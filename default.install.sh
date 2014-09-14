@@ -7,7 +7,7 @@ MYSQL_HOST="localhost"
 MYSQL_DB_NAME="negawatt"
 
 # Modify the URL below to match your OpenScholar base domain URL.
-BASE_DOMAIN_URL="http://localhost/negawatt/www"
+BASE_DOMAIN_URL="http://localhost/negawatt-server/www"
 
 # Modify the login details below to be the desired login details for the Administrator account.
 ADMIN_USERNAME="admin"
@@ -36,7 +36,6 @@ drush mi --all --user=1
 drush uli --uri=$BASE_DOMAIN_URL
 
 # Open browser (Mac)
-open http://localhost/$BASE_DOMAIN_URL/www
-
+open $BASE_DOMAIN_URL
 # Open browser (Linux)
-xdg-open http://localhost/$BASE_DOMAIN_URL/www
+xdg-open $BASE_DOMAIN_URL
