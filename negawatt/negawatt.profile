@@ -70,8 +70,6 @@ function negawatt_set_permissions() {
   // Enable default permissions for system roles.
   $permissions = array(
     'access content',
-    'search content',
-    'access site-wide contact form',
   );
 
   user_role_grant_permissions(DRUPAL_ANONYMOUS_RID, $permissions);
@@ -79,9 +77,6 @@ function negawatt_set_permissions() {
 
   // Enable permissions for restws.
   $permissions = array(
-    'access resource user',
-    'administer users',
-    'access user profiles',
   );
 
   $role = user_role_load_by_name('client');
@@ -97,7 +92,7 @@ function negawatt_set_variables() {
     'admin_theme' => 'seven',
     'node_admin_theme' => 0,
     'jquery_update_jquery_version' => '1.8',
-  );s
+  );
 
   foreach ($variables as $key => $value) {
     variable_set($key, $value);

@@ -34,3 +34,9 @@ drush mi --all --user=1
 
 # This command does the login for you when the build script is done. It will open a new tab in your default browser and login to your project as the Administrator. Comment out this line if you do not want the login to happen automatically.
 drush uli --uri=$BASE_DOMAIN_URL
+
+# Open browser (Mac)
+open http://localhost/$BASE_DOMAIN_URL/www
+
+# Open browser (Linux)
+xdg-open http://localhost/$BASE_DOMAIN_URL/www
