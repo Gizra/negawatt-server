@@ -1,0 +1,4 @@
+name = EcoFeedBack
+description = "Ecocity Eco-Feedback system"
+core = 7.x
+

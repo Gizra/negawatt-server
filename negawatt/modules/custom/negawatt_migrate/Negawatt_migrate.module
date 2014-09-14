@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * @file
+ * Populate dummy Negawatt content.
+ */
+
+/**
+ * Implements hook_migrate_api().
+ */
+function negawatt_migrate_migrate_api() {
+  $migrations = array(
+    // Nodes.
+    'NegawattCompaniesMigrate',
+    'NegawattItemsMigrate',
+    'NegawattItemVariantsMigrate',
+    'NegawattMaterialsMigrate',
+    'NegawattSeasonsMigrate',
+
+    // Terms.
+    'NegawattItemStatusTermsMigrate',
+    'NegawattSeasonStatusTermsMigrate',
+
+    // Users.
+    'NegawattUsersMigrate',
+  );
+
+  $api['api'] = 2;
+  foreach ($migrations as $migration) {
+    $api['migrations'][$migration] = array('class_name' => $migration);
+  }
+
+  return $api;
+}

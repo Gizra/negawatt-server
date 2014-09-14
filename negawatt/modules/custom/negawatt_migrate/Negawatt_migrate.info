@@ -1,0 +1,12 @@
+name = "Negawatt migration"
+description = "Populate dummy Negawatt content."
+package = "Negawatt"
+core = 7.x
+dependencies[] = migrate
+dependencies[] = migrate_extras
+
+; Handlers
+files[] = includes/negawatt_migrate.entity.inc
+
+files[] = handlers/user/NegawattUsersMigrate.php
+
