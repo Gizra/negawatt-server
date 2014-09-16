@@ -44,4 +44,10 @@ dependencies[] = token
 dependencies[] = views
 dependencies[] = views_bulk_operations
 
-; Features
+; Negawatt
+
+dependencies[] = negawatt_electricity
+dependencies[] = negawatt_restful
+dependencies[] = negawatt_migrate
+dependencies[] = satec
+dependencies[] = iec

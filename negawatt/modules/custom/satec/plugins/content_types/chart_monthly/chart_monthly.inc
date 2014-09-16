@@ -17,9 +17,9 @@ $plugin = array(
 /**
  * Render callback.
  */
-function ecocity_ecofeedback_chart_monthly_content_type_render($subtype, $conf, $args, $context) {
+function satec_chart_monthly_content_type_render($subtype, $conf, $args, $context) {
   global $user;
-  $module = 'ecocity_ecofeedback';
+  $module = 'satec';
   // Default user is currently logged in one.
   // Only admins can see everybody's data.
   $output = '';
@@ -33,7 +33,7 @@ function ecocity_ecofeedback_chart_monthly_content_type_render($subtype, $conf, 
 
   $height = 190;
   $width = 960;
-  $output .= ecocity_ecofeedback_chart_monthly_graph($width, $height, $account);
+  $output .= satec_chart_monthly_graph($width, $height, $account);
 
   $block = new stdClass();
   //$block->title = t('Welcome !');
@@ -46,7 +46,7 @@ function ecocity_ecofeedback_chart_monthly_content_type_render($subtype, $conf, 
 /**
  * Init a chart array.
  */
-function _ecocity_ecofeedback_chart_monthly_init_chart($title, $width, $height, $type = CHART_TYPE_LINE) {
+function _satec_chart_monthly_init_chart($title, $width, $height, $type = CHART_TYPE_LINE) {
   return array(
     '#chart_id' => $title,
     '#title' => chart_title($title, 'cc0000', 15),
@@ -55,19 +55,19 @@ function _ecocity_ecofeedback_chart_monthly_init_chart($title, $width, $height, 
   );
 }
 
-function ecocity_ecofeedback_chart_monthly_graph($width, $height, $account) {
+function satec_chart_monthly_graph($width, $height, $account) {
   $month = 6;
   $year = 2012;
   $days_in_month = cal_days_in_month(CAL_GREGORIAN, $month, $year);
-  $first_file = ecocity_ecofeedback_get_first_file_of_month($account->uid, $month, $year);
+  $first_file = satec_get_first_file_of_month($account->uid, $month, $year);
   $first_day = date('d', $first_file);
-  $chart = _ecocity_ecofeedback_chart_monthly_init_chart(t('צריכה יומית במהלך החודש', array('langcode' => 'he')), $width, $height);
+  $chart = _satec_chart_monthly_init_chart(t('צריכה יומית במהלך החודש', array('langcode' => 'he')), $width, $height);
   $data = array();
 
   for ($day = $first_day; $day <= $days_in_month; $day++) {
     $timestamp = ($day - $first_day) * TIME_SECONDS_PER_DAY + $first_file;
-    $day_data = _ecocity_ecofeedback_get_data_from_position('first', ecocity_ecofeedback_daily_consumptions($timestamp, $account->uid));
-    $next_day_data = _ecocity_ecofeedback_get_data_from_position('first', ecocity_ecofeedback_daily_consumptions($timestamp + TIME_SECONDS_PER_DAY, $account->uid));
+    $day_data = _satec_get_data_from_position('first', satec_daily_consumptions($timestamp, $account->uid));
+    $next_day_data = _satec_get_data_from_position('first', satec_daily_consumptions($timestamp + TIME_SECONDS_PER_DAY, $account->uid));
     if ($day_data && $next_day_data) {
       // Calculate difference.
       // Make sure it's over 0 - causes error when generating table.
@@ -121,12 +121,12 @@ function ecocity_ecofeedback_chart_monthly_graph($width, $height, $account) {
 /**
  * Form callback.
  */
-function ecocity_ecofeedback_chart_monthly_content_type_edit_form($form, &$form_state) {
+function satec_chart_monthly_content_type_edit_form($form, &$form_state) {
   // provide a blank form so we have a place to have context setting.
   return $form;
 }
 
-function ecocity_ecofeedback_chart_monthly_content_type_edit_form_submit($form, &$form_state) {
+function satec_chart_monthly_content_type_edit_form_submit($form, &$form_state) {
   // Copy everything from our defaults.
   foreach (array_keys($form_state['plugin']['defaults']) as $key) {
     $form_state['conf'][$key] = $form_state['values'][$key];
@@ -136,7 +136,7 @@ function ecocity_ecofeedback_chart_monthly_content_type_edit_form_submit($form, 
 /**
  * Include mozozoom files
  */
-function ecocity_ecofeedback_chart_monthly_excanvas_library_include() {
+function satec_chart_monthly_excanvas_library_include() {
   $excanvas_path = libraries_get_path('excanvas');
 
   if (!empty($excanvas_path)) {

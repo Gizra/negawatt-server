@@ -21,7 +21,7 @@ class NegawattUsersMigrate extends Migration {
   public $entityType = 'user';
 
   public $dependencies = array(
-    'NegawattCompaniesMigrate',
+    'NegawattCityMigrate',
   );
 
   public function __construct() {

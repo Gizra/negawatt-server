@@ -1,0 +1,122 @@
+<?php
+
+/**
+ * @file
+ * @author blazey http://drupal.org/user/353861
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function negawatt_electricity_schema() {
+  $schema = array();
+  $schema['negawatt_electricity_raw'] = array(
+    'description' => 'The base table for electricity consumption raw data.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'The primary identifier for the row.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'type' => array(
+        'description' => 'The type of this data, Satec/IEC/Other',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'timestamp' => array(
+        'description' => 'timestamp of recording',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'rate_type' => array(
+        'description' => 'Rate type, low/med/high/normal',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => 'normal',
+      ),
+      'value' => array(
+        'description' => 'Meter value',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'meter_nid' => array(
+        'description' => 'The electric meter NID, or Satec NID',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+  $schema['negawatt_electricity'] = array(
+    'description' => 'The base table for electricity consumption averages.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'The primary identifier for the row.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'type' => array(
+        'description' => 'The type of this data, day/month/week/year',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'day' => array(
+        'description' => 'day',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'week' => array(
+        'description' => 'week',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'month' => array(
+        'description' => 'month',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'year' => array(
+        'description' => 'year',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'rate_type' => array(
+        'description' => 'Rate type, low/med/high/normal',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => 'normal',
+      ),
+      'value' => array(
+        'description' => 'Consumption value',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'meter_nid' => array(
+        'description' => 'The electric meter NID, or Satec NID',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+  return $schema;
+}

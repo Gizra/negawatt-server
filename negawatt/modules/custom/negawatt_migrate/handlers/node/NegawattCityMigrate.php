@@ -5,7 +5,7 @@
  * Contains \NegawattCompaniesMigrate.
  */
 
-class NegawattCompaniesMigrate extends NegawattMigration {
+class NegawattCityMigrate extends NegawattMigration {
 
   public $entityType = 'node';
   public $bundle = 'company';

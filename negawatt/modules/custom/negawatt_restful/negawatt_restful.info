@@ -4,6 +4,4 @@ package = Negawatt
 dependencies[] = restful
 dependencies[] = entity_validator
 
-dependencies[] = negawatt_company
-
 files[] = plugins/restful/node/NtEntityBaseNode.php

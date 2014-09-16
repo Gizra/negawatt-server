@@ -1,4 +1,5 @@
-name = EcoFeedBack
-description = "Ecocity Eco-Feedback system"
+name = Satec
+description = "Satec connector"
 core = 7.x
+package = Negawatt
 

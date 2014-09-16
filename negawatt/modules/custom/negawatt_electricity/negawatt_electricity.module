@@ -1,0 +1,112 @@
+<?php
+
+
+
+/**
+ * Implements hook_cron().
+ */
+function negawatt_data_cron() {
+
+}
+
+/**
+ * Implements hook_entity_info().
+ */
+function negawatt_electricity_entity_info() {
+  $return = array(
+    'electricity' => array(
+      'label' => t('Electricity data', array(), array('context' => 'electricity entity')),
+      'controller class' => 'ElectricityEntityController',
+      'locking mode' => 'pessimistic',
+      'base table' => 'negawatt_electricity',
+      'fieldable' => FALSE,
+      'entity keys' => array(
+        'id' => 'id',
+      ),
+      'access arguments' => array(
+        'user key' => 'uid',
+        'access tag' => 'electricity_access',
+      ),
+      'permission labels' => array(
+        'singular' => t('electricity'),
+        'plural' => t('electricity'),
+      ),
+    ),
+  );
+
+  return $return;
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function negawatt_electricity_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'negawatt_electricity') . '/includes/views',
+  );
+}
+
+/**
+ * Returns auction controller.
+ *
+ * @return AuctionEntityController
+ */
+function negawatt_electricity_get_controller() {
+  return entity_get_controller('electricity');
+}
+
+/**
+ * Load auction.
+ *
+ * @param $auction_id
+ *   ID of the auction to load.
+ *
+ * @return
+ *   A loaded auction entity.
+ */
+function negawatt_electricity_load($id) {
+  $electricity = negawatt_electricity_get_controller()->load(array($id));
+  return array_shift($electricity);
+}
+
+/**
+ * Save auction.
+ *
+ * @param $auction
+ *   Auction entity to save.
+ *
+ * @return
+ *   Boolean determining whether the save was successfull.
+ */
+function negawatt_electricity_save($electricity) {
+  return negawatt_electricity_get_controller()->save($electricity);
+}
+
+/**
+ * Delete auction.
+ *
+ * @param $auction_id
+ *   ID of the auction to delete.
+ *
+ * @return
+ *   Boolean determining whether the delete was successfull.
+ */
+function negawatt_electricity_delete($electricity) {
+  return negawatt_electricity_get_controller()->delete(array($electricity));
+}
+
+/**
+ * Delete raw electricity data.
+ *
+ * @param $auction
+ *   The auction of the bid being deleted.
+ * @param $bid_id
+ *   ID of the bid to delete.
+ *
+ * @return
+ *   Whether the delete was successfull.
+ */
+function negawatt_electricity_raw_delete($raw_ids) {
+  return negawatt_electricity_get_controller()->deleteRaw($raw_ids);
+}

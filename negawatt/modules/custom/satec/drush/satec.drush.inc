@@ -8,9 +8,9 @@
 /**
  * Implement hook_drush_help().
  */
-function ecocity_ecofeedback_drush_help($section) {
+function satec_drush_help($section) {
   switch ($section) {
-    case 'drush:ecocity_ecofeedback_read_registers':
+    case 'drush:satec_read_registers':
       return dt('Read electricity values and save file.');
   }
 }
@@ -18,13 +18,14 @@ function ecocity_ecofeedback_drush_help($section) {
 /**
  * Implement hook_drush_command().
  */
-function ecocity_ecofeedback_drush_command() {
+function satec_drush_command() {
   $items = array();
 
-  $items['ecocity_ecofeedback_read_registers'] = array(
-    'callback' => 'ecocity_ecofeedback_read_registers',
-    'drupal dependencies' => array('ecocity'),
-    'description' => 'Read electricity values and save file.',
+  $items['satec_read_registers'] = array(
+    'callback' => 'satec_read_registers',
+    'drupal dependencies' => array(),
+    'description' => 'Read electricity values and save to DB.',
+    'description' => 'Read electricity values and save to DB.',
     'options' => array(
       'address' => 'IP address of modbus server',
       'user_id' => 'ID of the user to save the info to',
@@ -33,10 +34,10 @@ function ecocity_ecofeedback_drush_command() {
       'debug' => 'Get dpm info with dd',
     ),
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_CONFIGURATION,
-    'aliases' => array('err'),
+    'aliases' => array('satec'),
     'examples' => array(
-      'drush err --address=212.235.53.12 --reference=13500 --quantity=10' =>' get 10 32bit values from address 13500.',
-      'drush err' =>'L1 kw from ecolink',
+      'drush satec --address=212.235.53.12 --reference=13500 --quantity=10' =>' get 10 32bit values from address 13500.',
+      'drush satec' =>'L1 kw from ecolink',
     ),
   );
 
@@ -46,7 +47,7 @@ function ecocity_ecofeedback_drush_command() {
 /**
  * Callback function for sending digest email command.
  */
-function ecocity_ecofeedback_read_registers() {
+function satec_read_registers() {
   $address = drush_get_option('address', '212.235.53.12');
   $uid = drush_get_option('user_id', 1);
   $debug = drush_get_option('debug', FALSE);
@@ -66,11 +67,11 @@ function ecocity_ecofeedback_read_registers() {
   $timestamp = time();
   $data = array();
   foreach ($requests as $request) {
-    $data[] = ecocity_ecofeedback_read_modbus($request['reference'], $request['quantity'] , $address, $debug);
+    $data[] = satec_read_modbus($request['reference'], $request['quantity'] , $address, $debug);
   }
   if (!$data[0]) {
     // Send notification on error.
-    drupal_mail('ecocity_ecofeedback', 'error-connection', 'brice@gizra.com', 'en');
+    drupal_mail('satec', 'error-connection', 'brice@gizra.com', 'en');
     drush_print($data);
     return FALSE;
   }
@@ -79,7 +80,7 @@ function ecocity_ecofeedback_read_registers() {
      dd('Reading data: ' . date('c'));
   }
 
-  if (!ecocity_ecofeedback_write_regs_to_file($data, $timestamp, $uid, $debug)) {
+  if (!satec_write_regs_to_file($data, $timestamp, $uid, $debug)) {
     $msg = 'Error writing file';
     drush_print($msg);
     dd($msg);
@@ -89,7 +90,7 @@ function ecocity_ecofeedback_read_registers() {
 /**
  * Write result to todays file.
  */
-function ecocity_ecofeedback_write_regs_to_file($data, $timestamp, $uid, $debug = FALSE) {
+function satec_write_regs_to_file($data, $timestamp, $uid, $debug = FALSE) {
   // Parse power usage from array.
   // In $data, [1] and [0] positions are the lower part of the number, whereas
   // [1] notates 1-99 and [0] notates 100-9900. Same goes for the higher number
@@ -97,14 +98,14 @@ function ecocity_ecofeedback_write_regs_to_file($data, $timestamp, $uid, $debug 
   $consumption = $data[0][1] + ($data[0][0] * 100) + (($data[0][3] + ($data[0][2] * 100)) * 10000);
   $current_consumption = $data[1][1];
 
-  if (!$file_path = ecocity_ecofeedback_get_storage_file_path($timestamp, $uid)) {
+  if (!$file_path = satec_get_storage_file_path($timestamp, $uid)) {
     drush_print('Unable to create dir.');
     dd('Unable to create dir.');
     return FALSE;
   }
   
   // Begining of month
-  if ((date('j',$timestamp) == '1' || !file_exists(ecocity_ecofeedback_get_storage_file_path($timestamp - (60 * 60 * 24), $uid))) && !file_exists($file_path)) {
+  if ((date('j',$timestamp) == '1' || !file_exists(satec_get_storage_file_path($timestamp - (60 * 60 * 24), $uid))) && !file_exists($file_path)) {
     // First file of the month - save the total consumption in the user entity.
     $wrapper = entity_metadata_wrapper('user', $uid);
     // NOTE: Uses current consumption - acceptable difference from actual last
@@ -132,8 +133,8 @@ function ecocity_ecofeedback_write_regs_to_file($data, $timestamp, $uid, $debug 
 /**
  * Read a register and return an erray with results.
  */
-function ecocity_ecofeedback_read_modbus($reference = 287, $quantity = 2, $address = '212.235.53.12', $debug = FALSE) {
-  require_once(drupal_get_path('module','ecocity_ecofeedback') . '/Phpmodbus/Phpmodbus/ModbusMasterTcp.php');
+function satec_read_modbus($reference = 287, $quantity = 2, $address = '212.235.53.12', $debug = FALSE) {
+  require_once(drupal_get_path('module','satec') . '/Phpmodbus/Phpmodbus/ModbusMasterTcp.php');
   $modbus = new ModbusMasterTcp($address);
 
   try {

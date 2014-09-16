@@ -1,0 +1,10 @@
+name = Negawatt electricity storage
+description = Store data from electricity connectors
+
+core = 7.x
+
+package = Auctions
+
+files[] = includes/negawatt_electricity.controller.inc
+
+dependencies[] = entity

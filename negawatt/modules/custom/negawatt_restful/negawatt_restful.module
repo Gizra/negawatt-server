@@ -7,9 +7,8 @@
 /**
  * Implements hook_ctools_plugin_directory().
  */
-function negawatt_restful_ctools_plugin_directory($module, $plugin) {
+function negawatt_restfull_ctools_plugin_directory($module, $plugin) {
   if ($module == 'restful') {
     return 'plugins/' . $plugin;
   }
 }
-

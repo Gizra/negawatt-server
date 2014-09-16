@@ -11,15 +11,10 @@
 function negawatt_migrate_migrate_api() {
   $migrations = array(
     // Nodes.
-    'NegawattCompaniesMigrate',
-    'NegawattItemsMigrate',
-    'NegawattItemVariantsMigrate',
-    'NegawattMaterialsMigrate',
-    'NegawattSeasonsMigrate',
+    'NegawattCityMigrate',
 
     // Terms.
     'NegawattItemStatusTermsMigrate',
-    'NegawattSeasonStatusTermsMigrate',
 
     // Users.
     'NegawattUsersMigrate',

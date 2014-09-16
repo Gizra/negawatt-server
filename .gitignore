@@ -51,6 +51,7 @@ install.sh
 ##########
 .project
 .settings/
+.idea
 
 # Behat
 negawatt/behat/vendor/

@@ -17,9 +17,9 @@ $plugin = array(
 /**
  * Render callback.
  */
-function ecocity_ecofeedback_chart_table_report_content_type_render($subtype, $conf, $args, $context) {
+function satec_chart_table_report_content_type_render($subtype, $conf, $args, $context) {
   global $user;
-  $module = 'ecocity_ecofeedback';
+  $module = 'satec';
   // Default user is currently logged in one.
   // Only admins can see everybody's data.
   $output = '';
@@ -33,7 +33,7 @@ function ecocity_ecofeedback_chart_table_report_content_type_render($subtype, $c
 
   $height = 190;
   $width = 960;
-  $output .= ecocity_ecofeedback_chart_table_report_daily_graph($width, $height, $account);
+  $output .= satec_chart_table_report_daily_graph($width, $height, $account);
 
   $block = new stdClass();
   //$block->title = t('Welcome !');
@@ -46,7 +46,7 @@ function ecocity_ecofeedback_chart_table_report_content_type_render($subtype, $c
 /**
  * Init a chart array.
  */
-function _ecocity_ecofeedback_chart_table_report_init_chart($title, $width, $height, $type = CHART_TYPE_LINE) {
+function _satec_chart_table_report_init_chart($title, $width, $height, $type = CHART_TYPE_LINE) {
   return array(
     '#chart_id' => $title,
     '#title' => chart_title($title, 'cc0000', 15),
@@ -55,7 +55,7 @@ function _ecocity_ecofeedback_chart_table_report_init_chart($title, $width, $hei
   );
 }
 
-function ecocity_ecofeedback_chart_table_report_daily_graph($width, $height, $account) {
+function satec_chart_table_report_daily_graph($width, $height, $account) {
   $dates = array(
     time(),
     time() - 60 * 60 * 24,
@@ -68,7 +68,7 @@ function ecocity_ecofeedback_chart_table_report_daily_graph($width, $height, $ac
   $data = array();
   $max = 0;
   foreach ($dates as $date) {
-    $data[$date] = _ecocity_ecofeedback_get_from_data(ecocity_ecofeedback_daily_consumptions($date, $account->uid), 'current');
+    $data[$date] = _satec_get_from_data(satec_daily_consumptions($date, $account->uid), 'current');
     $max = $max < count($data[$date]) ? count($data[$date]) : $max;
   }
   
@@ -83,7 +83,8 @@ function ecocity_ecofeedback_chart_table_report_daily_graph($width, $height, $ac
        }
       // Save label for this value, one per hour.
       if ($j % 4 == 0) {
-        $label[count($result[$key]) - 1] =  date('G:00', $value[0]);      }
+        $label[count($result[$key]) - 1] =  date('G:00', $value[0]);
+      }
     }
     $columns[$key] = date('D', $date);
   }
@@ -116,12 +117,12 @@ function ecocity_ecofeedback_chart_table_report_daily_graph($width, $height, $ac
 /**
  * Form callback.
  */
-function ecocity_ecofeedback_chart_table_report_content_type_edit_form($form, &$form_state) {
+function satec_chart_table_report_content_type_edit_form($form, &$form_state) {
   // provide a blank form so we have a place to have context setting.
   return $form;
 }
 
-function ecocity_ecofeedback_chart_table_report_content_type_edit_form_submit($form, &$form_state) {
+function satec_chart_table_report_content_type_edit_form_submit($form, &$form_state) {
   // Copy everything from our defaults.
   foreach (array_keys($form_state['plugin']['defaults']) as $key) {
     $form_state['conf'][$key] = $form_state['values'][$key];
@@ -131,7 +132,7 @@ function ecocity_ecofeedback_chart_table_report_content_type_edit_form_submit($f
 /**
  * Include mozozoom files
  */
-function ecocity_ecofeedback_chart_table_report_excanvas_library_include() {
+function satec_chart_table_report_excanvas_library_include() {
   $excanvas_path = libraries_get_path('excanvas');
 
   if (!empty($excanvas_path)) {
