@@ -1,4 +1,10 @@
 <?php
+/**
+ * @file
+ * Code for the Negawatt electricity storage feature.
+ */
+
+include_once 'negawatt_electricity.features.inc';
 
 
 

@@ -1,4 +1,10 @@
 <?php
+/**
+ * @file
+ * Code for the Satec feature.
+ */
+
+include_once 'satec.features.inc';
 
 define('TIME_SECONDS_PER_DAY', (24 * 60 * 60));
 

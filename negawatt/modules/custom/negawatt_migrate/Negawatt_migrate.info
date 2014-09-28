@@ -8,6 +8,7 @@ dependencies[] = migrate_extras
 ; Handlers
 files[] = includes/negawatt_migrate.entity.inc
 
-files[] = handlers/user/NegawattUsersMigrate.php
-files[] = handlers/node/NegawattCityMigrate.php
+;files[] = handlers/user/NegawattUsersMigrate.php
+files[] = handlers/node/NegawattAccountMigrate.php
+;files[] = handlers/node/NegawattIecCounterMigrate.php
 

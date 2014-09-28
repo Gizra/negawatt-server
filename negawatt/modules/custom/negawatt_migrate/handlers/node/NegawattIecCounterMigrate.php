@@ -8,7 +8,7 @@
 class NegawattCityMigrate extends NegawattMigration {
 
   public $entityType = 'node';
-  public $bundle = 'company';
+  public $bundle = 'counter';
 
   public function __construct() {
     parent::__construct();

@@ -1,5 +1,7 @@
 name = Satec
-description = "Satec connector"
+description = Satec connector
 core = 7.x
 package = Negawatt
-
+dependencies[] = ctools
+features[ctools][] = strongarm:strongarm:1
+features[features_api][] = api:2

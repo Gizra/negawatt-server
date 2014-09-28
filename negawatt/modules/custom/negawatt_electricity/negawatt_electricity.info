@@ -1,10 +1,9 @@
 name = Negawatt electricity storage
 description = Store data from electricity connectors
-
 core = 7.x
-
-package = Auctions
-
-files[] = includes/negawatt_electricity.controller.inc
-
+package = Negawatt
+dependencies[] = ctools
 dependencies[] = entity
+features[ctools][] = strongarm:strongarm:1
+features[features_api][] = api:2
+files[] = includes/negawatt_electricity.controller.inc

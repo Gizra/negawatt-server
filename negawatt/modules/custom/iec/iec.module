@@ -1,3 +1,9 @@
 <?php
+/**
+ * @file
+ * Code for the IEC feature.
+ */
+
+include_once 'iec.features.inc';
 
 
