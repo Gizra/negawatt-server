@@ -19,6 +19,7 @@ dependencies[] = file
 ; Contrib modules
 dependencies[] = admin_menu_toolbar
 dependencies[] = admin_views
+dependencies[] = addressfield
 dependencies[] = ctools
 dependencies[] = date
 dependencies[] = date_migrate
@@ -29,6 +30,7 @@ dependencies[] = entity_validator
 dependencies[] = features
 dependencies[] = flag
 dependencies[] = geolocation
+dependencies[] = geolocation_googlemaps
 dependencies[] = libraries
 dependencies[] = message
 dependencies[] = migrate
@@ -46,10 +48,10 @@ dependencies[] = views
 dependencies[] = views_bulk_operations
 
 ; Negawatt
-
 dependencies[] = negawatt_electricity
 dependencies[] = negawatt_restful
 dependencies[] = negawatt_migrate
 dependencies[] = negawatt_account
 dependencies[] = satec
 dependencies[] = iec
+

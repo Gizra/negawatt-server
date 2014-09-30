@@ -4,7 +4,7 @@ $plugin = array(
   'label' => t('Me'),
   'description' => t('Export the "User" entity of the current user.'),
   'resource' => 'me',
-  'class' => 'NegawattMeResource',
+  'class' => 'NtMeResource',
   'entity_type' => 'user',
   'bundle' => 'user',
   // Try to authenticate users with all available authentication types.
