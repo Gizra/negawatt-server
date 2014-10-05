@@ -9,11 +9,9 @@ class NtIecCounterResource extends \NtEntityBaseNode
   /**
    * Overrides \RestfulEntityBase::publicFieldsInfo().
    */
-  public function publicFieldsInfo()
-  {
+  public function publicFieldsInfo() {
     $public_fields = parent::publicFieldsInfo();
 
-    // Fields created by the scrapper server, in a post petition.
     $public_fields['contract'] = array(
       'property' => 'field_contract_id'
     );

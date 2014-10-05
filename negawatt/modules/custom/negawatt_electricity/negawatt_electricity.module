@@ -63,10 +63,10 @@ function negawatt_electricity_get_controller() {
 }
 
 /**
- * Load auction.
+ * Load electricity data.
  *
- * @param $auction_id
- *   ID of the auction to load.
+ * @param $id
+ *   ID of the electricity data to load.
  *
  * @return
  *   A loaded auction entity.

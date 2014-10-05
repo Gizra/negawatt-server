@@ -47,10 +47,95 @@ function negawatt_account_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-account-field_geo_zoom'
+  $field_instances['node-account-field_geo_zoom'] = array(
+    'bundle' => 'account',
+    'default_value' => array(
+      0 => array(
+        'value' => 14,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => ' ',
+        ),
+        'type' => 'number_integer',
+        'weight' => 5,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_geo_zoom',
+    'label' => 'geo_zoom',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 5,
+    ),
+  );
+
+  // Exported field_instance: 'node-account-field_geolocation'
+  $field_instances['node-account-field_geolocation'] = array(
+    'bundle' => 'account',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'geolocation',
+        'settings' => array(),
+        'type' => 'geolocation_text',
+        'weight' => 6,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_geolocation',
+    'label' => 'Geolocation',
+    'required' => FALSE,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'module' => 'geolocation',
+      'settings' => array(),
+      'type' => 'geolocation_text',
+      'weight' => 6,
+    ),
+  );
+
   // Exported field_instance: 'node-account-field_location'
   $field_instances['node-account-field_location'] = array(
     'bundle' => 'account',
-    'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
     'display' => array(
@@ -76,9 +161,12 @@ function negawatt_account_field_default_field_instances() {
       'user_register_form' => FALSE,
     ),
     'widget' => array(
-      'active' => 0,
+      'active' => 1,
       'module' => 'geolocation',
-      'settings' => array(),
+      'settings' => array(
+        'marker_draggable' => 0,
+        'scrollwheel' => 0,
+      ),
       'type' => 'geolocation_text',
       'weight' => 3,
     ),
@@ -198,9 +286,11 @@ function negawatt_account_field_default_field_instances() {
   // Included for use with string extractors like potx.
   t('Account type');
   t('Determine if this is an OG group.');
+  t('Geolocation');
   t('Group');
   t('Group visibility');
   t('Location');
+  t('geo_zoom');
 
   return $field_instances;
 }

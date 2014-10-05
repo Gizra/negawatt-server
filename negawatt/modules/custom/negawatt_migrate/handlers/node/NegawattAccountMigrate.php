@@ -13,6 +13,7 @@ class NegawattAccountMigrate extends NegawattMigration {
   public $csvColumns = array(
     array('field_account_type', 'Type'),
     array('field_location', 'Location'),
+    array('field_geo_zoom', 'field_geo_zoom'),
   );
 
 
@@ -22,6 +23,7 @@ class NegawattAccountMigrate extends NegawattMigration {
     // Map fields that don't need extra definitions.
     $field_names = array(
       'field_account_type',
+      'field_geo_zoom',
     );
     $this->addSimpleMappings($field_names);
 

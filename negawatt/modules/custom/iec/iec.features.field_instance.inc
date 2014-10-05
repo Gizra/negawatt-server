@@ -363,6 +363,46 @@ function iec_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-iec_counter-field_place_description'
+  $field_instances['node-iec_counter-field_place_description'] = array(
+    'bundle' => 'iec_counter',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 6,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_place_description',
+    'label' => 'Place Description',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 7,
+    ),
+  );
+
   // Exported field_instance: 'node-iec_counter-field_place_locality'
   $field_instances['node-iec_counter-field_place_locality'] = array(
     'bundle' => 'iec_counter',
