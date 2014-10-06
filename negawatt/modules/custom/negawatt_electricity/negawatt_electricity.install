@@ -10,7 +10,7 @@
  */
 function negawatt_electricity_schema() {
   $schema = array();
-  $schema['negawatt_electricity_raw'] = array(
+  $schema['negawatt_electricity'] = array(
     'description' => 'The base table for electricity consumption raw data.',
     'fields' => array(
       'id' => array(
@@ -33,14 +33,7 @@ function negawatt_electricity_schema() {
         'not null' => TRUE,
       ),
       'rate_type' => array(
-        'description' => 'Rate type, low/med/high/normal',
-        'type' => 'varchar',
-        'length' => 32,
-        'not null' => TRUE,
-        'default' => 'normal',
-      ),
-      'value' => array(
-        'description' => 'Meter value',
+        'description' => 'Rate type, 0=nonTOUSE, 1=low, 2=mid, 3=peak',
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
@@ -52,10 +45,62 @@ function negawatt_electricity_schema() {
         'unsigned' => TRUE,
         'not null' => TRUE,
       ),
+      'cumulative_KWH' => array(
+        'description' => 'cumulative counter of total (three phases) kWh',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'power_factor' => array(
+        'description' => 'total power factor',
+        'type' => 'float',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'cumulative_KWH_L1' => array(
+        'description' => 'cumulative counter of L1 kWh',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'cumulative_KWH_L2' => array(
+        'description' => 'cumulative counter of L2 kWh',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'cumulative_KWH_L3' => array(
+        'description' => 'cumulative counter of L3 kWh',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'power_factor_L1' => array(
+        'description' => 'power factor for L1',
+        'type' => 'float',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'power_factor_L2' => array(
+        'description' => 'power factor for L2',
+        'type' => 'float',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'power_factor_L3' => array(
+        'description' => 'power factor for L3',
+        'type' => 'float',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
     ),
     'primary key' => array('id'),
   );
-  $schema['negawatt_electricity'] = array(
+  $schema['negawatt_electricity_normalized'] = array(
     'description' => 'The base table for electricity consumption averages.',
     'fields' => array(
       'id' => array(
@@ -96,14 +141,7 @@ function negawatt_electricity_schema() {
         'not null' => TRUE,
       ),
       'rate_type' => array(
-        'description' => 'Rate type, low/med/high/normal',
-        'type' => 'varchar',
-        'length' => 32,
-        'not null' => TRUE,
-        'default' => 'normal',
-      ),
-      'value' => array(
-        'description' => 'Consumption value',
+        'description' => 'Rate type, 0=nonTOUSE, 1=low, 2=mid, 3=peak',
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
@@ -114,6 +152,19 @@ function negawatt_electricity_schema() {
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
+      ),
+      'avg_power' => array(
+        'description' => 'Average power (KW) at period',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'min_power_factor' => array(
+        'description' => 'Minimal (worse) power factor at period',
+        'type' => 'float',
+        'not null' => TRUE,
+        'default' => 0,
       ),
     ),
     'primary key' => array('id'),
