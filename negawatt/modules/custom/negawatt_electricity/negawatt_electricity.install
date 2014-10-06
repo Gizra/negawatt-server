@@ -10,7 +10,7 @@
  */
 function negawatt_electricity_schema() {
   $schema = array();
-  $schema['negawatt_electricity_raw'] = array(
+  $schema['negawatt_electricity'] = array(
     'description' => 'The base table for electricity consumption raw data.',
     'fields' => array(
       'id' => array(
@@ -55,7 +55,7 @@ function negawatt_electricity_schema() {
     ),
     'primary key' => array('id'),
   );
-  $schema['negawatt_electricity'] = array(
+  $schema['negawatt_electricity_normalized'] = array(
     'description' => 'The base table for electricity consumption averages.',
     'fields' => array(
       'id' => array(

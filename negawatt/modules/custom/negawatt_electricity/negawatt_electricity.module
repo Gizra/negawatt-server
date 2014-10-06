@@ -24,7 +24,7 @@ function negawatt_electricity_entity_info() {
       'label' => t('Electricity data', array(), array('context' => 'electricity entity')),
       'controller class' => 'ElectricityEntityController',
       'locking mode' => 'pessimistic',
-      'base table' => 'negawatt_electricity',
+      'base table' => 'negawatt_electricity_normalized',
       'fieldable' => FALSE,
       'entity keys' => array(
         'id' => 'id',
