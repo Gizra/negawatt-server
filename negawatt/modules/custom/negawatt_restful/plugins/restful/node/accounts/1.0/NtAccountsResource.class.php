@@ -20,23 +20,23 @@ class NtAccountsResource extends \NtEntityBaseNode {
       'property' => 'field_account_type'
     );
 
-    $public_fields['counter_list'] = array(
-      'callback' => array($this, 'getCounters'),
+    $public_fields['meter_list'] = array(
+      'callback' => array($this, 'getMeters'),
     );
 
     return $public_fields;
   }
 
   /**
-   * Get the counters list of the account.
+   * Get the meters list of the account.
    */
-  function getCounters(\EntityMetadataWrapper $wrapper) {
+  function getMeters(\EntityMetadataWrapper $wrapper) {
     $nid = $wrapper->getIdentifier();
 
     $query = new EntityFieldQuery();
     $result = $query
       ->entityCondition('entity_type', 'node')
-      ->entityCondition('bundle', 'iec_counter')
+      ->entityCondition('bundle', 'iec_meter')
       ->propertyCondition('status', NODE_PUBLISHED)
       ->fieldCondition(OG_AUDIENCE_FIELD, 'target_id', $nid)
       ->propertyOrderBy('nid')
@@ -48,7 +48,7 @@ class NtAccountsResource extends \NtEntityBaseNode {
 
     $nids = array_keys($result['node']);
 
-    $handler = restful_get_restful_handler('iec_counters');
+    $handler = restful_get_restful_handler('iec_meters');
     return $handler->get(implode(',', $nids));
   }
 }

@@ -18,8 +18,8 @@ function iec_ctools_plugin_api($module = NULL, $api = NULL) {
  */
 function iec_node_info() {
   $items = array(
-    'iec_counter' => array(
-      'name' => t('IEC counter'),
+    'iec_meter' => array(
+      'name' => t('IEC meter'),
       'base' => 'node_content',
       'description' => '',
       'has_title' => '1',

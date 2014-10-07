@@ -2,9 +2,9 @@
 
 /**
  * @file
- * Contains NtIecCounterResource.
+ * Contains NtIecMeterResource.
  */
-class NtIecCounterResource extends \NtEntityBaseNode
+class NtIecMeterResource extends \NtEntityBaseNode
 {
   /**
    * Overrides \RestfulEntityBase::publicFieldsInfo().
@@ -36,12 +36,12 @@ class NtIecCounterResource extends \NtEntityBaseNode
       'sub_property' => 'country',
     );
 
-    $public_fields['counter_code'] = array(
-      'property' => 'field_counter_code',
+    $public_fields['meter_code'] = array(
+      'property' => 'field_meter_code',
     );
 
-    $public_fields['counter_serial'] = array(
-      'property' => 'field_counter_serial',
+    $public_fields['meter_serial'] = array(
+      'property' => 'field_meter_serial',
     );
 
     return $public_fields;

@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains \NegawattCompaniesMigrate.
+ * Contains \NegawattAccountMigrate.
  */
 
 class NegawattAccountMigrate extends NegawattMigration {
@@ -16,7 +16,6 @@ class NegawattAccountMigrate extends NegawattMigration {
     array('field_geo_zoom', 'field_geo_zoom'),
   );
 
-
   public function __construct() {
     parent::__construct();
 
@@ -26,12 +25,6 @@ class NegawattAccountMigrate extends NegawattMigration {
       'field_geo_zoom',
     );
     $this->addSimpleMappings($field_names);
-
-
-    // Map location.
-    $this->addFieldMapping('field_location:lat', 'field_location_lat');
-    $this->addFieldMapping('field_location:lng', 'field_location_lng');
-
 
     $this
       ->addFieldMapping(OG_GROUP_FIELD)
@@ -47,11 +40,16 @@ class NegawattAccountMigrate extends NegawattMigration {
   }
 
   /**
-   * Map location field.
+   * Map field_location and field_address fields.
    */
-  public function prepareRow($row) {
+  public function prepare($entity, $row)
+  {
     $row->field_location = explode('|', $row->field_location);
-    $row->field_location_lat = $row->field_location[0];
-    $row->field_location_lng =  $row->field_location[1];
+
+    $wrapper = entity_metadata_wrapper('node', $entity);
+    $wrapper->field_location->set(array(
+        'lat' => $row->field_location[0],
+        'lng' => $row->field_location[1],
+    ));
   }
 }

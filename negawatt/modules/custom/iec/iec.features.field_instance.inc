@@ -10,51 +10,12 @@
 function iec_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-iec_counter-field_account'
-  $field_instances['node-iec_counter-field_account'] = array(
-    'bundle' => 'iec_counter',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
-        'weight' => 4,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_account',
-    'label' => 'Account',
-    'required' => 0,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_select',
-      'weight' => 5,
-    ),
-  );
-
-  // Exported field_instance: 'node-iec_counter-field_address'
-  $field_instances['node-iec_counter-field_address'] = array(
-    'bundle' => 'iec_counter',
+  // Exported field_instance: 'node-iec_meter-field_address'
+  $field_instances['node-iec_meter-field_address'] = array(
+    'bundle' => 'iec_meter',
     'default_value' => array(
       0 => array(
-        'element_key' => 'node|iec_counter|field_address|und|0',
+        'element_key' => 'node|iec_meter|field_address|und|0',
         'thoroughfare' => '',
         'premise' => '',
         'locality' => '',
@@ -108,9 +69,9 @@ function iec_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-iec_counter-field_contract_id'
-  $field_instances['node-iec_counter-field_contract_id'] = array(
-    'bundle' => 'iec_counter',
+  // Exported field_instance: 'node-iec_meter-field_contract_id'
+  $field_instances['node-iec_meter-field_contract_id'] = array(
+    'bundle' => 'iec_meter',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -154,9 +115,9 @@ function iec_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-iec_counter-field_counter_code'
-  $field_instances['node-iec_counter-field_counter_code'] = array(
-    'bundle' => 'iec_counter',
+  // Exported field_instance: 'node-iec_meter-field_meter_code'
+  $field_instances['node-iec_meter-field_meter_code'] = array(
+    'bundle' => 'iec_meter',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -181,8 +142,8 @@ function iec_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
-    'field_name' => 'field_counter_code',
-    'label' => 'Counter Code',
+    'field_name' => 'field_meter_code',
+    'label' => 'Meter Code',
     'required' => 0,
     'settings' => array(
       'max' => '',
@@ -200,9 +161,9 @@ function iec_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-iec_counter-field_counter_serial'
-  $field_instances['node-iec_counter-field_counter_serial'] = array(
-    'bundle' => 'iec_counter',
+  // Exported field_instance: 'node-iec_meter-field_meter_serial'
+  $field_instances['node-iec_meter-field_meter_serial'] = array(
+    'bundle' => 'iec_meter',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -227,8 +188,8 @@ function iec_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
-    'field_name' => 'field_counter_serial',
-    'label' => 'Counter Serial',
+    'field_name' => 'field_meter_serial',
+    'label' => 'Meter Serial',
     'required' => 0,
     'settings' => array(
       'max' => '',
@@ -246,9 +207,9 @@ function iec_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-iec_counter-field_location'
-  $field_instances['node-iec_counter-field_location'] = array(
-    'bundle' => 'iec_counter',
+  // Exported field_instance: 'node-iec_meter-field_location'
+  $field_instances['node-iec_meter-field_location'] = array(
+    'bundle' => 'iec_meter',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -283,49 +244,9 @@ function iec_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-iec_counter-field_place_description'
-  $field_instances['node-iec_counter-field_place_description'] = array(
-    'bundle' => 'iec_counter',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 6,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_place_description',
-    'label' => 'Place Description',
-    'required' => 0,
-    'settings' => array(
-      'text_processing' => 0,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'text',
-      'settings' => array(
-        'size' => 60,
-      ),
-      'type' => 'text_textfield',
-      'weight' => 7,
-    ),
-  );
-
-  // Exported field_instance: 'node-iec_counter-field_place_address'
-  $field_instances['node-iec_counter-field_place_address'] = array(
-    'bundle' => 'iec_counter',
+  // Exported field_instance: 'node-iec_meter-field_place_address'
+  $field_instances['node-iec_meter-field_place_address'] = array(
+    'bundle' => 'iec_meter',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -363,9 +284,9 @@ function iec_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-iec_counter-field_place_description'
-  $field_instances['node-iec_counter-field_place_description'] = array(
-    'bundle' => 'iec_counter',
+  // Exported field_instance: 'node-iec_meter-field_place_description'
+  $field_instances['node-iec_meter-field_place_description'] = array(
+    'bundle' => 'iec_meter',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -403,9 +324,9 @@ function iec_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-iec_counter-field_place_locality'
-  $field_instances['node-iec_counter-field_place_locality'] = array(
-    'bundle' => 'iec_counter',
+  // Exported field_instance: 'node-iec_meter-field_place_locality'
+  $field_instances['node-iec_meter-field_place_locality'] = array(
+    'bundle' => 'iec_meter',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -443,9 +364,9 @@ function iec_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-iec_counter-group_content_access'
-  $field_instances['node-iec_counter-group_content_access'] = array(
-    'bundle' => 'iec_counter',
+  // Exported field_instance: 'node-iec_meter-group_content_access'
+  $field_instances['node-iec_meter-group_content_access'] = array(
+    'bundle' => 'iec_meter',
     'default_value' => array(
       0 => array(
         'value' => 2,
@@ -495,9 +416,9 @@ function iec_field_default_field_instances() {
     'widget_type' => 'options_select',
   );
 
-  // Exported field_instance: 'node-iec_counter-og_group_ref'
-  $field_instances['node-iec_counter-og_group_ref'] = array(
-    'bundle' => 'iec_counter',
+  // Exported field_instance: 'node-iec_meter-og_group_ref'
+  $field_instances['node-iec_meter-og_group_ref'] = array(
+    'bundle' => 'iec_meter',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -521,10 +442,11 @@ function iec_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'og_group_ref',
     'label' => 'Groups audience',
-    'required' => FALSE,
+    'required' => 0,
     'settings' => array(
       'behaviors' => array(
         'og_widget' => array(
+          'access_override' => 0,
           'admin' => array(
             'widget_type' => 'entityreference_autocomplete',
           ),
@@ -549,6 +471,7 @@ function iec_field_default_field_instances() {
       ),
     ),
     'widget' => array(
+      'active' => 0,
       'module' => 'og',
       'settings' => array(),
       'type' => 'og_complex',
@@ -558,11 +481,10 @@ function iec_field_default_field_instances() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Account');
   t('Address');
   t('Contract ID');
-  t('Counter Code');
-  t('Counter Serial');
+  t('Meter Code');
+  t('Meter Serial');
   t('Group content visibility');
   t('Groups audience');
   t('Location');

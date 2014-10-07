@@ -97,45 +97,10 @@ function negawatt_account_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-account-field_geolocation'
-  $field_instances['node-account-field_geolocation'] = array(
-    'bundle' => 'account',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'geolocation',
-        'settings' => array(),
-        'type' => 'geolocation_text',
-        'weight' => 6,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_geolocation',
-    'label' => 'Geolocation',
-    'required' => FALSE,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'module' => 'geolocation',
-      'settings' => array(),
-      'type' => 'geolocation_text',
-      'weight' => 6,
-    ),
-  );
-
   // Exported field_instance: 'node-account-field_location'
   $field_instances['node-account-field_location'] = array(
     'bundle' => 'account',
+    'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
     'display' => array(
@@ -286,7 +251,6 @@ function negawatt_account_field_default_field_instances() {
   // Included for use with string extractors like potx.
   t('Account type');
   t('Determine if this is an OG group.');
-  t('Geolocation');
   t('Group');
   t('Group visibility');
   t('Location');

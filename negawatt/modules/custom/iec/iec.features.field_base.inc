@@ -42,13 +42,13 @@ function iec_field_default_field_bases() {
     'type' => 'number_integer',
   );
 
-  // Exported field_base: 'field_counter_code'
-  $field_bases['field_counter_code'] = array(
+  // Exported field_base: 'field_meter_code'
+  $field_bases['field_meter_code'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
-    'field_name' => 'field_counter_code',
+    'field_name' => 'field_meter_code',
     'foreign keys' => array(),
     'indexes' => array(),
     'locked' => 0,
@@ -58,13 +58,13 @@ function iec_field_default_field_bases() {
     'type' => 'number_integer',
   );
 
-  // Exported field_base: 'field_counter_serial'
-  $field_bases['field_counter_serial'] = array(
+  // Exported field_base: 'field_meter_serial'
+  $field_bases['field_meter_serial'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
-    'field_name' => 'field_counter_serial',
+    'field_name' => 'field_meter_serial',
     'foreign keys' => array(),
     'indexes' => array(),
     'locked' => 0,
@@ -72,35 +72,6 @@ function iec_field_default_field_bases() {
     'settings' => array(),
     'translatable' => 0,
     'type' => 'number_integer',
-  );
-
-  // Exported field_base: 'field_place_description'
-  $field_bases['field_place_description'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_place_description',
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-    'indexes' => array(
-      'format' => array(
-        0 => 'format',
-      ),
-    ),
-    'locked' => 0,
-    'module' => 'text',
-    'settings' => array(
-      'max_length' => 255,
-    ),
-    'translatable' => 0,
-    'type' => 'text',
   );
 
   // Exported field_base: 'field_place_address'
@@ -188,34 +159,6 @@ function iec_field_default_field_bases() {
     ),
     'translatable' => 0,
     'type' => 'text',
-  );
-
-  // Exported field_base: 'group_content_access'
-  $field_bases['group_content_access'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'group_content_access',
-    'foreign keys' => array(),
-    'indexes' => array(
-      'value' => array(
-        0 => 'value',
-      ),
-    ),
-    'locked' => 0,
-    'module' => 'list',
-    'no_ui' => TRUE,
-    'settings' => array(
-      'allowed_values' => array(
-        0 => 'Use group defaults',
-        1 => 'Public - accessible to all site users',
-        2 => 'Private - accessible only to group members',
-      ),
-      'allowed_values_function' => '',
-    ),
-    'translatable' => 0,
-    'type' => 'list_integer',
   );
 
   return $field_bases;

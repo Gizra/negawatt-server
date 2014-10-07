@@ -37,7 +37,7 @@ function ecocity_read_regs($type = 'accumulated_demands') {
   $modbus->timeout_sec = 5;
 
   // See page 31 of PDF attached to understand each address:
-  // 32-bit Analog Registers, Binary Registers and Counters.
+  // 32-bit Analog Registers, Binary Registers and Meters.
   switch ($type) {
    case 'accumulated_demands':
       $reference = 287;

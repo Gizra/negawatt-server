@@ -10,5 +10,5 @@ files[] = includes/negawatt_migrate.entity.inc
 
 ;files[] = handlers/user/NegawattUsersMigrate.php
 files[] = handlers/node/NegawattAccountMigrate.php
-;files[] = handlers/node/NegawattIecCounterMigrate.php
+files[] = handlers/node/NegawattIecMeterMigrate.php
 

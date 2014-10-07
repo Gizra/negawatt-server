@@ -58,7 +58,7 @@ function satec_read_registers() {
     array('reference' => 13318, 'quantity' => 1),
   );
   // See page 18 of PDF attached to understand each address:
-  // 3.2 16-bit Scaled Analog Registers and Energy Counters - Basic Register Set
+  // 3.2 16-bit Scaled Analog Registers and Energy Meters - Basic Register Set
 
   // Reference : 256-308
   //+31 kWh import (low) 0-9999 1kWh UINT16 R 5
