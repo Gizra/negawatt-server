@@ -1,0 +1,7 @@
+id,type,day,week,month,year,rate_type,meter_nid,avg_power,min_power_factor,
+1,day,1388534400,flat,meter1,10,0.95,
+2,day,1388620800,flat,meter1,11,0.95,
+3,day,1388620800,low,meter1,3,0.95,
+4,day,1388620800,mid,meter1,5,0.92,
+5,day,1388620800,peak,meter1,2,0.95,
+6,day,1388707200,flat,meter2,13,0.95,

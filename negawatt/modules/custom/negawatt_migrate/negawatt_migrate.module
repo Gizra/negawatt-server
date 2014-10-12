@@ -13,12 +13,9 @@ function negawatt_migrate_migrate_api() {
     // Nodes.
     'NegawattAccountMigrate',
     'NegawattIecMeterMigrate',
-
-    // Terms.
-//    'NegawattItemStatusTermsMigrate',
-
-    // Users.
-//    'NegawattUsersMigrate',
+    // Custom entities.
+    'NegawattElectricityMigrate',
+    'NegawattElectricityRawMigrate',
   );
 
   $api['api'] = 2;

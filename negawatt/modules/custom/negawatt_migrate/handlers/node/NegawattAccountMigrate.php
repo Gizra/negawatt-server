@@ -42,8 +42,7 @@ class NegawattAccountMigrate extends NegawattMigration {
   /**
    * Map field_location and field_address fields.
    */
-  public function prepare($entity, $row)
-  {
+  public function prepare($entity, $row) {
     $row->field_location = explode('|', $row->field_location);
 
     $wrapper = entity_metadata_wrapper('node', $entity);
