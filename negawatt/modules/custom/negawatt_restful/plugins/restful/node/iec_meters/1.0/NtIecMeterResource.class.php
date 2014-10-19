@@ -4,8 +4,7 @@
  * @file
  * Contains NtIecMeterResource.
  */
-class NtIecMeterResource extends \NtEntityBaseNode
-{
+class NtIecMeterResource extends \NtEntityBaseNode {
   /**
    * Overrides \RestfulEntityBase::publicFieldsInfo().
    */
@@ -13,27 +12,19 @@ class NtIecMeterResource extends \NtEntityBaseNode
     $public_fields = parent::publicFieldsInfo();
 
     $public_fields['contract'] = array(
-      'property' => 'field_contract_id'
+      'property' => 'field_contract_id',
     );
 
     $public_fields['place_description'] = array(
-      'property' => 'field_address',
-      'sub_property' => 'premise',
-    );
-
-    $public_fields['place_locality'] = array(
-      'property' => 'field_address',
-      'sub_property' => 'locality',
+      'property' => 'field_place_description',
     );
 
     $public_fields['place_address'] = array(
-      'property' => 'field_address',
-      'sub_property' => 'thoroughfare',
+      'property' => 'field_place_address',
     );
 
-    $public_fields['country'] = array(
-      'property' => 'field_address',
-      'sub_property' => 'country',
+    $public_fields['place_locality'] = array(
+      'property' => 'field_place_locality',
     );
 
     $public_fields['meter_code'] = array(
@@ -46,4 +37,5 @@ class NtIecMeterResource extends \NtEntityBaseNode
 
     return $public_fields;
   }
+
 }

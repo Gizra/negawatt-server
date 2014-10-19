@@ -244,6 +244,49 @@ function iec_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-iec_meter-field_parent_contract'
+  $field_instances['node-iec_meter-field_parent_contract'] = array(
+    'bundle' => 'iec_meter',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'In case we have 2 or more meters for a single contract, this field will reference to the \'main\' contract ID, which is used to save the electricity Data.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 11,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_parent_contract',
+    'label' => 'Parent contract',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'entityreference',
+      'settings' => array(
+        'match_operator' => 'CONTAINS',
+        'path' => '',
+        'size' => 60,
+      ),
+      'type' => 'entityreference_autocomplete',
+      'weight' => 12,
+    ),
+  );
+
   // Exported field_instance: 'node-iec_meter-field_place_address'
   $field_instances['node-iec_meter-field_place_address'] = array(
     'bundle' => 'iec_meter',
@@ -432,9 +475,11 @@ function iec_field_default_field_instances() {
   t('Address');
   t('Contract ID');
   t('Groups audience');
+  t('In case we have 2 or more meters for a single contract, this field will reference to the \'main\' contract ID, which is used to save the electricity Data.');
   t('Location');
   t('Meter Code');
   t('Meter Serial');
+  t('Parent contract');
   t('Place Address');
   t('Place Description');
   t('Place Locality');
