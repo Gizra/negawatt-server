@@ -3,7 +3,7 @@
  * Implements hook_ctools_plugin_directory().
  */
 function negawatt_restful_ctools_plugin_directory($module, $plugin) {
-  if ($module == 'restful') {
+  if ($module == 'restful' || $module == 'entity_validator') {
     return 'plugins/' . $plugin;
   }
 }

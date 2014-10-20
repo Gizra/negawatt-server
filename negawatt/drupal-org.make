@@ -39,6 +39,10 @@ projects[entityreference][version] = "1.1"
 
 projects[entity_validator][subdir] = "contrib"
 projects[entity_validator][version] = "1.x"
+projects[entity_validator][download][url] = "git@github.com:Gizra/entity_validator.git"
+projects[entity_validator][download][branch] = "25"
+projects[entity_validator][download][type] = "git"
+
 
 projects[features][subdir] = "contrib"
 projects[features][version] = "2.2"
