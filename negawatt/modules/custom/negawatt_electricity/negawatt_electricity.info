@@ -10,6 +10,8 @@ features[ctools][] = views:views_default:3.0
 features[features_api][] = api:2
 features[views_view][] = electricity_overview
 features[views_view][] = electricity_raw_overview
-files[] = negawatt_electricity.info.inc
+
+files[] = includes/ElectricityMetadataController.php
+files[] = includes/ElectricityRawMetadataController.php
 files[] = includes/negawatt_electricity.controller.inc
 files[] = includes/negawatt_electricity_raw.controller.inc

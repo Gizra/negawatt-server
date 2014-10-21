@@ -49,7 +49,7 @@ function negawatt_electricity_views_default_views() {
   $handler->display->display_options['fields']['rate_type']['id'] = 'rate_type';
   $handler->display->display_options['fields']['rate_type']['table'] = 'negawatt_electricity_normalized';
   $handler->display->display_options['fields']['rate_type']['field'] = 'rate_type';
-  /* Field: Electricity data: Meter */
+  /* Field: Electricity data: Meter_nid */
   $handler->display->display_options['fields']['meter_nid']['id'] = 'meter_nid';
   $handler->display->display_options['fields']['meter_nid']['table'] = 'negawatt_electricity_normalized';
   $handler->display->display_options['fields']['meter_nid']['field'] = 'meter_nid';
@@ -117,7 +117,7 @@ function negawatt_electricity_views_default_views() {
   $handler->display->display_options['fields']['rate_type']['id'] = 'rate_type';
   $handler->display->display_options['fields']['rate_type']['table'] = 'negawatt_electricity';
   $handler->display->display_options['fields']['rate_type']['field'] = 'rate_type';
-  /* Field: Electricity raw data: Meter */
+  /* Field: Electricity raw data: Meter_nid */
   $handler->display->display_options['fields']['meter_nid']['id'] = 'meter_nid';
   $handler->display->display_options['fields']['meter_nid']['table'] = 'negawatt_electricity';
   $handler->display->display_options['fields']['meter_nid']['field'] = 'meter_nid';

@@ -43,7 +43,6 @@ projects[entity_validator][download][url] = "git@github.com:Gizra/entity_validat
 projects[entity_validator][download][branch] = "25"
 projects[entity_validator][download][type] = "git"
 
-
 projects[features][subdir] = "contrib"
 projects[features][version] = "2.2"
 

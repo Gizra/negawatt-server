@@ -37,10 +37,9 @@ function negawatt_electricity_entity_info() {
         'singular' => t('electricity'),
         'plural' => t('electricity'),
       ),
-      'metadata controller class' => 'EntityDefaultMetadataController',
+      'metadata controller class' => 'ElectricityMetadataController',
       'views controller class' => 'EntityDefaultViewsController',
       'entity cache' => module_exists('entitycache'),
-      'metadata controller class' => 'ElectricityMetadataController',
     ),
     'electricity_raw' => array(
       'label' => t('Electricity raw data', array(), array('context' => 'electricity raw entity')),
@@ -59,10 +58,9 @@ function negawatt_electricity_entity_info() {
         'singular' => t('electricity raw'),
         'plural' => t('electricity raw'),
       ),
-      'metadata controller class' => 'EntityDefaultMetadataController',
+      'metadata controller class' => 'ElectricityRawMetadataController',
       'views controller class' => 'EntityDefaultViewsController',
       'entity cache' => module_exists('entitycache'),
-      'metadata controller class' => 'ElectricityRawMetadataController',
     ),
   );
 
