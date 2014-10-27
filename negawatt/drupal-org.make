@@ -38,10 +38,8 @@ projects[entityreference][subdir] = "contrib"
 projects[entityreference][version] = "1.1"
 
 projects[entity_validator][subdir] = "contrib"
-projects[entity_validator][version] = "1.x"
-projects[entity_validator][download][url] = "git@github.com:Gizra/entity_validator.git"
-projects[entity_validator][download][branch] = "25"
 projects[entity_validator][download][type] = "git"
+projects[entity_validator][download][url] = "https://github.com/Gizra/entity_validator.git"
 
 projects[features][subdir] = "contrib"
 projects[features][version] = "2.2"
@@ -89,7 +87,8 @@ projects[purl][subdir] = "contrib"
 projects[purl][version] = "1.x-dev"
 
 projects[restful][subdir] = "contrib"
-projects[restful][version] = "1.x-dev"
+projects[restful][download][type] = "git"
+projects[restful][download][url] = "https://github.com/Gizra/restful.git"
 
 projects[search_api][subdir] = "contrib"
 projects[search_api][version] = "1.12"

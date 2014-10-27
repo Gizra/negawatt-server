@@ -26,6 +26,7 @@ before_script:
   - cd www
   - drush si negawatt --db-url=mysql://root:@127.0.0.1/drupal --account-pass=admin --yes
   - drush cc all --yes
+  - drush en simpletest -y
   # Use drush migrate command to import dummy content, as user 1, so we don't have node access issues.
   - drush mi --all --user=1
 
@@ -57,3 +58,5 @@ script:
 
   - ./bin/behat --tags=~@wip
 
+  # SimpleTest
+  - drush @negawatt test-run "Negawatt Normalizer" --uri=http://127.0.0.1:8080

@@ -1,24 +1,11 @@
 default:
-  context:
-    parameters:
-      drupal_users:
-        imanimo:
-          'imanimo'
-      sample_nodes:
-        imanimo:
-          season: 29
-          item: 40
-          item-variant: 48
-          production-order: 68
-          task: 70
-
   extensions:
     Behat\MinkExtension\Extension:
-      base_url: http://localhost/negawatt/www
+      base_url: http://localhost/negawatt-server/www
       goutte:
         guzzle_parameters:
           redirect.disable: true
     Drupal\DrupalExtension\Extension:
       api_driver: "drupal"
       drupal:
-        drupal_root: "/var/www/negawatt/www"
+        drupal_root: "/var/www/negawatt-server/www"
