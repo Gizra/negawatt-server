@@ -1,0 +1,12 @@
+<?php
+
+/**
+ * @file
+ * Contains NegawattWebTestCase.test
+ */
+
+class NegawattWebTestCase extends DrupalWebTestCase {
+
+  protected $profile = 'negawatt';
+
+}

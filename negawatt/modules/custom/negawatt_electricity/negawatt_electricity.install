@@ -139,8 +139,7 @@ function negawatt_electricity_schema() {
       ),
       'avg_power' => array(
         'description' => 'Average power (KW) at period.',
-        'type' => 'int',
-        'unsigned' => TRUE,
+        'type' => 'float',
         'not null' => TRUE,
         'default' => 0,
       ),

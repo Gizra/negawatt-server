@@ -1,0 +1,99 @@
+<?php
+
+/**
+ * @file
+ * Populate Negawatt normalizer.
+ */
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function negawatt_normalizer_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'negawatt_normalizer') {
+    return 'plugins/' . $plugin;
+  }
+}
+
+/**
+ * Implements hook_ctools_plugin_type().
+ */
+function negawatt_normalizer_ctools_plugin_type() {
+  $plugins['electricity_normalizer'] = array(
+    'classes' => array('class'),
+    'process' => 'negawatt_normalizer_plugin_process',
+  );
+  return $plugins;
+}
+
+
+/**
+ * Add defaults values to the normalizer related plugins.
+ */
+function negawatt_normalizer_plugin_process(&$plugin, $info) {
+  // Common operations.
+  $plugin += array(
+    'description' => '',
+  );
+
+  // Call the plugin specific process functions.
+  $function = 'negawatt_normalizer_process_' . $info['type'];
+  if (function_exists($function)) {
+    $function($plugin, $info);
+  }
+}
+
+/**
+ * Include CTools plugins and get all normalizer plugins.
+ *
+ * @return array
+ *   All normalizing plugins.
+ */
+function negawatt_normalizer_get_electricity_normalizer_plugins() {
+  ctools_include('plugins');
+  return ctools_get_plugins('negawatt_normalizer', 'electricity_normalizer');
+}
+
+/**
+ * Include CTools plugins and get the specified electricity normalizer plugin.
+ *
+ * @param string $plugin_name
+ *   If provided this function only returns the selected plugin.
+ *
+ * @return array
+ *   The selected plugin for electricity normalizer.
+ */
+function negawatt_normalizer_get_electricity_normalizer_plugin($plugin_name) {
+  ctools_include('plugins');
+  return ctools_get_plugins('negawatt_normalizer', 'electricity_normalizer', $plugin_name);
+}
+
+/**
+ * Return the handler based on major and minor version, and resource name.
+ *
+ * @param $plugin_name
+ *  Name of plugin.
+ * @throws Exception
+ *  Class not found.
+ *
+ * @return ElectricityNormalizerInterface | NULL
+ *   The handler object if found, or NULL.
+ */
+function negawatt_normalizer_get_electricity_normalizer_handler($plugin_name) {
+  $cache = &drupal_static(__FUNCTION__);
+  if (isset($cache[$plugin_name])) {
+    return $cache[$plugin_name];
+  }
+
+  $cache[$plugin_name] = NULL;
+
+  ctools_include('plugins');
+  $plugin = ctools_get_plugins('negawatt_normalizer', 'electricity_normalizer', $plugin_name);
+  if (!$class = ctools_plugin_load_class('negawatt_normalizer', 'electricity_normalizer', $plugin_name, 'class')) {
+    throw new \Exception("Electricity normalizer plugin class for '$plugin_name' not found.");
+  }
+  $handler = new $class($plugin);
+  $cache[$plugin_name] = $handler;
+
+  return $cache[$plugin_name];
+}
+

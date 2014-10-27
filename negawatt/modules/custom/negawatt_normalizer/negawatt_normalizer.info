@@ -1,0 +1,14 @@
+name = "Negawatt normalizer"
+package = "Negawatt"
+core = 7.x
+
+dependencies[] = negawatt_electricity
+
+; Handlers
+files[] = plugins/electricity_normalizer/ElectricityNormalizerInterface.php
+files[] = plugins/electricity_normalizer/ElectricityNormalizerBase.php
+
+; Tests
+files[] = tests/NegawattNormalizerMeterProcessTestCase.test
+
+

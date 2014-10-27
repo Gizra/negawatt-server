@@ -1,0 +1,136 @@
+<?php
+
+/**
+ * @file
+ * Contains NegawattNormalizerMeterProcessTestCase
+ */
+
+class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
+
+  /**
+   * Get test info.
+   *
+   * @return array
+   *    test info
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Meter process',
+      'description' => 'Test the processing of raw data by meter.',
+      'group' => 'Negawatt Normalizer',
+    );
+  }
+
+  /**
+   * Setup test environment.
+   * Prepare meter nodes and raw data entities.
+   */
+  function setUp() {
+    parent::setUp('negawatt_normalizer');
+
+    $settings = array(
+      'type' => 'iec_meter',
+    );
+
+    $meter_node1 = $this->drupalCreateNode($settings);
+    $meter_node2 = $this->drupalCreateNode($settings);
+
+    $this->meterNode1 = $meter_node1;
+    $this->meterNode2 = $meter_node2;
+
+    // @todo: Add frequency.
+    // $wrapper = entity_metadata_wrapper('node', $meter_node);
+    // $wrapper->field_meter_frequency-set();
+
+    // Create the raw data.
+    $values_info = array(
+      array(
+        'type' => 'SATEC',
+        'timestamp' => strtotime('2014-6-12 15:00'),
+        'rate_type' => 'flat',
+        'meter_nid' => $meter_node1->nid,
+        'cumulative_kwh' => 10,
+        'power_factor' => 0.90,
+      ),
+      array(
+        'type' => 'SATEC',
+        'timestamp' => strtotime('2014-6-12 15:01'),
+        'rate_type' => 'flat',
+        'meter_nid' => $meter_node1->nid,
+        'cumulative_kwh' => 20,
+        'power_factor' => 0.96,
+      ),
+      array(
+        'type' => 'SATEC',
+        'timestamp' => strtotime('2014-6-12 15:01'),
+        'rate_type' => 'flat',
+        'meter_nid' => $meter_node2->nid,
+        'cumulative_kwh' => 30,
+        'power_factor' => 0.96,
+      ),
+    );
+
+    foreach ($values_info as $values) {
+      $entity = entity_create('electricity_raw', $values);
+      $entity->save();
+    }
+  }
+
+  /**
+   * Test processing a meter.
+   * - @todo: Test meter with wrong frequency
+   * - Test meter with empty data
+   * - Test meter with valid data.
+   * - Test that the using same timestamp, nid returns an existing entity.
+   * - Test that adding raw data and calling process again returns proper values.
+   */
+  function testProcessMeter() {
+    $handler = negawatt_normalizer_get_electricity_normalizer_handler('satec');
+
+    // Call process() with no raw data.
+    $result_entity = $handler->process($this->meterNode1, \ElectricityNormalizerInterface::HOUR, strtotime('2013-6-5 03:00'));
+
+    // Should be NULL.
+    // @todo: We have to decide if we return NULL here or some kind of an empty entity
+    $this->assertNull($result_entity);
+
+    // Create a new normalized entity and check its validity.
+    $result_entity = $handler->process($this->meterNode1, \ElectricityNormalizerInterface::HOUR, strtotime('2014-6-12 16:00'));
+
+    $id = $result_entity->id;
+
+    $this->assertEqual($result_entity->type, \ElectricityNormalizerInterface::HOUR, 'Entity type is correct.');
+    $this->assertEqual($result_entity->timestamp, strtotime('2014-6-12 15:00'), 'Processed timestamp is correct.');
+    $this->assertEqual($result_entity->meter_nid, 1, 'Meter nid is correct.');
+    $this->assertEqual($result_entity->avg_power, 600, 'Average power calculation was correct.');
+    // Problem with float representation prevent the exact value of 0.9
+    $this->assertTrue(abs($result_entity->min_power_factor - 0.90) < 0.0001, 'Min power-factor calculation was correct.');
+
+    // Add new entity to electricity raw table.
+    $values = array(
+      'type' => 'SATEC',
+      'timestamp' => strtotime('2014-6-12 15:04'),
+      'rate_type' => 'flat',
+      'meter_nid' => $this->meterNode1->nid,
+      'cumulative_kwh' => 30,
+      // Supply a new minimal power factor of 0.89 (previous value as 0.90).
+      'power_factor' => 0.89,
+    );
+    $entity = entity_create('electricity_raw', $values);
+    $entity->save();
+
+    // Use same process params again.
+    $result_entity = $handler->process($this->meterNode1, \ElectricityNormalizerInterface::HOUR, strtotime('2014-6-12 16:00'));
+
+    // Make sure the same normalized entity is returned.
+    $this->assertEqual($result_entity->id, $id, '<b>Second call to process().</b><br>The existing electricity entity is used.');
+
+    // Check that the values were updated after new entry.
+    $this->assertEqual($result_entity->type, \ElectricityNormalizerInterface::HOUR, 'Entity type is correct.');
+    $this->assertEqual($result_entity->timestamp, strtotime('2014-6-12 15:00'), 'Processed timestamp is correct.');
+    $this->assertEqual($result_entity->meter_nid, 1, 'Meter nid is correct.');
+    $this->assertEqual($result_entity->avg_power, 300, 'Average power calculation was correct.');
+    $this->assertTrue(abs($result_entity->min_power_factor - 0.89) < 0.0001, 'Min power-factor calculation was correct.');
+
+  }
+}

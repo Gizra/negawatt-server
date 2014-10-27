@@ -22,42 +22,28 @@ function negawatt_electricity_entity_info() {
   $return = array(
     'electricity' => array(
       'label' => t('Electricity data', array(), array('context' => 'electricity entity')),
-      'controller class' => 'ElectricityEntityController',
       'locking mode' => 'pessimistic',
       'base table' => 'negawatt_electricity_normalized',
       'fieldable' => TRUE,
       'entity keys' => array(
         'id' => 'id',
       ),
-      'access arguments' => array(
-        'user key' => 'uid',
-        'access tag' => 'electricity_access',
-      ),
-      'permission labels' => array(
-        'singular' => t('electricity'),
-        'plural' => t('electricity'),
-      ),
+      'entity class' => 'Electricity',
+      'controller class' => 'EntityAPIController',
       'metadata controller class' => 'ElectricityMetadataController',
       'views controller class' => 'EntityDefaultViewsController',
       'entity cache' => module_exists('entitycache'),
     ),
+
     'electricity_raw' => array(
       'label' => t('Electricity raw data', array(), array('context' => 'electricity raw entity')),
-      'controller class' => 'ElectricityRawEntityController',
-      'locking mode' => 'pessimistic',
       'base table' => 'negawatt_electricity',
-      'fieldable' => FALSE,
+      'fieldable' => TRUE,
       'entity keys' => array(
         'id' => 'id',
       ),
-      'access arguments' => array(
-        'user key' => 'uid',
-        'access tag' => 'electricity_raw_access',
-      ),
-      'permission labels' => array(
-        'singular' => t('electricity raw'),
-        'plural' => t('electricity raw'),
-      ),
+      'entity class' => 'ElectricityRaw',
+      'controller class' => 'EntityAPIController',
       'metadata controller class' => 'ElectricityRawMetadataController',
       'views controller class' => 'EntityDefaultViewsController',
       'entity cache' => module_exists('entitycache'),

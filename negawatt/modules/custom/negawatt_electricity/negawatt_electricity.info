@@ -13,5 +13,8 @@ features[views_view][] = electricity_raw_overview
 
 files[] = includes/ElectricityMetadataController.php
 files[] = includes/ElectricityRawMetadataController.php
-files[] = includes/negawatt_electricity.controller.inc
-files[] = includes/negawatt_electricity_raw.controller.inc
+files[] = includes/Electricity.php
+files[] = includes/ElectricityRaw.php
+
+; Tests
+files[] = tests/NegawattWebTestCase.test

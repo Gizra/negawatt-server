@@ -28,6 +28,9 @@ class ElectricityMetadataController extends EntityDefaultMetadataController {
       $properties[$property_name]['setter callback'] = 'entity_property_verbatim_set';
     }
 
+    $properties['avg_power']['type'] = 'decimal';
+    $properties['min_power_factor']['type'] = 'decimal';
+
     $properties['meter_nid']['type'] = 'node';
 
     return $info;

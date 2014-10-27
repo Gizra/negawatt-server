@@ -48,10 +48,12 @@ dependencies[] = views
 dependencies[] = views_bulk_operations
 
 ; Negawatt
-dependencies[] = negawatt_electricity
-dependencies[] = negawatt_restful
-dependencies[] = negawatt_migrate
-dependencies[] = negawatt_account
-dependencies[] = satec
 dependencies[] = iec
+dependencies[] = negawatt_account
+dependencies[] = negawatt_electricity
+dependencies[] = negawatt_migrate
+dependencies[] = negawatt_normalizer
+dependencies[] = negawatt_restful
+dependencies[] = satec
+
 
