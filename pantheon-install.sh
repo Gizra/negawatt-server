@@ -1,9 +1,9 @@
 #!/bin/bash
 
-PANTHEON_DIR="/var/www/pantheon-negawatt"
+PANTHEON_DIR="/Applications/MAMP/htdocs/pantheon-negawatt"
 
 rm -rf $PANTHEON_DIR/profiles/negawatt
-cp -R pipeline $PANTHEON_DIR/profiles/negawatt
+cp -R negawatt $PANTHEON_DIR/profiles/negawatt
 
 cd $PANTHEON_DIR
 git add .
