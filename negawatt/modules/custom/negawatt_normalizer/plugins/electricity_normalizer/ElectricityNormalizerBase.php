@@ -8,6 +8,27 @@
 abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterface {
 
   /**
+   * Rate-type constant, peak rate.
+   */
+  const PEAK = 'peak';
+
+  /**
+   * Rate-type constant, middle rate.
+   */
+  const MID = 'mid';
+
+  /**
+   * Rate-type constant, low rate.
+   */
+  const LOW = 'low';
+
+  /**
+   * Rate-type constant for non-TOUse rate.
+   */
+  const FLAT = 'flat';
+
+
+  /**
    * The meter node.
    *
    * @var stdClass
@@ -34,6 +55,13 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
    * @var int
    */
   protected $timestampEnd = NULL;
+
+  /**
+   * Rate type, e.g. PEAK, LOW.
+   *
+   * @var string
+   */
+  protected $rateType = NULL;
 
   /**
    * Get the meter node.
@@ -99,6 +127,7 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
 
   /**
    * Get the timestamp of the beginning of time period to normalize.
+   *
    * If not set yet, will calculate the timestamp from the timestampEnd and frequency.
    *
    * @throws Exception if can't figure out the frequency.
@@ -163,6 +192,26 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
   }
 
   /**
+   * Get the rate type, e.g. PEAK, LOW.
+   *
+   * @return string
+   *    Rate-type.
+   */
+  public function getRateType() {
+    return $this->rateType;
+  }
+
+  /**
+   * Set the rate type, e.g. PEAK, LOW.
+   *
+   * @param string $rateType
+   *    The rate-type.
+   */
+  public function setRateType($rateType) {
+    $this->rateType = $rateType;
+  }
+
+  /**
    * Class constructor.
    *
    * @param array $plugin
@@ -175,18 +224,64 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
   /**
    * {@inheritdoc}
    */
-  public function process($node, $frequency, $timestamp_end = NULL) {
+  public function process($node, $frequency, $timestamp_end = NULL, array $rate_types = NULL) {
     $this->setMeterNode($node);
     $this->setFrequency($frequency);
     $this->setTimestampEnd($timestamp_end ? $timestamp_end : time());
 
+    $allowed_rate_types = array(
+      \ElectricityNormalizerBase::PEAK,
+      \ElectricityNormalizerBase::MID,
+      \ElectricityNormalizerBase::LOW,
+      \ElectricityNormalizerBase::FLAT,
+    );
+
+    // If $rate_types was NULL, set it to all allowed rate-types.
+    $rate_types = empty($rate_types) ? $allowed_rate_types : $rate_types;
+
+    $processedEntities = array();
+    foreach ($rate_types as $rate_type) {
+      // Make sure $rate_type is valid.
+      if (!in_array($rate_type, $allowed_rate_types)) {
+        $params = array(
+          '@type' => $rate_type,
+        );
+        throw new \Exception(format_string('Rate type "@rate" not in allowed rate types.', $params));
+      }
+
+      $processedEntity = $this->processByRateType($rate_type);
+      if (!$processedEntity) {
+        // Don't put into result a NULL entity.
+        continue;
+      }
+      $processedEntities[] = $processedEntity;
+    }
+
+    return $processedEntities;
+  }
+
+  /**
+   * Do the actual processing of one entity.
+   *
+   * Called from ElectricityNormalizerBase::process() for each rate-type.
+   * Node, frequency, and timestampEnd should all have been set by caller.
+   *
+   * @param string $rate_type
+   *    The rate-type to use (peak, mid, etc.).
+   *
+   * @return stdClass
+   *    The processed entity, or NULL if there were no values to process.
+   */
+  protected function processByRateType($rate_type) {
+    $this->setRateType($rate_type);
+
     // Try to normalize values.
-    if (!$values = $this->normalizeValues()) {
+    if (!$values = $this->getNormalizedValues()) {
       // No values to normalize.
       return;
     }
 
-    // Save returned normalized values.
+    // Prepare entity of normalized values.
     $wrapper = entity_metadata_wrapper('electricity', $this->getNormalizedEntity());
 
     foreach ($values as $property => $value) {
@@ -201,7 +296,7 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
    * Get or create the normalized entity for a time period and meter.
    *
    * @return StdClass
-   *  The entity found (or created).
+   *    The entity found (or created).
    */
   protected function getNormalizedEntity() {
     // Check if the required normalized entity exists.
@@ -210,7 +305,7 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
       ->entityCondition('entity_type', 'electricity')
       ->propertyCondition('meter_nid', $this->getMeterNode()->nid)
       ->propertyCondition('timestamp', $this->getTimestampBeginning())
-      // @fixme: For TOUse meters, several entities will result (for peak, mid, and low rates, and maybe non-touse too).
+      ->propertyCondition('rate_type', $this->getRateType())
       ->range(0, 1)
       ->execute();
     if (!empty($result['electricity'])) {
@@ -224,8 +319,7 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
       'type' => $this->getFrequency(),
       'meter_nid' => $this->getMeterNode()->nid,
       'timestamp' => $this->getTimestampBeginning(),
-      // @fixme: Consider rate type. There might be several entities for the time period with different rate types.
-      'rate_type' => 'flat',
+      'rate_type' => $this->getRateType(),
     );
 
     $entity = entity_create('electricity', $values);
@@ -241,12 +335,28 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
   }
 
   /**
+   * Prepare a standard query for the raw table.
+   *
+   * @return SelectQuery
+   *    The Query object.
+   */
+  protected function getQueryForNormalizedValues() {
+    $query = db_select('negawatt_electricity', 'ne')
+      ->condition('timestamp', $this->getTimestampBeginning(), '>=')
+      ->condition('timestamp', $this->getTimestampEnd(), '<')
+      ->condition('meter_nid', $this->getMeterNode()->nid)
+      ->condition('rate_type', $this->getRateType());
+    return $query;
+  }
+
+  /**
    * Normalize the required entities.
+   *
    * Must be supplied by child object.
    *
    * @return array
    *  Array of normalized values.
    */
-  abstract protected function normalizeValues();
+  abstract protected function getNormalizedValues();
 
 }

@@ -9,26 +9,25 @@ class ElectricityNormalizerSatec extends \ElectricityNormalizerBase {
 
   /**
    * Normalize the required entities.
+   * 
    * Must be supplied by child object.
    *
    * @throws Exception for frequency different than HOUR (NIY).
 
    * @return StdClass
-   *  The normalized entity.
+   *    The normalized entity.
    */
-  protected function normalizeValues() {
+  protected function getNormalizedValues() {
     if ($this->getFrequency() == \ElectricityNormalizerInterface::HOUR) {
 
       // For Satec, the minimal freq. is hour, get data from raw table.
-      $query = db_select('negawatt_electricity', 'ne')
-        ->condition('timestamp', array($this->getTimestampBeginning(), $this->getTimestampEnd()), 'BETWEEN')
-        ->condition('meter_nid', $this->getMeterNode()->nid);
+      $query = parent::getQueryForNormalizedValues();
 
-      $query->addExpression('MIN(cumulative_kwh)', 'minCumPower');
-      $query->addExpression('MAX(cumulative_kwh)', 'maxCumPower');
-      $query->addExpression('MIN(timestamp)', 'minTimestamp');
-      $query->addExpression('MAX(timestamp)', 'maxTimestamp');
-      $query->addExpression('MIN(power_factor)', 'minPowerFactor');
+      $query->addExpression('MIN(cumulative_kwh)', 'min_cum_power');
+      $query->addExpression('MAX(cumulative_kwh)', 'max_cum_power');
+      $query->addExpression('MIN(timestamp)', 'min_timestamp');
+      $query->addExpression('MAX(timestamp)', 'max_timestamp');
+      $query->addExpression('MIN(power_factor)', 'min_power_factor');
       // @fixme: group by rate_type
 
       $result = $query->execute();
@@ -52,29 +51,28 @@ class ElectricityNormalizerSatec extends \ElectricityNormalizerBase {
       // Calculate avg_power and return result.
       
       // If minTimestamp = maxTimestamp, divide-by-zero will result.
-      if ($result->minTimestamp >= $result->maxTimestamp) {
+      if ($result->min_timestamp >= $result->max_timestamp) {
         // @todo: What if only one record exists in the raw table for that time period?
         // Max and min timestamps are the same, cannot calculate avgPower.
         return NULL;
       }
 
-
       // Calculate average power at time period.
-      $energyDiff = $result->maxCumPower - $result->minCumPower;
-      $timeDiff = ($result->maxTimestamp - $result->minTimestamp);
+      $energy_diff = $result->max_cum_power - $result->min_cum_power;
+      $time_diff = ($result->max_timestamp - $result->min_timestamp);
       // Convert from seconds to hours (energy is given by kilowatt-hours).
-      $timeDiff = $timeDiff/60./60;
+      $time_diff = $time_diff/60./60;
       // Average power (in kilowatts) is given by dividing the total energy at
       // the time period (in kilowatt-hours) by the period's length (in hours).
-      $avgPower = $energyDiff / $timeDiff;
+      $avg_power = $energy_diff / $time_diff;
 
       return array(
-        'min_power_factor' => $result->minPowerFactor,
-        'avg_power' => $avgPower,
+        'min_power_factor' => $result->min_power_factor,
+        'avg_power' => $avg_power,
       );
     }
 
     // @todo: for frequency higher then hour, use data from normalized table
-    throw new \Exception('Unhandled frequency @ElectricityNormalizerSatec::normalizeValues().');
+    throw new \Exception('Unhandled frequency @ElectricityNormalizerSatec::getNormalizedValues().');
   }
 }
