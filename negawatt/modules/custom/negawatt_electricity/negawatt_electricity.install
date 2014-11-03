@@ -46,8 +46,8 @@ function negawatt_electricity_schema() {
         'unsigned' => TRUE,
         'not null' => TRUE,
       ),
-      'cumulative_kwh' => array(
-        'description' => 'cumulative counter of total (three phases) kWh.',
+      'kwh' => array(
+        'description' => 'Total (three phases) kWh.',
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
@@ -59,41 +59,41 @@ function negawatt_electricity_schema() {
         'not null' => TRUE,
         'default' => 0,
       ),
-      'cumulative_kwh_l1' => array(
-        'description' => 'cumulative counter of L1 kWh.',
+      'kwh_l1' => array(
+        'description' => 'L1 kWh.',
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
         'default' => 0,
       ),
-      'cumulative_kwh_l2' => array(
-        'description' => 'cumulative counter of L2 kWh.',
+      'kwh_l2' => array(
+        'description' => 'L2 kWh.',
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
         'default' => 0,
       ),
-      'cumulative_kwh_l3' => array(
-        'description' => 'cumulative counter of L3 kWh.',
+      'kwh_l3' => array(
+        'description' => 'L3 kWh.',
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
         'default' => 0,
       ),
       'power_factor_l1' => array(
-        'description' => 'power factor for L1.',
+        'description' => 'Power factor for L1.',
         'type' => 'float',
         'not null' => TRUE,
         'default' => 0,
       ),
       'power_factor_l2' => array(
-        'description' => 'power factor for L2.',
+        'description' => 'Power factor for L2.',
         'type' => 'float',
         'not null' => TRUE,
         'default' => 0,
       ),
       'power_factor_l3' => array(
-        'description' => 'power factor for L3.',
+        'description' => 'Power factor for L3.',
         'type' => 'float',
         'not null' => TRUE,
         'default' => 0,

@@ -1,21 +1,21 @@
 <?php
 /**
  * @file
- * iec.features.field_instance.inc
+ * satec.features.field_instance.inc
  */
 
 /**
  * Implements hook_field_default_field_instances().
  */
-function iec_field_default_field_instances() {
+function satec_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-iec_meter-field_address'
-  $field_instances['node-iec_meter-field_address'] = array(
-    'bundle' => 'iec_meter',
+  // Exported field_instance: 'node-satec_meter-field_address'
+  $field_instances['node-satec_meter-field_address'] = array(
+    'bundle' => 'satec_meter',
     'default_value' => array(
       0 => array(
-        'element_key' => 'node|iec_meter|field_address|und|0',
+        'element_key' => 'node|satec_meter|field_address|und|0',
         'thoroughfare' => '',
         'premise' => '',
         'locality' => '',
@@ -35,7 +35,7 @@ function iec_field_default_field_instances() {
           'use_widget_handlers' => 1,
         ),
         'type' => 'addressfield_default',
-        'weight' => 10,
+        'weight' => 7,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -55,7 +55,9 @@ function iec_field_default_field_instances() {
       'active' => 1,
       'module' => 'addressfield',
       'settings' => array(
-        'available_countries' => array(),
+        'available_countries' => array(
+          'IL' => 'IL',
+        ),
         'format_handlers' => array(
           'address' => 'address',
           'address-hide-country' => 0,
@@ -65,59 +67,13 @@ function iec_field_default_field_instances() {
         ),
       ),
       'type' => 'addressfield_standard',
-      'weight' => 11,
+      'weight' => 10,
     ),
   );
 
-  // Exported field_instance: 'node-iec_meter-field_contract_id'
-  $field_instances['node-iec_meter-field_contract_id'] = array(
-    'bundle' => 'iec_meter',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'number',
-        'settings' => array(
-          'decimal_separator' => '.',
-          'prefix_suffix' => TRUE,
-          'scale' => 0,
-          'thousand_separator' => ' ',
-        ),
-        'type' => 'number_integer',
-        'weight' => 2,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_contract_id',
-    'label' => 'Contract ID',
-    'required' => 0,
-    'settings' => array(
-      'max' => '',
-      'min' => '',
-      'prefix' => '',
-      'suffix' => '',
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'number',
-      'settings' => array(),
-      'type' => 'number',
-      'weight' => 2,
-    ),
-  );
-
-  // Exported field_instance: 'node-iec_meter-field_last_processed'
-  $field_instances['node-iec_meter-field_last_processed'] = array(
-    'bundle' => 'iec_meter',
+  // Exported field_instance: 'node-satec_meter-field_last_processed'
+  $field_instances['node-satec_meter-field_last_processed'] = array(
+    'bundle' => 'satec_meter',
     'deleted' => 0,
     'description' => '',
     'display' => array(
@@ -132,7 +88,7 @@ function iec_field_default_field_instances() {
           'multiple_to' => '',
         ),
         'type' => 'date_default',
-        'weight' => 12,
+        'weight' => 9,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -164,13 +120,13 @@ function iec_field_default_field_instances() {
         'year_range' => '-3:+3',
       ),
       'type' => 'date_text',
-      'weight' => 13,
+      'weight' => 12,
     ),
   );
 
-  // Exported field_instance: 'node-iec_meter-field_location'
-  $field_instances['node-iec_meter-field_location'] = array(
-    'bundle' => 'iec_meter',
+  // Exported field_instance: 'node-satec_meter-field_location'
+  $field_instances['node-satec_meter-field_location'] = array(
+    'bundle' => 'satec_meter',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -180,7 +136,7 @@ function iec_field_default_field_instances() {
         'module' => 'geolocation',
         'settings' => array(),
         'type' => 'geolocation_text',
-        'weight' => 3,
+        'weight' => 8,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -201,13 +157,53 @@ function iec_field_default_field_instances() {
       'module' => 'geolocation',
       'settings' => array(),
       'type' => 'geolocation_text',
-      'weight' => 4,
+      'weight' => 3,
     ),
   );
 
-  // Exported field_instance: 'node-iec_meter-field_meter_code'
-  $field_instances['node-iec_meter-field_meter_code'] = array(
-    'bundle' => 'iec_meter',
+  // Exported field_instance: 'node-satec_meter-field_mac_address'
+  $field_instances['node-satec_meter-field_mac_address'] = array(
+    'bundle' => 'satec_meter',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 1,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_mac_address',
+    'label' => 'MAC address',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 2,
+    ),
+  );
+
+  // Exported field_instance: 'node-satec_meter-field_meter_id'
+  $field_instances['node-satec_meter-field_meter_id'] = array(
+    'bundle' => 'satec_meter',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -222,7 +218,7 @@ function iec_field_default_field_instances() {
           'thousand_separator' => ' ',
         ),
         'type' => 'number_integer',
-        'weight' => 8,
+        'weight' => 6,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -232,8 +228,8 @@ function iec_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
-    'field_name' => 'field_meter_code',
-    'label' => 'Meter Code',
+    'field_name' => 'field_meter_id',
+    'label' => 'Meter id',
     'required' => 0,
     'settings' => array(
       'max' => '',
@@ -251,9 +247,49 @@ function iec_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-iec_meter-field_meter_serial'
-  $field_instances['node-iec_meter-field_meter_serial'] = array(
-    'bundle' => 'iec_meter',
+  // Exported field_instance: 'node-satec_meter-field_meter_ip_address'
+  $field_instances['node-satec_meter-field_meter_ip_address'] = array(
+    'bundle' => 'satec_meter',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 4,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_meter_ip_address',
+    'label' => 'Meter IP address',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 7,
+    ),
+  );
+
+  // Exported field_instance: 'node-satec_meter-field_meter_port'
+  $field_instances['node-satec_meter-field_meter_port'] = array(
+    'bundle' => 'satec_meter',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -268,7 +304,7 @@ function iec_field_default_field_instances() {
           'thousand_separator' => ' ',
         ),
         'type' => 'number_integer',
-        'weight' => 9,
+        'weight' => 5,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -278,8 +314,8 @@ function iec_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
-    'field_name' => 'field_meter_serial',
-    'label' => 'Meter Serial',
+    'field_name' => 'field_meter_port',
+    'label' => 'Meter port',
     'required' => 0,
     'settings' => array(
       'max' => '',
@@ -293,56 +329,13 @@ function iec_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 10,
+      'weight' => 8,
     ),
   );
 
-  // Exported field_instance: 'node-iec_meter-field_parent_contract'
-  $field_instances['node-iec_meter-field_parent_contract'] = array(
-    'bundle' => 'iec_meter',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => 'In case we have 2 or more meters for a single contract, this field will reference to the \'main\' contract ID, which is used to save the electricity Data.',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
-        'weight' => 11,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_parent_contract',
-    'label' => 'Parent contract',
-    'required' => 0,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'entityreference',
-      'settings' => array(
-        'match_operator' => 'CONTAINS',
-        'path' => '',
-        'size' => 60,
-      ),
-      'type' => 'entityreference_autocomplete',
-      'weight' => 12,
-    ),
-  );
-
-  // Exported field_instance: 'node-iec_meter-field_place_address'
-  $field_instances['node-iec_meter-field_place_address'] = array(
-    'bundle' => 'iec_meter',
+  // Exported field_instance: 'node-satec_meter-field_place_address'
+  $field_instances['node-satec_meter-field_place_address'] = array(
+    'bundle' => 'satec_meter',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -352,7 +345,7 @@ function iec_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 5,
+        'weight' => 2,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -376,13 +369,13 @@ function iec_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 6,
+      'weight' => 4,
     ),
   );
 
-  // Exported field_instance: 'node-iec_meter-field_place_description'
-  $field_instances['node-iec_meter-field_place_description'] = array(
-    'bundle' => 'iec_meter',
+  // Exported field_instance: 'node-satec_meter-field_place_description'
+  $field_instances['node-satec_meter-field_place_description'] = array(
+    'bundle' => 'satec_meter',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -416,13 +409,13 @@ function iec_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 7,
+      'weight' => 5,
     ),
   );
 
-  // Exported field_instance: 'node-iec_meter-field_place_locality'
-  $field_instances['node-iec_meter-field_place_locality'] = array(
-    'bundle' => 'iec_meter',
+  // Exported field_instance: 'node-satec_meter-field_place_locality'
+  $field_instances['node-satec_meter-field_place_locality'] = array(
+    'bundle' => 'satec_meter',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -432,7 +425,7 @@ function iec_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 7,
+        'weight' => 3,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -456,13 +449,13 @@ function iec_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 8,
+      'weight' => 6,
     ),
   );
 
-  // Exported field_instance: 'node-iec_meter-og_group_ref'
-  $field_instances['node-iec_meter-og_group_ref'] = array(
-    'bundle' => 'iec_meter',
+  // Exported field_instance: 'node-satec_meter-og_group_ref'
+  $field_instances['node-satec_meter-og_group_ref'] = array(
+    'bundle' => 'satec_meter',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -502,38 +495,25 @@ function iec_field_default_field_instances() {
       ),
       'user_register_form' => FALSE,
     ),
-    'view modes' => array(
-      'full' => array(
-        'custom settings' => FALSE,
-        'label' => 'Full',
-        'type' => 'og_list_default',
-      ),
-      'teaser' => array(
-        'custom settings' => FALSE,
-        'label' => 'Teaser',
-        'type' => 'og_list_default',
-      ),
-    ),
     'widget' => array(
       'active' => 0,
       'module' => 'og',
       'settings' => array(),
       'type' => 'og_complex',
-      'weight' => 0,
+      'weight' => 1,
     ),
   );
 
   // Translatables
   // Included for use with string extractors like potx.
   t('Address');
-  t('Contract ID');
   t('Groups audience');
-  t('In case we have 2 or more meters for a single contract, this field will reference to the \'main\' contract ID, which is used to save the electricity Data.');
   t('Last processed');
   t('Location');
-  t('Meter Code');
-  t('Meter Serial');
-  t('Parent contract');
+  t('MAC address');
+  t('Meter IP address');
+  t('Meter id');
+  t('Meter port');
   t('Place Address');
   t('Place Description');
   t('Place Locality');

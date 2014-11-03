@@ -126,31 +126,31 @@ function negawatt_electricity_views_default_views() {
   $handler->display->display_options['fields']['meter_nid']['alter']['make_link'] = TRUE;
   $handler->display->display_options['fields']['meter_nid']['alter']['path'] = 'node/[meter_nid]';
   $handler->display->display_options['fields']['meter_nid']['separator'] = '';
-  /* Field: Electricity raw data: Cumulative_kwh */
-  $handler->display->display_options['fields']['cumulative_kwh']['id'] = 'cumulative_kwh';
-  $handler->display->display_options['fields']['cumulative_kwh']['table'] = 'negawatt_electricity';
-  $handler->display->display_options['fields']['cumulative_kwh']['field'] = 'cumulative_kwh';
-  $handler->display->display_options['fields']['cumulative_kwh']['label'] = 'Cum. kwh';
+  /* Field: Electricity raw data: Kwh */
+  $handler->display->display_options['fields']['kwh']['id'] = 'kwh';
+  $handler->display->display_options['fields']['kwh']['table'] = 'negawatt_electricity';
+  $handler->display->display_options['fields']['kwh']['field'] = 'kwh';
+  $handler->display->display_options['fields']['kwh']['label'] = 'kwh';
   /* Field: Electricity raw data: Power_factor */
   $handler->display->display_options['fields']['power_factor']['id'] = 'power_factor';
   $handler->display->display_options['fields']['power_factor']['table'] = 'negawatt_electricity';
   $handler->display->display_options['fields']['power_factor']['field'] = 'power_factor';
   $handler->display->display_options['fields']['power_factor']['precision'] = '0';
-  /* Field: Electricity raw data: Cumulative_kwh_l1 */
-  $handler->display->display_options['fields']['cumulative_kwh_l1']['id'] = 'cumulative_kwh_l1';
-  $handler->display->display_options['fields']['cumulative_kwh_l1']['table'] = 'negawatt_electricity';
-  $handler->display->display_options['fields']['cumulative_kwh_l1']['field'] = 'cumulative_kwh_l1';
-  $handler->display->display_options['fields']['cumulative_kwh_l1']['label'] = 'Cum. kwh_l1';
-  /* Field: Electricity raw data: Cumulative_kwh_l2 */
-  $handler->display->display_options['fields']['cumulative_kwh_l2']['id'] = 'cumulative_kwh_l2';
-  $handler->display->display_options['fields']['cumulative_kwh_l2']['table'] = 'negawatt_electricity';
-  $handler->display->display_options['fields']['cumulative_kwh_l2']['field'] = 'cumulative_kwh_l2';
-  $handler->display->display_options['fields']['cumulative_kwh_l2']['label'] = 'Cum. kwh_l2';
-  /* Field: Electricity raw data: Cumulative_kwh_l3 */
-  $handler->display->display_options['fields']['cumulative_kwh_l3']['id'] = 'cumulative_kwh_l3';
-  $handler->display->display_options['fields']['cumulative_kwh_l3']['table'] = 'negawatt_electricity';
-  $handler->display->display_options['fields']['cumulative_kwh_l3']['field'] = 'cumulative_kwh_l3';
-  $handler->display->display_options['fields']['cumulative_kwh_l3']['label'] = 'Cum. kwh_l3';
+  /* Field: Electricity raw data: Kwh_l1 */
+  $handler->display->display_options['fields']['kwh_l1']['id'] = 'kwh_l1';
+  $handler->display->display_options['fields']['kwh_l1']['table'] = 'negawatt_electricity';
+  $handler->display->display_options['fields']['kwh_l1']['field'] = 'kwh_l1';
+  $handler->display->display_options['fields']['kwh_l1']['label'] = 'kwh_l1';
+  /* Field: Electricity raw data: Kwh_l2 */
+  $handler->display->display_options['fields']['kwh_l2']['id'] = 'kwh_l2';
+  $handler->display->display_options['fields']['kwh_l2']['table'] = 'negawatt_electricity';
+  $handler->display->display_options['fields']['kwh_l2']['field'] = 'kwh_l2';
+  $handler->display->display_options['fields']['kwh_l2']['label'] = 'kwh_l2';
+  /* Field: Electricity raw data: Kwh_l3 */
+  $handler->display->display_options['fields']['kwh_l3']['id'] = 'kwh_l3';
+  $handler->display->display_options['fields']['kwh_l3']['table'] = 'negawatt_electricity';
+  $handler->display->display_options['fields']['kwh_l3']['field'] = 'kwh_l3';
+  $handler->display->display_options['fields']['kwh_l3']['label'] = 'kwh_l3';
   /* Field: Electricity raw data: Power_factor_l1 */
   $handler->display->display_options['fields']['power_factor_l1']['id'] = 'power_factor_l1';
   $handler->display->display_options['fields']['power_factor_l1']['table'] = 'negawatt_electricity';

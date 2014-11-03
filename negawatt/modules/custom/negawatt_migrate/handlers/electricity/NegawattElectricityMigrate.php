@@ -62,5 +62,6 @@ class NegawattElectricityMigrate extends Migration {
 
   public function prepare($entity, $row) {
     $entity->meter_nid = reset($entity->meter_nid);
+    $entity->timestamp = strtotime($entity->timestamp);
   }
 }

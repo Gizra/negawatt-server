@@ -141,42 +141,50 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
     }
 
     // Create DateTime object to calculate the beginning of time period.
-    $date_time = new \DateTime(); 
+    $date_time = new \DateTime();
     $date_info = getdate($this->timestampEnd);
     switch ($this->frequency) {
       case \ElectricityNormalizerInterface::HOUR: {
-        // Take the beginning of the previous hour
-        // @fixme: What if timestampEnd is in the middle of an hour? Current calculation will result an interval of more then a hour.
+        // Take the beginning of the previous hour.
         $date_time->setDate($date_info['year'], $date_info['mon'], $date_info['mday']);
-        $date_time->setTime($date_info['hours'] - 1, 0, 0);
+        // If timestampEnd was set to exact hour, go back one hour, otherwise go back to beginning of hour.
+        $hour = (0 == $date_info['minutes'] && 0 == $date_info['seconds']) ? ($date_info['hours'] - 1) : $date_info['hours'];
+        $date_time->setTime($hour, 0, 0);
         break;
       }
       case \ElectricityNormalizerInterface::DAY: {
-        // Take the beginning of the previous day at noon.
-        // @fixme: What if timestampEnd is in the middle of the day? Current calculation will result an interval of more then one day.
-        $date_time->setDate($date_info['year'], $date_info['mon'], $date_info['mday'] - 1);
-        $date_time->setTime(12, 0, 0);
+        // Take the beginning of the previous day.
+        // If timestampEnd was set to beginning of the day, go back one day, otherwise go back to beginning of the day.
+        $day = (0 == $date_info['hours'] && 0 == $date_info['minutes'] && 0 == $date_info['seconds']) ? ($date_info['mday'] - 1) : $date_info['mday'];
+        $date_time->setDate($date_info['year'], $date_info['mon'], $day);
+        $date_time->setTime(0, 0, 0);
         break;
       }
       case \ElectricityNormalizerInterface::WEEK: {
-        // Take the beginning of the previous Sunday at noon.
-        // @fixme: What if timestampEnd is on Sun. but before noon? The result interval will be negative...
-        $date_time->setDate($date_info['year'], $date_info['mon'], $date_info['mday'] - $date_info['wday']);
-        $date_time->setTime(12, 0, 0);
+        // Take the beginning of the previous Sunday.
+        // If timestampEnd was set to beginning of the week, go back one week, otherwise go back to beginning of the week.
+        $day = (0 == $date_info['hours'] && 0 == $date_info['minutes'] && 0 == $date_info['seconds'] && 0 == $date_info['wday']) ?
+          ($date_info['mday'] - $date_info['wday']) : ($date_info['mday'] - 7);
+        $date_time->setDate($date_info['year'], $date_info['mon'], $day);
+        $date_time->setTime(0, 0, 0);
         break;
       }
       case \ElectricityNormalizerInterface::MONTH: {
-        // Take the beginning of the 1st day of the previous month, at noon.
-        // @fixme: What if timestampEnd is in the middle of the month? Current calculation will result an interval of more then one month.
-        $date_time->setDate($date_info['year'], $date_info['mon'] - 1, 1);
-        $date_time->setTime(12, 0, 0);
+        // Take the beginning of the 1st day of the previous month.
+        // If timestampEnd was set to beginning of the month, go back one month, otherwise go back to beginning of the month.
+        $month = (0 == $date_info['hours'] && 0 == $date_info['minutes'] && 0 == $date_info['seconds'] && 1 == $date_info['mday']) ?
+          ($date_info['mon'] - 1) : $date_info['mon'];
+        $date_time->setDate($date_info['year'], $month, 1);
+        $date_time->setTime(0, 0, 0);
         break;
       }
       case \ElectricityNormalizerInterface::YEAR: {
-        // Take the beginning of the 1st day of the previous year, at noon.
-        // @fixme: What if timestampEnd is in the middle of the year? Current calculation will result an interval of more then one year.
-        $date_time->setDate($date_info['year'] - 1, 1, 1);
-        $date_time->setTime(12, 0, 0);
+        // Take the beginning of the 1st day of the previous year.
+        // If timestampEnd was set to beginning of the month, go back one month, otherwise go back to beginning of the month.
+        $year = (0 == $date_info['hours'] && 0 == $date_info['minutes'] && 0 == $date_info['seconds'] && 0 == $date_info['yday']) ?
+          ($date_info['year'] - 1) : $date_info['year'];
+        $date_time->setDate($year, 1, 1);
+        $date_time->setTime(0, 0, 0);
         break;
       }
       default: {
@@ -224,10 +232,49 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
   /**
    * {@inheritdoc}
    */
-  public function process($node, $frequency, $timestamp_end = NULL, array $rate_types = NULL) {
+  public function process($node, $timestamp_end = NULL, $frequencies = array(), $rate_types = array()) {
     $this->setMeterNode($node);
-    $this->setFrequency($frequency);
     $this->setTimestampEnd($timestamp_end ? $timestamp_end : time());
+
+    // If frequencies was empty, set it to all allowed frequencies.
+    $allowed_frequencies = $this->getAllowedFrequencies();
+    $frequencies = empty($frequencies) ? $allowed_frequencies : $frequencies;
+
+    $processed_entities = array();
+    foreach ($frequencies as $frequency) {
+      // Make sure frequency is valid.
+      if (!in_array($frequency, $allowed_frequencies)) {
+        throw new \Exception(format_string('Frequency "@freq" not in allowed frequencies.', array('@freq', $frequency)));
+      }
+
+      $frequency_entities = $this->processByFrequency($frequency, $rate_types);
+      if (empty($frequency_entities)) {
+        // Don't put into result an empty array.
+        continue;
+      }
+      $processed_entities = array_merge($processed_entities, $frequency_entities);
+    }
+
+    return $processed_entities;
+  }
+
+  /**
+   * Process entities by one frequency.
+   *
+   * Called from ElectricityNormalizerBase::process() for each frequency.
+   * Node, and timestampEnd should have been set by caller.
+   *
+   * @param string $frequency
+   *    The frequency to use (HOUR, MONTH, etc.).
+   * @param array $rate_types
+   *    The rate-types to use (peak, mid, etc.).
+   * @throws Exception in case of unknown rate-type.
+   *
+   * @return array
+   *    The processed entities, or empty array if there were no values to process.
+   */
+  public function processByFrequency($frequency, $rate_types = array()) {
+    $this->setFrequency($frequency);
 
     $allowed_rate_types = array(
       \ElectricityNormalizerBase::PEAK,
@@ -236,28 +283,25 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
       \ElectricityNormalizerBase::FLAT,
     );
 
-    // If $rate_types was NULL, set it to all allowed rate-types.
+    // If $rate_types was empty, set it to all allowed rate-types.
     $rate_types = empty($rate_types) ? $allowed_rate_types : $rate_types;
 
-    $processedEntities = array();
+    $processed_entities = array();
     foreach ($rate_types as $rate_type) {
       // Make sure $rate_type is valid.
       if (!in_array($rate_type, $allowed_rate_types)) {
-        $params = array(
-          '@type' => $rate_type,
-        );
-        throw new \Exception(format_string('Rate type "@rate" not in allowed rate types.', $params));
+        throw new \Exception(format_string('Rate type "@rate" not in allowed rate types.', array('@type' => $rate_type)));
       }
 
-      $processedEntity = $this->processByRateType($rate_type);
-      if (!$processedEntity) {
+      $processed_entity = $this->processByRateType($rate_type);
+      if (!$processed_entity) {
         // Don't put into result a NULL entity.
         continue;
       }
-      $processedEntities[] = $processedEntity;
+      $processed_entities[] = $processed_entity;
     }
 
-    return $processedEntities;
+    return $processed_entities;
   }
 
   /**
@@ -293,7 +337,7 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
   }
 
   /**
-   * Get or create the normalized entity for a time period and meter.
+   * Get or create the normalized entity for a time period, rate-type, frequency, and meter.
    *
    * @return StdClass
    *    The entity found (or created).
@@ -303,6 +347,7 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
     $query = new EntityFieldQuery();
     $result = $query
       ->entityCondition('entity_type', 'electricity')
+      ->propertyCondition('type', $this->getFrequency())
       ->propertyCondition('meter_nid', $this->getMeterNode()->nid)
       ->propertyCondition('timestamp', $this->getTimestampBeginning())
       ->propertyCondition('rate_type', $this->getRateType())
@@ -324,14 +369,6 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
 
     $entity = entity_create('electricity', $values);
     return $entity;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-
-  public function access() {
-    return TRUE;
   }
 
   /**
@@ -359,4 +396,13 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
    */
   abstract protected function getNormalizedValues();
 
+  /**
+   * The set of allowed frequencies for that meter type.
+   *
+   * Must be supplied by child object.
+   *
+   * @return array
+   *  Array of allowed frequencies for that meter type.
+   */
+  abstract protected function getAllowedFrequencies();
 }

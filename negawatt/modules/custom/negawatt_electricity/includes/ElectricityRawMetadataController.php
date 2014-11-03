@@ -21,7 +21,7 @@ class ElectricityRawMetadataController extends EntityDefaultMetadataController {
       'type',
       'rate_type',
       'meter_nid',
-      'cumulative_kwh',
+      'kwh',
       'power_factor',
     );
 

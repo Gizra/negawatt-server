@@ -15,3 +15,4 @@ files[] = handlers/node/NegawattAccountMigrate.php
 files[] = handlers/electricity/NegawattElectricityMigrate.php
 files[] = handlers/electricity/NegawattElectricityRawMigrate.php
 files[] = handlers/node/NegawattIecMeterMigrate.php
+files[] = handlers/node/NegawattSatecMeterMigrate.php

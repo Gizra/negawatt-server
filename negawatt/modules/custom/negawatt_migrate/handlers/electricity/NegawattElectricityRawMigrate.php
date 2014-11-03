@@ -16,11 +16,11 @@ class NegawattElectricityRawMigrate extends Migration {
     array('timestamp', 'timestamp'),
     array('rate_type', 'rate_type'),
     array('meter_nid', 'meter_nid'),
-    array('cumulative_kwh', 'cumulative_kwh'),
+    array('kwh', 'kwh'),
     array('power_factor', 'power_factor'),
-    array('cumulative_kwh_l1', 'cumulative_kwh_l1'),
-    array('cumulative_kwh_l2', 'cumulative_kwh_l2'),
-    array('cumulative_kwh_l3', 'cumulative_kwh_l3'),
+    array('kwh_l1', 'kwh_l1'),
+    array('kwh_l2', 'kwh_l2'),
+    array('kwh_l3', 'kwh_l3'),
     array('power_factor_l1', 'power_factor_l1'),
     array('power_factor_l2', 'power_factor_l2'),
     array('power_factor_l3', 'power_factor_l3'),
@@ -39,11 +39,11 @@ class NegawattElectricityRawMigrate extends Migration {
       'type',
       'timestamp',
       'rate_type',
-      'cumulative_kwh',
+      'kwh',
       'power_factor',
-      'cumulative_kwh_l1',
-      'cumulative_kwh_l2',
-      'cumulative_kwh_l3',
+      'kwh_l1',
+      'kwh_l2',
+      'kwh_l3',
       'power_factor_l1',
       'power_factor_l2',
       'power_factor_l3',
@@ -52,7 +52,7 @@ class NegawattElectricityRawMigrate extends Migration {
 
     $this
       ->addFieldMapping('meter_nid', 'meter_nid')
-      ->sourceMigration('NegawattIecMeterMigrate');
+      ->sourceMigration(array('NegawattIecMeterMigrate', 'NegawattSatecMeterMigrate'));
 
     $this->description = t('Import @type - from CSV file.', array('@type' => $this->entityType));
 
@@ -74,5 +74,6 @@ class NegawattElectricityRawMigrate extends Migration {
 
   public function prepare($entity, $row) {
     $entity->meter_nid = reset($entity->meter_nid);
+    $entity->timestamp = strtotime($entity->timestamp);
   }
 }

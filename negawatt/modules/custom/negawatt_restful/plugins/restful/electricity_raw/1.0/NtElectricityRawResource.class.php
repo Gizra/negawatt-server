@@ -33,7 +33,7 @@ class NtElectricityRawResource extends RestfulEntityBase {
     );
 
     $public_fields['kwh'] = array(
-      'property' => 'cumulative_kwh'
+      'property' => 'kwh'
     );
 
     $public_fields['meter'] = array(

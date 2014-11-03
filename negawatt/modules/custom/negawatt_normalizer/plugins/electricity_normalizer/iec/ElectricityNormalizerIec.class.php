@@ -32,9 +32,9 @@ class ElectricityNormalizerIec extends \ElectricityNormalizerBase {
       // For IEC, the minimal frequency is month, get data from raw table.
       $query = parent::getQueryForNormalizedValues();
 
-      $query->addExpression('MIN(cumulative_kwh)', 'min_kwh');
-      $query->addExpression('MAX(cumulative_kwh)', 'max_kwh');
-      $query->addExpression('SUM(cumulative_kwh)', 'kwh');
+      $query->addExpression('MIN(kwh)', 'min_kwh');
+      $query->addExpression('MAX(kwh)', 'max_kwh');
+      $query->addExpression('SUM(kwh)', 'kwh');
       $query->addExpression('MIN(power_factor)', 'min_power_factor');
 
       $result = $query->execute();
@@ -79,4 +79,28 @@ class ElectricityNormalizerIec extends \ElectricityNormalizerBase {
     );
     throw new \Exception(format_string('Unhandled frequency "@freq".', $params));
   }
+
+  /**
+   * The set of allowed frequencies for that meter type.
+   *
+   * for ElectricityNormalizerIec object - use MONTH and up.
+   *
+   * @return array
+   *  Array of allowed frequencies for that meter type.
+   */
+  protected function getAllowedFrequencies() {
+    return array(
+      \ElectricityNormalizerBase::MONTH,
+      //@todo: add YEAR
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function access() {
+    $node = $this->getMeterNode();
+    return $node->type == 'iec_meter';
+  }
+
 }

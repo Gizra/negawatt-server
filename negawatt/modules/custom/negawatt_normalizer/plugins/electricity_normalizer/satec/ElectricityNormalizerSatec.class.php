@@ -9,7 +9,7 @@ class ElectricityNormalizerSatec extends \ElectricityNormalizerBase {
 
   /**
    * Normalize the required entities.
-   * 
+   *
    * Must be supplied by child object.
    *
    * @throws Exception for frequency different than HOUR (NIY).
@@ -23,8 +23,8 @@ class ElectricityNormalizerSatec extends \ElectricityNormalizerBase {
       // For Satec, the minimal freq. is hour, get data from raw table.
       $query = parent::getQueryForNormalizedValues();
 
-      $query->addExpression('MIN(cumulative_kwh)', 'min_cum_power');
-      $query->addExpression('MAX(cumulative_kwh)', 'max_cum_power');
+      $query->addExpression('MIN(kwh)', 'min_power');
+      $query->addExpression('MAX(kwh)', 'max_power');
       $query->addExpression('MIN(timestamp)', 'min_timestamp');
       $query->addExpression('MAX(timestamp)', 'max_timestamp');
       $query->addExpression('MIN(power_factor)', 'min_power_factor');
@@ -49,7 +49,7 @@ class ElectricityNormalizerSatec extends \ElectricityNormalizerBase {
       $result = $result->fetchObject();
 
       // Calculate avg_power and return result.
-      
+
       // If minTimestamp = maxTimestamp, divide-by-zero will result.
       if ($result->min_timestamp >= $result->max_timestamp) {
         // @todo: What if only one record exists in the raw table for that time period?
@@ -58,7 +58,7 @@ class ElectricityNormalizerSatec extends \ElectricityNormalizerBase {
       }
 
       // Calculate average power at time period.
-      $energy_diff = $result->max_cum_power - $result->min_cum_power;
+      $energy_diff = $result->max_power - $result->min_power;
       $time_diff = ($result->max_timestamp - $result->min_timestamp);
       // Convert from seconds to hours (energy is given by kilowatt-hours).
       $time_diff = $time_diff/60./60;
@@ -74,5 +74,28 @@ class ElectricityNormalizerSatec extends \ElectricityNormalizerBase {
 
     // @todo: for frequency higher then hour, use data from normalized table
     throw new \Exception('Unhandled frequency @ElectricityNormalizerSatec::getNormalizedValues().');
+  }
+
+  /**
+   * The set of allowed frequencies for that meter type.
+   *
+   * for ElectricityNormalizerSatec object - use HOUR and up.
+   *
+   * @return array
+   *  Array of allowed frequencies for that meter type.
+   */
+  protected function getAllowedFrequencies() {
+    return array(
+      \ElectricityNormalizerBase::HOUR,
+      //@todo: add DAY, WEEK, ...
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function access() {
+    $node = $this->getMeterNode();
+    return $node->type == 'satec_meter';
   }
 }
