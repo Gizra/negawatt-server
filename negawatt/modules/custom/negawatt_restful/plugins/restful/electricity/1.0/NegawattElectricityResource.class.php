@@ -2,10 +2,10 @@
 
 /**
  * @file
- * Contains NtElectricityRawResource.
+ * Contains NegawattElectricityResource.
  */
 
-class NtElectricityRawResource extends RestfulEntityBase {
+class NegawattElectricityResource extends RestfulEntityBase {
 
   /**
    * Overrides \RestfulEntityBase::publicFieldsInfo().
@@ -14,7 +14,7 @@ class NtElectricityRawResource extends RestfulEntityBase {
     $public_fields = parent::publicFieldsInfo();
 
     // Remove not necessary fields.
-    unset($public_fields['label'], $public_fields['self']);
+    unset($public_fields['label']);
 
     $public_fields['timestamp'] = array(
       'property' => 'timestamp'
@@ -28,16 +28,16 @@ class NtElectricityRawResource extends RestfulEntityBase {
       'property' => 'type'
     );
 
-    $public_fields['power_factor'] = array(
-      'property' => 'power_factor'
-    );
-
     $public_fields['kwh'] = array(
-      'property' => 'kwh'
+      'property' => 'avg_power'
     );
 
     $public_fields['meter'] = array(
       'property' => 'meter_nid',
+    );
+
+    $public_fields['min_power_factor'] = array(
+      'property' => 'min_power_factor',
     );
 
     return $public_fields;

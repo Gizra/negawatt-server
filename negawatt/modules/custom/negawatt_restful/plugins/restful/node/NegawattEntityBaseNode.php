@@ -5,7 +5,7 @@
  * Contains NegawattEntityBaseNode.
  */
 
-abstract class NtEntityBaseNode extends \RestfulEntityBaseNode {
+abstract class NegawattEntityBaseNode extends \RestfulEntityBaseNode {
 
   /**
    * Overrides \RestfulEntityBaseNode::publicFieldsInfo().

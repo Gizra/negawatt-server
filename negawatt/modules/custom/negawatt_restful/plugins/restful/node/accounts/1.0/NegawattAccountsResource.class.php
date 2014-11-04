@@ -2,26 +2,29 @@
 
 /**
  * @file
- * Contains NtAccountsResource.
+ * Contains NegawattAccountsResource.
  */
-class NtAccountsResource extends \NtEntityBaseNode {
+class NegawattAccountsResource extends \NegawattEntityBaseNode {
 
   /**
-   * Overrides \RestfulEntityBase::publicFieldsInfo().
+   * Overrides \NegawattEntityBaseNode::publicFieldsInfo().
    */
   public function publicFieldsInfo() {
     $public_fields = parent::publicFieldsInfo();
 
     $public_fields['location'] = array(
       'property' => 'field_location',
+      'process_callbacks' => array(
+        array($this, 'processLocation'),
+      ),
     );
 
     $public_fields['type'] = array(
       'property' => 'field_account_type'
     );
 
-    $public_fields['meter_list'] = array(
-      'callback' => array($this, 'getMeters'),
+    $public_fields['zoom'] = array(
+      'property' => 'field_geo_zoom'
     );
 
     return $public_fields;
@@ -50,5 +53,19 @@ class NtAccountsResource extends \NtEntityBaseNode {
 
     $handler = restful_get_restful_handler('iec_meters');
     return $handler->get(implode(',', $nids));
+  }
+
+  /**
+   * Location process callback.
+   *
+   * @param $value
+   *
+   * @return array
+   */
+  protected function processLocation($value) {
+    return array(
+      'lat' => $value['lat'],
+      'lng' => $value['lng'],
+    );
   }
 }

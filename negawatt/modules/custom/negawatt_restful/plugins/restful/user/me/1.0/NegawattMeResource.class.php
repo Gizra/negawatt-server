@@ -2,10 +2,10 @@
 
 /**
  * @file
- * Contains NtMeResource.
+ * Contains NegawattMeResource.
  */
 
-class NtMeResource extends \RestfulEntityBaseUser {
+class NegawattMeResource extends \RestfulEntityBaseUser {
 
   /**
    * Overrides \RestfulEntityBase::controllers.

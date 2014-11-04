@@ -2,14 +2,18 @@
 
 /**
  * @file
- * Contains NtIecMeterResource.
+ * Contains NegawattIecMeterResource.
  */
-class NtIecMeterResource extends \NtEntityBaseNode {
+class NegawattIecMeterResource extends \NegawattEntityBaseNode {
   /**
-   * Overrides \RestfulEntityBase::publicFieldsInfo().
+   * Overrides \NegawattEntityBaseNode::publicFieldsInfo().
    */
   public function publicFieldsInfo() {
     $public_fields = parent::publicFieldsInfo();
+
+    $public_fields['location'] = array(
+      'property' => 'field_location',
+    );
 
     $public_fields['contract'] = array(
       'property' => 'field_contract_id',
@@ -33,6 +37,16 @@ class NtIecMeterResource extends \NtEntityBaseNode {
 
     $public_fields['meter_serial'] = array(
       'property' => 'field_meter_serial',
+    );
+
+    $public_fields['account'] = array(
+      'property' => OG_AUDIENCE_FIELD,
+      'resource' => array(
+        'account' => array(
+          'name' => 'accounts',
+          'full_view' => FALSE,
+        ),
+      ),
     );
 
     return $public_fields;
