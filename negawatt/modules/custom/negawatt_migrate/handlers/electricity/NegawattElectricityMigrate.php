@@ -40,7 +40,7 @@ class NegawattElectricityMigrate extends Migration {
 
     $this
       ->addFieldMapping('meter_nid', 'meter_nid')
-      ->sourceMigration('NegawattIecMeterMigrate');
+      ->sourceMigration(array('NegawattIecMeterMigrate','NegawattSatecMeterMigrate'));
 
     $this->description = t('Import @type - from CSV file.', array('@type' => $this->entityType));
 

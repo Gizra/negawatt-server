@@ -21,10 +21,12 @@ class NegawattIecMeterMigrate extends NegawattMigration {
     array('field_meter_serial', 'Meter Serial'),
     array('country', 'Country'),
     array('field_last_processed', 'Last processed'),
+    array('field_meter_category', 'Meter category'),
   );
 
   public $dependencies = array(
     'NegawattAccountMigrate',
+    'NegawattMeterCategoryTermsMigrate',
   );
 
   public function __construct() {
@@ -53,6 +55,11 @@ class NegawattIecMeterMigrate extends NegawattMigration {
     $this
       ->addFieldMapping('uid')
       ->defaultValue('1');
+
+    $this
+      ->addFieldMapping('field_meter_category', 'field_meter_category')
+      ->sourceMigration('NegawattMeterCategoryTermsMigrate')
+      ->separator('|');
   }
 
   /**

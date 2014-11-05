@@ -18,6 +18,9 @@ function negawatt_migrate_migrate_api() {
     // Custom entities.
     'NegawattElectricityMigrate',
     'NegawattElectricityRawMigrate',
+
+    // Vocabulary
+    'NegawattMeterCategoryTermsMigrate',
   );
 
   $api['api'] = 2;

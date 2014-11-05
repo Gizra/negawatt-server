@@ -71,4 +71,12 @@ function negawatt_install() {
   theme_enable(array('bootstrap_subtheme'));
   variable_set('theme_default','bootstrap_subtheme');
   theme_disable(array('bartik'));
+
+  // Create a default vocabulary named "Meter Category", enabled for the 'node' content type.
+  $vocabulary = (object) array(
+    'name' => st('Meter Category'),
+    'description' => st('Use tags to group meters by categories.'),
+    'machine_name' => 'meter_category',
+  );
+  taxonomy_vocabulary_save($vocabulary);
 }
