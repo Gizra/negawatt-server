@@ -35,6 +35,12 @@ function negawatt_install_tasks() {
     'display' => FALSE,
   );
 
+  // Should be the last task.
+  $tasks['negawatt_rebuild_permissions'] = array(
+    'display_name' => st('Rebuild permissions'),
+    'display' => FALSE,
+  );
+
   return $tasks;
 }
 
@@ -97,4 +103,15 @@ function negawatt_set_variables() {
   foreach ($variables as $key => $value) {
     variable_set($key, $value);
   }
+}
+
+/**
+ * Task callback; Rebuild permissions (node access).
+ *
+ * Setting up the platform triggers the need to rebuild the permissions.
+ * We do this here so no manual rebuild is necessary when we finished the
+ * installation.
+ */
+function negawatt_rebuild_permissions() {
+  node_access_rebuild();
 }

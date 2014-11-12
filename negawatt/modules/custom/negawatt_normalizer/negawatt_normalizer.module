@@ -117,4 +117,3 @@ function negawatt_normalizer_process_meter($node, $timestamp = NULL) {
   $handler = negawatt_normalizer_get_electricity_normalizer_handler($plugin_name);
   return $handler->process($wrapper->value(), $timestamp);
 }
-

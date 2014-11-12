@@ -55,18 +55,18 @@ interface ElectricityNormalizerInterface {
    *
    * @param stdClass $node
    *    The node of type iec_meter.
-   * @param int $timestamp_end
-   *    The end timestamp of period to normalize. Default to NULL, which
-   *    indicates "now".
    * @param array $frequencies
    *    The required frequencies for normalization, e.g. HOUR. If empty, loop over all allowed frequencies.
+   * @param array $time_period
+   *    The time period to normalize. An array of two timestamps - beginning of time period, and end.
+   *    Default: begin at the last_processed time of the meter node and end at current time.
    * @param array $rate_types
    *    The rate-types to use (peak, mid, etc.). If empty, loop over all 4 of them.
    *
    * @return array
    *    The processed entities, or empty array if there were no values to process.
    */
-  public function process($node, $timestamp_end = NULL, $frequencies = array(), $rate_types = array());
+  public function process($node, $frequencies = array(), $time_period = array(), $rate_types = array());
 
 
   }
