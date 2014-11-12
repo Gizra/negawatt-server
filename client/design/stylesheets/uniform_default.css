@@ -1,0 +1,71 @@
+/* line 1, /home/andrei/core-admin-release/core-admin/source/stylesheets/uniform_default.scss */
+.uploader, .selector {
+  display: -moz-inline-box;
+  display: inline-block;
+  vertical-align: middle;
+  zoom: 1;
+  *display: inline; }
+  /* line 2, /home/andrei/core-admin-release/core-admin/source/stylesheets/uniform_default.scss */
+  .uploader *, .selector * {
+    margin: 0;
+    padding: 0; }
+
+/* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/uniform_default.scss */
+.selector select:focus {
+  outline: 0; }
+
+/* line 18, /home/andrei/core-admin-release/core-admin/source/stylesheets/uniform_default.scss */
+.uploader {
+  width: 190px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  cursor: default; }
+  /* line 30, /home/andrei/core-admin-release/core-admin/source/stylesheets/uniform_default.scss */
+  .uploader span.action {
+    width: 85px;
+    text-align: center;
+    text-shadow: #fff 0px 1px 0px;
+    background-color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    float: left;
+    display: inline;
+    padding: 2px 0px;
+    overflow: hidden;
+    cursor: pointer; }
+  /* line 43, /home/andrei/core-admin-release/core-admin/source/stylesheets/uniform_default.scss */
+  .uploader span.filename {
+    color: #777;
+    width: 82px;
+    border-right: solid 1px #bbb;
+    font-size: 11px;
+    padding: 0px 10px;
+    float: left;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: default; }
+  /* line 58, /home/andrei/core-admin-release/core-admin/source/stylesheets/uniform_default.scss */
+  .uploader input {
+    width: 190px;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    float: right;
+    height: 25px;
+    border: none;
+    cursor: default; }
+    /* line 70, /home/andrei/core-admin-release/core-admin/source/stylesheets/uniform_default.scss */
+    .uploader input:focus {
+      outline: 0; }
+  /* line 76, /home/andrei/core-admin-release/core-admin/source/stylesheets/uniform_default.scss */
+  .uploader.disabled span.action {
+    color: #aaa; }
+  /* line 79, /home/andrei/core-admin-release/core-admin/source/stylesheets/uniform_default.scss */
+  .uploader.disabled span.filename {
+    border-color: #ddd;
+    color: #aaa; }

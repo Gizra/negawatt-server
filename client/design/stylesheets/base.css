@@ -1,0 +1,149 @@
+/* line 4, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+* {
+  margin: 0px;
+  padding: 0px;
+  text-decoration: none;
+  outline: none; }
+
+/* line 11, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+html {
+  min-height: 100%; }
+
+/* line 15, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+body {
+  font: normal 12px 'Open Sans', HelveticaNeue, Helvetica, Arial;
+  background: url("../images/bg.png");
+  min-height: 100%;
+  color: #707070;
+  overflow-x: hidden; }
+
+/* line 27, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: 'Open Sans', HelveticaNeue, Helvetica, Arial;
+  line-height: 20px; }
+
+/* line 32, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+strong, b {
+  font-weight: 600; }
+
+/* line 36, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+a {
+  color: #78808a; }
+  /* line 40, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+  a:hover, a:active, a:focus {
+    cursor: pointer;
+    outline: 0px none;
+    text-decoration: none;
+    color: #5a6573; }
+
+/* line 49, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+.label {
+  font-size: 10px;
+  text-shadow: none; }
+
+/* line 54, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+i {
+  font-size: 14px; }
+
+/* line 58, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+.main-content {
+  position: relative;
+  margin-left: 201px; }
+
+/* line 63, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+.padded {
+  padding: 15px; }
+
+/* line 67, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+.nopadding {
+  padding: 0; }
+
+/* line 71, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+.hpadded {
+  padding-left: 15px;
+  padding-right: 15px; }
+
+/* line 76, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+.vpadded {
+  padding-top: 15px;
+  padding-bottom: 15px; }
+
+/* line 81, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+.separate-sections {
+  margin: 0;
+  list-style: none;
+  padding-bottom: 5px; }
+  /* line 86, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+  .separate-sections > li, .separate-sections > div {
+    margin-bottom: 15px !important; }
+    /* line 89, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+    .separate-sections > li:last-child, .separate-sections > div:last-child {
+      margin-bottom: 0px; }
+
+/* line 95, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+h1, h2, h3, h4, h5, h6, th {
+  color: #5f5f5f;
+  font-weight: 600; }
+
+/* line 101, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+.the-icons {
+  list-style: none; }
+
+/* line 105, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+.avatar {
+  display: inline-block; }
+  /* line 107, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+  .avatar img {
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    border-radius: 50%;
+    -webkit-box-shadow: 0 1px 3px 0px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 1px 3px 0px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 1px 3px 0px rgba(0, 0, 0, 0.3); }
+
+/* line 113, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+.avatar-small {
+  max-width: 32px;
+  max-height: 32px; }
+
+/* line 118, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+.twitter-color {
+  color: #4099ff; }
+
+/* line 122, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+.facebook-color {
+  color: #35508F; }
+
+/* line 126, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+.note {
+  color: #909090;
+  font-style: italic;
+  font-size: 11px;
+  margin-bottom: 10px; }
+
+/* line 132, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+.close {
+  line-height: 14px; }
+
+/* line 136, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+.relative {
+  position: relative; }
+
+/* line 140, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+.indent {
+  margin-left: 10px; }
+
+/* line 144, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+.strikethrough {
+  text-decoration: line-through; }
+
+/* line 148, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+.container {
+  width: 100%;
+  max-width: 100%; }
+  /* line 152, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
+  .container.padded > .row {
+    margin: 0; }

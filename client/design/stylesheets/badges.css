@@ -1,0 +1,251 @@
+/* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/badges.scss */
+.badge-blue, .badge-gray, .badge-green, .badge-red, .badge-dark-red, .badge-black, .badge-cyan, .badge-purple {
+  display: inline-block;
+  padding: 0 4px;
+  border-radius: 10px;
+  height: 14px;
+  min-width: 14px;
+  line-height: 14px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  text-align: center;
+  font-weight: 600;
+  font-size: 10px;
+  -webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6);
+  -moz-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+  color: #fff; }
+
+/* line 30, /home/andrei/core-admin-release/core-admin/source/stylesheets/badges.scss */
+.label, .badge {
+  font-weight: 600; }
+
+/* line 35, /home/andrei/core-admin-release/core-admin/source/stylesheets/badges.scss */
+.label-blue {
+  background: #599cc7;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzdmYjNkNCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzU5OWNjNyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #7fb3d4), color-stop(100%, #599cc7));
+  background-image: -webkit-linear-gradient(top, #7fb3d4, #599cc7);
+  background-image: -moz-linear-gradient(top, #7fb3d4, #599cc7);
+  background-image: -o-linear-gradient(top, #7fb3d4, #599cc7);
+  background-image: linear-gradient(top, #7fb3d4, #599cc7);
+  -webkit-box-shadow: 0 1px 0 #f7f7f7, inset 0 1px 1px #70aacf;
+  -moz-box-shadow: 0 1px 0 #f7f7f7, inset 0 1px 1px #70aacf;
+  box-shadow: 0 1px 0 #f7f7f7, inset 0 1px 1px #70aacf; }
+
+/* line 35, /home/andrei/core-admin-release/core-admin/source/stylesheets/badges.scss */
+.label-gray {
+  background: #5d5d5d;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzc2NzY3NiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzVkNWQ1ZCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #767676), color-stop(100%, #5d5d5d));
+  background-image: -webkit-linear-gradient(top, #767676, #5d5d5d);
+  background-image: -moz-linear-gradient(top, #767676, #5d5d5d);
+  background-image: -o-linear-gradient(top, #767676, #5d5d5d);
+  background-image: linear-gradient(top, #767676, #5d5d5d);
+  -webkit-box-shadow: 0 1px 0 #f7f7f7, inset 0 1px 1px #6c6c6c;
+  -moz-box-shadow: 0 1px 0 #f7f7f7, inset 0 1px 1px #6c6c6c;
+  box-shadow: 0 1px 0 #f7f7f7, inset 0 1px 1px #6c6c6c; }
+
+/* line 35, /home/andrei/core-admin-release/core-admin/source/stylesheets/badges.scss */
+.label-green {
+  background: #6eb056;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzhjYzA3OSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzZlYjA1NiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #8cc079), color-stop(100%, #6eb056));
+  background-image: -webkit-linear-gradient(top, #8cc079, #6eb056);
+  background-image: -moz-linear-gradient(top, #8cc079, #6eb056);
+  background-image: -o-linear-gradient(top, #8cc079, #6eb056);
+  background-image: linear-gradient(top, #8cc079, #6eb056);
+  -webkit-box-shadow: 0 1px 0 #f7f7f7, inset 0 1px 1px #80b96b;
+  -moz-box-shadow: 0 1px 0 #f7f7f7, inset 0 1px 1px #80b96b;
+  box-shadow: 0 1px 0 #f7f7f7, inset 0 1px 1px #80b96b; }
+
+/* line 35, /home/andrei/core-admin-release/core-admin/source/stylesheets/badges.scss */
+.label-red {
+  background: #964747;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2IzNWQ1ZCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzk2NDc0NyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #b35d5d), color-stop(100%, #964747));
+  background-image: -webkit-linear-gradient(top, #b35d5d, #964747);
+  background-image: -moz-linear-gradient(top, #b35d5d, #964747);
+  background-image: -o-linear-gradient(top, #b35d5d, #964747);
+  background-image: linear-gradient(top, #b35d5d, #964747);
+  -webkit-box-shadow: 0 1px 0 #f7f7f7, inset 0 1px 1px #ab5050;
+  -moz-box-shadow: 0 1px 0 #f7f7f7, inset 0 1px 1px #ab5050;
+  box-shadow: 0 1px 0 #f7f7f7, inset 0 1px 1px #ab5050; }
+
+/* line 35, /home/andrei/core-admin-release/core-admin/source/stylesheets/badges.scss */
+.label-dark-red {
+  background: #8f3831;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2I1NDczZSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzhmMzgzMSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #b5473e), color-stop(100%, #8f3831));
+  background-image: -webkit-linear-gradient(top, #b5473e, #8f3831);
+  background-image: -moz-linear-gradient(top, #b5473e, #8f3831);
+  background-image: -o-linear-gradient(top, #b5473e, #8f3831);
+  background-image: linear-gradient(top, #b5473e, #8f3831);
+  -webkit-box-shadow: 0 1px 0 #f7f7f7, inset 0 1px 1px #a64139;
+  -moz-box-shadow: 0 1px 0 #f7f7f7, inset 0 1px 1px #a64139;
+  box-shadow: 0 1px 0 #f7f7f7, inset 0 1px 1px #a64139; }
+
+/* line 35, /home/andrei/core-admin-release/core-admin/source/stylesheets/badges.scss */
+.label-black {
+  background: #4d4d4d;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzY2NjY2NiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzRkNGQ0ZCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #666666), color-stop(100%, #4d4d4d));
+  background-image: -webkit-linear-gradient(top, #666666, #4d4d4d);
+  background-image: -moz-linear-gradient(top, #666666, #4d4d4d);
+  background-image: -o-linear-gradient(top, #666666, #4d4d4d);
+  background-image: linear-gradient(top, #666666, #4d4d4d);
+  -webkit-box-shadow: 0 1px 0 #f7f7f7, inset 0 1px 1px #5c5c5c;
+  -moz-box-shadow: 0 1px 0 #f7f7f7, inset 0 1px 1px #5c5c5c;
+  box-shadow: 0 1px 0 #f7f7f7, inset 0 1px 1px #5c5c5c; }
+
+/* line 35, /home/andrei/core-admin-release/core-admin/source/stylesheets/badges.scss */
+.label-cyan {
+  background: #60a8ab;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzgxYmFiZCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzYwYThhYiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #81babd), color-stop(100%, #60a8ab));
+  background-image: -webkit-linear-gradient(top, #81babd, #60a8ab);
+  background-image: -moz-linear-gradient(top, #81babd, #60a8ab);
+  background-image: -o-linear-gradient(top, #81babd, #60a8ab);
+  background-image: linear-gradient(top, #81babd, #60a8ab);
+  -webkit-box-shadow: 0 1px 0 #f7f7f7, inset 0 1px 1px #74b3b6;
+  -moz-box-shadow: 0 1px 0 #f7f7f7, inset 0 1px 1px #74b3b6;
+  box-shadow: 0 1px 0 #f7f7f7, inset 0 1px 1px #74b3b6; }
+
+/* line 35, /home/andrei/core-admin-release/core-admin/source/stylesheets/badges.scss */
+.label-purple {
+  background: #9086bd;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2FlYTdjZiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzkwODZiZCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #aea7cf), color-stop(100%, #9086bd));
+  background-image: -webkit-linear-gradient(top, #aea7cf, #9086bd);
+  background-image: -moz-linear-gradient(top, #aea7cf, #9086bd);
+  background-image: -o-linear-gradient(top, #aea7cf, #9086bd);
+  background-image: linear-gradient(top, #aea7cf, #9086bd);
+  -webkit-box-shadow: 0 1px 0 #f7f7f7, inset 0 1px 1px #a29ac8;
+  -moz-box-shadow: 0 1px 0 #f7f7f7, inset 0 1px 1px #a29ac8;
+  box-shadow: 0 1px 0 #f7f7f7, inset 0 1px 1px #a29ac8; }
+
+/* line 41, /home/andrei/core-admin-release/core-admin/source/stylesheets/badges.scss */
+.badge-blue {
+  background: #6ca8ce;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzdmYjNkNCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzZjYThjZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #7fb3d4), color-stop(100%, #6ca8ce));
+  background-image: -webkit-linear-gradient(top, #7fb3d4, #6ca8ce);
+  background-image: -moz-linear-gradient(top, #7fb3d4, #6ca8ce);
+  background-image: -o-linear-gradient(top, #7fb3d4, #6ca8ce);
+  background-image: linear-gradient(top, #7fb3d4, #6ca8ce);
+  -webkit-box-shadow: 0 0 0 1px #3c84b1;
+  -moz-box-shadow: 0 0 0 1px #3c84b1;
+  box-shadow: 0 0 0 1px #3c84b1; }
+
+/* line 41, /home/andrei/core-admin-release/core-admin/source/stylesheets/badges.scss */
+.badge-gray {
+  background: dimgrey;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzc2NzY3NiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzY5Njk2OSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #767676), color-stop(100%, #696969));
+  background-image: -webkit-linear-gradient(top, #767676, #696969);
+  background-image: -moz-linear-gradient(top, #767676, #696969);
+  background-image: -o-linear-gradient(top, #767676, #696969);
+  background-image: linear-gradient(top, #767676, #696969);
+  -webkit-box-shadow: 0 0 0 1px #434343;
+  -moz-box-shadow: 0 0 0 1px #434343;
+  box-shadow: 0 0 0 1px #434343; }
+
+/* line 41, /home/andrei/core-admin-release/core-admin/source/stylesheets/badges.scss */
+.badge-green {
+  background: #7db868;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzhjYzA3OSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzdkYjg2OCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #8cc079), color-stop(100%, #7db868));
+  background-image: -webkit-linear-gradient(top, #8cc079, #7db868);
+  background-image: -moz-linear-gradient(top, #8cc079, #7db868);
+  background-image: -o-linear-gradient(top, #8cc079, #7db868);
+  background-image: linear-gradient(top, #8cc079, #7db868);
+  -webkit-box-shadow: 0 0 0 1px #589043;
+  -moz-box-shadow: 0 0 0 1px #589043;
+  box-shadow: 0 0 0 1px #589043; }
+
+/* line 41, /home/andrei/core-admin-release/core-admin/source/stylesheets/badges.scss */
+.badge-red {
+  background: #a84f4f;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2IzNWQ1ZCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2E4NGY0ZiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #b35d5d), color-stop(100%, #a84f4f));
+  background-image: -webkit-linear-gradient(top, #b35d5d, #a84f4f);
+  background-image: -moz-linear-gradient(top, #b35d5d, #a84f4f);
+  background-image: -o-linear-gradient(top, #b35d5d, #a84f4f);
+  background-image: linear-gradient(top, #b35d5d, #a84f4f);
+  -webkit-box-shadow: 0 0 0 1px #743636;
+  -moz-box-shadow: 0 0 0 1px #743636;
+  box-shadow: 0 0 0 1px #743636; }
+
+/* line 41, /home/andrei/core-admin-release/core-admin/source/stylesheets/badges.scss */
+.badge-dark-red {
+  background: #a24037;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2I1NDczZSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2EyNDAzNyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #b5473e), color-stop(100%, #a24037));
+  background-image: -webkit-linear-gradient(top, #b5473e, #a24037);
+  background-image: -moz-linear-gradient(top, #b5473e, #a24037);
+  background-image: -o-linear-gradient(top, #b5473e, #a24037);
+  background-image: linear-gradient(top, #b5473e, #a24037);
+  -webkit-box-shadow: 0 0 0 1px #692924;
+  -moz-box-shadow: 0 0 0 1px #692924;
+  box-shadow: 0 0 0 1px #692924; }
+
+/* line 41, /home/andrei/core-admin-release/core-admin/source/stylesheets/badges.scss */
+.badge-black {
+  background: #595959;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzY2NjY2NiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzU5NTk1OSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #666666), color-stop(100%, #595959));
+  background-image: -webkit-linear-gradient(top, #666666, #595959);
+  background-image: -moz-linear-gradient(top, #666666, #595959);
+  background-image: -o-linear-gradient(top, #666666, #595959);
+  background-image: linear-gradient(top, #666666, #595959);
+  -webkit-box-shadow: 0 0 0 1px #333333;
+  -moz-box-shadow: 0 0 0 1px #333333;
+  box-shadow: 0 0 0 1px #333333; }
+
+/* line 41, /home/andrei/core-admin-release/core-admin/source/stylesheets/badges.scss */
+.badge-cyan {
+  background: #70b1b4;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzgxYmFiZCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzcwYjFiNCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #81babd), color-stop(100%, #70b1b4));
+  background-image: -webkit-linear-gradient(top, #81babd, #70b1b4);
+  background-image: -moz-linear-gradient(top, #81babd, #70b1b4);
+  background-image: -o-linear-gradient(top, #81babd, #70b1b4);
+  background-image: linear-gradient(top, #81babd, #70b1b4);
+  -webkit-box-shadow: 0 0 0 1px #4a8a8e;
+  -moz-box-shadow: 0 0 0 1px #4a8a8e;
+  box-shadow: 0 0 0 1px #4a8a8e; }
+
+/* line 41, /home/andrei/core-admin-release/core-admin/source/stylesheets/badges.scss */
+.badge-purple {
+  background: #9f97c6;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2FlYTdjZiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzlmOTdjNiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #aea7cf), color-stop(100%, #9f97c6));
+  background-image: -webkit-linear-gradient(top, #aea7cf, #9f97c6);
+  background-image: -moz-linear-gradient(top, #aea7cf, #9f97c6);
+  background-image: -o-linear-gradient(top, #aea7cf, #9f97c6);
+  background-image: linear-gradient(top, #aea7cf, #9f97c6);
+  -webkit-box-shadow: 0 0 0 1px #7165ab;
+  -moz-box-shadow: 0 0 0 1px #7165ab;
+  box-shadow: 0 0 0 1px #7165ab; }
+
+/* line 47, /home/andrei/core-admin-release/core-admin/source/stylesheets/badges.scss */
+.badge-flat {
+  text-shadow: none; }

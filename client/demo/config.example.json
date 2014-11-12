@@ -1,0 +1,8 @@
+{
+  "development": {
+    "BACKEND_URL": "http://server.com"
+  },
+  "production": {
+    "BACKEND_URL": "http://server.com"
+  }
+}

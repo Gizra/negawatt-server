@@ -1,0 +1,71 @@
+<div class="page page-dashboard" data-ng-controller="GroupCtrl">
+
+  <section>
+    <section class="panel panel-default">
+      <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> {{city.name}}</strong></div>
+      <div class="panel-body">
+
+        <div class="row">
+          <div class="col-sm-8">
+            <leaflet center="city" markers="counters" height="270px" width="100%"></leaflet>
+          </div>
+
+          <div class="col-sm-4">
+
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">{{label}}</h3>
+              </div>
+              <div class="panel-body">
+                <div data-flot-chart
+                     data-name="pieChart"
+                     data-data="pieChart.data"
+                     data-options="pieChart.options"
+                     style="width: 100%; height: 210px;"
+                  ></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <section class="dasboard-chart" data-ng-controller="AccountReportCtrl">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Subgroup - {{label}}</h3>
+          </div>
+          <div class="panel-body">
+            <div data-flot-chart
+                 data-data="pieChart.data"
+                 data-options="pieChart.options"
+                 style="width: 100%; height: 300px;"
+              ></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-8">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Consumption - {{label}}</h3>
+          </div>
+          <div class="panel-body">
+            <div data-flot-chart
+                 data-name="line1"
+                 data-data="line1.data"
+                 data-options="line1.options"
+                 style="width: 100%; height: 300px;"
+              ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+</div>
+  

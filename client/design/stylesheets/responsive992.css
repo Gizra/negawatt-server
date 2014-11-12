@@ -1,0 +1,156 @@
+@media (max-width: 991px) {
+  /* line 5, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+  .sidebar-background {
+    display: none; }
+
+  /* line 9, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+  .primary-sidebar {
+    *zoom: 1;
+    position: static;
+    width: auto;
+    float: none;
+    background: #11161A; }
+    /* line 24, /home/andrei/core-admin-release/core-admin/source/stylesheets/mixin_helpers.scss */
+    .primary-sidebar:before, .primary-sidebar:after {
+      display: table;
+      content: "";
+      line-height: 0; }
+    /* line 30, /home/andrei/core-admin-release/core-admin/source/stylesheets/mixin_helpers.scss */
+    .primary-sidebar:after {
+      clear: both; }
+
+  /* line 17, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+  .main-content {
+    margin: 0; }
+
+  /* line 22, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+  .user-avatar > .dropdown-toggle {
+    display: none; }
+
+  /* line 27, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+  .dropdown-menu li.with-image span, .dropdown-menu li a {
+    text-shadow: none; }
+
+  /* line 31, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+  .label, .badge, .navbar-inverse .nav > li > a, .navbar-inverse .nav > li.active > a {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none; }
+
+  /* line 35, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+  .navbar-collapse .nav > li > a, .navbar-collapse .dropdown-menu a {
+    font-weight: 600; }
+
+  /* line 39, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+  .primary-sidebar .nav {
+    margin: 0; }
+
+  /* line 43, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+  .breadcrumb-line {
+    height: auto; }
+    /* line 46, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+    .breadcrumb-line .breadcrumbs {
+      *zoom: 1;
+      float: none; }
+      /* line 24, /home/andrei/core-admin-release/core-admin/source/stylesheets/mixin_helpers.scss */
+      .breadcrumb-line .breadcrumbs:before, .breadcrumb-line .breadcrumbs:after {
+        display: table;
+        content: "";
+        line-height: 0; }
+      /* line 30, /home/andrei/core-admin-release/core-admin/source/stylesheets/mixin_helpers.scss */
+      .breadcrumb-line .breadcrumbs:after {
+        clear: both; }
+    /* line 51, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+    .breadcrumb-line .nav.pull-right {
+      float: none;
+      margin-right: 0px;
+      border-right: none;
+      border-top: 1px solid #ccc; }
+      /* line 56, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+      .breadcrumb-line .nav.pull-right > li:first-child > a {
+        border-left: none; }
+
+  /* line 64, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+  .user-avatar .dropdown-menu {
+    display: block; }
+
+  /* line 68, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+  .navbar-collapse .dropdown-menu {
+    background: transparent; }
+    /* line 71, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+    .navbar-collapse .dropdown-menu li a {
+      background: rgba(0, 0, 0, 0.2);
+      margin-bottom: 3px; }
+    /* line 76, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+    .navbar-collapse .dropdown-menu li + li a {
+      margin-bottom: 3px; }
+
+  /* line 83, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+  .action-nav-normal .action-nav-button {
+    display: block; }
+  /* line 87, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+  .action-nav-normal.action-nav-line .action-nav-row {
+    margin-right: 0; }
+  /* line 91, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+  .action-nav-normal .action-nav-row {
+    margin-right: 0px; }
+  /* line 95, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+  .action-nav-normal.rounded .action-nav-button {
+    display: inline-block; }
+
+  /* line 100, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+  .navbar-form .form-group, .navbar-form .search-query.animated, .navbar-form .search-query.animated:focus, .navbar-form .search-query.animated .focused {
+    width: 100%; }
+
+  /* line 104, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+  .dropdown-menu .divider {
+    display: none; }
+
+  /* line 110, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+  .navbar-inverse .nav > li.cdrop > a, .navbar-inverse .nav > li.cdrop.active > a {
+    margin-right: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none; }
+
+  /* line 120, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+  .nav-tabs-right li > a > span, .nav-tabs-right .title, .nav-tabs-left li > a > span, .nav-tabs-left .title {
+    display: none; }
+
+  /* line 126, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+  .dark-nav.to-right .dropdown-menu {
+    margin: 0;
+    position: relative;
+    left: 0;
+    background: #11161A;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    -ms-border-radius: 0;
+    -o-border-radius: 0;
+    border-radius: 0;
+    height: 100%; }
+    /* line 134, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+    .dark-nav.to-right .dropdown-menu:before {
+      content: none; }
+    /* line 139, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+    .dark-nav.to-right .dropdown-menu li a {
+      margin-bottom: 0;
+      -webkit-border-radius: 0;
+      -moz-border-radius: 0;
+      -ms-border-radius: 0;
+      -o-border-radius: 0;
+      border-radius: 0; }
+    /* line 144, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+    .dark-nav.to-right .dropdown-menu li + li a {
+      margin-bottom: 0; }
+    /* line 148, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive992.scss */
+    .dark-nav.to-right .dropdown-menu a:hover {
+      background: rgba(50, 50, 50, 0.1);
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0icmdiYSg5MCwgOTAsIDkwLCAwLjIpIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSJyZ2JhKDUwLCA1MCwgNTAsIDAuMSkiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyYWQpIiAvPjwvc3ZnPiA=');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(90, 90, 90, 0.2)), color-stop(100%, rgba(50, 50, 50, 0.1)));
+      background-image: -webkit-linear-gradient(top, rgba(90, 90, 90, 0.2), rgba(50, 50, 50, 0.1));
+      background-image: -moz-linear-gradient(top, rgba(90, 90, 90, 0.2), rgba(50, 50, 50, 0.1));
+      background-image: -o-linear-gradient(top, rgba(90, 90, 90, 0.2), rgba(50, 50, 50, 0.1));
+      background-image: linear-gradient(top, rgba(90, 90, 90, 0.2), rgba(50, 50, 50, 0.1));
+      color: white; } }

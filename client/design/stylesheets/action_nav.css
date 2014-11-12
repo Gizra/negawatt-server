@@ -1,0 +1,410 @@
+/* line 21, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+.action-nav-normal .action-nav-button.btn-default a, .action-nav-normal .action-nav-button.btn-red a, .action-nav-normal .action-nav-button.btn-green a, .action-nav-normal .action-nav-button.btn-blue a, .action-nav-normal .action-nav-button.btn-gray a, .action-nav-normal .action-nav-button.btn-black a, .action-nav-normal .action-nav-button.btn-lightblue a, .action-nav-normal .action-nav-button.btn-gold a, .action-nav-normal .action-nav-button.btn-sea a, .action-nav-normal .action-nav-button.btn-brown a, .action-nav-normal .action-nav-button.btn-twitter a, .action-nav-normal .action-nav-button.btn-facebook a {
+  color: #fff;
+  text-shadow: 0 1px rgba(51, 51, 51, 0.5); }
+  /* line 25, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+  .action-nav-normal .action-nav-button.btn-default a i, .action-nav-normal .action-nav-button.btn-red a i, .action-nav-normal .action-nav-button.btn-green a i, .action-nav-normal .action-nav-button.btn-blue a i, .action-nav-normal .action-nav-button.btn-gray a i, .action-nav-normal .action-nav-button.btn-black a i, .action-nav-normal .action-nav-button.btn-lightblue a i, .action-nav-normal .action-nav-button.btn-gold a i, .action-nav-normal .action-nav-button.btn-sea a i, .action-nav-normal .action-nav-button.btn-brown a i, .action-nav-normal .action-nav-button.btn-twitter a i, .action-nav-normal .action-nav-button.btn-facebook a i {
+    color: #fff;
+    text-shadow: 0 1px rgba(51, 51, 51, 0.5); }
+  /* line 30, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+  .action-nav-normal .action-nav-button.btn-default a:active, .action-nav-normal .action-nav-button.btn-red a:active, .action-nav-normal .action-nav-button.btn-green a:active, .action-nav-normal .action-nav-button.btn-blue a:active, .action-nav-normal .action-nav-button.btn-gray a:active, .action-nav-normal .action-nav-button.btn-black a:active, .action-nav-normal .action-nav-button.btn-lightblue a:active, .action-nav-normal .action-nav-button.btn-gold a:active, .action-nav-normal .action-nav-button.btn-sea a:active, .action-nav-normal .action-nav-button.btn-brown a:active, .action-nav-normal .action-nav-button.btn-twitter a:active, .action-nav-normal .action-nav-button.btn-facebook a:active {
+    -webkit-box-shadow: 0 0 2px #707070 inset, 0 1px 0 white;
+    -moz-box-shadow: 0 0 2px #707070 inset, 0 1px 0 white;
+    box-shadow: 0 0 2px #707070 inset, 0 1px 0 white; }
+
+/* line 36, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+.action-nav-normal {
+  text-align: center; }
+  /* line 39, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+  .action-nav-normal.rounded .action-nav-button {
+    margin-left: 10px;
+    margin-right: 10px; }
+    /* line 44, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+    .action-nav-normal.rounded .action-nav-button a {
+      -webkit-border-radius: 50%;
+      -moz-border-radius: 50%;
+      -ms-border-radius: 50%;
+      -o-border-radius: 50%;
+      border-radius: 50%;
+      padding: 16px;
+      min-width: auto; }
+      /* line 49, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal.rounded .action-nav-button a i {
+        height: 40px;
+        line-height: 40px; }
+  /* line 60, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+  .action-nav-normal .action-nav-button {
+    margin-bottom: 15px;
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    padding-right: 0; }
+    /* line 68, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+    .action-nav-normal .action-nav-button a {
+      -webkit-border-radius: 4px;
+      -moz-border-radius: 4px;
+      -ms-border-radius: 4px;
+      -o-border-radius: 4px;
+      border-radius: 4px;
+      background: #ececec;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZhZmFmYSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2VjZWNlYyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fafafa), color-stop(100%, #ececec));
+      background-image: -webkit-linear-gradient(top, #fafafa, #ececec);
+      background-image: -moz-linear-gradient(top, #fafafa, #ececec);
+      background-image: -o-linear-gradient(top, #fafafa, #ececec);
+      background-image: linear-gradient(top, #fafafa, #ececec);
+      border: 1px solid #d5d5d5;
+      -webkit-box-shadow: 0 0 0 1px #fafafa inset, 0 1px 1px 0px #dddddd;
+      -moz-box-shadow: 0 0 0 1px #fafafa inset, 0 1px 1px 0px #dddddd;
+      box-shadow: 0 0 0 1px #fafafa inset, 0 1px 1px 0px #dddddd;
+      padding: 10px 0;
+      display: block;
+      font-weight: 600;
+      white-space: nowrap;
+      color: #626262;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box; }
+      /* line 81, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button a:hover {
+        background: #f2f2f2;
+        background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y3ZjdmNyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2YyZjJmMiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+        background-size: 100%;
+        background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f7f7f7), color-stop(100%, #f2f2f2));
+        background-image: -webkit-linear-gradient(top, #f7f7f7, #f2f2f2);
+        background-image: -moz-linear-gradient(top, #f7f7f7, #f2f2f2);
+        background-image: -o-linear-gradient(top, #f7f7f7, #f2f2f2);
+        background-image: linear-gradient(top, #f7f7f7, #f2f2f2); }
+      /* line 85, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button a:active {
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
+        background: #f7f7f7;
+        background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y0ZjRmNCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Y3ZjdmNyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+        background-size: 100%;
+        background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f4f4f4), color-stop(100%, #f7f7f7));
+        background-image: -webkit-linear-gradient(top, #f4f4f4, #f7f7f7);
+        background-image: -moz-linear-gradient(top, #f4f4f4, #f7f7f7);
+        background-image: -o-linear-gradient(top, #f4f4f4, #f7f7f7);
+        background-image: linear-gradient(top, #f4f4f4, #f7f7f7); }
+      /* line 91, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button a > span {
+        display: block;
+        padding-top: 4px;
+        font-weight: 600; }
+      /* line 96, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button a > i {
+        font-size: 32px;
+        color: #808080; }
+    /* line 106, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+    .action-nav-normal .action-nav-button.btn-default a {
+      border: 1px solid #d9d9d9;
+      -webkit-box-shadow: 0 1px 2px 0 #f8f8f8 inset;
+      -moz-box-shadow: 0 1px 2px 0 #f8f8f8 inset;
+      box-shadow: 0 1px 2px 0 #f8f8f8 inset;
+      background: #d4d4d4;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y4ZjhmOCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Q0ZDRkNCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f8f8f8), color-stop(100%, #d4d4d4));
+      background-image: -webkit-linear-gradient(top, #f8f8f8, #d4d4d4);
+      background-image: -moz-linear-gradient(top, #f8f8f8, #d4d4d4);
+      background-image: -o-linear-gradient(top, #f8f8f8, #d4d4d4);
+      background-image: linear-gradient(top, #f8f8f8, #d4d4d4); }
+      /* line 9, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button.btn-default a:hover {
+        opacity: 0.95;
+        -webkit-transition: opacity 0.2s ease-in-out;
+        -moz-transition: opacity 0.2s ease-in-out;
+        -o-transition: opacity 0.2s ease-in-out;
+        transition: opacity 0.2s ease-in-out; }
+      /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button.btn-default a:active {
+        background: #e4e4e4; }
+    /* line 106, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+    .action-nav-normal .action-nav-button.btn-red a {
+      border: 1px solid #ac4a4a;
+      -webkit-box-shadow: 0 1px 2px 0 #c27272 inset;
+      -moz-box-shadow: 0 1px 2px 0 #c27272 inset;
+      box-shadow: 0 1px 2px 0 #c27272 inset;
+      background: #a54747;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2MyNzI3MiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2E1NDc0NyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #c27272), color-stop(100%, #a54747));
+      background-image: -webkit-linear-gradient(top, #c27272, #a54747);
+      background-image: -moz-linear-gradient(top, #c27272, #a54747);
+      background-image: -o-linear-gradient(top, #c27272, #a54747);
+      background-image: linear-gradient(top, #c27272, #a54747); }
+      /* line 9, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button.btn-red a:hover {
+        opacity: 0.95;
+        -webkit-transition: opacity 0.2s ease-in-out;
+        -moz-transition: opacity 0.2s ease-in-out;
+        -o-transition: opacity 0.2s ease-in-out;
+        transition: opacity 0.2s ease-in-out; }
+      /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button.btn-red a:active {
+        background: #b65555; }
+    /* line 106, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+    .action-nav-normal .action-nav-button.btn-green a {
+      border: 1px solid #729d3e;
+      -webkit-box-shadow: 0 1px 2px 0 #91be5a inset;
+      -moz-box-shadow: 0 1px 2px 0 #91be5a inset;
+      box-shadow: 0 1px 2px 0 #91be5a inset;
+      background: #6d963b;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzkxYmU1YSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzZkOTYzYiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #91be5a), color-stop(100%, #6d963b));
+      background-image: -webkit-linear-gradient(top, #91be5a, #6d963b);
+      background-image: -moz-linear-gradient(top, #91be5a, #6d963b);
+      background-image: -o-linear-gradient(top, #91be5a, #6d963b);
+      background-image: linear-gradient(top, #91be5a, #6d963b); }
+      /* line 9, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button.btn-green a:hover {
+        opacity: 0.95;
+        -webkit-transition: opacity 0.2s ease-in-out;
+        -moz-transition: opacity 0.2s ease-in-out;
+        -o-transition: opacity 0.2s ease-in-out;
+        transition: opacity 0.2s ease-in-out; }
+      /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button.btn-green a:active {
+        background: #7dac43; }
+    /* line 106, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+    .action-nav-normal .action-nav-button.btn-blue a {
+      border: 1px solid #3682a9;
+      -webkit-box-shadow: 0 1px 2px 0 #53a1c9 inset;
+      -moz-box-shadow: 0 1px 2px 0 #53a1c9 inset;
+      box-shadow: 0 1px 2px 0 #53a1c9 inset;
+      background: #337ca1;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzUzYTFjOSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzMzN2NhMSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #53a1c9), color-stop(100%, #337ca1));
+      background-image: -webkit-linear-gradient(top, #53a1c9, #337ca1);
+      background-image: -moz-linear-gradient(top, #53a1c9, #337ca1);
+      background-image: -o-linear-gradient(top, #53a1c9, #337ca1);
+      background-image: linear-gradient(top, #53a1c9, #337ca1); }
+      /* line 9, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button.btn-blue a:hover {
+        opacity: 0.95;
+        -webkit-transition: opacity 0.2s ease-in-out;
+        -moz-transition: opacity 0.2s ease-in-out;
+        -o-transition: opacity 0.2s ease-in-out;
+        transition: opacity 0.2s ease-in-out; }
+      /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button.btn-blue a:active {
+        background: #3b8eb8; }
+    /* line 106, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+    .action-nav-normal .action-nav-button.btn-gray a {
+      border: 1px solid #667384;
+      -webkit-box-shadow: 0 1px 2px 0 #8692a2 inset;
+      -moz-box-shadow: 0 1px 2px 0 #8692a2 inset;
+      box-shadow: 0 1px 2px 0 #8692a2 inset;
+      background: #626e7f;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzg2OTJhMiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzYyNmU3ZiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #8692a2), color-stop(100%, #626e7f));
+      background-image: -webkit-linear-gradient(top, #8692a2, #626e7f);
+      background-image: -moz-linear-gradient(top, #8692a2, #626e7f);
+      background-image: -o-linear-gradient(top, #8692a2, #626e7f);
+      background-image: linear-gradient(top, #8692a2, #626e7f); }
+      /* line 9, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button.btn-gray a:hover {
+        opacity: 0.95;
+        -webkit-transition: opacity 0.2s ease-in-out;
+        -moz-transition: opacity 0.2s ease-in-out;
+        -o-transition: opacity 0.2s ease-in-out;
+        transition: opacity 0.2s ease-in-out; }
+      /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button.btn-gray a:active {
+        background: #6f7d90; }
+    /* line 106, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+    .action-nav-normal .action-nav-button.btn-black a {
+      border: 1px solid #5f5f5f;
+      -webkit-box-shadow: 0 1px 2px 0 #7e7e7e inset;
+      -moz-box-shadow: 0 1px 2px 0 #7e7e7e inset;
+      box-shadow: 0 1px 2px 0 #7e7e7e inset;
+      background: #5a5a5a;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzdlN2U3ZSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzVhNWE1YSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #7e7e7e), color-stop(100%, #5a5a5a));
+      background-image: -webkit-linear-gradient(top, #7e7e7e, #5a5a5a);
+      background-image: -moz-linear-gradient(top, #7e7e7e, #5a5a5a);
+      background-image: -o-linear-gradient(top, #7e7e7e, #5a5a5a);
+      background-image: linear-gradient(top, #7e7e7e, #5a5a5a); }
+      /* line 9, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button.btn-black a:hover {
+        opacity: 0.95;
+        -webkit-transition: opacity 0.2s ease-in-out;
+        -moz-transition: opacity 0.2s ease-in-out;
+        -o-transition: opacity 0.2s ease-in-out;
+        transition: opacity 0.2s ease-in-out; }
+      /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button.btn-black a:active {
+        background: #6a6a6a; }
+    /* line 106, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+    .action-nav-normal .action-nav-button.btn-lightblue a {
+      border: 1px solid #3898c3;
+      -webkit-box-shadow: 0 1px 2px 0 #65b1d3 inset;
+      -moz-box-shadow: 0 1px 2px 0 #65b1d3 inset;
+      box-shadow: 0 1px 2px 0 #65b1d3 inset;
+      background: #3692bb;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzY1YjFkMyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzM2OTJiYiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #65b1d3), color-stop(100%, #3692bb));
+      background-image: -webkit-linear-gradient(top, #65b1d3, #3692bb);
+      background-image: -moz-linear-gradient(top, #65b1d3, #3692bb);
+      background-image: -o-linear-gradient(top, #65b1d3, #3692bb);
+      background-image: linear-gradient(top, #65b1d3, #3692bb); }
+      /* line 9, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button.btn-lightblue a:hover {
+        opacity: 0.95;
+        -webkit-transition: opacity 0.2s ease-in-out;
+        -moz-transition: opacity 0.2s ease-in-out;
+        -o-transition: opacity 0.2s ease-in-out;
+        transition: opacity 0.2s ease-in-out; }
+      /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button.btn-lightblue a:active {
+        background: #45a1ca; }
+    /* line 106, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+    .action-nav-normal .action-nav-button.btn-gold a {
+      border: 1px solid #b08029;
+      -webkit-box-shadow: 0 1px 2px 0 #d3a044 inset;
+      -moz-box-shadow: 0 1px 2px 0 #d3a044 inset;
+      box-shadow: 0 1px 2px 0 #d3a044 inset;
+      background: #a87a27;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2QzYTA0NCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2E4N2EyNyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #d3a044), color-stop(100%, #a87a27));
+      background-image: -webkit-linear-gradient(top, #d3a044, #a87a27);
+      background-image: -moz-linear-gradient(top, #d3a044, #a87a27);
+      background-image: -o-linear-gradient(top, #d3a044, #a87a27);
+      background-image: linear-gradient(top, #d3a044, #a87a27); }
+      /* line 9, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button.btn-gold a:hover {
+        opacity: 0.95;
+        -webkit-transition: opacity 0.2s ease-in-out;
+        -moz-transition: opacity 0.2s ease-in-out;
+        -o-transition: opacity 0.2s ease-in-out;
+        transition: opacity 0.2s ease-in-out; }
+      /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button.btn-gold a:active {
+        background: #c18c2d; }
+    /* line 106, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+    .action-nav-normal .action-nav-button.btn-sea a {
+      border: 1px solid #3d5955;
+      -webkit-box-shadow: 0 1px 2px 0 #567d78 inset;
+      -moz-box-shadow: 0 1px 2px 0 #567d78 inset;
+      box-shadow: 0 1px 2px 0 #567d78 inset;
+      background: #39534f;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzU2N2Q3OCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzM5NTM0ZiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #567d78), color-stop(100%, #39534f));
+      background-image: -webkit-linear-gradient(top, #567d78, #39534f);
+      background-image: -moz-linear-gradient(top, #567d78, #39534f);
+      background-image: -o-linear-gradient(top, #567d78, #39534f);
+      background-image: linear-gradient(top, #567d78, #39534f); }
+      /* line 9, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button.btn-sea a:hover {
+        opacity: 0.95;
+        -webkit-transition: opacity 0.2s ease-in-out;
+        -moz-transition: opacity 0.2s ease-in-out;
+        -o-transition: opacity 0.2s ease-in-out;
+        transition: opacity 0.2s ease-in-out; }
+      /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button.btn-sea a:active {
+        background: #456561; }
+    /* line 106, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+    .action-nav-normal .action-nav-button.btn-brown a {
+      border: 1px solid #8c6c36;
+      -webkit-box-shadow: 0 1px 2px 0 #b88e48 inset;
+      -moz-box-shadow: 0 1px 2px 0 #b88e48 inset;
+      box-shadow: 0 1px 2px 0 #b88e48 inset;
+      background: #856733;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2I4OGU0OCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzg1NjczMyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #b88e48), color-stop(100%, #856733));
+      background-image: -webkit-linear-gradient(top, #b88e48, #856733);
+      background-image: -moz-linear-gradient(top, #b88e48, #856733);
+      background-image: -o-linear-gradient(top, #b88e48, #856733);
+      background-image: linear-gradient(top, #b88e48, #856733); }
+      /* line 9, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button.btn-brown a:hover {
+        opacity: 0.95;
+        -webkit-transition: opacity 0.2s ease-in-out;
+        -moz-transition: opacity 0.2s ease-in-out;
+        -o-transition: opacity 0.2s ease-in-out;
+        transition: opacity 0.2s ease-in-out; }
+      /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button.btn-brown a:active {
+        background: #9b783c; }
+    /* line 106, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+    .action-nav-normal .action-nav-button.btn-twitter a {
+      border: 1px solid #2c8eff;
+      -webkit-box-shadow: 0 1px 2px 0 #69afff inset;
+      -moz-box-shadow: 0 1px 2px 0 #69afff inset;
+      box-shadow: 0 1px 2px 0 #69afff inset;
+      background: #2189ff;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzY5YWZmZiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzIxODlmZiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #69afff), color-stop(100%, #2189ff));
+      background-image: -webkit-linear-gradient(top, #69afff, #2189ff);
+      background-image: -moz-linear-gradient(top, #69afff, #2189ff);
+      background-image: -o-linear-gradient(top, #69afff, #2189ff);
+      background-image: linear-gradient(top, #69afff, #2189ff); }
+      /* line 9, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button.btn-twitter a:hover {
+        opacity: 0.95;
+        -webkit-transition: opacity 0.2s ease-in-out;
+        -moz-transition: opacity 0.2s ease-in-out;
+        -o-transition: opacity 0.2s ease-in-out;
+        transition: opacity 0.2s ease-in-out; }
+      /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button.btn-twitter a:active {
+        background: #4099ff; }
+    /* line 106, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+    .action-nav-normal .action-nav-button.btn-facebook a {
+      border: 1px solid #2f4880;
+      -webkit-box-shadow: 0 1px 2px 0 #4061ad inset;
+      -moz-box-shadow: 0 1px 2px 0 #4061ad inset;
+      box-shadow: 0 1px 2px 0 #4061ad inset;
+      background: #2d4479;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzQwNjFhZCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzJkNDQ3OSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #4061ad), color-stop(100%, #2d4479));
+      background-image: -webkit-linear-gradient(top, #4061ad, #2d4479);
+      background-image: -moz-linear-gradient(top, #4061ad, #2d4479);
+      background-image: -o-linear-gradient(top, #4061ad, #2d4479);
+      background-image: linear-gradient(top, #4061ad, #2d4479); }
+      /* line 9, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button.btn-facebook a:hover {
+        opacity: 0.95;
+        -webkit-transition: opacity 0.2s ease-in-out;
+        -moz-transition: opacity 0.2s ease-in-out;
+        -o-transition: opacity 0.2s ease-in-out;
+        transition: opacity 0.2s ease-in-out; }
+      /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+      .action-nav-normal .action-nav-button.btn-facebook a:active {
+        background: #35508f; }
+
+/* line 115, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+.action-nav-normal .badge, .action-nav-normal .label {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  padding: 3px 5px;
+  display: block;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none; }
+/* line 125, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+.action-nav-normal.action-nav-line .action-nav-row {
+  margin-right: 0; }
+/* line 130, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+.action-nav-normal .triangle-button {
+  border-top-right-radius: 3px;
+  pointer-events: none; }
+  /* line 134, /home/andrei/core-admin-release/core-admin/source/stylesheets/action_nav.scss */
+  .action-nav-normal .triangle-button i {
+    right: 4px;
+    top: 3px; }

@@ -1,0 +1,6 @@
+# Since cookies are not sent with the request, we can set
+# "Access-Control-Allow-Origin" to a wildcard, rather than a specific domain.
+header('Access-Control-Allow-Origin: *');
+
+header('Access-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Headers: Authorization, access_token');

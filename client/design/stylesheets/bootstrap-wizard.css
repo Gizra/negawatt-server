@@ -1,0 +1,151 @@
+/* line 1, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+.wizard {
+  display: none; }
+
+/* line 4, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+.wizard-modal form {
+  margin: 0;
+  padding: 0; }
+
+/* line 8, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+.wizard-modal.modal {
+  width: 750px;
+  margin-left: -375px;
+  top: 50%; }
+
+/* line 13, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+.wizard-modal-footer {
+  padding: 0px;
+  text-align: right; }
+
+/* line 17, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+.wizard-modal-header.modal-header h3 {
+  line-height: 35px;
+  display: inline; }
+
+/* line 21, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+.wizard-modal-header.modal-header {
+  border-bottom: 0; }
+
+/* line 25, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+.wizard-subtitle {
+  font-weight: 600;
+  color: #AFAFAF;
+  padding-left: 20px; }
+
+/* line 35, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+.wizard-error,
+.wizard-failure,
+.wizard-success,
+.wizard-loading,
+.wizard-card {
+  position: relative;
+  padding: 35px;
+  padding-top: 20px;
+  overflow-y: auto;
+  height: 300px;
+  display: none;
+  border-top: 1px solid #EEE;
+  margin-right: 5px; }
+
+/* line 46, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+.wizard-nav-link .icon-chevron-right {
+  float: right;
+  margin-top: 12px;
+  margin-right: -6px;
+  opacity: .25; }
+
+/* line 53, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+li.wizard-nav-item.active .icon-chevron-right {
+  opacity: 1; }
+
+/* line 57, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+li.wizard-nav-item {
+  line-height: 40px; }
+
+/* line 61, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+.wizard-modal.modal .nav-list > li > a {
+  background-color: #f5f5f5;
+  padding: 3px 15px 3px 20px;
+  cursor: default;
+  color: #B4B4B4; }
+
+/* line 68, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+.wizard-modal.modal .nav-list li.active > a {
+  background-color: #08C; }
+
+/* line 72, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+.wizard-modal.modal .nav-list > li.already-visited > a.wizard-nav-link {
+  color: #08C;
+  cursor: pointer; }
+
+/* line 77, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+.wizard-modal.modal .nav-list > li.active > a.wizard-nav-link {
+  color: white; }
+
+/* line 81, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+.already-visited > a.wizard-nav-link:hover {
+  background-color: #E4E4E4; }
+
+/* line 85, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+.wizard-card > h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 21px;
+  line-height: 40px;
+  font-weight: normal; }
+
+/* line 93, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+.wizard-progress {
+  padding: 15px;
+  bottom: 0; }
+
+/* line 97, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+.wizard-progress-container {
+  padding: 20px; }
+
+/* line 101, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+.wizard-steps {
+  width: 28%;
+  height: 425px;
+  background-color: #f5f5f5; }
+
+/* line 107, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+.wizard-nav-container {
+  height: 360px; }
+
+/* line 111, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+.nav > li > a.wizard-step-error {
+  background-color: #F2DEDE;
+  color: #B94A48;
+  font-weight: 600; }
+
+/* line 117, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+.wizard-step-error .icon-chevron-right {
+  opacity: 0; }
+
+/* line 121, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+.wizard-input-section {
+  margin-bottom: 20px; }
+
+/* line 125, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+.wizard-buttons-container {
+  padding: 20px; }
+
+/* line 129, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+.wizard-modal .popover.error-popover {
+  background-color: #F2DEDE;
+  color: #B94A48;
+  border-color: #953B39; }
+
+/* line 135, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+.wizard-modal .popover.error-popover .arrow::after {
+  border-right-color: #F2DEDE; }
+
+/* line 139, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+.wizard-modal .popover.error-popover .popover-title {
+  display: none; }
+
+/* line 143, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-wizard.scss */
+.wizard-modal .popover.error-popover .arrow {
+  border-right-color: #953B39; }

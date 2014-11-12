@@ -1,0 +1,49 @@
+@media (max-width: 767px) {
+  /* line 5, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive768.scss */
+  body {
+    padding: 0; }
+
+  /* line 9, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive768.scss */
+  .btn-block {
+    margin-bottom: 10px; }
+
+  /* line 13, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive768.scss */
+  .user-avatar {
+    padding-bottom: 0; }
+
+  /* line 18, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive768.scss */
+  .dataTables_info {
+    display: none; }
+
+  /* line 22, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive768.scss */
+  .dataTables_filter input[type="text"] {
+    width: 130px; }
+
+  /* line 26, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive768.scss */
+  .dataTables_length {
+    display: none; }
+
+  /* line 30, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive768.scss */
+  .next.paginate_button, .previous.paginate_button {
+    display: none; }
+
+  /* line 34, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive768.scss */
+  .area-top {
+    text-align: center; }
+    /* line 38, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive768.scss */
+    .area-top .header {
+      margin-top: 0;
+      margin-bottom: 7px;
+      text-align: center;
+      float: none !important; }
+      /* line 43, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive768.scss */
+      .area-top .header i {
+        float: none; }
+    /* line 48, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive768.scss */
+    .area-top .sparkline-box {
+      float: none !important;
+      display: inline-block; } }
+@media (max-width: 550px) {
+  /* line 58, /home/andrei/core-admin-release/core-admin/source/stylesheets/responsive768.scss */
+  .area-top .sparkline-box .sparkline {
+    display: none; } }

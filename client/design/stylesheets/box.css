@@ -1,0 +1,255 @@
+/* line 4, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+.box {
+  -webkit-box-shadow: 0 2px 2px -2px #cccccc;
+  -moz-box-shadow: 0 2px 2px -2px #cccccc;
+  box-shadow: 0 2px 2px -2px #cccccc;
+  background: #fbfbfb;
+  border: 1px solid #cdcdcd;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  margin-bottom: 20px; }
+  /* line 12, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+  .box .box-header, .box .box-footer {
+    *zoom: 1;
+    background: #eaeaea;
+    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZkZmRmZCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2VhZWFlYSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+    background-size: 100%;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fdfdfd), color-stop(100%, #eaeaea));
+    background-image: -webkit-linear-gradient(top, #fdfdfd, #eaeaea);
+    background-image: -moz-linear-gradient(top, #fdfdfd, #eaeaea);
+    background-image: -o-linear-gradient(top, #fdfdfd, #eaeaea);
+    background-image: linear-gradient(top, #fdfdfd, #eaeaea);
+    text-shadow: 0 1px white;
+    border-bottom: 1px solid #CDCDCD;
+    color: #636363;
+    font-weight: 600; }
+    /* line 24, /home/andrei/core-admin-release/core-admin/source/stylesheets/mixin_helpers.scss */
+    .box .box-header:before, .box .box-header:after, .box .box-footer:before, .box .box-footer:after {
+      display: table;
+      content: "";
+      line-height: 0; }
+    /* line 30, /home/andrei/core-admin-release/core-admin/source/stylesheets/mixin_helpers.scss */
+    .box .box-header:after, .box .box-footer:after {
+      clear: both; }
+    /* line 17, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+    .box .box-header .title, .box .box-footer .title {
+      float: left;
+      display: block;
+      padding: 10px;
+      font-size: 12px;
+      font-weight: 600; }
+    /* line 25, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+    .box .box-header .box-toolbar, .box .box-footer .box-toolbar {
+      margin: 0;
+      padding: 0;
+      float: right;
+      list-style: none; }
+      /* line 31, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+      .box .box-header .box-toolbar .ibutton-container, .box .box-footer .box-toolbar .ibutton-container {
+        margin-top: 6px; }
+      /* line 35, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+      .box .box-header .box-toolbar > li, .box .box-footer .box-toolbar > li {
+        position: relative;
+        float: left;
+        margin-left: 15px;
+        line-height: 37px;
+        padding-right: 10px;
+        color: #636363;
+        font-size: 12px; }
+        /* line 42, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+        .box .box-header .box-toolbar > li ul, .box .box-footer .box-toolbar > li ul {
+          left: auto;
+          right: 0; }
+        /* line 49, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+        .box .box-header .box-toolbar > li.toolbar-link, .box .box-footer .box-toolbar > li.toolbar-link {
+          padding-right: 0; }
+        /* line 53, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+        .box .box-header .box-toolbar > li.toolbar-link > a, .box .box-footer .box-toolbar > li.toolbar-link > a {
+          border-left: 1px solid #cecece;
+          height: 37px;
+          line-height: 37px;
+          display: block;
+          padding: 0 10px; }
+          /* line 60, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+          .box .box-header .box-toolbar > li.toolbar-link > a i, .box .box-footer .box-toolbar > li.toolbar-link > a i {
+            font-size: 16px; }
+          /* line 64, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+          .box .box-header .box-toolbar > li.toolbar-link > a:hover, .box .box-footer .box-toolbar > li.toolbar-link > a:hover {
+            background: #efefef;
+            background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2VmZWZlZiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+            background-size: 100%;
+            background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #efefef));
+            background-image: -webkit-linear-gradient(top, #ffffff, #efefef);
+            background-image: -moz-linear-gradient(top, #ffffff, #efefef);
+            background-image: -o-linear-gradient(top, #ffffff, #efefef);
+            background-image: linear-gradient(top, #ffffff, #efefef); }
+          /* line 68, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+          .box .box-header .box-toolbar > li.toolbar-link > a:active, .box .box-footer .box-toolbar > li.toolbar-link > a:active {
+            background: #e5e5e5; }
+        /* line 73, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+        .box .box-header .box-toolbar > li > i, .box .box-footer .box-toolbar > li > i {
+          font-size: 14px;
+          height: 37px;
+          line-height: 37px; }
+        /* line 79, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+        .box .box-header .box-toolbar > li.open > a, .box .box-footer .box-toolbar > li.open > a {
+          background: #eee; }
+  /* line 89, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+  .box .box-header {
+    -moz-border-radius-topright: 3px;
+    -webkit-border-top-right-radius: 3px;
+    border-top-right-radius: 3px;
+    -moz-border-radius-topleft: 3px;
+    -webkit-border-top-left-radius: 3px;
+    border-top-left-radius: 3px; }
+  /* line 94, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+  .box .box-footer {
+    -moz-border-radius-bottomright: 3px;
+    -webkit-border-bottom-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    -moz-border-radius-bottomleft: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-bottom: none;
+    border-top: 1px solid #dddddd; }
+    /* line 101, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+    .box .box-footer .pagination {
+      margin: 10px 0; }
+    /* line 105, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+    .box .box-footer.flat {
+      border-top: none;
+      background: #f1f1f1;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZiZmJmYiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2YxZjFmMSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fbfbfb), color-stop(100%, #f1f1f1));
+      background-image: -webkit-linear-gradient(top, #fbfbfb, #f1f1f1);
+      background-image: -moz-linear-gradient(top, #fbfbfb, #f1f1f1);
+      background-image: -o-linear-gradient(top, #fbfbfb, #f1f1f1);
+      background-image: linear-gradient(top, #fbfbfb, #f1f1f1); }
+
+/* line 117, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+.box-list {
+  list-style: none;
+  margin: 0; }
+  /* line 121, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+  .box-list > li {
+    line-height: 24px;
+    *zoom: 1;
+    background: #f1f1f1;
+    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZiZmJmYiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2YxZjFmMSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+    background-size: 100%;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fbfbfb), color-stop(100%, #f1f1f1));
+    background-image: -webkit-linear-gradient(top, #fbfbfb, #f1f1f1);
+    background-image: -moz-linear-gradient(top, #fbfbfb, #f1f1f1);
+    background-image: -o-linear-gradient(top, #fbfbfb, #f1f1f1);
+    background-image: linear-gradient(top, #fbfbfb, #f1f1f1);
+    text-shadow: 0 1px white;
+    padding: 10px;
+    border-bottom: 1px solid #ddd; }
+    /* line 24, /home/andrei/core-admin-release/core-admin/source/stylesheets/mixin_helpers.scss */
+    .box-list > li:before, .box-list > li:after {
+      display: table;
+      content: "";
+      line-height: 0; }
+    /* line 30, /home/andrei/core-admin-release/core-admin/source/stylesheets/mixin_helpers.scss */
+    .box-list > li:after {
+      clear: both; }
+    /* line 129, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+    .box-list > li:last-child {
+      border-bottom: none; }
+  /* line 134, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+  .box-list .fields li {
+    line-height: 23px; }
+
+/* line 141, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+.box-section {
+  border-bottom: 1px solid #ddd;
+  margin-left: 0;
+  margin-right: 0;
+  border-top: 1px solid #fff;
+  padding: 15px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+  /* line 149, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+  .box-section:last-child {
+    border-bottom: none; }
+
+/* line 157, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+.faded-toolbar a {
+  margin-right: 10px; }
+/* line 162, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+.faded-toolbar.pull-right a {
+  margin-left: 10px;
+  margin-right: 0; }
+/* line 168, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+.faded-toolbar i {
+  -webkit-transition: opacity 0.3s;
+  -moz-transition: opacity 0.3s;
+  -o-transition: opacity 0.3s;
+  transition: opacity 0.3s;
+  vertical-align: middle;
+  color: #989898;
+  opacity: .6; }
+  /* line 173, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+  .faded-toolbar i:hover {
+    opacity: 1; }
+
+/* line 182, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+.box .box-header .nav {
+  margin-bottom: 0; }
+/* line 186, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+.box .box-header .nav-tabs + .title {
+  float: right; }
+/* line 190, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+.box .box-header .nav-tabs {
+  border-bottom: none; }
+  /* line 194, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+  .box .box-header .nav-tabs > .active > a, .box .box-header .nav-tabs > .active > a:hover {
+    background: #fbfbfb;
+    border-left-color: #dddddd;
+    border-right-color: #dddddd;
+    border-top-color: transparent;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    -ms-border-radius: 0;
+    -o-border-radius: 0;
+    border-radius: 0; }
+  /* line 203, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+  .box .box-header .nav-tabs.nav-tabs-left {
+    float: left; }
+    /* line 206, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+    .box .box-header .nav-tabs.nav-tabs-left li:first-child a {
+      border-left: 0;
+      -moz-border-radius-topleft: 3px;
+      -webkit-border-top-left-radius: 3px;
+      border-top-left-radius: 3px; }
+  /* line 212, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+  .box .box-header .nav-tabs.nav-tabs-right {
+    float: right; }
+    /* line 215, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+    .box .box-header .nav-tabs.nav-tabs-right li:last-child a {
+      border-right: 0;
+      -moz-border-radius-topright: 3px;
+      -webkit-border-top-right-radius: 3px;
+      border-top-right-radius: 3px;
+      margin-right: 0; }
+/* line 223, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+.box .box-header .nav > li > a:hover {
+  border-color: transparent;
+  background: none; }
+
+/* line 234, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+.box-header .tooltip {
+  line-height: 20px !important;
+  text-shadow: none; }
+/* line 239, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+.box-header .progress {
+  margin-top: 15px; }
+/* line 243, /home/andrei/core-admin-release/core-admin/source/stylesheets/box.scss */
+.box-header .input-with-submit input {
+  margin-bottom: 0;
+  margin-top: 5px; }

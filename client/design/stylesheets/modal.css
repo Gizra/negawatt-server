@@ -1,0 +1,38 @@
+/* line 3, /home/andrei/core-admin-release/core-admin/source/stylesheets/modal.scss */
+.modal-body {
+  background: #f5f5f5; }
+
+/* line 7, /home/andrei/core-admin-release/core-admin/source/stylesheets/modal.scss */
+.modal-content {
+  border: 3px solid #808080; }
+
+/* line 11, /home/andrei/core-admin-release/core-admin/source/stylesheets/modal.scss */
+.modal-header, .modal-footer {
+  background: #eaeaea;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZkZmRmZCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2VhZWFlYSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fdfdfd), color-stop(100%, #eaeaea));
+  background-image: -webkit-linear-gradient(top, #fdfdfd, #eaeaea);
+  background-image: -moz-linear-gradient(top, #fdfdfd, #eaeaea);
+  background-image: -o-linear-gradient(top, #fdfdfd, #eaeaea);
+  background-image: linear-gradient(top, #fdfdfd, #eaeaea); }
+  /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/modal.scss */
+  .modal-header h1, .modal-header h2, .modal-header h3, .modal-header h4, .modal-header h5, .modal-header h6, .modal-footer h1, .modal-footer h2, .modal-footer h3, .modal-footer h4, .modal-footer h5, .modal-footer h6 {
+    margin: 0; }
+
+/* line 19, /home/andrei/core-admin-release/core-admin/source/stylesheets/modal.scss */
+.modal-footer {
+  margin-top: 0; }
+
+/* line 23, /home/andrei/core-admin-release/core-admin/source/stylesheets/modal.scss */
+.modal-header {
+  -moz-border-radius-topleft: 4px;
+  -webkit-border-top-left-radius: 4px;
+  border-top-left-radius: 4px;
+  -moz-border-radius-topright: 4px;
+  -webkit-border-top-right-radius: 4px;
+  border-top-right-radius: 4px; }
+
+/* line 28, /home/andrei/core-admin-release/core-admin/source/stylesheets/modal.scss */
+.modal-header {
+  border-bottom: 1px solid #CDCDCD; }

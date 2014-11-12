@@ -1,0 +1,251 @@
+/* line 41, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .line {
+  stroke-width: 3px;
+  fill: none; }
+/* line 45, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .fill {
+  stroke-width: 0; }
+/* line 48, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart circle {
+  stroke: #FFF;
+  stroke-width: 3px; }
+/* line 53, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .axis .domain {
+  fill: none; }
+/* line 56, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .axis .tick {
+  stroke: #EEE;
+  stroke-width: 1px; }
+/* line 60, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .axis text {
+  font-family: Helvetica, Arial, Verdana, sans-serif;
+  fill: #666;
+  font-size: 12px; }
+/* line 15, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color0 .line {
+  stroke: #3880aa; }
+/* line 18, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color0 rect, .xchart .color0 circle {
+  fill: #3880aa; }
+/* line 21, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color0 .fill {
+  fill: rgba(56, 128, 170, 0.1); }
+/* line 25, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color0.comp .line {
+  stroke: #89bbd8; }
+/* line 28, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color0.comp rect {
+  fill: #89bbd8; }
+/* line 31, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color0.comp .fill {
+  display: none; }
+/* line 34, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color0.comp circle, .xchart .color0.comp .pointer {
+  fill: #89bbd8; }
+/* line 15, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color1 .line {
+  stroke: #4da944; }
+/* line 18, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color1 rect, .xchart .color1 circle {
+  fill: #4da944; }
+/* line 21, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color1 .fill {
+  fill: rgba(77, 169, 68, 0.1); }
+/* line 25, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color1.comp .line {
+  stroke: #9dd597; }
+/* line 28, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color1.comp rect {
+  fill: #9dd597; }
+/* line 31, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color1.comp .fill {
+  display: none; }
+/* line 34, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color1.comp circle, .xchart .color1.comp .pointer {
+  fill: #9dd597; }
+/* line 15, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color2 .line {
+  stroke: #f26522; }
+/* line 18, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color2 rect, .xchart .color2 circle {
+  fill: #f26522; }
+/* line 21, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color2 .fill {
+  fill: rgba(242, 101, 34, 0.1); }
+/* line 25, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color2.comp .line {
+  stroke: #f9b99a; }
+/* line 28, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color2.comp rect {
+  fill: #f9b99a; }
+/* line 31, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color2.comp .fill {
+  display: none; }
+/* line 34, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color2.comp circle, .xchart .color2.comp .pointer {
+  fill: #f9b99a; }
+/* line 15, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color3 .line {
+  stroke: #c6080d; }
+/* line 18, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color3 rect, .xchart .color3 circle {
+  fill: #c6080d; }
+/* line 21, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color3 .fill {
+  fill: rgba(198, 8, 13, 0.1); }
+/* line 25, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color3.comp .line {
+  stroke: #f8555a; }
+/* line 28, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color3.comp rect {
+  fill: #f8555a; }
+/* line 31, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color3.comp .fill {
+  display: none; }
+/* line 34, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color3.comp circle, .xchart .color3.comp .pointer {
+  fill: #f8555a; }
+/* line 15, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color4 .line {
+  stroke: #672d8b; }
+/* line 18, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color4 rect, .xchart .color4 circle {
+  fill: #672d8b; }
+/* line 21, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color4 .fill {
+  fill: rgba(103, 45, 139, 0.1); }
+/* line 25, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color4.comp .line {
+  stroke: #a869ce; }
+/* line 28, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color4.comp rect {
+  fill: #a869ce; }
+/* line 31, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color4.comp .fill {
+  display: none; }
+/* line 34, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color4.comp circle, .xchart .color4.comp .pointer {
+  fill: #a869ce; }
+/* line 15, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color5 .line {
+  stroke: #ce1797; }
+/* line 18, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color5 rect, .xchart .color5 circle {
+  fill: #ce1797; }
+/* line 21, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color5 .fill {
+  fill: rgba(206, 23, 151, 0.1); }
+/* line 25, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color5.comp .line {
+  stroke: #f075cb; }
+/* line 28, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color5.comp rect {
+  fill: #f075cb; }
+/* line 31, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color5.comp .fill {
+  display: none; }
+/* line 34, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color5.comp circle, .xchart .color5.comp .pointer {
+  fill: #f075cb; }
+/* line 15, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color6 .line {
+  stroke: #d9ce00; }
+/* line 18, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color6 rect, .xchart .color6 circle {
+  fill: #d9ce00; }
+/* line 21, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color6 .fill {
+  fill: rgba(217, 206, 0, 0.1); }
+/* line 25, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color6.comp .line {
+  stroke: #fff75a; }
+/* line 28, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color6.comp rect {
+  fill: #fff75a; }
+/* line 31, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color6.comp .fill {
+  display: none; }
+/* line 34, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color6.comp circle, .xchart .color6.comp .pointer {
+  fill: #fff75a; }
+/* line 15, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color7 .line {
+  stroke: #754c24; }
+/* line 18, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color7 rect, .xchart .color7 circle {
+  fill: #754c24; }
+/* line 21, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color7 .fill {
+  fill: rgba(117, 76, 36, 0.1); }
+/* line 25, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color7.comp .line {
+  stroke: #c98c50; }
+/* line 28, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color7.comp rect {
+  fill: #c98c50; }
+/* line 31, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color7.comp .fill {
+  display: none; }
+/* line 34, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color7.comp circle, .xchart .color7.comp .pointer {
+  fill: #c98c50; }
+/* line 15, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color8 .line {
+  stroke: #2eb9b4; }
+/* line 18, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color8 rect, .xchart .color8 circle {
+  fill: #2eb9b4; }
+/* line 21, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color8 .fill {
+  fill: rgba(46, 185, 180, 0.1); }
+/* line 25, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color8.comp .line {
+  stroke: #86e1de; }
+/* line 28, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color8.comp rect {
+  fill: #86e1de; }
+/* line 31, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color8.comp .fill {
+  display: none; }
+/* line 34, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color8.comp circle, .xchart .color8.comp .pointer {
+  fill: #86e1de; }
+/* line 15, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color9 .line {
+  stroke: #0e2e42; }
+/* line 18, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color9 rect, .xchart .color9 circle {
+  fill: #0e2e42; }
+/* line 21, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color9 .fill {
+  fill: rgba(14, 46, 66, 0.1); }
+/* line 25, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color9.comp .line {
+  stroke: #2477ab; }
+/* line 28, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color9.comp rect {
+  fill: #2477ab; }
+/* line 31, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color9.comp .fill {
+  display: none; }
+/* line 34, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.xchart .color9.comp circle, .xchart .color9.comp .pointer {
+  fill: #2477ab; }
+
+/* line 76, /home/andrei/core-admin-release/core-admin/source/stylesheets/xcharts.scss */
+.ex-tooltip {
+  position: absolute;
+  background: #EEE;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  padding: 5px;
+  -webkit-box-shadow: 0 1px 3px #000;
+  -moz-box-shadow: 0 1px 3px #000;
+  -ms-box-shadow: 0 1px 3px #000;
+  -o-box-shadow: 0 1px 3px #000;
+  box-shadow: 0 1px 3px #000;
+  border-collapse: separate;
+  display: none; }

@@ -31,10 +31,12 @@ drush en devel diff views_ui field_ui migrate_ui mimemail -y
 drush en negawatt_migrate -y
 drush mi --all --user=1
 
-# This command does the login for you when the build script is done. It will open a new tab in your default browser and login to your project as the Administrator. Comment out this line if you do not want the login to happen automatically.
-drush uli --uri=$BASE_DOMAIN_URL
+# Add permitted headers into the settings.php file.
+cat .headers >> sites/default/settings.php
 
-# Open browser (Mac)
-open $BASE_DOMAIN_URL
-# Open browser (Linux)
-xdg-open $BASE_DOMAIN_URL
+# Install client application.
+cd ../client/demo
+npm install && bower install
+
+# This command does the login for you when the build script is done. It will open a new tab in your default browser and login to your project as the Administrator.
+drush uli --uri=$BASE_DOMAIN_URL

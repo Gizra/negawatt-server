@@ -1,0 +1,207 @@
+/* line 56, /home/andrei/core-admin-release/core-admin/source/stylesheets/_arrow.scss */
+.arrow-box-left {
+  position: relative;
+  background: #fafeff;
+  border: 1px solid #b5cdd7;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box; }
+
+/* line 72, /home/andrei/core-admin-release/core-admin/source/stylesheets/_arrow.scss */
+.arrow-box-left:after, .arrow-box-left:before {
+  right: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none; }
+
+/* line 82, /home/andrei/core-admin-release/core-admin/source/stylesheets/_arrow.scss */
+.arrow-box-left:after {
+  border-right-color: #fafeff;
+  border-width: 6px;
+  top: 7px; }
+
+/* line 94, /home/andrei/core-admin-release/core-admin/source/stylesheets/_arrow.scss */
+.arrow-box-left:before {
+  border-right-color: #b5cdd7;
+  border-width: 7px;
+  top: 6px; }
+
+/* line 19, /home/andrei/core-admin-release/core-admin/source/stylesheets/chat-box.scss */
+.arrow-box-left.gray {
+  background: nil;
+  border-color: #d8d8d8; }
+  /* line 26, /home/andrei/core-admin-release/core-admin/source/stylesheets/_arrow.scss */
+  .arrow-box-left.gray:before {
+    border-right-color: #d8d8d8; }
+
+/* line 24, /home/andrei/core-admin-release/core-admin/source/stylesheets/chat-box.scss */
+.arrow-box-left {
+  -webkit-box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.1); }
+
+/* line 56, /home/andrei/core-admin-release/core-admin/source/stylesheets/_arrow.scss */
+.arrow-box-right {
+  position: relative;
+  background: #fafeff;
+  border: 1px solid #b5cdd7;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box; }
+
+/* line 72, /home/andrei/core-admin-release/core-admin/source/stylesheets/_arrow.scss */
+.arrow-box-right:after, .arrow-box-right:before {
+  left: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none; }
+
+/* line 82, /home/andrei/core-admin-release/core-admin/source/stylesheets/_arrow.scss */
+.arrow-box-right:after {
+  border-left-color: #fafeff;
+  border-width: 6px;
+  top: 7px; }
+
+/* line 94, /home/andrei/core-admin-release/core-admin/source/stylesheets/_arrow.scss */
+.arrow-box-right:before {
+  border-left-color: #b5cdd7;
+  border-width: 7px;
+  top: 6px; }
+
+/* line 19, /home/andrei/core-admin-release/core-admin/source/stylesheets/chat-box.scss */
+.arrow-box-right.gray {
+  background: nil;
+  border-color: #d8d8d8; }
+  /* line 26, /home/andrei/core-admin-release/core-admin/source/stylesheets/_arrow.scss */
+  .arrow-box-right.gray:before {
+    border-left-color: #d8d8d8; }
+
+/* line 24, /home/andrei/core-admin-release/core-admin/source/stylesheets/chat-box.scss */
+.arrow-box-right {
+  -webkit-box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.1); }
+
+/* line 31, /home/andrei/core-admin-release/core-admin/source/stylesheets/chat-box.scss */
+.chat-box.timeline .arrow-box-left {
+  padding: 0;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px;
+  border-radius: 2px;
+  min-height: auto;
+  margin-right: 0; }
+/* line 38, /home/andrei/core-admin-release/core-admin/source/stylesheets/chat-box.scss */
+.chat-box.timeline .info, .chat-box.timeline .content {
+  background: #fafafa;
+  padding: 5px 10px; }
+/* line 43, /home/andrei/core-admin-release/core-admin/source/stylesheets/chat-box.scss */
+.chat-box.timeline .content {
+  *zoom: 1;
+  border-top: 1px solid #ccc;
+  background: #f8f8f8;
+  -moz-border-radius-bottomleft: 2px;
+  -webkit-border-bottom-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+  -moz-border-radius-bottomright: 2px;
+  -webkit-border-bottom-right-radius: 2px;
+  border-bottom-right-radius: 2px; }
+  /* line 24, /home/andrei/core-admin-release/core-admin/source/stylesheets/mixin_helpers.scss */
+  .chat-box.timeline .content:before, .chat-box.timeline .content:after {
+    display: table;
+    content: "";
+    line-height: 0; }
+  /* line 30, /home/andrei/core-admin-release/core-admin/source/stylesheets/mixin_helpers.scss */
+  .chat-box.timeline .content:after {
+    clear: both; }
+/* line 51, /home/andrei/core-admin-release/core-admin/source/stylesheets/chat-box.scss */
+.chat-box.timeline blockquote {
+  margin: 10px 0px; }
+/* line 55, /home/andrei/core-admin-release/core-admin/source/stylesheets/chat-box.scss */
+.chat-box.timeline .chat-message-box {
+  display: inline-block;
+  min-width: 100px;
+  margin-left: 64px;
+  padding: 3px 10px;
+  border-radius: 10px; }
+
+/* line 64, /home/andrei/core-admin-release/core-admin/source/stylesheets/chat-box.scss */
+.chat-box.timeline + .closable-chat-box {
+  margin-left: 65px; }
+
+/* line 69, /home/andrei/core-admin-release/core-admin/source/stylesheets/chat-box.scss */
+.chat-box {
+  list-style: none;
+  margin: 0;
+  font-size: 11px;
+  line-height: 20px;
+  color: #5f5f5f; }
+  /* line 76, /home/andrei/core-admin-release/core-admin/source/stylesheets/chat-box.scss */
+  .chat-box .avatar {
+    position: absolute;
+    top: 0; }
+  /* line 82, /home/andrei/core-admin-release/core-admin/source/stylesheets/chat-box.scss */
+  .chat-box .arrow-box-left, .chat-box .arrow-box-right {
+    min-height: 30px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+    border-radius: 3px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    padding: 5px 10px; }
+  /* line 101, /home/andrei/core-admin-release/core-admin/source/stylesheets/chat-box.scss */
+  .chat-box .arrow-box-left {
+    margin-left: 65px;
+    margin-right: 15px; }
+    /* line 105, /home/andrei/core-admin-release/core-admin/source/stylesheets/chat-box.scss */
+    .chat-box .arrow-box-left .avatar {
+      left: -50px; }
+    /* line 109, /home/andrei/core-admin-release/core-admin/source/stylesheets/chat-box.scss */
+    .chat-box .arrow-box-left.gray .info .name strong {
+      color: #393939; }
+  /* line 101, /home/andrei/core-admin-release/core-admin/source/stylesheets/chat-box.scss */
+  .chat-box .arrow-box-right {
+    margin-right: 65px;
+    margin-left: 15px; }
+    /* line 105, /home/andrei/core-admin-release/core-admin/source/stylesheets/chat-box.scss */
+    .chat-box .arrow-box-right .avatar {
+      right: -50px; }
+    /* line 109, /home/andrei/core-admin-release/core-admin/source/stylesheets/chat-box.scss */
+    .chat-box .arrow-box-right.gray .info .name strong {
+      color: #393939; }
+  /* line 114, /home/andrei/core-admin-release/core-admin/source/stylesheets/chat-box.scss */
+  .chat-box .info {
+    *zoom: 1;
+    color: #949494;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    -ms-border-radius: 2px;
+    -o-border-radius: 2px;
+    border-radius: 2px; }
+    /* line 24, /home/andrei/core-admin-release/core-admin/source/stylesheets/mixin_helpers.scss */
+    .chat-box .info:before, .chat-box .info:after {
+      display: table;
+      content: "";
+      line-height: 0; }
+    /* line 30, /home/andrei/core-admin-release/core-admin/source/stylesheets/mixin_helpers.scss */
+    .chat-box .info:after {
+      clear: both; }
+    /* line 120, /home/andrei/core-admin-release/core-admin/source/stylesheets/chat-box.scss */
+    .chat-box .info .name {
+      float: left; }
+      /* line 122, /home/andrei/core-admin-release/core-admin/source/stylesheets/chat-box.scss */
+      .chat-box .info .name strong {
+        color: #2c596d;
+        margin-right: 10px; }
+    /* line 132, /home/andrei/core-admin-release/core-admin/source/stylesheets/chat-box.scss */
+    .chat-box .info .time {
+      float: right; }

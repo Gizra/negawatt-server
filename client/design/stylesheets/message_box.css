@@ -1,0 +1,104 @@
+/* line 56, /home/andrei/core-admin-release/core-admin/source/stylesheets/_arrow.scss */
+.chat-message-box {
+  position: relative;
+  background: white;
+  border: 1px solid #d8d8d8;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box; }
+
+/* line 72, /home/andrei/core-admin-release/core-admin/source/stylesheets/_arrow.scss */
+.chat-message-box:after, .chat-message-box:before {
+  bottom: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none; }
+
+/* line 82, /home/andrei/core-admin-release/core-admin/source/stylesheets/_arrow.scss */
+.chat-message-box:after {
+  border-bottom-color: white;
+  border-width: 7px;
+  left: 10px; }
+
+/* line 94, /home/andrei/core-admin-release/core-admin/source/stylesheets/_arrow.scss */
+.chat-message-box:before {
+  border-bottom-color: #d8d8d8;
+  border-width: 8px;
+  left: 9px; }
+
+/* line 9, /home/andrei/core-admin-release/core-admin/source/stylesheets/message_box.scss */
+.chat-message-box {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
+  margin-bottom: 15px; }
+  /* line 12, /home/andrei/core-admin-release/core-admin/source/stylesheets/message_box.scss */
+  .chat-message-box textarea {
+    border: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    margin: 5px;
+    width: 97% !important;
+    background: #fff; }
+    /* line 19, /home/andrei/core-admin-release/core-admin/source/stylesheets/message_box.scss */
+    .chat-message-box textarea:focus {
+      border: none; }
+
+/* line 26, /home/andrei/core-admin-release/core-admin/source/stylesheets/message_box.scss */
+.closable-chat-box .chat-message-box {
+  margin-bottom: 0; }
+  /* line 29, /home/andrei/core-admin-release/core-admin/source/stylesheets/message_box.scss */
+  .closable-chat-box .chat-message-box textarea {
+    height: 25px; }
+/* line 34, /home/andrei/core-admin-release/core-admin/source/stylesheets/message_box.scss */
+.closable-chat-box .actions {
+  display: none; }
+/* line 39, /home/andrei/core-admin-release/core-admin/source/stylesheets/message_box.scss */
+.closable-chat-box.open .chat-message-box {
+  margin-bottom: 15px; }
+  /* line 42, /home/andrei/core-admin-release/core-admin/source/stylesheets/message_box.scss */
+  .closable-chat-box.open .chat-message-box textarea {
+    height: auto; }
+/* line 47, /home/andrei/core-admin-release/core-admin/source/stylesheets/message_box.scss */
+.closable-chat-box.open .actions {
+  display: block; }
+/* line 52, /home/andrei/core-admin-release/core-admin/source/stylesheets/message_box.scss */
+.closable-chat-box .fields {
+  *zoom: 1;
+  position: relative; }
+  /* line 24, /home/andrei/core-admin-release/core-admin/source/stylesheets/mixin_helpers.scss */
+  .closable-chat-box .fields:before, .closable-chat-box .fields:after {
+    display: table;
+    content: "";
+    line-height: 0; }
+  /* line 30, /home/andrei/core-admin-release/core-admin/source/stylesheets/mixin_helpers.scss */
+  .closable-chat-box .fields:after {
+    clear: both; }
+  /* line 57, /home/andrei/core-admin-release/core-admin/source/stylesheets/message_box.scss */
+  .closable-chat-box .fields ul {
+    float: left;
+    margin-left: 50px;
+    margin-bottom: 2px;
+    list-style: none;
+    padding: 0; }
+    /* line 64, /home/andrei/core-admin-release/core-admin/source/stylesheets/message_box.scss */
+    .closable-chat-box .fields ul li {
+      line-height: 18px;
+      color: #949494; }
+  /* line 70, /home/andrei/core-admin-release/core-admin/source/stylesheets/message_box.scss */
+  .closable-chat-box .fields a {
+    color: #393939; }
+  /* line 74, /home/andrei/core-admin-release/core-admin/source/stylesheets/message_box.scss */
+  .closable-chat-box .fields .avatar {
+    position: absolute;
+    left: 0; }
+    /* line 77, /home/andrei/core-admin-release/core-admin/source/stylesheets/message_box.scss */
+    .closable-chat-box .fields .avatar img {
+      max-width: 36px;
+      max-height: 36px; }

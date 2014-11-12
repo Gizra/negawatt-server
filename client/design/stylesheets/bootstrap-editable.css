@@ -1,0 +1,951 @@
+/*! X-editable - v1.5.0 
+* In-place editing with Twitter Bootstrap, jQuery UI or pure jQuery
+* http://github.com/vitalets/x-editable
+* Copyright (c) 2013 Vitaliy Potapov; Licensed MIT */
+/* line 7, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.editableform {
+  margin-bottom: 0;
+  /* overwrites bootstrap margin */ }
+  /* line 10, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .editableform .control-group {
+    margin-bottom: 0;
+    /* overwrites bootstrap margin */
+    white-space: nowrap;
+    /* prevent wrapping buttons on new line */
+    line-height: 20px;
+    /* overwriting bootstrap line-height. See #133 */ }
+
+/* line 20, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.editable-buttons {
+  display: inline-block;
+  /* should be inline to take effect of parent's white-space: nowrap */
+  vertical-align: top;
+  margin-left: 7px;
+  /* inline-block emulation for IE7*/
+  zoom: 1;
+  *display: inline; }
+  /* line 28, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .editable-buttons.editable-buttons-bottom {
+    display: block;
+    margin-top: 7px;
+    margin-left: 0; }
+
+/* line 35, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.editable-input {
+  vertical-align: top;
+  display: inline-block;
+  /* should be inline to take effect of parent's white-space: nowrap */
+  width: auto;
+  /* bootstrap-responsive has width: 100% that breakes layout */
+  white-space: normal;
+  /* reset white-space decalred in parent*/
+  /* display-inline emulation for IE7*/
+  zoom: 1;
+  *display: inline; }
+
+/* line 49, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.editable-buttons .editable-cancel {
+  margin-left: 7px; }
+/* line 52, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.editable-buttons button.ui-button-icon-only {
+  height: 24px;
+  width: 30px; }
+
+/*for jquery-ui buttons need set height to look more pretty*/
+/* line 60, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.editableform-loading {
+  background: url("../images/loading.gif") center center no-repeat;
+  height: 25px;
+  width: auto;
+  min-width: 25px; }
+
+/* line 67, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.editable-inline .editableform-loading {
+  background-position: left 5px; }
+
+/* line 71, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.editable-error-block {
+  max-width: 300px;
+  margin: 5px 0 0 0;
+  width: auto;
+  white-space: normal; }
+  /* line 76, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .editable-error-block.ui-state-error {
+    padding: 3px; }
+
+/*add padding for jquery ui*/
+/* line 83, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.editable-error {
+  color: red; }
+
+/* ---- For specific types ---- */
+/* line 89, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.editableform .editable-date {
+  padding: 0;
+  margin: 0;
+  float: left; }
+
+/* move datepicker icon to center of add-on button. See https://github.com/vitalets/x-editable/issues/183 */
+/* line 97, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.editable-inline .add-on .icon-th {
+  margin-top: 3px;
+  margin-left: 1px; }
+
+/* checklist vertical alignment */
+/* line 104, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.editable-checklist label {
+  white-space: nowrap; }
+  /* line 105, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .editable-checklist label input[type="checkbox"], .editable-checklist label span {
+    vertical-align: middle;
+    margin: 0; }
+
+/* set exact width of textarea to fit buttons toolbar */
+/* line 114, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.editable-wysihtml5 {
+  width: 566px;
+  height: 250px; }
+
+/* clear button shown as link in date inputs */
+/* line 121, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.editable-clear {
+  clear: both;
+  font-size: 0.9em;
+  text-decoration: none;
+  text-align: right; }
+
+/* IOS-style clear button for text inputs */
+/* line 130, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.editable-clear-x {
+  background: url("../images/clear.png") center center no-repeat;
+  display: block;
+  width: 13px;
+  height: 13px;
+  position: absolute;
+  opacity: 0.6;
+  z-index: 100;
+  top: 50%;
+  right: 6px;
+  margin-top: -6px; }
+  /* line 141, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .editable-clear-x:hover {
+    opacity: 1; }
+
+/* line 146, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.editable-pre-wrapped {
+  white-space: pre-wrap; }
+
+/* line 151, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.editable-container.editable-popup {
+  max-width: none !important;
+  /* without this rule poshytip/tooltip does not stretch */ }
+/* line 155, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.editable-container.popover {
+  width: auto;
+  /* without this rule popover does not stretch */ }
+/* line 159, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.editable-container.editable-inline {
+  display: inline-block;
+  vertical-align: middle;
+  width: auto;
+  /* inline-block emulation for IE7*/
+  zoom: 1;
+  *display: inline; }
+/* line 167, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.editable-container.ui-widget {
+  font-size: inherit;
+  /* jqueryui widget font 1.1em too big, overwrite it */
+  z-index: 9990;
+  /* should be less than select2 dropdown z-index to close dropdown first when click */ }
+
+/* line 175, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.editable-click {
+  text-decoration: none;
+  border-bottom: dashed 1px #0088cc; }
+
+/* line 180, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+a.editable-click {
+  text-decoration: none;
+  border-bottom: dashed 1px #0088cc; }
+  /* line 183, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  a.editable-click:hover {
+    text-decoration: none;
+    border-bottom: dashed 1px #0088cc; }
+
+/* line 189, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.editable-click.editable-disabled {
+  color: #585858;
+  cursor: default;
+  border-bottom: none; }
+
+/* line 195, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+a.editable-click.editable-disabled {
+  color: #585858;
+  cursor: default;
+  border-bottom: none; }
+  /* line 199, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  a.editable-click.editable-disabled:hover {
+    color: #585858;
+    cursor: default;
+    border-bottom: none; }
+
+/* line 206, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.editable-empty {
+  font-style: italic;
+  color: #DD1144;
+  /* border-bottom: none; */
+  text-decoration: none; }
+  /* line 211, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .editable-empty:hover, .editable-empty:focus {
+    font-style: italic;
+    color: #DD1144;
+    /* border-bottom: none; */
+    text-decoration: none; }
+
+/* line 219, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.editable-unsaved {
+  font-weight: bold; }
+  /* line 221, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .editable-unsaved:after {
+    /*    content: '*'*/ }
+
+/* line 226, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.editable-bg-transition {
+  -webkit-transition: background-color 1400ms ease-out;
+  -moz-transition: background-color 1400ms ease-out;
+  -o-transition: background-color 1400ms ease-out;
+  -ms-transition: background-color 1400ms ease-out;
+  transition: background-color 1400ms ease-out; }
+
+/*see https://github.com/vitalets/x-editable/issues/139 */
+/* line 236, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.form-horizontal .editable {
+  padding-top: 5px;
+  display: inline-block; }
+
+/*!
+ * Datepicker for Bootstrap
+ *
+ * Copyright 2012 Stefan Petre
+ * Improvements by Andrew Rowls
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ */
+/* line 251, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.datepicker {
+  padding: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  direction: ltr;
+  /*.dow {
+		border-top: 1px solid #ddd !important;
+	}*/ }
+
+/* line 262, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.datepicker-inline {
+  width: 220px; }
+
+/* line 266, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.datepicker.datepicker-rtl {
+  direction: rtl; }
+  /* line 268, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker.datepicker-rtl table tr td span {
+    float: right; }
+
+/* line 273, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.datepicker-dropdown {
+  top: 0;
+  left: 0; }
+  /* line 276, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker-dropdown:before {
+    content: '';
+    display: inline-block;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-bottom: 7px solid #ccc;
+    border-bottom-color: rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: -7px;
+    left: 6px; }
+  /* line 287, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker-dropdown:after {
+    content: '';
+    display: inline-block;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid #ffffff;
+    position: absolute;
+    top: -6px;
+    left: 7px; }
+
+/* line 300, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.datepicker > div {
+  display: none; }
+/* line 303, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.datepicker.days div.datepicker-days, .datepicker.months div.datepicker-months, .datepicker.years div.datepicker-years {
+  display: block; }
+/* line 306, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.datepicker table {
+  margin: 0; }
+/* line 309, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.datepicker td, .datepicker th {
+  text-align: center;
+  width: 20px;
+  height: 20px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border: none; }
+
+/* line 321, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.table-striped .datepicker table tr td, .table-striped .datepicker table tr th {
+  background-color: transparent; }
+
+/* line 328, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.datepicker table tr td.day:hover {
+  background: #eeeeee;
+  cursor: pointer; }
+/* line 332, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.datepicker table tr td.old, .datepicker table tr td.new {
+  color: #999999; }
+/* line 335, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.datepicker table tr td.disabled {
+  background: none;
+  color: #999999;
+  cursor: default; }
+  /* line 339, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.disabled:hover {
+    background: none;
+    color: #999999;
+    cursor: default; }
+/* line 345, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.datepicker table tr td.today {
+  background-color: #fde19a;
+  background-image: -moz-linear-gradient(top, #fdd49a, #fdf59a);
+  background-image: -ms-linear-gradient(top, #fdd49a, #fdf59a);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fdd49a), to(#fdf59a));
+  background-image: -webkit-linear-gradient(top, #fdd49a, #fdf59a);
+  background-image: -o-linear-gradient(top, #fdd49a, #fdf59a);
+  background-image: linear-gradient(top, #fdd49a, #fdf59a);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdd49a', endColorstr='#fdf59a', GradientType=0);
+  border-color: #fdf59a #fdf59a #fbed50;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+  color: #000; }
+  /* line 359, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.today:hover {
+    background-color: #fde19a;
+    background-image: -moz-linear-gradient(top, #fdd49a, #fdf59a);
+    background-image: -ms-linear-gradient(top, #fdd49a, #fdf59a);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fdd49a), to(#fdf59a));
+    background-image: -webkit-linear-gradient(top, #fdd49a, #fdf59a);
+    background-image: -o-linear-gradient(top, #fdd49a, #fdf59a);
+    background-image: linear-gradient(top, #fdd49a, #fdf59a);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdd49a', endColorstr='#fdf59a', GradientType=0);
+    border-color: #fdf59a #fdf59a #fbed50;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    color: #000; }
+  /* line 374, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.today.disabled {
+    background-color: #fde19a;
+    background-image: -moz-linear-gradient(top, #fdd49a, #fdf59a);
+    background-image: -ms-linear-gradient(top, #fdd49a, #fdf59a);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fdd49a), to(#fdf59a));
+    background-image: -webkit-linear-gradient(top, #fdd49a, #fdf59a);
+    background-image: -o-linear-gradient(top, #fdd49a, #fdf59a);
+    background-image: linear-gradient(top, #fdd49a, #fdf59a);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdd49a', endColorstr='#fdf59a', GradientType=0);
+    border-color: #fdf59a #fdf59a #fbed50;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    color: #000; }
+    /* line 388, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td.today.disabled:hover {
+      background-color: #fde19a;
+      background-image: -moz-linear-gradient(top, #fdd49a, #fdf59a);
+      background-image: -ms-linear-gradient(top, #fdd49a, #fdf59a);
+      background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fdd49a), to(#fdf59a));
+      background-image: -webkit-linear-gradient(top, #fdd49a, #fdf59a);
+      background-image: -o-linear-gradient(top, #fdd49a, #fdf59a);
+      background-image: linear-gradient(top, #fdd49a, #fdf59a);
+      background-repeat: repeat-x;
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdd49a', endColorstr='#fdf59a', GradientType=0);
+      border-color: #fdf59a #fdf59a #fbed50;
+      border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+      filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+      color: #000; }
+  /* line 404, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.today:hover, .datepicker table tr td.today.disabled:hover, .datepicker table tr td.today:active, .datepicker table tr td.today:hover:active {
+    background-color: #fdf59a; }
+  /* line 408, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.today.disabled:active, .datepicker table tr td.today.disabled:hover:active {
+    background-color: #fdf59a; }
+  /* line 412, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.today.active, .datepicker table tr td.today:hover.active {
+    background-color: #fdf59a; }
+  /* line 415, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.today.disabled {
+    background-color: #fdf59a; }
+    /* line 416, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td.today.disabled.active, .datepicker table tr td.today.disabled:hover.active {
+      background-color: #fdf59a; }
+  /* line 421, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.today:hover.disabled {
+    background-color: #fdf59a; }
+  /* line 425, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.today.disabled.disabled, .datepicker table tr td.today.disabled:hover.disabled {
+    background-color: #fdf59a; }
+  /* line 429, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.today[disabled], .datepicker table tr td.today:hover[disabled] {
+    background-color: #fdf59a; }
+  /* line 433, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.today.disabled[disabled], .datepicker table tr td.today.disabled:hover[disabled] {
+    background-color: #fdf59a; }
+  /* line 437, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.today:active, .datepicker table tr td.today:hover:active {
+    background-color: #fbf069 \9; }
+  /* line 441, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.today.disabled:active, .datepicker table tr td.today.disabled:hover:active {
+    background-color: #fbf069 \9; }
+  /* line 445, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.today.active, .datepicker table tr td.today:hover.active {
+    background-color: #fbf069 \9; }
+  /* line 449, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.today.disabled.active, .datepicker table tr td.today.disabled:hover.active {
+    background-color: #fbf069 \9; }
+  /* line 453, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.today:hover:hover {
+    color: #000; }
+  /* line 456, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.today.active:hover {
+    color: #fff; }
+/* line 460, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.datepicker table tr td.range {
+  background: #eeeeee;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0; }
+  /* line 465, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.range:hover {
+    background: #eeeeee;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0; }
+  /* line 471, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.range.disabled {
+    background: #eeeeee;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0; }
+    /* line 476, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td.range.disabled:hover {
+      background: #eeeeee;
+      -webkit-border-radius: 0;
+      -moz-border-radius: 0;
+      border-radius: 0; }
+  /* line 483, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.range.today {
+    background-color: #f3d17a;
+    background-image: -moz-linear-gradient(top, #f3c17a, #f3e97a);
+    background-image: -ms-linear-gradient(top, #f3c17a, #f3e97a);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f3c17a), to(#f3e97a));
+    background-image: -webkit-linear-gradient(top, #f3c17a, #f3e97a);
+    background-image: -o-linear-gradient(top, #f3c17a, #f3e97a);
+    background-image: linear-gradient(top, #f3c17a, #f3e97a);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f3c17a', endColorstr='#f3e97a', GradientType=0);
+    border-color: #f3e97a #f3e97a #edde34;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0; }
+    /* line 499, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td.range.today:hover {
+      background-color: #f3d17a;
+      background-image: -moz-linear-gradient(top, #f3c17a, #f3e97a);
+      background-image: -ms-linear-gradient(top, #f3c17a, #f3e97a);
+      background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f3c17a), to(#f3e97a));
+      background-image: -webkit-linear-gradient(top, #f3c17a, #f3e97a);
+      background-image: -o-linear-gradient(top, #f3c17a, #f3e97a);
+      background-image: linear-gradient(top, #f3c17a, #f3e97a);
+      background-repeat: repeat-x;
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f3c17a', endColorstr='#f3e97a', GradientType=0);
+      border-color: #f3e97a #f3e97a #edde34;
+      border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+      filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+      -webkit-border-radius: 0;
+      -moz-border-radius: 0;
+      border-radius: 0; }
+    /* line 516, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td.range.today.disabled {
+      background-color: #f3d17a;
+      background-image: -moz-linear-gradient(top, #f3c17a, #f3e97a);
+      background-image: -ms-linear-gradient(top, #f3c17a, #f3e97a);
+      background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f3c17a), to(#f3e97a));
+      background-image: -webkit-linear-gradient(top, #f3c17a, #f3e97a);
+      background-image: -o-linear-gradient(top, #f3c17a, #f3e97a);
+      background-image: linear-gradient(top, #f3c17a, #f3e97a);
+      background-repeat: repeat-x;
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f3c17a', endColorstr='#f3e97a', GradientType=0);
+      border-color: #f3e97a #f3e97a #edde34;
+      border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+      filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+      -webkit-border-radius: 0;
+      -moz-border-radius: 0;
+      border-radius: 0; }
+      /* line 532, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+      .datepicker table tr td.range.today.disabled:hover {
+        background-color: #f3d17a;
+        background-image: -moz-linear-gradient(top, #f3c17a, #f3e97a);
+        background-image: -ms-linear-gradient(top, #f3c17a, #f3e97a);
+        background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f3c17a), to(#f3e97a));
+        background-image: -webkit-linear-gradient(top, #f3c17a, #f3e97a);
+        background-image: -o-linear-gradient(top, #f3c17a, #f3e97a);
+        background-image: linear-gradient(top, #f3c17a, #f3e97a);
+        background-repeat: repeat-x;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f3c17a', endColorstr='#f3e97a', GradientType=0);
+        border-color: #f3e97a #f3e97a #edde34;
+        border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+        filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+        -webkit-border-radius: 0;
+        -moz-border-radius: 0;
+        border-radius: 0; }
+    /* line 550, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td.range.today:hover, .datepicker table tr td.range.today.disabled:hover, .datepicker table tr td.range.today:active, .datepicker table tr td.range.today:hover:active {
+      background-color: #f3e97a; }
+    /* line 554, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td.range.today.disabled:active, .datepicker table tr td.range.today.disabled:hover:active {
+      background-color: #f3e97a; }
+    /* line 558, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td.range.today.active, .datepicker table tr td.range.today:hover.active {
+      background-color: #f3e97a; }
+    /* line 561, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td.range.today.disabled {
+      background-color: #f3e97a; }
+      /* line 562, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+      .datepicker table tr td.range.today.disabled.active, .datepicker table tr td.range.today.disabled:hover.active {
+        background-color: #f3e97a; }
+    /* line 567, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td.range.today:hover.disabled {
+      background-color: #f3e97a; }
+    /* line 571, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td.range.today.disabled.disabled, .datepicker table tr td.range.today.disabled:hover.disabled {
+      background-color: #f3e97a; }
+    /* line 575, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td.range.today[disabled], .datepicker table tr td.range.today:hover[disabled] {
+      background-color: #f3e97a; }
+    /* line 579, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td.range.today.disabled[disabled], .datepicker table tr td.range.today.disabled:hover[disabled] {
+      background-color: #f3e97a; }
+    /* line 583, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td.range.today:active, .datepicker table tr td.range.today:hover:active {
+      background-color: #efe24b \9; }
+    /* line 587, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td.range.today.disabled:active, .datepicker table tr td.range.today.disabled:hover:active {
+      background-color: #efe24b \9; }
+    /* line 591, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td.range.today.active, .datepicker table tr td.range.today:hover.active {
+      background-color: #efe24b \9; }
+    /* line 595, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td.range.today.disabled.active, .datepicker table tr td.range.today.disabled:hover.active {
+      background-color: #efe24b \9; }
+/* line 601, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.datepicker table tr td.selected {
+  background-color: #9e9e9e;
+  background-image: -moz-linear-gradient(top, #b3b3b3, gray);
+  background-image: -ms-linear-gradient(top, #b3b3b3, gray);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#b3b3b3), to(gray));
+  background-image: -webkit-linear-gradient(top, #b3b3b3, gray);
+  background-image: -o-linear-gradient(top, #b3b3b3, gray);
+  background-image: linear-gradient(top, #b3b3b3, #808080);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b3b3b3', endColorstr='#808080', GradientType=0);
+  border-color: #808080 #808080 #595959;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); }
+  /* line 616, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.selected:hover {
+    background-color: #9e9e9e;
+    background-image: -moz-linear-gradient(top, #b3b3b3, gray);
+    background-image: -ms-linear-gradient(top, #b3b3b3, gray);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#b3b3b3), to(gray));
+    background-image: -webkit-linear-gradient(top, #b3b3b3, gray);
+    background-image: -o-linear-gradient(top, #b3b3b3, gray);
+    background-image: linear-gradient(top, #b3b3b3, #808080);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b3b3b3', endColorstr='#808080', GradientType=0);
+    border-color: #808080 #808080 #595959;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); }
+  /* line 632, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.selected.disabled {
+    background-color: #9e9e9e;
+    background-image: -moz-linear-gradient(top, #b3b3b3, gray);
+    background-image: -ms-linear-gradient(top, #b3b3b3, gray);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#b3b3b3), to(gray));
+    background-image: -webkit-linear-gradient(top, #b3b3b3, gray);
+    background-image: -o-linear-gradient(top, #b3b3b3, gray);
+    background-image: linear-gradient(top, #b3b3b3, #808080);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b3b3b3', endColorstr='#808080', GradientType=0);
+    border-color: #808080 #808080 #595959;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); }
+    /* line 647, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td.selected.disabled:hover {
+      background-color: #9e9e9e;
+      background-image: -moz-linear-gradient(top, #b3b3b3, gray);
+      background-image: -ms-linear-gradient(top, #b3b3b3, gray);
+      background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#b3b3b3), to(gray));
+      background-image: -webkit-linear-gradient(top, #b3b3b3, gray);
+      background-image: -o-linear-gradient(top, #b3b3b3, gray);
+      background-image: linear-gradient(top, #b3b3b3, #808080);
+      background-repeat: repeat-x;
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b3b3b3', endColorstr='#808080', GradientType=0);
+      border-color: #808080 #808080 #595959;
+      border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+      filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+      color: #fff;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); }
+  /* line 664, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.selected:hover, .datepicker table tr td.selected.disabled:hover, .datepicker table tr td.selected:active, .datepicker table tr td.selected:hover:active {
+    background-color: #808080; }
+  /* line 668, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.selected.disabled:active, .datepicker table tr td.selected.disabled:hover:active {
+    background-color: #808080; }
+  /* line 672, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.selected.active, .datepicker table tr td.selected:hover.active {
+    background-color: #808080; }
+  /* line 675, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.selected.disabled {
+    background-color: #808080; }
+    /* line 676, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td.selected.disabled.active, .datepicker table tr td.selected.disabled:hover.active {
+      background-color: #808080; }
+  /* line 681, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.selected:hover.disabled {
+    background-color: #808080; }
+  /* line 685, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.selected.disabled.disabled, .datepicker table tr td.selected.disabled:hover.disabled {
+    background-color: #808080; }
+  /* line 689, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.selected[disabled], .datepicker table tr td.selected:hover[disabled] {
+    background-color: #808080; }
+  /* line 693, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.selected.disabled[disabled], .datepicker table tr td.selected.disabled:hover[disabled] {
+    background-color: #808080; }
+  /* line 697, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.selected:active, .datepicker table tr td.selected:hover:active {
+    background-color: #666666 \9; }
+  /* line 701, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.selected.disabled:active, .datepicker table tr td.selected.disabled:hover:active {
+    background-color: #666666 \9; }
+  /* line 705, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.selected.active, .datepicker table tr td.selected:hover.active {
+    background-color: #666666 \9; }
+  /* line 709, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.selected.disabled.active, .datepicker table tr td.selected.disabled:hover.active {
+    background-color: #666666 \9; }
+/* line 714, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.datepicker table tr td.active {
+  background-color: #006dcc;
+  background-image: -moz-linear-gradient(top, #0088cc, #0044cc);
+  background-image: -ms-linear-gradient(top, #0088cc, #0044cc);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0044cc));
+  background-image: -webkit-linear-gradient(top, #0088cc, #0044cc);
+  background-image: -o-linear-gradient(top, #0088cc, #0044cc);
+  background-image: linear-gradient(top, #0088cc, #0044cc);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088cc', endColorstr='#0044cc', GradientType=0);
+  border-color: #0044cc #0044cc #002a80;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); }
+  /* line 729, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.active:hover {
+    background-color: #006dcc;
+    background-image: -moz-linear-gradient(top, #0088cc, #0044cc);
+    background-image: -ms-linear-gradient(top, #0088cc, #0044cc);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0044cc));
+    background-image: -webkit-linear-gradient(top, #0088cc, #0044cc);
+    background-image: -o-linear-gradient(top, #0088cc, #0044cc);
+    background-image: linear-gradient(top, #0088cc, #0044cc);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088cc', endColorstr='#0044cc', GradientType=0);
+    border-color: #0044cc #0044cc #002a80;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); }
+  /* line 745, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.active.disabled {
+    background-color: #006dcc;
+    background-image: -moz-linear-gradient(top, #0088cc, #0044cc);
+    background-image: -ms-linear-gradient(top, #0088cc, #0044cc);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0044cc));
+    background-image: -webkit-linear-gradient(top, #0088cc, #0044cc);
+    background-image: -o-linear-gradient(top, #0088cc, #0044cc);
+    background-image: linear-gradient(top, #0088cc, #0044cc);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088cc', endColorstr='#0044cc', GradientType=0);
+    border-color: #0044cc #0044cc #002a80;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); }
+    /* line 760, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td.active.disabled:hover {
+      background-color: #006dcc;
+      background-image: -moz-linear-gradient(top, #0088cc, #0044cc);
+      background-image: -ms-linear-gradient(top, #0088cc, #0044cc);
+      background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0044cc));
+      background-image: -webkit-linear-gradient(top, #0088cc, #0044cc);
+      background-image: -o-linear-gradient(top, #0088cc, #0044cc);
+      background-image: linear-gradient(top, #0088cc, #0044cc);
+      background-repeat: repeat-x;
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088cc', endColorstr='#0044cc', GradientType=0);
+      border-color: #0044cc #0044cc #002a80;
+      border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+      filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+      color: #fff;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); }
+  /* line 777, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.active:hover, .datepicker table tr td.active.disabled:hover, .datepicker table tr td.active:active, .datepicker table tr td.active:hover:active {
+    background-color: #0044cc; }
+  /* line 781, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.active.disabled:active, .datepicker table tr td.active.disabled:hover:active {
+    background-color: #0044cc; }
+  /* line 785, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.active.active, .datepicker table tr td.active:hover.active {
+    background-color: #0044cc; }
+  /* line 788, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.active.disabled {
+    background-color: #0044cc; }
+    /* line 789, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td.active.disabled.active, .datepicker table tr td.active.disabled:hover.active {
+      background-color: #0044cc; }
+  /* line 794, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.active:hover.disabled {
+    background-color: #0044cc; }
+  /* line 798, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.active.disabled.disabled, .datepicker table tr td.active.disabled:hover.disabled {
+    background-color: #0044cc; }
+  /* line 802, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.active[disabled], .datepicker table tr td.active:hover[disabled] {
+    background-color: #0044cc; }
+  /* line 806, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.active.disabled[disabled], .datepicker table tr td.active.disabled:hover[disabled] {
+    background-color: #0044cc; }
+  /* line 810, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.active:active, .datepicker table tr td.active:hover:active {
+    background-color: #003399 \9; }
+  /* line 814, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.active.disabled:active, .datepicker table tr td.active.disabled:hover:active {
+    background-color: #003399 \9; }
+  /* line 818, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.active.active, .datepicker table tr td.active:hover.active {
+    background-color: #003399 \9; }
+  /* line 822, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td.active.disabled.active, .datepicker table tr td.active.disabled:hover.active {
+    background-color: #003399 \9; }
+/* line 827, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.datepicker table tr td span {
+  display: block;
+  width: 23%;
+  height: 54px;
+  line-height: 54px;
+  float: left;
+  margin: 1%;
+  cursor: pointer;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px; }
+  /* line 838, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td span:hover {
+    background: #eeeeee; }
+  /* line 841, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td span.disabled {
+    background: none;
+    color: #999999;
+    cursor: default; }
+    /* line 845, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td span.disabled:hover {
+      background: none;
+      color: #999999;
+      cursor: default; }
+  /* line 851, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td span.active {
+    background-color: #006dcc;
+    background-image: -moz-linear-gradient(top, #0088cc, #0044cc);
+    background-image: -ms-linear-gradient(top, #0088cc, #0044cc);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0044cc));
+    background-image: -webkit-linear-gradient(top, #0088cc, #0044cc);
+    background-image: -o-linear-gradient(top, #0088cc, #0044cc);
+    background-image: linear-gradient(top, #0088cc, #0044cc);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088cc', endColorstr='#0044cc', GradientType=0);
+    border-color: #0044cc #0044cc #002a80;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); }
+    /* line 866, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td span.active:hover {
+      background-color: #006dcc;
+      background-image: -moz-linear-gradient(top, #0088cc, #0044cc);
+      background-image: -ms-linear-gradient(top, #0088cc, #0044cc);
+      background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0044cc));
+      background-image: -webkit-linear-gradient(top, #0088cc, #0044cc);
+      background-image: -o-linear-gradient(top, #0088cc, #0044cc);
+      background-image: linear-gradient(top, #0088cc, #0044cc);
+      background-repeat: repeat-x;
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088cc', endColorstr='#0044cc', GradientType=0);
+      border-color: #0044cc #0044cc #002a80;
+      border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+      filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+      color: #fff;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); }
+    /* line 882, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td span.active.disabled {
+      background-color: #006dcc;
+      background-image: -moz-linear-gradient(top, #0088cc, #0044cc);
+      background-image: -ms-linear-gradient(top, #0088cc, #0044cc);
+      background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0044cc));
+      background-image: -webkit-linear-gradient(top, #0088cc, #0044cc);
+      background-image: -o-linear-gradient(top, #0088cc, #0044cc);
+      background-image: linear-gradient(top, #0088cc, #0044cc);
+      background-repeat: repeat-x;
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088cc', endColorstr='#0044cc', GradientType=0);
+      border-color: #0044cc #0044cc #002a80;
+      border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+      filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+      color: #fff;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); }
+      /* line 897, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+      .datepicker table tr td span.active.disabled:hover {
+        background-color: #006dcc;
+        background-image: -moz-linear-gradient(top, #0088cc, #0044cc);
+        background-image: -ms-linear-gradient(top, #0088cc, #0044cc);
+        background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0044cc));
+        background-image: -webkit-linear-gradient(top, #0088cc, #0044cc);
+        background-image: -o-linear-gradient(top, #0088cc, #0044cc);
+        background-image: linear-gradient(top, #0088cc, #0044cc);
+        background-repeat: repeat-x;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088cc', endColorstr='#0044cc', GradientType=0);
+        border-color: #0044cc #0044cc #002a80;
+        border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+        filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+        color: #fff;
+        text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); }
+    /* line 914, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td span.active:hover, .datepicker table tr td span.active.disabled:hover, .datepicker table tr td span.active:active, .datepicker table tr td span.active:hover:active {
+      background-color: #0044cc; }
+    /* line 918, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td span.active.disabled:active, .datepicker table tr td span.active.disabled:hover:active {
+      background-color: #0044cc; }
+    /* line 922, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td span.active.active, .datepicker table tr td span.active:hover.active {
+      background-color: #0044cc; }
+    /* line 925, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td span.active.disabled {
+      background-color: #0044cc; }
+      /* line 926, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+      .datepicker table tr td span.active.disabled.active, .datepicker table tr td span.active.disabled:hover.active {
+        background-color: #0044cc; }
+    /* line 931, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td span.active:hover.disabled {
+      background-color: #0044cc; }
+    /* line 935, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td span.active.disabled.disabled, .datepicker table tr td span.active.disabled:hover.disabled {
+      background-color: #0044cc; }
+    /* line 939, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td span.active[disabled], .datepicker table tr td span.active:hover[disabled] {
+      background-color: #0044cc; }
+    /* line 943, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td span.active.disabled[disabled], .datepicker table tr td span.active.disabled:hover[disabled] {
+      background-color: #0044cc; }
+    /* line 947, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td span.active:active, .datepicker table tr td span.active:hover:active {
+      background-color: #003399 \9; }
+    /* line 951, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td span.active.disabled:active, .datepicker table tr td span.active.disabled:hover:active {
+      background-color: #003399 \9; }
+    /* line 955, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td span.active.active, .datepicker table tr td span.active:hover.active {
+      background-color: #003399 \9; }
+    /* line 959, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+    .datepicker table tr td span.active.disabled.active, .datepicker table tr td span.active.disabled:hover.active {
+      background-color: #003399 \9; }
+  /* line 964, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .datepicker table tr td span.old, .datepicker table tr td span.new {
+    color: #999999; }
+/* line 969, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.datepicker th.datepicker-switch {
+  width: 145px; }
+/* line 972, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.datepicker thead tr:first-child th, .datepicker tfoot tr th {
+  cursor: pointer; }
+/* line 975, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.datepicker thead tr:first-child th:hover, .datepicker tfoot tr th:hover {
+  background: #eeeeee; }
+/* line 978, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.datepicker .cw {
+  font-size: 10px;
+  width: 12px;
+  padding: 0 2px 0 5px;
+  vertical-align: middle; }
+/* line 984, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.datepicker thead tr:first-child th.cw {
+  cursor: default;
+  background-color: transparent; }
+
+/* line 990, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.input-append.date .add-on i, .input-prepend.date .add-on i {
+  display: block;
+  cursor: pointer;
+  width: 16px;
+  height: 16px; }
+
+/* line 998, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.input-daterange input {
+  text-align: center; }
+  /* line 1000, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .input-daterange input:first-child {
+    -webkit-border-radius: 3px 0 0 3px;
+    -moz-border-radius: 3px 0 0 3px;
+    border-radius: 3px 0 0 3px; }
+  /* line 1005, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+  .input-daterange input:last-child {
+    -webkit-border-radius: 0 3px 3px 0;
+    -moz-border-radius: 0 3px 3px 0;
+    border-radius: 0 3px 3px 0; }
+/* line 1011, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap-editable.scss */
+.input-daterange .add-on {
+  display: inline-block;
+  width: auto;
+  min-width: 16px;
+  height: 18px;
+  padding: 4px 5px;
+  font-weight: normal;
+  line-height: 18px;
+  text-align: center;
+  text-shadow: 0 1px 0 #ffffff;
+  vertical-align: middle;
+  background-color: #eeeeee;
+  border: 1px solid #ccc;
+  margin-left: -5px;
+  margin-right: -5px; }

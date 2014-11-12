@@ -1,0 +1,174 @@
+/* line 4, /home/andrei/core-admin-release/core-admin/source/stylesheets/dropdowns.scss */
+.to-right .dropdown-menu {
+  top: 0px;
+  left: 100%;
+  margin-left: 10px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
+  float: none;
+  width: 100%;
+  -webkit-box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1) inset;
+  -moz-box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1) inset;
+  box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1) inset;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+  /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/dropdowns.scss */
+  .to-right .dropdown-menu:before {
+    content: '';
+    display: inline-block;
+    border-top: 7px solid transparent !important;
+    border-left: 7px solid transparent !important;
+    border-right: 8px solid #11161A;
+    border-bottom: 7px solid transparent !important;
+    position: absolute;
+    top: 12px;
+    left: -15px; }
+
+/* line 28, /home/andrei/core-admin-release/core-admin/source/stylesheets/dropdowns.scss */
+.dark-nav {
+  position: relative; }
+  /* line 31, /home/andrei/core-admin-release/core-admin/source/stylesheets/dropdowns.scss */
+  .dark-nav.to-right .dropdown-menu {
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+    border-radius: 4px; }
+  /* line 38, /home/andrei/core-admin-release/core-admin/source/stylesheets/dropdowns.scss */
+  .dark-nav > ul {
+    margin: 0;
+    padding: 0;
+    background: #11161A;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 4px 2px inset;
+    -moz-box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 4px 2px inset;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 4px 2px inset; }
+    /* line 44, /home/andrei/core-admin-release/core-admin/source/stylesheets/dropdowns.scss */
+    .dark-nav > ul:before {
+      border-bottom: 7px solid #0a0d0e !important; }
+    /* line 48, /home/andrei/core-admin-release/core-admin/source/stylesheets/dropdowns.scss */
+    .dark-nav > ul:after {
+      border-bottom: 6px solid #0a0d0e !important; }
+    /* line 52, /home/andrei/core-admin-release/core-admin/source/stylesheets/dropdowns.scss */
+    .dark-nav > ul li.active a {
+      color: #fff;
+      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+      background: rgba(50, 50, 50, 0.1);
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0icmdiYSg5MCwgOTAsIDkwLCAwLjIpIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSJyZ2JhKDUwLCA1MCwgNTAsIDAuMSkiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyYWQpIiAvPjwvc3ZnPiA=');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(90, 90, 90, 0.2)), color-stop(100%, rgba(50, 50, 50, 0.1)));
+      background-image: -webkit-linear-gradient(top, rgba(90, 90, 90, 0.2) 0%, rgba(50, 50, 50, 0.1));
+      background-image: -moz-linear-gradient(top, rgba(90, 90, 90, 0.2) 0%, rgba(50, 50, 50, 0.1));
+      background-image: -o-linear-gradient(top, rgba(90, 90, 90, 0.2) 0%, rgba(50, 50, 50, 0.1));
+      background-image: linear-gradient(top, rgba(90, 90, 90, 0.2) 0%, rgba(50, 50, 50, 0.1)); }
+      /* line 57, /home/andrei/core-admin-release/core-admin/source/stylesheets/dropdowns.scss */
+      .dark-nav > ul li.active a:hover {
+        background: rgba(50, 50, 50, 0.1);
+        background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0icmdiYSg5MCwgOTAsIDkwLCAwLjIpIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSJyZ2JhKDUwLCA1MCwgNTAsIDAuMSkiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyYWQpIiAvPjwvc3ZnPiA=');
+        background-size: 100%;
+        background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(90, 90, 90, 0.2)), color-stop(100%, rgba(50, 50, 50, 0.1)));
+        background-image: -webkit-linear-gradient(top, rgba(90, 90, 90, 0.2) 0%, rgba(50, 50, 50, 0.1));
+        background-image: -moz-linear-gradient(top, rgba(90, 90, 90, 0.2) 0%, rgba(50, 50, 50, 0.1));
+        background-image: -o-linear-gradient(top, rgba(90, 90, 90, 0.2) 0%, rgba(50, 50, 50, 0.1));
+        background-image: linear-gradient(top, rgba(90, 90, 90, 0.2) 0%, rgba(50, 50, 50, 0.1)); }
+    /* line 63, /home/andrei/core-admin-release/core-admin/source/stylesheets/dropdowns.scss */
+    .dark-nav > ul li a {
+      text-shadow: none;
+      text-align: left;
+      font-size: 11px;
+      padding: 6px 5px 6px 20px;
+      border-top: 1px solid #20292f;
+      border-bottom: 1px solid #0a0d0e;
+      color: #bbb;
+      display: block; }
+      /* line 73, /home/andrei/core-admin-release/core-admin/source/stylesheets/dropdowns.scss */
+      .dark-nav > ul li a:hover {
+        background: rgba(50, 50, 50, 0.1);
+        background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0icmdiYSg5MCwgOTAsIDkwLCAwLjIpIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSJyZ2JhKDUwLCA1MCwgNTAsIDAuMSkiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyYWQpIiAvPjwvc3ZnPiA=');
+        background-size: 100%;
+        background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(90, 90, 90, 0.2)), color-stop(100%, rgba(50, 50, 50, 0.1)));
+        background-image: -webkit-linear-gradient(top, rgba(90, 90, 90, 0.2) 0%, rgba(50, 50, 50, 0.1));
+        background-image: -moz-linear-gradient(top, rgba(90, 90, 90, 0.2) 0%, rgba(50, 50, 50, 0.1));
+        background-image: -o-linear-gradient(top, rgba(90, 90, 90, 0.2) 0%, rgba(50, 50, 50, 0.1));
+        background-image: linear-gradient(top, rgba(90, 90, 90, 0.2) 0%, rgba(50, 50, 50, 0.1));
+        color: #fff; }
+    /* line 80, /home/andrei/core-admin-release/core-admin/source/stylesheets/dropdowns.scss */
+    .dark-nav > ul li:last-child a {
+      border-bottom: none; }
+    /* line 86, /home/andrei/core-admin-release/core-admin/source/stylesheets/dropdowns.scss */
+    .dark-nav > ul li:first-child a {
+      border-top: none; }
+
+/* line 95, /home/andrei/core-admin-release/core-admin/source/stylesheets/dropdowns.scss */
+.navbar-inverse .nav.full {
+  margin: 0;
+  margin-left: 10px; }
+  /* line 99, /home/andrei/core-admin-release/core-admin/source/stylesheets/dropdowns.scss */
+  .navbar-inverse .nav.full > li > a {
+    height: 40px;
+    line-height: 40px;
+    padding: 3px 10px;
+    margin-right: 10px;
+    background: transparent;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    -ms-border-radius: 0;
+    -o-border-radius: 0;
+    border-radius: 0; }
+    /* line 108, /home/andrei/core-admin-release/core-admin/source/stylesheets/dropdowns.scss */
+    .navbar-inverse .nav.full > li > a:hover {
+      background: transparent; }
+    /* line 112, /home/andrei/core-admin-release/core-admin/source/stylesheets/dropdowns.scss */
+    .navbar-inverse .nav.full > li > a img {
+      width: 32px;
+      height: 32px; }
+
+/* line 119, /home/andrei/core-admin-release/core-admin/source/stylesheets/dropdowns.scss */
+.dropdown-menu {
+  background: whitesmoke;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZkZmRmZCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Y1ZjVmNSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fdfdfd), color-stop(100%, #f5f5f5));
+  background-image: -webkit-linear-gradient(top, #fdfdfd, #f5f5f5);
+  background-image: -moz-linear-gradient(top, #fdfdfd, #f5f5f5);
+  background-image: -o-linear-gradient(top, #fdfdfd, #f5f5f5);
+  background-image: linear-gradient(top, #fdfdfd, #f5f5f5);
+  -webkit-box-shadow: 0 1px 2px #dadada;
+  -moz-box-shadow: 0 1px 2px #dadada;
+  box-shadow: 0 1px 2px #dadada; }
+  /* line 123, /home/andrei/core-admin-release/core-admin/source/stylesheets/dropdowns.scss */
+  .dropdown-menu li > a:hover, .dropdown-menu .dropdown-menu li > a:focus, .dropdown-menu .dropdown-submenu:hover > a {
+    background: #f2f2f2;
+    color: #404040; }
+  /* line 128, /home/andrei/core-admin-release/core-admin/source/stylesheets/dropdowns.scss */
+  .dropdown-menu li a {
+    text-shadow: 0 1px white;
+    color: #475967;
+    font-weight: 600; }
+    /* line 133, /home/andrei/core-admin-release/core-admin/source/stylesheets/dropdowns.scss */
+    .dropdown-menu li a i {
+      color: #BCBECA; }
+  /* line 138, /home/andrei/core-admin-release/core-admin/source/stylesheets/dropdowns.scss */
+  .dropdown-menu li.with-image {
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 15px; }
+    /* line 144, /home/andrei/core-admin-release/core-admin/source/stylesheets/dropdowns.scss */
+    .dropdown-menu li.with-image .avatar img {
+      max-width: 100px;
+      max-height: 100px;
+      border: 4px solid #fff; }
+    /* line 151, /home/andrei/core-admin-release/core-admin/source/stylesheets/dropdowns.scss */
+    .dropdown-menu li.with-image span {
+      text-shadow: 0 1px white;
+      display: block;
+      margin-top: 15px;
+      color: #9EA1AA;
+      font-size: 16px;
+      font-weight: 600; }

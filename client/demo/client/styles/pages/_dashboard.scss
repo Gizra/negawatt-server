@@ -1,0 +1,32 @@
+// Header
+.header-container>.top-header .logo.bg-dark a {
+  font-size: 40px;
+}
+
+// Rewrite charts width.
+.charts-line {
+  width: 590px !important;
+  height: 255px !important;
+}
+
+.charts-pie {
+  margin-right: -15px !important;
+}
+
+// CURRENT STATUS COUNTERS
+.col-full {
+  padding: 0;
+
+  .icon {
+    padding-right: 10px;
+    font-size: 25px;
+    position: absolute;
+    left: 10px;
+    top: 8px;
+  }
+
+
+  .regular-paragraph {
+    margin: 0;
+  }
+}

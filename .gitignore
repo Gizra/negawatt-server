@@ -58,3 +58,12 @@ negawatt/behat/vendor/
 behat.local.yml
 negawatt/behat/bin
 negawatt/behat/composer.phar
+
+# Client #
+##########
+node_modules
+bower_components
+client/demo/config.json
+client/demo/dist/
+.tmp
+.sass-cache

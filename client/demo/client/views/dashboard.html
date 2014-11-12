@@ -1,0 +1,133 @@
+<div class="page page-dashboard" data-ng-controller="DashboardCtrl">
+
+  <section>
+    <section class="panel panel-default">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-sm-2 text-left">
+            <a ng-click="refreshMap()" href="" class="badge"> Refresh map <span class="glyphicon glyphicon-refresh"></span></a>
+          </div>
+          <div class="col-sm-6">
+            <span ng-show="categorySelected">Filter by:  {{ categorySelected }} </span>
+          </div>
+          <div class="col-sm-4">
+            <strong><span class="glyphicon glyphicon-th"></span> {{account.label}} </strong>
+          </div>
+        </div>
+      </div>
+      <div class="panel-body">
+
+        <div class="row">
+          <div class="col-sm-8">
+            <leaflet center="center" markers="meters" event-broadcast="events" height="270px" width="100%"></leaflet>
+          </div>
+
+          <div class="col-sm-4">
+            <section class="timeline-dashboard">
+              <div class="ui-timline-container">
+                <section class="ui-timeline">
+                  <article class="tl-item">
+                    <div class="tl-body">
+                      <div class="tl-entry">
+                        <div class="tl-caption">
+                          <a href="" class="btn btn-primary btn-block">היום</a>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+
+                  <article class="tl-item tl-message">
+                    <div class="tl-body">
+                      <div class="tl-entry">
+                        <div class="tl-time">לפני 3 דקות</div>
+                        <div class="tl-icon btn-icon-round btn-icon btn-icon-thin btn-info"><i class="ti-money"></i></div>
+                        <div class="tl-content">
+                          <h4 class="tl-tile text-primary">אולם כדורסל</h4>
+
+                          <p> 1,500 ש"ח קנס מקדם הספק</p>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+
+                  <article class="tl-item alt tl-message">
+                    <div class="tl-body">
+                      <div class="tl-entry">
+                        <div class="tl-time">לפני שעה</div>
+                        <div class="tl-icon btn-icon-round btn-icon btn-icon-thin btn-danger"><i class="ti-bolt-alt"></i>
+                        </div>
+                        <div class="tl-content">
+                          <h4 class="tl-tile text-danger">מגרש כדורסל שלמה המלך</h4>
+
+                          <p>צריכת אנרגיה לאחר 23:00</p>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+
+                  <article class="tl-item tl-message">
+                    <div class="tl-body">
+                      <div class="tl-entry">
+                        <div class="tl-time">לפני 3 שעות</div>
+                        <div class="tl-icon btn-icon-round btn-icon btn-icon-thin btn-success"><i class="ti-shine"></i></div>
+                        <div class="tl-content">
+                          <h4 class="tl-tile text-success">בית ספר שלאון</h4>
+
+                          <p>צריכת חשמל בין 18:00 ל 6:00 של 500 קוט"ש לשעה</p>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+
+                  <article class="tl-item tl-message">
+                    <div class="tl-body">
+                      <div class="tl-entry">
+                        <div class="tl-time">לפני 8 שעות</div>
+                        <div class="tl-icon btn-icon-round btn-icon btn-icon-thin btn-success"><i class="ti-shine"></i></div>
+                        <div class="tl-content">
+                          <h4 class="tl-tile text-success">משרדי העירייה</h4>
+
+                          <p>מערכת מיזוג עובדת במהלך הלילה</p>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+
+                </section>
+              </div>
+            </section>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </section>
+
+  <section class="dasboard-chart" data-ng-controller="AccountReportCtrl">
+    <div class="row" >
+      <div class="col-sm-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">סווג</h3>
+          </div>
+          <div class="panel-body">
+            <canvas tc-chartjs-pie chart-options="pie.options" chart-data="pie.data" class="charts charts-pie" height="260" auto-legend></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-8">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">{{meterSelected.label}}</h3>
+          </div>
+          <div class="panel-body">
+            <canvas tc-chartjs chart-type="line" chart-data="line.data" chart-options="line.options" class="charts charts-line"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+</div>

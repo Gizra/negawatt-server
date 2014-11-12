@@ -1,0 +1,289 @@
+/* line 4, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+.sidebar-background {
+  position: fixed;
+  z-index: -1;
+  width: 200px;
+  background: #eaeaea;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-right: 1px solid #ccc; }
+  /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+  .sidebar-background .primary-sidebar-background {
+    width: 200px;
+    background: #11161A;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute; }
+
+/* line 25, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+.primary-sidebar {
+  width: 200px;
+  float: left;
+  position: absolute; }
+  /* line 30, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+  .primary-sidebar .nav {
+    margin-bottom: 20px; }
+    /* line 34, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+    .primary-sidebar .nav:after {
+      content: "";
+      position: absolute;
+      bottom: -1px;
+      height: 1px;
+      width: 100%;
+      left: 0;
+      background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iNTAlIiB4Mj0iMTAwJSIgeTI9IjUwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iInRyYW5zcGFyZW50IiIvPjxzdG9wIG9mZnNldD0iMzUlIiBzdG9wLWNvbG9yPSJyZ2JhKDMyLCA0MSwgNDcsIDAuOCkiLz48c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0iIzIwMjkyZiIvPjxzdG9wIG9mZnNldD0iNjUlIiBzdG9wLWNvbG9yPSJyZ2JhKDMyLCA0MSwgNDcsIDAuOCkiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiJ0cmFuc3BhcmVudCIiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyYWQpIiAvPjwvc3ZnPiA=');
+      background: -webkit-gradient(linear, 0% 50%, 100% 50%, color-stop(0%, transparent), color-stop(35%, rgba(32, 41, 47, 0.8)), color-stop(50%, #20292f), color-stop(65%, rgba(32, 41, 47, 0.8)), color-stop(100%, transparent));
+      background: -webkit-linear-gradient(left, transparent 0%, rgba(32, 41, 47, 0.8) 35%, #20292f 50%, rgba(32, 41, 47, 0.8) 65%, transparent 100%);
+      background: -moz-linear-gradient(left, transparent 0%, rgba(32, 41, 47, 0.8) 35%, #20292f 50%, rgba(32, 41, 47, 0.8) 65%, transparent 100%);
+      background: -o-linear-gradient(left, transparent 0%, rgba(32, 41, 47, 0.8) 35%, #20292f 50%, rgba(32, 41, 47, 0.8) 65%, transparent 100%);
+      background: linear-gradient(left, transparent 0%, rgba(32, 41, 47, 0.8) 35%, #20292f 50%, rgba(32, 41, 47, 0.8) 65%, transparent 100%); }
+    /* line 44, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+    .primary-sidebar .nav > li {
+      position: relative;
+      border-bottom: 1px solid transparent; }
+      /* line 49, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+      .primary-sidebar .nav > li a:after {
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        height: 1px;
+        width: 100%;
+        left: 0;
+        background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iNTAlIiB4Mj0iMTAwJSIgeTI9IjUwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iInRyYW5zcGFyZW50IiIvPjxzdG9wIG9mZnNldD0iMzAlIiBzdG9wLWNvbG9yPSJyZ2JhKDEwLCAxMywgMTQsIDAuOCkiLz48c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0iIzBhMGQwZSIvPjxzdG9wIG9mZnNldD0iNzAlIiBzdG9wLWNvbG9yPSJyZ2JhKDEwLCAxMywgMTQsIDAuOCkiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiJ0cmFuc3BhcmVudCIiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyYWQpIiAvPjwvc3ZnPiA=');
+        background: -webkit-gradient(linear, 0% 50%, 100% 50%, color-stop(0%, transparent), color-stop(30%, rgba(10, 13, 14, 0.8)), color-stop(50%, #0a0d0e), color-stop(70%, rgba(10, 13, 14, 0.8)), color-stop(100%, transparent));
+        background: -webkit-linear-gradient(left, transparent 0%, rgba(10, 13, 14, 0.8) 30%, #0a0d0e 50%, rgba(10, 13, 14, 0.8) 70%, transparent 100%);
+        background: -moz-linear-gradient(left, transparent 0%, rgba(10, 13, 14, 0.8) 30%, #0a0d0e 50%, rgba(10, 13, 14, 0.8) 70%, transparent 100%);
+        background: -o-linear-gradient(left, transparent 0%, rgba(10, 13, 14, 0.8) 30%, #0a0d0e 50%, rgba(10, 13, 14, 0.8) 70%, transparent 100%);
+        background: linear-gradient(left, transparent 0%, rgba(10, 13, 14, 0.8) 30%, #0a0d0e 50%, rgba(10, 13, 14, 0.8) 70%, transparent 100%); }
+      /* line 59, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+      .primary-sidebar .nav > li a:before {
+        content: "";
+        position: absolute;
+        top: 0px;
+        height: 1px;
+        width: 100%;
+        left: 0;
+        background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iNTAlIiB4Mj0iMTAwJSIgeTI9IjUwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iInRyYW5zcGFyZW50IiIvPjxzdG9wIG9mZnNldD0iMzUlIiBzdG9wLWNvbG9yPSJyZ2JhKDMyLCA0MSwgNDcsIDAuOCkiLz48c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0iIzIwMjkyZiIvPjxzdG9wIG9mZnNldD0iNjUlIiBzdG9wLWNvbG9yPSJyZ2JhKDMyLCA0MSwgNDcsIDAuOCkiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiJ0cmFuc3BhcmVudCIiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyYWQpIiAvPjwvc3ZnPiA=');
+        background: -webkit-gradient(linear, 0% 50%, 100% 50%, color-stop(0%, transparent), color-stop(35%, rgba(32, 41, 47, 0.8)), color-stop(50%, #20292f), color-stop(65%, rgba(32, 41, 47, 0.8)), color-stop(100%, transparent));
+        background: -webkit-linear-gradient(left, transparent 0%, rgba(32, 41, 47, 0.8) 35%, #20292f 50%, rgba(32, 41, 47, 0.8) 65%, transparent 100%);
+        background: -moz-linear-gradient(left, transparent 0%, rgba(32, 41, 47, 0.8) 35%, #20292f 50%, rgba(32, 41, 47, 0.8) 65%, transparent 100%);
+        background: -o-linear-gradient(left, transparent 0%, rgba(32, 41, 47, 0.8) 35%, #20292f 50%, rgba(32, 41, 47, 0.8) 65%, transparent 100%);
+        background: linear-gradient(left, transparent 0%, rgba(32, 41, 47, 0.8) 35%, #20292f 50%, rgba(32, 41, 47, 0.8) 65%, transparent 100%); }
+      /* line 69, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+      .primary-sidebar .nav > li .glow {
+        position: absolute;
+        height: 40px;
+        width: 5px;
+        -webkit-transition: box-shadow 0.3s;
+        -moz-transition: box-shadow 0.3s;
+        -o-transition: box-shadow 0.3s;
+        transition: box-shadow 0.3s;
+        background: #1F2B42;
+        -webkit-box-shadow: 0 0 2px 1px #434d59 inset;
+        -moz-box-shadow: 0 0 2px 1px #434d59 inset;
+        box-shadow: 0 0 2px 1px #434d59 inset; }
+      /* line 80, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+      .primary-sidebar .nav > li:hover .glow {
+        background: #4291A6;
+        -webkit-box-shadow: 0 0 2px 1px #7bc8d7 inset;
+        -moz-box-shadow: 0 0 2px 1px #7bc8d7 inset;
+        box-shadow: 0 0 2px 1px #7bc8d7 inset; }
+      /* line 85, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+      .primary-sidebar .nav > li:hover > a {
+        color: #939ea4; }
+      /* line 91, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+      .primary-sidebar .nav > li.active .glow {
+        background: #4291A6;
+        -webkit-box-shadow: 0 0 2px 1px #7bc8d7 inset;
+        -moz-box-shadow: 0 0 2px 1px #7bc8d7 inset;
+        box-shadow: 0 0 2px 1px #7bc8d7 inset; }
+      /* line 96, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+      .primary-sidebar .nav > li.active > a {
+        text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+        color: #939ea4; }
+      /* line 102, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+      .primary-sidebar .nav > li > a {
+        padding-top: 8px;
+        padding-bottom: 8px;
+        padding-left: 25px;
+        -webkit-transition: color 0.3s;
+        -moz-transition: color 0.3s;
+        -o-transition: color 0.3s;
+        transition: color 0.3s;
+        text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+        color: #6B787F; }
+        /* line 110, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+        .primary-sidebar .nav > li > a:hover, .primary-sidebar .nav > li > a:focus {
+          background: #11161A;
+          position: static; }
+        /* line 115, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+        .primary-sidebar .nav > li > a span {
+          font-size: 12px;
+          vertical-align: middle; }
+        /* line 120, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+        .primary-sidebar .nav > li > a i {
+          vertical-align: middle; }
+        /* line 124, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+        .primary-sidebar .nav > li > a i + span {
+          padding-left: 10px; }
+
+/* line 137, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+.active .glow:after {
+  content: "";
+  border-radius: 50%;
+  position: absolute;
+  top: 20px;
+  width: 0;
+  height: 0;
+  left: 8px;
+  -webkit-box-shadow: -10px 0 15px 23px rgba(122, 171, 216, 0.15);
+  -moz-box-shadow: -10px 0 15px 23px rgba(122, 171, 216, 0.15);
+  box-shadow: -10px 0 15px 23px rgba(122, 171, 216, 0.15);
+  background: rgba(124, 190, 215, 0.2); }
+
+/* line 150, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+.user-avatar {
+  width: 100%;
+  position: relative; }
+  /* line 153, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+  .user-avatar .dropdown-toggle span {
+    font-weight: 600; }
+  /* line 161, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+  .user-avatar a {
+    display: inline-block; }
+    /* line 164, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+    .user-avatar a > span {
+      position: relative; }
+    /* line 168, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+    .user-avatar a img {
+      -webkit-box-shadow: 0 1px 3px #1e1e1e;
+      -moz-box-shadow: 0 1px 3px #1e1e1e;
+      box-shadow: 0 1px 3px #1e1e1e;
+      -webkit-border-radius: 2px;
+      -moz-border-radius: 2px;
+      -ms-border-radius: 2px;
+      -o-border-radius: 2px;
+      border-radius: 2px; }
+    /* line 173, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+    .user-avatar a .badge {
+      z-index: 2;
+      position: absolute;
+      left: -6px;
+      top: -10px; }
+  /* line 181, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+  .user-avatar .dropdown-menu {
+    margin-top: 4px; }
+
+/* line 186, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+.status-error {
+  color: #d13b3b; }
+
+/* line 190, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+.status-success {
+  color: #629b3e; }
+
+/* line 194, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+.status-pending {
+  color: #888; }
+
+/* line 198, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+.status-warning {
+  color: #E36D2D; }
+
+/* line 202, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+.status-info {
+  color: #4C9ECD; }
+
+/* line 207, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+hr.divider, li.divider {
+  border: 0;
+  height: 1px;
+  background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iNTAlIiB4Mj0iMTAwJSIgeTI9IjUwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0icmdiYSgyMDUsIDIwNSwgMjA1LCAwKSIvPjxzdG9wIG9mZnNldD0iNTAlIiBzdG9wLWNvbG9yPSIjY2RjZGNkIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSJyZ2JhKDIwNSwgMjA1LCAyMDUsIDApIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4g');
+  background: -webkit-gradient(linear, 0% 50%, 100% 50%, color-stop(0%, rgba(205, 205, 205, 0)), color-stop(50%, #cdcdcd), color-stop(100%, rgba(205, 205, 205, 0)));
+  background: -webkit-linear-gradient(left, rgba(205, 205, 205, 0), #cdcdcd, rgba(205, 205, 205, 0));
+  background: -moz-linear-gradient(left, rgba(205, 205, 205, 0), #cdcdcd, rgba(205, 205, 205, 0));
+  background: -o-linear-gradient(left, rgba(205, 205, 205, 0), #cdcdcd, rgba(205, 205, 205, 0));
+  background: linear-gradient(left, rgba(205, 205, 205, 0), #cdcdcd, rgba(205, 205, 205, 0));
+  position: relative; }
+  /* line 213, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+  hr.divider:after, li.divider:after {
+    content: '';
+    height: 1px;
+    top: 1px;
+    left: 0;
+    width: 100%;
+    position: absolute;
+    background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iNTAlIiB4Mj0iMTAwJSIgeTI9IjUwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0icmdiYSgyNTAsIDI1MCwgMjUwLCAwKSIvPjxzdG9wIG9mZnNldD0iNTAlIiBzdG9wLWNvbG9yPSIjZmFmYWZhIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSJyZ2JhKDI1MCwgMjUwLCAyNTAsIDApIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4g');
+    background: -webkit-gradient(linear, 0% 50%, 100% 50%, color-stop(0%, rgba(250, 250, 250, 0)), color-stop(50%, #fafafa), color-stop(100%, rgba(250, 250, 250, 0)));
+    background: -webkit-linear-gradient(left, rgba(250, 250, 250, 0), #fafafa, rgba(250, 250, 250, 0));
+    background: -moz-linear-gradient(left, rgba(250, 250, 250, 0), #fafafa, rgba(250, 250, 250, 0));
+    background: -o-linear-gradient(left, rgba(250, 250, 250, 0), #fafafa, rgba(250, 250, 250, 0));
+    background: linear-gradient(left, rgba(250, 250, 250, 0), #fafafa, rgba(250, 250, 250, 0)); }
+  /* line 223, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+  hr.divider + .padded, hr.divider + .vpadded, li.divider + .padded, li.divider + .vpadded {
+    padding-top: 0; }
+
+/* line 229, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+.primary-sidebar .divider {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-top: 1px solid #0a0d0e;
+  background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iNTAlIiB4Mj0iMTAwJSIgeTI9IjUwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iInRyYW5zcGFyZW50IiIvPjxzdG9wIG9mZnNldD0iMjUlIiBzdG9wLWNvbG9yPSJyZ2JhKDMyLCA0MSwgNDcsIDAuOCkiLz48c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0iIzIwMjkyZiIvPjxzdG9wIG9mZnNldD0iNzUlIiBzdG9wLWNvbG9yPSJyZ2JhKDMyLCA0MSwgNDcsIDAuOCkiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiJ0cmFuc3BhcmVudCIiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyYWQpIiAvPjwvc3ZnPiA=');
+  background: -webkit-gradient(linear, 0% 50%, 100% 50%, color-stop(0%, transparent), color-stop(25%, rgba(32, 41, 47, 0.8)), color-stop(50%, #20292f), color-stop(75%, rgba(32, 41, 47, 0.8)), color-stop(100%, transparent));
+  background: -webkit-linear-gradient(left, transparent 0%, rgba(32, 41, 47, 0.8) 25%, #20292f 50%, rgba(32, 41, 47, 0.8) 75%, transparent 100%);
+  background: -moz-linear-gradient(left, transparent 0%, rgba(32, 41, 47, 0.8) 25%, #20292f 50%, rgba(32, 41, 47, 0.8) 75%, transparent 100%);
+  background: -o-linear-gradient(left, transparent 0%, rgba(32, 41, 47, 0.8) 25%, #20292f 50%, rgba(32, 41, 47, 0.8) 75%, transparent 100%);
+  background: linear-gradient(left, transparent 0%, rgba(32, 41, 47, 0.8) 25%, #20292f 50%, rgba(32, 41, 47, 0.8) 75%, transparent 100%); }
+  /* line 230, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+  .primary-sidebar .divider:after {
+    content: none; }
+
+/* line 237, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+.area-top {
+  background: #ececec;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZhZmFmYSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2VjZWNlYyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fafafa), color-stop(100%, #ececec));
+  background-image: -webkit-linear-gradient(top, #fafafa, #ececec);
+  background-image: -moz-linear-gradient(top, #fafafa, #ececec);
+  background-image: -o-linear-gradient(top, #fafafa, #ececec);
+  background-image: linear-gradient(top, #fafafa, #ececec);
+  -webkit-box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.07);
+  -moz-box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.07);
+  border-bottom: 1px solid #ccc;
+  position: relative;
+  width: 100%;
+  padding: 10px 15px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-bottom: 15px; }
+  /* line 247, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+  .area-top .header {
+    font-size: 14px; }
+    /* line 251, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+    .area-top .header i {
+      float: left;
+      font-size: 24px;
+      margin-top: 4px;
+      margin-right: 10px; }
+    /* line 258, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+    .area-top .header h3, .area-top .header h5 {
+      margin: 0;
+      font-weight: 300; }
+    /* line 263, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+    .area-top .header h3, .area-top .header i {
+      color: #888; }
+    /* line 267, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+    .area-top .header h3 {
+      line-height: 35px; }
+    /* line 271, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+    .area-top .header h5 {
+      color: #aaa; }
+    /* line 275, /home/andrei/core-admin-release/core-admin/source/stylesheets/sidebar.scss */
+    .area-top .header > * {
+      vertical-align: middle;
+      text-shadow: 0 1px #fff; }

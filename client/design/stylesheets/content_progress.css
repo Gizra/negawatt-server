@@ -1,0 +1,106 @@
+/* line 16, /home/andrei/core-admin-release/core-admin/source/stylesheets/content_progress.scss */
+.progress {
+  height: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  border-radius: 8px;
+  background: #eee;
+  -webkit-box-shadow: 0 1px 0 white, 0 0px 0 1px rgba(0, 0, 0, 0.1) inset, 0 1px 4px rgba(0, 0, 0, 0.2) inset;
+  box-shadow: 0 1px 0 white, 0 0px 0 1px rgba(0, 0, 0, 0.1) inset, 0 1px 4px rgba(0, 0, 0, 0.2) inset; }
+  /* line 22, /home/andrei/core-admin-release/core-admin/source/stylesheets/content_progress.scss */
+  .progress .progress-bar {
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+    border-radius: 8px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    height: 100%; }
+
+/* line 30, /home/andrei/core-admin-release/core-admin/source/stylesheets/content_progress.scss */
+.progress-green {
+  background-image: -webkit-gradient(linear, left 0%, left 100%, from(#b2cb49), to(#97af32));
+  background-image: -webkit-linear-gradient(top, #b2cb49, 0%, #97af32, 100%);
+  background-image: -moz-linear-gradient(top, #b2cb49 0%, #97af32 100%);
+  background-image: linear-gradient(to bottom, #b2cb49 0%, #97af32 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFB2CB49', endColorstr='#FF97AF32', GradientType=0);
+  border: 1px solid #869b2c; }
+  /* line 35, /home/andrei/core-admin-release/core-admin/source/stylesheets/content_progress.scss */
+  .progress-striped .progress-green {
+    background-color: #b2cb49;
+    background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
+    background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    background-image: -moz-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent); }
+
+/* line 30, /home/andrei/core-admin-release/core-admin/source/stylesheets/content_progress.scss */
+.progress-blue {
+  background-image: -webkit-gradient(linear, left 0%, left 100%, from(#9bcff5), to(#6db9f0));
+  background-image: -webkit-linear-gradient(top, #9bcff5, 0%, #6db9f0, 100%);
+  background-image: -moz-linear-gradient(top, #9bcff5 0%, #6db9f0 100%);
+  background-image: linear-gradient(to bottom, #9bcff5 0%, #6db9f0 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FF9BCFF5', endColorstr='#FF6DB9F0', GradientType=0);
+  border: 1px solid #55aeee; }
+  /* line 35, /home/andrei/core-admin-release/core-admin/source/stylesheets/content_progress.scss */
+  .progress-striped .progress-blue {
+    background-color: #9bcff5;
+    background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
+    background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    background-image: -moz-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent); }
+
+/* line 30, /home/andrei/core-admin-release/core-admin/source/stylesheets/content_progress.scss */
+.progress-orange {
+  background-image: -webkit-gradient(linear, left 0%, left 100%, from(#dc9e6f), to(#d28346));
+  background-image: -webkit-linear-gradient(top, #dc9e6f, 0%, #d28346, 100%);
+  background-image: -moz-linear-gradient(top, #dc9e6f 0%, #d28346 100%);
+  background-image: linear-gradient(to bottom, #dc9e6f 0%, #d28346 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFDC9E6F', endColorstr='#FFD28346', GradientType=0);
+  border: 1px solid #cd7532; }
+  /* line 35, /home/andrei/core-admin-release/core-admin/source/stylesheets/content_progress.scss */
+  .progress-striped .progress-orange {
+    background-color: #dc9e6f;
+    background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
+    background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    background-image: -moz-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent); }
+
+/* line 30, /home/andrei/core-admin-release/core-admin/source/stylesheets/content_progress.scss */
+.progress-black {
+  background-image: -webkit-gradient(linear, left 0%, left 100%, from(#666666), to(#4c4c4c));
+  background-image: -webkit-linear-gradient(top, #666666, 0%, #4c4c4c, 100%);
+  background-image: -moz-linear-gradient(top, #666666 0%, #4c4c4c 100%);
+  background-image: linear-gradient(to bottom, #666666 0%, #4c4c4c 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FF666666', endColorstr='#FF4C4C4C', GradientType=0);
+  border: 1px solid #3f3f3f; }
+  /* line 35, /home/andrei/core-admin-release/core-admin/source/stylesheets/content_progress.scss */
+  .progress-striped .progress-black {
+    background-color: #666666;
+    background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
+    background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    background-image: -moz-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent); }
+
+/* line 30, /home/andrei/core-admin-release/core-admin/source/stylesheets/content_progress.scss */
+.progress-red {
+  background-image: -webkit-gradient(linear, left 0%, left 100%, from(#d47775), to(#c8514e));
+  background-image: -webkit-linear-gradient(top, #d47775, 0%, #c8514e, 100%);
+  background-image: -moz-linear-gradient(top, #d47775 0%, #c8514e 100%);
+  background-image: linear-gradient(to bottom, #d47775 0%, #c8514e 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFD47775', endColorstr='#FFC8514E', GradientType=0);
+  border: 1px solid #c13f3c; }
+  /* line 35, /home/andrei/core-admin-release/core-admin/source/stylesheets/content_progress.scss */
+  .progress-striped .progress-red {
+    background-color: #d47775;
+    background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
+    background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    background-image: -moz-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent); }

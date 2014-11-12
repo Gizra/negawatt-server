@@ -1,0 +1,63 @@
+/* line 11, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap_alerts.scss */
+.alert {
+  border: 1px solid #f1d276;
+  color: #a37f11;
+  background: #f6e1a4;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y4ZTliYiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Y2ZTFhNCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f8e9bb), color-stop(100%, #f6e1a4));
+  background-image: -webkit-linear-gradient(top, #f8e9bb, #f6e1a4);
+  background-image: -moz-linear-gradient(top, #f8e9bb, #f6e1a4);
+  background-image: -o-linear-gradient(top, #f8e9bb, #f6e1a4);
+  background-image: linear-gradient(top, #f8e9bb, #f6e1a4);
+  -webkit-box-shadow: 0 1px 2px #f9edc9 inset, 0 1px 1px #dfdfdf;
+  -moz-box-shadow: 0 1px 2px #f9edc9 inset, 0 1px 1px #dfdfdf;
+  box-shadow: 0 1px 2px #f9edc9 inset, 0 1px 1px #dfdfdf; }
+
+/* line 15, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap_alerts.scss */
+.alert-info {
+  border: 1px solid #a8c3dc;
+  color: #3c6a95;
+  background: #ccdcea;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2RlZThmMiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2NjZGNlYSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dee8f2), color-stop(100%, #ccdcea));
+  background-image: -webkit-linear-gradient(top, #dee8f2, #ccdcea);
+  background-image: -moz-linear-gradient(top, #dee8f2, #ccdcea);
+  background-image: -o-linear-gradient(top, #dee8f2, #ccdcea);
+  background-image: linear-gradient(top, #dee8f2, #ccdcea);
+  -webkit-box-shadow: 0 1px 2px #e9f0f6 inset, 0 1px 1px #dfdfdf;
+  -moz-box-shadow: 0 1px 2px #e9f0f6 inset, 0 1px 1px #dfdfdf;
+  box-shadow: 0 1px 2px #e9f0f6 inset, 0 1px 1px #dfdfdf; }
+
+/* line 19, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap_alerts.scss */
+.alert-danger, .alert-error {
+  border: 1px solid #de7e6d;
+  color: #7d2a1c;
+  background: #e8a397;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2VjYjVhYyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2U4YTM5NyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ecb5ac), color-stop(100%, #e8a397));
+  background-image: -webkit-linear-gradient(top, #ecb5ac, #e8a397);
+  background-image: -moz-linear-gradient(top, #ecb5ac, #e8a397);
+  background-image: -o-linear-gradient(top, #ecb5ac, #e8a397);
+  background-image: linear-gradient(top, #ecb5ac, #e8a397);
+  -webkit-box-shadow: 0 1px 2px #efc0b8 inset, 0 1px 1px #dfdfdf;
+  -moz-box-shadow: 0 1px 2px #efc0b8 inset, 0 1px 1px #dfdfdf;
+  box-shadow: 0 1px 2px #efc0b8 inset, 0 1px 1px #dfdfdf; }
+
+/* line 23, /home/andrei/core-admin-release/core-admin/source/stylesheets/bootstrap_alerts.scss */
+.alert-success {
+  border: 1px solid #97cc2e;
+  color: #2b3a0d;
+  background: #acd954;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2I2ZGQ2OSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2FjZDk1NCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #b6dd69), color-stop(100%, #acd954));
+  background-image: -webkit-linear-gradient(top, #b6dd69, #acd954);
+  background-image: -moz-linear-gradient(top, #b6dd69, #acd954);
+  background-image: -o-linear-gradient(top, #b6dd69, #acd954);
+  background-image: linear-gradient(top, #b6dd69, #acd954);
+  -webkit-box-shadow: 0 1px 2px #bce075 inset, 0 1px 1px #dfdfdf;
+  -moz-box-shadow: 0 1px 2px #bce075 inset, 0 1px 1px #dfdfdf;
+  box-shadow: 0 1px 2px #bce075 inset, 0 1px 1px #dfdfdf; }

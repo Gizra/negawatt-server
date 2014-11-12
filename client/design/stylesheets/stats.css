@@ -1,0 +1,50 @@
+/* line 4, /home/andrei/core-admin-release/core-admin/source/stylesheets/stats.scss */
+.dashboard-stats .glyph {
+  padding: 0;
+  background: #86B6DA;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
+  border: 1px solid #5F9FCE;
+  height: 32px;
+  width: 32px;
+  text-align: center;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+  /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/stats.scss */
+  .dashboard-stats .glyph i {
+    color: white;
+    line-height: 29px; }
+/* line 20, /home/andrei/core-admin-release/core-admin/source/stylesheets/stats.scss */
+.dashboard-stats .count {
+  font-size: 32px;
+  line-height: 32px;
+  height: 32px; }
+/* line 26, /home/andrei/core-admin-release/core-admin/source/stylesheets/stats.scss */
+.dashboard-stats ul.inline li {
+  vertical-align: middle; }
+/* line 30, /home/andrei/core-admin-release/core-admin/source/stylesheets/stats.scss */
+.dashboard-stats .stats-label {
+  color: #999999;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-top: 5px; }
+/* line 39, /home/andrei/core-admin-release/core-admin/source/stylesheets/stats.scss */
+.dashboard-stats.small .glyph {
+  height: 24px;
+  width: 24px; }
+  /* line 43, /home/andrei/core-admin-release/core-admin/source/stylesheets/stats.scss */
+  .dashboard-stats.small .glyph i {
+    line-height: 23px; }
+/* line 48, /home/andrei/core-admin-release/core-admin/source/stylesheets/stats.scss */
+.dashboard-stats.small .count {
+  font-size: 16px;
+  line-height: 16px;
+  height: 16px; }
+/* line 55, /home/andrei/core-admin-release/core-admin/source/stylesheets/stats.scss */
+.dashboard-stats .progress {
+  margin-bottom: 0;
+  height: 5px; }

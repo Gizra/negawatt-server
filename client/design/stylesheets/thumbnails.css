@@ -1,0 +1,12 @@
+/* line 3, /home/andrei/core-admin-release/core-admin/source/stylesheets/thumbnails.scss */
+.thumbnails {
+  list-style: none;
+  *zoom: 1; }
+  /* line 24, /home/andrei/core-admin-release/core-admin/source/stylesheets/mixin_helpers.scss */
+  .thumbnails:before, .thumbnails:after {
+    display: table;
+    content: "";
+    line-height: 0; }
+  /* line 30, /home/andrei/core-admin-release/core-admin/source/stylesheets/mixin_helpers.scss */
+  .thumbnails:after {
+    clear: both; }

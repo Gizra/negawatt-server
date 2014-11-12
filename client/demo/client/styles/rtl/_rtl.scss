@@ -1,0 +1,48 @@
+body.rtl {
+  direction: rtl;
+
+  // Elements
+  @media (min-width: 768px) {
+    .header-container > .top-header .top-nav {
+      padding: 0 220px 0 0;
+    }
+
+    .main-container > .content-container {
+      margin-right: 220px;
+      margin-left: 0;
+    }
+  }
+
+  // Map
+  .angular-leaflet-map .leaflet-popup-content,
+  // Timeline
+  .timeline-dashboard .tl-content,
+    // Menu
+  .nav-wrapper a {
+    text-align: right;
+  }
+
+  // Timeline elements.
+  .ui-timline-container  {
+    padding-right: 21px;
+    padding-left: 0;
+
+    .ui-timeline:before {
+      left: none;
+      right: 18px;
+    }
+
+    .ui-timeline {
+      .tl-item.tl-message .tl-body 
+        .tl-entry {
+          margin: 0 36px 15px 0;
+        }
+
+        .tl-icon {
+          left: 0;
+          right: -35px;
+        }
+    }
+  }
+
+}

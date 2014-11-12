@@ -1,0 +1,9 @@
+/* line 1, /home/andrei/core-admin-release/core-admin/source/stylesheets/justgage.scss */
+.justgage {
+  width: 200px;
+  height: 160px;
+  display: inline-block; }
+  /* line 6, /home/andrei/core-admin-release/core-admin/source/stylesheets/justgage.scss */
+  .justgage.small {
+    width: 90px;
+    height: 70px; }

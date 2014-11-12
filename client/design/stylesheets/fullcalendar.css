@@ -1,0 +1,470 @@
+/* line 3, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc {
+  direction: ltr;
+  text-align: left; }
+  /* line 6, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+  .fc table {
+    border-collapse: collapse;
+    border-spacing: 0; }
+
+/* line 12, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+html .fc {
+  font-size: 1em; }
+
+/* line 17, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc table {
+  font-size: 1em; }
+/* line 20, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc td, .fc th {
+  padding: 0;
+  vertical-align: top; }
+
+/* line 26, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-header {
+  position: relative; }
+  /* line 28, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+  .fc-header td {
+    white-space: nowrap; }
+
+/* line 33, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-header-left {
+  text-align: left;
+  width: 100%; }
+
+/* line 38, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-header-center {
+  text-align: center;
+  position: absolute;
+  top: 0;
+  width: 80%;
+  left: 10%;
+  line-height: 37px; }
+
+/* line 47, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-button-inner {
+  border-left: 1px solid #d5d5d5; }
+
+/* line 51, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-header-left .fc-button-inner {
+  border: none; }
+
+/* line 55, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-header-right {
+  text-align: right;
+  position: absolute;
+  top: -37px;
+  right: 0; }
+  /* line 60, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+  .fc-header-right .fc-button-agendaDay .fc-button-inner {
+    -moz-border-radius-topright: 3px;
+    -webkit-border-top-right-radius: 3px;
+    border-top-right-radius: 3px; }
+
+/* line 65, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-header-title {
+  display: inline-block; }
+  /* line 68, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+  .fc-header-title h2 {
+    font-size: 12px;
+    margin: 0; }
+  /* line 72, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+  .fc-header-title strong {
+    margin-top: 0;
+    white-space: nowrap;
+    padding: 8px 12px !important;
+    display: block; }
+
+/* line 80, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc .fc-header-space {
+  padding-left: 10px; }
+
+/* line 85, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-header .fc-corner-right {
+  margin-right: 0;
+  float: right; }
+/* line 89, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-header .ui-corner-right {
+  margin-right: 0; }
+/* line 92, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-header .fc-state-hover, .fc-header .ui-state-hover {
+  z-index: 2; }
+/* line 95, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-header .fc-state-down {
+  z-index: 3; }
+/* line 98, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-header .fc-state-active, .fc-header .ui-state-active {
+  z-index: 4; }
+
+/* line 103, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-button-next {
+  float: right;
+  margin-right: -2px; }
+
+/* line 108, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-view {
+  width: 100%;
+  overflow: hidden; }
+
+/* line 113, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-border-separate thead {
+  background: #eaeaea;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZkZmRmZCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2VhZWFlYSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fdfdfd), color-stop(100%, #eaeaea));
+  background-image: -webkit-linear-gradient(top, #fdfdfd, #eaeaea);
+  background-image: -moz-linear-gradient(top, #fdfdfd, #eaeaea);
+  background-image: -o-linear-gradient(top, #fdfdfd, #eaeaea);
+  background-image: linear-gradient(top, #fdfdfd, #eaeaea);
+  height: 25px;
+  line-height: 25px; }
+
+/* line 119, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-widget-header, .fc-widget-content {
+  border: 1px solid #ccc; }
+
+/* line 123, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-state-highlight {
+  background: #f4f3e6; }
+
+/* line 127, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-cell-overlay {
+  background: #99CCFF;
+  opacity: .2; }
+
+/* line 132, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-button {
+  position: relative;
+  cursor: pointer; }
+
+/* line 137, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-button-inner {
+  position: relative;
+  float: left;
+  overflow: hidden; }
+
+/* line 143, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-button-content {
+  position: relative;
+  float: left;
+  height: 37px;
+  line-height: 37px;
+  padding: 0 14px;
+  white-space: nowrap; }
+
+/* line 152, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-header-left .fc-button-content {
+  padding: 0 8px; }
+
+/* line 156, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-header-right .fc-button-content {
+  height: 37px; }
+
+/* gloss effect */
+/* line 162, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-state-default .fc-button-effect {
+  position: absolute;
+  top: 50%;
+  left: 0; }
+
+/* line 168, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-state-active {
+  color: #797979;
+  background: #f9f9f9;
+  box-shadow: 0 -1px 0 #eaeaea inset; }
+  /* line 172, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+  .fc-state-active .fc-button-inner {
+    color: #797979;
+    background: #f9f9f9;
+    box-shadow: 0 -1px 0 #eaeaea inset; }
+
+/* line 179, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-first th {
+  padding-top: 1px; }
+
+/* line 183, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-state-disabled {
+  color: #999;
+  border-color: #ddd;
+  cursor: default; }
+  /* line 186, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+  .fc-state-disabled .fc-button-inner {
+    color: #999;
+    border-color: #ddd; }
+  /* line 191, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+  .fc-state-disabled .fc-button-effect {
+    display: none; }
+
+/* Global Event Styles */
+/* line 198, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-event {
+  border-style: solid;
+  border-width: 0;
+  font-size: .85em;
+  cursor: default; }
+
+/* line 205, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+a.fc-event, .fc-event-draggable {
+  cursor: pointer; }
+
+/* line 209, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+a.fc-event {
+  text-decoration: none; }
+
+/* line 213, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-rtl .fc-event {
+  text-align: right; }
+
+/* line 217, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-event-skin {
+  border-color: #32779A;
+  background-color: #729BB9;
+  color: #fff;
+  display: block;
+  padding: 1px 0px;
+  font-size: 11px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  -khtml-border-radius: 2px;
+  border-radius: 2px;
+  margin-top: 1px; }
+
+/* line 231, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-event-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-style: solid;
+  border-width: 0;
+  overflow: hidden; }
+
+/* line 240, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-event-time, .fc-event-title {
+  padding: 0 2px 1px 5px;
+  display: block;
+  float: left;
+  line-height: 16px; }
+
+/* line 247, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc .ui-resizable-handle {
+  display: block;
+  position: absolute;
+  z-index: 99999;
+  overflow: hidden;
+  font-size: 300%;
+  line-height: 50%; }
+
+/* Horizontal Events */
+/* line 258, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-event-hori {
+  margin-bottom: 1px; }
+  /* line 260, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+  .fc-event-hori .ui-resizable-e {
+    top: 0 !important;
+    right: -3px !important;
+    width: 7px !important;
+    height: 100% !important;
+    cursor: e-resize; }
+  /* line 267, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+  .fc-event-hori .ui-resizable-w {
+    top: 0 !important;
+    left: -3px !important;
+    width: 7px !important;
+    height: 100% !important;
+    cursor: w-resize; }
+
+/* line 276, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-corner-right {
+  margin-right: 1px; }
+  /* line 278, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+  .fc-corner-right .fc-button-inner, .fc-corner-right .fc-event-inner {
+    margin-right: 0; }
+
+/* line 283, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-corner-top {
+  margin-top: 1px; }
+  /* line 285, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+  .fc-corner-top .fc-event-inner {
+    margin-top: -1px; }
+
+/* line 290, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-corner-bottom {
+  margin-bottom: 1px; }
+  /* line 292, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+  .fc-corner-bottom .fc-event-inner {
+    margin-bottom: -1px; }
+
+/* line 297, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-corner-top .fc-event-inner {
+  border-top-width: 1px; }
+
+/* line 301, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-corner-bottom .fc-event-inner {
+  border-bottom-width: 1px; }
+
+/* line 305, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+table.fc-border-separate {
+  border-collapse: separate; }
+
+/* line 310, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-border-separate th {
+  border-width: 1px 0 0 1px; }
+/* line 313, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-border-separate td {
+  border-width: 1px 0 0 1px; }
+  /* line 315, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+  .fc-border-separate td:first-child {
+    border-left: none; }
+/* line 319, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-border-separate th:first-child {
+  border-left: none; }
+/* line 323, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-border-separate tr.fc-last th, .fc-border-separate tr.fc-last td {
+  border-top-width: 1px; }
+/* line 328, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-border-separate tbody tr.fc-first td, .fc-border-separate tbody tr.fc-first th {
+  border-top-width: 1px; }
+
+/* Month View, Basic Week View, Basic Day View */
+/* line 336, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-widget-header {
+  text-align: center; }
+
+/* line 340, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-day-number {
+  float: right;
+  padding: 6px 5px 2px 5px; }
+
+/* line 345, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-cols .fc-other-month .fc-day-number {
+  opacity: 0.3;
+  filter: alpha(opacity=30); }
+
+/* line 350, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-day-content {
+  clear: both;
+  padding: 5px 2px 3px; }
+
+/* event styles */
+/* line 357, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-cols .fc-event-time {
+  font-weight: 600; }
+
+/* right-to-left */
+/* line 364, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-rtl .fc-cols .fc-day-number {
+  float: left; }
+/* line 367, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-rtl .fc-cols .fc-event-time {
+  float: right; }
+
+/* Agenda Week View, Agenda Day View */
+/* line 374, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-agenda table {
+  border-collapse: separate; }
+
+/* line 378, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-agenda-days th {
+  text-align: center; }
+
+/* line 383, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-agenda .fc-agenda-axis {
+  width: 50px;
+  padding: 0 4px;
+  vertical-align: middle;
+  text-align: right;
+  white-space: nowrap;
+  font-weight: normal; }
+/* line 391, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-agenda .fc-day-content {
+  padding: 2px 2px 1px; }
+
+/* line 397, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-agenda-days .fc-agenda-axis {
+  border-right-width: 1px; }
+/* line 400, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-agenda-days .fc-col0 {
+  border-left-width: 0; }
+
+/* line 406, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-agenda-allday th {
+  border-width: 0 1px; }
+/* line 409, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-agenda-allday .fc-day-content {
+  min-height: 34px;
+  _height: 34px; }
+
+/* line 415, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-agenda-divider-inner {
+  height: 2px;
+  overflow: hidden; }
+
+/* line 420, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-widget-header .fc-agenda-divider-inner {
+  background: #eee; }
+
+/* slot rows */
+/* line 427, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-agenda-slots th {
+  border-width: 1px 1px 0; }
+/* line 430, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-agenda-slots td {
+  border-width: 1px 0 0;
+  background: none; }
+  /* line 433, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+  .fc-agenda-slots td div {
+    height: 20px; }
+/* line 439, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-agenda-slots tr.fc-slot0 th, .fc-agenda-slots tr.fc-slot0 td {
+  border-top-width: 0; }
+/* line 444, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-agenda-slots tr.fc-minor th, .fc-agenda-slots tr.fc-minor td {
+  border-top-style: dotted; }
+/* line 447, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-agenda-slots tr.fc-minor th.ui-widget-header {
+  *border-top-style: solid; }
+
+/* Vertical Events */
+/* line 456, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-event-vert {
+  border-width: 0 1px; }
+  /* line 458, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+  .fc-event-vert .fc-event-head, .fc-event-vert .fc-event-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    overflow: hidden; }
+  /* line 464, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+  .fc-event-vert .fc-event-time {
+    white-space: nowrap;
+    font-size: 10px; }
+  /* line 468, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+  .fc-event-vert .fc-event-bg {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    opacity: .3;
+    filter: alpha(opacity=30); }
+
+/* line 481, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc .ui-draggable-dragging .fc-event-bg, .fc-select-helper .fc-event-bg {
+  display: none; }
+
+/* line 485, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-event-vert .ui-resizable-s {
+  bottom: 0        !important;
+  width: 100%      !important;
+  height: 8px      !important;
+  overflow: hidden !important;
+  line-height: 8px !important;
+  font-size: 11px  !important;
+  font-family: monospace;
+  text-align: center;
+  cursor: s-resize; }
+
+/* line 497, /home/andrei/core-admin-release/core-admin/source/stylesheets/fullcalendar.scss */
+.fc-agenda .ui-resizable-resizing {
+  overflow: hidden; }

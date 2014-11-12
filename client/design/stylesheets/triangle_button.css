@@ -1,0 +1,68 @@
+/* line 19, /home/andrei/core-admin-release/core-admin/source/stylesheets/triangle_button.scss */
+.triangle-button {
+  position: absolute;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 16px;
+  top: 0;
+  right: 0;
+  color: #fff;
+  overflow: hidden;
+  height: 32px;
+  width: 32px;
+  text-shadow: none; }
+  /* line 33, /home/andrei/core-admin-release/core-admin/source/stylesheets/triangle_button.scss */
+  .triangle-button i, .triangle-button .inner {
+    z-index: 1;
+    position: absolute;
+    right: 3px;
+    top: 2px; }
+  /* line 40, /home/andrei/core-admin-release/core-admin/source/stylesheets/triangle_button.scss */
+  .triangle-button:before {
+    content: '';
+    display: inline-block;
+    border-right: 32px solid;
+    border-bottom: 32px solid transparent;
+    position: absolute;
+    top: 0;
+    right: 0; }
+  /* line 50, /home/andrei/core-admin-release/core-admin/source/stylesheets/triangle_button.scss */
+  .triangle-button:hover, .triangle-button:active {
+    color: #fff; }
+  /* line 6, /home/andrei/core-admin-release/core-admin/source/stylesheets/triangle_button.scss */
+  .triangle-button.red:before {
+    border-right-color: #aa433a; }
+  /* line 10, /home/andrei/core-admin-release/core-admin/source/stylesheets/triangle_button.scss */
+  .triangle-button.red:hover:before {
+    border-right-color: #b5473e; }
+  /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/triangle_button.scss */
+  .triangle-button.red:active:before {
+    border-right-color: #9f3f36; }
+  /* line 6, /home/andrei/core-admin-release/core-admin/source/stylesheets/triangle_button.scss */
+  .triangle-button.green:before {
+    border-right-color: #8fae53; }
+  /* line 10, /home/andrei/core-admin-release/core-admin/source/stylesheets/triangle_button.scss */
+  .triangle-button.green:hover:before {
+    border-right-color: #96b35d; }
+  /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/triangle_button.scss */
+  .triangle-button.green:active:before {
+    border-right-color: #87a44d; }
+  /* line 6, /home/andrei/core-admin-release/core-admin/source/stylesheets/triangle_button.scss */
+  .triangle-button.blue:before {
+    border-right-color: #7fb3d4; }
+  /* line 10, /home/andrei/core-admin-release/core-admin/source/stylesheets/triangle_button.scss */
+  .triangle-button.blue:hover:before {
+    border-right-color: #8abad8; }
+  /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/triangle_button.scss */
+  .triangle-button.blue:active:before {
+    border-right-color: #74acd0; }
+  /* line 6, /home/andrei/core-admin-release/core-admin/source/stylesheets/triangle_button.scss */
+  .triangle-button.orange:before {
+    border-right-color: #cf6e20; }
+  /* line 10, /home/andrei/core-admin-release/core-admin/source/stylesheets/triangle_button.scss */
+  .triangle-button.orange:hover:before {
+    border-right-color: #dc7522; }
+  /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/triangle_button.scss */
+  .triangle-button.orange:active:before {
+    border-right-color: #c2671e; }

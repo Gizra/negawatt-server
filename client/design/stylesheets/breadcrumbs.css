@@ -1,0 +1,308 @@
+/* line 41, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+#breadcrumbs {
+  display: inline-block;
+  padding-right: 20px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: 0 0 0 1px #cccccc inset, 0 1px 0px rgba(255, 255, 255, 0.6), 0 1px 0 1px rgba(255, 255, 255, 0.6) inset;
+  -moz-box-shadow: 0 0 0 1px #cccccc inset, 0 1px 0px rgba(255, 255, 255, 0.6), 0 1px 0 1px rgba(255, 255, 255, 0.6) inset;
+  box-shadow: 0 0 0 1px #cccccc inset, 0 1px 0px rgba(255, 255, 255, 0.6), 0 1px 0 1px rgba(255, 255, 255, 0.6) inset;
+  background: #ececec;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZhZmFmYSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2VjZWNlYyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fafafa), color-stop(100%, #ececec));
+  background-image: -webkit-linear-gradient(top, #fafafa, #ececec);
+  background-image: -moz-linear-gradient(top, #fafafa, #ececec);
+  background-image: -o-linear-gradient(top, #fafafa, #ececec);
+  background-image: linear-gradient(top, #fafafa, #ececec);
+  width: 100%; }
+  /* line 53, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+  #breadcrumbs .breadcrumb-button .breadcrumb-label {
+    -webkit-box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5) inset;
+    -moz-box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5) inset;
+    box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5) inset;
+    -moz-border-radius-topleft: 3px;
+    -webkit-border-top-left-radius: 3px;
+    border-top-left-radius: 3px;
+    -moz-border-radius-bottomleft: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+    border-bottom-left-radius: 3px; }
+  /* line 64, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+  #breadcrumbs .breadcrumb-button {
+    text-shadow: 0 1px 1px #fafafa, 0 -1px 1px #ececec;
+    background: #ececec;
+    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZhZmFmYSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2VjZWNlYyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+    background-size: 100%;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fafafa), color-stop(100%, #ececec));
+    background-image: -webkit-linear-gradient(top, #fafafa, #ececec);
+    background-image: -moz-linear-gradient(top, #fafafa, #ececec);
+    background-image: -o-linear-gradient(top, #fafafa, #ececec);
+    background-image: linear-gradient(top, #fafafa, #ececec);
+    display: inline-block;
+    cursor: pointer;
+    margin-right: -20px; }
+    /* line 66, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+    #breadcrumbs .breadcrumb-button.yellow {
+      text-shadow: 0 1px 1px #ffd972, 0 -1px 1px #ffba49;
+      background: #ffba49;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZDk3MiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2ZmYmE0OSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffd972), color-stop(100%, #ffba49));
+      background-image: -webkit-linear-gradient(top, #ffd972, #ffba49);
+      background-image: -moz-linear-gradient(top, #ffd972, #ffba49);
+      background-image: -o-linear-gradient(top, #ffd972, #ffba49);
+      background-image: linear-gradient(top, #ffd972, #ffba49); }
+      /* line 10, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+      #breadcrumbs .breadcrumb-button.yellow .breadcrumb-label {
+        color: #5c481d; }
+      /* line 15, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+      #breadcrumbs .breadcrumb-button.yellow:hover {
+        background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjEwMCUiIHgyPSI1MCUiIHkyPSIwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmYmE0OSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2ZmZDk3MiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+        background: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, #ffba49), color-stop(100%, #ffd972));
+        background: -webkit-linear-gradient(bottom, #ffba49, #ffd972);
+        background: -moz-linear-gradient(bottom, #ffba49, #ffd972);
+        background: -o-linear-gradient(bottom, #ffba49, #ffd972);
+        background: linear-gradient(bottom, #ffba49, #ffd972); }
+        /* line 18, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+        #breadcrumbs .breadcrumb-button.yellow:hover .breadcrumb-arrow span {
+          background-color: #ffba49;
+          background: -moz-linear-gradient(135deg, #ffba49, #ffd972);
+          background: -ms-linear-gradient(135deg, #ffd972, #ffba49);
+          background: -o-linear-gradient(135deg, #ffd972, #ffba49);
+          background: -webkit-gradient(linear, left top, right bottom, from(#ffd972), to(#ffba49)); }
+      /* line 28, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+      #breadcrumbs .breadcrumb-button.yellow .breadcrumb-arrow span {
+        background-color: #ffd972;
+        background: -moz-linear-gradient(135deg, #ffba49, #ffd972);
+        background: -ms-linear-gradient(135deg, #ffba49, #ffd972);
+        background: -o-linear-gradient(135deg, #ffba49, #ffd972);
+        background: -webkit-gradient(linear, right bottom, left top, from(#ffba49), to(#ffd972)); }
+      /* line 69, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+      #breadcrumbs .breadcrumb-button.yellow .breadcrumb-label {
+        box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5) inset;
+        border-top-left-radius: 3px;
+        border-bottom-left-radius: 3px;
+        border-bottom: 1px solid #C99337;
+        border-left: 1px solid #D79D3B;
+        border-top: 1px solid #F5B244; }
+      /* line 78, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+      #breadcrumbs .breadcrumb-button.yellow .breadcrumb-arrow span {
+        box-shadow: 1px -1px 0px #E29B1E, 1px -1px 1px #F09900; }
+    /* line 83, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+    #breadcrumbs .breadcrumb-button.blue {
+      text-shadow: 0 1px 1px #92cff5, 0 -1px 1px #68a6ce;
+      background: #68a6ce;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzkyY2ZmNSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzY4YTZjZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #92cff5), color-stop(100%, #68a6ce));
+      background-image: -webkit-linear-gradient(top, #92cff5, #68a6ce);
+      background-image: -moz-linear-gradient(top, #92cff5, #68a6ce);
+      background-image: -o-linear-gradient(top, #92cff5, #68a6ce);
+      background-image: linear-gradient(top, #92cff5, #68a6ce); }
+      /* line 10, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+      #breadcrumbs .breadcrumb-button.blue .breadcrumb-label {
+        color: white; }
+      /* line 15, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+      #breadcrumbs .breadcrumb-button.blue:hover {
+        background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjEwMCUiIHgyPSI1MCUiIHkyPSIwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzY4YTZjZSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzkyY2ZmNSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+        background: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, #68a6ce), color-stop(100%, #92cff5));
+        background: -webkit-linear-gradient(bottom, #68a6ce, #92cff5);
+        background: -moz-linear-gradient(bottom, #68a6ce, #92cff5);
+        background: -o-linear-gradient(bottom, #68a6ce, #92cff5);
+        background: linear-gradient(bottom, #68a6ce, #92cff5); }
+        /* line 18, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+        #breadcrumbs .breadcrumb-button.blue:hover .breadcrumb-arrow span {
+          background-color: #68a6ce;
+          background: -moz-linear-gradient(135deg, #68a6ce, #92cff5);
+          background: -ms-linear-gradient(135deg, #92cff5, #68a6ce);
+          background: -o-linear-gradient(135deg, #92cff5, #68a6ce);
+          background: -webkit-gradient(linear, left top, right bottom, from(#92cff5), to(#68a6ce)); }
+      /* line 28, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+      #breadcrumbs .breadcrumb-button.blue .breadcrumb-arrow span {
+        background-color: #92cff5;
+        background: -moz-linear-gradient(135deg, #68a6ce, #92cff5);
+        background: -ms-linear-gradient(135deg, #68a6ce, #92cff5);
+        background: -o-linear-gradient(135deg, #68a6ce, #92cff5);
+        background: -webkit-gradient(linear, right bottom, left top, from(#68a6ce), to(#92cff5)); }
+      /* line 87, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+      #breadcrumbs .breadcrumb-button.blue .breadcrumb-label {
+        font-weight: 600;
+        box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5) inset;
+        border-top-left-radius: 3px;
+        border-bottom-left-radius: 3px;
+        border-bottom: 1px solid #3e89b9;
+        border-left: 1px solid #60a1ca;
+        border-top: 1px solid #73acd0; }
+        /* line 96, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+        #breadcrumbs .breadcrumb-button.blue .breadcrumb-label:hover {
+          color: white; }
+          /* line 99, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+          #breadcrumbs .breadcrumb-button.blue .breadcrumb-label:hover .breadcrumb-label {
+            color: white; }
+      /* line 105, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+      #breadcrumbs .breadcrumb-button.blue .breadcrumb-arrow span {
+        box-shadow: 1px -1px 0px #7599AF, 1px -1px 1px #45A8E7; }
+    /* line 110, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+    #breadcrumbs .breadcrumb-button .breadcrumb-label {
+      box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5) inset;
+      border-bottom: 1px solid #ccc;
+      border-top: 1px solid #ccc; }
+    /* line 118, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+    #breadcrumbs .breadcrumb-button .breadcrumb-arrow span {
+      box-shadow: 1px -1px 0px #ccc, 1px -1px 1px #ccc; }
+    /* line 10, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+    #breadcrumbs .breadcrumb-button .breadcrumb-label {
+      color: #888888; }
+    /* line 15, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+    #breadcrumbs .breadcrumb-button:hover {
+      background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjEwMCUiIHgyPSI1MCUiIHkyPSIwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2VjZWNlYyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2ZhZmFmYSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, #ececec), color-stop(100%, #fafafa));
+      background: -webkit-linear-gradient(bottom, #ececec, #fafafa);
+      background: -moz-linear-gradient(bottom, #ececec, #fafafa);
+      background: -o-linear-gradient(bottom, #ececec, #fafafa);
+      background: linear-gradient(bottom, #ececec, #fafafa); }
+      /* line 18, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+      #breadcrumbs .breadcrumb-button:hover .breadcrumb-arrow span {
+        background-color: #ececec;
+        background: -moz-linear-gradient(135deg, #ececec, #fafafa);
+        background: -ms-linear-gradient(135deg, #fafafa, #ececec);
+        background: -o-linear-gradient(135deg, #fafafa, #ececec);
+        background: -webkit-gradient(linear, left top, right bottom, from(#fafafa), to(#ececec)); }
+    /* line 28, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+    #breadcrumbs .breadcrumb-button .breadcrumb-arrow span {
+      background-color: #fafafa;
+      background: -moz-linear-gradient(135deg, #ececec, #fafafa);
+      background: -ms-linear-gradient(135deg, #ececec, #fafafa);
+      background: -o-linear-gradient(135deg, #ececec, #fafafa);
+      background: -webkit-gradient(linear, right bottom, left top, from(#ececec), to(#fafafa)); }
+    /* line 128, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+    #breadcrumbs .breadcrumb-button:first-child {
+      -webkit-border-radius: 3px 0 0 3px;
+      -moz-border-radius: 3px 0 0 3px;
+      -ms-border-radius: 3px 0 0 3px;
+      -o-border-radius: 3px 0 0 3px;
+      border-radius: 3px 0 0 3px; }
+      /* line 131, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+      #breadcrumbs .breadcrumb-button:first-child .breadcrumb-label {
+        border-top-left-radius: 3px;
+        border-bottom-left-radius: 3px; }
+    /* line 137, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+    #breadcrumbs .breadcrumb-button:last-child {
+      -webkit-border-radius: 0 3px 3px 0;
+      -moz-border-radius: 0 3px 3px 0;
+      -ms-border-radius: 0 3px 3px 0;
+      -o-border-radius: 0 3px 3px 0;
+      border-radius: 0 3px 3px 0; }
+    /* line 141, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+    #breadcrumbs .breadcrumb-button:first-child .breadcrumb-label {
+      padding-left: 15px; }
+    /* line 146, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+    #breadcrumbs .breadcrumb-button:last-child .breadcrumb-label {
+      padding-right: 15px; }
+    /* line 149, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+    #breadcrumbs .breadcrumb-button:last-child .breadcrumb-arrow {
+      display: none; }
+    /* line 154, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+    #breadcrumbs .breadcrumb-button .breadcrumb-label {
+      padding: 8px;
+      -moz-user-select: none;
+      -webkit-user-select: none;
+      display: inline-block;
+      padding-left: 25px; }
+    /* line 162, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+    #breadcrumbs .breadcrumb-button .breadcrumb-arrow {
+      width: 17px;
+      height: 34px;
+      display: inline-block;
+      vertical-align: top;
+      overflow: hidden;
+      margin-left: -5px; }
+      /* line 170, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+      #breadcrumbs .breadcrumb-button .breadcrumb-arrow span {
+        border-radius: 4px;
+        width: 26px;
+        height: 30px;
+        display: inline-block;
+        -webkit-transform: rotate(45deg);
+        -moz-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        -o-transform: rotate(45deg);
+        transform: rotate(45deg);
+        margin-left: -16px;
+        margin-top: 3px; }
+
+/* line 190, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+.breadcrumb-line {
+  color: #666;
+  height: 28px;
+  -webkit-box-shadow: 0 1px 0 white, 0 1px 0 white inset;
+  -moz-box-shadow: 0 1px 0 white, 0 1px 0 white inset;
+  box-shadow: 0 1px 0 white, 0 1px 0 white inset;
+  background: #e3e3e3;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y0ZjRmNCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2UzZTNlMyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f4f4f4), color-stop(100%, #e3e3e3));
+  background-image: -webkit-linear-gradient(top, #f4f4f4, #e3e3e3);
+  background-image: -moz-linear-gradient(top, #f4f4f4, #e3e3e3);
+  background-image: -o-linear-gradient(top, #f4f4f4, #e3e3e3);
+  background-image: linear-gradient(top, #f4f4f4, #e3e3e3);
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  font-size: 11px; }
+  /* line 199, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+  .breadcrumb-line .breadcrumbs {
+    margin: 0;
+    padding: 0;
+    list-style: none; }
+    /* line 204, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+    .breadcrumb-line .breadcrumbs li {
+      float: left;
+      line-height: 28px;
+      margin-left: 10px; }
+      /* line 209, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+      .breadcrumb-line .breadcrumbs li:after {
+        content: ">";
+        margin-left: 10px; }
+      /* line 214, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+      .breadcrumb-line .breadcrumbs li:last-child:after {
+        content: ""; }
+      /* line 216, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+      .breadcrumb-line .breadcrumbs li:first-child {
+        margin-left: 20px; }
+      /* line 218, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+      .breadcrumb-line .breadcrumbs li.current {
+        color: #888; }
+  /* line 222, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+  .breadcrumb-line .nav.pull-right {
+    margin-right: 20px;
+    border-right: 1px solid #ccc; }
+    /* line 226, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+    .breadcrumb-line .nav.pull-right .badge {
+      margin-left: 4px; }
+  /* line 231, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+  .breadcrumb-line .nav .dropdown-toggle .caret {
+    margin-top: 12px; }
+  /* line 235, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+  .breadcrumb-line .nav > li > a {
+    text-shadow: none;
+    line-height: 28px;
+    height: 28px;
+    margin: 0;
+    padding: 0 15px;
+    border-left: 1px solid #ccc;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    -ms-border-radius: 0;
+    -o-border-radius: 0;
+    border-radius: 0;
+    color: #666; }
+    /* line 245, /home/andrei/core-admin-release/core-admin/source/stylesheets/breadcrumbs.scss */
+    .breadcrumb-line .nav > li > a strong {
+      color: #B35D5D;
+      margin-left: 4px; }

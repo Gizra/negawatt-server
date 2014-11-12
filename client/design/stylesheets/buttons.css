@@ -1,0 +1,569 @@
+/* line 39, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+.btn {
+  color: #fff;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px;
+  border-radius: 2px;
+  font-size: 11px;
+  font-weight: 600;
+  text-shadow: 0 -1px #6f6f6f; }
+  /* line 48, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+  .btn:hover, .btn:active, .btn:focus {
+    color: #fff; }
+  /* line 52, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+  .btn.btn-full {
+    display: block; }
+  /* line 56, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+  .btn.btn-default {
+    color: #686868;
+    text-shadow: none; }
+    /* line 60, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+    .btn.btn-default:hover, .btn.btn-default:active {
+      color: #505050; }
+    /* line 64, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+    .btn.btn-default .caret {
+      border-top: 4px solid black; }
+  /* line 69, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+  .btn .caret {
+    border-top: 4px solid white; }
+  /* line 73, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+  .btn.btn-lg {
+    font-size: 12px; }
+  /* line 78, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+  .btn.btn-default {
+    border: 1px solid #d4d4d4;
+    -webkit-box-shadow: inset 0 1px 2px white;
+    -moz-box-shadow: inset 0 1px 2px white;
+    box-shadow: inset 0 1px 2px white;
+    background: #e9e9e9;
+    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZkZmRmZCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2U5ZTllOSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+    background-size: 100%;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fdfdfd), color-stop(100%, #e9e9e9));
+    background-image: -webkit-linear-gradient(top, #fdfdfd, #e9e9e9);
+    background-image: -moz-linear-gradient(top, #fdfdfd, #e9e9e9);
+    background-image: -o-linear-gradient(top, #fdfdfd, #e9e9e9);
+    background-image: linear-gradient(top, #fdfdfd, #e9e9e9); }
+    /* line 9, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+    .btn.btn-default:hover {
+      background: #e6e6e6;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZkZmRmZCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2U2ZTZlNiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fdfdfd), color-stop(100%, #e6e6e6));
+      background-image: -webkit-linear-gradient(top, #fdfdfd, #e6e6e6);
+      background-image: -moz-linear-gradient(top, #fdfdfd, #e6e6e6);
+      background-image: -o-linear-gradient(top, #fdfdfd, #e6e6e6);
+      background-image: linear-gradient(top, #fdfdfd, #e6e6e6);
+      -webkit-transition: box-shadow 0.05s ease-in-out;
+      -moz-transition: box-shadow 0.05s ease-in-out;
+      -o-transition: box-shadow 0.05s ease-in-out;
+      transition: box-shadow 0.05s ease-in-out; }
+    /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+    .btn.btn-default:active {
+      background: #f3f3f3;
+      border-color: #cfcfcf;
+      -webkit-box-shadow: 0 0 5px #f3f3f3 inset;
+      -moz-box-shadow: 0 0 5px #f3f3f3 inset;
+      box-shadow: 0 0 5px #f3f3f3 inset; }
+  /* line 78, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+  .btn.btn-red {
+    border: 1px solid #a54747;
+    -webkit-box-shadow: inset 0 1px 2px #cd8b8b;
+    -moz-box-shadow: inset 0 1px 2px #cd8b8b;
+    box-shadow: inset 0 1px 2px #cd8b8b;
+    background: #b95d5d;
+    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2M1Nzk3OSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2I5NWQ1ZCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+    background-size: 100%;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #c57979), color-stop(100%, #b95d5d));
+    background-image: -webkit-linear-gradient(top, #c57979, #b95d5d);
+    background-image: -moz-linear-gradient(top, #c57979, #b95d5d);
+    background-image: -o-linear-gradient(top, #c57979, #b95d5d);
+    background-image: linear-gradient(top, #c57979, #b95d5d); }
+    /* line 9, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+    .btn.btn-red:hover {
+      background: #b75959;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2M1Nzk3OSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2I3NTk1OSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #c57979), color-stop(100%, #b75959));
+      background-image: -webkit-linear-gradient(top, #c57979, #b75959);
+      background-image: -moz-linear-gradient(top, #c57979, #b75959);
+      background-image: -o-linear-gradient(top, #c57979, #b75959);
+      background-image: linear-gradient(top, #c57979, #b75959);
+      -webkit-transition: box-shadow 0.05s ease-in-out;
+      -moz-transition: box-shadow 0.05s ease-in-out;
+      -o-transition: box-shadow 0.05s ease-in-out;
+      transition: box-shadow 0.05s ease-in-out; }
+    /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+    .btn.btn-red:active {
+      background: #bf6b6b;
+      border-color: #9e4444;
+      -webkit-box-shadow: 0 0 5px #bf6b6b inset;
+      -moz-box-shadow: 0 0 5px #bf6b6b inset;
+      box-shadow: 0 0 5px #bf6b6b inset; }
+  /* line 78, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+  .btn.btn-green {
+    border: 1px solid #6d963b;
+    -webkit-box-shadow: inset 0 1px 2px #a2c873;
+    -moz-box-shadow: inset 0 1px 2px #a2c873;
+    box-shadow: inset 0 1px 2px #a2c873;
+    background: #82b346;
+    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzk2YzE2MSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzgyYjM0NiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+    background-size: 100%;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #96c161), color-stop(100%, #82b346));
+    background-image: -webkit-linear-gradient(top, #96c161, #82b346);
+    background-image: -moz-linear-gradient(top, #96c161, #82b346);
+    background-image: -o-linear-gradient(top, #96c161, #82b346);
+    background-image: linear-gradient(top, #96c161, #82b346); }
+    /* line 9, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+    .btn.btn-green:hover {
+      background: #80af45;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzk2YzE2MSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzgwYWY0NSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #96c161), color-stop(100%, #80af45));
+      background-image: -webkit-linear-gradient(top, #96c161, #80af45);
+      background-image: -moz-linear-gradient(top, #96c161, #80af45);
+      background-image: -o-linear-gradient(top, #96c161, #80af45);
+      background-image: linear-gradient(top, #96c161, #80af45);
+      -webkit-transition: box-shadow 0.05s ease-in-out;
+      -moz-transition: box-shadow 0.05s ease-in-out;
+      -o-transition: box-shadow 0.05s ease-in-out;
+      transition: box-shadow 0.05s ease-in-out; }
+    /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+    .btn.btn-green:active {
+      background: #8cbb52;
+      border-color: #688e38;
+      -webkit-box-shadow: 0 0 5px #8cbb52 inset;
+      -moz-box-shadow: 0 0 5px #8cbb52 inset;
+      box-shadow: 0 0 5px #8cbb52 inset; }
+  /* line 78, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+  .btn.btn-blue {
+    border: 1px solid #337ca1;
+    -webkit-box-shadow: inset 0 1px 2px #6eb0d1;
+    -moz-box-shadow: inset 0 1px 2px #6eb0d1;
+    box-shadow: inset 0 1px 2px #6eb0d1;
+    background: #3d94c0;
+    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzViYTVjYiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzNkOTRjMCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+    background-size: 100%;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5ba5cb), color-stop(100%, #3d94c0));
+    background-image: -webkit-linear-gradient(top, #5ba5cb, #3d94c0);
+    background-image: -moz-linear-gradient(top, #5ba5cb, #3d94c0);
+    background-image: -o-linear-gradient(top, #5ba5cb, #3d94c0);
+    background-image: linear-gradient(top, #5ba5cb, #3d94c0); }
+    /* line 9, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+    .btn.btn-blue:hover {
+      background: #3c91bc;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzViYTVjYiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzNjOTFiYyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5ba5cb), color-stop(100%, #3c91bc));
+      background-image: -webkit-linear-gradient(top, #5ba5cb, #3c91bc);
+      background-image: -moz-linear-gradient(top, #5ba5cb, #3c91bc);
+      background-image: -o-linear-gradient(top, #5ba5cb, #3c91bc);
+      background-image: linear-gradient(top, #5ba5cb, #3c91bc);
+      -webkit-transition: box-shadow 0.05s ease-in-out;
+      -moz-transition: box-shadow 0.05s ease-in-out;
+      -o-transition: box-shadow 0.05s ease-in-out;
+      transition: box-shadow 0.05s ease-in-out; }
+    /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+    .btn.btn-blue:active {
+      background: #4c9dc6;
+      border-color: #31769a;
+      -webkit-box-shadow: 0 0 5px #4c9dc6 inset;
+      -moz-box-shadow: 0 0 5px #4c9dc6 inset;
+      box-shadow: 0 0 5px #4c9dc6 inset; }
+  /* line 78, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+  .btn.btn-gray {
+    border: 1px solid #626e7f;
+    -webkit-box-shadow: inset 0 1px 2px #9aa4b1;
+    -moz-box-shadow: inset 0 1px 2px #9aa4b1;
+    box-shadow: inset 0 1px 2px #9aa4b1;
+    background: #758294;
+    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzhjOTdhNiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzc1ODI5NCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+    background-size: 100%;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #8c97a6), color-stop(100%, #758294));
+    background-image: -webkit-linear-gradient(top, #8c97a6, #758294);
+    background-image: -moz-linear-gradient(top, #8c97a6, #758294);
+    background-image: -o-linear-gradient(top, #8c97a6, #758294);
+    background-image: linear-gradient(top, #8c97a6, #758294); }
+    /* line 9, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+    .btn.btn-gray:hover {
+      background: #728092;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzhjOTdhNiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzcyODA5MiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #8c97a6), color-stop(100%, #728092));
+      background-image: -webkit-linear-gradient(top, #8c97a6, #728092);
+      background-image: -moz-linear-gradient(top, #8c97a6, #728092);
+      background-image: -o-linear-gradient(top, #8c97a6, #728092);
+      background-image: linear-gradient(top, #8c97a6, #728092);
+      -webkit-transition: box-shadow 0.05s ease-in-out;
+      -moz-transition: box-shadow 0.05s ease-in-out;
+      -o-transition: box-shadow 0.05s ease-in-out;
+      transition: box-shadow 0.05s ease-in-out; }
+    /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+    .btn.btn-gray:active {
+      background: #818d9d;
+      border-color: #5d6979;
+      -webkit-box-shadow: 0 0 5px #818d9d inset;
+      -moz-box-shadow: 0 0 5px #818d9d inset;
+      box-shadow: 0 0 5px #818d9d inset; }
+  /* line 78, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+  .btn.btn-black {
+    border: 1px solid #5a5a5a;
+    -webkit-box-shadow: inset 0 1px 2px #909090;
+    -moz-box-shadow: inset 0 1px 2px #909090;
+    box-shadow: inset 0 1px 2px #909090;
+    background: #6f6f6f;
+    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzgzODM4MyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzZmNmY2ZiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+    background-size: 100%;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #838383), color-stop(100%, #6f6f6f));
+    background-image: -webkit-linear-gradient(top, #838383, #6f6f6f);
+    background-image: -moz-linear-gradient(top, #838383, #6f6f6f);
+    background-image: -o-linear-gradient(top, #838383, #6f6f6f);
+    background-image: linear-gradient(top, #838383, #6f6f6f); }
+    /* line 9, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+    .btn.btn-black:hover {
+      background: #6c6c6c;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzgzODM4MyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzZjNmM2YyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #838383), color-stop(100%, #6c6c6c));
+      background-image: -webkit-linear-gradient(top, #838383, #6c6c6c);
+      background-image: -moz-linear-gradient(top, #838383, #6c6c6c);
+      background-image: -o-linear-gradient(top, #838383, #6c6c6c);
+      background-image: linear-gradient(top, #838383, #6c6c6c);
+      -webkit-transition: box-shadow 0.05s ease-in-out;
+      -moz-transition: box-shadow 0.05s ease-in-out;
+      -o-transition: box-shadow 0.05s ease-in-out;
+      transition: box-shadow 0.05s ease-in-out; }
+    /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+    .btn.btn-black:active {
+      background: #797979;
+      border-color: #555555;
+      -webkit-box-shadow: 0 0 5px #797979 inset;
+      -moz-box-shadow: 0 0 5px #797979 inset;
+      box-shadow: 0 0 5px #797979 inset; }
+  /* line 78, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+  .btn.btn-lightblue {
+    border: 1px solid #3692bb;
+    -webkit-box-shadow: inset 0 1px 2px #81bfdb;
+    -moz-box-shadow: inset 0 1px 2px #81bfdb;
+    box-shadow: inset 0 1px 2px #81bfdb;
+    background: #4da5cc;
+    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzZkYjVkNSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzRkYTVjYyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+    background-size: 100%;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #6db5d5), color-stop(100%, #4da5cc));
+    background-image: -webkit-linear-gradient(top, #6db5d5, #4da5cc);
+    background-image: -moz-linear-gradient(top, #6db5d5, #4da5cc);
+    background-image: -o-linear-gradient(top, #6db5d5, #4da5cc);
+    background-image: linear-gradient(top, #6db5d5, #4da5cc); }
+    /* line 9, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+    .btn.btn-lightblue:hover {
+      background: #49a3cb;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzZkYjVkNSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzQ5YTNjYiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #6db5d5), color-stop(100%, #49a3cb));
+      background-image: -webkit-linear-gradient(top, #6db5d5, #49a3cb);
+      background-image: -moz-linear-gradient(top, #6db5d5, #49a3cb);
+      background-image: -o-linear-gradient(top, #6db5d5, #49a3cb);
+      background-image: linear-gradient(top, #6db5d5, #49a3cb);
+      -webkit-transition: box-shadow 0.05s ease-in-out;
+      -moz-transition: box-shadow 0.05s ease-in-out;
+      -o-transition: box-shadow 0.05s ease-in-out;
+      transition: box-shadow 0.05s ease-in-out; }
+    /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+    .btn.btn-lightblue:active {
+      background: #5dadd0;
+      border-color: #338cb3;
+      -webkit-box-shadow: 0 0 5px #5dadd0 inset;
+      -moz-box-shadow: 0 0 5px #5dadd0 inset;
+      box-shadow: 0 0 5px #5dadd0 inset; }
+  /* line 78, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+  .btn.btn-gold {
+    border: 1px solid #a87a27;
+    -webkit-box-shadow: inset 0 1px 2px #daaf61;
+    -moz-box-shadow: inset 0 1px 2px #daaf61;
+    box-shadow: inset 0 1px 2px #daaf61;
+    background: #c9922f;
+    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Q1YTQ0YyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2M5OTIyZiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+    background-size: 100%;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #d5a44c), color-stop(100%, #c9922f));
+    background-image: -webkit-linear-gradient(top, #d5a44c, #c9922f);
+    background-image: -moz-linear-gradient(top, #d5a44c, #c9922f);
+    background-image: -o-linear-gradient(top, #d5a44c, #c9922f);
+    background-image: linear-gradient(top, #d5a44c, #c9922f); }
+    /* line 9, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+    .btn.btn-gold:hover {
+      background: #c58f2e;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Q1YTQ0YyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2M1OGYyZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #d5a44c), color-stop(100%, #c58f2e));
+      background-image: -webkit-linear-gradient(top, #d5a44c, #c58f2e);
+      background-image: -moz-linear-gradient(top, #d5a44c, #c58f2e);
+      background-image: -o-linear-gradient(top, #d5a44c, #c58f2e);
+      background-image: linear-gradient(top, #d5a44c, #c58f2e);
+      -webkit-transition: box-shadow 0.05s ease-in-out;
+      -moz-transition: box-shadow 0.05s ease-in-out;
+      -o-transition: box-shadow 0.05s ease-in-out;
+      transition: box-shadow 0.05s ease-in-out; }
+    /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+    .btn.btn-gold:active {
+      background: #d19c3b;
+      border-color: #a07425;
+      -webkit-box-shadow: 0 0 5px #d19c3b inset;
+      -moz-box-shadow: 0 0 5px #d19c3b inset;
+      box-shadow: 0 0 5px #d19c3b inset; }
+  /* line 78, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+  .btn.btn-sea {
+    border: 1px solid #39534f;
+    -webkit-box-shadow: inset 0 1px 2px #64928d;
+    -moz-box-shadow: inset 0 1px 2px #64928d;
+    box-shadow: inset 0 1px 2px #64928d;
+    background: #496b67;
+    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzVhODM3ZSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzQ5NmI2NyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+    background-size: 100%;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5a837e), color-stop(100%, #496b67));
+    background-image: -webkit-linear-gradient(top, #5a837e, #496b67);
+    background-image: -moz-linear-gradient(top, #5a837e, #496b67);
+    background-image: -o-linear-gradient(top, #5a837e, #496b67);
+    background-image: linear-gradient(top, #5a837e, #496b67); }
+    /* line 9, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+    .btn.btn-sea:hover {
+      background: #476864;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzVhODM3ZSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzQ3Njg2NCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5a837e), color-stop(100%, #476864));
+      background-image: -webkit-linear-gradient(top, #5a837e, #476864);
+      background-image: -moz-linear-gradient(top, #5a837e, #476864);
+      background-image: -o-linear-gradient(top, #5a837e, #476864);
+      background-image: linear-gradient(top, #5a837e, #476864);
+      -webkit-transition: box-shadow 0.05s ease-in-out;
+      -moz-transition: box-shadow 0.05s ease-in-out;
+      -o-transition: box-shadow 0.05s ease-in-out;
+      transition: box-shadow 0.05s ease-in-out; }
+    /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+    .btn.btn-sea:active {
+      background: #527772;
+      border-color: #354d4a;
+      -webkit-box-shadow: 0 0 5px #527772 inset;
+      -moz-box-shadow: 0 0 5px #527772 inset;
+      box-shadow: 0 0 5px #527772 inset; }
+  /* line 78, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+  .btn.btn-brown {
+    border: 1px solid #856733;
+    -webkit-box-shadow: inset 0 1px 2px #c29e61;
+    -moz-box-shadow: inset 0 1px 2px #c29e61;
+    box-shadow: inset 0 1px 2px #c29e61;
+    background: #a27e3f;
+    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2JiOTM0ZiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2EyN2UzZiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+    background-size: 100%;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #bb934f), color-stop(100%, #a27e3f));
+    background-image: -webkit-linear-gradient(top, #bb934f, #a27e3f);
+    background-image: -moz-linear-gradient(top, #bb934f, #a27e3f);
+    background-image: -o-linear-gradient(top, #bb934f, #a27e3f);
+    background-image: linear-gradient(top, #bb934f, #a27e3f); }
+    /* line 9, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+    .btn.btn-brown:hover {
+      background: #9f7b3d;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2JiOTM0ZiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzlmN2IzZCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #bb934f), color-stop(100%, #9f7b3d));
+      background-image: -webkit-linear-gradient(top, #bb934f, #9f7b3d);
+      background-image: -moz-linear-gradient(top, #bb934f, #9f7b3d);
+      background-image: -o-linear-gradient(top, #bb934f, #9f7b3d);
+      background-image: linear-gradient(top, #bb934f, #9f7b3d);
+      -webkit-transition: box-shadow 0.05s ease-in-out;
+      -moz-transition: box-shadow 0.05s ease-in-out;
+      -o-transition: box-shadow 0.05s ease-in-out;
+      transition: box-shadow 0.05s ease-in-out; }
+    /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+    .btn.btn-brown:active {
+      background: #b18944;
+      border-color: #7e6131;
+      -webkit-box-shadow: 0 0 5px #b18944 inset;
+      -moz-box-shadow: 0 0 5px #b18944 inset;
+      box-shadow: 0 0 5px #b18944 inset; }
+  /* line 78, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+  .btn.btn-twitter {
+    border: 1px solid #2189ff;
+    -webkit-box-shadow: inset 0 1px 2px #8dc2ff;
+    -moz-box-shadow: inset 0 1px 2px #8dc2ff;
+    box-shadow: inset 0 1px 2px #8dc2ff;
+    background: #4a9eff;
+    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzczYjRmZiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzRhOWVmZiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+    background-size: 100%;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #73b4ff), color-stop(100%, #4a9eff));
+    background-image: -webkit-linear-gradient(top, #73b4ff, #4a9eff);
+    background-image: -moz-linear-gradient(top, #73b4ff, #4a9eff);
+    background-image: -o-linear-gradient(top, #73b4ff, #4a9eff);
+    background-image: linear-gradient(top, #73b4ff, #4a9eff); }
+    /* line 9, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+    .btn.btn-twitter:hover {
+      background: #459cff;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzczYjRmZiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzQ1OWNmZiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #73b4ff), color-stop(100%, #459cff));
+      background-image: -webkit-linear-gradient(top, #73b4ff, #459cff);
+      background-image: -moz-linear-gradient(top, #73b4ff, #459cff);
+      background-image: -o-linear-gradient(top, #73b4ff, #459cff);
+      background-image: linear-gradient(top, #73b4ff, #459cff);
+      -webkit-transition: box-shadow 0.05s ease-in-out;
+      -moz-transition: box-shadow 0.05s ease-in-out;
+      -o-transition: box-shadow 0.05s ease-in-out;
+      transition: box-shadow 0.05s ease-in-out; }
+    /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+    .btn.btn-twitter:active {
+      background: #5fa9ff;
+      border-color: #1783ff;
+      -webkit-box-shadow: 0 0 5px #5fa9ff inset;
+      -moz-box-shadow: 0 0 5px #5fa9ff inset;
+      box-shadow: 0 0 5px #5fa9ff inset; }
+  /* line 78, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+  .btn.btn-facebook {
+    border: 1px solid #2d4479;
+    -webkit-box-shadow: inset 0 1px 2px #5272bf;
+    -moz-box-shadow: inset 0 1px 2px #5272bf;
+    box-shadow: inset 0 1px 2px #5272bf;
+    background: #385496;
+    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzQzNjViNCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzM4NTQ5NiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+    background-size: 100%;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #4365b4), color-stop(100%, #385496));
+    background-image: -webkit-linear-gradient(top, #4365b4, #385496);
+    background-image: -moz-linear-gradient(top, #4365b4, #385496);
+    background-image: -o-linear-gradient(top, #4365b4, #385496);
+    background-image: linear-gradient(top, #4365b4, #385496); }
+    /* line 9, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+    .btn.btn-facebook:hover {
+      background: #365293;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzQzNjViNCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzM2NTI5MyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+      background-size: 100%;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #4365b4), color-stop(100%, #365293));
+      background-image: -webkit-linear-gradient(top, #4365b4, #365293);
+      background-image: -moz-linear-gradient(top, #4365b4, #365293);
+      background-image: -o-linear-gradient(top, #4365b4, #365293);
+      background-image: linear-gradient(top, #4365b4, #365293);
+      -webkit-transition: box-shadow 0.05s ease-in-out;
+      -moz-transition: box-shadow 0.05s ease-in-out;
+      -o-transition: box-shadow 0.05s ease-in-out;
+      transition: box-shadow 0.05s ease-in-out; }
+    /* line 14, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+    .btn.btn-facebook:active {
+      background: #3d5ca5;
+      border-color: #2a3f71;
+      -webkit-box-shadow: 0 0 5px #3d5ca5 inset;
+      -moz-box-shadow: 0 0 5px #3d5ca5 inset;
+      box-shadow: 0 0 5px #3d5ca5 inset; }
+
+/* line 85, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+.btn-group.open .btn.btn-default.dropdown-toggle {
+  background-color: #fdfdfd; }
+
+/* line 85, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+.btn-group.open .btn.btn-red.dropdown-toggle {
+  background-color: #c57979; }
+
+/* line 85, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+.btn-group.open .btn.btn-green.dropdown-toggle {
+  background-color: #96c161; }
+
+/* line 85, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+.btn-group.open .btn.btn-blue.dropdown-toggle {
+  background-color: #5ba5cb; }
+
+/* line 85, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+.btn-group.open .btn.btn-gray.dropdown-toggle {
+  background-color: #8c97a6; }
+
+/* line 85, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+.btn-group.open .btn.btn-black.dropdown-toggle {
+  background-color: #838383; }
+
+/* line 85, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+.btn-group.open .btn.btn-lightblue.dropdown-toggle {
+  background-color: #6db5d5; }
+
+/* line 85, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+.btn-group.open .btn.btn-gold.dropdown-toggle {
+  background-color: #d5a44c; }
+
+/* line 85, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+.btn-group.open .btn.btn-sea.dropdown-toggle {
+  background-color: #5a837e; }
+
+/* line 85, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+.btn-group.open .btn.btn-brown.dropdown-toggle {
+  background-color: #bb934f; }
+
+/* line 85, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+.btn-group.open .btn.btn-twitter.dropdown-toggle {
+  background-color: #73b4ff; }
+
+/* line 85, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+.btn-group.open .btn.btn-facebook.dropdown-toggle {
+  background-color: #4365b4; }
+
+/* line 90, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+.btn-group.btn.btn-lg {
+  padding: 8px 10px; }
+
+/* line 94, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+button.btn {
+  font-weight: 600; }
+
+/* line 98, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+.btn-group > .btn, .btn-group > .dropdown-menu {
+  font-size: 12px; }
+
+/* line 102, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+.caret {
+  opacity: 0.6; }
+
+/* line 107, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+.btn-xs .caret, .btn-sm .caret, .btn-lg .caret {
+  margin-top: 8px;
+  margin-left: 4px; }
+
+/* line 112, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+.dropdown-menu .divider {
+  border-top: none !important; }
+
+/* line 117, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+.btn i {
+  vertical-align: middle; }
+
+/* line 126, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+.btn-group > .btn:first-child {
+  margin-left: 0;
+  -moz-border-radius-topleft: 2px;
+  -webkit-border-top-left-radius: 2px;
+  border-top-left-radius: 2px;
+  -moz-border-radius-bottomleft: 2px;
+  -webkit-border-bottom-left-radius: 2px;
+  border-bottom-left-radius: 2px; }
+
+/* line 133, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+.btn-group > .btn:last-child,
+.btn-group > .dropdown-toggle {
+  -moz-border-radius-topright: 2px;
+  -webkit-border-top-right-radius: 2px;
+  border-top-right-radius: 2px;
+  -moz-border-radius-bottomright: 2px;
+  -webkit-border-bottom-right-radius: 2px;
+  border-bottom-right-radius: 2px; }
+
+/* line 138, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+.btn-group > .btn.large:first-child {
+  -moz-border-radius-topleft: 2px;
+  -webkit-border-top-left-radius: 2px;
+  border-top-left-radius: 2px;
+  -moz-border-radius-bottomleft: 2px;
+  -webkit-border-bottom-left-radius: 2px;
+  border-bottom-left-radius: 2px; }
+
+/* line 143, /home/andrei/core-admin-release/core-admin/source/stylesheets/buttons.scss */
+.btn-group > .btn.large:last-child,
+.btn-group > .large.dropdown-toggle {
+  -moz-border-radius-topright: 2px;
+  -webkit-border-top-right-radius: 2px;
+  border-top-right-radius: 2px;
+  -moz-border-radius-bottomright: 2px;
+  -webkit-border-bottom-right-radius: 2px;
+  border-bottom-right-radius: 2px; }
