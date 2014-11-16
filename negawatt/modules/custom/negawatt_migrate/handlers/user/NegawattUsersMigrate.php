@@ -11,8 +11,6 @@ class NegawattUsersMigrate extends Migration {
    * Map the field and properties to the CSV header.
    */
   public $csvColumns = array(
-    array('id', 'Unique ID'),
-    array('og_user_company', 'Company'),
     array('name', 'Username'),
     array('pass', 'Password'),
     array('mail', 'Email'),
@@ -20,21 +18,14 @@ class NegawattUsersMigrate extends Migration {
 
   public $entityType = 'user';
 
-  public $dependencies = array(
-    'NegawattCityMigrate',
-  );
-
   public function __construct() {
     parent::__construct();
     $this->description = t('Import users from a CSV file.');
 
-    $this
-      ->addFieldMapping('og_user_company', 'og_user_company')
-      ->sourceMigration('NegawattCompaniesMigrate');
-
     $this->addFieldMapping('name', 'name');
     $this->addFieldMapping('pass', 'pass');
     $this->addFieldMapping('mail', 'mail');
+
     $this
       ->addFieldMapping('roles')
       ->defaultValue(DRUPAL_AUTHENTICATED_RID);
@@ -57,8 +48,5 @@ class NegawattUsersMigrate extends Migration {
     // Create a MigrateSource object.
     $this->source = new MigrateSourceCSV(drupal_get_path('module', 'negawatt_migrate') . '/csv/' . $this->entityType . '/user.csv', $this->csvColumns, array('header_rows' => 1));
     $this->destination = new MigrateDestinationUser();
-
-    // Clear flags cache.
-    flag_get_flags(NULL, NULL, NULL, TRUE);
   }
 }

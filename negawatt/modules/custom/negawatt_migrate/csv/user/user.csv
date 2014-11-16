@@ -1,3 +1,2 @@
-Unique ID,Company,Username,Password,Email
-user1,company1,imanimo,imanimo,user1@example.com
-user2,company2,puma,puma,user2@example.com
+Username,Password,Email
+carlos,1234,carlos@example.com

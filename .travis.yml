@@ -10,6 +10,24 @@ mysql:
 
 before_install:
   - sudo apt-get update > /dev/null
+  - composer self-update
+
+  # Install phantomJs.
+  - sudo apt-get update
+  - sudo apt-get install build-essential chrpath libssl-dev libxft-dev
+  - sudo apt-get install libfreetype6 libfreetype6-dev
+  - sudo apt-get install libfontconfig1 libfontconfig1-dev
+  - export PHANTOM_JS="phantomjs-1.9.7-linux-x86_64"
+  - wget https://bitbucket.org/ariya/phantomjs/downloads/$PHANTOM_JS.tar.bz2
+  - sudo mv $PHANTOM_JS.tar.bz2 /usr/local/share/
+  - sudo tar xvjf /usr/local/share/$PHANTOM_JS.tar.bz2
+  - sudo ln -sf /usr/local/share/$PHANTOM_JS/bin/phantomjs /usr/local/share/phantomjs
+  - sudo ln -sf /usr/local/share/$PHANTOM_JS/bin/phantomjs /usr/local/bin/phantomjs
+  - sudo ln -sf /usr/local/share/$PHANTOM_JS/bin/phantomjs /usr/bin/phantomjs
+
+  # Install grunt.
+  - npm install -g grunt-cli
+  - npm install -g bower
 
 install:
   # install php packages required for running a web server from drush on php 5.3
@@ -28,7 +46,13 @@ before_script:
   - drush cc all --yes
   - drush en simpletest -y
   # Use drush migrate command to import dummy content, as user 1, so we don't have node access issues.
+  - drush en negawatt_migrate -y
   - drush mi --all --user=1
+
+  # Allow HTTP headers on settings.php
+  - sudo chmod 777 sites/default/settings.php
+  - curl -O https://gist.githubusercontent.com/amitaibu/c28d819cf35ad8b5c484/raw/5b6d5725cc9ecfbbe884d89d0f5253b56f1aaee3/gistfile1.txt
+  - cat gistfile1.txt >> sites/default/settings.php
 
   - cd ..
 
@@ -51,12 +75,27 @@ script:
   - drush @negawatt runserver 127.0.0.1:8080 &
   - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
 
+  # Run client application.
+  - cd ../../client/demo
+  - pwd
+  - npm install
+  - bower install
+  - grunt server > ~/grunt.log 2>&1 &
+
   # Run selenium.
   - wget http://selenium-release.storage.googleapis.com/2.40/selenium-server-standalone-2.40.0.jar
   - java -jar selenium-server-standalone-2.40.0.jar -p 4444 &
   - sleep 5
 
-  - ./bin/behat --tags=~@wip
+  # Run phantomJs.
+  - phantomjs --webdriver=8643 > ~/phantomjs.log 2>&1 &
+
+  # Run behat tests.
+  - cd ../../negawatt/behat
+  - ./bin/behat -p phantomjs --tags=~@wip
+
+  # Print log ~/phantomjs.log
+  - cat ~/phantomjs.log
 
   # SimpleTest
   - drush @negawatt test-run "Negawatt Normalizer" --uri=http://127.0.0.1:8080

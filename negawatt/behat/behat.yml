@@ -1,13 +1,24 @@
 default:
+  context:
+      parameters:
+        drupal_users:
+          carlos:
+            '1234'
   paths:
     features: 'features'
   extensions:
     Behat\MinkExtension\Extension:
       goutte: ~
-      selenium2: ~
-      javascript_session: 'selenium2'
+      selenium2:
+        wd_host: 'http://localhost:8643/wd/hub'
     Drupal\DrupalExtension\Extension:
       blackbox: ~
-
+phantomjs:
+  context:
+      class:  'FeatureContext'
+  extensions:
+    Behat\MinkExtension\Extension:
+      base_url: 'http://localhost:9050/'
+      goutte: ~
 imports:
   - behat.local.yml

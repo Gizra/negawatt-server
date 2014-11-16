@@ -8,7 +8,7 @@ dependencies[] = migrate_extras
 ; Handlers
 files[] = includes/NegawattMigration.php
 
-;files[] = handlers/user/NegawattUsersMigrate.php
+files[] = handlers/user/NegawattUsersMigrate.php
 files[] = handlers/electricity/NegawattElectricityMigrate.php
 files[] = handlers/electricity/NegawattElectricityRawMigrate.php
 files[] = handlers/electricity/NegawattElectricityMigrate.php

@@ -88,11 +88,7 @@ projects[purl][subdir] = "contrib"
 projects[purl][version] = "1.x-dev"
 
 projects[restful][subdir] = "contrib"
-projects[restful][type] = "module"
-projects[restful][download][type] = "file"
-projects[restful][download][url] = "https://github.com/Gizra/restful.git"
-projects[restful][download][branch] = "245"
-projects[restful][download][type] = "git"
+projects[restful][version] = "1.x-dev"
 
 projects[search_api][subdir] = "contrib"
 projects[search_api][version] = "1.12"
