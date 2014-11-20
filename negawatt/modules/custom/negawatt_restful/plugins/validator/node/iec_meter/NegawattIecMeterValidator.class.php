@@ -8,12 +8,12 @@
 class NegawattIecMeterValidator extends EntityValidateBase {
 
   /**
-   * Overrides NodeValidate::getFieldsInfo().
+   * Overrides NodeValidate::publicFieldsInfo().
    */
-  public function getFieldsInfo() {
-    $fields = parent::getFieldsInfo();
+  public function publicFieldsInfo() {
+    $public_fields = parent::publicFieldsInfo();
 
-    $fields['field_contract_id']['validators'][] = 'validateMeterExist';
+    $fields['field_contract_id']['validators'][] = array($this, 'validateMeterExist');
 
     return $fields;
   }
@@ -21,7 +21,7 @@ class NegawattIecMeterValidator extends EntityValidateBase {
   /**
    * Validate that the meter already exist.
    */
-  public function validateMeterExist($field_name, $value, \EntityMetadataWrapper $wrapper) {
+  public function validateMeterExist($field_name, $value, EntityMetadataWrapper $wrapper, EntityMetadataWrapper $property_wrapper) {
     $meter_serial = $wrapper->field_meter_serial->value();
 
     $query = new EntityFieldQuery();
