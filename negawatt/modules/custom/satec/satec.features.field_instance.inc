@@ -241,7 +241,7 @@ function satec_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 14,
+      'weight' => 13,
     ),
   );
 
@@ -497,6 +497,49 @@ function satec_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-satec_meter-field_meter_processed'
+  $field_instances['node-satec_meter-field_meter_processed'] = array(
+    'bundle' => 'satec_meter',
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 11,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_meter_processed',
+    'label' => 'Meter processed',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'display_label' => 1,
+      ),
+      'type' => 'options_onoff',
+      'weight' => 11,
+    ),
+  );
+
   // Exported field_instance: 'node-satec_meter-og_group_ref'
   $field_instances['node-satec_meter-og_group_ref'] = array(
     'bundle' => 'satec_meter',
@@ -559,6 +602,7 @@ function satec_field_default_field_instances() {
   t('Meter IP address');
   t('Meter id');
   t('Meter port');
+  t('Meter processed');
   t('Place Address');
   t('Place Description');
   t('Place Locality');

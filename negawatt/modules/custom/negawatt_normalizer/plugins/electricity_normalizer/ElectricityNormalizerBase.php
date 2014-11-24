@@ -229,7 +229,7 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
     $result = $query
       ->entityCondition('entity_type', 'electricity_raw')
       ->propertyCondition('meter_nid', $this->getMeterNode()->nid)
-      ->propertyOrderBy('timestamp','DESC')
+      ->propertyOrderBy('timestamp')
       ->range(0, 1)
       ->execute();
 
@@ -275,8 +275,16 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
       $processed_entities = array_merge($processed_entities, $result['entities']);
     }
 
+    if (drupal_is_cli()) {
+      drush_log(' frequencies:[' . implode(',', $frequencies) . '], '
+        . 'time-period:[' . (empty($time_period)?'-':(date('Y-m-d H:i', $time_period[0]) . ',' . date('Y-m-d H:i', $time_period[1]))) . '], '
+        . 'rate-types:[' . implode(',', $rate_types) . ']. ');
+      drush_log(' ' . count($processed_entities) . ' entities returned.');
+    }
+
     // Save last processed node field.
     $wrapper = entity_metadata_wrapper('node', $this->getMeterNode());
+    $wrapper->field_meter_processed->set(TRUE);
     $wrapper->field_last_processed->set($last_processed);
     $wrapper->save();
 

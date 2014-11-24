@@ -78,6 +78,5 @@ class NegawattIecMeterMigrate extends NegawattMigration {
       'country' => $row->country,
       'locality' => $row->field_place_locality,
     ));
-
   }
 }

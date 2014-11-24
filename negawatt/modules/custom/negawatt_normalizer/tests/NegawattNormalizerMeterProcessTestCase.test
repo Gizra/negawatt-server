@@ -36,15 +36,6 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     $meter_node1 = $this->drupalCreateNode($settings);
     $meter_node2 = $this->drupalCreateNode($settings);
 
-    // Set field_last_processed for nodes.
-    $wrapper = entity_metadata_wrapper('node', $meter_node1);
-    $wrapper->field_last_processed->set(strtotime('2014-6-12 15:00'));
-    $wrapper->save();
-
-    $wrapper = entity_metadata_wrapper('node', $meter_node2);
-    $wrapper->field_last_processed->set(strtotime('2014-6-12 15:00'));
-    $wrapper->save();
-
     // Create IEC meter nodes.
     $settings = array(
       'type' => 'iec_meter',
@@ -52,11 +43,6 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
 
     $meter_node3 = $this->drupalCreateNode($settings);
     $meter_node4 = $this->drupalCreateNode($settings);
-
-    // Set field_last_processed for nodes.
-    $wrapper = entity_metadata_wrapper('node', $meter_node3);
-    $wrapper->field_last_processed->set(strtotime('2014-2-1 00:00'));
-    $wrapper->save();
 
     // Save nodes for later.
     $this->meterNode1 = $meter_node1;
@@ -256,6 +242,11 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
 
     $handler = negawatt_normalizer_get_electricity_normalizer_handler('iec');
 
+    // Before normalizing node, make sure it has meter-processed false and last-processed NULL
+    $wrapper = entity_metadata_wrapper('node', $this->meterNode3);
+    $this->assertEqual($wrapper->field_meter_processed->value(), FALSE, 'Before normalizing, node meter-processed is FALSE.');
+    $this->assertEqual($wrapper->field_last_processed->value(), 0, 'Before normalizing, node last-processed is NULL.');
+
     // Call process() with frequency lower then MONTH, should raise an Exception.
     $message = '<b>Testing IEC normalizer.</b><br>Calling process() with frequency lower than MONTH.';
     try {
@@ -269,7 +260,7 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
       $this->pass($message);
     }
 
-    // Call process() with no raw data, but with rate-type, should return an tmpty array.
+    // Call process() with no raw data, but with rate-type, should return an empty array.
     $result_entities = $handler->process($this->meterNode3,
       array(\ElectricityNormalizerInterface::MONTH),
       array(strtotime('2013-5-1 00:00'),strtotime('2013-5-1 00:00')),
@@ -298,6 +289,11 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     $this->assertEqual($result_entity->meter_nid, 3, 'Meter nid is correct.');
     $this->assertEqual($result_entity->avg_power, 2, 'Average power calculation was correct.');
     $this->assertTrue(abs($result_entity->min_power_factor - 0.97) < 0.0001, 'Min power-factor calculation was correct.');
+
+    // Make sure node's last processed field is correct
+    $wrapper = entity_metadata_wrapper('node', $this->meterNode3);
+    $this->assertEqual($wrapper->field_meter_processed->value(), TRUE, 'After normalizing, node meter-processed is TRUE.');
+    $this->assertEqual($wrapper->field_last_processed->value(), strtotime('2014-3-1 00:00'), 'Node last-processed field is correct.');
 
     // Modify an entity in electricity raw table.
     $entity = entity_load('electricity_raw', array(5));
@@ -420,5 +416,26 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     $wrapper = entity_metadata_wrapper('node', $this->meterNode4);
     $last_processed = $wrapper->field_last_processed->value();
     $this->assertEqual($last_processed, strtotime('2014-2-21 23:45'), 'Node last-processed field is correct.');
+
+    // Test that electricity entity can have negative kWh
+    $message = 'Electricity-raw entity can have a negative kWh';
+    try {
+      $values = array(
+        'type' => 'IEC',
+        'timestamp' => strtotime('2014-3-1 00:00'),
+        'rate_type' => 'flat',
+        'meter_nid' => $this->meterNode4->nid,
+        'kwh' => -123,
+        'power_factor' => 0.92,
+      );
+
+      $entity = entity_create('electricity_raw', $values);
+      $entity->save();
+
+      $this->pass($message);
+    }
+    catch(Exception $e) {
+      $this->fail($message);
+    }
   }
 }

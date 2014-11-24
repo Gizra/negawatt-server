@@ -6,15 +6,6 @@
 
 include_once 'negawatt_electricity.features.inc';
 
-
-
-/**
- * Implements hook_cron().
- */
-function negawatt_data_cron() {
-
-}
-
 /**
  * Implements hook_entity_info().
  */

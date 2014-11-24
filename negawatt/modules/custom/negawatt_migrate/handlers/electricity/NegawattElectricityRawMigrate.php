@@ -67,8 +67,9 @@ class NegawattElectricityRawMigrate extends Migration {
     $destination_handler = new MigrateDestinationEntityAPI($this->entityType, $this->bundle);
     $this->map = new MigrateSQLMap($this->machineName, $key, $destination_handler->getKeySchema($this->entityType));
 
-    // Create a MigrateSource object.
-    $this->source = new MigrateSourceCSV(drupal_get_path('module', 'negawatt_migrate') . '/csv/electricity/' . $this->entityType . '.csv', $this->csvColumns, array('header_rows' => 1));
+    // Create a MigrateSource object. Allow using variable to set path other than default.
+    $csv_path = variable_get('negawatt_migrate_csv_path', drupal_get_path('module', 'negawatt_migrate') . '/csv');
+    $this->source = new MigrateSourceCSV($csv_path . '/electricity/' . $this->entityType . '.csv', $this->csvColumns, array('header_rows' => 1));
     $this->destination = new MigrateDestinationEntityAPI($this->entityType, $this->bundle);
   }
 
