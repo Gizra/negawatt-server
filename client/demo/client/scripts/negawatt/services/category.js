@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app')
-  .service('Category', function ($http, $q, BACKEND_URL, $filter, Utils, $rootScope) {
+  .service('Category', function ($http, $q, NegawattConfig, $filter, Utils, $rootScope) {
     var Category = this;
 
     /**
@@ -45,7 +45,7 @@ angular.module('app')
     this.getCategories = function() {
       return $http({
         method: 'GET',
-        url: BACKEND_URL + '/api/meter_categories',
+        url: NegawattConfig.backend + '/api/meter_categories',
         transformResponse: addStyle
       });
     };

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app')
-  .service('Account', function Detector($http, $q, moment, BACKEND_URL, Utils) {
+  .service('Account', function Detector($http, $q, moment, NegawattConfig, Utils) {
     /**
      * Return the first account form the collection of acconts.
      *
@@ -35,7 +35,7 @@ angular.module('app')
      * @returns {*}
      */
     this.getAccount = function (filters) {
-      var url = BACKEND_URL + '/api/accounts' + Utils.createQueryString(filters);
+      var url = NegawattConfig.backend + '/api/accounts' + Utils.createQueryString(filters);
 
       var options = {
         method: 'GET',

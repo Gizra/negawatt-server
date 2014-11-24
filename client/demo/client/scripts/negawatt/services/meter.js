@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app')
-  .service('Meter', function ($q, $http, BACKEND_URL, $filter, Utils) {
+  .service('Meter', function ($q, $http, NegawattConfig, $filter, Utils) {
     var Meter = this;
 
     /**
@@ -70,7 +70,7 @@ angular.module('app')
      * @returns {*}
      */
     this.get = function() {
-      var url = BACKEND_URL + '/api/iec_meters';
+      var url = NegawattConfig.backend + '/api/iec_meters';
 
       return $http({
         method: 'GET',

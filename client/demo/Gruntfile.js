@@ -317,6 +317,25 @@
             push: true
           }
         }
+      },
+      ngconstant: {
+        options: {
+          name: 'config',
+          dest: 'client/scripts/config.js',
+        },
+        server: {
+          constants: {
+            NegawattConfig: grunt.file.readJSON('config.json').development
+          },
+          values: {
+            debug: true
+          }
+        },
+        build: {
+          constants: {
+            NegawattConfig: grunt.file.readJSON('config.json').production
+          },
+        }
       }
     });
 
@@ -324,7 +343,14 @@
       if (target === 'dist') {
         return grunt.task.run(['build', 'open', 'connect:dist:keepalive']);
       }
-      return grunt.task.run(['clean:server', 'concurrent:server', 'connect:livereload', 'open', 'watch']);
+      return grunt.task.run([
+        'clean:server',
+        'ngconstant:server',
+        'concurrent:server',
+        'connect:livereload',
+        'open',
+        'watch'
+      ]);
     });
 
     grunt.registerTask('lessServer', function(target) {
@@ -336,6 +362,7 @@
 
     grunt.registerTask('build', [
       'clean:dist',
+      'ngconstant:build',
       'useminPrepare',
       'concurrent:dist',
       'copy:dist',

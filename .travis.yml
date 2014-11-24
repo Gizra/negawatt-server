@@ -80,6 +80,7 @@ script:
   - pwd
   - npm install
   - bower install
+  - cp config.example.json config.json
   - grunt server > ~/grunt.log 2>&1 &
 
   # Run selenium.

@@ -67,3 +67,4 @@ client/demo/config.json
 client/demo/dist/
 .tmp
 .sass-cache
+client/demo/client/scripts/config.js

@@ -1,8 +1,8 @@
 {
   "development": {
-    "BACKEND_URL": "http://server.com"
+    "backend": "http://127.0.0.1:8080"
   },
   "production": {
-    "BACKEND_URL": "http://server.com"
+    "backend": "http://server.com"
   }
 }
