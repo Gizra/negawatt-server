@@ -80,7 +80,7 @@ angular.module('app')
       }, totals);
 
       // Get the year of the  timestamp first item.
-      timestamp = moment.unix(data.data[0].timestamp).format('YYYY');
+      timestamp = moment.unix(data.electricity[0].timestamp).format('YYYY');
 
       // Build a series for a dataset from data or totals.
       series = (data.showTotals) ? totals : data.data;
