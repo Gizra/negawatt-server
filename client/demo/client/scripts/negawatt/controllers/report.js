@@ -5,6 +5,9 @@ angular.module('app')
 
     /**
      * Get the chart data and plot.
+     *
+     * @param meterSelected
+     *   id of the meter selected.
      */
     function plotChart(meterSelected) {
       var filters = {
@@ -25,7 +28,6 @@ angular.module('app')
           };
 
         });
-
     }
 
     $scope.$on('negawatt.markerSelected', function(event, meterSelected) {
