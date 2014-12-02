@@ -49,11 +49,6 @@ before_script:
   - drush en negawatt_migrate -y
   - drush mi --all --user=1
 
-  # Allow HTTP headers on settings.php
-  - sudo chmod 777 sites/default/settings.php
-  - curl -O https://gist.githubusercontent.com/amitaibu/c28d819cf35ad8b5c484/raw/5b6d5725cc9ecfbbe884d89d0f5253b56f1aaee3/gistfile1.txt
-  - cat gistfile1.txt >> sites/default/settings.php
-
   - cd ..
 
   # Create a behat configuration file.
