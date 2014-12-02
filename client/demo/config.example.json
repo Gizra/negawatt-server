@@ -1,8 +1,10 @@
 {
   "development": {
-    "backend": "http://127.0.0.1:8080"
+    "backend": "http://127.0.0.1:8080",
+    "frontend": "http://localhost:9050"
   },
   "production": {
-    "backend": "http://server.com"
+    "backend": "http://server.com/api"
+    "frontend": "http://server.com"
   }
 }

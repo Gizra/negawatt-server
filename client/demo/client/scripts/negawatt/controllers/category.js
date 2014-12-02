@@ -8,7 +8,7 @@ angular.module('app')
 
     // Load Categories.
     Category.getCategories().then(function(response) {
-      Category.cache = $scope.categories = response.data.data;
+      Category.cache = $scope.categories = response.data;
     });
 
     // Filter map markers by id.

@@ -21,7 +21,7 @@
     "jquery-steps": "~1.0.7",
     "angular-wizard": "~0.3.0",
     "textAngular": "1.2.2",
-    "angular-ui-tree": "~2.1.0",
+    "angular-ui-tree": "~2.1.5",
     "ngmap": "~0.15.0",
     "ng-tags-input": "~2.0.1",
     "jquery-spinner": "~0.1.5",

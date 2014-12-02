@@ -1,3 +1,4 @@
+
 .angular-ui-tree {
     position: relative;
     display: block;
@@ -6,7 +7,7 @@
     font-size: 13px;
     line-height: 20px;
     list-style: none;
-
+    background-color: #1c2b36 !important;
 }
 
 .angular-ui-tree-placeholder{
@@ -14,18 +15,16 @@
     padding: 0;
     min-height: 30px;
     border: 1px dashed $state-default-border;
-    background-color: $state-info-bg;
     border-radius: $border-radius-base;
 }
 
 .angular-ui-tree-handle{
+    text-align: start;
     position: relative;
     display: block; 
     margin: 5px 0; 
-    padding: 10px 10px; 
-    text-decoration: none; 
-    border: 1px solid $state-default-border;
-    background: #fff;
+    padding: 10px 30px 10px;
+    text-decoration: none;
     cursor:move;
     border-radius: $border-radius-base;
 
@@ -33,6 +32,10 @@
         .angular-ui-tree-icon-action {
             display: inline;
         }
+    }
+
+    i {
+      font-size: 10px;
     }
 }
 
@@ -46,7 +49,7 @@
     display: block;
     position: relative;
     cursor: pointer;
-    float: left;
+    float: right;
     width: 25px;
     height: 40px;
     margin: -10px 0 0 -10px;
@@ -82,7 +85,7 @@
 .angular-ui-tree-empty{
     border: 1px dashed #bbb;
     min-height: 100px;
-    background-color: #fff;
+    border: 1px dashed $state-default-border;
     background-size:60px 60px;
     background-position:0 0,30px 30px;
 }
@@ -95,7 +98,7 @@
     list-style:none}
 
 .angular-ui-tree-nodes .angular-ui-tree-nodes{
-    padding-left: 30px
+    padding-right: 30px
 }
 
 .angular-ui-tree-node,.angular-ui-tree-placeholder{
@@ -107,9 +110,6 @@
     line-height:20px}
 
 .angular-ui-tree-hidden{display:none}
-
-
-
 
 .angular-ui-tree-drag{
     position:absolute;

@@ -8,11 +8,39 @@
     <li><a href="#/dashboard"> <i class="ti-home"></i><span data-i18n="Dashboard"></span> </a></li>
     <li>
       <a href="#/ui"><i class="ti-direction-alt"></i><span data-i18n="Categories"></span></a>
-      <ul>
-        <li ng-repeat="item in categories">
-          <a ng-click="filterBy(item.id)" href=""><i class="ti-angle-right" ng-style="{{item.style}}"></i><span data-i18n="{{item.label}}"></span></a>
-        </li>
+      <ul ui-tree data-drag-enabled="false" data-empty-place-holder-enabled="false">
+        <ol ui-tree-nodes="" ng-model="catgories">
+          <li ng-repeat="item in categories" ui-tree-node>
+            <div ui-tree-handle>
+              <a href="" ng-click="filterBy(item.id)">
+                <i class="ti-angle-double-right icon-has-ul"></i>
+                {{item.label}}
+              </a>
+            </div>
+            <ol ui-tree-nodes="" ng-model="item.children">
+              <li ng-repeat="subItem in item.children" ui-tree-node>
+                <div ui-tree-handle>
+                  <a href="" ng-click="filterBy(item.id)">
+                    <i class="ti-angle-double-right icon-has-ul"></i>
+                    {{subItem.label}}
+                  </a>
+                </div>
+                <ol ui-tree-nodes="" ng-model="subItem.children">
+                  <li ng-repeat="subItem2 in subItem.children" ui-tree-node>
+                    <div ui-tree-handle>
+                      <a href="" ng-click="filterBy(item.id)">
+                        <i class="ti-angle-double-right icon-has-ul"></i>
+                        {{subItem2.label}}
+                      </a>
+                    </div>
+                  </li>
+                </ol>
+              </li>
+            </ol>
+          </li>
+        </ol>
       </ul>
+
     </li>
   </ul>
 </div>

@@ -22,6 +22,23 @@ angular.module('app')
     };
 
     /**
+     * Convert a collection of objects to an object index by property id.
+     *
+     * @param collection {*[]}
+     *  Colection of objects.
+     * @returns {*}
+     *  Object indexed with properties id of each item.
+     */
+    this.indexById = function(collection) {
+      var indexed = {};
+      angular.forEach(collection, function(item) {
+        this[item.id] = item;
+      }, indexed);
+
+      return indexed;
+    };
+
+    /**
      * Return query string for restful module. (Drupal 7.0)
      *
      * @param {*} filters - object with filters, where the key is the name of the field to

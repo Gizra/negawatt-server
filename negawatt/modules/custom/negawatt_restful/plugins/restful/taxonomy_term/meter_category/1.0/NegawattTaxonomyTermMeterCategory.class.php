@@ -13,18 +13,33 @@ class NegawattTaxonomyTermMeterCategory extends \RestfulEntityBaseTaxonomyTerm {
   public function publicFieldsInfo() {
     $public_fields = parent::publicFieldsInfo();
 
-    $public_fields['parent'] = array(
-      'property' => 'parent',
-      'resource' => array(
-        'meter_category' => array(
-          'name' => 'meter_categories',
-          'full_view' => FALSE,
-        ),
-      )
+    $public_fields['children'] = array(
+      'callback' => array($this, 'getChildren',)
     );
 
     return $public_fields;
+  }
 
+  /**
+   *  Get the chidren of the current catetegory item by id.
+   */
+  protected function getChildren(\EntityMetadataWrapper $wrapper) {
+    $vocabulary = taxonomy_vocabulary_machine_name_load($this->getBundle());
+    $tree = taxonomy_get_tree($vocabulary->vid, $wrapper->getIdentifier(), 1);
+
+    // Exit if there is not children.
+    if (empty($tree)) {
+      return;
+    }
+
+    $children = array();
+
+    // Get just an array of id.
+    foreach ($tree as $term) {
+      $children[] = $term->tid;
+    }
+
+    return $children;
   }
 
   /**
