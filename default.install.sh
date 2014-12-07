@@ -35,7 +35,7 @@ drush mi --all --user=1
 drush uli --uri=$BASE_DOMAIN_URL
 
 # Install client application.
-cd ../client/demo
+cd ../client
 npm install && bower install
 
 # Open browser (Mac)

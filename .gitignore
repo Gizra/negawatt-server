@@ -54,17 +54,17 @@ install.sh
 .idea
 
 # Behat
-negawatt/behat/vendor/
+behat/vendor/
 behat.local.yml
-negawatt/behat/bin
-negawatt/behat/composer.phar
+behat/bin
+behat/composer.phar
 
 # Client #
 ##########
 node_modules
 bower_components
-client/demo/config.json
-client/demo/dist/
+config.json
+client/dist/
 .tmp
 .sass-cache
-client/demo/client/scripts/config.js
+client/app/scripts/config.js
