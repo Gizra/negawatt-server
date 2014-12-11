@@ -1,10 +1,8 @@
 {
   "development": {
-    "backend": "http://localhost/negawatt-server/www",
-    "frontend": "http://localhost"
+    "backend": "http://localhost/negawatt-server/www"
   },
   "production": {
-    "backend": "http://server.com/api",
-    "frontend": "http://server.com"
+    "backend": "http://server.com/api"
   }
 }
