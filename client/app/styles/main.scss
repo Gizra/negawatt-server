@@ -1,4 +1,5 @@
 $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
+
 // bower:scss
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 // endbower
@@ -10,8 +11,13 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
   padding: 0.2em 0;
 }
 
+html, body {
+  height: 100%;
+}
+
 body {
   min-height: 100%;
+  direction: rtl;
 }
 
 // Login view.
@@ -34,41 +40,149 @@ body {
 #map {
   position: fixed;
   width: 100%;
-  height: 1200px;
+  height: 100%;
   top: 0;
   left: 0;
   z-index: 0;
 }
 
-#dashboard-menu {
-  color: white;
-  position: fixed;
-  background-color: #000000;
-  z-index: 10;
-  height: 100px;
-  width: 98%;
-  top: 6%;
-  margin: 10px;
-  border: 1px solid black;
-}
 
 #dashboard-controls {
-  position: fixed;
-  background-color: #ffffff;
-  z-index: 10;
-  height: 471px;
-  width: 487px;
-  top: 22%;
-  right: 1.2%;
-  border: 1px solid black;
+  .dashboard-menu {
+    font-family: 'Noto Serif', serif;
+    background-color: #353434;
+    position: fixed;
+    z-index: 10;
+    height: 62px;
+    width: auto;
+    top: 5px;
+    right: 0;
+    left: 5px;
+    font-size: 12px;
+
+    * {
+      display: inline-block;
+      margin-top: 0;
+      margin-bottom: 0;
+      line-height: 62px;
+      vertical-align: middle;
+      height: 100%;
+      color: white;
+    }
+
+    .menu-separator {
+      border-left: 1px solid white;
+      height: 35%;
+      width: 1px;
+    }
+
+    .menu-buttom {
+      padding-right: 10px;
+    }
+
+    .menu-title {
+      width: 190px;
+      text-align: center;
+      font-size: 24px;
+    }
+
+    .menu-account {
+      width: 250px;
+      padding-right: 15px;
+
+      img {
+        width: 33px;
+        height: 33px;
+        margin-left: 5px;
+      }
+
+      span {
+        width: 110px;
+      }
+
+    }
+
+    .menu-messages {
+      padding-right: 25px;
+
+      img {
+        width: 22px;
+        height: 22px;
+        margin-left: 5px;
+      }
+
+      span {
+        width: 110px;
+      }
+
+    }
+
+    .menu-logo {
+      float: left;
+      margin-left: 35px;
+
+      img {
+        margin-top: 11px;
+      }
+
+      h4 {
+        margin-right: 10px;
+        margin-top: -11px;
+      }
+
+    }
+
+
+  }
+
+  .dashboard-controls {
+    position: fixed;
+    background-color: #ffffff;
+    z-index: 10;
+    margin: 2px;
+
+    &.dashboard-controls-col {
+      width: 250px;
+      margin-left: 3px;
+    }
+
+    &.dashboard-controls-row {
+      width: 505px;
+    }
+
+    &.dashboard-messages {
+      height: 545px;
+      right: 255px;
+      bottom: 235px;
+    }
+
+    &.dashboard-categories {
+      height: 360px;
+      right: 0;
+      bottom: 420px;
+    }
+    &.dashboard-details {
+      height: 180px;
+      right: 0;
+      bottom: 235px;
+    }
+    &.dashboard-usage {
+      height: 220px;
+      right: 0;
+      bottom: 10px;
+    }
+  }
+
+
 }
+
 
 .error {
   color: red;
 }
 
 // Login view.
-#dashboard-login {
+#login-form {
   position: fixed;
   background-color: #ffffff;
   z-index: 10;

@@ -1,11 +1,13 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Meter', function ($q, $http, $timeout, NegawattConfig, $rootScope) {
+  .service('Meter', function ($q, $http, $timeout, $state, $rootScope, Config, Marker) {
     var Meter = this;
 
     // A private cache key.
-    var cache = {};
+    var cache = {
+      selected: {} // Selected meter.
+    };
 
     /**
      * Return the promise with the meter list, from cache or the server.
@@ -13,7 +15,7 @@ angular.module('negawattClientApp')
      * @returns {*}
      */
     this.get = function() {
-      return $q.when(cache.data || getMeters());
+      return $q.when(cache.data || getDataFromBackend());
     };
 
     /**
@@ -21,15 +23,15 @@ angular.module('negawattClientApp')
      *
      * @returns {$q.promise}
      */
-    function getMeters() {
+    function getDataFromBackend() {
       var deferred = $q.defer();
-      var url = NegawattConfig.backend + '/api/iec_meters';
+      var url = Config.backend + '/api/iec_meters';
       $http({
         method: 'GET',
         url: url,
         transformResponse: prepareMetersForLeafletMarkers
       }).success(function(meters) {
-        save(meters);
+        setCache(meters);
         deferred.resolve(cache.data);
       });
 
@@ -39,15 +41,14 @@ angular.module('negawattClientApp')
     /**
      * Save meters in cache, and broadcast en event to inform that the meters data changed.
      *
-     * @param meters
+     * @param data
      */
-    function save(meters) {
+    function setCache(data) {
       // Cache meters data.
       cache = {
-        data: meters,
+        data: data,
         timestamp: new Date()
       };
-      Meter.data = cache;
       // Clear cache in 60 seconds.
       $timeout(function() {
         cache.data = undefined;
@@ -86,9 +87,15 @@ angular.module('negawattClientApp')
 
           delete item['location'];
         }
+
+        // Extend meter with marker properties and methods.
+        angular.extend(meters[item.id], Marker);
+        // Define default icon properties and methods, in order, to be changed later.
+         meters[item.id].unselect();
       });
 
       return meters;
     }
+
 
   });

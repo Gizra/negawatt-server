@@ -4,29 +4,36 @@
  * @ngdoc function
  * @name negawattClientApp.controller:MainCtrl
  * @description
- * # MainCtrl
+ * # DashboardCtrl
  * Controller of the negawattClientApp
  */
 angular.module('negawattClientApp')
-  .controller('DashboardCtrl', function ($scope, $state, Meter, Auth  ) {
-    // Center map.
-    $scope.center = {
-      lat: 31.6045263709886,
-      lng: 34.77267265319824,
-      zoom: 16
+  .controller('DashboardCtrl', function ($scope, $state, $stateParams, Meter, Map, meters, mapConfig, categories, session) {
+
+    // Initialize values.
+    $scope.defaults = mapConfig;
+    $scope.center = Map.getCenter();
+    $scope.meters = meters;
+    $scope.categories = categories;
+    $scope.session = session;
+
+    /**
+     * Set the selected Meter.
+     *
+     * @param id int
+     *   The Marker ID.
+     */
+    var setSelectedMarker = function(id) {
+      $scope.meters[id].select();
     };
 
-    // If the user is not authenticated, goto login state.
-    if (!Auth.isAuthenticated()) {
-      $state.go('login');
+    if ($stateParams.id) {
+      setSelectedMarker($stateParams.id);
     }
 
-    $scope.$on('$stateChangeSuccess', function(event, toState){
-      //Meter Principal dashboard view.
-      if (toState.name === 'dashboard.main') {
-        // Load meters.
-        Meter.get();
-      }
+    // Select marker in the Map.
+    $scope.$on('leafletDirectiveMarker.click', function(event, args) {
+      $state.go('dashboard.markers', {id: args.markerName});
     });
 
   });

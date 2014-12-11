@@ -54,7 +54,7 @@ install.sh
 .idea
 
 # Behat
-behat/vendor/
+behat/vendor
 behat.local.yml
 behat/bin
 behat/composer.phar

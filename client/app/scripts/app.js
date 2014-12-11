@@ -25,26 +25,34 @@ angular
     // For any unmatched url, redirect to '/'.
     $urlRouterProvider.otherwise('/dashboard');
 
-    // Now set up the states.
+    // Setup the states.
     $stateProvider
       .state('login', {
         url: '/',
         templateUrl: 'views/login.html'
       })
       .state('dashboard', {
+        templateUrl: 'views/dashboard/main.html',
         url: '/dashboard',
-        templateUrl: 'views/dashboard/dashboard.html',
+        resolve: {
+          meters: function(Meter) {
+            return Meter.get();
+          },
+          mapConfig: function(Map) {
+            return Map.getConfig();
+          },
+          categories: function(Category) {
+            return Category.get()
+          },
+          session: function(Session) {
+            return Session.get();
+          }
+        },
         controller: 'DashboardCtrl'
       })
-      .state('dashboard.login.failed', {
-        url: 'login',
-        templateUrl: 'views/partials/dashboard.login.html',
+      .state('dashboard.markers', {
+        url: '/marker/:id',
         controller: 'DashboardCtrl'
-      })
-      .state('dashboard.main', {
-        url: '/main',
-        templateUrl: 'views/dashboard/dashboard.main.html',
-        controller: 'MapCtrl'
       });
 
     // Define interceptors.

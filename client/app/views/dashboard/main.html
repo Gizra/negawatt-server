@@ -1,0 +1,35 @@
+<leaflet id="map" defaults="defaults" center="center" markers="meters"></leaflet>
+<div id="dashboard-controls">
+  <div class="dashboard-menu">
+
+    <span class="menu-buttom glyphicon glyphicon-th-list" aria-hidden="true"></span>
+    <h3 class="menu-title">NegaWatt</h3>
+    <span class="menu-separator"></span>
+    <div ng-controller="AccessCtrl" class="menu-account">
+      <img src="../../images/photo.png" alt=""/><span> שלום, קרן צורף </span> > <a ng-click="logout()">  התנתק </a>
+    </div>
+
+    <div class="menu-logo">
+      <img src="../../images/logo.png" alt=""/><h4>  קרית גת </h4>
+    </div>
+
+  </div>
+
+  <div class="dashboard-controls dashboard-controls-col dashboard-messages">
+    <h1>notifications</h1>
+  </div>
+
+  <div class="dashboard-controls dashboard-controls-col dashboard-categories">
+    <h1>categories</h1>
+  </div>
+
+  <div class="dashboard-controls dashboard-controls-col dashboard-details">
+    <h1>details</h1>
+  </div>
+
+  <div class="dashboard-controls dashboard-controls-row dashboard-usage">
+    <h1>usage</h1>
+  </div>
+</div>
+
+<div ui-view></div>

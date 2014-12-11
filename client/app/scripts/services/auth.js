@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Auth', function($injector, Utils, localStorageService, NegawattConfig) {
+  .service('Auth', function($injector, Utils, localStorageService, Config) {
     /**
      * Login by calling the Drupal REST server.
      *
@@ -14,7 +14,7 @@ angular.module('negawattClientApp')
       // Service 'Auth' can't depend on '$http', hence injecting it manually
       return $injector.get('$http')({
         method: 'GET',
-        url: NegawattConfig.backend + '/api/login-token',
+        url: Config.backend + '/api/login-token',
         headers: {
           'Authorization': 'Basic ' + Utils.Base64.encode(user.username + ':' + user.password)
         }
@@ -46,4 +46,5 @@ angular.module('negawattClientApp')
       $injector.get('$state').go('login');
       this.logout();
     };
+
   });

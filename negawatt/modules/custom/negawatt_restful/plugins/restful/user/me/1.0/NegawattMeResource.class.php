@@ -17,25 +17,6 @@ class NegawattMeResource extends \RestfulEntityBaseUser {
   );
 
   /**
-   * Overrides \RestfulEntityBaseUser::getPublicFields().
-   */
-  public function getPublicFields() {
-    $public_fields = parent::getPublicFields();
-
-    unset($public_fields['self']);
-
-
-    $public_fields['companies'] = array(
-      'property' => 'og_user_company',
-      'resource' => array(
-        'company' => 'companies',
-      ),
-    );
-
-    return $public_fields;
-  }
-
-  /**
    * Overrides \RestfulEntityBase::viewEntity().
    *
    * Always return the current user.
