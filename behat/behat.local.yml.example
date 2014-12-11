@@ -1,6 +1,5 @@
 default:
   extensions:
-    Drupal\DrupalExtension\Extension:
-      api_driver: "drupal"
+    Drupal\DrupalExtension:
       drupal:
         drupal_root: "/var/www/negawatt-server/www"

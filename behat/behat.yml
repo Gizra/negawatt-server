@@ -1,17 +1,17 @@
 default:
-  context:
-      parameters:
-        drupal_users:
-          carlos:
-            '1234'
-  paths:
-    features: 'features'
+  suites:
+    default:
+      contexts:
+        - Drupal\DrupalExtension\Context\MinkContext
+        - FeatureContext
   extensions:
-    Behat\MinkExtension\Extension:
-      base_url: 'http://localhost:9000/'
+    Behat\MinkExtension:
       goutte: ~
       selenium2: ~
-    Drupal\DrupalExtension\Extension:
+      base_url: "http://localhost:9000/"
+    Drupal\DrupalExtension:
       blackbox: ~
+      api_driver: "drupal"
+
 imports:
   - behat.local.yml
