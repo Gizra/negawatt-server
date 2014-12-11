@@ -1,46 +1,19 @@
 <?php
 
-use Behat\Behat\Exception\PendingException;
 use Drupal\DrupalExtension\Context\DrupalContext;
-use Behat\Behat\Context\Step\Given;
+use Behat\Behat\Context\SnippetAcceptingContext;
+use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
-use Guzzle\Service\Client;
-use Behat\Behat\Context\Step;
-use Behat\MinkExtension\Context\MinkContext;
+use Behat\Behat\Tester\Exception\PendingException;
 
-require 'vendor/autoload.php';
-
-class FeatureContext extends Drupal\DrupalExtension\Context\DrupalContext {
-
-  /**
-   * Initializes context.
-   *
-   * Every scenario gets its own context object.
-   *
-   * @param array $parameters.
-   *   Context parameters (set them up through behat.yml or behat.local.yml).
-   */
-  public function __construct(array $parameters) {
-    if (!empty($parameters['drupal_users'])) {
-      $this->drupal_users = $parameters['drupal_users'];
-    }
-  }
-
-  /**
-   * @When /^I visit the front page$/
-   */
-  public function iVisitTheFrontPage() {
-    $steps = array();
-
-    $steps[] = new Step\When('I am at "/"');
-    return $steps;
-  }
+class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
 
   /**
    * @When /^I login with user "([^"]*)"$/
    */
   public function iLoginWithUser($name) {
-    $password = $this->drupal_users[$name];
+    // @todo: Move password to YAML.
+    $password = '1234';
     $this->loginUser($name, $password);
   }
 
@@ -51,8 +24,10 @@ class FeatureContext extends Drupal\DrupalExtension\Context\DrupalContext {
    *   The user name.
    * @param $password
    *   The use password.
+   * @param bool $check_success
+   *   Determines if we should check for the login to be successful.
    */
-  protected function loginUser($name, $password) {
+  protected function loginUser($name, $password, $check_success = TRUE) {
     $this->getSession()->visit($this->locatePath('/#/login'));
     $element = $this->getSession()->getPage();
     $element->fillField('username', $name);
@@ -65,13 +40,18 @@ class FeatureContext extends Drupal\DrupalExtension\Context\DrupalContext {
 
     // Log in.
     $submit->click();
+
+    if ($check_success) {
+      // Wait for the dashboard's menu to load.
+      $this->iWaitForCssElement('#dashboard-menu', 'appear');
+    }
   }
 
   /**
    * @When /^I login with bad credentials$/
    */
   public function iLoginWithBadCredentials() {
-    return $this->loginUser('wrong-foo', 'wrong-bar');
+    return $this->loginUser('wrong-foo', 'wrong-bar', FALSE);
   }
 
   /**
@@ -95,8 +75,8 @@ class FeatureContext extends Drupal\DrupalExtension\Context\DrupalContext {
    * PhantomJs).
    */
   public function takeScreenshotAfterFailedStep($event) {
-    if ($event->getResult() != 4) {
-      // Step didn't fail.
+    if ($event->getTestResult()->isPassed()) {
+      // Not a failed step.
       return;
     }
 
@@ -149,7 +129,7 @@ class FeatureContext extends Drupal\DrupalExtension\Context\DrupalContext {
    *
    * @throws Exception
    */
-  private function waitFor($fn, $timeout = 10000) {
+  private function waitFor($fn, $timeout = 5000) {
     $start = microtime(true);
     $end = $start + $timeout / 1000.0;
     while (microtime(true) < $end) {
@@ -187,6 +167,4 @@ class FeatureContext extends Drupal\DrupalExtension\Context\DrupalContext {
       }
     });
   }
-
-
 }

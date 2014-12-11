@@ -80,7 +80,7 @@ script:
   - sleep 5
 
   # Run phantomJs.
-  - phantomjs --webdriver=4444 > ~/phantomjs.log 2>&1 &
+  - phantomjs --webdriver=4444 --debug=true > ~/phantomjs.log 2>&1 &
 
   # Run behat tests.
   - cd ../behat
