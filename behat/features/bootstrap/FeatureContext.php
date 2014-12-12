@@ -29,6 +29,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    */
   protected function loginUser($name, $password, $check_success = TRUE) {
     $this->getSession()->visit($this->locatePath('/#/login'));
+    $this->iWaitForCssElement('#login-form', 'appear');
     $element = $this->getSession()->getPage();
     $element->fillField('username', $name);
     $element->fillField('password', $password);
