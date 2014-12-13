@@ -26,6 +26,8 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    *   The use password.
    * @param bool $check_success
    *   Determines if we should check for the login to be successful.
+   *
+   * @throws \Exception
    */
   protected function loginUser($name, $password, $check_success = TRUE) {
     $this->getSession()->visit($this->locatePath('/#/login'));
