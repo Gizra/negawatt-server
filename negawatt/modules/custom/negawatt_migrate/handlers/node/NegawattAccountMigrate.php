@@ -14,6 +14,7 @@ class NegawattAccountMigrate extends NegawattMigration {
     array('field_account_type', 'Type'),
     array('field_location', 'Location'),
     array('field_geo_zoom', 'field_geo_zoom'),
+    array('field_logo', 'Logo'),
   );
 
   public function __construct() {
@@ -37,6 +38,14 @@ class NegawattAccountMigrate extends NegawattMigration {
     $this
       ->addFieldMapping('uid')
       ->defaultValue('1');
+
+    $this->addFieldMapping('field_logo', 'field_logo');
+    $this
+      ->addFieldMapping('field_logo:file_replace')
+      ->defaultValue(FILE_EXISTS_REPLACE);
+    $this
+      ->addFieldMapping('field_logo:source_dir')
+      ->defaultValue(drupal_get_path('module', 'negawatt_migrate') . '/images');
   }
 
   /**
