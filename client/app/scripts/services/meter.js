@@ -2,7 +2,6 @@
 
 angular.module('negawattClientApp')
   .service('Meter', function ($q, $http, $timeout, $state, $rootScope, Config, Marker) {
-    var Meter = this;
 
     // A private cache key.
     var cache = {
@@ -85,7 +84,7 @@ angular.module('negawattClientApp')
           meters[item.id].lat = parseFloat(item.location.lat);
           meters[item.id].lng = parseFloat(item.location.lng);
 
-          delete item['location'];
+          delete item.location;
         }
 
         // Extend meter with marker properties and methods.

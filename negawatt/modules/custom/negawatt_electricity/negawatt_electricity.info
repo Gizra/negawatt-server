@@ -14,6 +14,5 @@ files[] = includes/ElectricityMetadataController.php
 files[] = includes/ElectricityRawMetadataController.php
 files[] = includes/Electricity.php
 files[] = includes/ElectricityRaw.php
-
-; Tests
 files[] = tests/NegawattWebTestCase.test
+mtime = 1418024283

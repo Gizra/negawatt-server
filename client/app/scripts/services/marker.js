@@ -65,7 +65,7 @@ angular.module('negawattClientApp')
         return {
           lat: this.lat,
           lng: this.lng
-        }
+        };
       }
-    }
+    };
   });

@@ -132,47 +132,54 @@ body {
 
     }
 
-
   }
 
-  .dashboard-controls {
+  .dashboard-controls-container {
+    height: 100%;
+    width: 510px;
+    top: 70px;
+    bottom: 235px;
+    z-index: 5;
     position: fixed;
-    background-color: #ffffff;
-    z-index: 10;
-    margin: 2px;
 
-    &.dashboard-controls-col {
-      width: 250px;
-      margin-left: 3px;
-    }
+    .dashboard-controls {
+      position: fixed;
+      background-color: #ffffff;
+      z-index: 10;
+      margin: 2px;
 
-    &.dashboard-controls-row {
-      width: 505px;
-    }
+      &.dashboard-controls-col {
+        width: 250px;
+        margin-left: 3px;
+      }
 
-    &.dashboard-messages {
-      height: 545px;
-      right: 255px;
-      bottom: 235px;
-    }
+      &.dashboard-controls-row {
+        width: 505px;
+      }
 
-    &.dashboard-categories {
-      height: 360px;
-      right: 0;
-      bottom: 420px;
-    }
-    &.dashboard-details {
-      height: 180px;
-      right: 0;
-      bottom: 235px;
-    }
-    &.dashboard-usage {
-      height: 220px;
-      right: 0;
-      bottom: 10px;
+      &.dashboard-messages {
+        top: inherit;
+        bottom: 235px;
+        right: 255px;
+      }
+
+      &.dashboard-categories {
+        top: inherit;
+        right: 0;
+        bottom: 420px;
+      }
+      &.dashboard-details {
+        right: 0;
+        bottom: 235px;
+        height: 180px;
+      }
+      &.dashboard-usage {
+        height: 220px;
+        right: 0;
+        bottom: 10px;
+      }
     }
   }
-
 
 }
 

@@ -8,7 +8,7 @@
  * Controller of the negawattClientApp
  */
 angular.module('negawattClientApp')
-  .controller('CategoriesCtrl', function ($scope) {
+  .controller('CategoriesCtrl', function ($scope, $state, Auth) {
     // Configure, center the Map and Load he Meters.
     //$scope.categories = categoriesCollection;
 

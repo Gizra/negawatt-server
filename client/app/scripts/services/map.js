@@ -2,15 +2,9 @@
 
 angular.module('negawattClientApp')
   .service('Map', function (leafletData) {
-    var Map = this;
 
     // Initial center point.
-    var center =  {
-      lat: 31.6047,
-      lng: 34.7749,
-      zoom: 15,
-      autoDiscover: false
-    };
+    var cache = {};
 
     /**
      * Return extra configuration for the maps.
@@ -21,14 +15,27 @@ angular.module('negawattClientApp')
     this.getConfig = function() {
       return {
         zoomControlPosition: 'bottomleft'
-      }
+      };
+    };
+
+    /**
+     * Set geolocation values of the center of the map.
+     *
+     * @param center
+     *   Center object format for leaftlet map.
+     */
+    this.setCenter = function(center) {
+      cache.center = center;
     };
 
     /**
      * Return of the geolocation values of the center of the map.
+     *
+     * @return center
+     *   Center object.
      */
     this.getCenter = function() {
-      return center;
+      return cache.center;
     };
 
     /**
@@ -39,8 +46,8 @@ angular.module('negawattClientApp')
      */
     this.centerMapByMarker = function(marker) {
       leafletData.getMap().then(function(map){
-        map.setView(marker.getPosition())
+        map.setView(marker.getPosition());
       });
-    }
+    };
 
   });

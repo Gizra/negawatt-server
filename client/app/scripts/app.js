@@ -42,10 +42,10 @@ angular
             return Map.getConfig();
           },
           categories: function(Category) {
-            return Category.get()
+            return Category.get();
           },
-          session: function(Session) {
-            return Session.get();
+          profile: function(Profile) {
+            return Profile.get();
           }
         },
         controller: 'DashboardCtrl'

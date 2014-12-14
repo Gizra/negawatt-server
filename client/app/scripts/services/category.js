@@ -1,8 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Category', function ($q, $http, $timeout, $state, $rootScope, Config, Marker) {
-    var Category = this;
+  .service('Category', function ($q, $http, $timeout, $state, $rootScope, Config) {
 
     // A private cache key.
     var cache = {
