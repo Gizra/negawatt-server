@@ -1,39 +1,13 @@
 <leaflet id="map" defaults="defaults" center="center" markers="meters"></leaflet>
 <div id="dashboard-controls">
-  <div ui-view="menu" class="dashboard-menu">
-
-    <span class="menu-buttom glyphicon glyphicon-th-list" aria-hidden="true"></span>
-    <h3 class="menu-title">NegaWatt</h3>
-    <span class="menu-separator"></span>
-    <div ng-controller="AccessCtrl" class="menu-account">
-      <img src="../../images/photo.png" alt=""/><span> שלום,   {{ profile.user.label }} </span> <a ng-click="logout()">  התנתק </a>
-    </div>
-
-    <div class="menu-logo">
-      <img ng-src="{{ profile.account.logo.styles.large }}" alt=""/><h4> {{ profile.account.label }} </h4>
-    </div>
-
-  </div>
+  <ui-view name="menu" class="dashboard-menu"></ui-view>
 
   <div class="dashboard-controls-container">
-    <div class="dashboard-controls dashboard-controls-col dashboard-messages">
-      <h1>notifications</h1>
-    </div>
-
-    <div class="dashboard-controls dashboard-controls-col dashboard-categories">
-      <h1>categories</h1>
-    </div>
-
-    <div class="dashboard-controls dashboard-controls-col dashboard-details">
-      <h1>details</h1>
-    </div>
-
-    <div class="dashboard-controls dashboard-controls-row dashboard-usage">
-      <h1>usage</h1>
-    </div>
-
+    <ui-view name="messages" class="dashboard-controls dashboard-controls-col dashboard-messages"></ui-view>
+    <ui-view name="categories" class="dashboard-controls dashboard-controls-col dashboard-categories"></ui-view>
+    <ui-view name="details" class="dashboard-controls dashboard-controls-col dashboard-details"></ui-view>
+    <ui-view name="usage" class="dashboard-controls dashboard-controls-row dashboard-usage"></ui-view>
   </div>
 
 </div>
-
 <div ui-view></div>

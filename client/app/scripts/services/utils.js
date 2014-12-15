@@ -58,4 +58,22 @@ angular.module('negawattClientApp')
         return utftext;
       }
     };
+
+    /**
+     * Convert an array of objects to an object index by property id.
+     *
+     * @param list {*[]}
+     *  List of objects.
+     * @returns {*}
+     *  Object indexed with properties id of each item.
+     */
+    this.indexById = function(list) {
+      var indexed = {};
+      angular.forEach(list, function(item) {
+        this[item.id] = item;
+      }, indexed);
+
+      return indexed;
+    };
+
   });

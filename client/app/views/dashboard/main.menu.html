@@ -1,0 +1,11 @@
+<span class="menu-buttom glyphicon glyphicon-th-list" aria-hidden="true"></span>
+<h3 class="menu-title">NegaWatt</h3>
+<span class="menu-separator"></span>
+<div ng-controller="AccessCtrl" class="menu-account">
+  <img src="../../images/photo.png" alt=""/><span> שלום,   {{ profile.user.label }} </span> <a ng-click="logout()">  התנתק </a>
+</div>
+
+<div class="menu-logo">
+  <img ng-src="{{ profile.account.logo.styles.large }}" alt=""/><h4> {{ profile.account.label }} </h4>
+</div>
+<ui-view></ui-view>

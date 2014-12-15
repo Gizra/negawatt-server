@@ -147,6 +147,15 @@ body {
       background-color: #ffffff;
       z-index: 10;
       margin: 2px;
+      padding: 9px 0 9px;
+
+      .icon-options {
+        background-image: url('../images/option.png');
+        width: 26px;
+        height: 26px;
+        position: fixed;
+        z-index: 20;
+      }
 
       &.dashboard-controls-col {
         width: 250px;
@@ -167,12 +176,16 @@ body {
         top: inherit;
         right: 0;
         bottom: 420px;
+
+        overflow-y: scroll;
       }
+
       &.dashboard-details {
         right: 0;
         bottom: 235px;
         height: 180px;
       }
+
       &.dashboard-usage {
         height: 220px;
         right: 0;
@@ -184,8 +197,32 @@ body {
 }
 
 
-.error {
-  color: red;
+// Categories Style
+ol, ul {
+  padding-right: 10px;
+  list-style-type: none;
+}
+
+.icon-electricity {
+  background: url("../images/icon-electricity.png") 0 0 no-repeat;
+  width: 21px;
+  height: 21px;
+}
+
+.tree-level-top {
+  line-height: 30px;
+
+  a {
+    text-decoration: none;
+  }
+
+  span {
+    color: black;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 21px;
+    vertical-align: super;
+  }
 }
 
 // Login view.
@@ -202,4 +239,8 @@ body {
 
 .signin-body .container {
   width: 300px;
+}
+
+.error {
+  color: red;
 }

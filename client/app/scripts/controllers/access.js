@@ -20,7 +20,7 @@ angular.module('negawattClientApp')
     $scope.login = function(user) {
       $scope.loginButtonEnabled = false;
       Auth.login(user).then(function() {
-        $state.go('dashboard');
+        $state.go('dashboard.controls');
       }, function() {
         $state.go('login');
         $scope.loginButtonEnabled = true;

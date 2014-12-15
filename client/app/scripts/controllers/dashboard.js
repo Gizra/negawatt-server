@@ -36,7 +36,7 @@ angular.module('negawattClientApp')
 
     // Select marker in the Map.
     $scope.$on('leafletDirectiveMarker.click', function(event, args) {
-      $state.go('dashboard.markers', {id: args.markerName});
+      $state.go('dashboard.controls.markers', {id: args.markerName});
     });
 
   });

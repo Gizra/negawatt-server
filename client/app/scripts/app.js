@@ -32,8 +32,8 @@ angular
         templateUrl: 'views/login.html'
       })
       .state('dashboard', {
+        abstract: true,
         templateUrl: 'views/dashboard/main.html',
-        url: '/dashboard',
         resolve: {
           meters: function(Meter) {
             return Meter.get();
@@ -50,7 +50,27 @@ angular
         },
         controller: 'DashboardCtrl'
       })
-      .state('dashboard.markers', {
+      .state('dashboard.controls',  {
+        url: '/dashboard',
+        views: {
+          menu: {
+            templateUrl: 'views/dashboard/main.menu.html'
+          },
+          categories: {
+            templateUrl: 'views/dashboard/main.categories.html'
+          },
+          messages: {
+            templateUrl: 'views/dashboard/main.messages.html'
+          },
+          details: {
+            templateUrl: 'views/dashboard/main.details.html'
+          },
+          usage: {
+            templateUrl: 'views/dashboard/main.usage.html'
+          }
+        }
+      })
+      .state('dashboard.controls.markers', {
         url: '/marker/:id',
         controller: 'DashboardCtrl'
       });
