@@ -38,6 +38,9 @@ angular
           meters: function(Meter) {
             return Meter.get();
           },
+          messages: function(Message) {
+            return Message.get();
+          },
           mapConfig: function(Map) {
             return Map.getConfig();
           },

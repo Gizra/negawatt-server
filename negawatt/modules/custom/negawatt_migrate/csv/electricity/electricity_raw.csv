@@ -17,3 +17,4 @@ id,type,timestamp,rate_type,meter_nid,kwh,power_factor,kwh_L1,kwh_L2,kwh_L3,powe
 16,iec,2014-11-2,mid,meter1,130,0.95,,,,,,
 17,iec,2014-11-2,peak,meter1,140,0.95,,,,,,
 18,iec,2014-11-2 13:45,peak,meter2,140,0.95,,,,,,
+19,iec,2014-10-1 00:00,mid,meter1,1900,0.95,,,,,,

@@ -50,10 +50,6 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     $this->meterNode3 = $meter_node3;
     $this->meterNode4 = $meter_node4;
 
-    // @todo: Add frequency.
-    // $wrapper = entity_metadata_wrapper('node', $meter_node);
-    // $wrapper->field_meter_frequency-set();
-
     // Create the raw data.
     $values_info = array(
       array(
@@ -177,7 +173,6 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
       array('flat'));
 
     // Should be empty array.
-    // @todo: We have to decide if we return NULL here or some kind of an empty entity
     $this->assertTrue(is_array($result_entities) && empty($result_entities), 'process() with no data returns an empty array.');
 
     // Create a new normalized entity and check its validity.
@@ -193,7 +188,7 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
 
     $this->assertEqual($result_entity->type, \ElectricityNormalizerInterface::HOUR, '<b>Testing SATEC normalizer</b><br>Entity type is correct.');
     $this->assertEqual($result_entity->timestamp, strtotime('2014-6-12 15:00'), 'Processed timestamp is correct.');
-    $this->assertEqual($result_entity->meter_nid, 1, 'Meter nid is correct.');
+    $this->assertEqual($result_entity->meter_nid, $this->meterNode1->nid, 'Meter nid is correct.');
     $this->assertEqual($result_entity->avg_power, 600, 'Average power calculation was correct.');
     // Problem with float representation prevent the exact value of 0.9
     $this->assertTrue(abs($result_entity->min_power_factor - 0.90) < 0.0001, 'Min power-factor calculation was correct.');
@@ -224,7 +219,7 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     // Check that the values were updated after new entry.
     $this->assertEqual($result_entity->type, \ElectricityNormalizerInterface::HOUR, 'Entity type is correct.');
     $this->assertEqual($result_entity->timestamp, strtotime('2014-6-12 15:00'), 'Processed timestamp is correct.');
-    $this->assertEqual($result_entity->meter_nid, 1, 'Meter nid is correct.');
+    $this->assertEqual($result_entity->meter_nid, $this->meterNode1->nid, 'Meter nid is correct.');
     $this->assertEqual($result_entity->avg_power, 300, 'Average power calculation was correct.');
     $this->assertTrue(abs($result_entity->min_power_factor - 0.89) < 0.0001, 'Min power-factor calculation was correct.');
   }
@@ -286,7 +281,7 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
 
     $this->assertEqual($result_entity->type, \ElectricityNormalizerInterface::MONTH, 'Entity type is correct.');
     $this->assertEqual($result_entity->timestamp, strtotime('2014-2-1 00:00'), 'Processed timestamp is correct.');
-    $this->assertEqual($result_entity->meter_nid, 3, 'Meter nid is correct.');
+    $this->assertEqual($result_entity->meter_nid, $this->meterNode3->nid, 'Meter nid is correct.');
     $this->assertEqual($result_entity->avg_power, 2, 'Average power calculation was correct.');
     $this->assertTrue(abs($result_entity->min_power_factor - 0.97) < 0.0001, 'Min power-factor calculation was correct.');
 
@@ -315,7 +310,7 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     // Check that the values were updated after new entry.
     $this->assertEqual($result_entity->type, \ElectricityNormalizerInterface::MONTH, 'Entity type is correct.');
     $this->assertEqual($result_entity->timestamp, strtotime('2014-2-1 00:00'), 'Processed timestamp is correct.');
-    $this->assertEqual($result_entity->meter_nid, 3, 'Meter nid is correct.');
+    $this->assertEqual($result_entity->meter_nid, $this->meterNode3->nid, 'Meter nid is correct.');
     $this->assertEqual($result_entity->avg_power, 5, 'Average power calculation was correct.');
     $this->assertTrue(abs($result_entity->min_power_factor - 0.90) < 0.0001, 'Min power-factor calculation was correct.');
 
@@ -336,7 +331,7 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     // Check that the values for the 3rd entity are correct.
     $this->assertEqual($result_entities[2]->type, \ElectricityNormalizerInterface::MONTH, 'Entity type is correct.');
     $this->assertEqual($result_entities[2]->timestamp, strtotime('2014-2-1 00:00'), 'Processed timestamp is correct.');
-    $this->assertEqual($result_entities[2]->meter_nid, 3, 'Meter nid is correct.');
+    $this->assertEqual($result_entities[2]->meter_nid, $this->meterNode3->nid, 'Meter nid is correct.');
     $this->assertEqual($result_entities[2]->avg_power, 5, 'Average power calculation was correct.');
     $this->assertTrue(abs($result_entities[2]->min_power_factor - 0.90) < 0.0001, 'Min power-factor calculation was correct.');
 
@@ -353,7 +348,7 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     // Check that the values for the 3rd entity are correct.
     $this->assertEqual($result_entities[0]->type, \ElectricityNormalizerInterface::MONTH, 'Entity type is correct.');
     $this->assertEqual($result_entities[0]->timestamp, strtotime('2014-3-1 00:00'), 'Processed timestamp is correct.');
-    $this->assertEqual($result_entities[0]->meter_nid, 3, 'Meter nid is correct.');
+    $this->assertEqual($result_entities[0]->meter_nid, $this->meterNode3->nid, 'Meter nid is correct.');
     $this->assertEqual($result_entities[0]->rate_type, 'peak', 'Rate-type is correct.');
     $this->assertTrue(abs($result_entities[0]->avg_power - 2) < 0.01, 'Average power calculation was correct.');
     $this->assertTrue(abs($result_entities[0]->min_power_factor - 0.92) < 0.0001, 'Min power-factor calculation was correct.');
@@ -371,7 +366,7 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     // Check that the values for the 3rd entity are correct.
     $this->assertEqual($result_entities[2]->type, \ElectricityNormalizerInterface::MONTH, 'Entity type is correct.');
     $this->assertEqual($result_entities[2]->timestamp, strtotime('2014-2-1 00:00'), 'Processed timestamp is correct.');
-    $this->assertEqual($result_entities[2]->meter_nid, 3, 'Meter nid is correct.');
+    $this->assertEqual($result_entities[2]->meter_nid, $this->meterNode3->nid, 'Meter nid is correct.');
     $this->assertEqual($result_entities[2]->avg_power, 5, 'Average power calculation was correct.');
     $this->assertTrue(abs($result_entities[2]->min_power_factor - 0.90) < 0.0001, 'Min power-factor calculation was correct.');
 
@@ -396,7 +391,7 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     $this->assertEqual($result_entities[2]->type, \ElectricityNormalizerInterface::MONTH, 'Entity 2 type is correct.');
     $this->assertEqual($result_entities[2]->timestamp, strtotime('2014-2-1 00:00'), 'Entity 2 timestamp is correct.');
     $this->assertEqual($result_entities[2]->rate_type, 'peak', 'Entity 2 rate_type is correct.');
-    $this->assertEqual($result_entities[2]->meter_nid, 3, 'Entity 2 Meter nid is correct.');
+    $this->assertEqual($result_entities[2]->meter_nid, $this->meterNode3->nid, 'Entity 2 Meter nid is correct.');
     $this->assertEqual($result_entities[2]->avg_power, 4, 'Average power calculation was correct.');
     $this->assertTrue(abs($result_entities[2]->min_power_factor - 0.99) < 0.0001, 'Min power-factor calculation was correct.');
 

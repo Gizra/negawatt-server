@@ -2,7 +2,7 @@
 
 $plugin = array(
   'label' => t('Electricity data'),
-  'description' => t('Electricity consumption data from the contract or metters.'),
+  'description' => t('Electricity consumption data from the contract or meters.'),
   'resource' => 'electricity',
   'bundle' => 'electricity',
   'class' => 'NegawattElectricityResource',

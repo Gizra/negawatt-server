@@ -275,12 +275,32 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
       $processed_entities = array_merge($processed_entities, $result['entities']);
     }
 
+    // If not time period is given, use '-', otherwise use '<from-date>-<to-date>'.
+    $time_period_str = empty($time_period) ? '-' : ( date('Y-m-d H:i', $time_period[0]) . ',' . date('Y-m-d H:i', $time_period[1]) );
+
+    // Output a message when running under drush.
     if (drupal_is_cli()) {
       drush_log(' frequencies:[' . implode(',', $frequencies) . '], '
-        . 'time-period:[' . (empty($time_period)?'-':(date('Y-m-d H:i', $time_period[0]) . ',' . date('Y-m-d H:i', $time_period[1]))) . '], '
+        . 'time-period:[' . $time_period_str . '], '
         . 'rate-types:[' . implode(',', $rate_types) . ']. ');
       drush_log(' ' . count($processed_entities) . ' entities returned.');
     }
+
+    // Generate message
+    // Prepare arguments.
+    $arguments = array(
+      '!meter_url' => l($node->title, 'node/' . $node->nid),
+      '@frequencies' => implode(',', $frequencies),
+      '@rate_types' => $rate_types ? implode(',', $rate_types) : 'All',
+      '@time_period' => $time_period_str,
+      '@entities' => count($processed_entities),
+    );
+    // Prepare the message.
+    $user_account = user_load($node->uid);
+    $message = message_create('normalization_completed', array('arguments' => $arguments), $user_account);
+    $wrapper = entity_metadata_wrapper('message', $message);
+    $wrapper->field_meter->set($node);
+    $wrapper->save();
 
     // Save last processed node field.
     $wrapper = entity_metadata_wrapper('node', $this->getMeterNode());
@@ -309,7 +329,7 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
    *    [entities]: An array of the processed entities, or empty array if there were no values to process.
    *    [last_processed]: updated value for last processed node field. Caller should save this value.
    */
-  public function processByFrequency($frequency, $time_period = array(), $rate_types = array()) {
+  protected  function processByFrequency($frequency, $time_period = array(), $rate_types = array()) {
     $this->setFrequency($frequency);
 
     // Loop over all the time slices and process them one by one using processByTimePeriod
@@ -348,10 +368,17 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
 
     // Start from the last time-slice, and loop backwards for all time-slices in time period.
     $processed_entities = array();
+    $prev_period_entities = array();
     $timestamp_end = $time_period[1];
     do {
+      // Process the raw entities.
       $period_entities = $this->processByTimePeriod($timestamp_end, $rate_types);
+      // Analyze resulting entities for anomalies
+      $this->analyzeEntitiesFromConsecutiveTimeSlices($prev_period_entities, $period_entities);
+      $prev_period_entities = $period_entities;
+      // Collect all processed entities.
       $processed_entities = array_merge($processed_entities, $period_entities);
+      // Prepare for next time slice.
       $timestamp_end = $this->getTimestampBeginning();
     } while ($this->getTimeStampBeginning() >= $time_period[0]);
 
@@ -377,7 +404,7 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
    * @return array
    *    The processed entities, or empty array if there were no values to process.
    */
-  public function processByTimePeriod($timestamp_end, $rate_types = array()) {
+  protected  function processByTimePeriod($timestamp_end, $rate_types = array()) {
     $this->setTimestampEnd($timestamp_end);
 
     // Loop for given rate types and call processByRateType
@@ -488,7 +515,8 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
       ->condition('timestamp', $this->getTimestampBeginning(), '>=')
       ->condition('timestamp', $this->getTimestampEnd(), '<')
       ->condition('meter_nid', $this->getMeterNode()->nid)
-      ->condition('rate_type', $this->getRateType());
+      ->condition('rate_type', $this->getRateType())
+      ->orderBy('timestamp');
     return $query;
   }
 
@@ -511,4 +539,58 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
    *  Array of allowed frequencies for that meter type.
    */
   abstract protected function getAllowedFrequencies();
+
+  /**
+   * Analyze the processed entities from two consecutive time slices for anomalies.
+   *
+   * Currently checks for difference higher than +/- 10%.
+   * If an anomaly found, generate a warning message.
+   *
+   * @param $prev_entities
+   *  Array of entities from the previous time-slice.
+   * @param $entities
+   *  Array of entities from the current time-slice.
+   */
+  protected function analyzeEntitiesFromConsecutiveTimeSlices($prev_entities, $entities) {
+    if (!$entities || !$prev_entities) {
+      // No entities to compare, nothing to do.
+      return;
+    }
+
+    // Make field 'rate_type' the prev entities array key.
+    foreach ($prev_entities as $entity) {
+      $prev_entities[$entity->rate_type] = $entity;
+    }
+
+    // Go through rate types, and look for anomaly.
+    foreach ($entities as $entity) {
+      if (isset($prev_entities[$entity->rate_type])) {
+        $avg_power = $entity->avg_power;
+        $prev_avg_power = $prev_entities[$entity->rate_type]->avg_power;
+        $avg_power_diff = $avg_power / $prev_avg_power;
+        if ($avg_power_diff < 0.90 || $avg_power_diff > 1.10) {
+          // Avg power difference is suspicious, put an alert
+          $node = $this->getMeterNode();
+          // Get account node (OG audience reference).
+          $wrapper = entity_metadata_wrapper('node', $node);
+          // Prepare message arguments.
+          $arguments = array(
+            '!meter_url' => l($node->title, 'node/' . $node->nid),
+            '@location' => $wrapper->field_place_address->value() .', ' . $wrapper->field_place_locality->value(),
+            '@date' => date('Y-m-d H:i', $this->getTimestampBeginning()),
+            '@rate_type' => $this->getRateType(),
+            '@frequency' => $this->getFrequency(),
+            '@cur_avg_power' => $avg_power,
+            '@prev_avg_power' => $prev_avg_power,
+          );
+          // Generate the message.
+          $user_account = user_load($node->uid);
+          $message = message_create('anomalous_consumption', array('arguments' => $arguments), $user_account);
+          $wrapper = entity_metadata_wrapper('message', $message);
+          $wrapper->field_meter->set($node);
+          $wrapper->save();
+        }
+      }
+    }
+  }
 }

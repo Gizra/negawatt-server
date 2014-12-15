@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Negawatt messages feature.
+ */
+
+include_once 'negawatt_message.features.inc';

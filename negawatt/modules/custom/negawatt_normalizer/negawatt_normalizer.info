@@ -2,7 +2,9 @@ name = "Negawatt normalizer"
 package = "Negawatt"
 core = 7.x
 
+dependencies[] = negawatt_account
 dependencies[] = negawatt_electricity
+dependencies[] = negawatt_message
 
 ; Handlers
 files[] = plugins/electricity_normalizer/ElectricityNormalizerInterface.php
