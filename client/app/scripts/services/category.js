@@ -56,7 +56,6 @@ angular.module('negawattClientApp')
       $rootScope.$broadcast('negawatt.categories.changed');
     }
 
-
     /**
      * Convert the array of list of categories to and object of categories.
      *
@@ -68,11 +67,11 @@ angular.module('negawattClientApp')
      *   ID.
      */
     function prepareCategories(response) {
-      var categories = {},
-        list = angular.fromJson(response).data;
+      var categories = {};
+      var list = angular.fromJson(response).data;
 
-      // Save object of categories index by id.
-      cache.categoriesIndexById = Utils.indexById(list);
+      // Replace children category ID for the category it self.
+      list = updateCategoryWithChildren(list);
 
       // Get categories in tree model.
       categories = getCategoryTree(list);
@@ -87,11 +86,44 @@ angular.module('negawattClientApp')
      *    List of categories.
      *
      * @returns {*}
+     *
      */
     function getCategoryTree(list) {
+      var categoryTree;
       var categories = $filter('filter')(list, {depth: 0});
 
-      return Utils.indexById(categories);
+      // Category tree.
+      categoryTree = Utils.indexById(categories);
+
+      return categoryTree;
+    }
+
+    /**
+     * Check for each category in the list, if the category have children,
+     * replace the children's id with the category object.
+     *
+     * @param list - {*[]}
+     *    Categories only with children's ID.
+     *
+     * @returns list - [*]
+     *    Categories with children's object.
+     *
+     */
+    function updateCategoryWithChildren(list) {
+      // Save object of categories index by id.
+      var categoriesIndexById = Utils.indexById(list);
+      var categories = [];
+
+      // Replace children id for category object.
+      angular.forEach(list, function(item) {
+        angular.forEach(item.children, function(child, index) {
+          item.children[index] = categoriesIndexById[child];
+        });
+
+        this.push(item);
+      }, categories);
+
+      return list;
     }
 
 

@@ -209,21 +209,60 @@ ol, ul {
   height: 21px;
 }
 
-.tree-level-top {
-  line-height: 30px;
-
+.tree {
   a {
     text-decoration: none;
   }
 
-  span {
+  .tree-level-top {
     color: black;
-    font-size: 16px;
-    font-weight: bold;
-    line-height: 21px;
-    vertical-align: super;
+
+    span {
+      padding-right: 7px;
+      color: black;
+      font-size: 16px;
+      font-weight: bold;
+      line-height: 21px;
+    }
+  }
+
+  .tree-level-middle {
+    font-size: 13px;
+
+    a {
+      color: black;
+
+      span {
+        padding-right: 14px;
+      }
+
+      i {
+        font-size: 9px;
+      }
+    }
+
+  }
+
+  .tree-level-bottom {
+    font-size: 12px;
+
+    a {
+      color: #7DB5CD;
+
+      span {
+        padding-right: 14px;
+      }
+
+      i {
+        font-size: 7px;
+        padding-right: 15px;
+      }
+    }
+
   }
 }
+
+
 
 // Login view.
 #login-form {

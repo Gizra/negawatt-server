@@ -1,6 +1,6 @@
 <span><i class="icon-options"></i></span>
-<ul ui-tree data-drag-enabled="false" data-empty-place-holder-enabled="false">
-  <ol ui-tree-nodes="" ng-model="catgories">
+<ul ui-tree data-drag-enabled="false" data-empty-place-holder-enabled="false" class="tree">
+  <ol ui-tree-nodes="">
     <li ng-repeat="item in categories" ui-tree-node>
       <div ui-tree-handle class="tree-level-top">
         <a href="" ng-click="filterBy(item.id)">
@@ -8,20 +8,20 @@
           <span>{{item.label}}</span>
         </a>
       </div>
-      <ol ui-tree-nodes="" ng-model="item.children">
+      <ol ui-tree-nodes="" ng-model="item.children" >
         <li ng-repeat="subItem in item.children" ui-tree-node>
-          <div ui-tree-handle>
+          <div ui-tree-handle class="tree-level-middle">
             <a href="" ng-click="filterBy(item.id)">
-              <i class="ti-angle-double-right icon-has-ul"></i>
-              {{subItem.label}}
+              <i class="glyphicon glyphicon-chevron-left"></i>
+              <span>{{subItem.label}}</span>
             </a>
           </div>
           <ol ui-tree-nodes="" ng-model="subItem.children">
             <li ng-repeat="subItem2 in subItem.children" ui-tree-node>
-              <div ui-tree-handle>
+              <div ui-tree-handle class="tree-level-bottom">
                 <a href="" ng-click="filterBy(item.id)">
-                  <i class="ti-angle-double-right icon-has-ul"></i>
-                  {{subItem2.label}}
+                  <i class="glyphicon glyphicon-plus"></i>
+                  <span>{{subItem2.label}}</span>
                 </a>
               </div>
             </li>
