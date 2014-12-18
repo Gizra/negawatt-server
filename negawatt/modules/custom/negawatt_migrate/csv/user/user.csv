@@ -1,2 +1,2 @@
-Username,Password,Email
-carlos,1234,carlos@example.com
+Username,Password,Email,Group
+carlos,1234,carlos@example.com,account1

@@ -46,7 +46,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
 
     if ($check_success) {
       // Wait for the dashboard's menu to load.
-      $this->iWaitForCssElement('#dashboard-menu', 'appear');
+      $this->iWaitForCssElement('#dashboard-controls', 'appear');
     }
   }
 
@@ -71,6 +71,22 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     $xpath = $this->getSession()->getSelectorsHandler()->selectorToXpath('css', $element);
     $this->waitForXpathNode($xpath, $appear == 'appear');
   }
+
+   /**
+    * @When I am visit the url :arg1
+    */
+   public function iAmVisitTheUrl($arg1) {
+     $this->getSession()->visit($this->locatePath($arg1));
+   }
+
+  /**
+    * @Then I should see than a marker disappeared
+    */
+   public function iShouldSeeThanAMarkerDisappeared() {
+     $this->waitForXpathNode('//*[@id="map"]/div[2]/div[2]/div[3]/img[2]', FALSE);
+   }
+
+
   /**
    * @AfterStep
    *

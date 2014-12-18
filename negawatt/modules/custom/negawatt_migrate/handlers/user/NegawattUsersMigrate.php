@@ -14,10 +14,14 @@ class NegawattUsersMigrate extends Migration {
     array('name', 'Username'),
     array('pass', 'Password'),
     array('mail', 'Email'),
+    array('account', 'Group'),
   );
 
   public $entityType = 'user';
 
+  public $dependencies = array(
+    'NegawattAccountMigrate'
+  );
   public function __construct() {
     parent::__construct();
     $this->description = t('Import users from a CSV file.');
@@ -27,8 +31,8 @@ class NegawattUsersMigrate extends Migration {
     $this->addFieldMapping('mail', 'mail');
 
     $this
-      ->addFieldMapping('roles')
-      ->defaultValue(DRUPAL_AUTHENTICATED_RID);
+      ->addFieldMapping('og_user_node', 'account')
+      ->sourceMigration('NegawattAccountMigrate');
 
     $this
       ->addFieldMapping('status')
