@@ -1,20 +1,29 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Meter', function ($q, $http, $timeout, $state, $rootScope, Config, Marker) {
+  .service('Meter', function ($q, $http, $timeout, $filter, $state, $rootScope, Config, Marker, Utils) {
 
     // A private cache key.
-    var cache = {
-      selected: {} // Selected meter.
-    };
+    var cache = {};
 
     /**
-     * Return the promise with the meter list, from cache or the server.
+     * Return a promise with the meter list, from cache or the server.
      *
-     * @returns {*}
+     * @param categoryId
+     *  The category ID
+     *
+     * @returns {Promise}
+     *
      */
-    this.get = function() {
-      return $q.when(cache.data || getDataFromBackend());
+    this.get = function(categoryId) {
+      var gettingMeters = $q.when(cache.data || getDataFromBackend());
+
+      // Filtering in the case we have categoryId defined.
+      if (angular.isDefined(categoryId)) {
+        gettingMeters = gettingMetersFilterByCategory(gettingMeters, categoryId);
+      }
+
+      return gettingMeters;
     };
 
     /**
@@ -52,9 +61,8 @@ angular.module('negawattClientApp')
       $timeout(function() {
         cache.data = undefined;
       }, 60000);
-      $rootScope.$broadcast('negawatt.meters.changed');
+      $rootScope.$broadcast('negawattMetersChanged');
     }
-
 
     /**
      * Convert the array of list of meters to and object of meters.
@@ -94,6 +102,30 @@ angular.module('negawattClientApp')
       });
 
       return meters;
+    }
+
+    /**
+     * Return a promise with the meter list, from cache or the server. Filter by a category.
+     *
+     * @param gettingMeter - {$q.promise}
+     *    Promise with the list of meters.
+     *
+     * @param categoryId
+     *    The category ID.
+     *
+     * @returns {$q.promise}
+     *    Promise of a list of meters filter by category..
+     */
+    function gettingMetersFilterByCategory(gettingMeter, categoryId) {
+      var deferred = $q.defer();
+
+      // Filter meters with a category.
+      gettingMeter.then(function(meters) {
+        meters = Utils.indexById($filter('filter')(Utils.toArray(meters), {meter_categories: categoryId}, true));
+        deferred.resolve(meters);
+      });
+
+      return deferred.promise;
     }
 
 

@@ -56,6 +56,9 @@ angular
       .state('dashboard.controls',  {
         url: '/dashboard',
         views: {
+          map: {
+            templateUrl: 'views/dashboard/main.map.html'
+          },
           menu: {
             templateUrl: 'views/dashboard/main.menu.html'
           },
@@ -73,8 +76,24 @@ angular
           }
         }
       })
+      .state('dashboard.controls.categories', {
+        url: '/category/:categoryId',
+        views: {
+          // Replace the map that was set by the parent state, with markers filtered by the selected category.
+          'map@dashboard': {
+            templateUrl: 'views/dashboard/main.map.html',
+            controller: 'DashboardCtrl'
+          }
+        },
+        resolve: {
+          meters: function(Meter, $stateParams) {
+            return Meter.get($stateParams.categoryId);
+          }
+        }
+
+      })
       .state('dashboard.controls.markers', {
-        url: '/marker/:id',
+        url: '/marker/:markerId',
         controller: 'DashboardCtrl'
       });
 

@@ -42,6 +42,7 @@ angular.module('negawattClientApp')
      * Save categories in cache, and broadcast en event to inform that the categories data changed.
      *
      * @param data
+     *    Collection resulted from the request.
      */
     function setCache(data) {
       // Cache categories data.
@@ -57,7 +58,8 @@ angular.module('negawattClientApp')
     }
 
     /**
-     * Convert the array of list of categories to and object of categories.
+     * Convert the array of list of categories to and object of categories, order in structure
+     * tree (for the directive angular-ui-tree) and collection (used to index and select the categories).
      *
      * @param response - {string}
      *   Response of the request that contains the List of categories in an array.
@@ -70,17 +72,30 @@ angular.module('negawattClientApp')
       var categories = {};
       var list = angular.fromJson(response).data;
 
-      // Replace children category ID for the category it self.
-      list = updateCategoryWithChildren(list);
-
-      // Get categories in tree model.
-      categories = getCategoryTree(list);
+      // Categories indexed by id, used to easy select a categories.
+      categories.collection = getCategoryCollection(list);
+      // Get categories in tree model, used into the directive angular-ui-tree.
+      categories.tree = getCategoryTree(list);
 
       return categories;
     }
 
     /**
-     * Return a collection of categories in a tree view.
+     * Return categories in collection indexed by id.
+     *
+     * @param list
+     *    List of categories.
+     *
+     * @returns {*}
+     *    Categories collection indexed by id.
+     */
+    function getCategoryCollection(list) {
+
+      return Utils.indexById(list);
+    }
+
+    /**
+     * Return categories in a tree model.
      *
      * @param list
      *    List of categories.
@@ -89,30 +104,32 @@ angular.module('negawattClientApp')
      *
      */
     function getCategoryTree(list) {
-      var categoryTree;
       var categories = $filter('filter')(list, {depth: 0});
 
-      // Category tree.
-      categoryTree = Utils.indexById(categories);
+      var categoryTree;
+
+      // Replace children category ID for the category it self.
+      list = updateCategoryWithChildren(list);
+      categoryTree = $filter('filter')(list, {depth: 0});
+
 
       return categoryTree;
     }
 
     /**
-     * Check for each category in the list, if the category have children,
-     * replace the children's id with the category object.
+     * Replace the list of categories with children objects instead children id..
      *
      * @param list - {*[]}
-     *    Categories only with children's ID.
+     *    Categories, with children with ID.
      *
-     * @returns list - [*]
-     *    Categories with children's object.
+     * @returns Array - [*[]]
+     *    Categories, with children object.
      *
      */
     function updateCategoryWithChildren(list) {
       // Save object of categories index by id.
-      var categoriesIndexById = Utils.indexById(list);
-      var categories = [];
+      var categoriesIndexById = Utils.indexById(list),
+        categories = [];
 
       // Replace children id for category object.
       angular.forEach(list, function(item) {
@@ -125,7 +142,5 @@ angular.module('negawattClientApp')
 
       return list;
     }
-
-
 
   });

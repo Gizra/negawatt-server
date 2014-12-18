@@ -26,7 +26,7 @@ angular.module('negawattClientApp')
       var url = Config.backend + '/api/anomalous_consumption';
       $http({
         method: 'GET',
-        url: url,
+        url: url
       }).success(function(messages) {
         setCache(messages.data);
         deferred.resolve(cache.data);

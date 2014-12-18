@@ -64,6 +64,7 @@ angular.module('negawattClientApp')
      *
      * @param list {*[]}
      *  List of objects.
+     *
      * @returns {*}
      *  Object indexed with properties id of each item.
      */
@@ -75,5 +76,25 @@ angular.module('negawattClientApp')
 
       return indexed;
     };
+
+    /**
+     * Convert a object properties to an array.
+     *
+     * @param {*} object
+     *    The Object.
+     *
+     * @returns {Array}
+     *    Collection of the object's properties into an array.
+     */
+    this.toArray = function(object) {
+      var result = [];
+
+      angular.forEach(object, function(property){
+        this.push(property);
+      }, result);
+
+      return result;
+    };
+
 
   });

@@ -9,14 +9,13 @@
  */
 angular.module('negawattClientApp')
   .controller('DashboardCtrl', function ($scope, $state, $stateParams, Meter, Map, meters, messages, mapConfig, categories, profile) {
-
     // Set Map initial center position, according the account.
     Map.setCenter(profile.account.center);
 
     // Initialize values.
     $scope.defaults = mapConfig;
-    $scope.center = Map.getCenter();
     $scope.meters = meters;
+    $scope.center = Map.getCenter();
     $scope.messages = messages;
     $scope.categories = categories;
     $scope.profile = profile;
@@ -27,17 +26,17 @@ angular.module('negawattClientApp')
      * @param id int
      *   The Marker ID.
      */
-    var setSelectedMarker = function(id) {
+    function setSelectedMarker(id) {
       $scope.meters[id].select();
-    };
+    }
 
-    if ($stateParams.id) {
-      setSelectedMarker($stateParams.id);
+    if ($stateParams.markerId) {
+      setSelectedMarker($stateParams.markerId);
     }
 
     // Select marker in the Map.
     $scope.$on('leafletDirectiveMarker.click', function(event, args) {
-      $state.go('dashboard.controls.markers', {id: args.markerName});
+      $state.go('dashboard.controls.markers', {markerId: args.markerName});
     });
 
   });

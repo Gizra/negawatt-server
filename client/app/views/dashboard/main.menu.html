@@ -6,6 +6,9 @@
 </div>
 
 <div class="menu-logo">
-  <img ng-src="{{ profile.account.logo.styles.thumbnail }}" alt=""/><h4> {{ profile.account.label }} </h4>
+  <a ui-sref="dashboard.controls">
+    <img ng-src="{{ profile.account.logo.styles.thumbnail }}" alt=""/>
+    <h4> {{ profile.account.label }} </h4>
+  </a>
 </div>
 <ui-view></ui-view>
