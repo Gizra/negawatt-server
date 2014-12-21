@@ -14,7 +14,10 @@ angular.module('negawattClientApp')
      */
     this.getConfig = function() {
       return {
-        zoomControlPosition: 'bottomleft'
+        tileLayer: 'https://{s}.tiles.mapbox.com/v3/examples.map-i87786ca/{z}/{x}/{y}.png',
+        zoomControlPosition: 'bottomleft',
+        minZoom: 8,
+        maxZoom:16
       };
     };
 
