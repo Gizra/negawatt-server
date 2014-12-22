@@ -94,6 +94,13 @@ angular
       })
       .state('dashboard.controls.markers', {
         url: '/marker/:markerId',
+        views: {
+          // Replace the map that was set by the parent state, with markers filtered by the selected category.
+          'details@dashboard': {
+            templateUrl: 'views/dashboard/main.details.html',
+            controller: 'DashboardCtrl'
+          }
+        },
         controller: 'DashboardCtrl'
       });
 

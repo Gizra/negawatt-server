@@ -184,6 +184,11 @@ body {
         right: 0;
         bottom: 235px;
         height: 180px;
+
+        .meter-details {
+          padding-right: 30px;
+          padding-top: 10px;
+        }
       }
 
       &.dashboard-usage {

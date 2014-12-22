@@ -28,6 +28,8 @@ angular.module('negawattClientApp')
      */
     function setSelectedMarker(id) {
       $scope.meters[id].select();
+      // Use in the widget 'Details'.
+      $scope.meterSelected = $scope.meters[id];
     }
 
     if ($stateParams.markerId) {
