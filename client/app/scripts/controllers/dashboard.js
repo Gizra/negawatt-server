@@ -8,7 +8,7 @@
  * Controller of the negawattClientApp
  */
 angular.module('negawattClientApp')
-  .controller('DashboardCtrl', function ($scope, $state, $stateParams, Meter, Map, meters, messages, mapConfig, categories, profile) {
+  .controller('DashboardCtrl', function ($scope, $state, $stateParams, ChartUsage, Meter, Map, meters, messages, mapConfig, categories, profile, usage) {
     // Set Map initial center position, according the account.
     Map.setCenter(profile.account.center);
 
@@ -19,6 +19,7 @@ angular.module('negawattClientApp')
     $scope.messages = messages;
     $scope.categories = categories;
     $scope.profile = profile;
+    $scope.usageChart = usage;
 
     /**
      * Set the selected Meter.

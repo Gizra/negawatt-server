@@ -70,6 +70,7 @@ class ElectricityNormalizerIec extends \ElectricityNormalizerBase {
       return array(
         'min_power_factor' => $result->min_power_factor,
         'avg_power' => $avg_power,
+        'sum_kwh' => $energy_diff,
       );
     }
 

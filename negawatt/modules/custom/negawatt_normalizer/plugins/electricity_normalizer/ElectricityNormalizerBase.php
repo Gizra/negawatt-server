@@ -575,9 +575,11 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
           $wrapper = entity_metadata_wrapper('node', $node);
           // Prepare message arguments.
           $arguments = array(
-            '!meter_url' => l($node->title, 'node/' . $node->nid),
+            // @fixme: '#' in URL is replaced by '%23'
+            '!meter_url' => l($wrapper->field_place_description->value(), '#/dashboard/marker/' . $node->nid),
             '@location' => $wrapper->field_place_address->value() .', ' . $wrapper->field_place_locality->value(),
-            '@date' => date('Y-m-d H:i', $this->getTimestampBeginning()),
+            // @fixme: date format of 'Y-m' fits monthly data. Change according to frequency.
+            '@date' => date('Y-m', $this->getTimestampBeginning()),
             '@rate_type' => $this->getRateType(),
             '@frequency' => $this->getFrequency(),
             '@cur_avg_power' => $avg_power,

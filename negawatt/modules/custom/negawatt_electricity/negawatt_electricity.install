@@ -143,6 +143,12 @@ function negawatt_electricity_schema() {
         'not null' => TRUE,
         'default' => 0,
       ),
+      'sum_kwh' => array(
+        'description' => 'Total energy (kWh) at period.',
+        'type' => 'float',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
       'min_power_factor' => array(
         'description' => 'Minimal (worse) power factor at period.',
         'type' => 'float',

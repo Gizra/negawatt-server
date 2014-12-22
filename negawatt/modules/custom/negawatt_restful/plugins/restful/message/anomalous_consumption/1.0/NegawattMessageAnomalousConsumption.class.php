@@ -20,11 +20,19 @@ class NegawattMessageAnomalousConsumption extends \RestfulEntityBase {
       'property' => 'timestamp'
     );
 
-    // Message text, after placeholder replacement
+    // Message short-text, after placeholder replacement
     $public_fields['text'] = array(
-      'property' => 'text',
-      'callbacks' => array(
+      'property' => 'mid',
+      'process_callbacks' => array(
         array($this, 'getText'),
+      ),
+    );
+
+    // Message long-text, after placeholder replacement
+    $public_fields['long-text'] = array(
+      'property' => 'mid',
+      'process_callbacks' => array(
+        array($this, 'getLongText'),
       ),
     );
 
@@ -47,7 +55,7 @@ class NegawattMessageAnomalousConsumption extends \RestfulEntityBase {
   }
 
   /**
-   * Return message text.
+   * Return message text of partial 0 (short text).
    *
    * @param $id
    *  Message Id.
@@ -57,6 +65,20 @@ class NegawattMessageAnomalousConsumption extends \RestfulEntityBase {
    */
   protected function getText($id) {
     $message = message_load($id);
-    return $message->getText();
+    return $message->getText(LANGUAGE_NONE, array('partials' => TRUE, 'partial delta' => 0));
+  }
+
+  /**
+   * Return message text of partial 1 (long description).
+   *
+   * @param $id
+   *  Message Id.
+   *
+   * @return string
+   *  Message string after placeholder replacement.
+   */
+  protected function getLongText($id) {
+    $message = message_load($id);
+    return $message->getText(LANGUAGE_NONE, array('partials' => TRUE, 'partial delta' => 1));
   }
 }

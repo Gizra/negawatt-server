@@ -29,11 +29,25 @@ class NegawattElectricityResource extends RestfulEntityBase {
     );
 
     $public_fields['kwh'] = array(
+      'property' => 'sum_kwh'
+    );
+
+    $public_fields['avg_power'] = array(
       'property' => 'avg_power'
     );
 
     $public_fields['meter'] = array(
       'property' => 'meter_nid',
+      'resource' => array(
+        'satec_meter' => array(
+          'name' => 'meters',
+          'full_view' => FALSE,
+        ),
+        'iec_meter' => array(
+          'name' => 'meters',
+          'full_view' => FALSE,
+        ),
+      ),
     );
 
     $public_fields['min_power_factor'] = array(

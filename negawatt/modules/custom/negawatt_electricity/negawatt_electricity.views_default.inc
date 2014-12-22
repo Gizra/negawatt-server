@@ -57,6 +57,11 @@ function negawatt_electricity_views_default_views() {
   $handler->display->display_options['fields']['meter_nid']['alter']['text'] = 'Node [meter_nid]';
   $handler->display->display_options['fields']['meter_nid']['alter']['make_link'] = TRUE;
   $handler->display->display_options['fields']['meter_nid']['alter']['path'] = 'node/[meter_nid]';
+  /* Field: Electricity data: Sum_kwh */
+  $handler->display->display_options['fields']['sum_kwh']['id'] = 'sum_kwh';
+  $handler->display->display_options['fields']['sum_kwh']['table'] = 'negawatt_electricity_normalized';
+  $handler->display->display_options['fields']['sum_kwh']['field'] = 'sum_kwh';
+  $handler->display->display_options['fields']['sum_kwh']['precision'] = '0';
   /* Field: Electricity data: Avg_power */
   $handler->display->display_options['fields']['avg_power']['id'] = 'avg_power';
   $handler->display->display_options['fields']['avg_power']['table'] = 'negawatt_electricity_normalized';

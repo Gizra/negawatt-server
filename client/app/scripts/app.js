@@ -10,6 +10,7 @@
  */
 angular
   .module('negawattClientApp', [
+    'angularMoment',
     'ngAnimate',
     'ngCookies',
     'ngResource',
@@ -19,7 +20,9 @@ angular
     'leaflet-directive',
     'config',
     'LocalStorageModule',
-    'ui.router'
+    'ui.router',
+    'googlechart',
+    'angular-md5'
   ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
     // For any unmatched url, redirect to '/'.
@@ -49,6 +52,9 @@ angular
           },
           profile: function(Profile) {
             return Profile.get();
+          },
+          usage: function(ChartUsage) {
+            return ChartUsage.get();
           }
         },
         controller: 'DashboardCtrl'
@@ -72,7 +78,8 @@ angular
             templateUrl: 'views/dashboard/main.details.html'
           },
           usage: {
-            templateUrl: 'views/dashboard/main.usage.html'
+            templateUrl: 'views/dashboard/main.usage.html',
+            controller: 'DashboardCtrl'
           }
         }
       })
@@ -95,6 +102,16 @@ angular
       .state('dashboard.controls.markers', {
         url: '/marker/:markerId',
         views: {
+          // Update electricity-usage chart in 'usage' sub view
+          'usage@dashboard': {
+            templateUrl: 'views/dashboard/main.usage.html',
+            controller: 'DashboardCtrl',
+            resolve: {
+              usage: function(ChartUsage, $stateParams) {
+                return ChartUsage.get('meter', $stateParams.markerId);
+              }
+            }
+          },
           // Replace the map that was set by the parent state, with markers filtered by the selected category.
           'details@dashboard': {
             templateUrl: 'views/dashboard/main.details.html',

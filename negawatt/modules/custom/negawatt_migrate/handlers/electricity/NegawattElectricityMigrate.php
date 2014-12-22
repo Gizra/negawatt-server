@@ -16,6 +16,7 @@ class NegawattElectricityMigrate extends Migration {
     array('timestamp', 'timestamp'),
     array('rate_type', 'rate_type'),
     array('meter_nid', 'meter_nid'),
+    array('sum_khw', 'sum_kwh'),
     array('avg_power', 'avg_power'),
     array('min_power_factor', 'min_power_factor'),
   );
@@ -33,6 +34,7 @@ class NegawattElectricityMigrate extends Migration {
       'type',
       'timestamp',
       'rate_type',
+      'sum_kwh',
       'avg_power',
       'min_power_factor',
     );
