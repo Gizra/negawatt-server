@@ -1,5 +1,5 @@
 angular.module('config', [])
 
-.constant('Config', {backend:'http://gizra.github.io/negawatt-server'})
+.constant('Config', {backend:'dev-negawatt.pantheon.io'})
 
 ;
