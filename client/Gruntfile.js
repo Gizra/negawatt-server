@@ -411,6 +411,18 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.dist %>/scripts/config.js'
         }
       }
+    },
+
+    // Publish gh-pages.
+    buildcontrol: {
+      dist: {
+        options: {
+          remote: 'https://github.com/Gizra/negawatt-server.git',
+          branch: 'gh-pages',
+          commit: true,
+          push: true
+        }
+      }
     }
   });
 
@@ -459,7 +471,8 @@ module.exports = function (grunt) {
     'uglify',
     //'filerev',
     'usemin',
-    'htmlmin'
+    'htmlmin',
+    'buildcontrol'
   ]);
 
   grunt.registerTask('default', [
