@@ -1,5 +1,5 @@
 angular.module('config', [])
 
-.constant('Config', {backend:'dev-negawatt.pantheon.io'})
+.constant('Config', {backend:'http://dev-negawatt.pantheon.io'})
 
 ;
