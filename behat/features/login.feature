@@ -3,7 +3,7 @@ Feature: Login
   As an anonymous user
   We need to be able to login to the site and be authenticated
 
-  @javascript
+  @javascript @wip
   Scenario: Login with bad credentials
     Given I am an anonymous user
     When I login with bad credentials

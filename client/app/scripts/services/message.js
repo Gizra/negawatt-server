@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Message', function ($q, $http, $rootScope, $state, $timeout, Config) {
+  .service('Message', function ($q, $http, $rootScope, $state, $timeout, $sce, Config) {
 
     // A private cache key.
     var cache = {
@@ -26,13 +26,36 @@ angular.module('negawattClientApp')
       var url = Config.backend + '/api/anomalous_consumption';
       $http({
         method: 'GET',
-        url: url
+        url: url,
+        transformResponse: prepareMessages
       }).success(function(messages) {
-        setCache(messages.data);
+        setCache(messages);
         deferred.resolve(cache.data);
       });
 
       return deferred.promise;
+    }
+
+    /**
+     * Transform response fix a valid url.
+     *
+     * @param response
+     *    String with response data.
+     * @returns {*[]}
+     *
+     */
+    function prepareMessages(response) {
+      var messages = angular.fromJson(response).data;
+
+      // TODO: remove monkey patch after resolve issue:#210
+      angular.forEach(messages, function(message) {
+        message['long-text'] = message['long-text'].replace('%23', '#');
+        message['long-text'] = message['long-text'].replace('90', '50');
+        message['text'] = message['text'].replace('%23', '#');
+        message['text'] = message['text'].replace('90', '50');
+      });
+
+      return messages;
     }
 
     /**

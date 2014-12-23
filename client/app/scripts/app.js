@@ -89,15 +89,14 @@ angular
           // Replace the map that was set by the parent state, with markers filtered by the selected category.
           'map@dashboard': {
             templateUrl: 'views/dashboard/main.map.html',
+            resolve: {
+              meters: function(Meter, $stateParams) {
+                return Meter.get($stateParams.categoryId);
+              }
+            },
             controller: 'DashboardCtrl'
           }
-        },
-        resolve: {
-          meters: function(Meter, $stateParams) {
-            return Meter.get($stateParams.categoryId);
-          }
         }
-
       })
       .state('dashboard.controls.markers', {
         url: '/marker/:markerId',
@@ -105,7 +104,6 @@ angular
           // Update electricity-usage chart in 'usage' sub view
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
-            controller: 'DashboardCtrl',
             resolve: {
               usage: function(ChartUsage, $stateParams) {
                 return ChartUsage.get('meter', $stateParams.markerId);
@@ -117,8 +115,7 @@ angular
             templateUrl: 'views/dashboard/main.details.html',
             controller: 'DashboardCtrl'
           }
-        },
-        controller: 'DashboardCtrl'
+        }
       });
 
     // Define interceptors.
