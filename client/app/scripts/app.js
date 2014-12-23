@@ -101,6 +101,11 @@ angular
       .state('dashboard.controls.markers', {
         url: '/marker/:markerId',
         views: {
+          // Replace the map that was set by the parent state, with markers filtered by the selected category.
+          'details@dashboard': {
+            templateUrl: 'views/dashboard/main.details.html',
+            controller: 'DashboardCtrl'
+          },
           // Update electricity-usage chart in 'usage' sub view
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
@@ -108,12 +113,8 @@ angular
               usage: function(ChartUsage, $stateParams) {
                 return ChartUsage.get('meter', $stateParams.markerId);
               }
-            }
-          },
-          // Replace the map that was set by the parent state, with markers filtered by the selected category.
-          'details@dashboard': {
-            templateUrl: 'views/dashboard/main.details.html',
-            controller: 'DashboardCtrl'
+            },
+            controller: 'UsageCtrl'
           }
         }
       });
