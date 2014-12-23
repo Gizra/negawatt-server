@@ -49,10 +49,15 @@ angular.module('negawattClientApp')
 
       // TODO: remove monkey patch after resolve issue:#210
       angular.forEach(messages, function(message) {
-        message['long-text'] = message['long-text'].replace('%23', '#');
-        message['long-text'] = message['long-text'].replace('90', '50');
-        message['text'] = message['text'].replace('%23', '#');
-        message['text'] = message['text'].replace('90', '50');
+        if (angular.isDefined(message['long-text'])) {
+          message['long-text'] = message['long-text'].replace('%23', '#');
+          message['long-text'] = message['long-text'].replace('90', '50');
+        }
+
+        if (angular.isDefined(message['text'])) {
+          message['text'] = message['text'].replace('90', '50');
+          message['text'] = message['text'].replace('%23', '#');
+        }
       });
 
       return messages;
