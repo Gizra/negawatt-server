@@ -478,6 +478,10 @@ module.exports = function (grunt) {
     //'filerev',
     'usemin',
     'htmlmin',
+  ]);
+
+  grunt.registerTask('deploy', [
+    'build',
     'buildcontrol'
   ]);
 
