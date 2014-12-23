@@ -10,9 +10,10 @@ angular.module('negawattClientApp')
         iconUrl: '../images/marker-blue.png',
         shadowUrl: '../images/shadow.png',
         iconSize:     [40, 40], // size of the icon
-        shadowSize: [26, 26],
+        shadowSize:   [26, 26],
         iconAnchor:   [32, 30], // point of the icon which will correspond to marker's location
-        shadowAnchor: [25, 7]  // the same for the shadow
+        shadowAnchor: [25, 7],  // the same for the shadow
+        popupAnchor:  [-10, -25] // where the pop-up window will appear
       },
       selected: {
         iconUrl: '../images/marker-red.png',
@@ -20,7 +21,8 @@ angular.module('negawattClientApp')
         iconSize:     [40, 40], // size of the icon
         shadowSize: [26, 26],
         iconAnchor:   [32, 30], // point of the icon which will correspond to marker's location
-        shadowAnchor: [25, 7]  // the same for the shadow
+        shadowAnchor: [25, 7],  // the same for the shadow
+        popupAnchor:  [-10, -25] // where the pop-up window will appear
       }
     };
 

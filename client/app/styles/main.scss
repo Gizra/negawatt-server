@@ -157,6 +157,12 @@ body {
         z-index: 20;
       }
 
+      .title {
+        font-size: large;
+        font-weight: bold;
+        padding-right: 20px;
+      }
+
       &.dashboard-controls-col {
         width: 250px;
         margin-left: 3px;
@@ -170,6 +176,10 @@ body {
         top: inherit;
         bottom: 235px;
         right: 255px;
+        overflow-y: scroll;
+        p {
+          padding-right: 20px;
+        }
       }
 
       &.dashboard-categories {
@@ -264,6 +274,12 @@ ol, ul {
     }
 
   }
+}
+
+// Leaflet (marker) pop-up window
+.leaflet-popup-content {
+  direction: rtl;
+  text-align: right;
 }
 
 // Login view.

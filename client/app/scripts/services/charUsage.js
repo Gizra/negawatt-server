@@ -2,7 +2,8 @@
 
 angular.module('negawattClientApp')
   .service('ChartUsage', function ($q, Electricity, moment) {
-    var ChartUsage = this;
+    var ChartUsage = this,
+      usageChartParams = null;
 
     /**
      * Get the chart data and plot.
@@ -37,11 +38,25 @@ angular.module('negawattClientApp')
       Electricity.get(filters)
         .then(function(response) {
           // Reformat usage data for chart usage
-          var usageChartParams = ChartUsage.transformDataToDatasets(response);
-          deferred.resolve(usageChartParams);
+          ChartUsage.usageChartParams = ChartUsage.transformDataToDatasets(response);
+          deferred.resolve(ChartUsage.usageChartParams);
         });
 
       return deferred.promise;
+    }
+
+    this.meterSelected = function(meter) {
+      // Get meter name
+      var chartTitle = 'צריכת חשמל';
+      if (this.usageChartParams) {
+        chartTitle = meter.place_description + ', ' +
+        meter.place_address + ', ' +
+        meter.place_locality;
+
+        // Set chart title
+        this.usageChartParams.options.title = chartTitle;
+      }
+
     }
 
     /**
@@ -116,25 +131,25 @@ angular.module('negawattClientApp')
         },
         {
           'id': 'flat',
-          'label': 'Flat',
+          'label': 'אחיד',
           'type': 'number',
           'p': {}
         },
         {
           'id': 'peak',
-          'label': 'Peak',
+          'label': 'פסגה',
           'type': 'number',
           'p': {}
         },
         {
           'id': 'mid',
-          'label': 'Mid',
+          'label': 'גבע',
           'type': 'number',
           'p': {}
         },
         {
           'id': 'low',
-          'label': 'Low',
+          'label': 'שפל',
           'type': 'number',
           'p': {}
         },
@@ -163,13 +178,12 @@ angular.module('negawattClientApp')
           'rows': rows
         },
         'options': {
-          'title': 'Electricity Consumption',
           'isStacked': 'true',
           bar: { groupWidth: '75%' },
           'fill': 20,
           'displayExactValues': true,
           'vAxis': {
-            'title': 'קוט"ש',
+            'title': 'קוט"ש בחודש',
             'gridlines': {
               'count': 6
             }

@@ -29,7 +29,7 @@ class NegawattMessageAnomalousConsumption extends \RestfulEntityBase {
     );
 
     // Message long-text, after placeholder replacement
-    $public_fields['long-text'] = array(
+    $public_fields['longText'] = array(
       'property' => 'mid',
       'process_callbacks' => array(
         array($this, 'getLongText'),

@@ -95,10 +95,13 @@ angular.module('negawattClientApp')
           delete item.location;
         }
 
+        // Set meter tooltip
+        meters[item.id].message = item.place_description + '<br>' + item.place_address + '<br>' + item.place_locality;
+
         // Extend meter with marker properties and methods.
         angular.extend(meters[item.id], Marker);
         // Define default icon properties and methods, in order, to be changed later.
-         meters[item.id].unselect();
+        meters[item.id].unselect();
       });
 
       return meters;
