@@ -1,6 +1,6 @@
 <ui-view name="map"></ui-view>
 <div id="dashboard-controls">
-  <ui-view name="menu" class="dashboard-menu"></ui-view>
+  <ui-view ng-controller="MapCtrl" name="menu" class="dashboard-menu"></ui-view>
 
   <div class="dashboard-controls-container">
     <ui-view name="messages" class="dashboard-controls dashboard-controls-col dashboard-messages"></ui-view>
