@@ -2,9 +2,9 @@
 
 /**
  * @ngdoc function
- * @name negawattClientApp.controller:MainCtrl
+ * @name negawattClientApp.controller:UsageCtrl
  * @description
- * # DashboardCtrl
+ * # UsageCtrl
  * Controller of the negawattClientApp
  */
 angular.module('negawattClientApp')

@@ -45,16 +45,16 @@ angular.module('negawattClientApp')
     });
 
     /**
-     * Return true if have meters in the categories, otherwise false.
+     * Determine if a category has meters.
      *
      * @param category
      *    The category.
      *
      * @returns {boolean}
-     *     True is have meters.
+     *    True if category has meters.
      */
     $scope.hasMeters = function(category) {
-      return (category.meters > 0) ? true : false;
+      return !!category.meters;
     };
 
 

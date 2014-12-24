@@ -75,7 +75,13 @@ angular
             templateUrl: 'views/dashboard/main.messages.html'
           },
           details: {
-            templateUrl: 'views/dashboard/main.details.html'
+            templateUrl: 'views/dashboard/main.details.html',
+            resolve: {
+              categoriesChart: function(ChartCategories) {
+                return ChartCategories.get();
+              }
+            },
+            controller: 'CategoryCtrl'
           },
           usage: {
             templateUrl: 'views/dashboard/main.usage.html',
@@ -95,6 +101,16 @@ angular
               }
             },
             controller: 'DashboardCtrl'
+          },
+          // Replace the map that was set by the parent state, with markers filtered by the selected category.
+          'details@dashboard': {
+            templateUrl: 'views/dashboard/main.details.html',
+            resolve: {
+              categoriesChart: function(ChartCategories) {
+                return ChartCategories.get();
+              }
+            },
+            controller: 'CategoryCtrl'
           }
         }
       })

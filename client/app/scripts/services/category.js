@@ -2,7 +2,7 @@
 
 angular.module('negawattClientApp')
   .service('Category', function ($q, $http, $timeout, $state, $rootScope, $filter, Config, Utils, Meter) {
-    var Category = this;
+    var self = this;
 
     // A private cache key.
     var cache = {
@@ -30,8 +30,8 @@ angular.module('negawattClientApp')
      *    The promise with a list of categories.
      */
     function getDataFromBackend(meters) {
-      // Save temporal meter information.
-      Category.meters = Utils.toArray(meters);
+      // Save meters collection.
+      self.meters = Utils.toArray(meters);
 
       return getCategories();
     }
@@ -55,7 +55,6 @@ angular.module('negawattClientApp')
 
       return deferred.promise;
     }
-
 
     /**
      * Save categories in cache, and broadcast en event to inform that the categories data changed.
@@ -97,10 +96,10 @@ angular.module('negawattClientApp')
       }, list);
 
       // Index categories.
-      Category.indexed = Utils.indexById(list);
+      self.indexed = Utils.indexById(list);
 
       // Get the meter list categories.
-      metersCategories = ($filter('filter')(Category.meters, {meter_categories: '!!'}))
+      metersCategories = ($filter('filter')(self.meters, {meter_categories: '!!'}))
         .map(function(meter) {
           return meter.meter_categories;
         });
@@ -119,13 +118,13 @@ angular.module('negawattClientApp')
 
           // Increase amount of meters.
           angular.forEach(categoriesIds, function(itemsId) {
-            Category.indexed[itemsId].meters++;
+            self.indexed[itemsId].meters++;
           });
         });
       });
 
       // Return list
-      list = Utils.toArray(Category.indexed);
+      list = Utils.toArray(self.indexed);
 
       return list;
     }
@@ -148,8 +147,6 @@ angular.module('negawattClientApp')
       categories.collection = getCategoryCollection(list);
       // Get categories in tree model, used into the directive angular-ui-tree.
       categories.tree = getCategoryTree(list);
-
-      console.log('categories prepared');
 
       return categories;
     }
@@ -233,5 +230,4 @@ angular.module('negawattClientApp')
 
       return (angular.isDefined(parent)) ? parent.id : undefined;
     }
-
   });
