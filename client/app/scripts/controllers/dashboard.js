@@ -44,6 +44,19 @@ angular.module('negawattClientApp')
       $state.go('dashboard.controls.markers', {markerId: args.markerName});
     });
 
+    /**
+     * Return true if have meters in the categories, otherwise false.
+     *
+     * @param category
+     *    The category.
+     *
+     * @returns {boolean}
+     *     True is have meters.
+     */
+    $scope.hasMeters = function(category) {
+      return (category.meters > 0) ? true : false;
+    };
+
     var openedPopup = null;
 
     // Hover above marker in the Map -  open tooltip

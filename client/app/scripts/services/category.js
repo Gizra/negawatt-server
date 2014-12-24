@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Category', function ($q, $http, $timeout, $rootScope, $filter, Config, Utils) {
+  .service('Category', function ($q, $http, $timeout, $state, $rootScope, $filter, Config, Utils, Meter) {
+    var Category = this;
 
     // A private cache key.
     var cache = {
@@ -15,21 +16,38 @@ angular.module('negawattClientApp')
      * @returns {*}
      */
     this.get = function() {
-      return $q.when(cache.data || getDataFromBackend());
+      // It's necessary to get the meters info before the categories.
+      return $q.when(cache.data || $q.when(Meter.get(), getDataFromBackend));
     };
+
+    /**
+     * Prepare meters list to calculate meters for category, transform the categories to request.
+     *
+     * @param meters
+     *    The list of meters.
+     *
+     * @returns {$q.promise}
+     *    The promise with a list of categories.
+     */
+    function getDataFromBackend(meters) {
+      // Save temporal meter information.
+      Category.meters = Utils.toArray(meters);
+
+      return getCategories();
+    }
 
     /**
      * Return categories array from the server.
      *
      * @returns {$q.promise}
      */
-    function getDataFromBackend() {
+    function getCategories() {
       var deferred = $q.defer();
       var url = Config.backend + '/api/meter_categories';
       $http({
         method: 'GET',
         url: url,
-        transformResponse: prepareCategories
+        transformResponse: [addNumberOfMetersByCategory, prepareCategories]
       }).success(function(categories) {
         setCache(categories);
         deferred.resolve(cache.data);
@@ -37,6 +55,7 @@ angular.module('negawattClientApp')
 
       return deferred.promise;
     }
+
 
     /**
      * Save categories in cache, and broadcast en event to inform that the categories data changed.
@@ -58,24 +77,79 @@ angular.module('negawattClientApp')
     }
 
     /**
+     * Calculate the quantity of the meters for each category and quantity of meters in his children categories.
+     *
+     * @param response
+     *    List of categories.
+     * @returns {*}
+     *    List of categories with the quantity of meters in the category.
+     *
+     */
+    function addNumberOfMetersByCategory(response) {
+      // Get categories.
+      var metersCategories;
+      var list = angular.fromJson(response).data;
+      var indexed;
+
+      // Set meters in 0.
+      angular.forEach(list, function(category) {
+        category.meters = 0;
+      }, list);
+
+      // Index categories.
+      Category.indexed = Utils.indexById(list);
+
+      // Get the meter list categories.
+      metersCategories = ($filter('filter')(Category.meters, {meter_categories: '!!'}))
+        .map(function(meter) {
+          return meter.meter_categories;
+        });
+
+      angular.forEach(metersCategories, function(categories) {
+        angular.forEach(categories, function(categoryId) {
+          // Set active categories.
+          var categoriesIds = [parseInt(categoryId)] ;
+          // Discover parents id.
+          while (angular.isDefined(categoryId)) {
+            categoryId = getParentId(categoryId, list);
+            if (angular.isDefined(categoryId)) {
+              categoriesIds.push(categoryId);
+            }
+          }
+
+          // Increase amount of meters.
+          angular.forEach(categoriesIds, function(itemsId) {
+            Category.indexed[itemsId].meters++;
+          });
+        });
+      });
+
+      // Return list
+      list = Utils.toArray(Category.indexed);
+
+      return list;
+    }
+
+    /**
      * Convert the array of list of categories to and object of categories, order in structure
      * tree (for the directive angular-ui-tree) and collection (used to index and select the categories).
      *
-     * @param response - {string}
+     * @param list - {string}
      *   Response of the request that contains the List of categories in an array.
      *
      * @returns {*}
      *   List of categories organized in an object, each category keyed by its
      *   ID.
      */
-    function prepareCategories(response) {
+    function prepareCategories(list) {
       var categories = {};
-      var list = angular.fromJson(response).data;
 
       // Categories indexed by id, used to easy select a categories.
       categories.collection = getCategoryCollection(list);
       // Get categories in tree model, used into the directive angular-ui-tree.
       categories.tree = getCategoryTree(list);
+
+      console.log('categories prepared');
 
       return categories;
     }
@@ -112,7 +186,6 @@ angular.module('negawattClientApp')
       list = updateCategoryWithChildren(list);
       categoryTree = $filter('filter')(list, {depth: 0});
 
-
       return categoryTree;
     }
 
@@ -141,6 +214,24 @@ angular.module('negawattClientApp')
       }, categories);
 
       return list;
+    }
+
+    /**
+     * Return parent id, if the category id have parent.
+     *
+     * @param categoryId
+     *    Child category Id.
+     *
+     * @param categories
+     *    List of categories.
+     *
+     * @returns {*}
+     */
+    function getParentId(categoryId, categories) {
+      // Check if have parent.
+      var parent = ($filter('filter')(categories, {children: categoryId}, true)).pop();
+
+      return (angular.isDefined(parent)) ? parent.id : undefined;
     }
 
   });
