@@ -34,12 +34,14 @@ class NegawattIecMeterMigrate extends NegawattMigration {
 
     // Map fields that don't need extra definitions.
     $field_names = array(
+      'field_location',
       'field_contract_id',
       'field_place_locality',
       'field_place_address',
       'field_place_description',
       'field_meter_code',
       'field_meter_serial',
+      'country',
       'field_last_processed',
     );
     $this->addSimpleMappings($field_names);

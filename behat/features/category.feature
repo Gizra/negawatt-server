@@ -3,7 +3,7 @@ Feature: Category
   As user "carlos"
   We need to be able select a category and filter the markers.
 
-  @javascript
+  @javascript @wip
   Scenario: Show only meters of a selected category
     Given I login with user "carlos"
     When I visit '#/dashboard/category/13'

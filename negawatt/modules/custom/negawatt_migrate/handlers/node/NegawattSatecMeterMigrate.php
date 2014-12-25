@@ -35,6 +35,7 @@ class NegawattSatecMeterMigrate extends NegawattMigration {
 
     // Map fields that don't need extra definitions.
     $field_names = array(
+      'field_location',
       'field_mac_address',
       'field_place_locality',
       'field_place_address',
@@ -42,6 +43,7 @@ class NegawattSatecMeterMigrate extends NegawattMigration {
       'field_meter_ip_address',
       'field_meter_port',
       'field_meter_id',
+      'country',
       'field_last_processed',
     );
     $this->addSimpleMappings($field_names);

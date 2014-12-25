@@ -289,7 +289,6 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
     // Generate message
     // Prepare arguments.
     $arguments = array(
-      '!meter_url' => l($node->title, 'node/' . $node->nid),
       '@frequencies' => implode(',', $frequencies),
       '@rate_types' => $rate_types ? implode(',', $rate_types) : 'All',
       '@time_period' => $time_period_str,
@@ -570,14 +569,8 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
         $avg_power_diff = $avg_power / $prev_avg_power;
         if ($avg_power_diff < 0.90 || $avg_power_diff > 1.10) {
           // Avg power difference is suspicious, put an alert
-          $node = $this->getMeterNode();
-          // Get account node (OG audience reference).
-          $wrapper = entity_metadata_wrapper('node', $node);
           // Prepare message arguments.
           $arguments = array(
-            // @fixme: '#' in URL is replaced by '%23'
-            '!meter_url' => l($wrapper->field_place_description->value(), '#/dashboard/marker/' . $node->nid),
-            '@location' => $wrapper->field_place_address->value() .', ' . $wrapper->field_place_locality->value(),
             // @fixme: date format of 'Y-m' fits monthly data. Change according to frequency.
             '@date' => date('Y-m', $this->getTimestampBeginning()),
             '@rate_type' => $this->getRateType(),
@@ -586,6 +579,7 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
             '@prev_avg_power' => $prev_avg_power,
           );
           // Generate the message.
+          $node = $this->getMeterNode();
           $user_account = user_load($node->uid);
           $message = message_create('anomalous_consumption', array('arguments' => $arguments), $user_account);
           $wrapper = entity_metadata_wrapper('message', $message);

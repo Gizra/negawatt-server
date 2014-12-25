@@ -22,6 +22,7 @@ class NegawattAccountMigrate extends NegawattMigration {
 
     // Map fields that don't need extra definitions.
     $field_names = array(
+      'field_location',
       'field_account_type',
       'field_geo_zoom',
     );
@@ -56,8 +57,8 @@ class NegawattAccountMigrate extends NegawattMigration {
 
     $wrapper = entity_metadata_wrapper('node', $entity);
     $wrapper->field_location->set(array(
-        'lat' => $row->field_location[0],
-        'lng' => $row->field_location[1],
+        'lat' => +$row->field_location[0],
+        'lng' => +$row->field_location[1],
     ));
   }
 }

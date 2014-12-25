@@ -144,11 +144,11 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @param $fn
    *   A callable to invoke.
    * @param int $timeout
-   *   The timeout period. Defaults to 10 seconds.
+   *   The timeout period. Defaults to 60 seconds.
    *
    * @throws Exception
    */
-  private function waitFor($fn, $timeout = 5000) {
+  private function waitFor($fn, $timeout = 60000) {
     $start = microtime(true);
     $end = $start + $timeout / 1000.0;
     while (microtime(true) < $end) {

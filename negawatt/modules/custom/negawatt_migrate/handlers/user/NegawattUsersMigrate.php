@@ -40,7 +40,7 @@ class NegawattUsersMigrate extends Migration {
 
     // Create a map object for tracking the relationships between source rows
     $key = array(
-      'id' => array(
+      'name' => array(
         'type' => 'varchar',
         'length' => 255,
         'not null' => TRUE,

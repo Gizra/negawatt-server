@@ -18,7 +18,7 @@ abstract class NegawattMigration extends Migration {
     $this->description = t('Import @type - @bundle from CSV file.', array('@type' => $this->entityType, '@bundle' => $this->bundle));
 
     $this->csvColumns = !empty($this->csvColumns) ? $this->csvColumns : array();
-    $csv_cols[] = array('id', 'Unique ID');
+    $csv_cols[] = array('Unique_ID', 'Unique_ID');
 
     if ($this->entityType == 'node') {
       $this->addFieldMapping('title', 'title');
@@ -36,7 +36,7 @@ abstract class NegawattMigration extends Migration {
 
     // Create a map object for tracking the relationships between source rows
     $key = array(
-      'id' => array(
+      'Unique_ID' => array(
         'type' => 'varchar',
         'length' => 255,
         'not null' => TRUE,
@@ -46,9 +46,25 @@ abstract class NegawattMigration extends Migration {
     $destination_handler = new MigrateDestinationEntityAPI($this->entityType, $this->bundle);
     $this->map = new MigrateSQLMap($this->machineName, $key, $destination_handler->getKeySchema($this->entityType));
 
-    // Create a MigrateSource object. Allow using variable to set path other than default.
-    $csv_path = variable_get('negawatt_migrate_csv_path', drupal_get_path('module', 'negawatt_migrate') . '/csv');
-    $this->source = new MigrateSourceCSV($csv_path . '/' . $this->entityType . '/' . $this->bundle . '.csv', $this->csvColumns, array('header_rows' => 1));
+    // Create a MigrateSource object.
+    $sql_migrate = variable_get('negawatt_migrate_sql', FALSE);
+    if ($sql_migrate) {
+      // SQL migration.
+      // Prepare sql column names from csvColumns
+      $sqlColumns = array();
+      foreach ($this->csvColumns as $col) {
+        $sqlColumns[] = $col[0];
+      }
+      $query = db_select('_negawatt_' . $this->bundle . '_migrate', $this->bundle)
+        ->fields($this->bundle, $sqlColumns);
+      $this->source = new MigrateSourceSQL($query);
+    }
+    else {
+      // CSV migration.
+      // Allow using variable to set path other than default.
+      $csv_path = variable_get('negawatt_migrate_csv_path', drupal_get_path('module', 'negawatt_migrate') . '/csv');
+      $this->source = new MigrateSourceCSV($csv_path . '/' . $this->entityType . '/' . $this->bundle . '.csv', $this->csvColumns, array('header_rows' => 1));
+    }
     $this->destination = new $class_name($this->bundle, array('text_format' => 'filtered_html'));
   }
 }
