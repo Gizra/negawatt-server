@@ -108,14 +108,7 @@ angular.module('negawattClientApp')
         angular.forEach(categories, function(categoryId) {
           // Set active categories.
           var categoriesIds = [parseInt(categoryId)] ;
-          // Discover parents id.
-          while (angular.isDefined(categoryId)) {
-            categoryId = getParentId(categoryId, list);
-            if (angular.isDefined(categoryId)) {
-              categoriesIds.push(categoryId);
-            }
-          }
-
+          
           // Increase amount of meters.
           angular.forEach(categoriesIds, function(itemsId) {
             self.indexed[itemsId].meters++;

@@ -55,14 +55,30 @@ class NegawattIecMeterResource extends \NegawattEntityBaseNode {
 
     $public_fields['meter_categories'] = array(
       'property' => 'field_meter_category',
-      'resource' => array(
-        'meter_category' => array(
-          'name' => 'meter_categories',
-          'full_view' => FALSE,
-        ),
+      'process_callbacks' => array(
+        array($this, 'meterCategories'),
       ),
     );
+
     return $public_fields;
   }
 
+  /**
+   * Process callback, That look all the parent of the categories Id of the
+   * meter.
+   *
+   * @param id $value
+   *   The category id of the meter.
+   *
+   * @return array
+   *   A categories id array.
+   */
+  protected function meterCategories($value) {
+    $categories = taxonomy_get_parents_all($value[0]->tid);
+    foreach ($categories as $category) {
+      $categories_ids[] = $category->tid;
+    }
+
+    return $categories_ids;
+  }
 }
