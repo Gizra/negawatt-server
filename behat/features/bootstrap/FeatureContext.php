@@ -72,20 +72,13 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     $this->waitForXpathNode($xpath, $appear == 'appear');
   }
 
-   /**
-    * @When I am visit the url :arg1
-    */
-   public function iAmVisitTheUrl($arg1) {
-     $this->getSession()->visit($this->locatePath($arg1));
-   }
-
   /**
-    * @Then I should see than a marker disappeared
-    */
-   public function iShouldSeeThanAMarkerDisappeared() {
-     $this->waitForXpathNode('//*[@id="map"]/div[2]/div[2]/div[3]/img[2]', FALSE);
-   }
-
+   * @Then I should see than a marker disappeared
+   */
+  public function iShouldSeeThanAMarkerDisappeared() {
+    // Check if a meter of a different category disappear.
+    $this->waitForXpathNode('//*[@id="map"]/div[2]/div[2]/div[3]/img[2]', FALSE);
+  }
 
   /**
    * @AfterStep
@@ -106,6 +99,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
       print "Screenshot for failed step created in $file_name";
     }
   }
+
   /**
    * @BeforeScenario
    *
@@ -125,7 +119,6 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
       $entity->delete();
     }
   }
-
 
   /**
    * @BeforeScenario
@@ -185,5 +178,15 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
         throw $e;
       }
     });
+  }
+
+  /**
+   * @Then I should see all the markers
+   */
+  public function iShouldSeeAllTheMarkers() {
+    foreach (array(1, 2, 3) as $id) {
+      $xpath = '//*[@id="map"]/div[2]/div[2]/div[3]/img[' . $id . ']';
+      $this->waitForXpathNode($xpath, TRUE);
+    }
   }
 }
