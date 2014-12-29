@@ -10,7 +10,7 @@ angular.module('negawattClientApp')
      * Return a promise with the meter list, from cache or the server.
      *
      * @param categoryId
-     *  The category ID
+     *  The category ID.
      *
      * @returns {Promise}
      *

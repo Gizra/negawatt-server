@@ -6,33 +6,50 @@ angular.module('negawattClientApp')
     /**
      * Get the chart data and plot.
      *
+     * @param categoryId
+     *    The category Id.
      * @returns {$q.promise}
      */
-    this.get = function() {
+    this.get = function(categoryId) {
       var deferred = $q.defer();
 
-      Category.get().then(function(categories) {
-        deferred.resolve(transformDataToDatasets(categories.collection));
+      Category.get(categoryId).then(function(categories) {
+        deferred.resolve((categories.collection) ? transformDataToDatasets(categories.collection, categoryId) : {});
       });
 
       return deferred.promise;
     };
 
     /**
-     * Transform categories collection to Google Pie Chart object format.
+     * Return category object from the Google Pie Chart selection.
+     *
+     * @param selectedItem
+     *  Selected item from the chart.
+     *
+     * @param chartData
+     *  Actual Google Pie Chart data.
+     *
+     * @returns {Number}
+     *  The category id.
+     */
+    this.getCategoryIdSelected = function(selectedItem, chartData) {
+      return chartData.rows[selectedItem.row].c[2].id;
+    };
+
+    /**
+     * ransform categories collection to Google Pie Chart object format.
      *
      * @param {*} categories
      *   The categories collection.
-     * @param {Number} depth
-     *   Number indicate the relation parent-children between categories.
+     * @param {Number} categoryId
+     *   The category selected.
      *
      * @returns {*}
      *   Return categories collection for a depth, in the Google Pie Chart format.
      **/
-    function transformDataToDatasets(categories, depth) {
-      if (angular.isUndefined(depth)) {
-        depth = 0;
-      }
+    function transformDataToDatasets(categories, categoryId) {
+      var depth = getDepth(categories, categoryId);
+
       // Type of chart.
       categories.type = 'PieChart';
       // Data chart.
@@ -73,12 +90,36 @@ angular.module('negawattClientApp')
         this.push({
           c: [
             {v: row.label},
-            {v: row.meters}
+            {v: row.meters},
+            {id: row.id}
           ]
         });
       }, rows);
 
       return rows
+    }
+
+    /**
+     * Return the depth of the categories to show in the chart.
+     *
+     * @param categories
+     *  The categories list.
+     * @param categoryId
+     *  The category ID selected.
+     *
+     * @returns {number}
+     *  Number indicate the relation parent-children between categories.
+     *
+     */
+    function getDepth(categories, categoryId) {
+      var depth = 0;
+
+      // Get depth from one of the elements.
+      if (angular.isDefined(categoryId) && categories) {
+        depth = categories[0].depth;
+      }
+
+      return depth;
     }
 
   });

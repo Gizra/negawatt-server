@@ -106,8 +106,8 @@ angular
           'details@dashboard': {
             templateUrl: 'views/dashboard/main.details.html',
             resolve: {
-              categoriesChart: function(ChartCategories) {
-                return ChartCategories.get();
+              categoriesChart: function(ChartCategories, $stateParams) {
+                return ChartCategories.get($stateParams.categoryId);
               }
             },
             controller: 'CategoryCtrl'

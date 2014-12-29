@@ -57,5 +57,4 @@ angular.module('negawattClientApp')
       return !!category.meters;
     };
 
-
   });

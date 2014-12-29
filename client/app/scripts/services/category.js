@@ -13,11 +13,21 @@ angular.module('negawattClientApp')
     /**
      * Return the promise with the category list, from cache or the server.
      *
-     * @returns {*}
+     * @param categoryId
+     *  The categoryId.
+     *
+     * @returns {Promise}
      */
-    this.get = function() {
+    this.get = function(categoryId) {
+      var gettingCategories = $q.when(angular.copy(cache.data) || $q.when(Meter.get(), getDataFromBackend));
+
+      // Filtering in the case we have categoryId defined.
+      if (angular.isDefined(categoryId)) {
+        gettingCategories = gettingCategoriesFilterByCategory(gettingCategories, categoryId);
+      }
+
       // It's necessary to get the meters info before the categories.
-      return $q.when(cache.data || $q.when(Meter.get(), getDataFromBackend));
+      return gettingCategories;
     };
 
     /**
@@ -55,6 +65,31 @@ angular.module('negawattClientApp')
 
       return deferred.promise;
     }
+
+    /**
+     * Return a promise with the categories list, filter by category.
+     *
+     * @param gettingCategories
+     *  Promise with the list of categories.
+     * @param categoryId
+     *  The category ID.
+     * @returns {$q.promise}
+     *  Promise with the list of categories filtered.
+     */
+    function gettingCategoriesFilterByCategory(gettingCategories, categoryId) {
+      var deferred = $q.defer();
+
+      // Filter meters with a category.
+      gettingCategories.then(function(categories) {
+        // Necessary to separate the cache from the filtering.
+        categories = angular.copy(categories);
+        categories.collection = $filter('filter')(Utils.toArray(categories.collection), {id: parseInt(categoryId)}, true).pop().children;
+        deferred.resolve(categories);
+      });
+
+      return deferred.promise;
+    }
+
 
     /**
      * Save categories in cache, and broadcast en event to inform that the categories data changed.
@@ -223,4 +258,5 @@ angular.module('negawattClientApp')
 
       return (angular.isDefined(parent)) ? parent.id : undefined;
     }
+
   });
