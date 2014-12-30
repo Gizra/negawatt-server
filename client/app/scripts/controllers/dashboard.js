@@ -1,14 +1,7 @@
 'use strict';
 
-/**
- * @ngdoc function
- * @name negawattClientApp.controller:MainCtrl
- * @description
- * # DashboardCtrl
- * Controller of the negawattClientApp
- */
 angular.module('negawattClientApp')
-  .controller('DashboardCtrl', function ($scope, $state, $stateParams, ChartUsage, Meter, Map, meters, messages, mapConfig, categories, profile, usage) {
+  .controller('DashboardCtrl', function ($scope, $state, $stateParams, ChartUsage, Meter, Map, Category, meters, messages, mapConfig, categories, profile, usage) {
     // Set Map initial center position, according the account.
     Map.setCenter(profile.account.center);
 
@@ -35,13 +28,28 @@ angular.module('negawattClientApp')
       ChartUsage.meterSelected($scope.meterSelected);
     }
 
+    /**
+     * Set the selected category.
+     *
+     * @param id int
+     *   The Category ID.
+     */
+    function setSelectedCategory(id) {
+      Category.setSelectedCategory($stateParams.categoryId);
+    }
+
     if ($stateParams.markerId) {
       setSelectedMarker($stateParams.markerId);
     }
 
+    if ($stateParams.categoryId) {
+      setSelectedCategory($stateParams.markerId);
+    }
+
+
     // Select marker in the Map.
     $scope.$on('leafletDirectiveMarker.click', function(event, args) {
-      $state.go('dashboard.controls.markers', {markerId: args.markerName});
+      $state.go('dashboard.controls.markers', {markerId: args.markerName, categoryId: Category.getSelectedCategory()});
     });
 
     /**

@@ -5,10 +5,11 @@ angular.module('negawattClientApp')
     var self = this;
 
     // A private cache key.
-    var cache = {
-      // Selected category.
-      selected: {}
-    };
+    var cache = {};
+
+    // Selected category.
+    var selected;
+
 
     /**
      * Return the promise with the category list, from cache or the server.
@@ -23,12 +24,40 @@ angular.module('negawattClientApp')
 
       // Filtering in the case we have categoryId defined.
       if (angular.isDefined(categoryId)) {
+        // Set Activity Category.
         gettingCategories = gettingCategoriesFilterByCategory(gettingCategories, categoryId);
       }
 
       // It's necessary to get the meters info before the categories.
       return gettingCategories;
     };
+
+    /**
+     * Returns the selected category ID.
+     *
+     * @returns {*}
+     */
+    this.getSelectedCategory = function() {
+      return selected;
+    };
+
+    /**
+     * Save the selected category ID.
+     *
+     * @param categoryId
+     *    The category Id.
+     */
+    this.setSelectedCategory = function(categoryId) {
+      selected = categoryId;
+    };
+
+    /**
+     * Reset the selected category ID.
+     */
+    this.resetSelectedCategory = function() {
+      selected = undefined;
+    };
+
 
     /**
      * Prepare meters list to calculate meters for category, transform the categories to request.
@@ -141,9 +170,9 @@ angular.module('negawattClientApp')
 
       angular.forEach(metersCategories, function(categories) {
         angular.forEach(categories, function(categoryId) {
-          // Set active categories.
+          // Set selected categories.
           var categoriesIds = [parseInt(categoryId)] ;
-          
+
           // Increase amount of meters.
           angular.forEach(categoriesIds, function(itemsId) {
             self.indexed[itemsId].meters++;

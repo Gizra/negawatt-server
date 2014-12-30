@@ -102,7 +102,7 @@ angular
             },
             controller: 'DashboardCtrl'
           },
-          // Replace the map that was set by the parent state, with markers filtered by the selected category.
+          // Update chart of categories.
           'details@dashboard': {
             templateUrl: 'views/dashboard/main.details.html',
             resolve: {
@@ -115,14 +115,24 @@ angular
         }
       })
       .state('dashboard.controls.markers', {
-        url: '/marker/:markerId',
+        url: '/marker/:markerId?categoryId',
         views: {
-          // Replace the map that was set by the parent state, with markers filtered by the selected category.
+          // Update the meter detailed data.
           'details@dashboard': {
             templateUrl: 'views/dashboard/main.details.html',
-            controller: 'DashboardCtrl'
+            controller: 'DetailsCtrl'
           },
           // Update electricity-usage chart in 'usage' sub view
+          'map@dashboard': {
+            templateUrl: 'views/dashboard/main.map.html',
+            resolve: {
+              meters: function(Meter, Category, $stateParams) {
+                return Meter.get($stateParams.categoryId);
+              }
+            },
+            controller: 'DashboardCtrl'
+          },
+          // Replace the map that was set by the parent state, with markers filtered by the selected category.
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {

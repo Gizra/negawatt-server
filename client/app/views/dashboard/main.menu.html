@@ -5,8 +5,8 @@
   <img src="../../images/photo.png" alt=""/><span> שלום,   {{ profile.user.label }} </span> <a ng-click="logout()">  התנתק </a>
 </div>
 
-<div class="menu-logo">
-  <a ui-sref="dashboard.controls">
+<div class="menu-logo" ng-controller="MenuCtrl">
+  <a ng-click="reloadDashboard()" href="">
     <img ng-src="{{ profile.account.logo.styles.thumbnail }}" alt=""/>
     <h4> {{ profile.account.label }} </h4>
   </a>
