@@ -85,6 +85,11 @@ angular
           },
           usage: {
             templateUrl: 'views/dashboard/main.usage.html',
+            resolve: {
+              meters: function(meters) {
+                return meters;
+              }
+            },
             controller: 'DashboardCtrl'
           }
         }

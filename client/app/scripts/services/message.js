@@ -27,7 +27,8 @@ angular.module('negawattClientApp')
       $http({
         method: 'GET',
         url: url,
-        transformResponse: prepareMessages
+        transformResponse: prepareMessages,
+        cache: true
       }).success(function(messages) {
         setCache(messages);
         deferred.resolve(cache.data);

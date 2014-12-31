@@ -17,7 +17,8 @@ angular.module('negawattClientApp')
         url: Config.backend + '/api/login-token',
         headers: {
           'Authorization': 'Basic ' + Utils.Base64.encode(user.username + ':' + user.password)
-        }
+        },
+        cache: true
       });
     };
 

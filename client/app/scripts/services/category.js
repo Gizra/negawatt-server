@@ -86,7 +86,8 @@ angular.module('negawattClientApp')
       $http({
         method: 'GET',
         url: url,
-        transformResponse: [addNumberOfMetersByCategory, prepareCategories]
+        transformResponse: [addNumberOfMetersByCategory, prepareCategories],
+        cache: true
       }).success(function(categories) {
         setCache(categories);
         deferred.resolve(cache.data);
