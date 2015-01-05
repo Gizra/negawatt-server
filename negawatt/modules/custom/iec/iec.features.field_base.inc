@@ -72,6 +72,35 @@ function iec_field_default_field_bases() {
     'type' => 'datestamp',
   );
 
+  // Exported field_base: 'field_max_frequency'
+  $field_bases['field_max_frequency'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_max_frequency',
+    'foreign keys' => array(
+      'format' => array(
+        'columns' => array(
+          'format' => 'format',
+        ),
+        'table' => 'filter_format',
+      ),
+    ),
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'text',
+    'settings' => array(
+      'max_length' => 32,
+    ),
+    'translatable' => 0,
+    'type' => 'text',
+  );
+
   // Exported field_base: 'field_meter_category'
   $field_bases['field_meter_category'] = array(
     'active' => 1,

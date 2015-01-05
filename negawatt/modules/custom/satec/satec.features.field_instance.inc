@@ -201,6 +201,46 @@ function satec_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-satec_meter-field_max_frequency'
+  $field_instances['node-satec_meter-field_max_frequency'] = array(
+    'bundle' => 'satec_meter',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 12,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_max_frequency',
+    'label' => 'Max frequency',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 32,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 15,
+    ),
+  );
+
   // Exported field_instance: 'node-satec_meter-field_meter_category'
   $field_instances['node-satec_meter-field_meter_category'] = array(
     'bundle' => 'satec_meter',
@@ -598,6 +638,7 @@ function satec_field_default_field_instances() {
   t('Last processed');
   t('Location');
   t('MAC address');
+  t('Max frequency');
   t('Meter Category');
   t('Meter IP address');
   t('Meter id');

@@ -205,6 +205,46 @@ function iec_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-iec_meter-field_max_frequency'
+  $field_instances['node-iec_meter-field_max_frequency'] = array(
+    'bundle' => 'iec_meter',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Maximum sampling frequency for the meter.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 15,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_max_frequency',
+    'label' => 'Max frequency',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 32,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 14,
+    ),
+  );
+
   // Exported field_instance: 'node-iec_meter-field_meter_category'
   $field_instances['node-iec_meter-field_meter_category'] = array(
     'bundle' => 'iec_meter',
@@ -618,6 +658,8 @@ function iec_field_default_field_instances() {
   t('In case we have 2 or more meters for a single contract, this field will reference to the \'main\' contract ID, which is used to save the electricity Data.');
   t('Last processed');
   t('Location');
+  t('Max frequency');
+  t('Maximum sampling frequency for the meter.');
   t('Meter Category');
   t('Meter Code');
   t('Meter Serial');

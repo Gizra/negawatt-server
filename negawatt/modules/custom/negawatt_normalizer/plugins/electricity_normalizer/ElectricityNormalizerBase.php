@@ -126,6 +126,20 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
   }
 
   /**
+   * Set the timestamp of the beginning of time period to normalize.
+   *
+   * USE WITH CAUTION: Usually you shouldn't call this function since
+   * getTimestampBeginning() automatically calculates beginning timestamp
+   * from end timestamp and frequency.
+   *
+   * @param int $timestamp
+   *    The timestamp of the beginning of the time period to normalize.
+   */
+  public function setTimestampBeginning($timestamp) {
+    $this->timestampBeginning = $timestamp;
+  }
+
+  /**
    * Get the timestamp of the beginning of time period to normalize.
    *
    * If not set yet, will calculate the timestamp from the timestampEnd and frequency.
@@ -144,6 +158,15 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
     $date_time = new \DateTime();
     $date_info = getdate($this->timestampEnd);
     switch ($this->frequency) {
+      case \ElectricityNormalizerInterface::MINUTE: {
+        // Take the beginning of the previous minute.
+        $date_time->setDate($date_info['year'], $date_info['mon'], $date_info['mday']);
+        $hour = $date_info['hours'];
+        // If timestampEnd was set to exact minute, go back one minute, otherwise go back to beginning of minute.
+        $minute = (0 == $date_info['seconds']) ? ($date_info['minutes'] - 1) : $date_info['minutes'];
+        $date_time->setTime($hour, $minute, 0);
+        break;
+      }
       case \ElectricityNormalizerInterface::HOUR: {
         // Take the beginning of the previous hour.
         $date_time->setDate($date_info['year'], $date_info['mon'], $date_info['mday']);
@@ -156,15 +179,6 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
         // Take the beginning of the previous day.
         // If timestampEnd was set to beginning of the day, go back one day, otherwise go back to beginning of the day.
         $day = (0 == $date_info['hours'] && 0 == $date_info['minutes'] && 0 == $date_info['seconds']) ? ($date_info['mday'] - 1) : $date_info['mday'];
-        $date_time->setDate($date_info['year'], $date_info['mon'], $day);
-        $date_time->setTime(0, 0, 0);
-        break;
-      }
-      case \ElectricityNormalizerInterface::WEEK: {
-        // Take the beginning of the previous Sunday.
-        // If timestampEnd was set to beginning of the week, go back one week, otherwise go back to beginning of the week.
-        $day = (0 == $date_info['hours'] && 0 == $date_info['minutes'] && 0 == $date_info['seconds'] && 0 == $date_info['wday']) ?
-          ($date_info['mday'] - $date_info['wday']) : ($date_info['mday'] - 7);
         $date_time->setDate($date_info['year'], $date_info['mon'], $day);
         $date_time->setTime(0, 0, 0);
         break;
@@ -190,13 +204,26 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
       default: {
         // Not a known frequency.
         $params = array(
-          '@freq' => $this->frequency,
+          '@freq' => $this->frequencyToStr($this->frequency),
         );
         throw new \Exception(format_string('Cannot figure out frequency "@freq".', $params));
       }
     }
     $this->timestampBeginning = $date_time->getTimestamp();
     return $date_time->getTimestamp();
+  }
+
+  /**
+   * Set the timestamp of the beginning and end of time period to normalize.
+   *
+   * @param int $fromTimestamp
+   *    The timestamp of the beginning of the time period to normalize.
+   * @param int $toTimestamp
+   *    The timestamp of the ebd of the time period to normalize.
+   */
+  public function setTimestampFromTo($fromTimestamp, $toTimestamp) {
+    $this->timestampBeginning = $fromTimestamp;
+    $this->timestampEnd = $toTimestamp;
   }
 
   /**
@@ -220,7 +247,8 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
   }
 
   /**
-   * Return the timestamp of the oldest raw-electricity entity.
+   * Return the timestamp of the oldest raw-electricity entity for the
+   * current meter node.
    *
    * If no entity exists, return "now".
    */
@@ -244,6 +272,32 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
   }
 
   /**
+   * The timestamp of raw entity before a given time.
+   *
+   * The function returns the timestamp of the raw-electricity entity for
+   * the current meter node, that is immediately before a given timestamp.
+   *
+   * @param $timestamp
+   *    Reference timestamp.
+   *
+   * @return null | int
+   *    The timestamp of the entity before, or NULL.
+   */
+  protected function getTimestampOfRawEntitiesBefore($timestamp) {
+    $query = db_select('negawatt_electricity', 'ne')
+      ->fields('ne', array('timestamp'))
+      ->condition('timestamp', $timestamp, '<')
+      ->condition('meter_nid', $this->getMeterNode()->nid)
+      ->range(0, 1)
+      ->orderBy('timestamp', 'DESC');
+
+    $result = $query->execute()->fetchObject();
+
+    // If result is false, return NULL, otherwise return timestamp
+    return $result ? $result->timestamp : NULL;
+  }
+
+  /**
    * Class constructor.
    *
    * @param array $plugin
@@ -256,7 +310,7 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
   /**
    * {@inheritdoc}
    */
-  public function process($node, $frequencies = array(), $time_period = array(), $rate_types = array()) {
+  public function process($node, $frequencies = array(), $time_period = array()) {
     $this->setMeterNode($node);
 
     // If frequencies was empty, set it to all allowed frequencies.
@@ -264,14 +318,15 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
     $frequencies = empty($frequencies) ? $allowed_frequencies : $frequencies;
 
     $processed_entities = array();
+    $last_processed = 0;
     foreach ($frequencies as $frequency) {
       // Make sure frequency is valid.
       if (!in_array($frequency, $allowed_frequencies)) {
-        throw new \Exception(format_string('Frequency "@freq" not in allowed frequencies.', array('@freq' => $frequency)));
+        throw new \Exception(format_string('Frequency "@freq" not in allowed frequencies.', array('@freq' => $this->frequencyToStr($frequency))));
       }
 
-      $result = $this->processByFrequency($frequency, $time_period, $rate_types);
-      $last_processed = $result['last_processed'];
+      $result = $this->processByFrequency($frequency, $time_period);
+      $last_processed = max($last_processed, $result['last_processed']);
       $processed_entities = array_merge($processed_entities, $result['entities']);
     }
 
@@ -280,17 +335,15 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
 
     // Output a message when running under drush.
     if (drupal_is_cli()) {
-      drush_log(' frequencies:[' . implode(',', $frequencies) . '], '
-        . 'time-period:[' . $time_period_str . '], '
-        . 'rate-types:[' . implode(',', $rate_types) . ']. ');
+      drush_log(' frequencies:[' . implode(',', $this->frequencyToStr($frequencies)) . '], '
+        . 'time-period:[' . $time_period_str . ']. ');
       drush_log(' ' . count($processed_entities) . ' entities returned.');
     }
 
     // Generate message
     // Prepare arguments.
     $arguments = array(
-      '@frequencies' => implode(',', $frequencies),
-      '@rate_types' => $rate_types ? implode(',', $rate_types) : 'All',
+      '@frequencies' => implode(',', $this->frequencyToStr($frequencies)),
       '@time_period' => $time_period_str,
       '@entities' => count($processed_entities),
     );
@@ -320,15 +373,13 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
    *    The frequency to use (HOUR, MONTH, etc.).
    * @param array $time_period
    *    Beginning and end of time period to process.
-   * @param array $rate_types
-   *    The rate-types to use (peak, mid, etc.).
    * @throws Exception if $time_period end is before beginning.
    *
    * @return array
    *    [entities]: An array of the processed entities, or empty array if there were no values to process.
    *    [last_processed]: updated value for last processed node field. Caller should save this value.
    */
-  protected  function processByFrequency($frequency, $time_period = array(), $rate_types = array()) {
+  protected function processByFrequency($frequency, $time_period = array()) {
     $this->setFrequency($frequency);
 
     // Loop over all the time slices and process them one by one using processByTimePeriod
@@ -365,107 +416,129 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
       throw new \Exception(format_string('Time period ends before it starts: beginning = @begin, end = @end.', $params));
     }
 
+    $meter_max_frequency = $wrapper->field_max_frequency->value();
+    if ($frequency == $meter_max_frequency) {
+      // Processing max frequency, analyze data from raw data.
+      return $this->processRawEntities($time_period[0], $time_period[1]);
+    }
+
+    // Processing lower frequency, analyze data from normalized data.
+    return $this->processNormalizedEntities($time_period[0], $time_period[1]);
+  }
+
+  /**
+   * Process raw entities in a certain time frame.
+   *
+   * Process raw-electricity entities between two given timestamps, and create
+   * the appropriate normalized-electricity entities.
+   *
+   * @param $fromTimestamp
+   *    Timestamp of beginning of time frame.
+   * @param $toTimestamp
+   *    Timestamp of end of time frame.
+   * @return array
+   *    The processed normalized entities.
+   */
+  protected function processRawEntities($fromTimestamp, $toTimestamp) {
+
+    // NOTE: call setTimestampEnd BEFORE setTimestampBeginning, since
+    // setTimestampEnd resets timestampBeginning!
+    $this->setTimestampFromTo($fromTimestamp, $toTimestamp);
+
+    // Get data from raw table.
+    $query = $this->getQueryForNormalizedValues();
+    $query->fields('ne', array('timestamp', 'rate_type', 'kwh', 'power_factor'));
+    $result = $query->execute();
+
+    // Loop for received rate types and save the entities.
+    $processed_entities = array();
+    $prev_timestamp = $this->getTimestampOfRawEntitiesBefore($fromTimestamp);
+    $prev_time_delta = NULL;
+    foreach ($result as $record) {
+      $this->setRateType($record->rate_type);
+      $this->setTimestampBeginning($record->timestamp);
+
+      // Prepare entity of normalized values.
+      $wrapper = entity_metadata_wrapper('electricity', $this->getNormalizedEntity());
+
+      // Calc time difference from last entity, in hours.
+      $time_delta = $prev_timestamp ? ($record->timestamp - $prev_timestamp) / 60.0 / 60 : NULL;
+      // When having several raw entities from the same time period (with
+      // different rate types), delta time will be set to 0 on the 2nd iteration
+      // and on. In such cases, use previous delta time.
+      $time_delta = $time_delta ? $time_delta : $prev_time_delta;
+
+      // Save timestamp and time-delta for next iteration.
+      $prev_timestamp = $record->timestamp;
+      $prev_time_delta = $time_delta;
+
+      // Calc average power at entity's time slice.
+      // Note that for the first raw entity for a meter, there's no 'previous
+      // timestamp', hence the average power cannot be computed.
+      $avg_power = $time_delta ? ($record->kwh / $time_delta) : NULL;
+
+      // Set entity's values.
+      $wrapper->min_power_factor->set($record->power_factor);
+      $wrapper->avg_power->set($avg_power);
+      $wrapper->sum_kwh->set($record->kwh);
+
+      $wrapper->save();
+      $processed_entities[] = $wrapper->value();
+    }
+
+    // The last timestamp processed is the timestamp of last iteration
+    $last_processed = $prev_timestamp;
+
+    return array(
+      'entities' => $processed_entities,
+      'last_processed' => $last_processed,
+    );
+  }
+
+  /**
+   * Process normalized entities in a certain time frame.
+   *
+   * Process normalized-electricity entities of a high frequency (e.g. minutes),
+   * between two given timestamps, to create the appropriate normalized-electricity
+   * entities in a lower frequency (e.g. hours).
+   *
+   * @param $fromTimestamp
+   *    Timestamp of beginning of time frame.
+   * @param $toTimestamp
+   *    Timestamp of end of time frame.
+   * @return array
+   *    The processed normalized entities.
+   * @throws Exception
+   */
+  protected function processNormalizedEntities($fromTimestamp, $toTimestamp) {
     // Start from the last time-slice, and loop backwards for all time-slices in time period.
     $processed_entities = array();
     $prev_period_entities = array();
-    $timestamp_end = $time_period[1];
+    $this->setTimestampEnd($toTimestamp);
     do {
-      // Process the raw entities.
-      $period_entities = $this->processByTimePeriod($timestamp_end, $rate_types);
+      // Process the normalized entities.
+      $period_entities = $this->calcNormalizedValues();
       // Analyze resulting entities for anomalies
       $this->analyzeEntitiesFromConsecutiveTimeSlices($prev_period_entities, $period_entities);
       $prev_period_entities = $period_entities;
       // Collect all processed entities.
       $processed_entities = array_merge($processed_entities, $period_entities);
       // Prepare for next time slice.
-      $timestamp_end = $this->getTimestampBeginning();
-    } while ($this->getTimeStampBeginning() >= $time_period[0]);
+      $this->setTimestampEnd($this->getTimestampBeginning());
+    } while ($this->getTimeStampBeginning() > $fromTimestamp);
 
     // Return processed entities and last processed timestamp (the end of time period).
+
+    // The last timestamp processed is one time frame after the timestamp of last iteration
+    $last_processed = NULL;
+    if (count($processed_entities)) {
+      $last_processed = $processed_entities[0]->timestamp;
+    }
+
     return array(
       'entities' => $processed_entities,
-      'last_processed' => $time_period[1]
+      'last_processed' => $last_processed,
     );
-  }
-
-  /**
-   * Process entities according to given time period.
-   *
-   * Called from ElectricityNormalizerBase::processByFrequency() for each time slice.
-   * $timestamp_end and $rate_types should have been set by caller.
-   *
-   * @param $timestamp_end
-   *    The timestamp of the end of the time slice.
-   * @param array $rate_types
-   *    The rate-types to use (peak, mid, etc.).
-   * @throws Exception in case of unknown rate-type.
-   *
-   * @return array
-   *    The processed entities, or empty array if there were no values to process.
-   */
-  protected  function processByTimePeriod($timestamp_end, $rate_types = array()) {
-    $this->setTimestampEnd($timestamp_end);
-
-    // Loop for given rate types and call processByRateType
-
-    $allowed_rate_types = array(
-      \ElectricityNormalizerBase::PEAK,
-      \ElectricityNormalizerBase::MID,
-      \ElectricityNormalizerBase::LOW,
-      \ElectricityNormalizerBase::FLAT,
-    );
-
-    // If $rate_types was empty, set it to all allowed rate-types.
-    $rate_types = empty($rate_types) ? $allowed_rate_types : $rate_types;
-
-    $processed_entities = array();
-    foreach ($rate_types as $rate_type) {
-      // Make sure $rate_type is valid.
-      if (!in_array($rate_type, $allowed_rate_types)) {
-        throw new \Exception(format_string('Rate type "@rate" not in allowed rate types.', array('@type' => $rate_type)));
-      }
-
-      $processed_entity = $this->processByRateType($rate_type);
-      if (!$processed_entity) {
-        // Don't put into result a NULL entity.
-        continue;
-      }
-      $processed_entities[] = $processed_entity;
-    }
-
-    return $processed_entities;
-  }
-
-  /**
-   * Do the actual processing of one entity.
-   *
-   * Called from ElectricityNormalizerBase::process() for each rate-type.
-   * Node, frequency, and timestampEnd should all have been set by caller.
-   *
-   * @param string $rate_type
-   *    The rate-type to use (peak, mid, etc.).
-   *
-   * @return stdClass
-   *    The processed entity, or NULL if there were no values to process.
-   */
-  protected function processByRateType($rate_type) {
-    $this->setRateType($rate_type);
-
-    // Try to normalize values.
-    if (!$values = $this->getNormalizedValues()) {
-      // No values to normalize.
-      return;
-    }
-
-    // Prepare entity of normalized values.
-    $wrapper = entity_metadata_wrapper('electricity', $this->getNormalizedEntity());
-
-    foreach ($values as $property => $value) {
-      $wrapper->{$property}->set($value);
-    }
-
-    $wrapper->save();
-    return $wrapper->value();
   }
 
   /**
@@ -506,15 +579,17 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
   /**
    * Prepare a standard query for the raw table.
    *
-   * @return SelectQuery
-   *    The Query object.
+   * @param string $table_name
+   *    The name of the table to be queried. Defaults to 'negawatt_electricity'.
+   * @return SelectQuery The Query object.
+   * The Query object.
+   * @throws Exception
    */
-  protected function getQueryForNormalizedValues() {
-    $query = db_select('negawatt_electricity', 'ne')
+  protected function getQueryForNormalizedValues($table_name = 'negawatt_electricity') {
+    $query = db_select($table_name, 'ne')
       ->condition('timestamp', $this->getTimestampBeginning(), '>=')
       ->condition('timestamp', $this->getTimestampEnd(), '<')
       ->condition('meter_nid', $this->getMeterNode()->nid)
-      ->condition('rate_type', $this->getRateType())
       ->orderBy('timestamp');
     return $query;
   }
@@ -530,14 +605,92 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
   abstract protected function getNormalizedValues();
 
   /**
+   * Calculate normalized entities.
+   *
+   * Calculate the normalized electricity entities for frequency that is NOT
+   * the maximal allowed frequency for that meter. For example, if the max
+   * frequency is HOUR, than this function will calc the DAILY normalized
+   * entities from the hourly ones.
+   *
+   * @return array.
+   *    The normalized entities, or empty array if there were none.
+   * @throws Exception
+   */
+  protected function calcNormalizedValues() {
+    // Find the frequency to look for. Take one frequency level higher than
+    // current, e.g. if current frequency is MONTH, take DAY.
+    $required_frequency = $this->getFrequency() + 1;
+
+    // Make sure there are entities in the required range
+    $count = $this->getQueryForNormalizedValues('negawatt_electricity_normalized')
+      ->condition('type', $required_frequency)
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    if (!$count) {
+      // Nothing to do.
+      return array();
+    }
+
+    // Get data from normalized table.
+    $query = $this->getQueryForNormalizedValues('negawatt_electricity_normalized');
+    $query->fields('ne', array('rate_type'));
+    $query->condition('type', $required_frequency);
+    $query->addExpression('SUM(sum_kwh)', 'sum_kwh');
+    $query->addExpression('AVG(avg_power)', 'avg_power');
+    $query->addExpression('MIN(min_power_factor)', 'min_power_factor');
+    $query->groupBy('rate_type');
+
+    $result = $query->execute();
+
+    // Loop for received rate types and save the entities.
+    $processed_entities = array();
+    foreach ($result as $record) {
+      $this->setRateType($record->rate_type);
+
+      // Prepare entity of normalized values.
+      $wrapper = entity_metadata_wrapper('electricity', $this->getNormalizedEntity());
+
+      // Set entity's values.
+      $wrapper->min_power_factor->set($record->min_power_factor);
+      $wrapper->avg_power->set($record->avg_power);
+      $wrapper->sum_kwh->set($record->sum_kwh);
+
+      $wrapper->save();
+      $processed_entities[] = $wrapper->value();
+    }
+
+    return $processed_entities;
+  }
+
+  /**
    * The set of allowed frequencies for that meter type.
    *
-   * Must be supplied by child object.
+   * for ElectricityNormalizerIec object - use MONTH and up.
    *
    * @return array
    *  Array of allowed frequencies for that meter type.
    */
-  abstract protected function getAllowedFrequencies();
+  protected function getAllowedFrequencies() {
+    // Look for maximum frequency allowed for current meter
+    $wrapper = entity_metadata_wrapper('node', $this->getMeterNode());
+    $return = array();
+    // Prepare an array with allowed frequencies. Use fallthrough.
+    switch ($wrapper->field_max_frequency->value()) {
+      case \ElectricityNormalizerInterface::MINUTE:
+        array_push($return, \ElectricityNormalizerInterface::MINUTE);
+      case \ElectricityNormalizerInterface::HOUR:
+        array_push($return, \ElectricityNormalizerInterface::HOUR);
+      case \ElectricityNormalizerInterface::DAY:
+        array_push($return, \ElectricityNormalizerInterface::DAY);
+      case \ElectricityNormalizerInterface::MONTH:
+        array_push($return, \ElectricityNormalizerInterface::MONTH);
+      case \ElectricityNormalizerInterface::YEAR:
+        array_push($return, \ElectricityNormalizerInterface::YEAR);
+    }
+    return $return;
+  }
 
   /**
    * Analyze the processed entities from two consecutive time slices for anomalies.
@@ -587,6 +740,78 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
           $wrapper->save();
         }
       }
+    }
+  }
+
+  /**
+   * Convert a string (or array of strings) to frequency constant(s).
+   *
+   * @param $str|array
+   *    Input string, e.g. 'month'.
+   * @return bool|int|array
+   *    Appropriate frequency constant.
+   * @throws Exception
+   *    On unknown string.
+   */
+  protected function strToFrequency($str) {
+    // Handle an array of strings.
+    if (is_array($str)) {
+      $return = array();
+      foreach ($str as $s) {
+        array_push($return, $this->strToFrequency($s));
+      }
+      return $return;
+    }
+    // Handle a single string.
+    switch (strtolower($str)) {
+      case 'year':
+        return \ElectricityNormalizerInterface::YEAR;
+      case 'month':
+        return \ElectricityNormalizerInterface::MONTH;
+      case 'day':
+        return \ElectricityNormalizerInterface::DAY;
+      case 'hour':
+        return \ElectricityNormalizerInterface::HOUR;
+      case 'minute':
+        return \ElectricityNormalizerInterface::MINUTE;
+      default:
+        throw new \Exception(format_string('Frequency "@freq" not known.', array('@freq' => $str)));
+    }
+  }
+
+  /**
+   * Convert a frequency constant (or array thereof) to string(s).
+   *
+   * @param $frequency
+   *    Input frequency constant.
+   * @return bool|string
+   *    Appropriate string, e.g. 'month'.
+   * @throws Exception
+   *    On unknown frequency.
+   */
+  protected function frequencyToStr($frequency) {
+    // Handle an array of frequencies.
+    if (is_array($frequency)) {
+      $return = array();
+      foreach ($frequency as $f) {
+        array_push($return, $this->frequencyToStr($f));
+      }
+      return $return;
+    }
+    // Handle a single frequency.
+    switch ($frequency) {
+      case \ElectricityNormalizerInterface::YEAR:
+        return 'year';
+      case \ElectricityNormalizerInterface::MONTH:
+        return 'month';
+      case \ElectricityNormalizerInterface::DAY:
+        return 'day';
+      case \ElectricityNormalizerInterface::HOUR:
+        return 'hour';
+      case \ElectricityNormalizerInterface::MINUTE:
+        return 'minute';
+      default:
+        throw new \Exception(format_string('Frequency "@freq" not known.', array('@freq' => $frequency)));
     }
   }
 }
