@@ -23,6 +23,7 @@ class NegawattSatecMeterMigrate extends NegawattMigration {
     array('country', 'Country'),
     array('field_last_processed', 'Last processed'),
     array('field_meter_category', 'Meter category'),
+    array('field_max_frequency', 'Max frequency'),
   );
 
   public $dependencies = array(
@@ -45,6 +46,7 @@ class NegawattSatecMeterMigrate extends NegawattMigration {
       'field_meter_id',
       'country',
       'field_last_processed',
+      'field_max_frequency',
     );
     $this->addSimpleMappings($field_names);
 

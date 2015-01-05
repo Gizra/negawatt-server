@@ -12,7 +12,7 @@ class ElectricityNormalizerSatec extends \ElectricityNormalizerBase {
    *
    * Must be supplied by child object.
    *
-   * @throws Exception for frequency different than HOUR (NIY).
+   * @throws Exception for frequency higher than meter's max frequency.
 
    * @return StdClass
    *    The normalized entity.
@@ -74,21 +74,6 @@ class ElectricityNormalizerSatec extends \ElectricityNormalizerBase {
 
     // @todo: for frequency higher then hour, use data from normalized table
     throw new \Exception('Unhandled frequency @ElectricityNormalizerSatec::getNormalizedValues().');
-  }
-
-  /**
-   * The set of allowed frequencies for that meter type.
-   *
-   * for ElectricityNormalizerSatec object - use HOUR and up.
-   *
-   * @return array
-   *  Array of allowed frequencies for that meter type.
-   */
-  protected function getAllowedFrequencies() {
-    return array(
-      \ElectricityNormalizerBase::HOUR,
-      //@todo: add DAY, WEEK, ...
-    );
   }
 
   /**

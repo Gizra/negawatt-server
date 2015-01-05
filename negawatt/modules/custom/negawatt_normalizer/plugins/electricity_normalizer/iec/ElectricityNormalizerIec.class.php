@@ -12,87 +12,71 @@ class ElectricityNormalizerIec extends \ElectricityNormalizerBase {
    *
    * Must be supplied by child object.
    *
-   * @throws Exception for frequency different than MONTH.
+   * @throws Exception for frequency higher than meter's max frequency.
 
    * @return StdClass
    *  The normalized entity.
    */
   protected function getNormalizedValues() {
-    if ($this->getFrequency() == \ElectricityNormalizerInterface::HOUR ||
-      $this->getFrequency() == \ElectricityNormalizerInterface::DAY ||
-      $this->getFrequency() == \ElectricityNormalizerInterface::WEEK) {
+    $wrapper = entity_metadata_wrapper('node', $this->getMeterNode());
+    // The requested frequency can't be higher (shorter) than the meter's max frequency.
+    if ($this->strToFrequency($wrapper->field_max_frequency->value()) < $this->getFrequency()) {
       $params = array(
-        '@frequency' => $this->getFrequency(),
+        '@frequency' => $this->frequencyToStr($this->getFrequency()),
       );
-      throw new \Exception(format_string('IEC normalizer cannot handle that frequency: @freauency', $params));
+      throw new \Exception(format_string('IEC normalizer cannot handle that frequency: @frequency', $params));
     }
 
-    if ($this->getFrequency() == \ElectricityNormalizerInterface::MONTH) {
-
-      // For IEC, the minimal frequency is month, get data from raw table.
-      $query = parent::getQueryForNormalizedValues();
-
-      $query->addExpression('MIN(kwh)', 'min_kwh');
-      $query->addExpression('MAX(kwh)', 'max_kwh');
-      $query->addExpression('SUM(kwh)', 'kwh');
-      $query->addExpression('MIN(power_factor)', 'min_power_factor');
-
-      $result = $query->execute();
-
-      $row_count = $result->rowCount();
-
-      if (!$row_count) {
-        // Nothing found at that time interval.
-        return;
-      }
-
-      if ($row_count > 1) {
-        throw new \Exception('Row-count>1 @ElectricityNormalizerIec::getNormalizedValues.');
-      }
-
-      // Only one record is expected.
-      $result = $result->fetchObject();
-
-      // Test for null result.
-      if (!$result->kwh) {
-        return NULL;
-      }
-
-      // Calculate average power at time period.
-      $energy_diff = $result->kwh;
-      $time_diff = $this->getTimestampEnd() - $this->getTimestampBeginning();
-      // Convert from seconds to hours (energy is given by kilowatt-hours).
-      $time_diff = $time_diff/60./60;
-      // Average power (in kilowatts) is given by dividing the total energy at
-      // the time period (in kilowatt-hours) by the period's length (in hours).
-      $avg_power = $energy_diff / $time_diff;
-
-      return array(
-        'min_power_factor' => $result->min_power_factor,
-        'avg_power' => $avg_power,
-        'sum_kwh' => $energy_diff,
-      );
+    if ($this->getFrequency() != $this->strToFrequency($wrapper->field_max_frequency->value())) {
+      // The frequency requested is not the maximal frequency for this meter.
+      // Use ElectricityNormalizerBase::calcNormalizedValues() to calculate
+      // normalized values.
+      return $this->calcNormalizedValues();
     }
 
-    // @todo: for frequency higher then hour, use data from normalized table
-    $params = array(
-      '@freq' => $this->getFrequency(),
-    );
-    throw new \Exception(format_string('Unhandled frequency "@freq".', $params));
-  }
+    // If we're here, the requested frequency is the maximal for the current
+    // meter. Get the data from raw table.
+    $query = parent::getQueryForNormalizedValues();
 
-  /**
-   * The set of allowed frequencies for that meter type.
-   *
-   * for ElectricityNormalizerIec object - use MONTH and up.
-   *
-   * @return array
-   *  Array of allowed frequencies for that meter type.
-   */
-  protected function getAllowedFrequencies() {
+    $query->addExpression('MIN(kwh)', 'min_kwh');
+    $query->addExpression('MAX(kwh)', 'max_kwh');
+    $query->addExpression('SUM(kwh)', 'kwh');
+    $query->addExpression('MIN(power_factor)', 'min_power_factor');
+
+    $result = $query->execute();
+
+    $row_count = $result->rowCount();
+
+    if (!$row_count) {
+      // Nothing found at that time interval.
+      return;
+    }
+
+    if ($row_count > 1) {
+      throw new \Exception('Row-count>1 @ElectricityNormalizerIec::getNormalizedValues.');
+    }
+
+    // Only one record is expected.
+    $result = $result->fetchObject();
+
+    // Test for null result.
+    if (!$result->kwh) {
+      return NULL;
+    }
+
+    // Calculate average power at time period.
+    $energy_diff = $result->kwh;
+    $time_diff = $this->getTimestampEnd() - $this->getTimestampBeginning();
+    // Convert from seconds to hours (energy is given by kilowatt-hours).
+    $time_diff = $time_diff/60./60;
+    // Average power (in kilowatts) is given by dividing the total energy at
+    // the time period (in kilowatt-hours) by the period's length (in hours).
+    $avg_power = $energy_diff / $time_diff;
+
     return array(
-      \ElectricityNormalizerBase::MONTH,
-      //@todo: add YEAR
+      'min_power_factor' => $result->min_power_factor,
+      'avg_power' => $avg_power,
+      'sum_kwh' => $energy_diff,
     );
   }
 
