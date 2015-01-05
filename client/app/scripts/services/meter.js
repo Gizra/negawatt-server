@@ -163,7 +163,11 @@ angular.module('negawattClientApp')
 
       // Filter meters with a category.
       gettingMeter.then(function(meters) {
-        meters = Utils.indexById($filter('filter')(Utils.toArray(meters), {meter_categories: categoryId}, true));
+        meters = Utils.indexById($filter('filter')(Utils.toArray(meters), function(meter) {
+          if (meter.meter_categories && meter.meter_categories.indexOf(categoryId) !== -1) {
+            return meter;
+          }
+        }, true));
         deferred.resolve(meters);
       });
 

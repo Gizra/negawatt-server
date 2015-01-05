@@ -69,7 +69,12 @@ angular
             templateUrl: 'views/dashboard/main.menu.html'
           },
           categories: {
-            templateUrl: 'views/dashboard/main.categories.html'
+            templateUrl: 'views/dashboard/main.categories.html',
+            resolve: {
+              categories: function(Category) {
+                return Category.get();
+              }
+            }
           },
           messages: {
             templateUrl: 'views/dashboard/main.messages.html'

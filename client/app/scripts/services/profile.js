@@ -121,12 +121,14 @@ angular.module('negawattClientApp')
       }
 
       // Convert response serialized to an object.
-      var account = angular.fromJson(data).data[0];
+      var account = angular.fromJson(data);
 
       if (!account) {
         // Response code was a 401.
         return;
       }
+
+      account = account.data[0];
 
       // Convert center information for leafleat Map.
       account.center = {

@@ -24,4 +24,9 @@ angular.module('negawattClientApp')
       $stateParams.openedPopup = null;
     });
 
+    // Reload the current $state when meters added more.
+    $scope.$on('negawattMetersChanged', function() {
+      $state.reload();
+    });
+
   });
