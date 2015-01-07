@@ -204,7 +204,7 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
       default: {
         // Not a known frequency.
         $params = array(
-          '@freq' => $this->frequencyToStr($this->frequency),
+          '@freq' => self::frequencyToStr($this->frequency),
         );
         throw new \Exception(format_string('Cannot figure out frequency "@freq".', $params));
       }
@@ -317,12 +317,22 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
     $allowed_frequencies = $this->getAllowedFrequencies();
     $frequencies = empty($frequencies) ? $allowed_frequencies : $frequencies;
 
+    // If not time period is given, use '-', otherwise use '<from-date>-<to-date>'.
+    $time_period_str = empty($time_period) ? '-' : ( date('Y-m-d H:i', $time_period[0]) . ',' . date('Y-m-d H:i', $time_period[1]) );
+
+    // Output debug message.
+    $options = array(
+      '@frequencies' => implode(',', self::frequencyToStr($frequencies)),
+      '@time_period' => $time_period_str,
+    );
+    self::debugMessage(format_string('frequencies:[@frequencies], time-period:[@time_period_str].', $options), 1);
+
     $processed_entities = array();
     $last_processed = 0;
     foreach ($frequencies as $frequency) {
       // Make sure frequency is valid.
       if (!in_array($frequency, $allowed_frequencies)) {
-        throw new \Exception(format_string('Frequency "@freq" not in allowed frequencies.', array('@freq' => $this->frequencyToStr($frequency))));
+        throw new \Exception(format_string('Frequency "@freq" not in allowed frequencies.', array('@freq' => self::frequencyToStr($frequency))));
       }
 
       $result = $this->processByFrequency($frequency, $time_period);
@@ -330,20 +340,13 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
       $processed_entities = array_merge($processed_entities, $result['entities']);
     }
 
-    // If not time period is given, use '-', otherwise use '<from-date>-<to-date>'.
-    $time_period_str = empty($time_period) ? '-' : ( date('Y-m-d H:i', $time_period[0]) . ',' . date('Y-m-d H:i', $time_period[1]) );
-
-    // Output a message when running under drush.
-    if (drupal_is_cli()) {
-      drush_log(' frequencies:[' . implode(',', $this->frequencyToStr($frequencies)) . '], '
-        . 'time-period:[' . $time_period_str . ']. ');
-      drush_log(' ' . count($processed_entities) . ' entities returned.');
-    }
+    // Output debug message.
+    self::debugMessage(format_string('@count entities returned.', array('@count' => count($processed_entities))), 1);
 
     // Generate message
     // Prepare arguments.
     $arguments = array(
-      '@frequencies' => implode(',', $this->frequencyToStr($frequencies)),
+      '@frequencies' => implode(',', self::frequencyToStr($frequencies)),
       '@time_period' => $time_period_str,
       '@entities' => count($processed_entities),
     );
@@ -441,9 +444,11 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
    */
   protected function processRawEntities($fromTimestamp, $toTimestamp) {
 
-    // NOTE: call setTimestampEnd BEFORE setTimestampBeginning, since
-    // setTimestampEnd resets timestampBeginning!
     $this->setTimestampFromTo($fromTimestamp, $toTimestamp);
+
+    // Output debug message.
+    self::debugMessage(format_string('in processRawEntities. frequency: @frequency, time-frame: @time_from-@time_to', array('frequency' => self::frequencyToStr($this->getFrequency()))),
+      2, $fromTimestamp, $toTimestamp);
 
     // Get data from raw table.
     $query = $this->getQueryForNormalizedValues();
@@ -484,15 +489,52 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
 
       $wrapper->save();
       $processed_entities[] = $wrapper->value();
+
+      // Output debug message.
+      self::debugMessage("rate-type: $record->rate_type, time-stamp: @time_from, sum-kwh: $record->kwh", 3, $this->getTimestampBeginning());
     }
 
     // The last timestamp processed is the timestamp of last iteration
     $last_processed = $prev_timestamp;
 
+    // Output debug message.
+    self::debugMessage(format_string('total entities: @count, last processed: @time_from', array('@count' => count($processed_entities))), 3, $last_processed);
+
     return array(
       'entities' => $processed_entities,
       'last_processed' => $last_processed,
     );
+  }
+
+  /**
+   * Generate the end-timestamp for the next time slice in processNormalizedEntities()
+   *
+   * Time slices go backwards, from end timestamp to the beginnings.
+   * For year, month, and day frequencies, use $this->getTimestampBeginning.
+   * For minute and hour, subtract the number of seconds from $this->timestampEnd.
+   * This is because when switching from winter to summer clock, using
+   * $date_time->setTime, as in getTimestampBeginning, will repeat the same hour again!
+   *
+   * @return int
+   *  The end-timestamp for next time slice.
+   */
+  protected function getNextTimeSlice() {
+    switch ($this->getFrequency()) {
+
+      case \ElectricityNormalizerInterface::MINUTE:
+        // 'hard' retrace 60 seconds to avoid problems with daylight saving
+        // time change.
+        return $this->getTimestampEnd() - 60;
+
+      case \ElectricityNormalizerInterface::HOUR:
+        // 'hard' retrace 3600 seconds.
+        return $this->getTimestampEnd() - 60 * 60;
+
+      default:
+        // use DateTime::setTime() and setDate() since day interval and higher
+        // will not be affected by daylight saving time change.
+        return $this->getTimestampBeginning();
+    }
   }
 
   /**
@@ -511,11 +553,18 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
    * @throws Exception
    */
   protected function processNormalizedEntities($fromTimestamp, $toTimestamp) {
+    // Output debug message.
+    self::debugMessage(format_string('in processNormalizedEntities. frequency: @frequency, time-frame: @time_from-@time_to', array('@frequency' => self::frequencyToStr($this->getFrequency()))),
+      2, $fromTimestamp, $toTimestamp);
+
     // Start from the last time-slice, and loop backwards for all time-slices in time period.
     $processed_entities = array();
     $prev_period_entities = array();
     $this->setTimestampEnd($toTimestamp);
     do {
+      // Output debug message.
+      self::debugMessage('time-frame: @time_from-@time_to', 3, $this->getTimestampBeginning(), $this->getTimestampEnd());
+
       // Process the normalized entities.
       $period_entities = $this->calcNormalizedValues();
       // Analyze resulting entities for anomalies
@@ -524,8 +573,8 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
       // Collect all processed entities.
       $processed_entities = array_merge($processed_entities, $period_entities);
       // Prepare for next time slice.
-      $this->setTimestampEnd($this->getTimestampBeginning());
-    } while ($this->getTimeStampBeginning() > $fromTimestamp);
+      $this->setTimestampEnd($this->getNextTimeSlice());
+    } while ($this->getTimeStampEnd() > $fromTimestamp);
 
     // Return processed entities and last processed timestamp (the end of time period).
 
@@ -628,6 +677,10 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
       ->execute()
       ->fetchField();
 
+    // Output debug message.
+    self::debugMessage(format_string("in calcNormalizedValues. required frequency: @frequency, time-frame: @time_from-@time_to, entities: $count", array('@frequency' => self::frequencyToStr($required_frequency))),
+      3, $this->getTimestampBeginning(), $this->getTimestampEnd());
+
     if (!$count) {
       // Nothing to do.
       return array();
@@ -659,6 +712,9 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
 
       $wrapper->save();
       $processed_entities[] = $wrapper->value();
+
+      // Output debug message.
+      self::debugMessage("rate-type: $record->rate_type, sum-kwh: $record->sum_kwh", 4);
     }
 
     return $processed_entities;
@@ -719,7 +775,7 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
       if (isset($prev_entities[$entity->rate_type])) {
         $avg_power = $entity->avg_power;
         $prev_avg_power = $prev_entities[$entity->rate_type]->avg_power;
-        $avg_power_diff = $avg_power / $prev_avg_power;
+        $avg_power_diff = $prev_avg_power ? ($avg_power / $prev_avg_power) : 10;
         if ($avg_power_diff < 0.90 || $avg_power_diff > 1.10) {
           // Avg power difference is suspicious, put an alert
           // Prepare message arguments.
@@ -753,12 +809,12 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
    * @throws Exception
    *    On unknown string.
    */
-  protected function strToFrequency($str) {
+  protected static function strToFrequency($str) {
     // Handle an array of strings.
     if (is_array($str)) {
       $return = array();
       foreach ($str as $s) {
-        array_push($return, $this->strToFrequency($s));
+        array_push($return, strToFrequency($s));
       }
       return $return;
     }
@@ -789,12 +845,12 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
    * @throws Exception
    *    On unknown frequency.
    */
-  protected function frequencyToStr($frequency) {
+  protected static function frequencyToStr($frequency) {
     // Handle an array of frequencies.
     if (is_array($frequency)) {
       $return = array();
       foreach ($frequency as $f) {
-        array_push($return, $this->frequencyToStr($f));
+        array_push($return, self::frequencyToStr($f));
       }
       return $return;
     }
@@ -814,4 +870,36 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
         throw new \Exception(format_string('Frequency "@freq" not known.', array('@freq' => $frequency)));
     }
   }
+
+  /**
+   * Output debug message, either through drush_log or debug.
+   *
+   * @param $message
+   *    The message to output. Can use @time_from, @time_to as placeholders.
+   * @param int $indentation
+   *    Message indentation. That number of spaces will precede the message string.
+   * @param null $time_from
+   *    Timestamp. Will be converted to text and replace @time_from placeholder.
+   * @param null $time_to
+   *    Timestamp. Will be converted to text and replace @time_to placeholder.
+   */
+  protected static function debugMessage($message, $indentation = 0, $time_from = NULL, $time_to = NULL) {
+
+    // Prepare message string.
+    $options = array(
+      '@time_from' => date('Y-m-d H:i', $time_from),
+      '@time_to' => date('Y-m-d H:i', $time_to),
+    );
+    $message = str_repeat(' ', $indentation) . format_string($message, $options);
+
+    // Output message.
+    if (drupal_is_cli()) {
+      drush_log($message);
+    }
+    else {
+      debug($message);
+    }
+  }
+
 }
+

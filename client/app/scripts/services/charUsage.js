@@ -24,7 +24,8 @@ angular.module('negawattClientApp')
       var twoYearsBack = Math.floor(Date.now() / 1000) - 2 * 365 * 24 * 60 * 60;
 
       var filters = {
-        type: 'month',
+        // type 2 = month
+        type: '2',
         timestamp: {
           value: twoYearsBack,
           operator: '>'

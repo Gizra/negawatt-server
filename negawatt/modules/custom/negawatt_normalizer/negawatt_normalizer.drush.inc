@@ -12,7 +12,10 @@ function negawatt_normalizer_drush_command() {
   $items['process-meter'] = array(
     'description' => dt('Process and normalize meter(s).'),
     'options' => array(
-      'id' => dt('The node ID(s) of the meters.'),
+      'start_id'  => dt('Process meters with node ID higher than this value.'),
+      'range'     => dt('The number of nodes to process in each batch.'),
+      'time_from' => dt('Process entities with date-time higher than this value.'),
+      'time_to'   => dt('Process entities with date-time lower than this value.'),
     ),
   );
 
@@ -27,23 +30,29 @@ function negawatt_normalizer_drush_command() {
  * meter to the current, and process.
  */
 function drush_negawatt_normalizer_process_meter() {
-  $meter_ids = drush_get_option('id');
-  negawatt_normalizer_process_meters($meter_ids);
+  $meter_start_id = drush_get_option('start_id');
+  $options = array();
+  $options['range']     = drush_get_option('range', 50);
+  $options['time_from'] = drush_get_option('time_from') ? strtotime(drush_get_option('time_from')) : 0;
+  $options['time_to']   = drush_get_option('time_to') ? strtotime(drush_get_option('time_to')) : REQUEST_TIME;
+  negawatt_normalizer_process_meters($meter_start_id, $options);
 }
 
 
 /**
  * Implements hook_query_TAG_alter().
  *
- * Test for either last-processed field is NULL, or it's earlier than the time
- * given in $query->negawatt_options_time (which will be set to REQUEST_TIME)
- * by the caller.
+ * Test for either last-processed field is NULL, or it's in the time frame
+ * given in $query->negawatt_options_time_from and _to.
  */
 function negawatt_server_query_electricity_last_processed_condition_alter(QueryAlterableInterface $query) {
   $query->leftJoin('field_data_field_last_processed', 'lp', 'node.nid = lp.entity_id');
+  $and = db_and()
+    ->condition('lp.field_last_processed_value', $query->negawatt_options_time_from, '>=')
+    ->condition('lp.field_last_processed_value', $query->negawatt_options_time_to, '<');
   $or = db_or()
     ->isNull('lp.field_last_processed_value')
-    ->condition('lp.field_last_processed_value', $query->negawatt_options_time, '<');
+    ->condition($and);
   $query
     ->condition($or);
 }
@@ -56,32 +65,25 @@ function negawatt_server_query_electricity_last_processed_condition_alter(QueryA
  * Calls negawatt_normalizer_process_meters_once() repeatedly to process
  * all meters.
  *
- * @param array $meter_ids
- *   Array of meter-ids to process. If NULL or empty array, run over all the
- *   meters from least updated to the most recent.
+ * @param  $meter_start_id
+ *   The lowest meter-id to process. If NULL, run over all the meters from
+ *   least updated to the most recent.
  * @param array $options
  *   Extra options to add to the query when no meter IDs are provided. Optional
  *   keys are:
- *   - start_id: Result should include only node IDs equal or higher then this
- *     value. Defaults to FALSE which indicates no restriction on the node ID
- *     should be done.
  *   - range: How many nodes to include in each internal loop. Defaults to 50.
- *   - time: Include only meters that their last-processed field is EARLIER
- *     than this value. Defaults to REQUEST_TIME.
+ *   - time_from, time_to: Include only meters that their last-processed field
+ *     is between these values. Defaults to 1/1/1970-REQUEST_TIME.
  */
-function negawatt_normalizer_process_meters($meter_ids = array(), $options = array()) {
+function negawatt_normalizer_process_meters($meter_start_id, $options = array()) {
   // Set default options.
   $options += array(
     'range' => 50,
-    'start_id' => FALSE,
-    'time' => REQUEST_TIME,
+    'time_from' => 0,
+    'time_to' => REQUEST_TIME,
   );
 
-  if (!empty($meter_ids)) {
-    // A list of meter-ids was given, process them and return.
-    negawatt_normalizer_process_meters_once($meter_ids);
-    return;
-  }
+  drush_log('time options: '.date('Ym-d H:i', $options['time_from']) . '-' . date('Y-m-d H:i', $options['time_to']));
 
   $bundles = array(
     'iec_meter',
@@ -100,10 +102,11 @@ function negawatt_normalizer_process_meters($meter_ids = array(), $options = arr
     // current request.
     ->addTag('electricity_last_processed_condition');
 
-  $base_query->negawatt_options_time = $options['time'];
+  $base_query->negawatt_options_time_from = $options['time_from'];
+  $base_query->negawatt_options_time_to = $options['time_to'];
 
-  if ($options['start_id']) {
-    $base_query->propertyCondition('nid', $options['start_id'], '>=');
+  if ($meter_start_id) {
+    $base_query->propertyCondition('nid', $meter_start_id, '>=');
   }
 
   // Count the meters.
@@ -117,40 +120,52 @@ function negawatt_normalizer_process_meters($meter_ids = array(), $options = arr
     return;
   }
 
-  // Add sort to base query.
-  $base_query
-    ->fieldOrderBy('field_last_processed', 'value')
-    ->fieldOrderBy('field_meter_processed', 'value');
+  // @todo: Add sort by field_last_processed, field_meter_processed to base query.
+
+  // Count meters corresponding to the query
+  // Get meter IDs that need to be processed.
+  $query = clone $base_query;
+  $valid_meters_count = $query
+    ->range(0, $options['range'])
+    ->count()
+    ->execute();
 
   $params = array(
+    '@valid_count' => $valid_meters_count,
     '@count' => $meters_count,
     '@delta' => $options['range'],
+    '@time' => date('Y-m-d H:i', $options['time_from']) . '-' . date('Y-m-d H:i', $options['time_to']),
   );
-  drush_log(format_string('Looping for meters. meters-count=@count, range=@delta.', $params));
+  drush_log(format_string('Looping for meters. meters-count=@valid_count out of @count, range=@delta, time-frame=@time.', $params));
 
-  for ($count = 0; $count < $meters_count; $count += $options['range']) {
-
+  for ($count = 0; $count < $valid_meters_count; $count += $options['range']) {
+    // Loop with 'range' sized groups and call negawatt_normalizer_process_meters_once()
     // Get meter IDs that need to be processed.
     $query = clone $base_query;
     $result = $query
       ->range(0, $options['range'])
       ->execute();
 
-    $meter_ids = array_keys($result['node']);
+    drush_log(format_string('Query returned @count meters.', array('@count' => count($result['node']))));
 
-    negawatt_normalizer_process_meters_once($meter_ids);
+    // Process a batch of meters.
+    $meter_ids = array_keys($result['node']);
+    negawatt_normalizer_process_meters_once($meter_ids, array($options['time_from'], $options['time_to']));
   }
 }
 
 /**
  * Process meters' raw data.
  *
- * Run over given meter ids and process their raw data.
+ * Run over a given group of meter ids (according to 'range' option) and
+ * process their raw data.
  *
  * @param array $meter_ids
  *   Array of meter-ids to process.
+ * @param array $time_frame
+ *   Array of from and to timestamps, giving the time frame to process.
  */
-function negawatt_normalizer_process_meters_once($meter_ids = array()) {
+function negawatt_normalizer_process_meters_once($meter_ids = array(), $time_frame = array()) {
   drush_log('Entering negawatt_normalizer_process_meters_once().');
   $count = count($meter_ids);
   $delta = 0;
@@ -170,7 +185,7 @@ function negawatt_normalizer_process_meters_once($meter_ids = array()) {
     drush_log(format_string('Processing meter ID @id (@delta/@count) [@meter_type, @meter_name]', $params));
 
     try {
-      $result = negawatt_normalizer_process_meter($meter_id);
+      $result = negawatt_normalizer_process_meter($meter_id, $time_frame);
 
       // Log results.
       $entities_count = count($result);

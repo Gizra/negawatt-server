@@ -112,10 +112,9 @@ function negawatt_electricity_schema() {
       ),
       'type' => array(
         'description' => 'The type of this data, day/month/week/year.',
-        'type' => 'varchar',
-        'length' => 32,
+        'type' => 'int',
+        'unsigned' => TRUE,
         'not null' => TRUE,
-        'default' => '',
       ),
       'timestamp' => array(
         'description' => 'timestamp of beginning of period (at 12:00PM).',

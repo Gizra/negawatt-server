@@ -104,16 +104,16 @@ function negawatt_normalizer_get_electricity_normalizer_handler($plugin_name) {
  *
  * @param $node
  *    The node object or ID.
- * @param null $timestamp
- *    The end timestamp of period to normalize. Default to NULL, which
- *    indicates "now".
+ * @param array $time_frame
+ *   Array of from and to timestamps, giving the time frame to process.
  *
  * @return array
  *    Array of processed entities.
  */
-function negawatt_normalizer_process_meter($node, $timestamp = NULL) {
+function negawatt_normalizer_process_meter($node, $time_frame = array()) {
   $wrapper = entity_metadata_wrapper('node', $node);
   $plugin_name = str_replace('_meter', '', $wrapper->getBundle());
   $handler = negawatt_normalizer_get_electricity_normalizer_handler($plugin_name);
-  return $handler->process($wrapper->value(), $timestamp);
+  return $handler->process($wrapper->value(), $frequencies = array(), $time_frame);
 }
+

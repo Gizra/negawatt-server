@@ -206,13 +206,13 @@ function satec_field_default_field_instances() {
     'bundle' => 'satec_meter',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Maximal sampling frequency for the meter.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'text',
+        'module' => 'list',
         'settings' => array(),
-        'type' => 'text_default',
+        'type' => 'list_default',
         'weight' => 12,
       ),
       'teaser' => array(
@@ -227,17 +227,14 @@ function satec_field_default_field_instances() {
     'label' => 'Max frequency',
     'required' => 0,
     'settings' => array(
-      'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'text',
-      'settings' => array(
-        'size' => 32,
-      ),
-      'type' => 'text_textfield',
-      'weight' => 15,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 14,
     ),
   );
 
@@ -639,6 +636,7 @@ function satec_field_default_field_instances() {
   t('Location');
   t('MAC address');
   t('Max frequency');
+  t('Maximal sampling frequency for the meter.');
   t('Meter Category');
   t('Meter IP address');
   t('Meter id');
