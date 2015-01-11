@@ -19,7 +19,49 @@ function negawatt_normalizer_drush_command() {
     ),
   );
 
+  $items['reset-last-processed'] = array(
+    'description' => dt('Reset meters` last-processed flag.'),
+  );
+
+  $items['clear-normalized-electricity'] = array(
+    'description' => dt('Clear normalized electricity table in the database.'),
+  );
+
   return $items;
+}
+
+/**
+ * Clear normalized electricity table in the database.
+ */
+function drush_negawatt_normalizer_clear_normalized_electricity() {
+  db_truncate('negawatt_electricity_normalized')->execute();
+}
+
+/**
+ * Reset meters` last-processed flag.
+ */
+function drush_negawatt_normalizer_reset_last_processed() {
+  $bundles = array(
+    'iec_meter',
+    'satec_meter',
+  );
+
+  $query = new EntityFieldQuery();
+  $query
+    ->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', $bundles, 'IN')
+    ->propertyCondition('status', NODE_PUBLISHED);
+  $result = $query->execute();
+  $meter_ids = array_keys($result['node']);
+
+  foreach ($meter_ids as $meter_id) {
+    // Reset meter-processed and last-processed fields for the meter
+    $node = node_load($meter_id);
+    $wrapper = entity_metadata_wrapper('node', $node);
+    $wrapper->field_meter_processed->set(FALSE);
+    $wrapper->field_last_processed->set(0);
+    $wrapper->save();
+  }
 }
 
 /**
@@ -83,7 +125,8 @@ function negawatt_normalizer_process_meters($meter_start_id, $options = array())
     'time_to' => REQUEST_TIME,
   );
 
-  drush_log('time options: '.date('Ym-d H:i', $options['time_from']) . '-' . date('Y-m-d H:i', $options['time_to']));
+
+  drush_log('time options: '.date('Y-m-d H:i', $options['time_from']) . '-' . date('Y-m-d H:i', $options['time_to']));
 
   $bundles = array(
     'iec_meter',
@@ -193,11 +236,13 @@ function negawatt_normalizer_process_meters_once($meter_ids = array(), $time_fra
       $entities_delta = 0;
       foreach ($result as $entity) {
         ++$entities_delta;
+        drush_log('Back at negawatt_normalizer_process_meters_once.');
         drush_log(format_string(' electricity-entity @delta/@count:', array('@count' => $entities_count, '@delta' => $entities_delta)));
 
         drush_log(format_string('  type: @type', array('@type' => $entity->type)));
         drush_log(format_string('  timestamp: @timestamp', array('@timestamp' => date('Y-m-d H:i', $entity->timestamp))));
         drush_log(format_string('  rate_type: @type', array('@type' => $entity->rate_type)));
+        drush_log(format_string('  sum_kwh: @sum', array('@sum' => $entity->sum_kwh)));
         drush_log(format_string('  avg_power: @avg', array('@avg' => $entity->avg_power)));
         drush_log(format_string('  min_power_factor: @pf', array('@pf' => $entity->min_power_factor)));
       }

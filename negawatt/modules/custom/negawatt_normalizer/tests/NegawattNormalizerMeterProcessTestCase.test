@@ -222,9 +222,10 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
 
     // Create a new normalized entity and check its validity.
     // Use HOUR frequency to aggregate normalized MINUTE entities into one HOUR entity.
+    // Start time is 15:20, but will be rounded to 15:00 hence all 2 minute entities should be taken into account
     $result_entities = $handler->process($this->meterNode1,
       array(\ElectricityNormalizerInterface::HOUR),
-      array(strtotime('2014-6-12 15:00'),strtotime('2014-6-12 16:00')));
+      array(strtotime('2014-6-12 15:20'),strtotime('2014-6-12 16:00')));
 
     $this->assertTrue(is_array($result_entities) && count($result_entities) == 1, 'process() returns an array with one object.');
     $result_entity = $result_entities[0];
@@ -507,13 +508,29 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
       NULL,
       array(strtotime('2014-2-1 00:00'), strtotime('2014-2-21 23:45')));
 
-    // Should return only on entity.
+    // Should return 2 entities - for month and year
     $this->assertTrue(is_array($result_entities) && count($result_entities) == 2,
-      '<b>Testing process with node that doesn\'t have last processed field.</b><br>Process() returned 2 item.');
+      '<b>Testing process with node that doesn\'t have last processed field.</b><br>Process() returned 2 items.');
     $result_entity = $result_entities[0];
     $this->assertEqual($result_entity->type, \ElectricityNormalizerInterface::MONTH, 'Entity 0 type is correct.');
     $this->assertEqual($result_entity->timestamp, strtotime('2014-2-2 13:56'), 'Entity timestamp is correct.');
     $this->assertEqual($result_entity->rate_type, ElectricityNormalizerBase::FLAT, 'Entity 0 rate_type is correct.');
+
+    $result_entity = $result_entities[1];
+    $this->assertEqual($result_entity->type, \ElectricityNormalizerInterface::YEAR, 'Entity 1 type is correct.');
+    $this->assertEqual($result_entity->timestamp, strtotime('2014-1-1 00:00'), 'Entity timestamp is correct.');
+
+    // Make sure node's last processed field is correct
+    $wrapper = entity_metadata_wrapper('node', $this->meterNode4);
+    $last_processed = $wrapper->field_last_processed->value();
+    $this->assertEqual($last_processed, strtotime('2014-2-2 13:56'), 'Node last-processed field is correct.');
+
+    // Call process() with meter node4 again and no time frame, no entity should be returned
+    $result_entities = $handler->process($this->meterNode4);
+
+    // Should return zero entities
+    $this->assertTrue(is_array($result_entities) && count($result_entities) == 0,
+      '<b>Testing process with node 4 for the second time.</b><br>Process() returned nothing.');
 
     // Make sure node's last processed field is correct
     $wrapper = entity_metadata_wrapper('node', $this->meterNode4);
