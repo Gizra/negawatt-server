@@ -22,9 +22,10 @@ angular
     'LocalStorageModule',
     'ui.router',
     'googlechart',
-    'angular-md5'
+    'angular-md5',
+    'angular-loading-bar'
   ])
-  .config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
+  .config(function ($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
     // For any unmatched url, redirect to '/'.
     $urlRouterProvider.otherwise('/dashboard');
 
@@ -183,6 +184,10 @@ angular
       };
     });
 
+    // Configuration of the loading bar.
+    cfpLoadingBarProvider.includeSpinner = false;
+    cfpLoadingBarProvider.latencyThreshold = 1000;
+
   })
   .run(function ($rootScope, $state, $stateParams, $log, Config) {
     // It's very handy to add references to $state and $stateParams to the
@@ -216,5 +221,6 @@ angular
         $log.log(unfoundState, fromState, fromParams);
       });
     }
+
   });
 
