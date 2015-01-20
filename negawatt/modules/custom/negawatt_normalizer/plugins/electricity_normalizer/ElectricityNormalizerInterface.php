@@ -9,29 +9,25 @@
 interface ElectricityNormalizerInterface {
 
   /**
-   * frequency constant.
+   * Rate-type constant, peak rate.
    */
-  const MINUTE = 5;
+  const PEAK = 'peak';
 
   /**
-   * frequency constant.
+   * Rate-type constant, middle rate.
    */
-  const HOUR = 4;
+  const MID = 'mid';
 
   /**
-   * frequency constant.
+   * Rate-type constant, low rate.
    */
-  const DAY = 3;
+  const LOW = 'low';
 
   /**
-   * frequency constant.
+   * Rate-type constant for non-TOUse rate.
    */
-  const MONTH = 2;
+  const FLAT = 'flat';
 
-  /**
-   * frequency constant.
-   */
-  const YEAR = 1;
 
   /**
    * Constructor for the ElectricityNormalizer handler.
@@ -53,8 +49,8 @@ interface ElectricityNormalizerInterface {
   /**
    * Entry point to process a request.
    *
-   * @param stdClass $node
-   *    The node of type iec_meter.
+   * It's the callers responsibility to call setMeterNode() before calling process().
+   *
    * @param array $frequencies
    *    The required frequencies for normalization, e.g. HOUR. If empty, loop over all allowed frequencies.
    * @param array $time_period
@@ -62,9 +58,10 @@ interface ElectricityNormalizerInterface {
    *    Default: begin at the last_processed time of the meter node and end at current time.
    *
    * @return array
-   *    The processed entities, or empty array if there were no values to process.
+   *    The processed entities in the form array[frequency][timestamp][rate-type] = entity,
+   *    or an empty array if there were no values to process.
    */
-  public function process($node, $frequencies = array(), $time_period = array());
+  public function process($frequencies = array(), $time_period = array());
 
 
   }

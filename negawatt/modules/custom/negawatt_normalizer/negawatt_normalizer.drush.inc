@@ -53,13 +53,13 @@ function drush_negawatt_normalizer_reset_last_processed() {
     ->propertyCondition('status', NODE_PUBLISHED);
   $result = $query->execute();
   $meter_ids = array_keys($result['node']);
+  $nodes = node_load_multiple($meter_ids);
 
-  foreach ($meter_ids as $meter_id) {
+  foreach ($nodes as $node) {
     // Reset meter-processed and last-processed fields for the meter
-    $node = node_load($meter_id);
     $wrapper = entity_metadata_wrapper('node', $node);
     $wrapper->field_meter_processed->set(FALSE);
-    $wrapper->field_last_processed->set(0);
+    $wrapper->field_last_processed->set(FALSE);
     $wrapper->save();
   }
 }

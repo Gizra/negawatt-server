@@ -114,6 +114,7 @@ function negawatt_normalizer_process_meter($node, $time_frame = array()) {
   $wrapper = entity_metadata_wrapper('node', $node);
   $plugin_name = str_replace('_meter', '', $wrapper->getBundle());
   $handler = negawatt_normalizer_get_electricity_normalizer_handler($plugin_name);
-  return $handler->process($wrapper->value(), $frequencies = array(), $time_frame);
+  $handler->setMeterNode($wrapper->value());
+  return $handler->process($frequencies = array(), $time_frame);
 }
 
