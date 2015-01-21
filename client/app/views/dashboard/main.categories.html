@@ -3,7 +3,7 @@
   <ol ui-tree-nodes="">
     <li ng-repeat="item in categories.tree" ui-tree-node ng-show="hasMeters(item)">
       <div ui-tree-handle class="tree-level-top">
-        <a ui-sref="dashboard.controls.categories({categoryId: item.id})">
+        <a ui-sref="dashboard.controls.categories({categoryId: item.id})" ui-sref-active="active-category">
           <i class="glyphicon " ></i>
           <span>{{item.label}}</span> ({{item.meters}})
         </a>
@@ -11,7 +11,7 @@
       <ol ui-tree-nodes="" ng-model="item.children" >
         <li ng-repeat="subItem in item.children" ui-tree-node ng-show="hasMeters(subItem)">
           <div ui-tree-handle class="tree-level-middle">
-            <a ui-sref="dashboard.controls.categories({categoryId: subItem.id})">
+            <a ui-sref="dashboard.controls.categories({categoryId: subItem.id})" ui-sref-active="active-category">
               <i class="glyphicon glyphicon-chevron-left"></i>
               <span>{{subItem.label}}</span> ({{subItem.meters}})
             </a>
@@ -19,7 +19,7 @@
           <ol ui-tree-nodes="" ng-model="subItem.children">
             <li ng-repeat="subItem2 in subItem.children" ui-tree-node ng-show="hasMeters(subItem2)">
               <div ui-tree-handle class="tree-level-bottom">
-                <a ui-sref="dashboard.controls.categories({categoryId: subItem2.id})">
+                <a ui-sref="dashboard.controls.categories({categoryId: subItem2.id})" ui-sref-active="active-category">
                   <i class="glyphicon glyphicon-plus"></i>
                   <span>{{subItem2.label}}</span> ({{subItem2.meters}})
                 </a>

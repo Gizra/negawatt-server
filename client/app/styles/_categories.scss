@@ -1,0 +1,80 @@
+// Categories Style
+ol, ul {
+  padding-right: 10px;
+  list-style-type: none;
+}
+
+.icon-electricity {
+  background: url("../images/icon-electricity.png") 0 0 no-repeat;
+  width: 21px;
+  height: 21px;
+}
+
+.tree {
+  font-family: Alef;
+
+  a {
+    text-decoration: none;
+  }
+
+  a.active-category {
+    color: #26858d  !important;
+  }
+
+  li {
+    line-height: 28px;
+  }
+
+  .tree-level-top {
+
+    a {
+      color: #2c2c2c;
+
+      span {
+        padding-right: 7px;
+        color: #2c2c2c;
+        font-size: 16px;
+        font-weight: bold;
+        line-height: 21px;
+      }
+    }
+
+    a.active-category span {
+      color: #26858d;
+    }
+  }
+
+  .tree-level-middle {
+    font-size: 13px;
+
+    a {
+      color: #3e3e3e;
+
+      span {
+        padding-right: 14px;
+      }
+
+      i {
+        font-size: 9px;
+      }
+    }
+
+  }
+
+  .tree-level-bottom {
+    font-size: 12px;
+    a {
+      color: #3e3e3e;
+
+      span {
+        padding-right: 14px;
+      }
+
+      i {
+        font-size: 7px;
+        padding-right: 15px;
+      }
+    }
+
+  }
+}
