@@ -11,7 +11,7 @@
 function satec_drush_help($section) {
   switch ($section) {
     case 'drush:satec_read_registers':
-      return dt('Read electricity values and save file.');
+      return dt('Read electricity values and save in raw-electricity table.');
   }
 }
 
@@ -21,23 +21,19 @@ function satec_drush_help($section) {
 function satec_drush_command() {
   $items = array();
 
-  $items['satec_read_registers'] = array(
-    'callback' => 'satec_read_registers',
+  $items['satec_read_meter'] = array(
+    'callback' => 'satec_read_meter',
     'drupal dependencies' => array(),
     'description' => 'Read electricity values and save to DB.',
-    'description' => 'Read electricity values and save to DB.',
     'options' => array(
-      'address' => 'IP address of modbus server',
-      'user_id' => 'ID of the user to save the info to',
-      'reference' => 'Reference to start reading from',
-      'quantity' => 'Lenght of data',
+      'meter_id' => 'Meter ID.',
       'debug' => 'Get dpm info with dd',
     ),
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_CONFIGURATION,
     'aliases' => array('satec'),
     'examples' => array(
-      'drush satec --address=212.235.53.12 --reference=13500 --quantity=10' =>' get 10 32bit values from address 13500.',
-      'drush satec' =>'L1 kw from ecolink',
+      'drush satec_read_meter --meter_id=123' =>' Read data from meter 123.',
+      'drush satec_read_meter' =>' Read data from all satec meters.',
     ),
   );
 
@@ -45,111 +41,207 @@ function satec_drush_command() {
 }
 
 /**
- * Callback function for sending digest email command.
+ * Callback function for reading meter command.
  */
-function satec_read_registers() {
-  $address = drush_get_option('address', '212.235.53.12');
-  $uid = drush_get_option('user_id', 1);
+function satec_read_meter() {
   $debug = drush_get_option('debug', FALSE);
+  $meter_id = drush_get_option('meter_id', FALSE);
 
+  if ($meter_id) {
+    satec_read_one_meter($meter_id);
+    return;
+  }
 
+  // Meter-ID was not given, loop for all satec meter nodes
+  $query = new EntityFieldQuery();
+  $result = $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', array('satec_meter'), 'IN')
+    ->propertyCondition('status', NODE_PUBLISHED)
+    ->execute();
+
+  if (empty($result['node'])) {
+    drush_log('Meters of type satec were not found.', 'error');
+    return FALSE;
+  }
+
+  $meter_ids = array_keys($result['node']);
+  foreach ($meter_ids as $meter_id) {
+    satec_read_one_meter($meter_id);
+  }
+}
+
+/**
+ * Read data from one Satec meter and store it in raw-electricity table.
+ *
+ * @param $meter_id
+ *    Node ID of the meter.
+ *
+ * @return bool
+ *    True if everything went fine.
+ */
+function satec_read_one_meter($meter_id) {
+  // Look for meter node.
+  $node = node_load($meter_id);
+  if (!$node) {
+    drush_log(format_string('Meter id @meter_id was not found.', array('@meter_id' => $meter_id)), 'error');
+    return FALSE;
+  }
+
+  drush_log(format_string('Node @meter_id loaded', array('@meter_id' => $meter_id)), 'ok');
+
+  // Get meter properties from node
+  $wrapper = entity_metadata_wrapper('node', $meter_id);
+  $address = $wrapper->field_meter_ip_address->value();
+  $modbus_id = $wrapper->field_meter_id->value();
+  $meter_port = $wrapper->field_meter_port->value();
+
+  drush_log('Meter ip address = '.$address, 'ok');
+
+  // Prepare set of registers to read.
   $requests = array(
-    array('reference' => 287, 'quantity' => 2),
-    array('reference' => 13318, 'quantity' => 1),
+    // 1 Second total KW.
+    array('reference' => 14336 + 00, 'quantity' => 2, 'signed' => TRUE),
+    // 1 Second total PF.
+    array('reference' => 14336 + 06, 'quantity' => 2, 'signed' => TRUE),
+    // Total sum kWh.
+    array('reference' => 14720 + 00, 'quantity' => 2, 'signed' => FALSE),
+    // Phase sum kWh.
+    array('reference' => 14848 + 00, 'quantity' => 2, 'signed' => FALSE),
+    array('reference' => 14848 + 02, 'quantity' => 2, 'signed' => FALSE),
+    array('reference' => 14848 + 04, 'quantity' => 2, 'signed' => FALSE),
+    // 1 Second phase PF.
+    array('reference' => 13952 + 30, 'quantity' => 2, 'signed' => TRUE),
+    array('reference' => 13952 + 32, 'quantity' => 2, 'signed' => TRUE),
+    array('reference' => 13952 + 34, 'quantity' => 2, 'signed' => TRUE),
   );
-  // See page 18 of PDF attached to understand each address:
-  // 3.2 16-bit Scaled Analog Registers and Energy Meters - Basic Register Set
 
-  // Reference : 256-308
-  //+31 kWh import (low) 0-9999 1kWh UINT16 R 5
-  //+32 kWh import (high) 0-9999 ×10MWh UINT16 R 5
-  // Get total power usage count.
+  // Read registers.
   $timestamp = time();
   $data = array();
   foreach ($requests as $request) {
-    $data[] = satec_read_modbus($request['reference'], $request['quantity'] , $address, $debug);
+    $data[] = satec_read_modbus_32bit_registers($request, $address, $modbus_id, $meter_port);
   }
+
   if (!$data[0]) {
     // Send notification on error.
+    drush_log('Nothing was read from the meter.', 'error');
     drupal_mail('satec', 'error-connection', 'brice@gizra.com', 'en');
     drush_print($data);
     return FALSE;
   }
-  drush_print_r($data[0]);
-  if ($debug) {
-     dd('Reading data: ' . date('c'));
+
+  drush_log('Data received.', 'ok');
+
+  // Save data onto db.
+  if (!satec_write_data_to_db($meter_id, $data, $timestamp)) {
+    $msg = 'Error writing to db';
+    drush_log($msg, 'error');
   }
 
-  if (!satec_write_regs_to_file($data, $timestamp, $uid, $debug)) {
-    $msg = 'Error writing file';
-    drush_print($msg);
-    dd($msg);
-  }
-}
-
-/**
- * Write result to todays file.
- */
-function satec_write_regs_to_file($data, $timestamp, $uid, $debug = FALSE) {
-  // Parse power usage from array.
-  // In $data, [1] and [0] positions are the lower part of the number, whereas
-  // [1] notates 1-99 and [0] notates 100-9900. Same goes for the higher number
-  // with [3] and [2] respectively, starting at 10,000.
-  $consumption = $data[0][1] + ($data[0][0] * 100) + (($data[0][3] + ($data[0][2] * 100)) * 10000);
-  $current_consumption = $data[1][1];
-
-  if (!$file_path = satec_get_storage_file_path($timestamp, $uid)) {
-    drush_print('Unable to create dir.');
-    dd('Unable to create dir.');
-    return FALSE;
-  }
-  
-  // Begining of month
-  if ((date('j',$timestamp) == '1' || !file_exists(satec_get_storage_file_path($timestamp - (60 * 60 * 24), $uid))) && !file_exists($file_path)) {
-    // First file of the month - save the total consumption in the user entity.
-    $wrapper = entity_metadata_wrapper('user', $uid);
-    // NOTE: Uses current consumption - acceptable difference from actual last
-    // month's consumption.
-    $wrapper->field_start_consumption->set($consumption);
-    $wrapper->field_start_date->set($timestamp);
-    $wrapper->save();
-  }
-
-  $handler = fopen($file_path, 'a');
-  if (!$handler) {
-    drush_print('Unable to create file');
-    dd('Unable to create dir file');
-    return FALSE;
-  }
-  if ($debug) {
-     dd('wrote to file: ' . $file_path);
-  }
-  $res = fwrite($handler,"$timestamp\t$consumption\t$current_consumption\n");
-  fclose($handler);
-  drush_print($file_path);
   return TRUE;
 }
 
 /**
- * Read a register and return an erray with results.
+ * Write result to raw-electricity table.
+ *
+ * @param $meter_id
+ *    Node ID of the meter.
+ * @param $data
+ *    Array of meter data.
+ * @param $timestamp
+ *    The time data was read.
+ * @param bool $debug
+ *    Display additional debug information.
+ *
+ * @return bool
+ *    True if everything went fine.
  */
-function satec_read_modbus($reference = 287, $quantity = 2, $address = '212.235.53.12', $debug = FALSE) {
-  require_once(drupal_get_path('module','satec') . '/Phpmodbus/Phpmodbus/ModbusMasterTcp.php');
-  $modbus = new ModbusMasterTcp($address);
+function satec_write_data_to_db($meter_id, $data, $timestamp, $debug = FALSE) {
+  // Create a new raw-electricity entity.
+  $values = array(
+    'type' => 'satec',
+    'meter_nid' => $meter_id,
+    'timestamp' => $timestamp,
+    'rate_type' => 'unknown',
+    'kwh' => $data[2],
+    'power_factor' => $data[1] / 1000,
+    'kwh_l1' => $data[3],
+    'kwh_l2' => $data[4],
+    'kwh_l3' => $data[5],
+    'power_factor_l1' => $data[6] / 1000,
+    'power_factor_l2' => $data[7] / 1000,
+    'power_factor_l3' => $data[8] / 1000,
+  );
+
+  $entity = entity_create('electricity_raw', $values);
+
+  drush_log('entity created', 'ok');
+  drush_print_r($values);
+
+  $result = $entity->save();
+
+  if ($result != SAVED_NEW) {
+    drush_log(format_string('entity->save() returned @val instead of 1 (SAVED_NEW).', array('@val' => $result)), 'error');
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+/**
+ * Read a register and return an array with results.
+ *
+ * @param $request
+ *    Array of request parameters:
+ *    - reference: Register address.
+ *    - quantity: Number of 16bit words to read.
+ *    - signed: Is it a signed integer?
+ * @param $address
+ *    IP address of the meter.
+ * @param int $modbus_id
+ *    Modbus unit-ID of the meter (usually 1).
+ * @param int $port
+ *    Meter UDP port (usually 502).
+ * @param bool $debug
+ *    Show extra debug info?
+ *
+ * @return bool|int|number
+ *    The value, if call succeeded, or FALSE if an error occurred.
+ */
+function satec_read_modbus_32bit_registers($request, $address, $modbus_id = 1, $port = 502, $debug = FALSE) {
+  // Extract request parameters.
+  $reference = $request['reference'];
+  $quantity = $request['quantity'];
+  $signed = $request['signed'];
+
+  // Set default values.
+  $modbus_id = $modbus_id ? $modbus_id : 1;
+  $port = $port ? $port : 502;
+
+  require_once(drupal_get_path('module', 'satec') . '/Phpmodbus/Phpmodbus/ModbusMasterTcp.php');
+  $modbus = new ModbusMasterTcp($address, $port);
 
   try {
-   $moduleId = 1;
-   $recData = $modbus->readMultipleRegisters($moduleId, $reference, $quantity);
-   if ($debug) {
-     dd($recData);
-   }
-   return $recData;
+    // Read bytes from meter.
+    $recData = $modbus->readMultipleRegisters($modbus_id, $reference, $quantity);
 
+    // Calc value from returned bytes.
+    $value = 0;
+    for ($i = 0; $i < count($recData); $i += 2) {
+      $value += ($recData[$i + 1] + $recData[$i] * 256) * pow(256, $i);
+    }
+    // If value is signed, and is higher then half the full-range (256^n, where n is the number of bytes),
+    // then get the negative value by subtracting the full-range from the value.
+    if ($signed) {
+      $full_range = pow(256, count($recData));
+      if ($value >= $full_range / 2) {
+        $value -= $full_range;
+      }
+    }
+    return $value;
   }
   catch (Exception $e) {
-    //drush_print_r($e);
-    drush_print_r('Cannot read registers.');
-    dd(dt('Unbale to read registers: @reference.', array('@reference' => $referece)), 'error');
+    drush_log('Cannot read registers.');
     return FALSE;
   }
 }

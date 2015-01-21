@@ -38,12 +38,16 @@ class ModbusMasterTcp extends ModbusMaster {
   /**
    * ModbusMasterTcp
    *
-   * This is the constructor that defines {@link $host} IP address of the object. 
-   *     
-   * @param String $host An IP address of a Modbus TCP device. E.g. "192.168.1.1".
-   */         
-  function ModbusMasterTcp($host){
+   * This is the constructor that defines {@link $host} IP address of the object.
+   *
+   * @param String $host
+   *    An IP address of a Modbus TCP device. E.g. "192.168.1.1".
+   * @param String $port
+   *    The IP port of the device (usually "502").
+   */
+  function ModbusMasterTcp($host, $port){
     $this->host = $host;
+    $this->port = $port;
     $this->socket_protocol = "TCP";
   }
 }
