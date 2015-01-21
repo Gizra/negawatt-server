@@ -1,8 +1,11 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .controller('MapCtrl', function ($scope, $state, $stateParams) {
-    var openedPopup = null;
+  .controller('MapCtrl', function ($scope, $state, $stateParams, Category, ChartUsage, Map, leafletData, $timeout, account, meters) {
+    // Config map.
+    $scope.defaults = Map.getConfig();
+    $scope.center = Map.getCenter(account);
+    $scope.meters = meters;
 
     // Hover above marker in the Map -  open tooltip.
     $scope.$on("leafletDirectiveMarker.mouseover", function(event, args) {
@@ -24,9 +27,57 @@ angular.module('negawattClientApp')
       $stateParams.openedPopup = null;
     });
 
+    // Save the center of the map every time this is moved.
+    $scope.$on("leafletDirectiveMap.dragend", function() {
+      leafletData.getMap().then(function(map){
+        Map.setCenter(map.getCenter());
+      });
+    });
+
+    // Check when the map is loaded.
+    $scope.$on("leafletDirectiveMap.zoomend", function() {
+      leafletData.getMap().then(function(map){
+        Map.updateCenterZoom(map.getZoom());
+      });
+    });
+
     // Reload the current $state when meters added more.
     $scope.$on('negawattMetersChanged', function() {
       $state.reload();
     });
+
+    // Select marker in the Map.
+    $scope.$on('leafletDirectiveMarker.click', function(event, args) {
+      $state.go('dashboard.withAccount.preload.markers', {markerId: args.markerName, categoryId: Category.getSelectedCategory()});
+    });
+
+
+    /**
+    * Set the selected Meter.
+    *
+    * @param id int
+    *   The Marker ID.
+    */
+    function setSelectedMarker(id) {
+      // $timeout works as helper to select marker after the map it's loaded.
+      $timeout(function() {
+        var lastSelectedMarkerId = Map.getMarkerSelected();
+        // Unselect the previous marker.
+        if (angular.isDefined(lastSelectedMarkerId) && angular.isDefined($scope.meters[lastSelectedMarkerId])) {
+          $scope.meters[Map.getMarkerSelected()].unselect()
+        }
+
+        // Select the marker.
+        if (angular.isDefined($scope.meters[id])) {
+          $scope.meters[id].select();
+          Map.setMarkerSelected(id);
+        }
+      });
+
+    }
+
+    if ($stateParams.markerId) {
+      setSelectedMarker($stateParams.markerId);
+    }
 
   });

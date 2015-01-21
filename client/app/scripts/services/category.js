@@ -8,7 +8,13 @@ angular.module('negawattClientApp')
     var cache = {};
 
     // Selected category.
-    var selected;
+    //var selected;
+
+    // Promise in progress of categories.
+    var getCategories;
+
+    // Update event broadcast name.
+    var broadcastUpdateEventName = 'nwCategoriesChanged';
 
     /**
      * Returns the selected category ID.
@@ -16,49 +22,49 @@ angular.module('negawattClientApp')
      * @returns {*}
      */
     this.getSelectedCategory = function() {
-      return selected;
+      return cache.selected;
     };
 
     /**
-     * Save the selected category ID.
+     * Save the selected category ID, if categoryId ID is empty save undefined.
      *
      * @param categoryId
-     *    The category Id.
+     *  The category ID.
      */
     this.setSelectedCategory = function(categoryId) {
-      selected = categoryId;
-    };
-
-    /**
-     * Reset the selected category ID.
-     */
-    this.resetSelectedCategory = function() {
-      selected = undefined;
+      cache.selected = categoryId;
     };
 
     /**
      * Return the promise with the category list, from cache or the server.
      *
+     * @param accountId - int
+     *  The account ID.
      * @param categoryId - int
-     *  The categoryId.
+     *  The category ID.
      *
      * @returns {Promise}
      */
-    this.get = function(categoryId) {
-      var gettingCategories;
+    this.get = function(accountId, categoryId) {
 
-      gettingCategories = $q.when(cache.data || getCategories());
+      getCategories = $q.when(getCategories || angular.copy(cache.data) || getCategoriesFromServer());
 
       // Prepare the categories object.
-      gettingCategories = prepareCategories(gettingCategories);
+      getCategories = prepareCategories(getCategories, accountId);
 
       // Filtering in the case we have categoryId defined.
       if (angular.isDefined(categoryId)) {
         // Set Activity Category.
-        gettingCategories = gettingCategoriesFilterByCategory(gettingCategories, categoryId);
+        getCategories = getCategoriesFilterByCategory(getCategories, categoryId);
       }
 
-      return gettingCategories;
+      // Clear the promise cached, after resolve or reject the promise. Permit access to the cache data, when
+      // the promise excecution is done (finally).
+      getCategories.finally(function getCategoriesFinally() {
+        getCategories = undefined;
+      });
+
+      return getCategories;
     };
 
     /**
@@ -66,7 +72,7 @@ angular.module('negawattClientApp')
      *
      * @returns {$q.promise}
      */
-    function getCategories() {
+    function getCategoriesFromServer() {
       var deferred = $q.defer();
       var url = Config.backend + '/api/meter_categories';
       $http({
@@ -74,8 +80,7 @@ angular.module('negawattClientApp')
         url: url,
         cache: true
       }).success(function(categories) {
-        setCache(categories.data);
-        deferred.resolve(cache.data);
+        deferred.resolve(categories.data);
       });
 
       return deferred.promise;
@@ -84,18 +89,18 @@ angular.module('negawattClientApp')
     /**
      * Return a promise with the categories list, filter by category.
      *
-     * @param gettingCategories
+     * @param getCategories
      *  Promise with the list of categories.
      * @param categoryId
      *  The category ID.
      * @returns {$q.promise}
      *  Promise with the list of categories filtered.
      */
-    function gettingCategoriesFilterByCategory(gettingCategories, categoryId) {
+    function getCategoriesFilterByCategory(getCategories, categoryId) {
       var deferred = $q.defer();
 
       // Filter meters with a category.
-      gettingCategories.then(function(categories) {
+      getCategories.then(function getCategoriesFilterByCategoryResolve(categories) {
         // Necessary to separate the cache from the filtering.
         categories = angular.copy(categories);
         categories.collection = $filter('filter')(Utils.toArray(categories.collection), {id: parseInt(categoryId)}, true).pop().children;
@@ -122,7 +127,7 @@ angular.module('negawattClientApp')
       $timeout(function() {
         cache.data = undefined;
       }, 60000);
-      $rootScope.$broadcast('negawattCategoriesChanged');
+      $rootScope.$broadcast(broadcastUpdateEventName);
     }
 
 
@@ -133,20 +138,22 @@ angular.module('negawattClientApp')
      *
      * Return the categories object into a promises.
      *
-     * @param gettingCategories - {$q.promise)
+     * @param getCategories - {$q.promise)
      *  Promise of list of categories, comming from cache or the server.
+     * @param accountId - int
+     *  The account ID.
+     *
      */
-    function prepareCategories(gettingCategories) {
+    function prepareCategories(getCategories, accountId) {
       var deferred = $q.defer();
 
       // Get all the meters.
-      Meter.get().then(function(meters) {
+      Meter.get(accountId).then(function(meters) {
         self.meters = Utils.toArray(meters);
-
-        gettingCategories
+        getCategories
           .then(addNumberOfMetersByCategory)
           .then(prepareData)
-          .then(function(categories) {
+          .then(function prepareCategoriesResolve(categories) {
             setCache(categories);
             deferred.resolve(cache.data);
           });
@@ -169,7 +176,6 @@ angular.module('negawattClientApp')
       var deferred = $q.defer();
       var metersCategories;
       var list = (angular.isArray(categories)) ? categories : categories.list;
-
       // Set meters in 0.
       angular.forEach(list, function(category) {
         category.meters = 0;
@@ -308,5 +314,9 @@ angular.module('negawattClientApp')
 
       return (angular.isDefined(parent)) ? parent.id : undefined;
     }
+
+    $rootScope.$on('nwClearCache', function() {
+      cache = {};
+    });
 
   });

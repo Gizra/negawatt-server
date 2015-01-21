@@ -44,7 +44,7 @@ angular.module('negawattClientApp')
         });
 
       return deferred.promise;
-    }
+    };
 
     this.meterSelected = function(meter) {
       // Get meter name
@@ -58,7 +58,7 @@ angular.module('negawattClientApp')
         this.usageChartParams.options.title = chartTitle;
       }
 
-    }
+    };
 
     /**
      *  From the object received from the server transforming to chart object format.
@@ -153,7 +153,7 @@ angular.module('negawattClientApp')
           'label': 'שפל',
           'type': 'number',
           'p': {}
-        },
+        }
       ];
 
       // Build rows

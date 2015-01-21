@@ -6,14 +6,17 @@ angular.module('negawattClientApp')
     /**
      * Get the chart data and plot.
      *
+     * @param accountId
+     *  The account ID.
      * @param categoryId
-     *    The category Id.
+     *  The category ID.
+     *
      * @returns {$q.promise}
      */
-    this.get = function(categoryId) {
+    this.get = function(accountId, categoryId) {
       var deferred = $q.defer();
 
-      Category.get(categoryId).then(function(categories) {
+      Category.get(accountId, categoryId).then(function(categories) {
         deferred.resolve((categories.collection) ? transformDataToDatasets(categories.collection, categoryId) : {});
       });
 

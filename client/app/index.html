@@ -18,12 +18,13 @@
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
   </head>
-  <body ng-app="negawattClientApp" loading-bar-text>
+  <body ng-app="negawattClientApp">
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
     <!-- Add your site or application content here -->
+    <loading-bar-text></loading-bar-text>
     <div ui-view></div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
@@ -95,9 +96,10 @@
     <script src="scripts/controllers/category.js"></script>
     <script src="scripts/controllers/details.js"></script>
     <script src="scripts/controllers/menu.js"></script>
+    <script src="scripts/controllers/message.js"></script>
     <script src="scripts/services/meter.js"></script>
     <script src="scripts/services/category.js"></script>
-    <script src="scripts/services/charUsage.js"></script>
+    <script src="scripts/services/chartUsage.js"></script>
     <script src="scripts/services/chartCategories.js"></script>
     <script src="scripts/services/electricity.js"></script>
     <script src="scripts/services/auth.js"></script>

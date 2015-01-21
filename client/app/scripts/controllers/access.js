@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .controller('AccessCtrl', function($scope, Auth, $state) {
+  .controller('AccessCtrl', function($scope, $state, Auth, Profile) {
 
     // Will be FALSE during login GET period - will cause the login button to be disabled.
     $scope.loginButtonEnabled = true;
@@ -20,7 +20,7 @@ angular.module('negawattClientApp')
     $scope.login = function(user) {
       $scope.loginButtonEnabled = false;
       Auth.login(user).then(function() {
-        $state.go('dashboard.controls');
+        $state.go('dashboard');
       }, function() {
         $state.go('login');
         $scope.loginButtonEnabled = true;

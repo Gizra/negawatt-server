@@ -2,13 +2,13 @@
 <h3 class="menu-title">NegaWatt</h3>
 <span class="menu-separator"></span>
 <div ng-controller="AccessCtrl" class="menu-account">
-  <img src="../../images/photo.png" alt=""/><span> שלום,   {{ profile.user.label }} </span> <a ng-click="logout()">  התנתק </a>
+  <img src="../../images/photo.png" alt=""/><span> שלום,   {{ user.label }} </span> <a ng-click="logout()">  התנתק </a>
 </div>
 
-<div class="menu-logo" ng-controller="MenuCtrl">
+<div class="menu-logo">
   <a ng-click="reloadDashboard()" href="">
-    <img ng-src="{{ profile.account.logo.styles.thumbnail }}" alt=""/>
-    <h4> {{ profile.account.label }} </h4>
+    <img ng-src="{{ account.logo.styles.thumbnail }}" alt=""/>
+    <h4> {{ account.label }} </h4>
   </a>
 </div>
 <ui-view></ui-view>

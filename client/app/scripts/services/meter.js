@@ -2,6 +2,7 @@
 
 angular.module('negawattClientApp')
   .service('Meter', function ($q, $http, $timeout, $filter, $state, $rootScope, Config, Marker, Utils) {
+    var self = this;
 
     // A private cache key.
     var cache = {};
@@ -9,41 +10,58 @@ angular.module('negawattClientApp')
     // Handle when reset the cache, this need it to handle multiple pagination data.
     var skipResetCache = false;
 
+    // Force to only execute one request
+    var getMeters;
+
+    // Update event broadcast name.
+    var broadcastUpdateEventName = 'nwMetersChanged';
+
     /**
      * Return a promise with the meter list, from cache or the server.
      *
+     * @param accountId
+     *  The account ID.
      * @param categoryId
      *  The category ID.
      *
      * @returns {Promise}
      *
      */
-    this.get = function(categoryId) {
-      var gettingMeters = $q.when(cache.data || getDataFromBackend());
+    this.get = function(accountId, categoryId) {
+      // We return the promise in progress, cache data or data from the server.
+      getMeters = $q.when(getMeters || angular.copy(cache.data) || getDataFromBackend(accountId));
 
       // Filtering in the case we have categoryId defined.
       if (angular.isDefined(categoryId)) {
-        gettingMeters = gettingMetersFilterByCategory(gettingMeters, categoryId);
+        getMeters = getMetersFilterByCategory(getMeters, categoryId);
       }
 
-      return gettingMeters;
+      // Clear the promise cached, after resolve or reject the promise. Permit access to the cache data, when
+      // the promise excecution is done (finally).
+      getMeters.finally(function getMeterFinally() {
+        getMeters = undefined;
+      });
+
+      return getMeters;
     };
 
     /**
      * Return meters array from the server.
      *
+     * @param accountId
+     *  The account ID.
      * @param pageNumber
-     *    The url for the next list (page) of meters.
+     *  The url for the next list (page) of meters.
      *
      * @returns {$q.promise}
      */
-    function getDataFromBackend(pageNumber) {
+    function getDataFromBackend(accountId, pageNumber) {
       var deferred = $q.defer();
       var url;
       pageNumber = pageNumber || 1;
 
       // Define endpoint.
-      url = Config.backend + '/api/iec_meters?page=' + pageNumber;
+      url = Config.backend + '/api/iec_meters?filter[account]=' + accountId + '&page=' + pageNumber;
 
       $http({
         method: 'GET',
@@ -51,12 +69,12 @@ angular.module('negawattClientApp')
         transformResponse: prepareMetersForLeafletMarkers
       }).success(function(meters) {
         setCache(meters.data);
-        deferred.resolve(cache.data);
+        deferred.resolve(meters.data);
 
         // Update with the rest of the markers.
         if (meters.hasNextPage) {
           skipResetCache = true;
-          getDataFromBackend(getPageNumber(meters.hasNextPage.href));
+          getDataFromBackend(accountId, getPageNumber(meters.hasNextPage.href));
         }
 
         resetCache();
@@ -79,7 +97,7 @@ angular.module('negawattClientApp')
       };
 
       // Broadcast and event to update the markers in the map.
-      $rootScope.$broadcast('negawattMetersChanged');
+      $rootScope.$broadcast(broadcastUpdateEventName);
 
       // Active the reset after update the cache.
       skipResetCache = false;
@@ -94,7 +112,7 @@ angular.module('negawattClientApp')
       }
 
       // Clear cache in 10 minutes.
-      $timeout(function() {
+      $timeout(function timeoutResetCache() {
         cache.data = undefined;
       }, 600000);
     }
@@ -119,7 +137,7 @@ angular.module('negawattClientApp')
 
       // Save meters and the next request to get hasNextPage meters (if exist).
       meters = {
-        data: response.data,
+        data: Utils.indexById(response.data),
         hasNextPage: response.next || false
       };
 
@@ -139,6 +157,7 @@ angular.module('negawattClientApp')
 
         // Extend meter with marker properties and methods.
         angular.extend(meters.data[item.id], Marker);
+
         // Define default icon properties and methods, in order, to be changed later.
         meters.data[item.id].unselect();
       });
@@ -149,7 +168,7 @@ angular.module('negawattClientApp')
     /**
      * Return a promise with the meter list, from cache or the server. Filter by a category.
      *
-     * @param gettingMeter - {$q.promise}
+     * @param getMeters - {$q.promise}
      *    Promise with the list of meters.
      *
      * @param categoryId
@@ -158,16 +177,21 @@ angular.module('negawattClientApp')
      * @returns {$q.promise}
      *    Promise of a list of meters filter by category..
      */
-    function gettingMetersFilterByCategory(gettingMeter, categoryId) {
+    function getMetersFilterByCategory(getMeters, categoryId) {
       var deferred = $q.defer();
 
       // Filter meters with a category.
-      gettingMeter.then(function(meters) {
+      getMeters.then(function(meters) {
         meters = Utils.indexById($filter('filter')(Utils.toArray(meters), function(meter) {
-          if (meter.meter_categories && meter.meter_categories.indexOf(categoryId) !== -1) {
+
+          // Convert categories id to integer.
+          meter.meter_categories = meter.meter_categories.map(function(item) { return parseInt(item)});
+
+          if (meter.meter_categories && meter.meter_categories.indexOf(parseInt(categoryId)) !== -1) {
             return meter;
           }
         }, true));
+
         deferred.resolve(meters);
       });
 
@@ -186,5 +210,7 @@ angular.module('negawattClientApp')
       return regex.exec(url).pop();
     }
 
-
+    $rootScope.$on('nwClearCache', function() {
+      cache = {};
+    });
   });

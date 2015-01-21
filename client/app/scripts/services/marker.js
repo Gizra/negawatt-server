@@ -43,6 +43,12 @@ angular.module('negawattClientApp')
       /**
        * Return "default" icon to set icon marker is unselected.
        */
+      getSelected: function() {
+        return selected;
+      },
+      /**
+       * Return "default" icon to set icon marker is unselected.
+       */
       unselect: function() {
         this.icon = getIcon('default');
       },
@@ -57,7 +63,6 @@ angular.module('negawattClientApp')
         }
         selected = this;
         this.icon = getIcon('selected');
-
         Map.centerMapByMarker(this);
       },
       /**

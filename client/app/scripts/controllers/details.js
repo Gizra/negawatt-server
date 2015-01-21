@@ -1,7 +1,30 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .controller('DetailsCtrl', function ($scope, $stateParams) {
-    // Share meter selected.
-    $scope.meterSelected = $scope.meters[$stateParams.markerId];
+  .controller('DetailsCtrl', function ($scope, $state, $stateParams, ChartCategories, categoriesChart, meters) {
+    var categoryId;
+    $scope.categoriesChart = categoriesChart;
+
+    // Select category form the pie chart.
+    $scope.onSelect = function(selectedItem, chartData) {
+      categoryId = ChartCategories.getCategoryIdSelected(selectedItem, chartData);
+      if (angular.isDefined(categoryId)) {
+        $state.go('dashboard.withAccount.preload.categories', {accountId: $stateParams.accountId, categoryId: categoryId});
+      }
+    };
+
+    /**
+     * Set the selected Meter.
+     *
+     * @param id int
+     *   The Marker ID.
+     */
+    function setSelectedMarker(id) {
+      // Use in the widget 'Details'.
+      $scope.meterSelected = meters[id];
+    }
+
+    if ($stateParams.markerId) {
+      setSelectedMarker($stateParams.markerId);
+    }
   });

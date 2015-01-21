@@ -4,8 +4,10 @@ angular.module('negawattClientApp')
   .service('Message', function ($q, $http, $rootScope, $state, $timeout, $sce, Config) {
 
     // A private cache key.
-    var cache = {
-    };
+    var cache = {};
+
+    // Update event broadcast name.
+    var broadcastUpdateEventName = 'nwMessagesChanged';
 
     /**
      * Return the promise with the meter list, from cache or the server.
@@ -79,6 +81,10 @@ angular.module('negawattClientApp')
       $timeout(function() {
         cache.data = undefined;
       }, 60000);
-      $rootScope.$broadcast('negawatt.messages.changed');
+      $rootScope.$broadcast(broadcastUpdateEventName);
     }
+
+    $rootScope.$on('nwClearCache', function() {
+      cache = {};
+    });
   });

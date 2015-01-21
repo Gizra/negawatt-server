@@ -8,17 +8,36 @@
  * Controller of the negawattClientApp
  */
 angular.module('negawattClientApp')
-  .controller('CategoryCtrl', function ($scope, $state, ChartCategories, categoriesChart, categories) {
-    var categoryId;
-    $scope.categoriesChart = categoriesChart;
+  .controller('CategoryCtrl', function ($scope, $state, $stateParams, Category, categories) {
     $scope.categories = categories;
+    $scope.allCategories = categories;
+    $scope.accountId = $stateParams.accountId;
 
-    // Select category form the pie chart.
-    $scope.onSelect = function(selectedItem, chartData) {
-      categoryId = ChartCategories.getCategoryIdSelected(selectedItem, chartData);
-      if (angular.isDefined(categoryId)) {
-        $state.go('dashboard.controls.categories', {categoryId: categoryId});
-      }
+     /**
+     * Determine if a category has meters.
+     *
+     * @param category
+     *  The category.
+     *
+     * @returns {boolean}
+     *  It's true if the category has meters.
+     */
+    $scope.hasMeters = function(category) {
+      return !!category.meters;
     };
+
+    /**
+     * Set the selected category.
+     *
+     * @param id int
+     *   The Category ID.
+     */
+    function setSelectedCategory(id) {
+      Category.setSelectedCategory(id);
+    }
+
+    if ($stateParams.categoryId) {
+      setSelectedCategory($stateParams.categoryId);
+    }
 
   });

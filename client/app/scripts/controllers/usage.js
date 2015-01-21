@@ -8,6 +8,16 @@
  * Controller of the negawattClientApp
  */
 angular.module('negawattClientApp')
-  .controller('UsageCtrl', function ($scope, usage) {
+  .controller('UsageCtrl', function ($scope, $stateParams, usage, meters, ChartUsage) {
     $scope.usageChart = usage;
+
+    // Detail information of the selected marker.
+    if (angular.isDefined($stateParams.markerId)) {
+      // Share meter selected.
+      $scope.meterSelected = meters[$stateParams.markerId];
+
+      // Chart usage information of the selected marker.
+      ChartUsage.meterSelected(meters[$stateParams.markerId]);
+    }
+
   });

@@ -1,13 +1,17 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Profile', function ($q, $http, $timeout, $state, $rootScope, Config) {
+  .service('Profile', function ($q, $http, $timeout, $filter, $state, $rootScope, Config) {
+    var self = this;
 
     // A private cache key.
     var cache = {};
 
     // Update event broadcast name.
     var broadcastUpdateEventName = 'nwProfileChanged';
+
+    // Save the account ID of the active account.
+    var activeAccountId;
 
     /**
      * Return the promise with the account, from cache or the server.
@@ -19,6 +23,43 @@ angular.module('negawattClientApp')
     };
 
     /**
+     * Return the account active
+     *
+     * @param accountId
+     *  The account ID comming form the URL params.
+     * @param profile
+     *  The object profile
+     *
+     * @returns {*}
+     *  The account object selected.
+     */
+    this.selectAccount = function(accountId, profile) {
+      var active,
+        position;
+
+      // Get select the account as active.
+      active = $filter('filter')(profile.account, {id: accountId});
+
+      profile.account.map(function(item, index) {
+        if (item.id === accountId) {
+          // Remove the selection from the original array.
+          profile.account.splice(index, 1);
+          return;
+        }
+      });
+
+      // Insert in the beginning of the Array.
+      profile.account.unshift(active.pop());
+
+      // Clear app cache, if new account was selected or there not define the active account.
+      if (activeAccountId !== profile.account[0].id) {
+        $rootScope.$broadcast('nwClearCache');
+      }
+
+      return profile.account[0];
+    };
+
+    /**
      * Return a promise of an profile object object from the server.
      *
      * The Profile object have the information of the account and the user session.
@@ -26,11 +67,11 @@ angular.module('negawattClientApp')
      * @returns {$q.promise}
      */
     function getDataFromBackend() {
-      var promises,
+      var getProfile,
         deferred = $q.defer();
 
-      promises = $q.all([getUserData(), getAccountData()]);
-      promises.then(function(data) {
+      getProfile = $q.all([getUserData(), getAccountData()]);
+      getProfile.then(function(data) {
         setCache(data);
         deferred.resolve(cache.data);
       });
@@ -121,27 +162,31 @@ angular.module('negawattClientApp')
       }
 
       // Convert response serialized to an object.
-      var account = angular.fromJson(data);
+      var accounts = angular.fromJson(data);
 
-      if (!account) {
+      if (!accounts) {
         // Response code was a 401.
         return;
       }
 
-      account = account.data[0];
+      angular.forEach(accounts.data, function(account, index) {
+        // Convert center information for leafleat Map.
+        account.center = {
+          lat: parseFloat(account.location.lat),
+          lng: parseFloat(account.location.lng),
+          zoom: parseInt(account.zoom)
+        };
 
-      // Convert center information for leafleat Map.
-      account.center = {
-        lat: parseFloat(account.location.lat),
-        lng: parseFloat(account.location.lng),
-        zoom: parseInt(account.zoom)
-      };
+        delete account.location;
+        delete account.zoom;
+      });
 
-      delete account.location;
-      delete account.zoom;
 
-      return account;
+      return accounts.data;
     }
 
+    $rootScope.$on('nwClearCache', function() {
+      cache = {};
+    });
 
   });

@@ -6,6 +6,14 @@ angular.module('negawattClientApp')
     // A private cache key.
     var cache = {};
 
+    // Array of $timeout promises to clear the cache.
+    var timeouts = [];
+
+    var getElectricity;
+
+    // Update event broadcast name.
+    var broadcastUpdateEventName = 'nwElectricityChanged';
+
     /**
      * Return the promise with the meter list, from cache or the server.
      *
@@ -14,7 +22,17 @@ angular.module('negawattClientApp')
     this.get = function(filters) {
       // Create a hash from the filters object for indexing the cache
       var filtersHash = md5.createHash(JSON.stringify(filters));
-      return $q.when(cache[filtersHash] && cache[filtersHash].data || getDataFromBackend(filters, filtersHash));
+
+      // Preparation of the promise and cache for Electricity request.
+      getElectricity = $q.when(getElectricity || cache[filtersHash] && cache[filtersHash].data || getDataFromBackend(filters, filtersHash));
+
+      // Clear the promise cached, after resolve or reject the promise. Permit access to the cache data, when
+      // the promise excecution is done (finally).
+      getElectricity.finally(function getElectricityFinally() {
+        getElectricity = undefined;
+      });
+
+      return getElectricity;
     };
 
     /**
@@ -72,11 +90,26 @@ angular.module('negawattClientApp')
         data: data,
         timestamp: new Date()
       };
+
       // Clear cache in 60 seconds.
-      $timeout(function() {
-        cache[key].data = undefined;
-      }, 60000);
-      $rootScope.$broadcast('negawatt.electricity.changed');
+      timeouts.push($timeout(function() {
+        if (angular.isDefined(cache[key])) {
+          cache[key].data = undefined;
+        }
+      }, 60000));
+      $rootScope.$broadcast(broadcastUpdateEventName);
     }
+
+    $rootScope.$on('nwClearCache', function() {
+      cache = {};
+
+      // Cancel Promises of timeout to clear the cache.
+      angular.forEach(timeouts, function(timeout) {
+        $timeout.cancel(timeout);
+      });
+
+      // Destroy pile of timeouts.
+      timeouts = [];
+    });
   });
 

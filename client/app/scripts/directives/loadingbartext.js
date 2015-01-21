@@ -9,8 +9,32 @@
 angular.module('negawattClientApp')
   .directive('loadingBarText', function () {
     return {
-      link: function postLink(scope, element) {
-        element.prepend('<div class=\"splash-screen\">טוען...</div>');
-      }
+      restrict: 'EA',
+      template: '<div class="splash-screen" ng-show="isLoading">{{text}}</div>',
+      controller: function($scope) {
+        $scope.text = 'טוען...';
+        $scope.isLoading = false;
+
+        /**
+         * Determine if the text is showing.
+         *
+         * @param isLoading - Boolean
+         *  True show the text, false hide it.
+         */
+        function setLoading(isLoading) {
+          $scope.isLoading = isLoading;
+        }
+
+        // Events to set the message when start the XHR request until is completed.
+        $scope.$on('cfpLoadingBar:started', function() {
+          setLoading(true);
+        });
+
+        $scope.$on('cfpLoadingBar:completed', function() {
+          setLoading(false);
+        });
+      },
+      // Isolate scope.
+      scope: {}
     };
   });

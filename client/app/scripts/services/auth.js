@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Auth', function($injector, Utils, localStorageService, Config) {
+  .service('Auth', function($injector, $rootScope, Utils, localStorageService, Config) {
     /**
      * Login by calling the Drupal REST server.
      *
@@ -29,6 +29,8 @@ angular.module('negawattClientApp')
      */
     this.logout = function() {
       localStorageService.remove('access_token');
+
+      $rootScope.$broadcast('nwClearCache');
     };
 
     /**

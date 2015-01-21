@@ -32,7 +32,8 @@ class NegawattUsersMigrate extends Migration {
 
     $this
       ->addFieldMapping('og_user_node', 'account')
-      ->sourceMigration('NegawattAccountMigrate');
+      ->sourceMigration('NegawattAccountMigrate')
+      ->separator('|');
 
     $this
       ->addFieldMapping('status')
@@ -52,5 +53,19 @@ class NegawattUsersMigrate extends Migration {
     // Create a MigrateSource object.
     $this->source = new MigrateSourceCSV(drupal_get_path('module', 'negawatt_migrate') . '/csv/' . $this->entityType . '/user.csv', $this->csvColumns, array('header_rows' => 1));
     $this->destination = new MigrateDestinationUser();
+  }
+
+  /**
+   * Prepare object for multiple accounts as OG expected.
+   */
+  public function prepare($entity, $row) {
+    if (empty($entity->og_user_node)) {
+      return;
+    }
+    foreach ($entity->og_user_node[LANGUAGE_NONE] as &$value) {
+      if (is_array($value['target_id'])) {
+        $value['target_id'] = $value['target_id']['destid1'];
+      }
+    }
   }
 }

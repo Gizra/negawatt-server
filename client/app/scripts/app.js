@@ -27,123 +27,138 @@ angular
   ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
     // For any unmatched url, redirect to '/'.
-    $urlRouterProvider.otherwise('/dashboard');
+    $urlRouterProvider.otherwise('/');
 
     // Setup the states.
     $stateProvider
       .state('login', {
-        url: '/',
+        url: '/login',
         templateUrl: 'views/login.html'
       })
       .state('dashboard', {
-        abstract: true,
+        url: '',
         templateUrl: 'views/dashboard/main.html',
         resolve: {
-          meters: function(Meter) {
-            return Meter.get();
-          },
-          messages: function(Message) {
-            return Message.get();
-          },
-          mapConfig: function(Map) {
-            return Map.getConfig();
-          },
-          categories: function(Category) {
-            return Category.get();
-          },
           profile: function(Profile) {
             return Profile.get();
-          },
-          usage: function(ChartUsage) {
-            return ChartUsage.get();
           }
         },
         controller: 'DashboardCtrl'
       })
-      .state('dashboard.controls',  {
-        url: '/dashboard',
-        views: {
-          map: {
-            templateUrl: 'views/dashboard/main.map.html'
+      .state('dashboard.withAccount', {
+        abstract: true,
+        url: '/dashboard/{accountId:int}',
+        resolve: {
+          account: function($stateParams, Profile, profile) {
+            return Profile.selectAccount($stateParams.accountId, profile);
           },
-          menu: {
-            templateUrl: 'views/dashboard/main.menu.html'
+          categories: function(Category, account) {
+            return Category.get(account.id);
           },
-          categories: {
-            templateUrl: 'views/dashboard/main.categories.html',
-            resolve: {
-              categories: function(Category) {
-                return Category.get();
-              }
-            }
-          },
-          messages: {
-            templateUrl: 'views/dashboard/main.messages.html'
-          },
-          details: {
-            templateUrl: 'views/dashboard/main.details.html',
-            resolve: {
-              categoriesChart: function(ChartCategories) {
-                return ChartCategories.get();
-              }
-            },
-            controller: 'CategoryCtrl'
-          },
-          usage: {
-            templateUrl: 'views/dashboard/main.usage.html',
-            resolve: {
-              meters: function(meters) {
-                return meters;
-              }
-            },
-            controller: 'DashboardCtrl'
+          meters: function(Meter, account) {
+            return Meter.get(account.id);
           }
         }
       })
-      .state('dashboard.controls.categories', {
-        url: '/category/:categoryId',
+      .state('dashboard.withAccount.preload', {
+        url: '',
+        views: {
+          'menu@dashboard': {
+            templateUrl: 'views/dashboard/main.menu.html',
+            controller: 'MenuCtrl'
+          },
+          'map@dashboard': {
+            templateUrl: 'views/dashboard/main.map.html',
+            controller: 'MapCtrl'
+          },
+          'categories@dashboard': {
+            templateUrl: 'views/dashboard/main.categories.html',
+            controller: 'CategoryCtrl'
+          },
+          'messages@dashboard': {
+            templateUrl: 'views/dashboard/main.messages.html',
+            resolve: {
+              messages: function(Message) {
+                return Message.get();
+              }
+            },
+            controller: 'MessageCtrl'
+          },
+          'usage@dashboard': {
+            templateUrl: 'views/dashboard/main.usage.html',
+            resolve: {
+              usage: function(ChartUsage) {
+                return ChartUsage.get();
+              }
+            },
+            controller: 'UsageCtrl'
+          },
+          'details@dashboard': {
+            templateUrl: 'views/dashboard/main.details.html',
+            resolve: {
+              categoriesChart: function(ChartCategories, account) {
+                return ChartCategories.get(account.id);
+              }
+            },
+            controller: 'DetailsCtrl'
+          }
+        }
+      })
+      .state('dashboard.withAccount.preload.categories', {
+        url: '/category/{categoryId:int}',
         views: {
           // Replace the map that was set by the parent state, with markers filtered by the selected category.
           'map@dashboard': {
             templateUrl: 'views/dashboard/main.map.html',
             resolve: {
-              meters: function(Meter, $stateParams) {
-                return Meter.get($stateParams.categoryId);
+              meters: function(Meter, $stateParams, account) {
+                return Meter.get(account.id, $stateParams.categoryId);
               }
             },
-            controller: 'DashboardCtrl'
+            controller: 'MapCtrl'
           },
           // Update chart of categories.
           'details@dashboard': {
             templateUrl: 'views/dashboard/main.details.html',
             resolve: {
-              categoriesChart: function(ChartCategories, $stateParams) {
-                return ChartCategories.get($stateParams.categoryId);
+              categoriesChart: function(ChartCategories, $stateParams, account) {
+                return ChartCategories.get(account.id, $stateParams.categoryId);
               }
             },
-            controller: 'CategoryCtrl'
-          }
-        }
-      })
-      .state('dashboard.controls.markers', {
-        url: '/marker/:markerId?categoryId',
-        views: {
-          // Update the meter detailed data.
-          'details@dashboard': {
-            templateUrl: 'views/dashboard/main.details.html',
             controller: 'DetailsCtrl'
           },
-          // Update electricity-usage chart in 'usage' sub view
+          'categories@dashboard': {
+            templateUrl: 'views/dashboard/main.categories.html',
+            controller: 'CategoryCtrl'
+          }
+
+
+        }
+      })
+      .state('dashboard.withAccount.preload.markers', {
+        url: '/marker/:markerId?categoryId',
+        views: {
+          // Update the Map.
           'map@dashboard': {
             templateUrl: 'views/dashboard/main.map.html',
             resolve: {
-              meters: function(Meter, Category, $stateParams) {
-                return Meter.get($stateParams.categoryId);
+              meters: function(Meter, $stateParams, account) {
+                return Meter.get(account.id, $stateParams.categoryId);
               }
             },
-            controller: 'DashboardCtrl'
+            controller: 'MapCtrl'
           },
-          // Replace the map that was set by the parent state, with markers filtered by the selected category.
+          // Update the meter detailed data.
+          'details@dashboard': {
+            templateUrl: 'views/dashboard/main.details.html',
+            resolve: {
+              // Keep angular.noop because need to resolve with an empty function 'function(){}',
+              // null or {} doesn't works.
+              categoriesChart: angular.noop
+            },
+            controller: 'DetailsCtrl'
+          },
+          // Update electricity-usage chart in 'usage' sub view.
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
@@ -152,6 +167,10 @@ angular
               }
             },
             controller: 'UsageCtrl'
+          },
+          'categories@dashboard': {
+            templateUrl: 'views/dashboard/main.categories.html',
+            controller: 'CategoryCtrl'
           }
         }
       });
