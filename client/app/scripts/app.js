@@ -23,7 +23,8 @@ angular
     'ui.router',
     'googlechart',
     'angular-md5',
-    'angular-loading-bar'
+    'angular-loading-bar',
+    'weatherModule'
   ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
     // For any unmatched url, redirect to '/'.

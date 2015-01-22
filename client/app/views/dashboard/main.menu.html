@@ -4,7 +4,9 @@
 <div ng-controller="AccessCtrl" class="menu-account">
   <img src="../../images/photo.png" alt=""/><span> שלום,   {{ user.label }} </span> <a ng-click="logout()">  התנתק </a>
 </div>
-
+<span class="menu-separator"></span>
+<todays-weather location="Kiryat Gat, IL" custom-size="25"></todays-weather>
+<span class="menu-separator"></span>
 <div class="menu-logo">
   <a ng-click="reloadDashboard()" href="">
     <img ng-src="{{ account.logo.styles.thumbnail }}" alt=""/>

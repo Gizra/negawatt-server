@@ -1,9 +1,11 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .controller('MenuCtrl', function($scope, $state, $stateParams, Category, account, profile) {
+  .controller('MenuCtrl', function($scope, $state, $stateParams, weatherService, Category, account, profile) {
     $scope.account = account;
     $scope.user = profile.user;
+
+    var weather = weatherService.getWeather('Tel');
 
     /**
      * Reset category selection and back to the home.
