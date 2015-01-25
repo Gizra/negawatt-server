@@ -23,7 +23,10 @@ angular
     'ui.router',
     'googlechart',
     'angular-md5',
-    'angular-loading-bar'
+    'angular-loading-bar',
+    'ui.bootstrap.tabs',
+    'template/tabs/tab.html',
+    'template/tabs/tabset.html'
   ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
     // For any unmatched url, redirect to '/'.

@@ -2,8 +2,37 @@
 
 angular.module('negawattClientApp')
   .service('ChartUsage', function ($q, Electricity, moment) {
-    var ChartUsage = this,
-      usageChartParams = null;
+    var ChartUsage = this;
+
+    // Frequencies information.
+    var frequencies = [
+      {
+        frequency: 'year',
+        label: 'שנה',
+        type: '1'
+      },
+      {
+        frequency: 'month',
+        label: 'חודש',
+        type: '2'
+      },
+      {
+        frequency: 'day',
+        label: 'יום',
+        type: '3'
+      },
+      {
+        frequency: 'hour',
+        label: 'שעה',
+        type: '4'
+      },
+      {
+        frequency: 'minute',
+        label: 'דקות',
+        type: '5'
+      }
+
+    ];
 
     /**
      * Get the chart data and plot.
@@ -126,7 +155,7 @@ angular.module('negawattClientApp')
       var cosl = [
         {
           'id': 'month',
-          'label': 'Month',
+          'label': 'חודש',
           'type': 'string',
           'p': {}
         },
@@ -159,7 +188,7 @@ angular.module('negawattClientApp')
       // Build rows
       var rows = [];
       angular.forEach(values, function(item, timestamp) {
-        var label = moment.unix(timestamp).format('MM-YYYY')
+        var label = moment.unix(timestamp).format('MM-YYYY');
         var col = [
           { 'v': label },
           { 'v': item.flat },
@@ -198,6 +227,16 @@ angular.module('negawattClientApp')
       };
 
       return chartData;
+    };
+
+    /**
+     * Return the frequencies collection.
+     *
+     * @returns {{frequency: string, label: string, type: string}[]}
+     *  The frequencies colleciton.
+     */
+    this.getFrequencies = function() {
+      return frequencies;
     }
 
   });

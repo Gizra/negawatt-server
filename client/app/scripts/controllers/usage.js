@@ -10,6 +10,7 @@
 angular.module('negawattClientApp')
   .controller('UsageCtrl', function ($scope, $stateParams, usage, meters, ChartUsage) {
     $scope.usageChart = usage;
+    $scope.frequencies = ChartUsage.getFrequencies();
 
     // Detail information of the selected marker.
     if (angular.isDefined($stateParams.markerId)) {
