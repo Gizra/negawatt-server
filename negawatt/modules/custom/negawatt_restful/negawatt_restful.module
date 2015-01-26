@@ -3,7 +3,7 @@
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Credentials: true');
-header('Access-Control-Allow-Headers: Authorization, access_token');
+header('Access-Control-Allow-Headers: Authorization, access-token');
 
 /**
  * Implements hook_ctools_plugin_directory().
