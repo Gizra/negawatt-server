@@ -62,7 +62,7 @@ script:
   - grunt serve > ~/grunt.log 2>&1 &
 
   # Wait for grunt to start
-  -
+  - until $(curl --output /dev/null --silent --head --fail http://localhost:9000); do sleep 1; echo '.'; done
 
   # Run phantomJs.
   - phantomjs --webdriver=4444 > ~/phantomjs.log 2>&1 &
