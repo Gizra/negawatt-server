@@ -61,10 +61,8 @@ script:
   - cp config.travis.json config.json
   - grunt serve > ~/grunt.log 2>&1 &
 
-  # Run selenium.
-  - wget http://selenium-release.storage.googleapis.com/2.40/selenium-server-standalone-2.40.0.jar
-  - java -jar selenium-server-standalone-2.40.0.jar -p 4444 &
-  - sleep 5
+  # Wait for grunt to start
+  -
 
   # Run phantomJs.
   - phantomjs --webdriver=4444 > ~/phantomjs.log 2>&1 &
