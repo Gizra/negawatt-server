@@ -46,6 +46,7 @@ negawatt/libraries
 www
 negawatt/themes/custom/negawatt_bootstrap/.sass-cache/
 install.sh
+pantheon-install.sh
 
 # IDE #
 ##########
