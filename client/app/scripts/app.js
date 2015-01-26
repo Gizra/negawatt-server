@@ -23,7 +23,8 @@ angular
     'ui.router',
     'googlechart',
     'angular-md5',
-    'angular-loading-bar'
+    'angular-loading-bar',
+    'angularMoment'
   ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
     // For any unmatched url, redirect to '/'.
@@ -207,7 +208,10 @@ angular
     cfpLoadingBarProvider.latencyThreshold = 1000;
 
   })
-  .run(function ($rootScope, $state, $stateParams, $log, Config) {
+  .run(function ($rootScope, $state, $stateParams, $log, Config, amMoment) {
+    // MomentJS internationalization.
+    amMoment.changeLocale('he');
+
     // It's very handy to add references to $state and $stateParams to the
     // $rootScope so that you can access them from any scope within your
     // applications.For example:

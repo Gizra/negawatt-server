@@ -1,9 +1,10 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .controller('MenuCtrl', function($scope, $state, $stateParams, Category, account, profile) {
+  .controller('MenuCtrl', function($scope, $state, $stateParams, amMoment, Timedate, Category, account, profile) {
     $scope.account = account;
     $scope.user = profile.user;
+    $scope.timedate = Timedate;
 
     /**
      * Reset category selection and back to the home.
