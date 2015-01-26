@@ -16,9 +16,9 @@ cd -
 # Excute Pantheon install outside of the Pantheon Dir.
 # Make sure you have the alias setup (use `drush sa` too see the aliases).
 
-drush @pantheon.negawatts.dev sql-drop -y --strict=0
-drush @pantheon.negawatts.dev si -y negawatt --account-pass=admin
-drush @pantheon.negawatts.dev vset restful_skip_basic_auth 1 --strict=0
-drush @pantheon.negawatts.dev en pipe_migrate -y --strict=0
-drush @pantheon.negawatts.dev mi --all --user=1 --strict=0
-drush @pantheon.negawatts.dev uli
+drush @pantheon.negawatt.dev sql-drop -y --strict=0
+drush @pantheon.negawatt.dev si -y negawatt --account-pass=admin
+drush @pantheon.negawatt.dev vset restful_skip_basic_auth 1 --strict=0
+drush @pantheon.negawatt.dev en pipe_migrate -y --strict=0
+drush @pantheon.negawatt.dev mi --all --user=1 --strict=0
+drush @pantheon.negawatt.dev uli
