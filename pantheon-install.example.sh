@@ -18,7 +18,6 @@ cd -
 
 drush @pantheon.negawatt.dev sql-drop -y --strict=0
 drush @pantheon.negawatt.dev si -y negawatt --account-pass=admin
-drush @pantheon.negawatt.dev vset restful_skip_basic_auth 1 --strict=0
 drush @pantheon.negawatt.dev en pipe_migrate -y --strict=0
 drush @pantheon.negawatt.dev mi --all --user=1 --strict=0
 drush @pantheon.negawatt.dev uli
