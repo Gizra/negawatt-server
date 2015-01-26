@@ -52,14 +52,22 @@
       width: 250px;
       padding-right: 15px;
 
-      img {
+      img.menu-account-photo {
         width: 33px;
         height: 33px;
         margin-left: 5px;
       }
 
+      img.menu-account-logout {
+        width: auto;
+        height: auto;
+        margin: 0;
+      }
+
       span {
-        width: 110px;
+        width: auto;
+        margin-left: 20px;
+
       }
 
     }
@@ -94,6 +102,13 @@
 
     }
 
+    .menu-home {
+      img {
+        width: auto;
+        height: auto;
+        margin: 0 10px 4px;
+      }
+    }
   }
 
   .dashboard-controls-container {
