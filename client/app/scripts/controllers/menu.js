@@ -10,7 +10,7 @@ angular.module('negawattClientApp')
      */
     $scope.reloadDashboard = function() {
       Category.setSelectedCategory();
-      $state.go('dashboard.withAccount.preload', {accountId: $stateParams.accountId});
+      $state.go('dashboard.withAccount.preload', {accountId: $stateParams.accountId}, {reload: true});
     };
 
   });

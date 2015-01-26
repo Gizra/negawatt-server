@@ -97,7 +97,7 @@ angular.module('negawattClientApp')
       };
 
       // Broadcast and event to update the markers in the map.
-      $rootScope.$broadcast(broadcastUpdateEventName);
+      $rootScope.$broadcast(broadcastUpdateEventName, cache.data);
 
       // Active the reset after update the cache.
       skipResetCache = false;

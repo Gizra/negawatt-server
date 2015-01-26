@@ -56,6 +56,7 @@ angular
             return Category.get(account.id);
           },
           meters: function(Meter, account) {
+            // Get first 100 records.
             return Meter.get(account.id);
           }
         }
@@ -95,8 +96,7 @@ angular
           },
           'details@dashboard': {
             templateUrl: 'views/dashboard/main.details.html',
-            resolve: {
-              categoriesChart: function(ChartCategories, account) {
+            resolve: {categoriesChart: function(ChartCategories, account) {
                 return ChartCategories.get(account.id);
               }
             },
@@ -141,11 +141,6 @@ angular
           // Update the Map.
           'map@dashboard': {
             templateUrl: 'views/dashboard/main.map.html',
-            resolve: {
-              meters: function(Meter, $stateParams, account) {
-                return Meter.get(account.id, $stateParams.categoryId);
-              }
-            },
             controller: 'MapCtrl'
           },
           // Update the meter detailed data.
@@ -162,6 +157,10 @@ angular
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
+              meters: function($stateParams, Meter, meters, account) {
+                // Assert get all the meters from cache.
+                return Meter.get(account.id, $stateParams.categoryId);
+              },
               usage: function(ChartUsage, $stateParams) {
                 return ChartUsage.get('meter', $stateParams.markerId);
               }
