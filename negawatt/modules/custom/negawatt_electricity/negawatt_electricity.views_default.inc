@@ -41,7 +41,7 @@ function negawatt_electricity_views_default_views() {
     'avg_power' => 'avg_power',
     'min_power_factor' => 'min_power_factor',
   );
-  $handler->display->display_options['style_options']['default'] = 'timestamp';
+  $handler->display->display_options['style_options']['default'] = 'type';
   $handler->display->display_options['style_options']['info'] = array(
     'id' => array(
       'sortable' => 1,
@@ -52,7 +52,7 @@ function negawatt_electricity_views_default_views() {
     ),
     'type' => array(
       'sortable' => 1,
-      'default_sort_order' => 'asc',
+      'default_sort_order' => 'desc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,

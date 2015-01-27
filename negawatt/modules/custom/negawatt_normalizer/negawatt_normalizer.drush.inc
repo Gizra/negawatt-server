@@ -59,7 +59,7 @@ function drush_negawatt_normalizer_reset_last_processed() {
     // Reset meter-processed and last-processed fields for the meter
     $wrapper = entity_metadata_wrapper('node', $node);
     $wrapper->field_meter_processed->set(FALSE);
-    $wrapper->field_last_processed->set(FALSE);
+    $wrapper->field_last_processed->set(0);
     $wrapper->save();
   }
 }
@@ -193,7 +193,7 @@ function negawatt_normalizer_process_meters($meter_start_id, $options = array())
 
     // Process a batch of meters.
     $meter_ids = array_keys($result['node']);
-    negawatt_normalizer_process_meters_once($meter_ids, array($options['time_from'], $options['time_to']));
+    negawatt_normalizer_process_meters_once($meter_ids, $options['time_from'], $options['time_to']);
   }
 }
 
@@ -205,10 +205,12 @@ function negawatt_normalizer_process_meters($meter_start_id, $options = array())
  *
  * @param array $meter_ids
  *   Array of meter-ids to process.
- * @param array $time_frame
- *   Array of from and to timestamps, giving the time frame to process.
+ * @param null|int $from_timestamp
+ *    Beginning of time period. If NULL, will be set to the last_processed time of the meter node
+ * @param null|int $to_timestamp
+ *    End of time period. If NULL, will be set to now.
  */
-function negawatt_normalizer_process_meters_once($meter_ids = array(), $time_frame = array()) {
+function negawatt_normalizer_process_meters_once($meter_ids = array(), $from_timestamp = NULL, $to_timestamp = NULL) {
   drush_log('Entering negawatt_normalizer_process_meters_once().');
   $count = count($meter_ids);
   $delta = 0;
@@ -228,7 +230,7 @@ function negawatt_normalizer_process_meters_once($meter_ids = array(), $time_fra
     drush_log(format_string('Processing meter ID @id (@delta/@count) [@meter_type, @meter_name]', $params));
 
     try {
-      $result = negawatt_normalizer_process_meter($meter_id, $time_frame);
+      $result = negawatt_normalizer_process_meter($meter_id, $from_timestamp, $to_timestamp);
 
       // Log results.
       $entities_count = count($result);
