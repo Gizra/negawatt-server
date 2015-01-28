@@ -73,6 +73,14 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     $query->leftJoin($table_name, 'cat', 'cat.entity_id=meter_nid');
     $query->addField('cat', 'field_meter_category_target_id', 'meter_category');
 
+    $query->addExpression('SUM(sum_kwh)', 'sum_kwh');
+    $query->addExpression('MIN(min_power_factor)', 'min_power_factor');
+    $query->addExpression('AVG(avg_power)', 'avg_power');
+
+    $query->groupBy('type');
+    $query->groupBy('rate_type');
+    $query->groupBy('timestamp');
+
     return $query;
   }
 
