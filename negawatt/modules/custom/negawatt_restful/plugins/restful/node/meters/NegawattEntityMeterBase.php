@@ -50,7 +50,7 @@ class NegawattEntityMeterBase extends \NegawattEntityBaseNode {
     );
 
     $public_fields['meter_categories'] = array(
-      'property' => 'field_meter_category',
+      'property' => 'meter_nid',
       'process_callbacks' => array(
         array($this, 'meterCategories'),
       ),
