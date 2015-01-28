@@ -14,5 +14,5 @@ $plugin = array(
     'id_column' => 'id',
   ),
   // Output the data in our own formatter.
-  'formatter' => 'electricity_hal_json',
+  //'formatter' => 'electricity_hal_json',
 );
