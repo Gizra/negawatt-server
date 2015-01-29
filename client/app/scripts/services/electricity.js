@@ -52,9 +52,16 @@ angular.module('negawattClientApp')
         params = {};
         angular.forEach(filters, function(item, key) {
           if (typeof item === 'object') {
-            // item is an object, go through sub items
+            // Item is an object, go through sub items
             angular.forEach(item, function(subItem, subKey) {
-              params['filter['+key+']['+subKey+']'] = subItem;
+              if (subItem instanceof Array) {
+                angular.forEach(subItem, function(subSubItem, subSubKey) {
+                  params['filter['+key+']['+subKey+']['+subSubKey+']'] = subSubItem;
+                });
+              }
+              else {
+                params['filter['+key+']['+subKey+']'] = subItem;
+              }
             });
           }
           else {

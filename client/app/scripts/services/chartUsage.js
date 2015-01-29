@@ -80,14 +80,9 @@ angular.module('negawattClientApp')
       var filters = {
         type: chart_frequency,
         timestamp: {
-          value: chart_begin_timestamp,
-          operator: '>='
+          value: [chart_begin_timestamp, chart_end_timestamp],
+          operator: 'BETWEEN'
         }
-        // @fixme: How to have two conditions on timestamp?
-        // timestamp: {
-        //  value: chart_end_timestamp,
-        //  operator: '<'
-        //}
       };
       if (selector_type) {
         filters[selector_type] = id;
@@ -170,6 +165,8 @@ angular.module('negawattClientApp')
 
       // Create a temp array like { time: {low: 1, mid:4, peak:5}, time: {..}, ..}.
       var values = {};
+      var prev_rate_type;
+      var line_chart = (chart_frequency_info.chart_type == 'LineChart');
       angular.forEach(data, function(item) {
         if (!(item.timestamp in values)) {
           // Never encountered this timestamp, create an empty object
@@ -180,7 +177,18 @@ angular.module('negawattClientApp')
           values[item.timestamp][item.rate_type] = 0;
         }
         // Sum the kWhs. Might have several meters with the same ts and rate-type...
+        // @fixme: since restful now returns totals only, there shouldn't be multiple meters...
         values[item.timestamp][item.rate_type] += +item.kwh;
+
+        // Handle problem with line chart:
+        // If haveing TOUse data, the lines should be elongated one data point forward
+        // when changing rate-type in order to 'connect' the lines of the different
+        // charts.
+        if (line_chart && prev_rate_type && prev_rate_type != item.rate_type) {
+          values[item.timestamp][prev_rate_type] = +item.kwh;
+        }
+
+        prev_rate_type = item.rate_type;
       });
 
       // Prepare cols
