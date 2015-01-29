@@ -11,10 +11,6 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
    * Overrides \RestfulBase::publicFieldsInfo().
    */
   public function publicFieldsInfo() {
-    $public_fields['id'] = array(
-      'property' => 'id'
-    );
-
     $public_fields['timestamp'] = array(
       'property' => 'timestamp'
     );
@@ -37,20 +33,6 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
 
     $public_fields['avg_power'] = array(
       'property' => 'avg_power'
-    );
-
-    $public_fields['meter'] = array(
-      'property' => 'meter_nid',
-      'resource' => array(
-        'satec_meter' => array(
-          'name' => 'meters',
-          'full_view' => FALSE,
-        ),
-        'iec_meter' => array(
-          'name' => 'meters',
-          'full_view' => FALSE,
-        ),
-      ),
     );
 
     $public_fields['meter_category'] = array(
