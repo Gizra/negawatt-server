@@ -2,8 +2,59 @@
 
 angular.module('negawattClientApp')
   .service('ChartUsage', function ($q, Electricity, moment) {
-    var ChartUsage = this,
-      usageChartParams = null;
+    var ChartUsage = this;
+
+    // Chart parameters that will be passed to google chart.
+    this.usageGoogleChartParams;
+
+    // Chart parameters.
+    this.usageChartParams = {
+      frequency: 4
+    };
+
+    // Frequencies information.
+    this.frequencyParams = {
+      1: {
+        frequency: 'year',
+        label: 'שנה',
+        type: '1',
+        unit_num_seconds: 365 * 24 * 60 * 60,
+        chart_default_time_frame: 10,
+        chart_type: 'ColumnChart'
+      },
+      2: {
+        frequency: 'month',
+        label: 'חודש',
+        type: '2',
+        unit_num_seconds: 31 * 24 * 60 * 60,
+        chart_default_time_frame: 24,
+        chart_type: 'ColumnChart'
+      },
+      3: {
+        frequency: 'day',
+        label: 'יום',
+        type: '3',
+        unit_num_seconds: 24 * 60 * 60,
+        chart_default_time_frame: 14,
+        chart_type: 'ColumnChart'
+      },
+      4: {
+        frequency: 'hour',
+        label: 'שעה',
+        type: '4',
+        unit_num_seconds: 60 * 60,
+        chart_default_time_frame: 48,
+        chart_type: 'LineChart'
+      },
+      5: {
+        frequency: 'minute',
+        label: 'דקות',
+        type: '5',
+        unit_num_seconds: 60,
+        chart_default_time_frame: 48 * 60,
+        chart_type: 'LineChart'
+      }
+    };
 
     /**
      * Get the chart data and plot.
@@ -11,36 +62,43 @@ angular.module('negawattClientApp')
      * Get chart data from server according to given filter.
      * Reformat response to shape it in chart's format.
      *
-     * @param type
+     * @param selector_type
      *   type of filter, e.g. 'meter', 'category'.
      * @param id
      *   id of the object selected.
      * @returns {$q.promise}
      */
-    this.get = function(type, id) {
+    this.get = function(selector_type, id) {
       var deferred = $q.defer();
 
-      // Limit date to 2 year back
-      var twoYearsBack = Math.floor(Date.now() / 1000) - 2 * 365 * 24 * 60 * 60;
+      var chart_frequency = this.usageChartParams.frequency;
+      var chart_frequency_info = this.frequencyParams[chart_frequency];
+      var chart_timeframe = chart_frequency_info.chart_default_time_frame;
+      var chart_end_timestamp = 1388620800; // Hard code 2/1/2014 for now. Should be: Math.floor(Date.now() / 1000);
+      var chart_begin_timestamp = chart_end_timestamp - chart_timeframe * chart_frequency_info.unit_num_seconds;
 
       var filters = {
-        // type 2 = month
-        type: '2',
+        type: chart_frequency,
         timestamp: {
-          value: twoYearsBack,
-          operator: '>'
+          value: chart_begin_timestamp,
+          operator: '>='
         }
+        // @fixme: How to have two conditions on timestamp?
+        // timestamp: {
+        //  value: chart_end_timestamp,
+        //  operator: '<'
+        //}
       };
-      if (type) {
-        filters[type] = id;
+      if (selector_type) {
+        filters[selector_type] = id;
       }
 
       // Get chart data object.
       Electricity.get(filters)
         .then(function(response) {
           // Reformat usage data for chart usage
-          ChartUsage.usageChartParams = ChartUsage.transformDataToDatasets(response);
-          deferred.resolve(ChartUsage.usageChartParams);
+          ChartUsage.usageGoogleChartParams = ChartUsage.transformDataToDatasets(response, chart_frequency_info);
+          deferred.resolve(ChartUsage.usageGoogleChartParams);
         });
 
       return deferred.promise;
@@ -49,13 +107,13 @@ angular.module('negawattClientApp')
     this.meterSelected = function(meter) {
       // Get meter name
       var chartTitle = 'צריכת חשמל';
-      if (this.usageChartParams) {
+      if (this.usageGoogleChartParams) {
         chartTitle = meter.place_description + ', ' +
         meter.place_address + ', ' +
         meter.place_locality;
 
         // Set chart title
-        this.usageChartParams.options.title = chartTitle;
+        this.usageGoogleChartParams.options.title = chartTitle;
       }
 
     };
@@ -101,11 +159,14 @@ angular.module('negawattClientApp')
      *      }
      *
      * @param {data} data
-     *   source object in electricity format.
+     *    Source object in electricity format.
+     * @param {Object} chart_frequency_info
+     *    Chart frequency info, as defined in this.frequencyParams.
+     *
      * @returns {Object}
-     *   target data in charts' datasets format.
+     *    Target data in charts' datasets format.
      **/
-    this.transformDataToDatasets = function(data) {
+    this.transformDataToDatasets = function(data, chart_frequency_info) {
 
       // Create a temp array like { time: {low: 1, mid:4, peak:5}, time: {..}, ..}.
       var values = {};
@@ -172,7 +233,7 @@ angular.module('negawattClientApp')
 
       // Construct chart data object.
       var chartData = {
-        'type': 'ColumnChart',
+        'type': chart_frequency_info.chart_type, //'ColumnChart',
         'cssStyle': 'height:210px; width:500px;',
         'data': {
           'cols': cosl,
