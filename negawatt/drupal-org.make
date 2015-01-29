@@ -57,10 +57,10 @@ projects[jquery_update][version] = "2.4"
 projects[libraries][subdir] = "contrib"
 projects[libraries][version] = "2.2"
 
-projects[loggly_http][download][type] = "file"
-projects[loggly_http][download][url] = "https://github.com/Gizra/loggly_http/archive/7.x-1.x.zip"
-projects[loggly_http][subdir] = "contrib"
-projects[loggly_http][type] = "module"
+projects[logs_http][download][type] = "file"
+projects[logs_http][download][url] = "https://github.com/Gizra/logs_http/archive/7.x-1.x.zip"
+projects[logs_http][subdir] = "contrib"
+projects[logs_http][type] = "module"
 
 projects[mailsystem][version] = 2.34
 projects[mailsystem][subdir] = "contrib"
@@ -94,7 +94,7 @@ projects[purl][version] = "1.x-dev"
 
 projects[restful][download][type] = "git"
 projects[restful][download][url] = "https://github.com/Gizra/restful.git"
-projects[restful][download][branch] = 7.x-1.x
+projects[restful][download][branch] = override-db-query
 projects[restful][subdir] = "contrib"
 projects[restful][type] = "module"
 
