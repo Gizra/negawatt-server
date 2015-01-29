@@ -20,21 +20,6 @@ class NegawattFormatterElectricityHalJson extends \RestfulFormatterHalJson {
     // Here we get the data after calling the backend storage for the resources.
     $output = parent::prepare($data);
 
-    // Calculate monthly totals for each meter.
-    $meter_id = FALSE;
-    foreach ($data as $row) {
-      if (empty($month) || $month > 12) {
-        $month = 1;
-      }
-
-      if ($meter_id !== $row['meter']->nid) {
-        $meter_id = $row['meter']->nid;
-      }
-
-      $output['total'][$month]['kwh'] += $row['kwh'];
-      $month++;
-    }
-
     return $output;
   }
 }

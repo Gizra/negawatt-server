@@ -118,6 +118,16 @@ angular
             },
             controller: 'MapCtrl'
           },
+          // Update usage-chart.
+          'usage@dashboard': {
+            templateUrl: 'views/dashboard/main.usage.html',
+            resolve: {
+              usage: function(ChartUsage, $stateParams) {
+                return ChartUsage.get('meter_category', $stateParams.categoryId);
+              }
+            },
+            controller: 'UsageCtrl'
+          },
           // Update chart of categories.
           'details@dashboard': {
             templateUrl: 'views/dashboard/main.details.html',
@@ -132,8 +142,6 @@ angular
             templateUrl: 'views/dashboard/main.categories.html',
             controller: 'CategoryCtrl'
           }
-
-
         }
       })
       .state('dashboard.withAccount.preload.markers', {
