@@ -35,6 +35,20 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
       'property' => 'avg_power'
     );
 
+    $public_fields['meter'] = array(
+      'property' => 'meter_nid',
+      'resource' => array(
+        'satec_meter' => array(
+          'name' => 'meters',
+          'full_view' => FALSE,
+        ),
+        'iec_meter' => array(
+          'name' => 'meters',
+          'full_view' => FALSE,
+        ),
+      ),
+    );
+    
     $public_fields['meter_category'] = array(
       'property' => 'meter_category',
       'column_for_query' => 'cat.field_meter_category_target_id',
