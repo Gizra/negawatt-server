@@ -63,20 +63,24 @@ angular.module('negawattClientApp')
      * Reformat response to shape it in chart's format.
      *
      * @param selector_type
-     *   type of filter, e.g. 'meter', 'category'.
+     *   Type of filter, e.g. 'meter', 'meter_category'.
      * @param id
-     *   id of the object selected.
+     *   ID of the selector, e.g. meter ID or category ID.
+     *
      * @returns {$q.promise}
      */
     this.get = function(selector_type, id) {
       var deferred = $q.defer();
 
+      // Calculate the time-frame for data request.
       var chart_frequency = this.usageChartParams.frequency;
       var chart_frequency_info = this.frequencyParams[chart_frequency];
       var chart_timeframe = chart_frequency_info.chart_default_time_frame;
+      // @fixme: hard coded timestamp here.
       var chart_end_timestamp = 1388620800; // Hard code 2/1/2014 for now. Should be: Math.floor(Date.now() / 1000);
       var chart_begin_timestamp = chart_end_timestamp - chart_timeframe * chart_frequency_info.unit_num_seconds;
 
+      // Prepare filters for data request.
       var filters = {
         type: chart_frequency,
         timestamp: {
@@ -159,7 +163,7 @@ angular.module('negawattClientApp')
      *    Chart frequency info, as defined in this.frequencyParams.
      *
      * @returns {Object}
-     *    Target data in charts' datasets format.
+     *    Target data in google charts' datasets format.
      **/
     this.transformDataToDatasets = function(data, chart_frequency_info) {
 
@@ -167,6 +171,7 @@ angular.module('negawattClientApp')
       var values = {};
       var prev_rate_type;
       var line_chart = (chart_frequency_info.chart_type == 'LineChart');
+
       angular.forEach(data, function(item) {
         if (!(item.timestamp in values)) {
           // Never encountered this timestamp, create an empty object
@@ -181,7 +186,7 @@ angular.module('negawattClientApp')
         values[item.timestamp][item.rate_type] += +item.kwh;
 
         // Handle problem with line chart:
-        // If haveing TOUse data, the lines should be elongated one data point forward
+        // If having TOUse data, the lines should be elongated one data point forward
         // when changing rate-type in order to 'connect' the lines of the different
         // charts.
         if (line_chart && prev_rate_type && prev_rate_type != item.rate_type) {
@@ -241,7 +246,7 @@ angular.module('negawattClientApp')
 
       // Construct chart data object.
       var chartData = {
-        'type': chart_frequency_info.chart_type, //'ColumnChart',
+        'type': chart_frequency_info.chart_type,
         'cssStyle': 'height:210px; width:500px;',
         'data': {
           'cols': cosl,

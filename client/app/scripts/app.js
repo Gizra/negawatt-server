@@ -118,7 +118,7 @@ angular
             },
             controller: 'MapCtrl'
           },
-          // Update usage-chart.
+          // Update usage-chart to show category summary.
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
@@ -128,7 +128,7 @@ angular
             },
             controller: 'UsageCtrl'
           },
-          // Update chart of categories.
+          // Update details (pie) chart for categories.
           'details@dashboard': {
             templateUrl: 'views/dashboard/main.details.html',
             resolve: {
