@@ -81,7 +81,7 @@ angular.module('negawattClientApp')
         params: params,
         cache: true
       }).success(function(electricity) {
-        setCache(electricity.electricity, filtersHash);
+        setCache(electricity.data, filtersHash);
         deferred.resolve(cache[filtersHash].data);
       });
 
