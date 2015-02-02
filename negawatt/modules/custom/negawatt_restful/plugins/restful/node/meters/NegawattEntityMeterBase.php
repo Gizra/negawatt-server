@@ -50,7 +50,7 @@ class NegawattEntityMeterBase extends \NegawattEntityBaseNode {
     );
 
     $public_fields['meter_categories'] = array(
-      'property' => 'meter_nid',
+      'property' => 'nid',
       'process_callbacks' => array(
         array($this, 'meterCategories'),
       ),
@@ -64,13 +64,15 @@ class NegawattEntityMeterBase extends \NegawattEntityBaseNode {
    * meter.
    *
    * @param id $value
-   *   The category id of the meter.
+   *   The meter ID.
    *
    * @return array
    *   A categories id array.
    */
   protected function meterCategories($value) {
-    $categories = taxonomy_get_parents_all($value[0]->tid);
+    $wrapper = entity_metadata_wrapper('node', $value);
+    $meter_category = $wrapper->field_meter_category->value();
+    $categories = taxonomy_get_parents_all($meter_category[0]->tid);
     foreach ($categories as $category) {
       $categories_ids[] = $category->tid;
     }
