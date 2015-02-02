@@ -9,7 +9,7 @@ angular.module('negawattClientApp')
 
     // Chart parameters.
     this.usageChartParams = {
-      frequency: 4
+      frequency: 2
     };
 
     // Frequencies information.

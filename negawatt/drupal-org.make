@@ -94,7 +94,7 @@ projects[purl][version] = "1.x-dev"
 
 projects[restful][download][type] = "git"
 projects[restful][download][url] = "https://github.com/Gizra/restful.git"
-projects[restful][download][branch] = override-db-query
+projects[restful][download][branch] = 7.x-1.x
 projects[restful][subdir] = "contrib"
 projects[restful][type] = "module"
 

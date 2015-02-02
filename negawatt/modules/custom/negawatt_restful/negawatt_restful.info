@@ -6,3 +6,7 @@ dependencies[] = entity_validator
 
 files[] = plugins/restful/node/NegawattEntityBaseNode.php
 files[] = plugins/restful/node/meters/NegawattEntityMeterBase.php
+
+; Tests
+files[] = tests/NegawattRestfulTestCase.test
+
