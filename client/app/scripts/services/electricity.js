@@ -24,7 +24,7 @@ angular.module('negawattClientApp')
       var filtersHash = md5.createHash(JSON.stringify(filters));
 
       // Preparation of the promise and cache for Electricity request.
-      getElectricity = $q.when(getElectricity || cache[filtersHash] && cache[filtersHash].data || getDataFromBackend(filters, filtersHash));
+      getElectricity = $q.when(getElectricity || cache[filtersHash] && cache[filtersHash].data || getDataFromBackend(filters, filtersHash, 0));
 
       // Clear the promise cached, after resolve or reject the promise. Permit access to the cache data, when
       // the promise excecution is done (finally).
@@ -40,11 +40,12 @@ angular.module('negawattClientApp')
      *
      * @returns {$q.promise}
      */
-    function getDataFromBackend(filters, filtersHash) {
+    function getDataFromBackend(filters, filtersHash, pageNumber) {
       var deferred = $q.defer();
       var url = Config.backend + '/api/electricity';
       var params = {};
 
+      // @todo: Move to a separate function (in Utils?).
       if (filters) {
         // Add filter parameters to the http request
         // Filter format: filter[item]=value
@@ -75,6 +76,11 @@ angular.module('negawattClientApp')
         });
       }
 
+      // If page-number is given, add it to the params.
+      if (pageNumber) {
+        params['page'] = pageNumber;
+      }
+
       $http({
         method: 'GET',
         url: url,
@@ -83,6 +89,13 @@ angular.module('negawattClientApp')
       }).success(function(electricity) {
         setCache(electricity.data, filtersHash);
         deferred.resolve(cache[filtersHash].data);
+
+        // If there are more pages, read them.
+        var hasNextPage = electricity.next || false;
+        if (hasNextPage) {
+          //skipResetCache = true;
+          getDataFromBackend(filters, filtersHash, pageNumber+1/*getPageNumber(electricity.next.href)*/);
+        }
       });
 
       return deferred.promise;
@@ -99,7 +112,7 @@ angular.module('negawattClientApp')
     function setCache(data, key) {
       // Cache messages data.
       cache[key] = {
-        data: data,
+        data: angular.extend(cache[key] ? cache[key].data : {}, data),
         timestamp: new Date()
       };
 
