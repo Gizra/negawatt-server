@@ -24,7 +24,7 @@ angular.module('negawattClientApp')
       var filtersHash = md5.createHash(JSON.stringify(filters));
 
       // Preparation of the promise and cache for Electricity request.
-      getElectricity = $q.when(getElectricity || cache[filtersHash] && cache[filtersHash].data || getDataFromBackend(filters, filtersHash, 0));
+      getElectricity = $q.when(getElectricity || cache[filtersHash] && cache[filtersHash].data || getDataFromBackend(filters, filtersHash, 0, false));
 
       // Clear the promise cached, after resolve or reject the promise. Permit access to the cache data, when
       // the promise excecution is done (finally).
@@ -40,7 +40,7 @@ angular.module('negawattClientApp')
      *
      * @returns {$q.promise}
      */
-    function getDataFromBackend(filters, filtersHash, pageNumber) {
+    function getDataFromBackend(filters, filtersHash, pageNumber, skipResetCache) {
       var deferred = $q.defer();
       var url = Config.backend + '/api/electricity';
       var params = {};
@@ -87,14 +87,17 @@ angular.module('negawattClientApp')
         params: params,
         cache: true
       }).success(function(electricity) {
-        setCache(electricity.data, filtersHash);
-        deferred.resolve(cache[filtersHash].data);
+        setCache(electricity.data, filtersHash, skipResetCache);
 
         // If there are more pages, read them.
-        var hasNextPage = electricity.next || false;
+        var hasNextPage = electricity.next != undefined;
         if (hasNextPage) {
-          //skipResetCache = true;
-          getDataFromBackend(filters, filtersHash, pageNumber+1/*getPageNumber(electricity.next.href)*/);
+          getDataFromBackend(filters, filtersHash, pageNumber + 1, true).then(function() {
+            deferred.resolve(cache[filtersHash].data);
+          });
+        }
+        else {
+          deferred.resolve(cache[filtersHash].data);
         }
       });
 
@@ -109,12 +112,19 @@ angular.module('negawattClientApp')
      * @param key
      *   A key for the cached data.
      */
-    function setCache(data, key) {
+    function setCache(data, key, skipResetCache) {
       // Cache messages data.
       cache[key] = {
-        data: angular.extend(cache[key] ? cache[key].data : {}, data),
+        data: (cache[key] ? cache[key].data : []).concat(data),
         timestamp: new Date()
       };
+
+      // Broadcast an update event.
+      $rootScope.$broadcast(broadcastUpdateEventName);
+
+      if (skipResetCache) {
+        return;
+      }
 
       // Clear cache in 60 seconds.
       timeouts.push($timeout(function() {
@@ -122,7 +132,6 @@ angular.module('negawattClientApp')
           cache[key].data = undefined;
         }
       }, 60000));
-      $rootScope.$broadcast(broadcastUpdateEventName);
     }
 
     $rootScope.$on('nwClearCache', function() {
