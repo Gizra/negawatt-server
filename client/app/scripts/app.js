@@ -179,11 +179,6 @@ angular
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
-              // @fixme: do we need this 'meters' resolved here?
-              meters: function($stateParams, Meter, meters, account) {
-                // Assert get all the meters from cache.
-                return Meter.get(account.id, $stateParams.categoryId);
-              },
               electricity: function(Electricity, $stateParams) {
                 return Electricity.get('meter', $stateParams.markerId);
               },

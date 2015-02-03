@@ -23,9 +23,7 @@ angular.module('negawattClientApp')
     // Handle lazy-load of electricity data.
     // When cache expands, update the chart.
     $scope.$on("nwElectricityChanged", function(event, newData) {
-      ChartUsage.get(newData).then(function(dataFormarted) {
-        $scope.usageChart = dataFormarted;
-      });
+      $scope.usageChart = ChartUsage.get(newData);
     });
 
   });
