@@ -21,7 +21,10 @@ angular.module('negawattClientApp')
         unit_num_seconds: 365 * 24 * 60 * 60,
         chart_default_time_frame: 10,
         chart_default_time_frame_end: 'now',
-        chart_type: 'ColumnChart'
+        chart_type: 'ColumnChart',
+        vaxis_title: 'קוט"ש בחודש',
+        haxis_format: 'YYYY',
+        haxis_title: 'שנה'
       },
       2: {
         frequency: 'month',
@@ -30,7 +33,10 @@ angular.module('negawattClientApp')
         unit_num_seconds: 31 * 24 * 60 * 60,
         chart_default_time_frame: 24,
         chart_default_time_frame_end: 'now',
-        chart_type: 'ColumnChart'
+        chart_type: 'ColumnChart',
+        vaxis_title: 'קוט"ש בשנה',
+        haxis_format: 'MM-YYYY',
+        haxis_title: 'חודש'
       },
       3: {
         frequency: 'day',
@@ -40,7 +46,10 @@ angular.module('negawattClientApp')
         chart_default_time_frame: 14,
         // @fixme: hard coded timestamp here (and below).
         chart_default_time_frame_end: 1388620800,
-        chart_type: 'ColumnChart'
+        chart_type: 'ColumnChart',
+        vaxis_title: 'קוט"ש ביום',
+        haxis_format: 'DD-MM',
+        haxis_title: 'תאריך'
       },
       4: {
         frequency: 'hour',
@@ -49,7 +58,10 @@ angular.module('negawattClientApp')
         unit_num_seconds: 60 * 60,
         chart_default_time_frame: 48,
         chart_default_time_frame_end: 1388620800,
-        chart_type: 'LineChart'
+        chart_type: 'LineChart',
+        vaxis_title: 'KW',
+        haxis_format: 'HH',
+        haxis_title: 'שעה'
       },
       5: {
         frequency: 'minute',
@@ -58,7 +70,10 @@ angular.module('negawattClientApp')
         unit_num_seconds: 60,
         chart_default_time_frame: 48 * 60,
         chart_default_time_frame_end: 1388620800,
-        chart_type: 'LineChart'
+        chart_type: 'LineChart',
+        vaxis_title: 'KW',
+        haxis_format: 'HH',
+        haxis_title: 'שעה'
       }
     };
 
@@ -254,7 +269,7 @@ angular.module('negawattClientApp')
       // Build rows
       var rows = [];
       angular.forEach(values, function(item, timestamp) {
-        var label = moment.unix(timestamp).format('MM-YYYY');
+        var label = moment.unix(timestamp).format(chartFrequencyInfo.haxis_format);
         var col = [
           { 'v': label },
           { 'v': item.flat },
@@ -279,13 +294,13 @@ angular.module('negawattClientApp')
           'fill': 20,
           'displayExactValues': true,
           'vAxis': {
-            'title': 'קוט"ש בחודש',
+            'title': chartFrequencyInfo.vaxis_title,
             'gridlines': {
               'count': 6
             }
           },
           'hAxis': {
-            'title': 'חודש'
+            'title': chartFrequencyInfo.haxis_title
           }
         },
         'formatters': {},
