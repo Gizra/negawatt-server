@@ -9,8 +9,8 @@
  */
 angular.module('negawattClientApp')
   .controller('CategoryCtrl', function ($scope, $state, $stateParams, Category, categories) {
+
     $scope.categories = categories;
-    $scope.allCategories = categories;
     $scope.accountId = $stateParams.accountId;
 
      /**
@@ -27,7 +27,7 @@ angular.module('negawattClientApp')
     };
 
     /**
-     * Set the selected category.
+     * Set the selected category, to keep in other states.
      *
      * @param id int
      *   The Category ID.

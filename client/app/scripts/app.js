@@ -37,7 +37,7 @@ angular
         templateUrl: 'views/login.html'
       })
       .state('dashboard', {
-        url: '',
+        url: '/',
         templateUrl: 'views/dashboard/main.html',
         resolve: {
           profile: function(Profile) {
@@ -47,23 +47,22 @@ angular
         controller: 'DashboardCtrl'
       })
       .state('dashboard.withAccount', {
-        abstract: true,
-        url: '/dashboard/{accountId:int}',
+        url: 'dashboard/{accountId:int}',
         resolve: {
           account: function($stateParams, Profile, profile) {
             return Profile.selectAccount($stateParams.accountId, profile);
           },
+          meters: function(Meter, account, $stateParams, Category) {
+            // Get first 100 records.
+            return Meter.get(account.id);
+          },
           categories: function(Category, account) {
             return Category.get(account.id);
           },
-          meters: function(Meter, account) {
-            // Get first 100 records.
-            return Meter.get(account.id);
+          messages: function(Message) {
+            return Message.get();
           }
-        }
-      })
-      .state('dashboard.withAccount.preload', {
-        url: '',
+        },
         views: {
           'menu@dashboard': {
             templateUrl: 'views/dashboard/main.menu.html',
@@ -79,12 +78,16 @@ angular
           },
           'messages@dashboard': {
             templateUrl: 'views/dashboard/main.messages.html',
+            controller: 'MessageCtrl'
+          },
+          'details@dashboard': {
+            templateUrl: 'views/dashboard/main.details.html',
             resolve: {
-              messages: function(Message) {
-                return Message.get();
+              categoriesChart: function(ChartCategories, account, categories, $stateParams) {
+                return ChartCategories.get(account.id, $stateParams.categoryId, categories.collection);
               }
             },
-            controller: 'MessageCtrl'
+            controller: 'DetailsCtrl'
           },
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
@@ -94,18 +97,10 @@ angular
               }
             },
             controller: 'UsageCtrl'
-          },
-          'details@dashboard': {
-            templateUrl: 'views/dashboard/main.details.html',
-            resolve: {categoriesChart: function(ChartCategories, account) {
-                return ChartCategories.get(account.id);
-              }
-            },
-            controller: 'DetailsCtrl'
           }
         }
       })
-      .state('dashboard.withAccount.preload.categories', {
+      .state('dashboard.withAccount.categories', {
         url: '/category/{categoryId:int}',
         views: {
           // Replace the map that was set by the parent state, with markers filtered by the selected category.
@@ -128,29 +123,38 @@ angular
             },
             controller: 'UsageCtrl'
           },
+          'categories@dashboard': {
+            templateUrl: 'views/dashboard/main.categories.html',
+            controller: 'CategoryCtrl'
+          },
           // Update details (pie) chart for categories.
           'details@dashboard': {
             templateUrl: 'views/dashboard/main.details.html',
             resolve: {
-              categoriesChart: function(ChartCategories, $stateParams, account) {
-                return ChartCategories.get(account.id, $stateParams.categoryId);
+              categoriesChart: function(ChartCategories, $stateParams, account, categories) {
+                return ChartCategories.get(account.id, $stateParams.categoryId, categories.collection);
               }
             },
             controller: 'DetailsCtrl'
-          },
-          'categories@dashboard': {
-            templateUrl: 'views/dashboard/main.categories.html',
-            controller: 'CategoryCtrl'
           }
         }
       })
-      .state('dashboard.withAccount.preload.markers', {
+      .state('dashboard.withAccount.markers', {
         url: '/marker/:markerId?categoryId',
         views: {
           // Update the Map.
           'map@dashboard': {
             templateUrl: 'views/dashboard/main.map.html',
+            resolve: {
+              meters: function(Meter, $stateParams, account) {
+                return Meter.get(account.id, $stateParams.categoryId);
+              }
+            },
             controller: 'MapCtrl'
+          },
+          'categories@dashboard': {
+            templateUrl: 'views/dashboard/main.categories.html',
+            controller: 'CategoryCtrl'
           },
           // Update the meter detailed data.
           'details@dashboard': {
@@ -175,10 +179,6 @@ angular
               }
             },
             controller: 'UsageCtrl'
-          },
-          'categories@dashboard': {
-            templateUrl: 'views/dashboard/main.categories.html',
-            controller: 'CategoryCtrl'
           }
         }
       });

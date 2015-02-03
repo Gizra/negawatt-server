@@ -33,6 +33,15 @@ angular.module('negawattClientApp')
     };
 
     /**
+     * Delete selected category ID.
+     *
+     * @returns {*}
+     */
+    this.clearSelectedCategory = function() {
+      cache.selected = undefined;
+    };
+
+    /**
      * Return the promise with the category list, from cache or the server.
      *
      * @param accountId - int

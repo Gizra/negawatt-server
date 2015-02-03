@@ -1,12 +1,15 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .controller('DashboardCtrl', function ($state, profile) {
+  .controller('DashboardCtrl', function ($state, $stateParams, profile) {
     var defaultAccountId;
     if (profile) {
-      // Get active account it's always in the .
-      defaultAccountId = profile.account[0].id;
-      $state.go('dashboard.withAccount.preload', {accountId: defaultAccountId});
+      // Apply only on the login wotkflow.
+      if (!(Object.keys($stateParams).length) && $state.is('dashboard')) {
+        // Get active account after login.
+        defaultAccountId = profile.account[0].id;
+        $state.go('dashboard.withAccount', {accountId: defaultAccountId});
+      }
     }
     else {
       // Redirect to login.
