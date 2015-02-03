@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Electricity', function ($q, $http, $timeout, $rootScope, Config, md5) {
+  .service('Electricity', function ($q, $http, $timeout, $rootScope, Config, md5, Utils) {
 
     // A private cache key.
     var cache = {};
@@ -45,35 +45,9 @@ angular.module('negawattClientApp')
       var url = Config.backend + '/api/electricity';
       var params = {};
 
-      // @todo: Move to a separate function (in Utils?).
       if (filters) {
         // Add filter parameters to the http request
-        // Filter format: filter[item]=value
-        // For sub items, the format is: filter[item][subItem]=value
-        // For sub-sub items (like, for 'BETWEEN' operator), the format is:
-        // filter[item][subItem][0]=value&filter[item][subItem][1]=value, etc.
-        params = {};
-        angular.forEach(filters, function(item, key) {
-          if (typeof item === 'object') {
-            // Item is an object, go through sub items
-            angular.forEach(item, function(subItem, subKey) {
-              if (subItem instanceof Array) {
-                // Subitem is an array, add the array elements with 0, 1, 2... indices.
-                angular.forEach(subItem, function(subSubItem, subSubKey) {
-                  params['filter['+key+']['+subKey+']['+subSubKey+']'] = subSubItem;
-                });
-              }
-              else {
-                // Handle subitem as a simple value.
-                params['filter['+key+']['+subKey+']'] = subItem;
-              }
-            });
-          }
-          else {
-            // Handle item as a simple value.
-            params['filter['+key+']'] = item;
-          }
-        });
+        params = Utils.filtersToParams(filters);
       }
 
       // If page-number is given, add it to the params.
