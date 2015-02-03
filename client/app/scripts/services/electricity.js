@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Electricity', function ($q, $http, $timeout, $rootScope, Config, md5, Utils) {
+  .service('Electricity', function ($q, $http, $timeout, $rootScope, ChartUsage, Config, md5, Utils) {
 
     // A private cache key.
     var cache = {};
@@ -19,7 +19,10 @@ angular.module('negawattClientApp')
      *
      * @returns {*}
      */
-    this.get = function(filters) {
+    this.get = function(seletctorType, selectorId) {
+      // Ask ChartUsage to translate selector type and id to filters.
+      var filters = ChartUsage.filtersFromSelector(seletctorType, selectorId);
+
       // Create a hash from the filters object for indexing the cache
       var filtersHash = md5.createHash(JSON.stringify(filters));
 
@@ -94,7 +97,7 @@ angular.module('negawattClientApp')
       };
 
       // Broadcast an update event.
-      $rootScope.$broadcast(broadcastUpdateEventName);
+      $rootScope.$broadcast(broadcastUpdateEventName, cache[key].data);
 
       if (skipResetCache) {
         return;

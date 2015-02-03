@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('ChartUsage', function ($q, Electricity, moment) {
+  .service('ChartUsage', function ($q, moment) {
     var ChartUsage = this;
 
     // Chart parameters that will be passed to google chart.
@@ -63,21 +63,17 @@ angular.module('negawattClientApp')
     };
 
     /**
-     * Get the chart data and plot.
-     *
-     * Get chart data from server according to given filter.
-     * Reformat response to shape it in chart's format.
+     * Translate selector type and ID to filters.
      *
      * @param selector_type
-     *   Type of filter, e.g. 'meter', 'meter_category'.
+     *   Type of filter, e.g. 'meter' or 'meter_category'.
      * @param id
      *   ID of the selector, e.g. meter ID or category ID.
      *
-     * @returns {$q.promise}
+     * @returns
+     *   Filters array in the form required by get().
      */
-    this.get = function(selector_type, id) {
-      var deferred = $q.defer();
-
+    this.filtersFromSelector = function(selectorType, selectorId) {
       // Calculate the time-frame for data request.
       var chartFrequency = this.usageChartParams.frequency;
       var chartFrequencyInfo = this.frequencyParams[chartFrequency];
@@ -93,21 +89,41 @@ angular.module('negawattClientApp')
           operator: 'BETWEEN'
         }
       };
-      if (selector_type) {
-        filters[selector_type] = id;
+      if (selectorType) {
+        filters[selectorType] = selectorId;
       }
 
-      // Get chart data object.
-      Electricity.get(filters)
-        .then(function(response) {
-          // Reformat usage data for chart usage
-          ChartUsage.usageGoogleChartParams = ChartUsage.transformDataToDatasets(response, chartFrequencyInfo);
-          deferred.resolve(ChartUsage.usageGoogleChartParams);
-        });
-
-      return deferred.promise;
+      return filters;
     };
 
+    /**
+     * Update chart after data was changed.
+     *
+     * After electricity data was received from the server, reformat response to
+     * shape it in google chart's format.
+     *
+     * @param electricity
+     *   New electricity data.
+     *
+     * @returns
+     *   Data in google-chart format.
+     */
+    this.get = function(electricity) {
+      // Get frequency-info record.
+      var chartFrequency = this.usageChartParams.frequency;
+      var chartFrequencyInfo = this.frequencyParams[chartFrequency];
+
+      // Translate electricity data to google charts format.
+      ChartUsage.usageGoogleChartParams = ChartUsage.transformDataToDatasets(electricity, chartFrequencyInfo);
+      return ChartUsage.usageGoogleChartParams;
+    };
+
+    /**
+     * Update chart after meter was changed.
+     *
+     * @param meter
+     *   New meter ID.
+     */
     this.meterSelected = function(meter) {
       // Get meter name
       var chartTitle = 'צריכת חשמל';

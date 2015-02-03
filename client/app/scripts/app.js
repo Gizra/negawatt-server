@@ -61,6 +61,9 @@ angular
           },
           messages: function(Message) {
             return Message.get();
+          },
+          electricity: function(Electricity) {
+            return Electricity.get();
           }
         },
         views: {
@@ -92,8 +95,11 @@ angular
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
-              usage: function(ChartUsage) {
-                return ChartUsage.get();
+              electricity: function(Electricity) {
+                return Electricity.get();
+              },
+              usage: function(ChartUsage, electricity) {
+                return ChartUsage.get(electricity);
               }
             },
             controller: 'UsageCtrl'
@@ -117,8 +123,11 @@ angular
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
-              usage: function(ChartUsage, $stateParams) {
-                return ChartUsage.get('meter_category', $stateParams.categoryId);
+              electricity: function(Electricity, $stateParams) {
+                return Electricity.get('meter_category', $stateParams.categoryId);
+              },
+              usage: function(ChartUsage, electricity) {
+                return ChartUsage.get(electricity);
               }
             },
             controller: 'UsageCtrl'
@@ -170,12 +179,16 @@ angular
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
+              // @fixme: do we need this 'meters' resolved here?
               meters: function($stateParams, Meter, meters, account) {
                 // Assert get all the meters from cache.
                 return Meter.get(account.id, $stateParams.categoryId);
               },
-              usage: function(ChartUsage, $stateParams) {
-                return ChartUsage.get('meter', $stateParams.markerId);
+              electricity: function(Electricity, $stateParams) {
+                return Electricity.get('meter', $stateParams.markerId);
+              },
+              usage: function(ChartUsage, electricity) {
+                return ChartUsage.get(electricity);
               }
             },
             controller: 'UsageCtrl'
