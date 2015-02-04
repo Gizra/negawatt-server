@@ -36,6 +36,14 @@ angular
         url: '/login',
         templateUrl: 'views/login.html'
       })
+      .state('logout', {
+        url: '/logout',
+        template: '<ui-view/>',
+        controller: function(Auth, $state) {
+          Auth.logout();
+          $state.go('login');
+        }
+      })
       .state('dashboard', {
         url: '/',
         templateUrl: 'views/dashboard/main.html',

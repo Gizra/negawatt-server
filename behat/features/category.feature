@@ -4,7 +4,7 @@ Feature: Category
   We need to be able select a category and filter the markers.
 
   @javascript
-  Scenario: Show only meters of a selected category
+  Scenario: Show category selected active
     Given I login with user "carlos"
-    When I visit '#/dashboard/category/13'
-    Then I should see than a marker disappeared
+    When I visit '/#/dashboard/1/category/5'
+    Then I should see the category active
