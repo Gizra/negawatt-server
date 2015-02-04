@@ -22,18 +22,6 @@ class NegawattFormatterElectricityHalJson extends \RestfulFormatterHalJson {
 
     // Calculate monthly totals for each meter.
     $meter_id = FALSE;
-    foreach ($data as $row) {
-      if (empty($month) || $month > 12) {
-        $month = 1;
-      }
-
-      if ($meter_id !== $row['meter']->nid) {
-        $meter_id = $row['meter']->nid;
-      }
-
-      $output['total'][$month]['kwh'] += $row['kwh'];
-      $month++;
-    }
 
     return $output;
   }

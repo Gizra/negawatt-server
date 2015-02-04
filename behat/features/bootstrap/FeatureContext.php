@@ -30,7 +30,9 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @throws \Exception
    */
   protected function loginUser($name, $password, $check_success = TRUE) {
-    $this->getSession()->visit($this->locatePath('/#/login'));
+    $this->getSession()->visit($this->locatePath('/#/logout'));
+    // Reload to force refresh button of the browser. (ui-router reload the state.)
+    $this->getSession()->reload();
     $this->iWaitForCssElement('#login-form', 'appear');
     $element = $this->getSession()->getPage();
     $element->fillField('username', $name);
@@ -45,8 +47,8 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     $submit->click();
 
     if ($check_success) {
-      // Wait for the dashboard's menu to load.
-      $this->iWaitForCssElement('#dashboard-controls', 'appear');
+      // Wait for the dashboard's menu to load, with the user accout information.
+      $this->iWaitForCssElement('.menu-account', 'appear');
     }
   }
 
@@ -73,11 +75,10 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
-   * @Then I should see than a marker disappeared
+   * @Then I should see the category active
    */
-  public function iShouldSeeThanAMarkerDisappeared() {
-    // Check if a meter of a different category disappear.
-    $this->waitForXpathNode('//*[@id="map"]/div[2]/div[2]/div[3]/img[2]', FALSE);
+  public function iShouldSeeTheCategoryActive() {
+    $this->iWaitForCssElement('.active-category', 'appear');
   }
 
   /**
@@ -115,6 +116,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
       // No tokens found.
       return;
     }
+    // Delete from database.
     foreach ($entities as $entity) {
       $entity->delete();
     }
@@ -137,11 +139,11 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @param $fn
    *   A callable to invoke.
    * @param int $timeout
-   *   The timeout period. Defaults to 60 seconds.
+   *   The timeout period. Defaults to 10 seconds.
    *
    * @throws Exception
    */
-  private function waitFor($fn, $timeout = 60000) {
+  private function waitFor($fn, $timeout = 10000) {
     $start = microtime(true);
     $end = $start + $timeout / 1000.0;
     while (microtime(true) < $end) {
