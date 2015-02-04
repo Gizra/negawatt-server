@@ -98,14 +98,14 @@ angular.module('negawattClientApp')
 
       // Prepare filters for data request.
       var filters = {
-        type: chartFrequency,
-        timestamp: {
-          value: [chartBeginTimestamp, chartEndTimestamp],
-          operator: 'BETWEEN'
-        }
+        'filter[type]': chartFrequency,
+        'filter[timestamp][operator]': 'BETWEEN',
+        'filter[timestamp][value][0]': chartBeginTimestamp,
+        'filter[timestamp][value][1]': chartEndTimestamp
       };
+
       if (selectorType) {
-        filters[selectorType] = selectorId;
+        filters['filters['+selectorType+']'] = selectorId;
       }
 
       return filters;

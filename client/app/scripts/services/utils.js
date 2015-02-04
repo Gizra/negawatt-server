@@ -96,46 +96,4 @@ angular.module('negawattClientApp')
       return result;
     };
 
-    /**
-     * Convert a filters array to HTTP request params format.
-     *
-     * Filter format: filter[item]=value
-     * For sub items, the format is: filter[item][subItem]=value
-     * For sub-sub items (like, for 'BETWEEN' operator), the format is:
-     * filter[item][subItem][0]=value&filter[item][subItem][1]=value, etc.
-
-     * @param {*} filters
-     *    The filters array.
-     *
-     * @returns {Array}
-     *    Collection of parameters for the HTTP request.
-     */
-    this.filtersToParams = function (filters) {
-      // Add filter parameters to the http request
-      var params = {};
-      angular.forEach(filters, function (item, key) {
-        if (typeof item === 'object') {
-          // Item is an object, go through sub items
-          angular.forEach(item, function (subItem, subKey) {
-            if (subItem instanceof Array) {
-              // Subitem is an array, add the array elements with 0, 1, 2... indices.
-              angular.forEach(subItem, function (subSubItem, subSubKey) {
-                params['filter[' + key + '][' + subKey + '][' + subSubKey + ']'] = subSubItem;
-              });
-            }
-            else {
-              // Handle subitem as a simple value.
-              params['filter[' + key + '][' + subKey + ']'] = subItem;
-            }
-          });
-        }
-        else {
-          // Handle item as a simple value.
-          params['filter[' + key + ']'] = item;
-        }
-      });
-
-      return params;
-    };
-
   });

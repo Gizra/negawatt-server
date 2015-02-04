@@ -57,22 +57,16 @@ angular.module('negawattClientApp')
     function getDataFromBackend(filters, filtersHash, pageNumber, skipResetCache) {
       var deferred = $q.defer();
       var url = Config.backend + '/api/electricity';
-      var params = {};
-
-      if (filters) {
-        // Add filter parameters to the http request
-        params = Utils.filtersToParams(filters);
-      }
 
       // If page-number is given, add it to the params.
       if (pageNumber) {
-        params['page'] = pageNumber;
+        filters['page'] = pageNumber;
       }
 
       $http({
         method: 'GET',
         url: url,
-        params: params,
+        params: filters,
         cache: true
       }).success(function(electricity) {
         setCache(electricity.data, filtersHash, skipResetCache);
