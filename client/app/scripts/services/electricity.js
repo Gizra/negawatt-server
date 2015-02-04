@@ -101,6 +101,10 @@ angular.module('negawattClientApp')
       // Broadcast an update event.
       $rootScope.$broadcast(broadcastUpdateEventName, key);
 
+      // If asked to skip cache timer reset, return now.
+      // Will happen when reading multiple page data - when reading pages
+      // other then the first, there's no need to start a new timer to
+      // reset the cache.
       if (skipResetCache) {
         return;
       }
