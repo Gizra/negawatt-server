@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Electricity', function ($q, $http, $timeout, $rootScope, ChartUsage, Config, md5, Utils) {
+  .service('Electricity', function ($q, $http, $timeout, $rootScope, Config, md5, Utils) {
 
     // A private cache key.
     var cache = {};
@@ -19,10 +19,7 @@ angular.module('negawattClientApp')
      *
      * @returns {*}
      */
-    this.get = function(chartFreq, seletctorType, selectorId) {
-      // Ask ChartUsage to translate selector type and id to filters.
-      var filters = ChartUsage.filtersFromSelector(chartFreq, seletctorType, selectorId);
-
+    this.get = function(filters) {
       // Create a hash from the filters object for indexing the cache
       var filtersHash = md5.createHash(JSON.stringify(filters));
 
@@ -36,6 +33,20 @@ angular.module('negawattClientApp')
       });
 
       return getElectricity;
+    };
+
+    /**
+     * Return data that is already in the cache.
+     *
+     * @param filtersHash
+     *   Cache hash key.
+     *
+     * @returns {*}
+     *    If any data resides in the cache with the given key, it will
+     *    be returned, otherwise, an undefined will be returned.
+     */
+    this.getDataFromCache = function(filtersHash) {
+      return cache[filtersHash] ? cache[filtersHash].data : undefined;
     };
 
     /**
@@ -66,15 +77,12 @@ angular.module('negawattClientApp')
       }).success(function(electricity) {
         setCache(electricity.data, filtersHash, skipResetCache);
 
+        deferred.resolve(cache[filtersHash].data);
+
         // If there are more pages, read them.
         var hasNextPage = electricity.next != undefined;
         if (hasNextPage) {
-          getDataFromBackend(filters, filtersHash, pageNumber + 1, true).then(function() {
-            deferred.resolve(cache[filtersHash].data);
-          });
-        }
-        else {
-          deferred.resolve(cache[filtersHash].data);
+          getDataFromBackend(filters, filtersHash, pageNumber + 1, true);
         }
       });
 
@@ -97,7 +105,7 @@ angular.module('negawattClientApp')
       };
 
       // Broadcast an update event.
-      $rootScope.$broadcast(broadcastUpdateEventName, cache[key].data);
+      $rootScope.$broadcast(broadcastUpdateEventName, key);
 
       if (skipResetCache) {
         return;

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('ChartUsage', function ($q, moment) {
+  .service('ChartUsage', function ($q, Electricity, moment) {
     var ChartUsage = this;
 
     // Chart parameters that will be passed to google chart.
@@ -123,14 +123,52 @@ angular.module('negawattClientApp')
      * @returns
      *   Data in google-chart format.
      */
-    this.get = function(chartFreq, electricity) {
+    this.get = function(chartFreq, seletctorType, selectorId) {
+      var deferred = $q.defer();
+
+      // Ask ChartUsage to translate selector type and id to filters.
+      var filters = this.filtersFromSelector(chartFreq, seletctorType, selectorId);
+
       // Get frequency-info record.
       var chartFrequency = chartFreq || this.usageChartParams.frequency;
       var chartFrequencyInfo = this.frequencyParams[chartFrequency];
 
+      // Get electricity data.
+      Electricity.get(filters).then(function(electricity) {
+        // Translate electricity data to google charts format.
+        ChartUsage.usageGoogleChartParams = ChartUsage.transformDataToDatasets(electricity, chartFrequencyInfo);
+        deferred.resolve(ChartUsage.usageGoogleChartParams);
+      });
+
+      return deferred.promise;
+    };
+
+    /**
+     * Prepare chart data after electricity data was loaded.
+     *
+     * If electricity data has more than one page (50 entities), it will
+     * arrive in several GET requests. Each time a response arrives, this
+     * function will be called to update the chart data according to the
+     * updated electricity data in the cache.
+     *
+     * @param chartFreq
+     *   Chart frequency, if given in URL.
+     * @param hash
+     *   Electricity cache hash.
+     *
+     * @returns
+     *   Data in google-chart format.
+     */
+    this.getFromElectricityCache = function(chartFreq, hash) {
+      // Get frequency-info record.
+      var chartFrequency = chartFreq || this.usageChartParams.frequency;
+      var chartFrequencyInfo = this.frequencyParams[chartFrequency];
+
+      // Get electricity data from the cache - use hash as key.
+      var electricity = Electricity.getDataFromCache(hash);
+
       // Translate electricity data to google charts format.
-      ChartUsage.usageGoogleChartParams = ChartUsage.transformDataToDatasets(electricity, chartFrequencyInfo);
-      return ChartUsage.usageGoogleChartParams;
+      return this.transformDataToDatasets(electricity, chartFrequencyInfo);
     };
 
     /**

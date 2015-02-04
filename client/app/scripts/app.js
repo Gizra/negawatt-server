@@ -92,13 +92,9 @@ angular
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
-              // Get electricity data.
-              electricity: function(Electricity, $stateParams) {
-                return Electricity.get($stateParams.chartFreq);
-              },
-              // Translate electricity data to chart format.
-              usage: function(ChartUsage, electricity, $stateParams) {
-                return ChartUsage.get($stateParams.chartFreq, electricity);
+              // Get electricity data and transform it to chart format.
+              usage: function(ChartUsage, $stateParams) {
+                return ChartUsage.get($stateParams.chartFreq);
               }
             },
             controller: 'UsageCtrl'
@@ -122,13 +118,9 @@ angular
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
-              // Get electricity data.
-              electricity: function(Electricity, $stateParams) {
-                return Electricity.get($stateParams.chartFreq, 'meter_category', $stateParams.categoryId);
-              },
-              // Translate electricity data to chart format.
-              usage: function(ChartUsage, electricity, $stateParams) {
-                return ChartUsage.get($stateParams.chartFreq, electricity);
+              // Get electricity data and transform it to chart format.
+              usage: function(ChartUsage, $stateParams) {
+                return ChartUsage.get($stateParams.chartFreq, 'meter_category', $stateParams.categoryId);
               }
             },
             controller: 'UsageCtrl'
@@ -180,13 +172,9 @@ angular
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
-              // Get electricity data.
-              electricity: function(Electricity, $stateParams) {
-                return Electricity.get($stateParams.chartFreq, 'meter', $stateParams.markerId);
-              },
-              // Translate electricity data to chart format.
-              usage: function(ChartUsage, electricity, $stateParams) {
-                return ChartUsage.get($stateParams.chartFreq, electricity);
+              // Get electricity data and transform it to chart format.
+              usage: function(ChartUsage, $stateParams) {
+                return ChartUsage.get($stateParams.chartFreq, 'meter', $stateParams.markerId);
               }
             },
             controller: 'UsageCtrl'
