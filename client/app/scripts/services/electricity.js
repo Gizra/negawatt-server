@@ -19,9 +19,9 @@ angular.module('negawattClientApp')
      *
      * @returns {*}
      */
-    this.get = function(seletctorType, selectorId) {
+    this.get = function(chartFreq, seletctorType, selectorId) {
       // Ask ChartUsage to translate selector type and id to filters.
-      var filters = ChartUsage.filtersFromSelector(seletctorType, selectorId);
+      var filters = ChartUsage.filtersFromSelector(chartFreq, seletctorType, selectorId);
 
       // Create a hash from the filters object for indexing the cache
       var filtersHash = md5.createHash(JSON.stringify(filters));

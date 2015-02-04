@@ -47,7 +47,7 @@ angular
         controller: 'DashboardCtrl'
       })
       .state('dashboard.withAccount', {
-        url: 'dashboard/{accountId:int}',
+        url: 'dashboard/{accountId:int}?chartFreq',
         resolve: {
           account: function($stateParams, Profile, profile) {
             return Profile.selectAccount($stateParams.accountId, profile);
@@ -61,9 +61,6 @@ angular
           },
           messages: function(Message) {
             return Message.get();
-          },
-          electricity: function(Electricity) {
-            return Electricity.get();
           }
         },
         views: {
@@ -95,11 +92,13 @@ angular
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
-              electricity: function(Electricity) {
-                return Electricity.get();
+              // Get electricity data.
+              electricity: function(Electricity, $stateParams) {
+                return Electricity.get($stateParams.chartFreq);
               },
-              usage: function(ChartUsage, electricity) {
-                return ChartUsage.get(electricity);
+              // Translate electricity data to chart format.
+              usage: function(ChartUsage, electricity, $stateParams) {
+                return ChartUsage.get($stateParams.chartFreq, electricity);
               }
             },
             controller: 'UsageCtrl'
@@ -107,7 +106,7 @@ angular
         }
       })
       .state('dashboard.withAccount.categories', {
-        url: '/category/{categoryId:int}',
+        url: '/category/{categoryId:int}?chartFreq',
         views: {
           // Replace the map that was set by the parent state, with markers filtered by the selected category.
           'map@dashboard': {
@@ -123,11 +122,13 @@ angular
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
+              // Get electricity data.
               electricity: function(Electricity, $stateParams) {
-                return Electricity.get('meter_category', $stateParams.categoryId);
+                return Electricity.get($stateParams.chartFreq, 'meter_category', $stateParams.categoryId);
               },
-              usage: function(ChartUsage, electricity) {
-                return ChartUsage.get(electricity);
+              // Translate electricity data to chart format.
+              usage: function(ChartUsage, electricity, $stateParams) {
+                return ChartUsage.get($stateParams.chartFreq, electricity);
               }
             },
             controller: 'UsageCtrl'
@@ -149,7 +150,7 @@ angular
         }
       })
       .state('dashboard.withAccount.markers', {
-        url: '/marker/:markerId?categoryId',
+        url: '/marker/:markerId?categoryId&chartFreq',
         views: {
           // Update the Map.
           'map@dashboard': {
@@ -179,11 +180,13 @@ angular
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
+              // Get electricity data.
               electricity: function(Electricity, $stateParams) {
-                return Electricity.get('meter', $stateParams.markerId);
+                return Electricity.get($stateParams.chartFreq, 'meter', $stateParams.markerId);
               },
-              usage: function(ChartUsage, electricity) {
-                return ChartUsage.get(electricity);
+              // Translate electricity data to chart format.
+              usage: function(ChartUsage, electricity, $stateParams) {
+                return ChartUsage.get($stateParams.chartFreq, electricity);
               }
             },
             controller: 'UsageCtrl'

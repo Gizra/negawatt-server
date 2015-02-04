@@ -9,7 +9,7 @@ angular.module('negawattClientApp')
 
     // Chart parameters.
     this.usageChartParams = {
-      frequency: 5
+      frequency: 2
     };
 
     // Frequencies information.
@@ -88,9 +88,9 @@ angular.module('negawattClientApp')
      * @returns
      *   Filters array in the form required by get().
      */
-    this.filtersFromSelector = function(selectorType, selectorId) {
+    this.filtersFromSelector = function(chartFreq, selectorType, selectorId) {
       // Calculate the time-frame for data request.
-      var chartFrequency = this.usageChartParams.frequency;
+      var chartFrequency = chartFreq || this.usageChartParams.frequency;
       var chartFrequencyInfo = this.frequencyParams[chartFrequency];
       var chartTimeFrame = chartFrequencyInfo.chart_default_time_frame;
       var chartEndTimestamp = chartFrequencyInfo.chart_default_time_frame_end == 'now' ? Math.floor(Date.now() / 1000) : chartFrequencyInfo.chart_default_time_frame_end;
@@ -123,9 +123,9 @@ angular.module('negawattClientApp')
      * @returns
      *   Data in google-chart format.
      */
-    this.get = function(electricity) {
+    this.get = function(chartFreq, electricity) {
       // Get frequency-info record.
-      var chartFrequency = this.usageChartParams.frequency;
+      var chartFrequency = chartFreq || this.usageChartParams.frequency;
       var chartFrequencyInfo = this.frequencyParams[chartFrequency];
 
       // Translate electricity data to google charts format.
