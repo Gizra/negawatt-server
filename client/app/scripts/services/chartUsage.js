@@ -105,7 +105,7 @@ angular.module('negawattClientApp')
       };
 
       if (selectorType) {
-        filters['filters['+selectorType+']'] = selectorId;
+        filters['filter['+selectorType+']'] = selectorId;
       }
 
       return filters;
