@@ -112,22 +112,40 @@ angular.module('negawattClientApp')
     };
 
     /**
-     * Update chart after data was changed.
+     * Get electricity data and update chart.
      *
-     * After electricity data was received from the server, reformat response to
-     * shape it in google chart's format.
+     * @param chartFreq
+     *   Rrequired frequency, e.g. 2 for MONTH.
+     * @param selectorType
+     *   Optional - one of 'meter' or 'meter-category'.
+     * @param selectorId
+     *   Optional - id of selector.
      *
-     * @param electricity
-     *   New electricity data.
-     *
-     * @returns
-     *   Data in google-chart format.
+     * @returns {*}
+     *   Promise for data in google-chart format.
      */
-    this.get = function(chartFreq, seletctorType, selectorId) {
+    this.get = function(chartFreq, selectorType, selectorId) {
       var deferred = $q.defer();
 
-      // Ask ChartUsage to translate selector type and id to filters.
-      var filters = this.filtersFromSelector(chartFreq, seletctorType, selectorId);
+      // Translate selector type and id to filters.
+      var filters = this.filtersFromSelector(chartFreq, selectorType, selectorId);
+
+      return this.getByFilters(chartFreq, filters);
+    };
+
+    /**
+     * Get electricity data and update chart.
+     *
+     * @param chartFreq
+     *   Rrequired frequency, e.g. 2 for MONTH.
+     * @param filters
+     *   Filters for GET request.
+     *
+     * @returns {*}
+     *   Promise for data in google-chart format.
+     */
+    this.getByFilters = function(chartFreq, filters) {
+      var deferred = $q.defer();
 
       // Get frequency-info record.
       var chartFrequency = chartFreq || this.usageChartParams.frequency;
@@ -141,34 +159,6 @@ angular.module('negawattClientApp')
       });
 
       return deferred.promise;
-    };
-
-    /**
-     * Prepare chart data after electricity data was loaded.
-     *
-     * If electricity data has more than one page (50 entities), it will
-     * arrive in several GET requests. Each time a response arrives, this
-     * function will be called to update the chart data according to the
-     * updated electricity data in the cache.
-     *
-     * @param chartFreq
-     *   Chart frequency, if given in URL.
-     * @param hash
-     *   Electricity cache hash.
-     *
-     * @returns
-     *   Data in google-chart format.
-     */
-    this.getFromElectricityCache = function(chartFreq, hash) {
-      // Get frequency-info record.
-      var chartFrequency = chartFreq || this.usageChartParams.frequency;
-      var chartFrequencyInfo = this.frequencyParams[chartFrequency];
-
-      // Get electricity data from the cache - use hash as key.
-      var electricity = Electricity.getDataFromCache(hash);
-
-      // Translate electricity data to google charts format.
-      return this.transformDataToDatasets(electricity, chartFrequencyInfo);
     };
 
     /**
@@ -251,13 +241,8 @@ angular.module('negawattClientApp')
           // Never encountered this timestamp, create an empty object
           values[item.timestamp] = {};
         }
-        if (!(item.rate_type in values[item.timestamp])) {
-          // Never encountered this rate type, put a zero entry
-          values[item.timestamp][item.rate_type] = 0;
-        }
-        // Sum the kWhs. Might have several meters with the same ts and rate-type...
-        // @fixme: since restful now returns totals only, there shouldn't be multiple meters...
-        values[item.timestamp][item.rate_type] += +item.kwh;
+        // Save the kWhs.
+        values[item.timestamp][item.rate_type] = +item.kwh;
 
         // Handle problem with line chart:
         // If having TOUse data, the lines should be elongated one data point forward

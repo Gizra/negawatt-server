@@ -9,13 +9,16 @@ angular.module('negawattClientApp')
     // Array of $timeout promises to clear the cache.
     var timeouts = [];
 
-    var getElectricity;
+    var getElectricity = {};
 
     // Update event broadcast name.
     var broadcastUpdateEventName = 'nwElectricityChanged';
 
     /**
-     * Return the promise with the meter list, from cache or the server.
+     * Return the promise with the electricity data, from cache or the server.
+     *
+     * @param filters
+     *   Array of filter parameters in GET params format.
      *
      * @returns {*}
      */
@@ -24,29 +27,16 @@ angular.module('negawattClientApp')
       var filtersHash = md5.createHash(JSON.stringify(filters));
 
       // Preparation of the promise and cache for Electricity request.
-      getElectricity = $q.when(getElectricity || cache[filtersHash] && cache[filtersHash].data || getDataFromBackend(filters, filtersHash, 0, false));
+      getElectricity[filtersHash] = $q.when(getElectricity[filtersHash] || cache[filtersHash] && cache[filtersHash].data || getDataFromBackend(filters, filtersHash, 0, false));
 
-      // Clear the promise cached, after resolve or reject the promise. Permit access to the cache data, when
-      // the promise excecution is done (finally).
-      getElectricity.finally(function getElectricityFinally() {
-        getElectricity = undefined;
+      // Clear the promise cached, after resolve or reject the
+      // promise. Permit access to the cache data, when
+      // the promise execution is done (finally).
+      getElectricity[filtersHash].finally(function getElectricityFinally() {
+        getElectricity[filtersHash] = undefined;
       });
 
-      return getElectricity;
-    };
-
-    /**
-     * Return data that is already in the cache.
-     *
-     * @param filtersHash
-     *   Cache hash key.
-     *
-     * @returns {*}
-     *    If any data resides in the cache with the given key, it will
-     *    be returned, otherwise, an undefined will be returned.
-     */
-    this.getDataFromCache = function(filtersHash) {
-      return cache[filtersHash] ? cache[filtersHash].data : undefined;
+      return getElectricity[filtersHash];
     };
 
     /**
@@ -57,19 +47,24 @@ angular.module('negawattClientApp')
     function getDataFromBackend(filters, filtersHash, pageNumber, skipResetCache) {
       var deferred = $q.defer();
       var url = Config.backend + '/api/electricity';
+      // Create a copy of filters, since params might add page option. Filters must
+      // stay clean of page parameters since it also serves as key to the cache.
+      var params = angular.copy(filters);
 
       // If page-number is given, add it to the params.
+      // Don't modify 'filters' since it should reflect the general params,
+      // without page number.
       if (pageNumber) {
-        filters['page'] = pageNumber;
+        params['page'] = pageNumber;
       }
 
       $http({
         method: 'GET',
         url: url,
-        params: filters,
+        params: params,
         cache: true
       }).success(function(electricity) {
-        setCache(electricity.data, filtersHash, skipResetCache);
+        setCache(electricity.data, filters, filtersHash, skipResetCache);
 
         deferred.resolve(cache[filtersHash].data);
 
@@ -91,15 +86,16 @@ angular.module('negawattClientApp')
      * @param key
      *   A key for the cached data.
      */
-    function setCache(data, key, skipResetCache) {
+    function setCache(data, filters, key, skipResetCache) {
       // Cache messages data.
       cache[key] = {
         data: (cache[key] ? cache[key].data : []).concat(data),
+        filters: filters,
         timestamp: new Date()
       };
 
       // Broadcast an update event.
-      $rootScope.$broadcast(broadcastUpdateEventName, key);
+      $rootScope.$broadcast(broadcastUpdateEventName, filters);
 
       // If asked to skip cache timer reset, return now.
       // Will happen when reading multiple page data - when reading pages
