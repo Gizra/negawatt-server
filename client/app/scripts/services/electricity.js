@@ -27,7 +27,7 @@ angular.module('negawattClientApp')
       var filtersHash = md5.createHash(JSON.stringify(filters));
 
       // Preparation of the promise and cache for Electricity request.
-      getElectricity[filtersHash] = $q.when(getElectricity[filtersHash] || cache[filtersHash] && cache[filtersHash].data || getDataFromBackend(filters, filtersHash, 0, false));
+      getElectricity[filtersHash] = $q.when(getElectricity[filtersHash] || cache[filtersHash] && cache[filtersHash].data || getDataFromBackend(filters, filtersHash, 1, false));
 
       // Clear the promise cached, after resolve or reject the
       // promise. Permit access to the cache data, when
@@ -90,7 +90,6 @@ angular.module('negawattClientApp')
       // Cache messages data.
       cache[key] = {
         data: (cache[key] ? cache[key].data : []).concat(data),
-        filters: filters,
         timestamp: new Date()
       };
 

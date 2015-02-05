@@ -101,7 +101,9 @@ angular
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
               // Get electricity data and transform it to chart format.
-              usage: function(ChartUsage, $stateParams) {
+              // Must depend on account, in order to finish clearing the cache on
+              // account change BEFORE beginning downloading data.
+              usage: function(ChartUsage, $stateParams, account) {
                 return ChartUsage.get($stateParams.chartFreq);
               }
             },
@@ -127,7 +129,9 @@ angular
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
               // Get electricity data and transform it to chart format.
-              usage: function(ChartUsage, $stateParams) {
+              // Must depend on account, in order to finish clearing the cache on
+              // account change BEFORE beginning downloading data.
+              usage: function(ChartUsage, $stateParams, account) {
                 return ChartUsage.get($stateParams.chartFreq, 'meter_category', $stateParams.categoryId);
               }
             },
@@ -181,7 +185,9 @@ angular
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
               // Get electricity data and transform it to chart format.
-              usage: function(ChartUsage, $stateParams) {
+              // Must depend on account, in order to finish clearing the cache on
+              // account change BEFORE beginning downloading data.
+              usage: function(ChartUsage, $stateParams, account) {
                 return ChartUsage.get($stateParams.chartFreq, 'meter', $stateParams.markerId);
               }
             },
