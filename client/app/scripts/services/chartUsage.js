@@ -91,6 +91,10 @@ angular.module('negawattClientApp')
     this.filtersFromSelector = function(chartFreq, selectorType, selectorId) {
       // Calculate the time-frame for data request.
       var chartFrequency = chartFreq || this.usageChartParams.frequency;
+      // Fix a bug
+      if (chartFrequency instanceof Array) {
+        chartFrequency = chartFrequency[0];
+      }
       var chartFrequencyInfo = this.frequencyParams[chartFrequency];
       var chartTimeFrame = chartFrequencyInfo.chart_default_time_frame;
       var chartEndTimestamp = chartFrequencyInfo.chart_default_time_frame_end == 'now' ? Math.floor(Date.now() / 1000) : chartFrequencyInfo.chart_default_time_frame_end;
@@ -149,6 +153,11 @@ angular.module('negawattClientApp')
 
       // Get frequency-info record.
       var chartFrequency = chartFreq || this.usageChartParams.frequency;
+      // Fix a bug
+      if (chartFrequency instanceof Array) {
+        chartFrequency = chartFrequency[0];
+      }
+
       var chartFrequencyInfo = this.frequencyParams[chartFrequency];
 
       // Get electricity data.
@@ -159,6 +168,32 @@ angular.module('negawattClientApp')
       });
 
       return deferred.promise;
+    };
+
+    /**
+     * Get electricity data and update chart.
+     *
+     * @param chartFreq
+     *   Rrequired frequency, e.g. 2 for MONTH.
+     * @param filters
+     *   Filters for GET request.
+     *
+     * @returns {*}
+     *   Promise for data in google-chart format.
+     */
+    this.getByElectricity = function(chartFreq, electricity) {
+      // Get frequency-info record.
+      var chartFrequency = chartFreq || this.usageChartParams.frequency;
+      // Fix a bug
+      if (chartFrequency instanceof Array) {
+        chartFrequency = chartFrequency[0];
+      }
+
+      var chartFrequencyInfo = this.frequencyParams[chartFrequency];
+
+      // Translate electricity data to google charts format.
+      ChartUsage.usageGoogleChartParams = ChartUsage.transformDataToDatasets(electricity, chartFrequencyInfo);
+      return ChartUsage.usageGoogleChartParams;
     };
 
     /**

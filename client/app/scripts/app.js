@@ -30,6 +30,9 @@ angular
     // For any unmatched url, redirect to '/'.
     $urlRouterProvider.otherwise('/');
 
+    // A common variable to hold the filters for electricity GET request.
+    var electricityFilters = [];
+
     // Setup the states.
     $stateProvider
       .state('login', {
@@ -100,11 +103,17 @@ angular
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
-              // Get electricity data and transform it to chart format.
               // Must depend on account, in order to finish clearing the cache on
               // account change BEFORE beginning downloading data.
-              usage: function(ChartUsage, $stateParams, account) {
-                return ChartUsage.get($stateParams.chartFreq);
+              electricityFilter: function(ChartUsage, $stateParams, account) {
+                electricityFilters = ChartUsage.filtersFromSelector($stateParams.chartFreq);
+              },
+              electricity: function(Electricity, electricityFilter) {
+                return Electricity.get(electricityFilters);
+              },
+              // Get electricity data and transform it to chart format.
+              usage: function(ChartUsage, $stateParams, electricity) {
+                return ChartUsage.getByElectricity($stateParams.chartFreq, electricity);
               }
             },
             controller: 'UsageCtrl'
@@ -128,12 +137,12 @@ angular
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
-              // Get electricity data and transform it to chart format.
               // Must depend on account, in order to finish clearing the cache on
               // account change BEFORE beginning downloading data.
-              usage: function(ChartUsage, $stateParams, account) {
-                return ChartUsage.get($stateParams.chartFreq, 'meter_category', $stateParams.categoryId);
-              }
+              electricityFilter: function(ChartUsage, $stateParams, account) {
+                electricityFilters = ChartUsage.filtersFromSelector($stateParams.chartFreq, 'meter_category', $stateParams.categoryId);
+              },
+              usage: angular.noop
             },
             controller: 'UsageCtrl'
           },
@@ -184,12 +193,12 @@ angular
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
-              // Get electricity data and transform it to chart format.
               // Must depend on account, in order to finish clearing the cache on
               // account change BEFORE beginning downloading data.
-              usage: function(ChartUsage, $stateParams, account) {
-                return ChartUsage.get($stateParams.chartFreq, 'meter', $stateParams.markerId);
-              }
+              electricityFilter: function(ChartUsage, $stateParams, account) {
+                electricityFilters = ChartUsage.filtersFromSelector($stateParams.chartFreq, 'meter', $stateParams.markerId);
+              },
+              usage: angular.noop
             },
             controller: 'UsageCtrl'
           }
