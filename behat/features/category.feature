@@ -6,5 +6,5 @@ Feature: Category
   @javascript
   Scenario: Show category selected active
     Given I login with user "carlos"
-    When I visit '/#/dashboard/1/category/5'
+    When I visit "/#/dashboard/1/category/5"
     Then I should see the category active
