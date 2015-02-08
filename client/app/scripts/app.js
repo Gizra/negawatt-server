@@ -145,6 +145,7 @@ angular
             templateUrl: 'views/dashboard/main.map.html',
             resolve: {
               meters: function(Meter, $stateParams, account) {
+                // Necessary to resolve again to apply the filter, of category id.
                 return Meter.get(account.id, $stateParams.categoryId);
               }
             },
@@ -169,7 +170,7 @@ angular
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
               meters: function($stateParams, Meter, meters, account) {
-                // Assert get all the meters from cache.
+                // Assert get all the meters from cache, when we use lazy load.
                 return Meter.get(account.id, $stateParams.categoryId);
               },
               usage: function(ChartUsage, $stateParams) {

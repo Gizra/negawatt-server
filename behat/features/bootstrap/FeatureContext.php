@@ -110,6 +110,29 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
+   * @Then I should see a marker selected
+   */
+  public function iShouldSeeAMarkerSelected($appear = TRUE) {
+    $selected_src_image = '../images/marker-red.png';
+    // check if exist and is selected.
+    $this->waitFor(function($context) use ($selected_src_image, $appear) {
+      try {
+        $src = $context->getSession()->evaluateScript('angular.element(".leaflet-marker-icon").attr("src");');
+        if ($src == $selected_src_image) {
+          return $appear;
+        }
+        return !$appear;
+      }
+      catch (WebDriver\Exception $e) {
+        if ($e->getCode() == WebDriver\Exception::NO_SUCH_ELEMENT) {
+          return !$appear;
+        }
+        throw $e;
+      }
+    });
+  }
+
+  /**
    * @AfterStep
    *
    * Take a screen shot after failed steps for Selenium drivers (e.g.
