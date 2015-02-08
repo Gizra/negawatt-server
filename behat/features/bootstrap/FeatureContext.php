@@ -109,7 +109,6 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     });
   }
 
-
   /**
    * @Then I should see a marker selected
    */
@@ -118,8 +117,9 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     // check if exist and is selected.
     $this->waitFor(function($context) use ($selected_src_image, $appear) {
       try {
-        $src = $context->getSession()->evaluateScript('angular.element(".leaflet-marker-icon").attr("src");');
-        if ($src == $selected_src_image) {
+        // Get an array of string <img src="...">, filled with the value of the src attribute of the marker icon image.
+        $marker_attr_src = $context->getSession()->evaluateScript('angular.element(".leaflet-marker-icon").map(function(index, element){ return angular.element(element).attr("src") });');
+        if (in_array($selected_src_image, $marker_attr_src)) {
           return $appear;
         }
         return !$appear;
@@ -132,7 +132,6 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
       }
     });
   }
-
 
   /**
    * @AfterStep
