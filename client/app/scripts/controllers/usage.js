@@ -23,11 +23,13 @@ angular.module('negawattClientApp')
     // Handle lazy-load of electricity data.
     // When cache expands, update the chart.
     $scope.$on("nwElectricityChanged", function(event, filters, stateName) {
-      ChartUsage.getByFilters($stateParams.chartFreq, filters, stateName).then(function(data) {
+      if ($state.current.name != stateName) {
         // Update usageChart only if we're in the proper state.
-        if ($state.current.name == stateName) {
-          $scope.usageChart = data;
-        }
+        return;
+      }
+
+      ChartUsage.getByFilters($stateParams.chartFreq, filters, stateName).then(function(data) {
+        $scope.usageChart = data;
       });
     });
 
