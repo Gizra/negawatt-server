@@ -132,13 +132,13 @@ angular.module('negawattClientApp')
      * @returns {*}
      *   Promise for data in google-chart format.
      */
-    this.get = function(chartFreq, selectorType, selectorId) {
+    this.get = function(chartFreq, stateName, selectorType, selectorId) {
       var deferred = $q.defer();
 
       // Translate selector type and id to filters.
       var filters = this.filtersFromSelector(chartFreq, selectorType, selectorId);
 
-      return this.getByFilters(chartFreq, filters);
+      return this.getByFilters(chartFreq, filters, stateName);
     };
 
     /**
@@ -152,11 +152,11 @@ angular.module('negawattClientApp')
      * @returns {*}
      *   Promise for data in google-chart format.
      */
-    this.getByFilters = function(chartFreq, filters) {
+    this.getByFilters = function(chartFreq, filters, stateName) {
       var deferred = $q.defer();
 
       // Get electricity data.
-      Electricity.get(filters).then(function(electricity) {
+      Electricity.get(filters, stateName).then(function(electricity) {
         // Translate electricity data to google charts format.
         deferred.resolve(ChartUsage.getByElectricity(chartFreq, electricity));
       });

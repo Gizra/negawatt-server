@@ -30,9 +30,6 @@ angular
     // For any unmatched url, redirect to '/'.
     $urlRouterProvider.otherwise('/');
 
-    // A common variable to hold the filters for electricity GET request.
-    var electricityFiltersVar = [];
-
     // Setup the states.
     $stateProvider
       .state('login', {
@@ -107,10 +104,7 @@ angular
               // Must depend on account, in order to finish clearing the cache on
               // account change BEFORE beginning downloading data.
               usage: function(ChartUsage, $stateParams, account) {
-                return {
-                  stateName: 'dashboard.withAccount',
-                  chartData: ChartUsage.get($stateParams.chartFreq, electricityFiltersVar)
-                };
+                return ChartUsage.get($stateParams.chartFreq, 'dashboard.withAccount');
               }
             },
             controller: 'UsageCtrl'
@@ -139,10 +133,7 @@ angular
               // Must depend on account, in order to finish clearing the cache on
               // account change BEFORE beginning downloading data.
               usage: function(ChartUsage, $stateParams, account) {
-                return {
-                  stateName: 'dashboard.withAccount.categories',
-                  chartData: ChartUsage.get($stateParams.chartFreq, 'meter_category', $stateParams.categoryId)
-                };
+                return ChartUsage.get($stateParams.chartFreq, 'dashboard.withAccount.categories', 'meter_category', $stateParams.categoryId);
               }
             },
             controller: 'UsageCtrl'
@@ -200,10 +191,7 @@ angular
               // Must depend on account, in order to finish clearing the cache on
               // account change BEFORE beginning downloading data.
               usage: function(ChartUsage, $stateParams, account) {
-                return {
-                  stateName: 'dashboard.withAccount.markers',
-                  chartData: ChartUsage.get($stateParams.chartFreq, 'meter', $stateParams.markerId)
-                };
+                return ChartUsage.get($stateParams.chartFreq, 'dashboard.withAccount.markers', 'meter', $stateParams.markerId);
               }
             },
             controller: 'UsageCtrl'

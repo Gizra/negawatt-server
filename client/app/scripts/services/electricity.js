@@ -22,12 +22,12 @@ angular.module('negawattClientApp')
      *
      * @returns {*}
      */
-    this.get = function(filters) {
+    this.get = function(filters, stateName) {
       // Create a hash from the filters object for indexing the cache
       var filtersHash = md5.createHash(JSON.stringify(filters));
 
       // Preparation of the promise and cache for Electricity request.
-      getElectricity[filtersHash] = $q.when(getElectricity[filtersHash] || cache[filtersHash] && cache[filtersHash].data || getDataFromBackend(filters, filtersHash, 1, false));
+      getElectricity[filtersHash] = $q.when(getElectricity[filtersHash] || cache[filtersHash] && cache[filtersHash].data || getDataFromBackend(filters, filtersHash, stateName, 1, false));
 
       // Clear the promise cached, after resolve or reject the
       // promise. Permit access to the cache data, when
@@ -44,7 +44,7 @@ angular.module('negawattClientApp')
      *
      * @returns {$q.promise}
      */
-    function getDataFromBackend(filters, filtersHash, pageNumber, skipResetCache) {
+    function getDataFromBackend(filters, filtersHash, stateName, pageNumber, skipResetCache) {
       var deferred = $q.defer();
       var url = Config.backend + '/api/electricity';
       // Create a copy of filters, since params might add page option. Filters must
@@ -64,14 +64,14 @@ angular.module('negawattClientApp')
         params: params,
         cache: true
       }).success(function(electricity) {
-        setCache(electricity.data, filters, filtersHash, skipResetCache);
+        setCache(electricity.data, filters, stateName, filtersHash, skipResetCache);
 
         deferred.resolve(cache[filtersHash].data);
 
         // If there are more pages, read them.
         var hasNextPage = electricity.next != undefined;
         if (hasNextPage) {
-          getDataFromBackend(filters, filtersHash, pageNumber + 1, true);
+          getDataFromBackend(filters, filtersHash, stateName, pageNumber + 1, true);
         }
       });
 
@@ -86,7 +86,7 @@ angular.module('negawattClientApp')
      * @param key
      *   A key for the cached data.
      */
-    function setCache(data, filters, key, skipResetCache) {
+    function setCache(data, filters, stateName, key, skipResetCache) {
       // Cache messages data.
       cache[key] = {
         data: (cache[key] ? cache[key].data : []).concat(data),
@@ -94,7 +94,7 @@ angular.module('negawattClientApp')
       };
 
       // Broadcast an update event.
-      $rootScope.$broadcast(broadcastUpdateEventName, filters);
+      $rootScope.$broadcast(broadcastUpdateEventName, filters, stateName);
 
       // If asked to skip cache timer reset, return now.
       // Will happen when reading multiple page data - when reading pages
