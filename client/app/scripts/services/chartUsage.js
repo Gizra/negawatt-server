@@ -80,18 +80,22 @@ angular.module('negawattClientApp')
     /**
      * Translate selector type and ID to filters.
      *
-     * @param selector_type
+     * @param chartFreq
+     *   Required frequency, e.g. 2 for MONTH.
+     * @param selectorType
      *   Type of filter, e.g. 'meter' or 'meter_category'.
-     * @param id
+     * @param selectorId
      *   ID of the selector, e.g. meter ID or category ID.
      *
-     * @returns
+     * @returns {Object}
      *   Filters array in the form required by get().
      */
     this.filtersFromSelector = function(chartFreq, selectorType, selectorId) {
       // Calculate the time-frame for data request.
       var chartFrequency = chartFreq || this.usageChartParams.frequency;
-      // Fix a bug
+      // Fix a bug when there are two chartFrequency params in url's search
+      // string (issue #338).
+      // @todo: Remove after the bug is fixed.
       if (chartFrequency instanceof Array) {
         chartFrequency = chartFrequency[0];
       }
@@ -119,29 +123,7 @@ angular.module('negawattClientApp')
      * Get electricity data and update chart.
      *
      * @param chartFreq
-     *   Rrequired frequency, e.g. 2 for MONTH.
-     * @param selectorType
-     *   Optional - one of 'meter' or 'meter-category'.
-     * @param selectorId
-     *   Optional - id of selector.
-     *
-     * @returns {*}
-     *   Promise for data in google-chart format.
-     */
-    this.get = function(chartFreq, selectorType, selectorId) {
-      var deferred = $q.defer();
-
-      // Translate selector type and id to filters.
-      var filters = this.filtersFromSelector(chartFreq, selectorType, selectorId);
-
-      return this.getByFilters(chartFreq, filters);
-    };
-
-    /**
-     * Get electricity data and update chart.
-     *
-     * @param chartFreq
-     *   Rrequired frequency, e.g. 2 for MONTH.
+     *   Required frequency, e.g. 2 for MONTH.
      * @param filters
      *   Filters for GET request.
      *
@@ -153,7 +135,9 @@ angular.module('negawattClientApp')
 
       // Get frequency-info record.
       var chartFrequency = chartFreq || this.usageChartParams.frequency;
-      // Fix a bug
+      // Fix a bug when there are two chartFrequency params in url's search
+      // string (issue #338).
+      // @todo: Remove after the bug is fixed.
       if (chartFrequency instanceof Array) {
         chartFrequency = chartFrequency[0];
       }
@@ -171,20 +155,25 @@ angular.module('negawattClientApp')
     };
 
     /**
-     * Get electricity data and update chart.
+     * Return chart data according to electricity.
+     *
+     * The function receives electricity data, and converts it to proper
+     * chart format.
      *
      * @param chartFreq
-     *   Rrequired frequency, e.g. 2 for MONTH.
-     * @param filters
-     *   Filters for GET request.
+     *   Required frequency, e.g. 2 for MONTH.
+     * @param electricity
+     *   Electricity data.
      *
      * @returns {*}
-     *   Promise for data in google-chart format.
+     *   Data in google-chart format.
      */
     this.getByElectricity = function(chartFreq, electricity) {
       // Get frequency-info record.
       var chartFrequency = chartFreq || this.usageChartParams.frequency;
-      // Fix a bug
+      // Fix a bug when there are two chartFrequency params in url's search
+      // string (issue #338).
+      // @todo: Remove after the bug is fixed.
       if (chartFrequency instanceof Array) {
         chartFrequency = chartFrequency[0];
       }
