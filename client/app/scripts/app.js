@@ -126,7 +126,8 @@ angular
       .state('dashboard.withAccount.categories', {
         url: '/category/{categoryId:int}?chartFreq',
         views: {
-          // Replace the map that was set by the parent state, with markers filtered by the selected category.
+          // Replace `meters` data previous resolved, with the cached data
+          // filtered by the selected category.
           'map@dashboard': {
             templateUrl: 'views/dashboard/main.map.html',
             resolve: {
@@ -171,11 +172,13 @@ angular
       .state('dashboard.withAccount.markers', {
         url: '/marker/:markerId?categoryId&chartFreq',
         views: {
-          // Update the Map.
+          // Replace `meters` data previous resolved, with the cached data
+          // if is the case filtered by the selected category.
           'map@dashboard': {
             templateUrl: 'views/dashboard/main.map.html',
             resolve: {
               meters: function(Meter, $stateParams, account) {
+                // Necessary to resolve again to apply the filter, of category id.
                 return Meter.get(account.id, $stateParams.categoryId);
               }
             },

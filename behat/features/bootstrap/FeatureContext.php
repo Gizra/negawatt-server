@@ -75,11 +75,64 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
+   * @Then I should see the login page
+   */
+  public function iShouldSeeTheLoginPage() {
+    $this->iWaitForCssElement('#login-form', 'appear');
+  }
+
+  /**
    * @Then I should see the category active
    */
   public function iShouldSeeTheCategoryActive() {
     $this->iWaitForCssElement('.active-category', 'appear');
   }
+
+  /**
+   * @Then I should see :markers markers
+   */
+  public function iShouldSeeMarkers($markers, $equals = TRUE) {
+    $this->waitFor(function($context) use ($markers, $equals) {
+      try {
+        $nodes = $context->getSession()->evaluateScript('angular.element(".leaflet-marker-icon").length');
+        if ($nodes == (int)$markers) {
+          return $equals;
+        }
+        return !$equals;
+      }
+      catch (WebDriver\Exception $e) {
+        if ($e->getCode() == WebDriver\Exception::NO_SUCH_ELEMENT) {
+          return !$equals;
+        }
+        throw $e;
+      }
+    });
+  }
+
+
+  /**
+   * @Then I should see a marker selected
+   */
+  public function iShouldSeeAMarkerSelected($appear = TRUE) {
+    $selected_src_image = '../images/marker-red.png';
+    // check if exist and is selected.
+    $this->waitFor(function($context) use ($selected_src_image, $appear) {
+      try {
+        $src = $context->getSession()->evaluateScript('angular.element(".leaflet-marker-icon").attr("src");');
+        if ($src == $selected_src_image) {
+          return $appear;
+        }
+        return !$appear;
+      }
+      catch (WebDriver\Exception $e) {
+        if ($e->getCode() == WebDriver\Exception::NO_SUCH_ELEMENT) {
+          return !$appear;
+        }
+        throw $e;
+      }
+    });
+  }
+
 
   /**
    * @AfterStep
@@ -139,11 +192,11 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @param $fn
    *   A callable to invoke.
    * @param int $timeout
-   *   The timeout period. Defaults to 10 seconds.
+   *   The timeout period. Defaults to 30 seconds.
    *
    * @throws Exception
    */
-  private function waitFor($fn, $timeout = 10000) {
+  private function waitFor($fn, $timeout = 30000) {
     $start = microtime(true);
     $end = $start + $timeout / 1000.0;
     while (microtime(true) < $end) {
@@ -153,6 +206,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     }
     throw new \Exception('waitFor timed out.');
   }
+
   /**
    * Wait for an element by its XPath to appear or disappear.
    *
@@ -182,13 +236,4 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     });
   }
 
-  /**
-   * @Then I should see all the markers
-   */
-  public function iShouldSeeAllTheMarkers() {
-    foreach (array(1, 2, 3) as $id) {
-      $xpath = '//*[@id="map"]/div[2]/div[2]/div[3]/img[' . $id . ']';
-      $this->waitForXpathNode($xpath, TRUE);
-    }
-  }
 }
