@@ -71,7 +71,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    */
   public function iWaitForCssElement($element, $appear) {
     $xpath = $this->getSession()->getSelectorsHandler()->selectorToXpath('css', $element);
-    return $this->waitForXpathNode($xpath, $appear == 'appear');
+    $this->waitForXpathNode($xpath, $appear == 'appear');
   }
 
   /**
@@ -109,6 +109,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     });
   }
 
+
   /**
    * @Then I should see a marker selected
    */
@@ -131,6 +132,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
       }
     });
   }
+
 
   /**
    * @AfterStep

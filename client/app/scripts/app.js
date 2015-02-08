@@ -111,7 +111,8 @@ angular
       .state('dashboard.withAccount.categories', {
         url: '/category/{categoryId:int}',
         views: {
-          // Replace the map that was set by the parent state, with markers filtered by the selected category.
+          // Replace `meters` data previous resolved, with the cached data
+          // filtered by the selected category.
           'map@dashboard': {
             templateUrl: 'views/dashboard/main.map.html',
             resolve: {
@@ -140,7 +141,8 @@ angular
       .state('dashboard.withAccount.markers', {
         url: '/marker/:markerId?categoryId',
         views: {
-          // Update the Map.
+          // Replace `meters` data previous resolved, with the cached data
+          // if is the case filtered by the selected category.
           'map@dashboard': {
             templateUrl: 'views/dashboard/main.map.html',
             resolve: {
