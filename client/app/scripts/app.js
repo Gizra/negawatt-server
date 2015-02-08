@@ -103,12 +103,12 @@ angular
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
-              // Must depend on account, in order to finish clearing the cache on
-              // account change BEFORE beginning downloading data.
-              electricityFilter: function(ChartUsage, $stateParams, account) {
+              electricityFilter: function(ChartUsage, $stateParams) {
                 electricityFilters = ChartUsage.filtersFromSelector($stateParams.chartFreq);
               },
-              electricity: function(Electricity, electricityFilter) {
+              // Must depend on account, in order to finish clearing the cache on
+              // account change BEFORE beginning downloading data.
+              electricity: function(Electricity, electricityFilter, account) {
                 return Electricity.get(electricityFilters);
               },
               // Get electricity data and transform it to chart format.
@@ -137,9 +137,7 @@ angular
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
-              // Must depend on account, in order to finish clearing the cache on
-              // account change BEFORE beginning downloading data.
-              electricityFilter: function(ChartUsage, $stateParams, account) {
+              electricityFilter: function(ChartUsage, $stateParams) {
                 electricityFilters = ChartUsage.filtersFromSelector($stateParams.chartFreq, 'meter_category', $stateParams.categoryId);
               },
               usage: angular.noop
@@ -193,9 +191,7 @@ angular
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
-              // Must depend on account, in order to finish clearing the cache on
-              // account change BEFORE beginning downloading data.
-              electricityFilter: function(ChartUsage, $stateParams, account) {
+              electricityFilter: function(ChartUsage, $stateParams) {
                 electricityFilters = ChartUsage.filtersFromSelector($stateParams.chartFreq, 'meter', $stateParams.markerId);
               },
               usage: angular.noop
