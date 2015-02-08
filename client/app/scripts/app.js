@@ -107,7 +107,10 @@ angular
               // Must depend on account, in order to finish clearing the cache on
               // account change BEFORE beginning downloading data.
               usage: function(ChartUsage, $stateParams, account) {
-                return ChartUsage.get($stateParams.chartFreq, electricityFiltersVar);
+                return {
+                  stateName: 'dashboard.withAccount',
+                  chartData: ChartUsage.get($stateParams.chartFreq, electricityFiltersVar)
+                };
               }
             },
             controller: 'UsageCtrl'
@@ -136,7 +139,10 @@ angular
               // Must depend on account, in order to finish clearing the cache on
               // account change BEFORE beginning downloading data.
               usage: function(ChartUsage, $stateParams, account) {
-                return ChartUsage.get($stateParams.chartFreq, 'meter_category', $stateParams.categoryId);
+                return {
+                  stateName: 'dashboard.withAccount.categories',
+                  chartData: ChartUsage.get($stateParams.chartFreq, 'meter_category', $stateParams.categoryId)
+                };
               }
             },
             controller: 'UsageCtrl'
@@ -194,7 +200,10 @@ angular
               // Must depend on account, in order to finish clearing the cache on
               // account change BEFORE beginning downloading data.
               usage: function(ChartUsage, $stateParams, account) {
-                return ChartUsage.get($stateParams.chartFreq, 'meter', $stateParams.markerId);
+                return {
+                  stateName: 'dashboard.withAccount.markers',
+                  chartData: ChartUsage.get($stateParams.chartFreq, 'meter', $stateParams.markerId)
+                };
               }
             },
             controller: 'UsageCtrl'
