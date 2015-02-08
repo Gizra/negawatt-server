@@ -108,15 +108,11 @@ angular
               electricityFilter: function(ChartUsage, $stateParams) {
                 electricityFiltersVar = ChartUsage.filtersFromSelector($stateParams.chartFreq);
               },
-              // Get electricity data according to electricity-filters.
+              // Get electricity data and transform it into chart format.
               // Must depend on account, in order to finish clearing the cache on
               // account change BEFORE beginning downloading data.
-              electricity: function(Electricity, electricityFilter, account) {
-                return Electricity.get(electricityFiltersVar);
-              },
-              // Transform electricity data into chart format.
-              usage: function(ChartUsage, $stateParams, electricity) {
-                return ChartUsage.getByElectricity($stateParams.chartFreq, electricity);
+              usage: function(ChartUsage, $stateParams, account) {
+                return ChartUsage.getByFilters($stateParams.chartFreq, electricityFiltersVar);
               }
             },
             controller: 'UsageCtrl'
@@ -148,8 +144,12 @@ angular
               electricityFilter: function(ChartUsage, $stateParams) {
                 electricityFiltersVar = ChartUsage.filtersFromSelector($stateParams.chartFreq, 'meter_category', $stateParams.categoryId);
               },
-              // Usage is actually handled in parent state.
-              usage: angular.noop
+              // Get electricity data and transform it into chart format.
+              // Must depend on account, in order to finish clearing the cache on
+              // account change BEFORE beginning downloading data.
+              usage: function(ChartUsage, $stateParams, account) {
+                return ChartUsage.getByFilters($stateParams.chartFreq, electricityFiltersVar);
+              }
             },
             controller: 'UsageCtrl'
           },
@@ -209,8 +209,12 @@ angular
               electricityFilter: function(ChartUsage, $stateParams) {
                 electricityFiltersVar = ChartUsage.filtersFromSelector($stateParams.chartFreq, 'meter', $stateParams.markerId);
               },
-              // Usage is actually handled in parent state.
-              usage: angular.noop
+              // Get electricity data and transform it into chart format.
+              // Must depend on account, in order to finish clearing the cache on
+              // account change BEFORE beginning downloading data.
+              usage: function(ChartUsage, $stateParams, account) {
+                return ChartUsage.getByFilters($stateParams.chartFreq, electricityFiltersVar);
+              }
             },
             controller: 'UsageCtrl'
           }
