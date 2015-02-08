@@ -103,16 +103,11 @@ angular
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
-              // Set electricity filters according to chart parameters.
-              // Might be overriden by child states.
-              electricityFilter: function(ChartUsage, $stateParams) {
-                electricityFiltersVar = ChartUsage.filtersFromSelector($stateParams.chartFreq);
-              },
               // Get electricity data and transform it into chart format.
               // Must depend on account, in order to finish clearing the cache on
               // account change BEFORE beginning downloading data.
               usage: function(ChartUsage, $stateParams, account) {
-                return ChartUsage.getByFilters($stateParams.chartFreq, electricityFiltersVar);
+                return ChartUsage.get($stateParams.chartFreq, electricityFiltersVar);
               }
             },
             controller: 'UsageCtrl'
@@ -137,18 +132,11 @@ angular
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
-              // Set electricity filters according to chart parameters.
-              // Overrides parent state settings.
-              // Electricity download itself and preparation of usage-chart
-              // are handled in parent state.
-              electricityFilter: function(ChartUsage, $stateParams) {
-                electricityFiltersVar = ChartUsage.filtersFromSelector($stateParams.chartFreq, 'meter_category', $stateParams.categoryId);
-              },
               // Get electricity data and transform it into chart format.
               // Must depend on account, in order to finish clearing the cache on
               // account change BEFORE beginning downloading data.
               usage: function(ChartUsage, $stateParams, account) {
-                return ChartUsage.getByFilters($stateParams.chartFreq, electricityFiltersVar);
+                return ChartUsage.get($stateParams.chartFreq, 'meter_category', $stateParams.categoryId);
               }
             },
             controller: 'UsageCtrl'
@@ -202,18 +190,11 @@ angular
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
-              // Set electricity filters according to chart parameters.
-              // Overrides parent state settings.
-              // Electricity download itself and preparation of usage-chart
-              // are handled in parent state.
-              electricityFilter: function(ChartUsage, $stateParams) {
-                electricityFiltersVar = ChartUsage.filtersFromSelector($stateParams.chartFreq, 'meter', $stateParams.markerId);
-              },
               // Get electricity data and transform it into chart format.
               // Must depend on account, in order to finish clearing the cache on
               // account change BEFORE beginning downloading data.
               usage: function(ChartUsage, $stateParams, account) {
-                return ChartUsage.getByFilters($stateParams.chartFreq, electricityFiltersVar);
+                return ChartUsage.get($stateParams.chartFreq, 'meter', $stateParams.markerId);
               }
             },
             controller: 'UsageCtrl'

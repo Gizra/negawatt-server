@@ -123,6 +123,28 @@ angular.module('negawattClientApp')
      * Get electricity data and update chart.
      *
      * @param chartFreq
+     *   Rrequired frequency, e.g. 2 for MONTH.
+     * @param selectorType
+     *   Optional - one of 'meter' or 'meter-category'.
+     * @param selectorId
+     *   Optional - id of selector.
+     *
+     * @returns {*}
+     *   Promise for data in google-chart format.
+     */
+    this.get = function(chartFreq, selectorType, selectorId) {
+      var deferred = $q.defer();
+
+      // Translate selector type and id to filters.
+      var filters = this.filtersFromSelector(chartFreq, selectorType, selectorId);
+
+      return this.getByFilters(chartFreq, filters);
+    };
+
+    /**
+     * Get electricity data and update chart.
+     *
+     * @param chartFreq
      *   Required frequency, e.g. 2 for MONTH.
      * @param filters
      *   Filters for GET request.
