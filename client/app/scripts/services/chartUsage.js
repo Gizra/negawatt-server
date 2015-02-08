@@ -133,22 +133,10 @@ angular.module('negawattClientApp')
     this.getByFilters = function(chartFreq, filters) {
       var deferred = $q.defer();
 
-      // Get frequency-info record.
-      var chartFrequency = chartFreq || this.usageChartParams.frequency;
-      // Fix a bug when there are two chartFrequency params in url's search
-      // string (issue #338).
-      // @todo: Remove after the bug is fixed.
-      if (chartFrequency instanceof Array) {
-        chartFrequency = chartFrequency[0];
-      }
-
-      var chartFrequencyInfo = this.frequencyParams[chartFrequency];
-
       // Get electricity data.
       Electricity.get(filters).then(function(electricity) {
         // Translate electricity data to google charts format.
-        ChartUsage.usageGoogleChartParams = ChartUsage.transformDataToDatasets(electricity, chartFrequencyInfo);
-        deferred.resolve(ChartUsage.usageGoogleChartParams);
+        deferred.resolve(ChartUsage.getByElectricity(chartFreq, electricity));
       });
 
       return deferred.promise;
@@ -202,7 +190,6 @@ angular.module('negawattClientApp')
         // Set chart title
         this.usageGoogleChartParams.options.title = chartTitle;
       }
-
     };
 
     /**
