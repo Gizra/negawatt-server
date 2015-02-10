@@ -3,7 +3,7 @@
   <ol ui-tree-nodes="">
     <li ng-repeat="item in categories.tree" ui-tree-node ng-show="hasMeters(item)">
       <div ui-tree-handle class="tree-level-top">
-        <a ui-sref="dashboard.withAccount.categories({categoryId: item.id})" ng-class="{'active-category':  ('categoryId' | includedByParams:item.id) }">
+        <a ui-sref="dashboard.withAccount.categories({categoryId: item.id}, {inherit: false})" ng-class="{'active-category':  ('categoryId' | includedByParams:item.id) }">
           <i class="glyphicon " ></i>
           <span>{{item.label}}</span> ({{item.meters}})
         </a>
