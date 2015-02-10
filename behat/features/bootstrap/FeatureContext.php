@@ -109,7 +109,6 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     });
   }
 
-
   /**
    * @Then I should see a marker selected
    */
@@ -137,13 +136,11 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   /**
    * @Then I should have :frequency as chart usage label
    */
-  public function iShouldHaveAsChartUsageLabel($frequency)
-  {
+  public function iShouldHaveAsChartUsageLabel($frequency) {
     // Because the svg tag i have to use angular.element ti create the assertion
     // XPath //*[@id="chart-usage"]/div[1]/div/svg/g[3]/g[1]/text
     // CSSPath #chart-usage > div:nth-child(1) > div > svg > g:nth-child(5) > g:nth-child(1) > text
     $csspath = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(5) > g:nth-child(1) > text';
-
     $this->waitForTextNgElement($csspath, $frequency);
   }
 

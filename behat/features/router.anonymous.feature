@@ -1,10 +1,10 @@
 Feature: Router
   In order to check the router system
-  As authenticated user
-  We need to be able navigate between states.
+  As anonymous user
+  We need to be able to ask the login.
 
-  @javascript @anonymous
-  Scenario: Authenticate user have to see homepage when set url "/"
-    Given I login with user "carlos"
+  @javascript
+  Scenario: Anonymous user have to see login page when set url "/"
+    Given I am an anonymous user
     When I visit "/"
-    Then I should see "3" markers
+    Then I should see the login page

@@ -15,7 +15,7 @@ Feature: Router
     When I visit "/#/dashboard/1"
     Then I should have "חודש" as chart usage label
 
-  @javascript @wip
+  @javascript
   Scenario: Show url with
     Given I login with user "carlos"
     When I visit "/#/dashboard/1"
