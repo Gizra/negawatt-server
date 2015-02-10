@@ -135,6 +135,19 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
 
 
   /**
+   * @Then I should have :frequency as chart usage label
+   */
+  public function iShouldHaveAsChartUsageLabel($frequency)
+  {
+    // Because the svg tag i have to use angular.element ti create the assertion
+    // XPath //*[@id="chart-usage"]/div[1]/div/svg/g[3]/g[1]/text
+    // CSSPath #chart-usage > div:nth-child(1) > div > svg > g:nth-child(5) > g:nth-child(1) > text
+    $csspath = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(5) > g:nth-child(1) > text';
+
+    $this->waitForTextNgElement($csspath, $frequency);
+  }
+
+  /**
    * @AfterStep
    *
    * Take a screen shot after failed steps for Selenium drivers (e.g.
@@ -235,5 +248,34 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
       }
     });
   }
+
+  /**
+   * Wait for the text appear or disappear frommthe element in the CSSPath.
+   *
+   * @param string $csspath
+   *   The CSSPath string.
+   * @param bool $appear
+   *   Determine if element should appear. Defaults to TRUE.
+   *
+   * @throws Exception
+   */
+  private function waitForTextNgElement($csspath, $text, $appear = TRUE) {
+    $this->waitFor(function($context) use ($csspath, $text, $appear) {
+      try {
+        $element_text = $context->getSession()->evaluateScript('angular.element("' + $csspath + '").text();');
+        if ($element_text == $text) {
+          return $appear;
+        }
+        return !$appear;
+      }
+      catch (WebDriver\Exception $e) {
+        if ($e->getCode() == WebDriver\Exception::NO_SUCH_ELEMENT) {
+          return !$appear;
+        }
+        throw $e;
+      }
+    });
+  }
+
 
 }
