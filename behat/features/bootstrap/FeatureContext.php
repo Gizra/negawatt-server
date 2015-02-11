@@ -133,6 +133,13 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     });
   }
 
+  /**
+   * @Then I should have :frequency as chart usage label
+   */
+  public function iShouldHaveAsChartUsageLabel($frequency) {
+    $csspath = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(5) > g:nth-child(1) > text';
+    $this->waitForTextNgElement($csspath, $frequency);
+  }
 
   /**
    * @Then I should not see the filters
@@ -243,5 +250,34 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
       }
     });
   }
+
+  /**
+   * Wait for appear or disappear text of an element, the search is done with CSSPath.
+   *
+   * @param string $csspath
+   *   The CSSPath string.
+   * @param bool $appear
+   *   Determine if element should appear. Defaults to TRUE.
+   *
+   * @throws Exception
+   */
+  private function waitForTextNgElement($csspath, $text, $appear = TRUE) {
+    $this->waitFor(function($context) use ($csspath, $text, $appear) {
+      try {
+        $element_text = $context->getSession()->evaluateScript('angular.element("' + $csspath + '").text();');
+        if ($element_text == $text) {
+          return $appear;
+        }
+        return !$appear;
+      }
+      catch (WebDriver\Exception $e) {
+        if ($e->getCode() == WebDriver\Exception::NO_SUCH_ELEMENT) {
+          return !$appear;
+        }
+        throw $e;
+      }
+    });
+  }
+
 
 }

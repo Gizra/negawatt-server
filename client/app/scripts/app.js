@@ -55,7 +55,13 @@ angular
         controller: 'DashboardCtrl'
       })
       .state('dashboard.withAccount', {
-        url: 'dashboard/{accountId:int}?chartFreq',
+        url: 'dashboard/{accountId:int}?:chartFreq',
+        params: {
+          chartFreq: {
+            // Keep monthly chart type by default.
+            value: 2
+          }
+        },
         resolve: {
           account: function($stateParams, Profile, profile) {
             return Profile.selectAccount($stateParams.accountId, profile);
@@ -117,7 +123,7 @@ angular
         }
       })
       .state('dashboard.withAccount.categories', {
-        url: '/category/{categoryId:int}?chartFreq',
+        url: '/category/{categoryId:int}',
         views: {
           // Replace `meters` data previous resolved, with the cached data
           // filtered by the selected category.
@@ -160,7 +166,7 @@ angular
         }
       })
       .state('dashboard.withAccount.markers', {
-        url: '/marker/:markerId?categoryId&chartFreq',
+        url: '/marker/:markerId?categoryId',
         views: {
           // Replace `meters` data previous resolved, with the cached data
           // if is the case filtered by the selected category.
