@@ -8,8 +8,12 @@
  * Controller of the negawattClientApp
  */
 angular.module('negawattClientApp')
-  .controller('UsageCtrl', function ($scope, $state, $stateParams, usage, meters, ChartUsage) {
-    $scope.usageChart = usage;
+  .controller('UsageCtrl', function ($scope, $stateParams, usage, meters, ChartUsage) {
+    // Get data from the cache, since 'usage' might not be up to date
+    // after lazy-load.
+    ChartUsage.get($stateParams).then(function(data) {
+      $scope.usageChart = data;
+    });
 
     // Detail information of the selected marker.
     if (angular.isDefined($stateParams.markerId)) {
@@ -22,13 +26,14 @@ angular.module('negawattClientApp')
 
     // Handle lazy-load of electricity data.
     // When cache expands, update the chart.
-    $scope.$on("nwElectricityChanged", function(event, filters, stateName) {
-      if ($state.current.name != stateName) {
-        // Update usageChart only if we're in the proper state.
+    $scope.$on("nwElectricityChanged", function(event, filtersHash) {
+
+      // Don't update usageChart if we're not in the active request.
+      if (filtersHash != ChartUsage.getActiveRequestHash()) {
         return;
       }
 
-      ChartUsage.getByFilters($stateParams.chartFreq, filters, stateName).then(function(data) {
+      ChartUsage.getByFiltersHash(filtersHash).then(function(data) {
         $scope.usageChart = data;
       });
     });

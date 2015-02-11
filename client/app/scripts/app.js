@@ -109,8 +109,13 @@ angular
               // Get electricity data and transform it into chart format.
               // Must depend on account, in order to finish clearing the cache on
               // account change BEFORE beginning downloading data.
-              usage: function(ChartUsage, $stateParams, account) {
-                return ChartUsage.get($stateParams.chartFreq, 'dashboard.withAccount');
+              usage: function(ChartUsage, $state, $stateParams, account) {
+                // Perform the GET only if we're in the proper (parent) state.
+                if ($state.current.name == 'dashboard.withAccount') {
+                  return ChartUsage.get($stateParams);
+                } else {
+                  return {};
+                }
               }
             },
             controller: 'UsageCtrl'
@@ -118,7 +123,7 @@ angular
         }
       })
       .state('dashboard.withAccount.categories', {
-        url: '/category/{categoryId:int}',
+        url: '/category/{categoryId:int}?chartFreq',
         views: {
           // Replace `meters` data previous resolved, with the cached data
           // filtered by the selected category.
@@ -139,7 +144,7 @@ angular
               // Must depend on account, in order to finish clearing the cache on
               // account change BEFORE beginning downloading data.
               usage: function(ChartUsage, $stateParams, account) {
-                return ChartUsage.get($stateParams.chartFreq, 'dashboard.withAccount.categories', 'meter_category', $stateParams.categoryId);
+                return ChartUsage.get($stateParams);
               }
             },
             controller: 'UsageCtrl'
@@ -161,7 +166,7 @@ angular
         }
       })
       .state('dashboard.withAccount.markers', {
-        url: '/marker/:markerId?categoryId',
+        url: '/marker/:markerId?categoryId&chartFreq',
         views: {
           // Replace `meters` data previous resolved, with the cached data
           // if is the case filtered by the selected category.
@@ -197,7 +202,7 @@ angular
               // Must depend on account, in order to finish clearing the cache on
               // account change BEFORE beginning downloading data.
               usage: function(ChartUsage, $stateParams, account) {
-                return ChartUsage.get($stateParams.chartFreq, 'dashboard.withAccount.markers', 'meter', $stateParams.markerId);
+                return ChartUsage.get($stateParams);
               }
             },
             controller: 'UsageCtrl'

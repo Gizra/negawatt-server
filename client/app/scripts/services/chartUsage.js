@@ -77,6 +77,24 @@ angular.module('negawattClientApp')
       }
     };
 
+    // Store the filters-hash code of the active request.
+    // Used to prevent updating the chart when there are several active
+    // requests in parallel.
+    this.activeRequestHash;
+
+    // A map from filters-hash code to chart-frequency.
+    this.filtersHashToFreq = {};
+
+    /**
+     * Returns the filters-hash code of the active GET request.
+     *
+     * @returns {string}
+     *   Filters-hash code of the active GET request.
+     */
+    this.getActiveRequestHash = function() {
+      return this.activeRequestHash;
+    };
+
     /**
      * Translate selector type and ID to filters.
      *
@@ -120,55 +138,73 @@ angular.module('negawattClientApp')
     };
 
     /**
-     * Get electricity data and update chart.
+     * Get electricity data and convert it to chart format.
      *
-     * @param chartFreq
-     *   Rrequired frequency, e.g. 2 for MONTH.
-     * @param selectorType
-     *   Optional - one of 'meter' or 'meter-category'.
-     * @param selectorId
-     *   Optional - id of selector.
+     * @param stateParams
+     *   State parameters, including frequency, marker-id, etc.
      *
      * @returns {*}
      *   Promise for data in google-chart format.
      */
-    this.get = function(chartFreq, stateName, selectorType, selectorId) {
+    this.get = function(stateParams) {
       var deferred = $q.defer();
+
+      // Decipher selector type and id out of stateParams.
+      var selectorType, selectorId;
+      if (stateParams.markerId) {
+        selectorType = 'meter';
+        selectorId = stateParams.markerId;
+      }
+      else if (stateParams.categoryId) {
+        selectorType = 'meter_category';
+        selectorId = stateParams.categoryId;
+      }
 
       // Translate selector type and id to filters.
-      var filters = this.filtersFromSelector(chartFreq, selectorType, selectorId);
+      var filters = this.filtersFromSelector(stateParams.chartFreq, selectorType, selectorId);
 
-      return this.getByFilters(chartFreq, filters, stateName);
-    };
-
-    /**
-     * Get electricity data and update chart.
-     *
-     * @param chartFreq
-     *   Required frequency, e.g. 2 for MONTH.
-     * @param filters
-     *   Filters for GET request.
-     *
-     * @returns {*}
-     *   Promise for data in google-chart format.
-     */
-    this.getByFilters = function(chartFreq, filters, stateName) {
-      var deferred = $q.defer();
+      // Save filters-hash code and map to frequency for later use.
+      var filtersHash = Electricity.hashFromFilters(filters);
+      this.activeRequestHash = filtersHash;
+      this.filtersHashToFreq[filtersHash] = stateParams.chartFreq;
 
       // Get electricity data.
-      Electricity.get(filters, stateName).then(function(electricity) {
+      Electricity.get(filters).then(function(electricity) {
         // Translate electricity data to google charts format.
-        deferred.resolve(ChartUsage.getByElectricity(chartFreq, electricity));
+        deferred.resolve(ChartUsage.electricityToChartData(stateParams.chartFreq, electricity));
       });
 
       return deferred.promise;
     };
 
     /**
-     * Return chart data according to electricity.
+     * Get electricity data and convert it to chart format.
      *
-     * The function receives electricity data, and converts it to proper
-     * chart format.
+     * Uses filters-hash code as a key to get electricity data.
+     *
+     * @param filtersHash
+     *   Filters-hash code.
+     *
+     * @returns {*}
+     *   Promise for data in google-chart format.
+     */
+    this.getByFiltersHash = function(filtersHash) {
+      var deferred = $q.defer();
+
+      // Find chart-frequency.
+      var chartFreq = this.filtersHashToFreq[filtersHash];
+
+      // Get electricity data.
+      Electricity.getByFiltersHash(filtersHash).then(function(electricity) {
+        // Translate electricity data to google charts format.
+        deferred.resolve(ChartUsage.electricityToChartData(chartFreq, electricity));
+      });
+
+      return deferred.promise;
+    };
+
+    /**
+     * Converts electricity data to chart format.
      *
      * @param chartFreq
      *   Required frequency, e.g. 2 for MONTH.
@@ -178,7 +214,7 @@ angular.module('negawattClientApp')
      * @returns {*}
      *   Data in google-chart format.
      */
-    this.getByElectricity = function(chartFreq, electricity) {
+    this.electricityToChartData = function(chartFreq, electricity) {
       // Get frequency-info record.
       var chartFrequency = chartFreq || this.usageChartParams.frequency;
       // Fix a bug when there are two chartFrequency params in url's search
