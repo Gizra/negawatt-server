@@ -123,7 +123,7 @@ angular
         }
       })
       .state('dashboard.withAccount.categories', {
-        url: '/category/{categoryId:int}?chartFreq',
+        url: '/category/{categoryId:int}',
         views: {
           // Replace `meters` data previous resolved, with the cached data
           // filtered by the selected category.
@@ -166,7 +166,7 @@ angular
         }
       })
       .state('dashboard.withAccount.markers', {
-        url: '/marker/:markerId?categoryId&chartFreq',
+        url: '/marker/:markerId?categoryId',
         views: {
           // Replace `meters` data previous resolved, with the cached data
           // if is the case filtered by the selected category.

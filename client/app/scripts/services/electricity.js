@@ -57,7 +57,7 @@ angular.module('negawattClientApp')
      * @returns {*}
      *   A promise to electricity data.
      */
-    this.get = function(filters, stateName) {
+    this.get = function(filters) {
       // Create a hash from the filters object for indexing the cache
       var filtersHash = this.hashFromFilters(filters);
 
