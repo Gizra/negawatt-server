@@ -2,8 +2,6 @@
 
 angular.module('negawattClientApp')
   .controller('MenuCtrl', function($scope, $state, $stateParams, amMoment, Timedate, Category, account, profile) {
-    console.log('leafletDirectiveMarker.click', $stateParams)
-
     $scope.account = account;
     $scope.user = profile.user;
     $scope.timedate = Timedate;

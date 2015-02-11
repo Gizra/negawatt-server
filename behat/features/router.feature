@@ -10,13 +10,13 @@ Feature: Router
     Then I should see "3" markers
 
   @javascript
-  Scenario: Set default chartFreq monthly
+  Scenario: Set default chart frequency monthly
     Given I login with user "carlos"
     When I visit "/#/dashboard/1"
     Then I should have "חודש" as chart usage label
 
   @javascript
-  Scenario: Show url with
+  Scenario: Keep chart frequency monthly at category selection
     Given I login with user "carlos"
     When I visit "/#/dashboard/1"
     Then I click "בטחון"
