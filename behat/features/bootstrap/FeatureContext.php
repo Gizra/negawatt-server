@@ -133,6 +133,15 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     });
   }
 
+
+  /**
+   * @Then I should not see the filters
+   */
+  public function iShouldNotSeeTheFilters() {
+    $csspath = "input.hide-meters-category";
+    $this->iWaitForCssElement($csspath, FALSE);
+  }
+
   /**
    * @AfterStep
    *

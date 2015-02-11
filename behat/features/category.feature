@@ -15,3 +15,15 @@ Feature: Category
     When I visit "/#/dashboard/1/marker/5?categoryId=15"
     Then I should see the category active
 
+  @javascript
+  Scenario: Hide filter meters by categories
+    Given I login with user "carlos"
+    When I click "בטחון"
+    Then I should not see the filters
+
+  @javascript
+  Scenario: Show filter meters by categories
+    Given I login with user "carlos"
+    When I visit "/#/dashboard/1"
+    Then the "מבנה חינוך" checkbox should be checked
+
