@@ -11,12 +11,12 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
    * Overrides \RestfulBase::publicFieldsInfo().
    */
   public function publicFieldsInfo() {
-    $public_fields['id'] = array(
-      'property' => 'id'
-    );
-
     $public_fields['timestamp'] = array(
       'property' => 'timestamp'
+    );
+
+    $public_fields['datatime'] = array(
+      'property' => 'datetime'
     );
 
     $public_fields['rate_type'] = array(
@@ -48,7 +48,7 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
         ),
       ),
     );
-
+    
     $public_fields['meter_category'] = array(
       'property' => 'meter_category',
       'column_for_query' => 'cat.field_meter_category_target_id',
@@ -72,6 +72,19 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     $table_name = _field_sql_storage_tablename($field);
     $query->leftJoin($table_name, 'cat', 'cat.entity_id=meter_nid');
     $query->addField('cat', 'field_meter_category_target_id', 'meter_category');
+
+    // Add human readable date-time field
+    $query->addExpression('from_unixtime(timestamp) ', 'datetime');
+
+    // Make summary fields
+    $query->addExpression('SUM(sum_kwh)', 'sum_kwh');
+    $query->addExpression('MIN(min_power_factor)', 'min_power_factor');
+    $query->addExpression('AVG(avg_power)', 'avg_power');
+
+    // Set grouping.
+    $query->groupBy('timestamp');
+    $query->groupBy('rate_type');
+    $query->groupBy('type');
 
     return $query;
   }

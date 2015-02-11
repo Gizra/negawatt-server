@@ -17,7 +17,7 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     return array(
       'name' => 'Normalizer process',
       'description' => 'Test the processing of raw data by normalizers.',
-      'group' => 'Negawatt Normalizer',
+      'group' => 'Negawatt',
     );
   }
 

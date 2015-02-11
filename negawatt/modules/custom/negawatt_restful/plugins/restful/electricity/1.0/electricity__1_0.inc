@@ -13,6 +13,4 @@ $plugin = array(
     'table_name' => 'negawatt_electricity_normalized',
     'id_column' => 'id',
   ),
-  // Output the data in our own formatter.
-  'formatter' => 'electricity_hal_json',
 );

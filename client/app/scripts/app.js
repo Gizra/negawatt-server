@@ -55,7 +55,7 @@ angular
         controller: 'DashboardCtrl'
       })
       .state('dashboard.withAccount', {
-        url: 'dashboard/{accountId:int}',
+        url: 'dashboard/{accountId:int}?chartFreq',
         resolve: {
           account: function($stateParams, Profile, profile) {
             return Profile.selectAccount($stateParams.accountId, profile);
@@ -100,8 +100,16 @@ angular
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
-              usage: function(ChartUsage) {
-                return ChartUsage.get();
+              // Get electricity data and transform it into chart format.
+              // Must depend on account, in order to finish clearing the cache on
+              // account change BEFORE beginning downloading data.
+              usage: function(ChartUsage, $state, $stateParams, account) {
+                // Perform the GET only if we're in the proper (parent) state.
+                if ($state.current.name == 'dashboard.withAccount') {
+                  return ChartUsage.get($stateParams);
+                } else {
+                  return {};
+                }
               }
             },
             controller: 'UsageCtrl'
@@ -109,7 +117,7 @@ angular
         }
       })
       .state('dashboard.withAccount.categories', {
-        url: '/category/{categoryId:int}',
+        url: '/category/{categoryId:int}?chartFreq',
         views: {
           // Replace `meters` data previous resolved, with the cached data
           // filtered by the selected category.
@@ -122,11 +130,24 @@ angular
             },
             controller: 'MapCtrl'
           },
+          // Update usage-chart to show category summary.
+          'usage@dashboard': {
+            templateUrl: 'views/dashboard/main.usage.html',
+            resolve: {
+              // Get electricity data and transform it into chart format.
+              // Must depend on account, in order to finish clearing the cache on
+              // account change BEFORE beginning downloading data.
+              usage: function(ChartUsage, $stateParams, account) {
+                return ChartUsage.get($stateParams);
+              }
+            },
+            controller: 'UsageCtrl'
+          },
           'categories@dashboard': {
             templateUrl: 'views/dashboard/main.categories.html',
             controller: 'CategoryCtrl'
           },
-          // Update chart of categories.
+          // Update details (pie) chart for categories.
           'details@dashboard': {
             templateUrl: 'views/dashboard/main.details.html',
             resolve: {
@@ -139,7 +160,7 @@ angular
         }
       })
       .state('dashboard.withAccount.markers', {
-        url: '/marker/:markerId?categoryId',
+        url: '/marker/:markerId?categoryId&chartFreq',
         views: {
           // Replace `meters` data previous resolved, with the cached data
           // if is the case filtered by the selected category.
@@ -171,12 +192,11 @@ angular
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
-              meters: function($stateParams, Meter, meters, account) {
-                // Assert get all the meters from cache, when we use lazy load.
-                return Meter.get(account.id, $stateParams.categoryId);
-              },
-              usage: function(ChartUsage, $stateParams) {
-                return ChartUsage.get('meter', $stateParams.markerId);
+              // Get electricity data and transform it into chart format.
+              // Must depend on account, in order to finish clearing the cache on
+              // account change BEFORE beginning downloading data.
+              usage: function(ChartUsage, $stateParams, account) {
+                return ChartUsage.get($stateParams);
               }
             },
             controller: 'UsageCtrl'
