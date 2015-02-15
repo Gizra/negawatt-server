@@ -27,6 +27,14 @@ angular.module('negawattClientApp')
       }
     }
 
+    // Active the seleced chart frequency.
+    function setActiveFrequencyTab(frequency) {
+      frequency.active = true;
+    }
+    if (angular.isDefined($stateParams.chartFreq)) {
+      setActiveFrequencyTab($scope.frequencies[$stateParams.chartFreq-1])
+    }
+
     // Detail information of the selected marker.
     if (angular.isDefined($stateParams.markerId)) {
       // Share meter selected.
