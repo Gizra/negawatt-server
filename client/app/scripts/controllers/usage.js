@@ -24,14 +24,15 @@ angular.module('negawattClientApp')
       ChartUsage.meterSelected(meters[$stateParams.markerId]);
     }
 
-    // Increase chart size.
-    if (true) {
-      var newHeight = 300;
+    // Set chart size, if chartHeight option is given.
+    if ($stateParams.chartHeight) {
+      var newHeight = +$stateParams.chartHeight;
 
-      // Calculations.
+      // Calculate new width and height.
       var newWidth = newHeight * 510 / 220;
       var newBottom = newHeight + 15;
 
+      // Set elements.
       var element = angular.element('#messages-view');
       element.css('bottom', newBottom + 'px');
 

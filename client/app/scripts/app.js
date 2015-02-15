@@ -55,7 +55,7 @@ angular
         controller: 'DashboardCtrl'
       })
       .state('dashboard.withAccount', {
-        url: 'dashboard/{accountId:int}?:chartFreq',
+        url: 'dashboard/{accountId:int}?:chartFreq,chartHeight',
         params: {
           chartFreq: {
             // Keep monthly chart type by default.
