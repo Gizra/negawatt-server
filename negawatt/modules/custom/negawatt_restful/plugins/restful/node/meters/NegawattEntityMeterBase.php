@@ -2,9 +2,9 @@
 
 /**
  * @file
- * Contains NegawattIecMeterResource.
+ * Contains NegawattSatecMeterResource.
  */
-class NegawattIecMeterResource extends \NegawattEntityBaseNode {
+class NegawattEntityMeterBase extends \NegawattEntityBaseNode {
   /**
    * Overrides \NegawattEntityBaseNode::publicFieldsInfo().
    */
@@ -15,12 +15,12 @@ class NegawattIecMeterResource extends \NegawattEntityBaseNode {
   public function publicFieldsInfo() {
     $public_fields = parent::publicFieldsInfo();
 
-    $public_fields['location'] = array(
-      'property' => 'field_location',
+    $public_fields['type'] = array(
+      'property' => 'type',
     );
 
-    $public_fields['contract'] = array(
-      'property' => 'field_contract_id',
+    $public_fields['location'] = array(
+      'property' => 'field_location',
     );
 
     $public_fields['place_description'] = array(
@@ -35,14 +35,6 @@ class NegawattIecMeterResource extends \NegawattEntityBaseNode {
       'property' => 'field_place_locality',
     );
 
-    $public_fields['meter_code'] = array(
-      'property' => 'field_meter_code',
-    );
-
-    $public_fields['meter_serial'] = array(
-      'property' => 'field_meter_serial',
-    );
-
     $public_fields['account'] = array(
       'property' => OG_AUDIENCE_FIELD,
       'resource' => array(
@@ -53,8 +45,12 @@ class NegawattIecMeterResource extends \NegawattEntityBaseNode {
       ),
     );
 
+    $public_fields['max_frequency'] = array(
+      'property' => 'field_max_frequency',
+    );
+
     $public_fields['meter_categories'] = array(
-      'property' => 'field_meter_category',
+      'property' => 'nid',
       'process_callbacks' => array(
         array($this, 'meterCategories'),
       ),
@@ -68,13 +64,15 @@ class NegawattIecMeterResource extends \NegawattEntityBaseNode {
    * meter.
    *
    * @param id $value
-   *   The category id of the meter.
+   *   The meter ID.
    *
    * @return array
    *   A categories id array.
    */
   protected function meterCategories($value) {
-    $categories = taxonomy_get_parents_all($value[0]->tid);
+    $wrapper = entity_metadata_wrapper('node', $value);
+    $meter_category = $wrapper->field_meter_category->value();
+    $categories = taxonomy_get_parents_all($meter_category[0]->tid);
     foreach ($categories as $category) {
       $categories_ids[] = $category->tid;
     }

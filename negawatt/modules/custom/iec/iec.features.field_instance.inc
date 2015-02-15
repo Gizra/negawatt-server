@@ -180,7 +180,7 @@ function iec_field_default_field_instances() {
         'module' => 'geolocation',
         'settings' => array(),
         'type' => 'geolocation_text',
-        'weight' => 3,
+        'weight' => 16,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -238,7 +238,7 @@ function iec_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 15,
+      'weight' => 14,
     ),
   );
 

@@ -58,6 +58,5 @@ features[variable][] = node_options_iec_meter
 features[variable][] = node_preview_iec_meter
 features[variable][] = node_submitted_iec_meter
 features_exclude[field_base][group_content_access] = group_content_access
-features_exclude[field_base][field_location] = field_location
 features_exclude[field_base][og_group_ref] = og_group_ref
-mtime = 1420634885
+mtime = 1422868222

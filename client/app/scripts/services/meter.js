@@ -97,7 +97,7 @@ angular.module('negawattClientApp')
       };
 
       // Broadcast and event to update the markers in the map.
-      $rootScope.$broadcast(broadcastUpdateEventName);
+      $rootScope.$broadcast(broadcastUpdateEventName, cache.data);
 
       // Active the reset after update the cache.
       skipResetCache = false;
@@ -185,7 +185,9 @@ angular.module('negawattClientApp')
         meters = Utils.indexById($filter('filter')(Utils.toArray(meters), function(meter) {
 
           // Convert categories id to integer.
-          meter.meter_categories = meter.meter_categories.map(function(item) { return parseInt(item)});
+          if (meter.meter_categories) {
+            meter.meter_categories = meter.meter_categories.map(function(item) { return parseInt(item)});
+          }
 
           if (meter.meter_categories && meter.meter_categories.indexOf(parseInt(categoryId)) !== -1) {
             return meter;

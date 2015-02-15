@@ -1,0 +1,15 @@
+<?php
+
+$plugin = array(
+  'label' => t('Meters'),
+  'description' => t('List of meters.'),
+  'resource' => 'meters',
+  'class' => 'NegawattMeterResource',
+  'name' => 'meter__1_0',
+  'entity_type' => 'node',
+  'bundles' => array(
+    'iec_meter' => 'iec_meters',
+    'satec_meter' => 'satec_meters',
+  ),
+  'authentication_types' => TRUE,
+);

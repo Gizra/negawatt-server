@@ -116,18 +116,16 @@ class NegaWattNormalizerDataProviderBase implements \NegaWattNormalizerDataProvi
   /**
    * {@inheritdoc}
    */
-  public function getTimestampOfRawEntitiesBefore() {
+  public function getRawEntityBefore() {
     $query = db_select('negawatt_electricity', 'ne')
-      ->fields('ne', array('timestamp'))
+      ->fields('ne')
       ->condition('timestamp', $this->getTimestampFrom(), '<')
       ->condition('meter_nid', $this->getMeterNode()->nid)
       ->range(0, 1)
       ->orderBy('timestamp', 'DESC');
 
-    $result = $query->execute()->fetchObject();
-
-    // If result is false, return NULL, otherwise return timestamp
-    return $result ? $result->timestamp : NULL;
+    // There is only one result entity.
+    return $query->execute()->fetchObject();
   }
 
   /**

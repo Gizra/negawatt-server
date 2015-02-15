@@ -8,10 +8,19 @@
  * Controller of the negawattClientApp
  */
 angular.module('negawattClientApp')
-  .controller('CategoryCtrl', function ($scope, $state, $stateParams, Category, categories) {
+  .controller('CategoryCtrl', function ($scope, $state, $stateParams, $filter, Category, Meter, categories, meters) {
+
+    // Define property in the parent scope, permit to be accesable
+    // by scope methods of the controller.
+    $scope.categoriesChecked = {};
+
     $scope.categories = categories;
-    $scope.allCategories = categories;
     $scope.accountId = $stateParams.accountId;
+
+    // Activate filter of meters only if we are in the principal state.
+    if ($state.is('dashboard.withAccount')) {
+      $scope.filterMeters = true;
+    }
 
      /**
      * Determine if a category has meters.
@@ -27,7 +36,34 @@ angular.module('negawattClientApp')
     };
 
     /**
-     * Set the selected category.
+     * Check/Unckeck category to filter meters over the map.
+     *
+     */
+    $scope.toggleMetersByCategory = function() {
+      // Update meters on the map.
+      $scope.$parent.$broadcast('nwMetersChanged', $filter('filterMeterByCategories')(meters, getCategoriesChecked()));
+    }
+
+    /**
+     * Return an array of the category ids, checeked.
+     *
+     * @returns {Array}
+     */
+    function getCategoriesChecked() {
+      var filter = [];
+
+      // Return filter object.
+      angular.forEach($scope.categoriesChecked, function(categoryChecked, index) {
+        if (!categoryChecked) {
+          this.push(index);
+        }
+      }, filter);
+
+      return filter;
+    }
+
+    /**
+     * Set the selected category, to keep in other states.
      *
      * @param id int
      *   The Category ID.

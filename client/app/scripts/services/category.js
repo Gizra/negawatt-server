@@ -7,9 +7,6 @@ angular.module('negawattClientApp')
     // A private cache key.
     var cache = {};
 
-    // Selected category.
-    //var selected;
-
     // Promise in progress of categories.
     var getCategories;
 
@@ -33,6 +30,15 @@ angular.module('negawattClientApp')
      */
     this.setSelectedCategory = function(categoryId) {
       cache.selected = categoryId;
+    };
+
+    /**
+     * Delete selected category ID.
+     *
+     * @returns {*}
+     */
+    this.clearSelectedCategory = function() {
+      cache.selected = undefined;
     };
 
     /**
@@ -176,6 +182,7 @@ angular.module('negawattClientApp')
       var deferred = $q.defer();
       var metersCategories;
       var list = (angular.isArray(categories)) ? categories : categories.list;
+
       // Set meters in 0.
       angular.forEach(list, function(category) {
         category.meters = 0;

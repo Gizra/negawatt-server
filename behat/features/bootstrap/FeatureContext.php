@@ -30,7 +30,9 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @throws \Exception
    */
   protected function loginUser($name, $password, $check_success = TRUE) {
-    $this->getSession()->visit($this->locatePath('/#/login'));
+    $this->getSession()->visit($this->locatePath('/#/logout'));
+    // Reload to force refresh button of the browser. (ui-router reload the state.)
+    $this->getSession()->reload();
     $this->iWaitForCssElement('#login-form', 'appear');
     $element = $this->getSession()->getPage();
     $element->fillField('username', $name);
@@ -45,8 +47,8 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     $submit->click();
 
     if ($check_success) {
-      // Wait for the dashboard's menu to load.
-      $this->iWaitForCssElement('#dashboard-controls', 'appear');
+      // Wait for the dashboard's menu to load, with the user accout information.
+      $this->iWaitForCssElement('.menu-account', 'appear');
     }
   }
 
@@ -73,11 +75,78 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
-   * @Then I should see than a marker disappeared
+   * @Then I should see the login page
    */
-  public function iShouldSeeThanAMarkerDisappeared() {
-    // Check if a meter of a different category disappear.
-    $this->waitForXpathNode('//*[@id="map"]/div[2]/div[2]/div[3]/img[2]', FALSE);
+  public function iShouldSeeTheLoginPage() {
+    $this->iWaitForCssElement('#login-form', 'appear');
+  }
+
+  /**
+   * @Then I should see the category active
+   */
+  public function iShouldSeeTheCategoryActive() {
+    $this->iWaitForCssElement('.active-category', 'appear');
+  }
+
+  /**
+   * @Then I should see :markers markers
+   */
+  public function iShouldSeeMarkers($markers, $equals = TRUE) {
+    $this->waitFor(function($context) use ($markers, $equals) {
+      try {
+        $nodes = $context->getSession()->evaluateScript('angular.element(".leaflet-marker-icon").length');
+        if ($nodes == (int)$markers) {
+          return $equals;
+        }
+        return !$equals;
+      }
+      catch (WebDriver\Exception $e) {
+        if ($e->getCode() == WebDriver\Exception::NO_SUCH_ELEMENT) {
+          return !$equals;
+        }
+        throw $e;
+      }
+    });
+  }
+
+  /**
+   * @Then I should see a marker selected
+   */
+  public function iShouldSeeAMarkerSelected($appear = TRUE) {
+    $selected_src_image = '../images/marker-red.png';
+    // check if exist and is selected.
+    $this->waitFor(function($context) use ($selected_src_image, $appear) {
+      try {
+        // Get an array of string <img src="...">, filled with the value of the src attribute of the marker icon image.
+        $marker_attr_src = $context->getSession()->evaluateScript('angular.element(".leaflet-marker-icon").map(function(index, element){ return angular.element(element).attr("src") });');
+        if (in_array($selected_src_image, $marker_attr_src)) {
+          return $appear;
+        }
+        return !$appear;
+      }
+      catch (WebDriver\Exception $e) {
+        if ($e->getCode() == WebDriver\Exception::NO_SUCH_ELEMENT) {
+          return !$appear;
+        }
+        throw $e;
+      }
+    });
+  }
+
+  /**
+   * @Then I should have :frequency as chart usage label
+   */
+  public function iShouldHaveAsChartUsageLabel($frequency) {
+    $csspath = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(5) > g:nth-child(1) > text';
+    $this->waitForTextNgElement($csspath, $frequency);
+  }
+
+  /**
+   * @Then I should not see the filters
+   */
+  public function iShouldNotSeeTheFilters() {
+    $csspath = "input.hide-meters-category";
+    $this->iWaitForCssElement($csspath, FALSE);
   }
 
   /**
@@ -115,6 +184,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
       // No tokens found.
       return;
     }
+    // Delete from database.
     foreach ($entities as $entity) {
       $entity->delete();
     }
@@ -137,11 +207,11 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @param $fn
    *   A callable to invoke.
    * @param int $timeout
-   *   The timeout period. Defaults to 60 seconds.
+   *   The timeout period. Defaults to 30 seconds.
    *
    * @throws Exception
    */
-  private function waitFor($fn, $timeout = 60000) {
+  private function waitFor($fn, $timeout = 30000) {
     $start = microtime(true);
     $end = $start + $timeout / 1000.0;
     while (microtime(true) < $end) {
@@ -151,6 +221,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     }
     throw new \Exception('waitFor timed out.');
   }
+
   /**
    * Wait for an element by its XPath to appear or disappear.
    *
@@ -181,12 +252,32 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
-   * @Then I should see all the markers
+   * Wait for appear or disappear text of an element, the search is done with CSSPath.
+   *
+   * @param string $csspath
+   *   The CSSPath string.
+   * @param bool $appear
+   *   Determine if element should appear. Defaults to TRUE.
+   *
+   * @throws Exception
    */
-  public function iShouldSeeAllTheMarkers() {
-    foreach (array(1, 2, 3) as $id) {
-      $xpath = '//*[@id="map"]/div[2]/div[2]/div[3]/img[' . $id . ']';
-      $this->waitForXpathNode($xpath, TRUE);
-    }
+  private function waitForTextNgElement($csspath, $text, $appear = TRUE) {
+    $this->waitFor(function($context) use ($csspath, $text, $appear) {
+      try {
+        $element_text = $context->getSession()->evaluateScript('angular.element("' + $csspath + '").text();');
+        if ($element_text == $text) {
+          return $appear;
+        }
+        return !$appear;
+      }
+      catch (WebDriver\Exception $e) {
+        if ($e->getCode() == WebDriver\Exception::NO_SUCH_ELEMENT) {
+          return !$appear;
+        }
+        throw $e;
+      }
+    });
   }
+
+
 }

@@ -1,8 +1,8 @@
 <span><i class="icon-options"></i></span>
 
-<tabset class="chart-usage" vertical="true">
+<tabset class="box-chart-usage" vertical="true">
   <tab ng-repeat="frequency in frequencies" heading="{{frequency.label}}" active="frequency.active" disabled="frequency.disabled">
-    <div google-chart chart="usageChart" style="{{usageChart.cssStyle}}"/>
+    <div google-chart chart="usageChart" id="chart-usage" style="{{usageChart.cssStyle}}"/>
   </tab>
 </tabset>
 
