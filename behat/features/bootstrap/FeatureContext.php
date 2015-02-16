@@ -160,6 +160,16 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
+   * @Then I see the monthly kws chart a meter
+   */
+  public function iSeeTheMonthlyKwsChartAMeter() {
+    $start_chart = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(4) > g:nth-child(2) > g:nth-child(2) > rect:nth-child(1)';
+    $end_chart = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(4) > g:nth-child(2) > g:nth-child(2) > rect:nth-child(40)';
+    $this->waitForNgNodes($start_chart, TRUE);
+    $this->waitForNgNodes($end_chart, TRUE);
+  }
+
+  /**
    * @AfterStep
    *
    * Take a screen shot after failed steps for Selenium drivers (e.g.
