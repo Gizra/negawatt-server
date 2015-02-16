@@ -3,7 +3,7 @@ Feature: Chart
   As authenticated user
   We need to be able see chart.
 
-  @javascript @wip
+  @javascript
   Scenario: Show chart usage monthly of the total kws of the meters.
     Given I login with user "carlos"
     When I visit "/#/dashboard/1"
