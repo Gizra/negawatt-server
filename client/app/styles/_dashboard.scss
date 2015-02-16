@@ -191,35 +191,32 @@
         padding: 0;
         margin-left: 20px;
 
-        .box-chart-usage {
+
+        // Tabs
+        ul.nav {
           height: inherit;
-          width: inherit;
+          position: fixed;
+          right: 502px;
+          background-color: #93928E;
+          padding: 0;
+          border: 0;
 
-          // Tabs
-          ul.nav {
-            height: inherit;
-            position: fixed;
-            right: 502px;
-            background-color: #93928E;
-            padding: 0;
-            border: 0;
+          li  {
+            a  {
+              margin: 0;
+              border: 0;
+              border-top-left-radius: 0;
+              border-top-right-radius: 0;
+              color: #ffffff;
+            }
 
-            li  {
-              a  {
-                margin: 0;
-                border: 0;
-                border-top-left-radius: 0;
-                border-top-right-radius: 0;
-                color: #ffffff;
-              }
-
-              &.active > a, a:hover {
-                color: #93928E;
-                background-color: #ffffff;
-              }
+            &.active > a, a:hover {
+              color: #93928E;
+              background-color: #ffffff;
             }
           }
         }
+
       }
 
     }

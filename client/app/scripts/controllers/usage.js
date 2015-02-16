@@ -8,7 +8,7 @@
  * Controller of the negawattClientApp
  */
 angular.module('negawattClientApp')
-  .controller('UsageCtrl', function ($scope, $location, $stateParams, usage, meters, ChartUsage) {
+  .controller('UsageCtrl', function ($scope, $location, $stateParams, account, usage, meters, ChartUsage) {
     // Get data from the cache, since 'usage' might not be up to date
     // after lazy-load.
     ChartUsage.get(account.id, $stateParams).then(function(data) {
@@ -33,7 +33,6 @@ angular.module('negawattClientApp')
 
         //console.log('select Tab validated');
         $location.search('chartFreq', $stateParams.chartFreq);
-
       }
     }
 
