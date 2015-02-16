@@ -154,9 +154,9 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    */
   public function iSeeTheMonthlyKwsChartOfAllMeters() {
     $start_chart = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(4) > g:nth-child(2) > g:nth-child(2) > rect:nth-child(1)';
-    $end_chart = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(4) > g:nth-child(2) > g:nth-child(2) > rect:nth-child(40)';
-    $this->waitForNgNodes($start_chart, TRUE);
-    $this->waitForNgNodes($end_chart, TRUE);
+    $end_chart = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(4) > g:nth-child(2) > g:nth-child(2) > rect:nth-child(10)';
+    $this->waitForNgNodes($start_chart, 'height', '61');
+    $this->waitForNgNodes($end_chart, 'height', '62');
   }
 
   /**
@@ -165,8 +165,8 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   public function iSeeTheMonthlyKwsChartAMeter() {
     $start_chart = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(4) > g:nth-child(2) > g:nth-child(2) > rect:nth-child(1)';
     $end_chart = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(4) > g:nth-child(2) > g:nth-child(2) > rect:nth-child(40)';
-    $this->waitForNgNodes($start_chart, TRUE);
-    $this->waitForNgNodes($end_chart, TRUE);
+    $this->waitForAttrNgElement($start_chart, 'height', '120');
+    $this->waitForNgNodes($end_chart, 'height', '12');
   }
 
   /**
@@ -327,5 +327,31 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     });
   }
 
-
+  /**
+   * Wait for appear or disappear an attribute of an element, and check the value. The search is done with CSSPath and angular.element.
+   *
+   * @param string $csspath
+   *   The CSSPath string.
+   * @param string $value
+   *   The CSSPath string.
+   *
+   * @throws Exception
+   */
+  private function waitForAttrNgElement($csspath, $attr, $value) {
+    $this->waitFor(function($context) use ($csspath, $attr, $value) {
+      try {
+        $element_attribute = $context->getSession()->evaluateScript('angular.element("' + $csspath + '").attr('" + $attr + "');');
+        if ($element_attribute == $value) {
+          return $appear;
+        }
+        return !$appear;
+      }
+      catch (WebDriver\Exception $e) {
+        if ($e->getCode() == WebDriver\Exception::NO_SUCH_ELEMENT) {
+          return !$appear;
+        }
+        throw $e;
+      }
+    });
+  }
 }
