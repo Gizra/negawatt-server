@@ -184,6 +184,7 @@
       }
 
       &.dashboard-usage {
+        width: 505px;
         height: 220px;
         right: 0;
         bottom: 10px;
@@ -192,7 +193,9 @@
 
         .box-chart-usage {
           height: inherit;
+          width: inherit;
 
+          // Tabs
           ul.nav {
             height: inherit;
             position: fixed;
@@ -214,14 +217,11 @@
                 color: #93928E;
                 background-color: #ffffff;
               }
-
             }
-
-
           }
         }
-
       }
+
     }
   }
 
