@@ -24,7 +24,9 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     );
 
     $public_fields['type'] = array(
-      'property' => 'type'
+      'property' => 'type',
+      // To prevent conflict with og_membership 'type' field.
+      'column_for_query' => 'negawatt_electricity_normalized.type',
     );
 
     $public_fields['kwh'] = array(
@@ -48,10 +50,15 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
         ),
       ),
     );
-    
+
     $public_fields['meter_category'] = array(
       'property' => 'meter_category',
       'column_for_query' => 'cat.field_meter_category_target_id',
+    );
+
+    $public_fields['meter_account'] = array(
+      'property' => 'meter_account',
+      'column_for_query' => 'acc.gid',
     );
 
     $public_fields['min_power_factor'] = array(
@@ -67,11 +74,16 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
   public function getQuery() {
     $query = parent::getQuery();
 
-    // Add a query for meter_categories.
+    // Add a query for meter_category.
     $field = field_info_field('field_meter_category');
     $table_name = _field_sql_storage_tablename($field);
     $query->leftJoin($table_name, 'cat', 'cat.entity_id=meter_nid');
     $query->addField('cat', 'field_meter_category_target_id', 'meter_category');
+
+    // Add a query for meter_account.
+    $table_name = 'og_membership';
+    $query->leftJoin($table_name, 'acc', 'acc.etid=meter_nid');
+    $query->addField('acc', 'gid', 'meter_account');
 
     // Add human readable date-time field
     $query->addExpression('from_unixtime(timestamp) ', 'datetime');
@@ -84,7 +96,7 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     // Set grouping.
     $query->groupBy('timestamp');
     $query->groupBy('rate_type');
-    $query->groupBy('type');
+    $query->groupBy('negawatt_electricity_normalized.type');
 
     return $query;
   }

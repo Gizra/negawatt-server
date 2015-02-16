@@ -128,6 +128,8 @@ angular.module('negawattClientApp')
     /**
      * Translate selector type and ID to filters.
      *
+     * @param accountId
+     *   User account ID.
      * @param chartFreq
      *   Required frequency, e.g. 2 for MONTH.
      * @param selectorType
@@ -138,7 +140,7 @@ angular.module('negawattClientApp')
      * @returns {Object}
      *   Filters array in the form required by get().
      */
-    this.filtersFromSelector = function(chartFreq, selectorType, selectorId) {
+    this.filtersFromSelector = function(accountId, chartFreq, selectorType, selectorId) {
       // Calculate the time-frame for data request.
       var chartFrequency = chartFreq || this.usageChartParams.frequency;
       // Fix a bug when there are two chartFrequency params in url's search
@@ -154,6 +156,7 @@ angular.module('negawattClientApp')
 
       // Prepare filters for data request.
       var filters = {
+        'filter[meter_account]': accountId,
         'filter[type]': chartFrequency,
         'filter[timestamp][operator]': 'BETWEEN',
         'filter[timestamp][value][0]': chartBeginTimestamp,
@@ -170,13 +173,15 @@ angular.module('negawattClientApp')
     /**
      * Get electricity data and convert it to chart format.
      *
+     * @param accountId
+     *   User account ID.
      * @param stateParams
      *   State parameters, including frequency, marker-id, etc.
      *
      * @returns {*}
      *   Promise for data in google-chart format.
      */
-    this.get = function(stateParams) {
+    this.get = function(accountId, stateParams) {
       var deferred = $q.defer();
 
       // Decipher selector type and id out of stateParams.
@@ -191,7 +196,7 @@ angular.module('negawattClientApp')
       }
 
       // Translate selector type and id to filters.
-      var filters = this.filtersFromSelector(stateParams.chartFreq, selectorType, selectorId);
+      var filters = this.filtersFromSelector(accountId, stateParams.chartFreq, selectorType, selectorId);
 
       // Save filters-hash code and map to frequency for later use.
       var filtersHash = Electricity.hashFromFilters(filters);

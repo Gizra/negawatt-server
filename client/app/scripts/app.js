@@ -111,12 +111,10 @@ angular
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
               // Get electricity data and transform it into chart format.
-              // Must depend on account, in order to finish clearing the cache on
-              // account change BEFORE beginning downloading data.
               usage: function(ChartUsage, $state, $stateParams, account) {
                 // Perform the GET only if we're in the proper (parent) state.
                 if ($state.current.name == 'dashboard.withAccount') {
-                  return ChartUsage.get($stateParams);
+                  return ChartUsage.get(account.id, $stateParams);
                 } else {
                   return {};
                 }
@@ -146,10 +144,8 @@ angular
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
               // Get electricity data and transform it into chart format.
-              // Must depend on account, in order to finish clearing the cache on
-              // account change BEFORE beginning downloading data.
               usage: function(ChartUsage, $stateParams, account) {
-                return ChartUsage.get($stateParams);
+                return ChartUsage.get(account.id, $stateParams);
               }
             },
             controller: 'UsageCtrl'
@@ -205,10 +201,8 @@ angular
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
               // Get electricity data and transform it into chart format.
-              // Must depend on account, in order to finish clearing the cache on
-              // account change BEFORE beginning downloading data.
               usage: function(ChartUsage, $stateParams, account) {
-                return ChartUsage.get($stateParams);
+                return ChartUsage.get(account.id, $stateParams);
               }
             },
             controller: 'UsageCtrl'

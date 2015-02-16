@@ -11,7 +11,7 @@ angular.module('negawattClientApp')
   .controller('UsageCtrl', function ($scope, $location, $stateParams, usage, meters, ChartUsage) {
     // Get data from the cache, since 'usage' might not be up to date
     // after lazy-load.
-    ChartUsage.get($stateParams).then(function(data) {
+    ChartUsage.get(account.id, $stateParams).then(function(data) {
       $scope.usageChart = data;
     });
     $scope.frequencies = ChartUsage.getFrequencies();
