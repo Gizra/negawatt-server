@@ -155,8 +155,8 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   public function iSeeTheMonthlyKwsChartOfAllMeters() {
     $start_chart = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(4) > g:nth-child(2) > g:nth-child(2) > rect:nth-child(1)';
     $end_chart = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(4) > g:nth-child(2) > g:nth-child(2) > rect:nth-child(40)';
-    $this->iWaitForCssElement($start_chart, TRUE);
-    $this->iWaitForCssElement($end_chart, TRUE);
+    $this->waitForNgNodes($start_chart, TRUE);
+    $this->waitForNgNodes($end_chart, TRUE);
   }
 
   /**
@@ -276,6 +276,34 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
       try {
         $element_text = $context->getSession()->evaluateScript('angular.element("' + $csspath + '").text();');
         if ($element_text == $text) {
+          return $appear;
+        }
+        return !$appear;
+      }
+      catch (WebDriver\Exception $e) {
+        if ($e->getCode() == WebDriver\Exception::NO_SUCH_ELEMENT) {
+          return !$appear;
+        }
+        throw $e;
+      }
+    });
+  }
+
+  /**
+   * Wait for appear or disappear an element. The search is done with CSSPath and angular.element.
+   *
+   * @param string $csspath
+   *   The CSSPath string.
+   * @param bool $appear
+   *   Determine if element should appear. Defaults to TRUE.
+   *
+   * @throws Exception
+   */
+  private function waitForNgNodes($csspath, $appear = TRUE) {
+    $this->waitFor(function($context) use ($csspath, $appear) {
+      try {
+        $nodes = $context->getSession()->evaluateScript('angular.element("' + $csspath + '");');
+        if (count($nodes) > 0) {
           return $appear;
         }
         return !$appear;
