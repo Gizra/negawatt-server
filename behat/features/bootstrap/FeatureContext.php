@@ -155,8 +155,8 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   public function iSeeTheMonthlyKwsChartOfAllMeters() {
     $start_chart = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(4) > g:nth-child(2) > g:nth-child(2) > rect:nth-child(1)';
     $end_chart = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(4) > g:nth-child(2) > g:nth-child(2) > rect:nth-child(10)';
-    $this->waitForNgNodes($start_chart, 'height', '61');
-    $this->waitForNgNodes($end_chart, 'height', '62');
+    $this->waitForAttrNgElement($start_chart, 'height', '61');
+    $this->waitForAttrNgElement($end_chart, 'height', '62');
   }
 
   /**
@@ -164,9 +164,9 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    */
   public function iSeeTheMonthlyKwsChartAMeter() {
     $start_chart = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(4) > g:nth-child(2) > g:nth-child(2) > rect:nth-child(1)';
-    $end_chart = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(4) > g:nth-child(2) > g:nth-child(2) > rect:nth-child(40)';
+    $end_chart = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(4) > g:nth-child(2) > g:nth-child(2) > rect:nth-child(10)';
     $this->waitForAttrNgElement($start_chart, 'height', '120');
-    $this->waitForNgNodes($end_chart, 'height', '12');
+    $this->waitForAttrNgElement($end_chart, 'height', '12');
   }
 
   /**
@@ -284,8 +284,9 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   private function waitForTextNgElement($csspath, $text, $appear = TRUE) {
     $this->waitFor(function($context) use ($csspath, $text, $appear) {
       try {
-        $element_text = $context->getSession()->evaluateScript('angular.element("' + $csspath + '").text();');
-        if ($element_text == $text) {
+        $element_text = $context->getSession()->evaluateScript('angular.element("' . $csspath . '").text();');
+        if ($element_text
+          == $text) {
           return $appear;
         }
         return !$appear;
@@ -340,15 +341,15 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   private function waitForAttrNgElement($csspath, $attr, $value) {
     $this->waitFor(function($context) use ($csspath, $attr, $value) {
       try {
-        $element_attribute = $context->getSession()->evaluateScript('angular.element("' + $csspath + '").attr('" + $attr + "');');
+        $element_attribute = $context->getSession()->evaluateScript('angular.element("' . $csspath . '").attr("' . $attr . '");');
         if ($element_attribute == $value) {
-          return $appear;
+          return TRUE;
         }
-        return !$appear;
+        return FALSE;
       }
       catch (WebDriver\Exception $e) {
         if ($e->getCode() == WebDriver\Exception::NO_SUCH_ELEMENT) {
-          return !$appear;
+          return FALSE;
         }
         throw $e;
       }
