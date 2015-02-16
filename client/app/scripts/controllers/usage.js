@@ -20,17 +20,20 @@ angular.module('negawattClientApp')
      * Search the data with the new chart frequency.
      */
     $scope.select = function() {
+
       // Prevent only one excetion.
       if ($stateParams.chartFreq !== this.frequencies[this.$index].type) {
         $stateParams.chartFreq = this.frequencies[this.$index].type;
         // Load electricity data in the chart according the chart frequency.
+        $scope.isLoading = true;
         ChartUsage.get($stateParams).then(function(data) {
           $scope.usageChart = data;
-          console.log('$scope.usageChart', $scope.usageChart);
+          $scope.isLoading = false;
         });
 
         //console.log('select Tab validated');
         $location.search('chartFreq', $stateParams.chartFreq);
+
       }
     }
 
@@ -39,7 +42,6 @@ angular.module('negawattClientApp')
       frequency.active = true;
     }
     if (angular.isDefined($stateParams.chartFreq)) {
-      console.log('setActiveFrequencyTab');
       setActiveFrequencyTab($scope.frequencies[$stateParams.chartFreq-1])
     }
 

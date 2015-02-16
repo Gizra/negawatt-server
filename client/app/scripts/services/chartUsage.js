@@ -442,4 +442,17 @@ angular.module('negawattClientApp')
       return frequencies;
     }
 
+    this.default = function() {
+      return {
+        'type': 'ColumnChart',
+        'data': {
+          'cols': [],
+          'rows': []
+        },
+        'options': {},
+        'formatters': {},
+        'displayed': false
+      };
+
+    }
   });
