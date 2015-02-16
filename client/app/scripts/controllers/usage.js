@@ -22,6 +22,7 @@ angular.module('negawattClientApp')
     $scope.select = function() {
       // Prevent only one excetion.
       if ($stateParams.chartFreq !== this.frequencies[this.$index].type) {
+        $stateParams.chartFreq = this.frequencies[this.$index].type;
         // Load electricity data in the chart according the chart frequency.
         ChartUsage.get($stateParams).then(function(data) {
           $scope.usageChart = data;
@@ -29,7 +30,6 @@ angular.module('negawattClientApp')
         });
 
         //console.log('select Tab validated');
-        $stateParams.chartFreq = this.frequencies[this.$index].type;
         $location.search('chartFreq', $stateParams.chartFreq);
       }
     }
