@@ -153,19 +153,21 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @Then I see the monthly kws chart of all meters
    */
   public function iSeeTheMonthlyKwsChartOfAllMeters() {
+    // Testing the height of the first and last column, with the default chart size and data of the migration.
     $start_chart = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(4) > g:nth-child(2) > g:nth-child(2) > rect:nth-child(1)';
     $end_chart = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(4) > g:nth-child(2) > g:nth-child(2) > rect:nth-child(10)';
-    $this->waitForAttrNgElement($start_chart, 'height', '61');
-    $this->waitForAttrNgElement($end_chart, 'height', '62');
+    $this->waitForAttrNgElement($start_chart, 'height', '59');
+    $this->waitForAttrNgElement($end_chart, 'height', '60');
   }
 
   /**
    * @Then I see the monthly kws chart a meter
    */
   public function iSeeTheMonthlyKwsChartAMeter() {
+    // Testing the height of the first and last column, with the default chart size and data of the migration.
     $start_chart = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(4) > g:nth-child(2) > g:nth-child(2) > rect:nth-child(1)';
     $end_chart = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(4) > g:nth-child(2) > g:nth-child(2) > rect:nth-child(10)';
-    $this->waitForAttrNgElement($start_chart, 'height', '120');
+    $this->waitForAttrNgElement($start_chart, 'height', '115');
     $this->waitForAttrNgElement($end_chart, 'height', '12');
   }
 
