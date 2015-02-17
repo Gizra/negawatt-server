@@ -184,13 +184,15 @@
       }
 
       &.dashboard-usage {
-        width: 505px;
-        height: 220px;
         right: 0;
         bottom: 10px;
         padding: 0;
         margin-left: 20px;
 
+        .tab-pane {
+          width: 505px;
+          height: 220px;
+        }
 
         // Tabs
         ul.nav {
