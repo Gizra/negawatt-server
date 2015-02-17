@@ -287,8 +287,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     $this->waitFor(function($context) use ($csspath, $text, $appear) {
       try {
         $element_text = $context->getSession()->evaluateScript('angular.element("' . $csspath . '").text();');
-        if ($element_text
-          == $text) {
+        if ($element_text == $text) {
           return $appear;
         }
         return !$appear;

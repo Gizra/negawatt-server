@@ -11,10 +11,7 @@ angular.module('negawattClientApp')
   .controller('UsageCtrl', function ($scope, $location, $stateParams, account, usage, meters, ChartUsage) {
     // Get data from the cache, since 'usage' might not be up to date
     // after lazy-load.
-    console.log('$scope.id: ', $scope.$id);
-
     ChartUsage.get(account.id, $stateParams).then(function(data) {
-      console.log('data', data);
       $scope.usageChartData = data;
     });
     $scope.frequencies = ChartUsage.getFrequencies();
@@ -26,7 +23,6 @@ angular.module('negawattClientApp')
 
       // Prevent only one excetion.
       if ($stateParams.chartFreq !== this.frequencies[this.$index].type) {
-        console.log('$scope.id: ', $scope.$id);
         $stateParams.chartFreq = this.frequencies[this.$index].type;
         // Load electricity data in the chart according the chart frequency.
         $scope.isLoading = true;
