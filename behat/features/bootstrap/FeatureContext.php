@@ -283,18 +283,19 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    *
    * @throws Exception
    */
-  private function waitForTextNgElement($csspath, $text, $appear = TRUE) {
-    $this->waitFor(function($context) use ($csspath, $text, $appear) {
+  private function waitForTextNgElement($csspath, $text) {
+    $this->waitFor(function($context) use ($csspath, $text) {
       try {
         $element_text = $context->getSession()->evaluateScript('angular.element("' . $csspath . '").text();');
+        print_r($element_text);
         if ($element_text == $text) {
-          return $appear;
+          return TRUE;
         }
-        return !$appear;
+        return FALSE;
       }
       catch (WebDriver\Exception $e) {
         if ($e->getCode() == WebDriver\Exception::NO_SUCH_ELEMENT) {
-          return !$appear;
+          return FALSE;
         }
         throw $e;
       }
@@ -314,7 +315,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   private function waitForNgNodes($csspath, $appear = TRUE) {
     $this->waitFor(function($context) use ($csspath, $appear) {
       try {
-        $nodes = $context->getSession()->evaluateScript('angular.element("' + $csspath + '");');
+        $nodes = $context->getSession()->evaluateScript('angular.element("' . $csspath . '");');
         if (count($nodes) > 0) {
           return $appear;
         }
