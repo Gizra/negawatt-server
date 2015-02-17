@@ -8,12 +8,18 @@
  * Controller of the negawattClientApp
  */
 angular.module('negawattClientApp')
-  .controller('UsageCtrl', function ($scope, $location, $stateParams, account, usage, meters, ChartUsage) {
+  .controller('UsageCtrl', function ($scope, $q, $location, $stateParams, account, usage, meters, ChartUsage) {
     // Get data from the cache, since 'usage' might not be up to date
     // after lazy-load.
-    ChartUsage.get(account.id, $stateParams).then(function(data) {
-      $scope.usageChartData = data;
+    var updateChart;
+
+    var chart = ChartUsage.get(account.id, $stateParams)
+    // Revolve promise
+    chart.then(function(data) {
+      $scope.usageChartData = angular.copy(data);
+      chart = undefined;
     });
+
     $scope.frequencies = ChartUsage.getFrequencies();
 
     /**
@@ -23,16 +29,26 @@ angular.module('negawattClientApp')
 
       // Prevent only one excetion.
       if ($stateParams.chartFreq !== this.frequencies[this.$index].type) {
+        $scope.usageChartData.displayed = false;
+        //debugger;
         $stateParams.chartFreq = this.frequencies[this.$index].type;
         // Load electricity data in the chart according the chart frequency.
         $scope.isLoading = true;
 
-        ChartUsage.get(account.id, $stateParams).then(function(data) {
-          $scope.usageChartData = data;
-          $scope.isLoading = false;
+        updateChart = $q.when(chart || ChartUsage.get(account.id, $stateParams));
+        updateChart.then(function(response) {
+          if (chart) {
+            console.log('select chart');
+            $scope.usageChartData = data;
+            chart = undefined;
+          }
+          else {
+            console.log('select update');
+            //$scope.usageChartData.data.rows = response.data.rows;
+            $scope.isLoading = false;
+          }
         });
 
-        //console.log('select Tab validated');
         $location.search('chartFreq', $stateParams.chartFreq);
       }
     }
@@ -63,8 +79,9 @@ angular.module('negawattClientApp')
         return;
       }
 
-      ChartUsage.getByFiltersHash(filtersHash).then(function(data) {
-        $scope.usageChartData = data;
+      ChartUsage.getByFiltersHash(filtersHash).then(function(response) {
+        $scope.usageChartData.data.rows = response.data.rows;
+        //$scope.usageChartData = data;
       });
     });
 
