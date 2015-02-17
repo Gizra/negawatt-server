@@ -11,8 +11,11 @@ angular.module('negawattClientApp')
   .controller('UsageCtrl', function ($scope, $location, $stateParams, account, usage, meters, ChartUsage) {
     // Get data from the cache, since 'usage' might not be up to date
     // after lazy-load.
+    console.log('$scope.id: ', $scope.$id);
+
     ChartUsage.get(account.id, $stateParams).then(function(data) {
-      $scope.usageChart = data;
+      console.log('data', data);
+      $scope.usageChartData = data;
     });
     $scope.frequencies = ChartUsage.getFrequencies();
 
@@ -23,11 +26,13 @@ angular.module('negawattClientApp')
 
       // Prevent only one excetion.
       if ($stateParams.chartFreq !== this.frequencies[this.$index].type) {
+        console.log('$scope.id: ', $scope.$id);
         $stateParams.chartFreq = this.frequencies[this.$index].type;
         // Load electricity data in the chart according the chart frequency.
         $scope.isLoading = true;
-        ChartUsage.get($stateParams).then(function(data) {
-          $scope.usageChart = data;
+
+        ChartUsage.get(account.id, $stateParams).then(function(data) {
+          $scope.usageChartData = data;
           $scope.isLoading = false;
         });
 
@@ -57,13 +62,13 @@ angular.module('negawattClientApp')
     // When cache expands, update the chart.
     $scope.$on("nwElectricityChanged", function(event, filtersHash) {
 
-      // Don't update usageChart if we're not in the active request.
+      // Don't update usageChartData if we're not in the active request.
       if (filtersHash != ChartUsage.getActiveRequestHash()) {
         return;
       }
 
       ChartUsage.getByFiltersHash(filtersHash).then(function(data) {
-        $scope.usageChart = data;
+        $scope.usageChartData = data;
       });
     });
 
