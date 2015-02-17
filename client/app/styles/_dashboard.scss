@@ -188,12 +188,7 @@
         bottom: 10px;
         padding: 0;
         margin-left: 20px;
-
-        .tab-pane {
-          width: 505px;
-          height: 220px;
-
-        }
+        height: 220px;
 
         // Tabs
         ul.nav {
@@ -228,6 +223,8 @@
 }
 
 // Necesary to apply the dynamic css.
-//.usageChart {
-//  border: 1px solid white;
-//}
+.usageChart {
+  border: 1px solid white;
+  width: 510px;
+  height: 220px;
+}

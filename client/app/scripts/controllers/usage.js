@@ -12,9 +12,8 @@ angular.module('negawattClientApp')
     // Get data from the cache, since 'usage' might not be up to date
     // after lazy-load.
     $scope.frequencies = ChartUsage.getFrequencies();
-    $scope.cssStyle = 'height:210px; width:500px;';
-
     $scope.usageChartData = $scope.usageChartData || {};
+    $scope.cssStyle = 'height:210px; width:500px;';
 
     //angular.extend($scope.usageChartData, {}, ChartUsage.getConfig());
     //  Add Configuration.
@@ -44,6 +43,9 @@ angular.module('negawattClientApp')
       }
     });
 
+    $scope.select = function() {
+      $scope.usageChartData.type = ($scope.usageChartData.type === 'ColumnChart') ? 'LineChart' : 'ColumnChart';
+    }
 
     //angular.extend($scope.usageChartData.data, ChartUsage.getData());
     //
