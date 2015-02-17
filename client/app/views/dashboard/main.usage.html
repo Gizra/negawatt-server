@@ -2,7 +2,8 @@
 
 <tabset class="box-chart-usage" vertical="true">
   <tab ng-repeat="frequency in frequencies" heading="{{frequency.label}}" active="frequency.active" disabled="frequency.disabled" select="select()">
-    <ui-view name="chart"></ui-view>
+    <ng-include src="'views/dashboard/main.usage.chart.html'"></ng-include>
   </tab>
 </tabset>
+<ng-include src="'views/dashboard/main.usage.chart.html'"></ng-include>
 
