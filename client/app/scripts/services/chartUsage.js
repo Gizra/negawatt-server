@@ -410,7 +410,6 @@ angular.module('negawattClientApp')
       // Construct chart data object.
       var chartData = {
         'type': chartFrequencyInfo.chart_type,
-        'cssStyle': 'height:210px; width:500px;',
         'data': {
           'cols': cols,
           'rows': rows
@@ -429,9 +428,7 @@ angular.module('negawattClientApp')
           'hAxis': {
             'title': chartFrequencyInfo.haxis_title
           }
-        },
-        'formatters': {},
-        'displayed': true
+        }
       };
 
       return chartData;
@@ -447,17 +444,33 @@ angular.module('negawattClientApp')
       return frequencies;
     }
 
-    this.default = function() {
+    this.getConfig = function() {
       return {
-        'type': 'ColumnChart',
+        'type': 'Columchart',
         'data': {
-          'cols': [],
-          'rows': []
+          'cols': [{ 'v': '' },],
+          'rows': [{ 'c': 0 },]
         },
-        'options': {},
-        'formatters': {},
-        'displayed': false
+        'options': {
+          'isStacked': 'true',
+          'bar': {
+            groupWidth: '75%'
+          },
+          'fill': 20,
+          'displayExactValues': true,
+          'vAxis': {
+            'title': 'title',
+            'gridlines': {
+              'count': 6
+            }
+          },
+          'hAxis': {
+            'title': 'title 2'
+          }
+        }
       };
 
     }
+
+
   });
