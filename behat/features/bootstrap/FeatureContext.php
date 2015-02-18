@@ -154,10 +154,10 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    */
   public function iSeeTheMonthlyKwsChartOfAllMeters() {
     // Testing the height of the first and last column, with the default chart size and data of the migration.
-    $start_chart = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(4) > g:nth-child(2) > g:nth-child(2) > rect:nth-child(1)';
-    $end_chart = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(4) > g:nth-child(2) > g:nth-child(2) > rect:nth-child(10)';
-    $this->waitForAttrNgElement($start_chart, 'height', '61');
-    $this->waitForAttrNgElement($end_chart, 'height', '62');
+    $start_chart = '#chart-usage > div:nth-child(1) > div > div > table > tbody > tr:nth-child(2) > td:nth-child(2)';
+    $end_chart = '#chart-usage > div:nth-child(1) > div > div > table > tbody > tr:nth-child(11) > td:nth-child(2)';
+    $this->waitForTextNgElement($start_chart, '12188');
+    $this->waitForTextNgElement($end_chart, '12318');
   }
 
   /**
@@ -165,10 +165,10 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    */
   public function iSeeTheMonthlyKwsChartAMeter() {
     // Testing the height of the first and last column, with the default chart size and data of the migration.
-    $start_chart = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(4) > g:nth-child(2) > g:nth-child(2) > rect:nth-child(1)';
-    $end_chart = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(4) > g:nth-child(2) > g:nth-child(2) > rect:nth-child(10)';
-    $this->waitForAttrNgElement($start_chart, 'height', '120');
-    $this->waitForAttrNgElement($end_chart, 'height', '12');
+    $start_chart = '#chart-usage > div:nth-child(1) > div > div > table > tbody > tr:nth-child(2) > td:nth-child(2)';
+    $end_chart = '#chart-usage > div:nth-child(1) > div > div > table > tbody > tr:nth-child(11) > td:nth-child(2)';
+    $this->waitForTextNgElement($start_chart, '7540');
+    $this->waitForTextNgElement($end_chart, '827');
   }
 
   /**
