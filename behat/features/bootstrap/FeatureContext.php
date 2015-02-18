@@ -172,6 +172,35 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
+   * @When I click meter :meter
+   */
+  public function iClickMeter($meter) {
+    $this->getSession()->evaluateScript('function clickMeter(e){var a={},l=Object.keys(angular.element("div.angular-leaflet-map").scope().meters);angular.element(".leaflet-marker-icon").map(function(e,r){var c=l[e];a[c]={L:r,id:c,marker:angular.element(r).bind("click")}}),a[e].marker.click()};clickMeter(' . $meter . ');');
+  }
+
+
+  /**
+   * @Then I see a marker :meter selected
+   */
+  public function iSeeAMarkerSelected($meter) {
+    $this->waitFor(function($context) use ($meter) {
+      try {
+        $element_attribute = $context->getSession()->evaluateScript('function getMetersImgSrc(e){var r={},a=Object.keys(angular.element("div.angular-leaflet-map").scope().meters);return angular.element(".leaflet-marker-icon").map(function(e,t){var n=a[e];r[n]={L:t,id:n,marker:angular.element(t).bind("click")}}),angular.element(r[e].L).attr("src")}getMetersImgSrc(' . $meter . ');');
+        if ($element_attribute !== NULL && $element_attribute == $value) {
+          return TRUE;
+        }
+        return FALSE;
+      }
+      catch (WebDriver\Exception $e) {
+        if ($e->getCode() == WebDriver\Exception::NO_SUCH_ELEMENT) {
+          return FALSE;
+        }
+        throw $e;
+      }
+    });
+  }
+
+  /**
    * @AfterStep
    *
    * Take a screen shot after failed steps for Selenium drivers (e.g.
