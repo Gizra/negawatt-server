@@ -156,8 +156,8 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     // Testing the height of the first and last column, with the default chart size and data of the migration.
     $start_chart = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(4) > g:nth-child(2) > g:nth-child(2) > rect:nth-child(1)';
     $end_chart = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(4) > g:nth-child(2) > g:nth-child(2) > rect:nth-child(10)';
-    $this->waitForAttrNgElement($start_chart, 'height', '59');
-    $this->waitForAttrNgElement($end_chart, 'height', '60');
+    $this->waitForAttrNgElement($start_chart, 'height', '61');
+    $this->waitForAttrNgElement($end_chart, 'height', '62');
   }
 
   /**
@@ -167,7 +167,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     // Testing the height of the first and last column, with the default chart size and data of the migration.
     $start_chart = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(4) > g:nth-child(2) > g:nth-child(2) > rect:nth-child(1)';
     $end_chart = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(4) > g:nth-child(2) > g:nth-child(2) > rect:nth-child(10)';
-    $this->waitForAttrNgElement($start_chart, 'height', '115');
+    $this->waitForAttrNgElement($start_chart, 'height', '120');
     $this->waitForAttrNgElement($end_chart, 'height', '12');
   }
 
@@ -287,7 +287,6 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     $this->waitFor(function($context) use ($csspath, $text) {
       try {
         $element_text = $context->getSession()->evaluateScript('angular.element("' . $csspath . '").text();');
-        print_r($element_text);
         if ($element_text == $text) {
           return TRUE;
         }
@@ -344,7 +343,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     $this->waitFor(function($context) use ($csspath, $attr, $value) {
       try {
         $element_attribute = $context->getSession()->evaluateScript('angular.element("' . $csspath . '").attr("' . $attr . '");');
-        if ($element_attribute == $value) {
+        if ($element_attribute !== NULL && $element_attribute == $value) {
           return TRUE;
         }
         return FALSE;
