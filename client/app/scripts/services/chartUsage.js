@@ -444,33 +444,5 @@ angular.module('negawattClientApp')
       return frequencies;
     }
 
-    this.getConfig = function() {
-      return {
-        'type': 'Columchart',
-        'data': {
-          'cols': [{ 'v': '' },],
-          'rows': [{ 'c': 0 },]
-        },
-        'options': {
-          'isStacked': 'true',
-          'bar': {
-            groupWidth: '75%'
-          },
-          'fill': 20,
-          'displayExactValues': true,
-          'vAxis': {
-            'title': 'title',
-            'gridlines': {
-              'count': 6
-            }
-          },
-          'hAxis': {
-            'title': 'title 2'
-          }
-        }
-      };
-
-    }
-
 
   });
