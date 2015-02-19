@@ -275,7 +275,7 @@ angular.module('negawattClientApp')
     this.meterSelected = function(meter) {
       // Get meter name
       var chartTitle = 'צריכת חשמל';
-      if (this.usageGoogleChartParams) {
+      if (this.usageGoogleChartParams && angular.isDefined(meter)) {
         chartTitle = meter.place_description + ', ' +
         meter.place_address + ', ' +
         meter.place_locality;

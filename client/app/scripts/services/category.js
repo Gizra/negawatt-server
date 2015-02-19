@@ -53,7 +53,7 @@ angular.module('negawattClientApp')
      */
     this.get = function(accountId, categoryId) {
 
-      getCategories = $q.when(getCategories || angular.copy(cache.data) || getCategoriesFromServer());
+      getCategories = $q.when(getCategories || angular.copy(cache.data) || getCategoriesFromServer(accountId));
 
       // Prepare the categories object.
       getCategories = prepareCategories(getCategories, accountId);
@@ -78,12 +78,14 @@ angular.module('negawattClientApp')
      *
      * @returns {$q.promise}
      */
-    function getCategoriesFromServer() {
+    function getCategoriesFromServer(accountId) {
       var deferred = $q.defer();
       var url = Config.backend + '/api/meter_categories';
+      var params = {account: accountId};
       $http({
         method: 'GET',
         url: url,
+        params: params,
         cache: true
       }).success(function(categories) {
         deferred.resolve(categories.data);

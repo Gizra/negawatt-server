@@ -12,7 +12,6 @@ angular.module('negawattClientApp')
     // Get data from the cache, since 'usage' might not be up to date
     // after lazy-load.
     $scope.frequencies = ChartUsage.getFrequencies();
-    $scope.cssStyle = 'height:210px; width:500px;';
 
     var chart = ChartUsage.get(account.id, $stateParams)
     // Revolve promise

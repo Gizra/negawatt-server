@@ -112,21 +112,21 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   /**
    * @Then I should see a marker selected
    */
-  public function iShouldSeeAMarkerSelected($appear = TRUE) {
+  public function iShouldSeeAMarkerSelected() {
     $selected_src_image = '../images/marker-red.png';
     // check if exist and is selected.
-    $this->waitFor(function($context) use ($selected_src_image, $appear) {
+    $this->waitFor(function($context) use ($selected_src_image) {
       try {
         // Get an array of string <img src="...">, filled with the value of the src attribute of the marker icon image.
-        $marker_attr_src = $context->getSession()->evaluateScript('angular.element(".leaflet-marker-icon").map(function(index, element){ return angular.element(element).attr("src") });');
-        if (in_array($selected_src_image, $marker_attr_src)) {
-          return $appear;
+        $marker_selected = $context->getSession()->evaluateScript('angular.element(".leaflet-marker-icon").map(function(index, element){ return angular.element(element).attr("src") }).toArray().indexOf("' . $selected_src_image . '");');
+        if ($marker_selected !== -1) {
+          return TRUE;
         }
-        return !$appear;
+        return FALSE;
       }
       catch (WebDriver\Exception $e) {
         if ($e->getCode() == WebDriver\Exception::NO_SUCH_ELEMENT) {
-          return !$appear;
+          return FALSE;
         }
         throw $e;
       }
@@ -137,7 +137,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @Then I should have :frequency as chart usage label
    */
   public function iShouldHaveAsChartUsageLabel($frequency) {
-    $csspath = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(5) > g:nth-child(1) > text';
+    $csspath = '#chart-usage > div > div:nth-child(1) > div > svg > g:nth-child(5) > g:nth-child(1) > text';
     $this->waitForTextNgElement($csspath, $frequency);
   }
 
@@ -154,8 +154,8 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    */
   public function iSeeTheMonthlyKwsChartOfAllMeters() {
     // Testing the height of the first and last column, with the default chart size and data of the migration.
-    $start_chart = '#chart-usage > div:nth-child(1) > div > div > table > tbody > tr:nth-child(2) > td:nth-child(2)';
-    $end_chart = '#chart-usage > div:nth-child(1) > div > div > table > tbody > tr:nth-child(11) > td:nth-child(2)';
+    $start_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(1) > td:nth-child(2)';
+    $end_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(10) > td:nth-child(2)';
     $this->waitForTextNgElement($start_chart, '12188');
     $this->waitForTextNgElement($end_chart, '12318');
   }
@@ -165,8 +165,8 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    */
   public function iSeeTheMonthlyKwsChartAMeter() {
     // Testing the height of the first and last column, with the default chart size and data of the migration.
-    $start_chart = '#chart-usage > div:nth-child(1) > div > div > table > tbody > tr:nth-child(2) > td:nth-child(2)';
-    $end_chart = '#chart-usage > div:nth-child(1) > div > div > table > tbody > tr:nth-child(11) > td:nth-child(2)';
+    $start_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(1) > td:nth-child(2)';
+    $end_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(10) > td:nth-child(2)';
     $this->waitForTextNgElement($start_chart, '7540');
     $this->waitForTextNgElement($end_chart, '827');
   }
