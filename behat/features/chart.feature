@@ -13,5 +13,5 @@ Feature: Chart
   Scenario: Show chart usage monthly of a selected meter.
     Given I login with user "carlos"
     When I visit "/#/dashboard/1/marker/4?chartFreq=2"
-    Then I should have "חודש" as chart usage label
+    Then I should see a marker selected
     Then I see the monthly kws chart a meter
