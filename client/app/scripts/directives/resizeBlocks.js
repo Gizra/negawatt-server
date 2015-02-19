@@ -8,6 +8,7 @@
  */
 angular.module('negawattClientApp')
   .directive('resizeBlocks', function () {
+
     function link(scope, element, attrs) {
 
       /**
@@ -18,7 +19,7 @@ angular.module('negawattClientApp')
        */
       function resizeBlocks(chartHeight) {
         // Set block size, to fit given chartHeight.
-        var newHeight = +$stateParams.chartHeight;
+        var newHeight = chartHeight;
 
         // Calculate new width and height.
         var newWidth = newHeight * 510 / 220;
@@ -40,8 +41,9 @@ angular.module('negawattClientApp')
         element.css('width', newWidth + 'px');
       };
 
-      resizeBlocks(attrs.chartHeight);
+      resizeBlocks(+attrs.resizeBlocks);
     }
+
     return {
       link: link
     };
