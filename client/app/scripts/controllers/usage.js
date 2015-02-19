@@ -24,30 +24,6 @@ angular.module('negawattClientApp')
       ChartUsage.meterSelected(meters[$stateParams.markerId]);
     }
 
-    // Set chart size, if chartHeight option is given.
-    if ($stateParams.chartHeight) {
-      var newHeight = +$stateParams.chartHeight;
-
-      // Calculate new width and height.
-      var newWidth = newHeight * 510 / 220;
-      var newBottom = newHeight + 15;
-
-      // Set elements.
-      var element = angular.element('#messages-view');
-      element.css('bottom', newBottom + 'px');
-
-      element = angular.element('#details-view');
-      element.css('bottom', newBottom + 'px');
-      var detailsHeight = +element.css('height').replace('px', '');
-
-      element = angular.element('#catigories-view');
-      element.css('bottom', newBottom + detailsHeight + 5 + 'px');
-
-      element = angular.element('#usage-view');
-      element.css('height', newHeight + 'px');
-      element.css('width', newWidth + 'px');
-    }
-
     // Handle lazy-load of electricity data.
     // When cache expands, update the chart.
     $scope.$on("nwElectricityChanged", function(event, filtersHash) {
