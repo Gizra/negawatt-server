@@ -67,7 +67,7 @@ function satec_field_default_field_instances() {
         ),
       ),
       'type' => 'addressfield_standard',
-      'weight' => 10,
+      'weight' => 11,
     ),
   );
 
@@ -120,7 +120,7 @@ function satec_field_default_field_instances() {
         'year_range' => '-3:+3',
       ),
       'type' => 'date_text',
-      'weight' => 12,
+      'weight' => 13,
     ),
   );
 
@@ -238,50 +238,6 @@ function satec_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-satec_meter-field_meter_category'
-  $field_instances['node-satec_meter-field_meter_category'] = array(
-    'bundle' => 'satec_meter',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
-        'weight' => 10,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_meter_category',
-    'label' => 'Meter Category',
-    'required' => 0,
-    'settings' => array(
-      'behaviors' => array(
-        'taxonomy-index' => array(
-          'status' => TRUE,
-        ),
-      ),
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_select',
-      'weight' => 13,
-    ),
-  );
-
   // Exported field_instance: 'node-satec_meter-field_meter_id'
   $field_instances['node-satec_meter-field_meter_id'] = array(
     'bundle' => 'satec_meter',
@@ -324,7 +280,7 @@ function satec_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 9,
+      'weight' => 10,
     ),
   );
 
@@ -364,7 +320,7 @@ function satec_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 7,
+      'weight' => 8,
     ),
   );
 
@@ -410,7 +366,7 @@ function satec_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 8,
+      'weight' => 9,
     ),
   );
 
@@ -453,7 +409,7 @@ function satec_field_default_field_instances() {
         'display_label' => 1,
       ),
       'type' => 'options_onoff',
-      'weight' => 11,
+      'weight' => 12,
     ),
   );
 
@@ -628,6 +584,44 @@ function satec_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-satec_meter-og_vocabulary'
+  $field_instances['node-satec_meter-og_vocabulary'] = array(
+    'bundle' => 'satec_meter',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'og_vocab',
+        'settings' => array(
+          'concatenate' => FALSE,
+        ),
+        'type' => 'og_vocab',
+        'weight' => 13,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'og_vocabulary',
+    'label' => 'OG vocabulary',
+    'required' => FALSE,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'module' => 'og_vocab',
+      'settings' => array(),
+      'type' => 'og_vocab_complex',
+      'weight' => 7,
+    ),
+  );
+
   // Translatables
   // Included for use with string extractors like potx.
   t('Address');
@@ -637,11 +631,11 @@ function satec_field_default_field_instances() {
   t('MAC address');
   t('Max frequency');
   t('Maximal sampling frequency for the meter.');
-  t('Meter Category');
   t('Meter IP address');
   t('Meter id');
   t('Meter port');
   t('Meter processed');
+  t('OG vocabulary');
   t('Place Address');
   t('Place Description');
   t('Place Locality');

@@ -38,11 +38,11 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
 
     $meter_node1 = $this->drupalCreateNode($settings);
     $wrapper = entity_metadata_wrapper('node', $meter_node1);
-    $wrapper->field_meter_category->set(array(7));
+    $wrapper->{OG_VOCAB_FIELD}->set(array(7));
 
     $meter_node2 = $this->drupalCreateNode($settings);
     $wrapper = entity_metadata_wrapper('node', $meter_node2);
-    $wrapper->field_meter_category->set(array(6));
+    $wrapper->{OG_VOCAB_FIELD}->set(array(6));
 
     // Create IEC meter nodes.
     $settings = array(
@@ -69,7 +69,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
         'meter_nid' => $meter_node1->nid,
         'avg_power' => 2,
         'sum_kwh' => 1440,
-        'power_factor' => 0.90,
+        'min_power_factor' => 0.90,
       ),
       array(
         'type' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
@@ -78,7 +78,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
         'meter_nid' => $meter_node1->nid,
         'avg_power' => 3,
         'sum_kwh' => 2160,
-        'power_factor' => 0.96,
+        'min_power_factor' => 0.96,
       ),
       // One entry at 16:00, should not be read when processing 15:00-16:00
       array(
@@ -88,7 +88,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
         'meter_nid' => $meter_node1->nid,
         'avg_power' => 2,
         'sum_kwh' => 1440,
-        'power_factor' => 0.96,
+        'min_power_factor' => 0.96,
       ),
       // Hourly entries
       array(
@@ -98,7 +98,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
         'meter_nid' => $meter_node1->nid,
         'avg_power' => 2,
         'sum_kwh' => 1440,
-        'power_factor' => 0.96,
+        'min_power_factor' => 0.96,
       ),
       array(
         'type' => \NegaWattNormalizerTimeManagerInterface::HOUR,
@@ -107,7 +107,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
         'meter_nid' => $meter_node1->nid,
         'avg_power' => 2,
         'sum_kwh' => 1440,
-        'power_factor' => 0.96,
+        'min_power_factor' => 0.96,
       ),
       // Daily entries
       array(
@@ -116,8 +116,8 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
         'rate_type' => 'flat',
         'meter_nid' => $meter_node1->nid,
         'avg_power' => 2,
-        'sum_kwh' => 1440,
-        'power_factor' => 0.96,
+        'sum_kwh' => 2000,
+        'min_power_factor' => 0.96,
       ),
       // One entry for meter 2, should not be read.
       array(
@@ -125,9 +125,9 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
         'timestamp' => strtotime('2014-6-12 15:00'),
         'rate_type' => 'flat',
         'meter_nid' => $meter_node2->nid,
-        'avg_power' => 2,
+        'avg_power' => 4,
         'sum_kwh' => 1440,
-        'power_factor' => 0.96,
+        'min_power_factor' => 0.96,
       ),
     );
 
@@ -174,12 +174,13 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     $handler = restful_get_restful_handler('electricity');
     $response = $handler->get();
 
-    // There should be 7 entities.
-    $this->assertTrue(is_array($response) && count($response) == 7, '<b>Testing electricity API</b><br>7 entities were found.');
+    // There should be 6 entities (due to sum over meters).
+    $this->assertTrue(is_array($response) && count($response) == 6, '<b>Testing electricity API</b><br>6 entities were found.');
     $entity = $response[0];
     $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::DAY, 'Entity 0 is of type DAY.');
     $this->assertEqual($entity['meter'], 1, 'Entity is for meter 1.');
     $this->assertEqual($entity['timestamp'], strtotime('2014-6-12'), 'Entity timestamp is correct.');
+    $this->assertEqual($entity['kwh'], 2000, 'Entity kWh is correct.');
     $entity = $response[1];
     $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::HOUR, 'Entity 1 is of type HOUR.');
     $this->assertEqual($entity['meter'], 1, 'Entity is for meter 1.');
@@ -188,11 +189,10 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::MINUTE, 'Entity 2 is of type MINUTE.');
     $this->assertEqual($entity['meter'], 1, 'Entity is for meter 1.');
     $this->assertEqual($entity['timestamp'], strtotime('2014-6-12 15:00'), 'Entity timestamp is correct.');
-    $entity = $response[3];
-    $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::MINUTE, 'Entity 3 is of type MINUTE.');
-    $this->assertEqual($entity['meter'], 2, 'Entity is for meter 2.');
-    $entity = $response[5];
-    $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::HOUR, 'Entity 5 is of type HOUR.');
+    $this->assertEqual($entity['kwh'], 2880, 'Entity kWh is correct.');
+    $this->assertEqual($entity['avg_power'], 3, 'Entity avg-power is correct.');
+    $entity = $response[4];
+    $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::HOUR, 'Entity 4 is of type HOUR.');
     $this->assertEqual($entity['meter'], 1, 'Entity is for meter 1.');
     $this->assertEqual($entity['timestamp'], strtotime('2014-6-12 16:00'), 'Entity timestamp is correct.');
 

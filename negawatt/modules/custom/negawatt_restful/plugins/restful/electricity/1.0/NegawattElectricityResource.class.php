@@ -53,7 +53,7 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
 
     $public_fields['meter_category'] = array(
       'property' => 'meter_category',
-      'column_for_query' => 'cat.field_meter_category_target_id',
+      'column_for_query' => 'cat.og_vocabulary_target_id',
     );
 
     $public_fields['meter_account'] = array(
@@ -75,10 +75,10 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     $query = parent::getQuery();
 
     // Add a query for meter_category.
-    $field = field_info_field('field_meter_category');
+    $field = field_info_field(OG_VOCAB_FIELD);
     $table_name = _field_sql_storage_tablename($field);
     $query->leftJoin($table_name, 'cat', 'cat.entity_id=meter_nid');
-    $query->addField('cat', 'field_meter_category_target_id', 'meter_category');
+    $query->addField('cat', 'og_vocabulary_target_id', 'meter_category');
 
     // Add a query for meter_account.
     $table_name = 'og_membership';
@@ -122,15 +122,14 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
         continue;
       }
 
-      // Find meter-category taxonomy vid
-      $tax_vid = taxonomy_vocabulary_machine_name_load('meter_category')->vid;
-
       // Modify the filter to find entities with meter-category as given
       // in the filter, or any of its children
       $term_ids = array();
       foreach ($filter['value'] as $term_id) {
+
+        $term = taxonomy_term_load($term_id);
         // Get meter category list of children.
-        $tree = taxonomy_get_tree($tax_vid, $term_id);
+        $tree = taxonomy_get_tree($term->vid, $term_id);
         // The category itself is not in the tree, add it manually.
         $term_ids[$term_id] = $term_id;
         // Add all terms in the tree to term-ids.
