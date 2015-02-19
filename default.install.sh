@@ -29,6 +29,7 @@ drush en devel diff views_ui field_ui migrate_ui mimemail -y
 
 # These commands migrates dummy content and is used for development and testing.
 drush en negawatt_migrate -y
+
 # Must allow access to these dirs for logo images migration and processing.
 chmod 777 sites/default/files
 chmod 777 sites/default/files/styles
