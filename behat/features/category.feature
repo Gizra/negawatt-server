@@ -12,7 +12,7 @@ Feature: Category
   @javascript
   Scenario: Show highlight the active category
     Given I login with user "carlos"
-    When I visit "/#/dashboard/1/marker/5?categoryId=15"
+    When I visit "/#/dashboard/1/marker/6?categoryId=14"
     Then I should see the category active
 
   @javascript

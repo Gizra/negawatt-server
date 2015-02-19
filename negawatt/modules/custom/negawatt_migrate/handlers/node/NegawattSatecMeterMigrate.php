@@ -22,7 +22,7 @@ class NegawattSatecMeterMigrate extends NegawattMigration {
     array('field_meter_id', 'Meter id'),
     array('country', 'Country'),
     array('field_last_processed', 'Last processed'),
-    array('field_meter_category', 'Meter category'),
+    array(OG_VOCAB_FIELD, 'Meter category'),
     array('field_max_frequency', 'Max frequency'),
   );
 
@@ -63,7 +63,7 @@ class NegawattSatecMeterMigrate extends NegawattMigration {
       ->defaultValue('1');
 
     $this
-      ->addFieldMapping('field_meter_category', 'field_meter_category')
+      ->addFieldMapping(OG_VOCAB_FIELD, OG_VOCAB_FIELD)
       ->sourceMigration('NegawattMeterCategoryTermsMigrate')
       ->separator('|');
   }
