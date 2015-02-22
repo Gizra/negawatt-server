@@ -24,6 +24,9 @@ angular
     'googlechart',
     'angular-md5',
     'angular-loading-bar',
+    'ui.bootstrap.tabs',
+    'template/tabs/tab.html',
+    'template/tabs/tabset.html',
     'angularMoment'
   ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {

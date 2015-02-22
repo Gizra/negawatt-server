@@ -62,7 +62,7 @@ angular.module('negawattClientApp')
       var filtersHash = this.hashFromFilters(filters);
 
       // Preparation of the promise and cache for Electricity request.
-      getElectricity[filtersHash] = $q.when(getElectricity[filtersHash] || cache[filtersHash] && cache[filtersHash].data || getDataFromBackend(filters, filtersHash, 1, false));
+      getElectricity[filtersHash] = $q.when(getElectricity[filtersHash] || cache[filtersHash] && angular.copy(cache[filtersHash].data) || getDataFromBackend(filters, filtersHash, 1, false));
 
       // Clear the promise cached, after resolve or reject the
       // promise. Permit access to the cache data, when

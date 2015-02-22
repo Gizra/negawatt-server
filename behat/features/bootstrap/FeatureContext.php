@@ -112,21 +112,21 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   /**
    * @Then I should see a marker selected
    */
-  public function iShouldSeeAMarkerSelected($appear = TRUE) {
+  public function iShouldSeeAMarkerSelected() {
     $selected_src_image = '../images/marker-red.png';
     // check if exist and is selected.
-    $this->waitFor(function($context) use ($selected_src_image, $appear) {
+    $this->waitFor(function($context) use ($selected_src_image) {
       try {
         // Get an array of string <img src="...">, filled with the value of the src attribute of the marker icon image.
-        $marker_attr_src = $context->getSession()->evaluateScript('angular.element(".leaflet-marker-icon").map(function(index, element){ return angular.element(element).attr("src") });');
-        if (in_array($selected_src_image, $marker_attr_src)) {
-          return $appear;
+        $marker_selected = $context->getSession()->evaluateScript('angular.element(".leaflet-marker-icon").map(function(index, element){ return angular.element(element).attr("src") }).toArray().indexOf("' . $selected_src_image . '");');
+        if ($marker_selected !== -1) {
+          return TRUE;
         }
-        return !$appear;
+        return FALSE;
       }
       catch (WebDriver\Exception $e) {
         if ($e->getCode() == WebDriver\Exception::NO_SUCH_ELEMENT) {
-          return !$appear;
+          return FALSE;
         }
         throw $e;
       }
@@ -137,7 +137,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @Then I should have :frequency as chart usage label
    */
   public function iShouldHaveAsChartUsageLabel($frequency) {
-    $csspath = '#chart-usage > div:nth-child(1) > div > svg > g:nth-child(5) > g:nth-child(1) > text';
+    $csspath = '#chart-usage > div > div:nth-child(1) > div > svg > g:nth-child(5) > g:nth-child(1) > text';
     $this->waitForTextNgElement($csspath, $frequency);
   }
 
@@ -147,6 +147,28 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   public function iShouldNotSeeTheFilters() {
     $csspath = "input.hide-meters-category";
     $this->iWaitForCssElement($csspath, FALSE);
+  }
+
+  /**
+   * @Then I see the monthly kws chart of all meters
+   */
+  public function iSeeTheMonthlyKwsChartOfAllMeters() {
+    // Testing the height of the first and last column, with the default chart size and data of the migration.
+    $start_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(1) > td:nth-child(2)';
+    $end_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(10) > td:nth-child(2)';
+    $this->waitForTextNgElement($start_chart, '12188');
+    $this->waitForTextNgElement($end_chart, '12318');
+  }
+
+  /**
+   * @Then I see the monthly kws chart a meter
+   */
+  public function iSeeTheMonthlyKwsChartAMeter() {
+    // Testing the height of the first and last column, with the default chart size and data of the migration.
+    $start_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(1) > td:nth-child(2)';
+    $end_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(10) > td:nth-child(2)';
+    $this->waitForTextNgElement($start_chart, '7540');
+    $this->waitForTextNgElement($end_chart, '827');
   }
 
   /**
@@ -261,11 +283,39 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    *
    * @throws Exception
    */
-  private function waitForTextNgElement($csspath, $text, $appear = TRUE) {
-    $this->waitFor(function($context) use ($csspath, $text, $appear) {
+  private function waitForTextNgElement($csspath, $text) {
+    $this->waitFor(function($context) use ($csspath, $text) {
       try {
-        $element_text = $context->getSession()->evaluateScript('angular.element("' + $csspath + '").text();');
-        if ($element_text == $text) {
+        $element_text = $context->getSession()->evaluateScript('angular.element("' . $csspath . '").text();');
+        if ($element_text !== NULL && $element_text == $text) {
+          return TRUE;
+        }
+        return FALSE;
+      }
+      catch (WebDriver\Exception $e) {
+        if ($e->getCode() == WebDriver\Exception::NO_SUCH_ELEMENT) {
+          return FALSE;
+        }
+        throw $e;
+      }
+    });
+  }
+
+  /**
+   * Wait for appear or disappear an element. The search is done with CSSPath and angular.element.
+   *
+   * @param string $csspath
+   *   The CSSPath string.
+   * @param bool $appear
+   *   Determine if element should appear. Defaults to TRUE.
+   *
+   * @throws Exception
+   */
+  private function waitForNgNodes($csspath, $appear = TRUE) {
+    $this->waitFor(function($context) use ($csspath, $appear) {
+      try {
+        $nodes = $context->getSession()->evaluateScript('angular.element("' . $csspath . '");');
+        if (count($nodes) > 0) {
           return $appear;
         }
         return !$appear;
@@ -279,5 +329,31 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     });
   }
 
-
+  /**
+   * Wait for appear or disappear an attribute of an element, and check the value. The search is done with CSSPath and angular.element.
+   *
+   * @param string $csspath
+   *   The CSSPath string.
+   * @param string $value
+   *   The CSSPath string.
+   *
+   * @throws Exception
+   */
+  private function waitForAttrNgElement($csspath, $attr, $value) {
+    $this->waitFor(function($context) use ($csspath, $attr, $value) {
+      try {
+        $element_attribute = $context->getSession()->evaluateScript('angular.element("' . $csspath . '").attr("' . $attr . '");');
+        if ($element_attribute !== NULL && $element_attribute == $value) {
+          return TRUE;
+        }
+        return FALSE;
+      }
+      catch (WebDriver\Exception $e) {
+        if ($e->getCode() == WebDriver\Exception::NO_SUCH_ELEMENT) {
+          return FALSE;
+        }
+        throw $e;
+      }
+    });
+  }
 }
