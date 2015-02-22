@@ -1,9 +1,10 @@
 <?php
 
-
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Credentials: true');
-header('Access-Control-Allow-Headers: Authorization, access-token');
+if (!drupal_is_cli()) {
+  header('Access-Control-Allow-Origin: *');
+  header('Access-Control-Allow-Credentials: true');
+  header('Access-Control-Allow-Headers: Authorization, access-token');
+}
 
 /**
  * Implements hook_ctools_plugin_directory().
