@@ -18,6 +18,7 @@ angular.module('negawattClientApp')
        *  True show the text, false hide it.
        */
       function resizeBlocks(chartHeight) {
+
         // Set block size, to fit given chartHeight.
         var newHeight = chartHeight;
 
@@ -45,6 +46,9 @@ angular.module('negawattClientApp')
     }
 
     return {
+      //scope: {
+      //  chartHeight: '@'
+      //},
       link: link
     };
   });

@@ -1,7 +1,10 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .controller('DashboardCtrl', function ($state, $stateParams, profile) {
+  .controller('DashboardCtrl', function ($scope, $state, $stateParams, profile) {
+    // Save chart height for resizeBlocks directive.
+    $scope.chartHeight = $state.params.chartHeight;
+    
     var defaultAccountId;
     if (profile) {
       // Apply only on the login wotkflow.

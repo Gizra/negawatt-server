@@ -60,6 +60,9 @@ angular
           chartFreq: {
             // Keep monthly chart type by default.
             value: 2
+          },
+          chartHeight: {
+            value: 210
           }
         },
         resolve: {
