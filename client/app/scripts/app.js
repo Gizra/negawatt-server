@@ -24,6 +24,9 @@ angular
     'googlechart',
     'angular-md5',
     'angular-loading-bar',
+    'ui.bootstrap.tabs',
+    'template/tabs/tab.html',
+    'template/tabs/tabset.html',
     'angularMoment'
   ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
@@ -55,7 +58,13 @@ angular
         controller: 'DashboardCtrl'
       })
       .state('dashboard.withAccount', {
-        url: 'dashboard/{accountId:int}',
+        url: 'dashboard/{accountId:int}?:chartFreq',
+        params: {
+          chartFreq: {
+            // Keep monthly chart type by default.
+            value: 2
+          }
+        },
         resolve: {
           account: function($stateParams, Profile, profile) {
             return Profile.selectAccount($stateParams.accountId, profile);
@@ -100,8 +109,14 @@ angular
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
-              usage: function(ChartUsage) {
-                return ChartUsage.get();
+              // Get electricity data and transform it into chart format.
+              usage: function(ChartUsage, $state, $stateParams, account) {
+                // Perform the GET only if we're in the proper (parent) state.
+                if ($state.current.name == 'dashboard.withAccount') {
+                  return ChartUsage.get(account.id, $stateParams);
+                } else {
+                  return {};
+                }
               }
             },
             controller: 'UsageCtrl'
@@ -122,11 +137,22 @@ angular
             },
             controller: 'MapCtrl'
           },
+          // Update usage-chart to show category summary.
+          'usage@dashboard': {
+            templateUrl: 'views/dashboard/main.usage.html',
+            resolve: {
+              // Get electricity data and transform it into chart format.
+              usage: function(ChartUsage, $stateParams, account) {
+                return ChartUsage.get(account.id, $stateParams);
+              }
+            },
+            controller: 'UsageCtrl'
+          },
           'categories@dashboard': {
             templateUrl: 'views/dashboard/main.categories.html',
             controller: 'CategoryCtrl'
           },
-          // Update chart of categories.
+          // Update details (pie) chart for categories.
           'details@dashboard': {
             templateUrl: 'views/dashboard/main.details.html',
             resolve: {
@@ -171,12 +197,9 @@ angular
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
-              meters: function($stateParams, Meter, meters, account) {
-                // Assert get all the meters from cache, when we use lazy load.
-                return Meter.get(account.id, $stateParams.categoryId);
-              },
-              usage: function(ChartUsage, $stateParams) {
-                return ChartUsage.get('meter', $stateParams.markerId);
+              // Get electricity data and transform it into chart format.
+              usage: function(ChartUsage, $stateParams, account) {
+                return ChartUsage.get(account.id, $stateParams);
               }
             },
             controller: 'UsageCtrl'

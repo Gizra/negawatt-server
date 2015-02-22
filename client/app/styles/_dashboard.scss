@@ -184,11 +184,47 @@
       }
 
       &.dashboard-usage {
-        height: 220px;
         right: 0;
         bottom: 10px;
+        padding: 0;
+        margin-left: 20px;
+        height: 220px;
+
+        // Tabs
+        ul.nav {
+          height: inherit;
+          position: fixed;
+          right: 502px;
+          background-color: #93928E;
+          padding: 0;
+          border: 0;
+
+          li  {
+            a  {
+              margin: 0;
+              border: 0;
+              border-top-left-radius: 0;
+              border-top-right-radius: 0;
+              color: #ffffff;
+            }
+
+            &.active > a, a:hover {
+              color: #93928E;
+              background-color: #ffffff;
+            }
+          }
+        }
+
       }
+
     }
   }
 
+}
+
+// Necesary to apply the dynamic css.
+.usageChart {
+  border: 1px solid white;
+  width: 510px;
+  height: 220px;
 }

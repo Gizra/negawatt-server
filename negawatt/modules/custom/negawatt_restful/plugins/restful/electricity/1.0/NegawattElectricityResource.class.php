@@ -11,12 +11,12 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
    * Overrides \RestfulBase::publicFieldsInfo().
    */
   public function publicFieldsInfo() {
-    $public_fields['id'] = array(
-      'property' => 'id'
-    );
-
     $public_fields['timestamp'] = array(
       'property' => 'timestamp'
+    );
+
+    $public_fields['datatime'] = array(
+      'property' => 'datetime'
     );
 
     $public_fields['rate_type'] = array(
@@ -24,7 +24,9 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     );
 
     $public_fields['type'] = array(
-      'property' => 'type'
+      'property' => 'type',
+      // To prevent conflict with og_membership 'type' field.
+      'column_for_query' => 'negawatt_electricity_normalized.type',
     );
 
     $public_fields['kwh'] = array(
@@ -51,7 +53,12 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
 
     $public_fields['meter_category'] = array(
       'property' => 'meter_category',
-      'column_for_query' => 'cat.field_meter_category_target_id',
+      'column_for_query' => 'cat.og_vocabulary_target_id',
+    );
+
+    $public_fields['meter_account'] = array(
+      'property' => 'meter_account',
+      'column_for_query' => 'acc.gid',
     );
 
     $public_fields['min_power_factor'] = array(
@@ -67,11 +74,29 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
   public function getQuery() {
     $query = parent::getQuery();
 
-    // Add a query for meter_categories.
-    $field = field_info_field('field_meter_category');
+    // Add a query for meter_category.
+    $field = field_info_field(OG_VOCAB_FIELD);
     $table_name = _field_sql_storage_tablename($field);
     $query->leftJoin($table_name, 'cat', 'cat.entity_id=meter_nid');
-    $query->addField('cat', 'field_meter_category_target_id', 'meter_category');
+    $query->addField('cat', 'og_vocabulary_target_id', 'meter_category');
+
+    // Add a query for meter_account.
+    $table_name = 'og_membership';
+    $query->leftJoin($table_name, 'acc', 'acc.etid=meter_nid');
+    $query->addField('acc', 'gid', 'meter_account');
+
+    // Add human readable date-time field
+    $query->addExpression('from_unixtime(timestamp) ', 'datetime');
+
+    // Make summary fields
+    $query->addExpression('SUM(sum_kwh)', 'sum_kwh');
+    $query->addExpression('MIN(min_power_factor)', 'min_power_factor');
+    $query->addExpression('AVG(avg_power)', 'avg_power');
+
+    // Set grouping.
+    $query->groupBy('timestamp');
+    $query->groupBy('rate_type');
+    $query->groupBy('negawatt_electricity_normalized.type');
 
     return $query;
   }
@@ -97,15 +122,14 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
         continue;
       }
 
-      // Find meter-category taxonomy vid
-      $tax_vid = taxonomy_vocabulary_machine_name_load('meter_category')->vid;
-
       // Modify the filter to find entities with meter-category as given
       // in the filter, or any of its children
       $term_ids = array();
       foreach ($filter['value'] as $term_id) {
+
+        $term = taxonomy_term_load($term_id);
         // Get meter category list of children.
-        $tree = taxonomy_get_tree($tax_vid, $term_id);
+        $tree = taxonomy_get_tree($term->vid, $term_id);
         // The category itself is not in the tree, add it manually.
         $term_ids[$term_id] = $term_id;
         // Add all terms in the tree to term-ids.

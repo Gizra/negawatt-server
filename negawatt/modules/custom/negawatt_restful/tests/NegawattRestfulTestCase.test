@@ -1,0 +1,217 @@
+<?php
+
+/**
+ * @file
+ * Contains NegawattNormalizerMeterProcessTestCase
+ */
+
+class NegawattRestfulTestCase extends NegawattWebTestCase {
+
+  /**
+   * Get test info.
+   *
+   * @return array
+   *    test info
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Restful API',
+      'description' => 'Test the restful API for negawatt-server.',
+      'group' => 'Negawatt',
+    );
+  }
+
+  /**
+   * Setup test environment.
+   * Prepare meter nodes and raw data entities.
+   */
+  function setUp() {
+    parent::setUp('negawatt_restful');
+
+    // Create satec meter nodes.
+    $settings = array(
+      'type' => 'satec_meter',
+      'field_location' => array('und' => array('0' => array('lat' => 31.6172559, 'lng' => 34.7661047, 'lat_sin' => 0.52424239873671, 'lat_cos' => 0.85156908549264, 'lng_rad' => 0.60678299510808))),
+      'field_max_frequency' => array('und' => array('0' => array('value' => \NegaWattNormalizerTimeManagerInterface::MINUTE))),
+      'field_meter_id' => array('und' => array('0' => array('value' => 1))),
+    );
+
+    $meter_node1 = $this->drupalCreateNode($settings);
+    $wrapper = entity_metadata_wrapper('node', $meter_node1);
+    $wrapper->{OG_VOCAB_FIELD}->set(array(7));
+
+    $meter_node2 = $this->drupalCreateNode($settings);
+    $wrapper = entity_metadata_wrapper('node', $meter_node2);
+    $wrapper->{OG_VOCAB_FIELD}->set(array(6));
+
+    // Create IEC meter nodes.
+    $settings = array(
+      'type' => 'iec_meter',
+      'field_max_frequency' => array('und' => array('0' => array('value' => \NegaWattNormalizerTimeManagerInterface::MONTH))),
+    );
+
+    $meter_node3 = $this->drupalCreateNode($settings);
+    $meter_node4 = $this->drupalCreateNode($settings);
+
+    // Save nodes for later.
+    $this->meterNode1 = $meter_node1;
+    $this->meterNode2 = $meter_node2;
+    $this->meterNode3 = $meter_node3;
+    $this->meterNode4 = $meter_node4;
+
+    // Create the raw data.
+    $values_info = array(
+      array(
+        // Two SATEC entries for hour 15:00.
+        'type' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
+        'timestamp' => strtotime('2014-6-12 15:00'),
+        'rate_type' => 'flat',
+        'meter_nid' => $meter_node1->nid,
+        'avg_power' => 2,
+        'sum_kwh' => 1440,
+        'min_power_factor' => 0.90,
+      ),
+      array(
+        'type' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
+        'timestamp' => strtotime('2014-6-12 15:15'),
+        'rate_type' => 'flat',
+        'meter_nid' => $meter_node1->nid,
+        'avg_power' => 3,
+        'sum_kwh' => 2160,
+        'min_power_factor' => 0.96,
+      ),
+      // One entry at 16:00, should not be read when processing 15:00-16:00
+      array(
+        'type' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
+        'timestamp' => strtotime('2014-6-12 16:00'),
+        'rate_type' => 'flat',
+        'meter_nid' => $meter_node1->nid,
+        'avg_power' => 2,
+        'sum_kwh' => 1440,
+        'min_power_factor' => 0.96,
+      ),
+      // Hourly entries
+      array(
+        'type' => \NegaWattNormalizerTimeManagerInterface::HOUR,
+        'timestamp' => strtotime('2014-6-12 15:00'),
+        'rate_type' => 'flat',
+        'meter_nid' => $meter_node1->nid,
+        'avg_power' => 2,
+        'sum_kwh' => 1440,
+        'min_power_factor' => 0.96,
+      ),
+      array(
+        'type' => \NegaWattNormalizerTimeManagerInterface::HOUR,
+        'timestamp' => strtotime('2014-6-12 16:00'),
+        'rate_type' => 'flat',
+        'meter_nid' => $meter_node1->nid,
+        'avg_power' => 2,
+        'sum_kwh' => 1440,
+        'min_power_factor' => 0.96,
+      ),
+      // Daily entries
+      array(
+        'type' => \NegaWattNormalizerTimeManagerInterface::DAY,
+        'timestamp' => strtotime('2014-6-12 00:00'),
+        'rate_type' => 'flat',
+        'meter_nid' => $meter_node1->nid,
+        'avg_power' => 2,
+        'sum_kwh' => 2000,
+        'min_power_factor' => 0.96,
+      ),
+      // One entry for meter 2, should not be read.
+      array(
+        'type' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
+        'timestamp' => strtotime('2014-6-12 15:00'),
+        'rate_type' => 'flat',
+        'meter_nid' => $meter_node2->nid,
+        'avg_power' => 4,
+        'sum_kwh' => 1440,
+        'min_power_factor' => 0.96,
+      ),
+    );
+
+    foreach ($values_info as $values) {
+      $entity = entity_create('electricity', $values);
+      $entity->save();
+    }
+  }
+
+  /**
+   * Test 'meters' API.
+   * - Should give both satec and iec meters.
+   * - Max-frequency field should show.
+   * - Meter-category field should list the entire category hierarchy.
+   * - Particular satec and iec meters' fields will appear.
+   */
+  function testMetersApi() {
+
+    $handler = restful_get_restful_handler('satec_meters');
+    $response = $handler->get();
+
+    // There should be 2 meters
+    $this->assertTrue(is_array($response) && count($response) == 2, 'Two SATEC meters were found.');
+    $meter = $response[0];
+    $this->assertEqual($meter['type'], 'satec_meter', 'Meter type is correct.');
+    $this->assertEqual($meter['max_frequency'], 5, 'Max-frequency field is correct.');
+    $this->assertEqual($meter['meter_id'], 1, 'Meter ID field is correct.');
+    // @todo: Test meter_category.
+
+    // @todo: Test 'meters' API call
+    // @todo: Test that both satec and iec meters are returned.
+  }
+
+  /**
+   * Test 'electricity' API.
+   * - Should sum values.
+   * - Test filter by type.
+   * - Test filter by meter-category - should filter values from child categories
+   *   as well - e.g. if filtering by category 5 (edu), should show values related
+   *   to categories 6 (kindergarten) and 7 (schools).
+   */
+  function testElectricityApi() {
+
+    $handler = restful_get_restful_handler('electricity');
+    $response = $handler->get();
+
+    // There should be 6 entities (due to sum over meters).
+    $this->assertTrue(is_array($response) && count($response) == 6, '<b>Testing electricity API</b><br>6 entities were found.');
+    $entity = $response[0];
+    $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::DAY, 'Entity 0 is of type DAY.');
+    $this->assertEqual($entity['meter'], 1, 'Entity is for meter 1.');
+    $this->assertEqual($entity['timestamp'], strtotime('2014-6-12'), 'Entity timestamp is correct.');
+    $this->assertEqual($entity['kwh'], 2000, 'Entity kWh is correct.');
+    $entity = $response[1];
+    $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::HOUR, 'Entity 1 is of type HOUR.');
+    $this->assertEqual($entity['meter'], 1, 'Entity is for meter 1.');
+    $this->assertEqual($entity['timestamp'], strtotime('2014-6-12 15:00'), 'Entity timestamp is correct.');
+    $entity = $response[2];
+    $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::MINUTE, 'Entity 2 is of type MINUTE.');
+    $this->assertEqual($entity['meter'], 1, 'Entity is for meter 1.');
+    $this->assertEqual($entity['timestamp'], strtotime('2014-6-12 15:00'), 'Entity timestamp is correct.');
+    $this->assertEqual($entity['kwh'], 2880, 'Entity kWh is correct.');
+    $this->assertEqual($entity['avg_power'], 3, 'Entity avg-power is correct.');
+    $entity = $response[4];
+    $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::HOUR, 'Entity 4 is of type HOUR.');
+    $this->assertEqual($entity['meter'], 1, 'Entity is for meter 1.');
+    $this->assertEqual($entity['timestamp'], strtotime('2014-6-12 16:00'), 'Entity timestamp is correct.');
+
+    // @todo: Add test for summation of kWh of different meters. For that we
+    // need to get the data from a database.
+
+    // Test filter on type=2 (MONTH)
+    $response = $handler->get('', array('filter' => array('type' => 4)));
+    // There should be 2 entities.
+    $this->assertTrue(is_array($response) && count($response) == 2, '<b>Testing electricity with filter for type=MONTH</b><br>2 entities were found.');
+    $entity = $response[0];
+    $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::HOUR, 'Entity 0 is of type HOUR.');
+    $this->assertEqual($entity['meter'], 1, 'Entity is for meter 1.');
+    $this->assertEqual($entity['timestamp'], strtotime('2014-6-12 15:00'), 'Entity timestamp is correct.');
+    $entity = $response[1];
+    $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::HOUR, 'Entity 1 is of type HOUR.');
+    $this->assertEqual($entity['meter'], 1, 'Entity is for meter 1.');
+    $this->assertEqual($entity['timestamp'], strtotime('2014-6-12 16:00'), 'Entity timestamp is correct.');
+
+    // @todo: Add tests for filter by category.
+  }
+}

@@ -10,9 +10,9 @@ angular.module('negawattClientApp')
      */
     this.Base64 = {
       // private property
-      _keyStr : 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=',
+      _keyStr: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=',
       // public method for encoding
-      encode : function (input) {
+      encode: function (input) {
         var output = '';
         var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
         var i = 0;
@@ -37,15 +37,15 @@ angular.module('negawattClientApp')
         return output;
       },
       // private method for UTF-8 encoding
-      _utf8_encode : function (string) {
-        string = string.replace(/\r\n/g,'\n');
+      _utf8_encode: function (string) {
+        string = string.replace(/\r\n/g, '\n');
         var utftext = '';
         for (var n = 0; n < string.length; n++) {
           var c = string.charCodeAt(n);
           if (c < 128) {
             utftext += String.fromCharCode(c);
           }
-          else if((c > 127) && (c < 2048)) {
+          else if ((c > 127) && (c < 2048)) {
             utftext += String.fromCharCode((c >> 6) | 192);
             utftext += String.fromCharCode((c & 63) | 128);
           }
@@ -68,9 +68,9 @@ angular.module('negawattClientApp')
      * @returns {*}
      *  Object indexed with properties id of each item.
      */
-    this.indexById = function(list) {
+    this.indexById = function (list) {
       var indexed = {};
-      angular.forEach(list, function(item) {
+      angular.forEach(list, function (item) {
         this[item.id] = item;
       }, indexed);
 
@@ -86,15 +86,14 @@ angular.module('negawattClientApp')
      * @returns {Array}
      *    Collection of the object's properties into an array.
      */
-    this.toArray = function(object) {
+    this.toArray = function (object) {
       var result = [];
 
-      angular.forEach(object, function(property){
+      angular.forEach(object, function (property) {
         this.push(property);
       }, result);
 
       return result;
     };
-
 
   });

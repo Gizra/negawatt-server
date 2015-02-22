@@ -71,12 +71,20 @@ class NegawattEntityMeterBase extends \NegawattEntityBaseNode {
    */
   protected function meterCategories($value) {
     $wrapper = entity_metadata_wrapper('node', $value);
-    $meter_category = $wrapper->field_meter_category->value();
-    $categories = taxonomy_get_parents_all($meter_category[0]->tid);
-    foreach ($categories as $category) {
-      $categories_ids[] = $category->tid;
+    $meter_categories = $wrapper->{OG_VOCAB_FIELD}->value();
+    // Loop for meter-category vocabularies only
+    $category_ids = array();
+    foreach ($meter_categories as $meter_category) {
+      if (strpos($meter_category->vocabulary_machine_name, 'meter_category_') === FALSE) {
+        // Not a meter category vocabulary, skip.
+        continue;
+      }
+      $categories = taxonomy_get_parents_all($meter_category->tid);
+      foreach ($categories as $category) {
+        $category_ids[] = $category->tid;
+      }
     }
 
-    return $categories_ids;
+    return $category_ids;
   }
 }
