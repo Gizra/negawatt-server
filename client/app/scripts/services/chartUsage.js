@@ -140,7 +140,7 @@ angular.module('negawattClientApp')
      * @returns {Object}
      *   Filters array in the form required by get().
      */
-    this.filtersFromSelector = function(accountId, chartFreq, selectorType, selectorId) {
+    this.filtersFromSelector = function(accountId, chartFreq, selectorType, selectorId, period) {
       // Calculate the time-frame for data request.
       var chartFrequency = chartFreq || this.usageChartParams.frequency;
       // Fix a bug when there are two chartFrequency params in url's search
@@ -151,8 +151,10 @@ angular.module('negawattClientApp')
       }
       var chartFrequencyInfo = this.frequencyParams[chartFrequency];
       var chartTimeFrame = chartFrequencyInfo.chart_default_time_frame;
-      var chartEndTimestamp = chartFrequencyInfo.chart_default_time_frame_end == 'now' ? Math.floor(Date.now() / 1000) : chartFrequencyInfo.chart_default_time_frame_end;
-      var chartBeginTimestamp = chartEndTimestamp - chartTimeFrame * chartFrequencyInfo.unit_num_seconds;
+      var chartEndTimestamp = period && period.chartEndTimestamp || chartFrequencyInfo.chart_default_time_frame_end == 'now' ? Math.floor(Date.now() / 1000) : chartFrequencyInfo.chart_default_time_frame_end;
+      var chartBeginTimestamp = period && period.chartBeginTimestamp || chartEndTimestamp - chartTimeFrame * chartFrequencyInfo.unit_num_seconds;
+
+
 
       // Prepare filters for data request.
       var filters = {
@@ -177,11 +179,13 @@ angular.module('negawattClientApp')
      *   User account ID.
      * @param stateParams
      *   State parameters, including frequency, marker-id, etc.
+     * @param period
+     *   Period of time to use in the electricity request.
      *
      * @returns {*}
      *   Promise for data in google-chart format.
      */
-    this.get = function(accountId, stateParams) {
+    this.get = function(accountId, stateParams, period) {
       var deferred = $q.defer();
 
       // Decipher selector type and id out of stateParams.
@@ -196,7 +200,7 @@ angular.module('negawattClientApp')
       }
 
       // Translate selector type and id to filters.
-      var filters = this.filtersFromSelector(accountId, stateParams.chartFreq, selectorType, selectorId);
+      var filters = this.filtersFromSelector(accountId, stateParams.chartFreq, selectorType, selectorId, period);
 
       // Save filters-hash code and map to frequency for later use.
       var filtersHash = Electricity.hashFromFilters(filters);

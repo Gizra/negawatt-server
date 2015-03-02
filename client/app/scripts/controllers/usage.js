@@ -31,7 +31,7 @@ angular.module('negawattClientApp')
         // Load electricity data in the chart according the chart frequency.
         $scope.isLoading = true;
 
-        ChartUsage.get(account.id, $stateParams).then(function(response) {
+        ChartUsage.get(account.id, $stateParams, period).then(function(response) {
             $scope.usageChartData = response;
             $scope.isLoading = false;
         });
