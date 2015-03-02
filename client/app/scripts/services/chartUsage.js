@@ -449,7 +449,7 @@ angular.module('negawattClientApp')
 
     /**
      * Check the electricity response, if have more data in previous or next period,
-     * set true true/false the object
+     * set true true/false the object.
      *
      * @return controls {*}
      *   The controls data {next:boolean, previous:boolean}
