@@ -35,7 +35,7 @@ angular.module('negawattClientApp')
     ];
 
     // Chart parameters that will be passed to google chart.
-    this.usageGoogleChartParams;
+    this.usageGoogleChartParams = {};
 
     // Chart parameters.
     this.usageChartParams = {
@@ -205,6 +205,8 @@ angular.module('negawattClientApp')
 
       // Get electricity data.
       Electricity.get(filters).then(function(electricity) {
+        // Add periods.
+        angular.extend(ChartUsage.usageGoogleChartParams, hasMorePeriods(electricity))
         // Translate electricity data to google charts format.
         deferred.resolve(ChartUsage.electricityToChartData(stateParams.chartFreq, electricity));
       });
@@ -262,7 +264,7 @@ angular.module('negawattClientApp')
       var chartFrequencyInfo = this.frequencyParams[chartFrequency];
 
       // Translate electricity data to google charts format.
-      ChartUsage.usageGoogleChartParams = ChartUsage.transformDataToDatasets(electricity, chartFrequencyInfo);
+      angular.extend(ChartUsage.usageGoogleChartParams, ChartUsage.transformDataToDatasets(electricity, chartFrequencyInfo));
       return ChartUsage.usageGoogleChartParams;
     };
 
@@ -444,5 +446,23 @@ angular.module('negawattClientApp')
       return frequencies;
     }
 
+
+    /**
+     * Check the electricity response, if have more data in previous or next period,
+     * set true true/false the object
+     *
+     * @return controls {*}
+     *   The controls data {next:boolean, previous:boolean}
+     */
+    function hasMorePeriods(electricity) {
+      console.log(electricity);
+
+      return {
+        controls: {
+          next: true,
+          previous: true
+        }
+      }
+    }
 
   });
