@@ -152,8 +152,10 @@ angular.module('negawattClientApp')
       var chartFrequencyInfo = this.frequencyParams[chartFrequency];
       var chartTimeFrame = chartFrequencyInfo.chart_default_time_frame;
       var chartEndTimestamp = period && period.chartEndTimestamp || chartFrequencyInfo.chart_default_time_frame_end == 'now' ? Math.floor(Date.now() / 1000) : chartFrequencyInfo.chart_default_time_frame_end;
+      var chartEndTimestampMomentJs = period && period.chartEndTimestamp || chartFrequencyInfo.chart_default_time_frame_end == 'now' ? Math.floor(Date.now() / 1000) : chartFrequencyInfo.chart_default_time_frame_end;
       var chartBeginTimestamp = period && period.chartBeginTimestamp || chartEndTimestamp - chartTimeFrame * chartFrequencyInfo.unit_num_seconds;
 
+      console.log(chartEndTimestamp, chartEndTimestampMomentJs);
 
 
       // Prepare filters for data request.
