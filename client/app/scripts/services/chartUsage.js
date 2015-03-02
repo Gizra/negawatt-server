@@ -86,7 +86,8 @@ angular.module('negawattClientApp')
         label: 'שעה',
         type: '4',
         unit_num_seconds: 60 * 60,
-        chart_default_time_frame: 24 * 7,
+        // One week.
+        chart_default_time_frame: 168,
         chart_default_time_frame_end: 1388620800,
         chart_type: 'LineChart',
         vaxis_title: 'KW',
@@ -98,7 +99,8 @@ angular.module('negawattClientApp')
         label: 'דקות',
         type: '5',
         unit_num_seconds: 60,
-        chart_default_time_frame: 2 * 60,
+        // 48 hours.
+        chart_default_time_frame: 1440,
         chart_default_time_frame_end: 1388620800,
         chart_type: 'LineChart',
         vaxis_title: 'KW',
@@ -151,10 +153,8 @@ angular.module('negawattClientApp')
       }
       var chartFrequencyInfo = this.frequencyParams[chartFrequency];
       var chartTimeFrame = chartFrequencyInfo.chart_default_time_frame;
-      var chartEndTimestamp = period && period.chartEndTimestamp || chartFrequencyInfo.chart_default_time_frame_end == 'now' ? Math.floor(Date.now() / 1000) : chartFrequencyInfo.chart_default_time_frame_end;
-      var chartBeginTimestamp = period && period.chartBeginTimestamp || chartEndTimestamp - chartTimeFrame * chartFrequencyInfo.unit_num_seconds;
-
-
+      var chartEndTimestamp = period && period.chartEndTimestamp || chartFrequencyInfo.chart_default_time_frame_end === 'now' ? moment().unix() : chartFrequencyInfo.chart_default_time_frame_end;
+      var chartBeginTimestamp = period && period.chartBeginTimestamp || moment.unix(chartEndTimestamp).subtract(chartFrequencyInfo.chart_default_time_frame, chartFrequencyInfo.frequency).unix();
 
       // Prepare filters for data request.
       var filters = {
