@@ -59,6 +59,7 @@ angular
       })
       .state('dashboard.withAccount', {
         url: 'dashboard/{accountId:int}?:chartFreq',
+        reloadOnSearch: true,
         params: {
           chartFreq: {
             // Keep monthly chart type by default.

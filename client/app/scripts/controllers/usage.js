@@ -8,7 +8,7 @@
  * Controller of the negawattClientApp
  */
 angular.module('negawattClientApp')
-  .controller('UsageCtrl', function ($scope, $q, $location, $stateParams, account, usage, meters, ChartUsage) {
+  .controller('UsageCtrl', function ($scope, $q, $location, $state, $stateParams, account, usage, meters, ChartUsage) {
     // Get data from the cache, since 'usage' might not be up to date
     // after lazy-load.
     $scope.frequencies = ChartUsage.getFrequencies();
@@ -22,10 +22,13 @@ angular.module('negawattClientApp')
 
     /**
     * Search the data with the new chart frequency.
+    *
+    * @param period
+    *   Period of time expresed in timestamp, used to request specific electricity data.
     */
-    $scope.select = function() {
+    $scope.select = function(period) {
 
-      // Prevent only one excetion.
+      // Prevent only one execution.
       if ($stateParams.chartFreq !== this.frequencies[this.$index].type) {
         $stateParams.chartFreq = this.frequencies[this.$index].type;
         // Load electricity data in the chart according the chart frequency.
@@ -35,7 +38,8 @@ angular.module('negawattClientApp')
             $scope.usageChartData = response;
             $scope.isLoading = false;
         });
-        $location.search('chartFreq', $stateParams.chartFreq);
+        // $location.search('chartFreq', $stateParams.chartFreq);
+        $state.go('dashboard.withAccount', {chartFreq: this.frequencies[this.$index].type});
       }
     }
 
