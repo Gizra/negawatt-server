@@ -22,10 +22,13 @@ angular.module('negawattClientApp')
 
     /**
     * Search the data with the new chart frequency.
+    *
+    * @param period
+    *   Period of time expresed in timestamp, used to request specific electricity data.
     */
-    $scope.select = function() {
+    $scope.select = function(period) {
 
-      // Prevent only one excetion.
+      // Prevent only one execution.
       if ($stateParams.chartFreq !== this.frequencies[this.$index].type) {
         $stateParams.chartFreq = this.frequencies[this.$index].type;
         // Load electricity data in the chart according the chart frequency.
