@@ -134,6 +134,22 @@
         z-index: 20;
       }
 
+      .icon-arrow {
+        width: 24px;
+        height: 24px;
+        position: absolute;
+        margin-top: 10px;
+        z-index: 25;
+
+        &.glyphicon-chevron-left {
+          left: 50px;
+        }
+
+        &.glyphicon-chevron-right {
+          right: 65px;
+        }
+      }
+
       .title {
         font-size: large;
         font-weight: bold;

@@ -4,5 +4,9 @@
   <tab ng-repeat="frequency in frequencies" heading="{{frequency.label}}" active="frequency.active" disabled="frequency.disabled" select="select()"></tab>
 </tabset>
 <div google-chart chart="usageChartData"  ng-hide="isLoading" id="chart-usage" class="usageChart"/>
+<span>
+  <i class="icon-arrow glyphicon glyphicon-chevron-left"></i>
+  <i class="icon-arrow glyphicon glyphicon-chevron-right"></i>
+</span>
 
 
