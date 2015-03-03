@@ -39,7 +39,7 @@ angular.module('negawattClientApp')
             $scope.isLoading = false;
         });
         $location.search('chartFreq', $stateParams.chartFreq);
-        $state.go('dashboard.withAccount', {accountId: account.id, chartFreq: this.frequencies[this.$index].type});
+        $state.go('dashboard.withAccount', {accountId: account.id, chartFreq: $stateParams.chartFreq});
       }
     }
 
