@@ -20,13 +20,23 @@ angular.module('negawattClientApp')
       chart = undefined;
     });
 
-    // Detail information of the selected marker.
-    if (angular.isDefined($stateParams.markerId)) {
-      // Share meter selected.
-      $scope.meterSelected = meters[$stateParams.markerId];
+    /**
+    * Search the data with the new chart frequency.
+    */
+    $scope.select = function() {
 
-      // Chart usage information of the selected marker.
-      ChartUsage.meterSelected(meters[$stateParams.markerId]);
+      // Prevent only one excetion.
+      if ($stateParams.chartFreq !== this.frequencies[this.$index].type) {
+        $stateParams.chartFreq = this.frequencies[this.$index].type;
+        // Load electricity data in the chart according the chart frequency.
+        $scope.isLoading = true;
+
+        ChartUsage.get(account.id, $stateParams).then(function(response) {
+            $scope.usageChartData = response;
+            $scope.isLoading = false;
+        });
+        $location.search('chartFreq', $stateParams.chartFreq);
+      }
     }
 
 
@@ -70,6 +80,15 @@ angular.module('negawattClientApp')
     }
     if (angular.isDefined($stateParams.chartFreq)) {
       setActiveFrequencyTab($scope.frequencies[$stateParams.chartFreq-1])
+    }
+
+    // Detail information of the selected marker.
+    if (angular.isDefined($stateParams.markerId)) {
+      // Share meter selected.
+      $scope.meterSelected = meters[$stateParams.markerId];
+
+      // Chart usage information of the selected marker.
+      ChartUsage.meterSelected(meters[$stateParams.markerId]);
     }
 
 
