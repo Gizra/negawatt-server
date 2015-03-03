@@ -27,7 +27,8 @@ angular
     'ui.bootstrap.tabs',
     'template/tabs/tab.html',
     'template/tabs/tabset.html',
-    'angularMoment'
+    'angularMoment',
+    'cm.angularHttpPlus'
   ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
     // For any unmatched url, redirect to '/'.
@@ -51,8 +52,8 @@ angular
         url: '/',
         templateUrl: 'views/dashboard/main.html',
         resolve: {
-          profile: function(Profile) {
-            return Profile.get();
+          profile: function(ProfilePlus) {
+            return ProfilePlus.get();
           }
         },
         controller: 'DashboardCtrl'
