@@ -16,6 +16,7 @@ angular.module('negawattClientApp')
 
     $scope.categories = categories;
     $scope.accountId = $stateParams.accountId;
+    $scope.chartFreq = $stateParams.chartFreq;
 
     // Activate filter of meters only if we are in the principal state.
     if ($state.is('dashboard.withAccount')) {

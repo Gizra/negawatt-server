@@ -20,26 +20,6 @@ angular.module('negawattClientApp')
       chart = undefined;
     });
 
-    /**
-    * Search the data with the new chart frequency.
-    */
-    $scope.select = function() {
-
-      // Prevent only one excetion.
-      if ($stateParams.chartFreq !== this.frequencies[this.$index].type) {
-        $stateParams.chartFreq = this.frequencies[this.$index].type;
-        // Load electricity data in the chart according the chart frequency.
-        $scope.isLoading = true;
-
-        ChartUsage.get(account.id, $stateParams).then(function(response) {
-            $scope.usageChartData = response;
-            $scope.isLoading = false;
-        });
-        //$location.search('chartFreq', $stateParams.chartFreq);
-        //$state.go($state.current, $stateParams);
-      }
-    }
-
 
     /**
     * Search the data with the new chart frequency.
@@ -57,6 +37,7 @@ angular.module('negawattClientApp')
             $scope.isLoading = false;
         });
         $location.search('chartFreq', $stateParams.chartFreq);
+        $state.go($state.current, $stateParams);
       }
     }
 
