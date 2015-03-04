@@ -1,4 +1,12 @@
+'use strict';
 
+/**
+ * @ngdoc function
+ * @name negawattClientApp.decorator:$state
+ * @description
+ * #
+ * Add new method to force reload after query search
+ */
 
 angular.module('negawattClientApp')
   .config(function ($provide) {
