@@ -16,29 +16,40 @@ angular.module('negawattClientApp')
       var isUndefined = angular.isUndefined;
       var states = {};
 
+      /**
+       * Extend $state.go method, to keep default value of property reloadOnSearch
+       *
+       * @param to
+       * @param params
+       * @param options
+       * @returns {promise|void}
+       */
       $delegate.go = function go(to, params, options) {
-        console.log('$state.go decorated.')
-
+        // Save initial value of property reloadOnSearch per state.
         if (isUndefined(states[to])) {
           states[to] = {
             reloadOnSearch: $delegate.$current.reloadOnSearch
           };
         }
+        // Set default value.
         $delegate.$current.reloadOnSearch = states[to].reloadOnSearch;
-        console.log($delegate.$current.name, $delegate.$current.reloadOnSearch);
-
         return $delegate.transitionTo(to, params, extend({ inherit: true, relative: $delegate.$current }, options));
       };
 
+      /**
+       * Extend $state.go to force reload of state.
+       *
+       * @param to
+       * @param params
+       * @param options
+       * @returns {promise|void}
+       */
       $delegate.mustGo = function go(to, params, options) {
-        console.log('$state.mustGo decorated.')
-
+        // Force reload state.
         $delegate.current.reloadOnSearch = true;
-        console.log($delegate.$current.name, $delegate.$current.reloadOnSearch);
 
         return $delegate.transitionTo(to, params, extend({ inherit: true, relative: $delegate.$current }, options));
       };
-
 
       return $delegate;
     });
