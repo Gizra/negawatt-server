@@ -4,7 +4,7 @@
     <ol ui-tree-nodes="">
       <li ng-repeat="category in categories.tree" ui-tree-node ng-show="hasMeters(category)">
         <div ui-tree-handle class="tree-level-top">
-          <a ng-click="select(category.id)" ng-class="{'active-category':  ('categoryId' | includedByParams:category.id) }">
+          <a ng-click="select(category.id)" ng-class="{'active-category':  ('categoryId' | includedByParams:category.id) }" href="">
             <span>{{category.label}}</span> ({{category.meters}})
           </a>
           <input ng-change="toggleMetersByCategory()" ng-init="categoriesChecked[category.id]=true" ng-model="categoriesChecked[category.id]" ng-show="filterMeters" class="hide-meters-category" type="checkbox" name="{{category.label}}"/>
@@ -12,7 +12,7 @@
         <ol ui-tree-nodes="" ng-model="category.children" >
           <li ng-repeat="subCategory in category.children" ui-tree-node ng-show="hasMeters(subCategory)">
             <div ui-tree-handle class="tree-level-middle">
-              <a ng-click="select(subCategory.id)" ng-class="{'active-category':  ('categoryId' | includedByParams:subCategory.id) }">
+              <a ng-click="select(subCategory.id)" ng-class="{'active-category':  ('categoryId' | includedByParams:subCategory.id) }" href="">
                 <i class="glyphicon glyphicon-chevron-left"></i>
                 <span>{{subCategory.label}}</span> ({{subCategory.meters}})
               </a>
@@ -21,7 +21,7 @@
             <ol ui-tree-nodes="" ng-model="subCategory.children">
               <li ng-repeat="subCategory2 in subCategory.children" ui-tree-node ng-show="hasMeters(subCategory2)">
                 <div ui-tree-handle class="tree-level-bottom">
-                  <a ng-click="select(subCategory2.id)" ng-class="{'active-category':  ('categoryId' | includedByParams:subCategory2.id) }">
+                  <a ng-click="select(subCategory2.id)" ng-class="{'active-category':  ('categoryId' | includedByParams:subCategory2.id) }" href="">
                     <i class="glyphicon glyphicon-plus"></i>
                     <span>{{subCategory2.label}}</span> ({{subCategory2.meters}})
                   </a>
