@@ -1,7 +1,14 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .controller('DashboardCtrl', function ($state, $stateParams, profile) {
+  .controller('DashboardCtrl', function ($state, $stateParams, profile, ProfilePlus) {
+    ProfilePlus.get(function(profile){
+      console.log('profile:', profile);
+    }, function(err){
+      console.log('err:', err);
+    });
+    console.log('profile test');
+
     var defaultAccountId;
     if (profile) {
       // Apply only on the login wotkflow.

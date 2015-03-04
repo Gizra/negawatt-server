@@ -52,8 +52,8 @@ angular
         url: '/',
         templateUrl: 'views/dashboard/main.html',
         resolve: {
-          profile: function(ProfilePlus) {
-            return ProfilePlus.get();
+          profile: function(Profile) {
+            return Profile.get();
           }
         },
         controller: 'DashboardCtrl'
