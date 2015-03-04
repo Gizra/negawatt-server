@@ -46,6 +46,15 @@ angular.module('negawattClientApp')
     }
 
     /**
+     * Select a category forcing reload of the state, used after query search without reloading.
+     *
+     * @param categoryId
+     */
+    $scope.select = function(categoryId) {
+      $state.mustGo('dashboard.withAccount.categories', {categoryId: categoryId});
+    }
+
+    /**
      * Return an array of the category ids, checeked.
      *
      * @returns {Array}
