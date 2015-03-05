@@ -28,7 +28,7 @@ angular.module('negawattClientApp')
     *   Period of time expresed in timestamp, used to request specific electricity data.
     */
     $scope.select = function(period) {
-
+      debugger;
       // Prevent only one execution.
       if ($stateParams.chartFreq !== this.frequencies[this.$index].type) {
         $stateParams.chartFreq = this.frequencies[this.$index].type;

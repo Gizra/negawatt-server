@@ -188,6 +188,10 @@ angular.module('negawattClientApp')
     this.get = function(accountId, stateParams, period) {
       var deferred = $q.defer();
 
+      if (period) {
+        console.log(period);
+      }
+
       // Decipher selector type and id out of stateParams.
       var selectorType, selectorId;
       if (stateParams.markerId) {

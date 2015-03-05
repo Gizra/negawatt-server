@@ -5,11 +5,11 @@
 </tabset>
 <div google-chart chart="usageChartData"  ng-hide="isLoading" id="chart-usage" class="usageChart"/>
 <span>
-  <button type="button" class="btn btn-transparent btn-arrow btn-arrow-left">
-    <span ng-click="select(usageChartData.period('previous'))" ng-show="usageChartData.controls.previous" class="glyphicon glyphicon-chevron-left"></span>
+  <button type="button" class="btn btn-transparent btn-arrow btn-arrow-left" ng-hide="usageChartData.hideControl('previous')">
+    <span ng-click="select(usageChartData.period('previous'))"  class="glyphicon glyphicon-chevron-left"></span>
   </button>
-  <button type="button" class="btn btn-transparent btn-arrow btn-arrow-right">
-    <span ng-click="select(usageChartData.period('next'))" ng-show="usageChartData.controls.next" class="glyphicon glyphicon-chevron-right"></span>
+  <button type="button" class="btn btn-transparent btn-arrow btn-arrow-right" ng-hide="usageChartData.hideControl('next')" >
+    <span ng-click="select(usageChartData.period('next'))" class="glyphicon glyphicon-chevron-right"></span>
   </button>
 </span>
 
