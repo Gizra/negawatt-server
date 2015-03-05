@@ -56,6 +56,10 @@ function iec_node_presave($node) {
 
 // Check and update Geocode, if needed.
 function iec_node_update_geocode($node) {
+  // Make sure wer'e dealing with an iec-meter.
+  if ($node->type != 'iec_meter') {
+    return;
+  }
 
   $wrapper = entity_metadata_wrapper('node', $node);
   $wrapper_original = entity_metadata_wrapper('node', $node->original);
@@ -86,6 +90,7 @@ function iec_node_update_geocode($node) {
     catch (Exception $e) {
       // Geolocating on full address failed, try locating on city name only.
       drupal_set_message(t('לא ניתן היה לאתר את הכתובת "@address"', array('@address' => $full_address)), 'warning');
+      $wrapper->field_geocode_valid->set(FALSE);
       try {
         $geocode = $geocoder->geocode($city);
       }
