@@ -56,6 +56,7 @@ function iec_field_default_field_instances() {
       'module' => 'addressfield',
       'settings' => array(
         'available_countries' => array(),
+        'default_country' => '',
         'format_handlers' => array(
           'address' => 'address',
           'address-hide-country' => 0,
@@ -112,6 +113,47 @@ function iec_field_default_field_instances() {
       'settings' => array(),
       'type' => 'number',
       'weight' => 2,
+    ),
+  );
+
+  // Exported field_instance: 'node-iec_meter-field_geocode_valid'
+  $field_instances['node-iec_meter-field_geocode_valid'] = array(
+    'bundle' => 'iec_meter',
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 18,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_geocode_valid',
+    'label' => 'Geocode valid',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_buttons',
+      'weight' => 3,
     ),
   );
 
@@ -645,6 +687,7 @@ function iec_field_default_field_instances() {
   // Included for use with string extractors like potx.
   t('Address');
   t('Contract ID');
+  t('Geocode valid');
   t('Groups audience');
   t('In case we have 2 or more meters for a single contract, this field will reference to the \'main\' contract ID, which is used to save the electricity Data.');
   t('Last processed');
