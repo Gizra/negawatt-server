@@ -62,8 +62,8 @@ script:
   - grunt serve > ~/grunt.log 2>&1 &
 
   # Run selenium.
-  - wget http://selenium-release.storage.googleapis.com/2.44/selenium-server-standalone-2.44.0.jar
-  - java -jar selenium-server-standalone-2.44.0.jar -p 4444 > ~/selenium.log 2>&1 &
+  - wget http://selenium-release.storage.googleapis.com/2.45/selenium-server-standalone-2.45.0.jar
+  - java -jar selenium-server-standalone-2.45.0.jar -p 4444 > ~/selenium.log 2>&1 &
   - sleep 5
 
   # Run phantomJs.

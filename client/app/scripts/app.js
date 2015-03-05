@@ -126,6 +126,7 @@ angular
       })
       .state('dashboard.withAccount.categories', {
         url: '/category/{categoryId:int}',
+        reloadOnSearch: false,
         views: {
           // Replace `meters` data previous resolved, with the cached data
           // filtered by the selected category.
@@ -167,6 +168,7 @@ angular
       })
       .state('dashboard.withAccount.markers', {
         url: '/marker/:markerId?categoryId',
+        reloadOnSearch: false,
         views: {
           // Replace `meters` data previous resolved, with the cached data
           // if is the case filtered by the selected category.
