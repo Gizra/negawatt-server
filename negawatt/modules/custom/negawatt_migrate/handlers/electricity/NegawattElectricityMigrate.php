@@ -26,8 +26,8 @@ class NegawattElectricityMigrate extends Migration {
     'NegawattSatecMeterMigrate',
   );
 
-  public function __construct() {
-    parent::__construct();
+  public function __construct($arguments = array()) {
+    parent::__construct($arguments);
 
     // Map fields that don't need extra definitions.
     $field_names = array(
