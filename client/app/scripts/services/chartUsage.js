@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('ChartUsage', function ($q, Electricity, moment) {
+  .service('ChartUsage', function ($q, Electricity, UsagePeriod, moment) {
     var ChartUsage = this;
 
     // Frequencies information.
@@ -210,7 +210,7 @@ angular.module('negawattClientApp')
       // Get electricity data.
       Electricity.get(filters).then(function(electricity) {
         // Add periods.
-        angular.extend(ChartUsage.usageGoogleChartParams, hasMorePeriods(electricity))
+        angular.extend(ChartUsage.usageGoogleChartParams, hasMorePeriods(electricity, stateParams, filters))
         // Translate electricity data to google charts format.
         deferred.resolve(ChartUsage.electricityToChartData(stateParams.chartFreq, electricity));
       });
@@ -458,15 +458,11 @@ angular.module('negawattClientApp')
      * @return controls {*}
      *   The controls data {next:boolean, previous:boolean}
      */
-    function hasMorePeriods(electricity) {
-      console.log(electricity);
+    function hasMorePeriods(electricity, stateParams, filters) {
+      //
+      UsagePeriod.setFrequency(ChartUsage.frequencyParams[stateParams.chartFreq], filters)
 
-      return {
-        controls: {
-          next: true,
-          previous: true
-        }
-      }
+      return UsagePeriod;
     }
 
   });
