@@ -5,6 +5,7 @@
  */
 
 include_once 'iec.features.inc';
+require_once __DIR__ . '/../../../libraries/geocoder/src/autoload.php';
 
 /**
  * Implements hook_node_presave().
@@ -13,6 +14,9 @@ include_once 'iec.features.inc';
  * the original one, which always has the lowest node ID.
  */
 function iec_node_presave($node) {
+  // Check and update Geocode, if needed.
+  iec_node_update_geocode($node);
+
   if (!empty($node->nid)) {
     // Node is already saved.
     return;
@@ -48,4 +52,64 @@ function iec_node_presave($node) {
 
   $nid = key($result['node']);
   $wrapper->field_parent_contract->set($nid);
+}
+
+// Check and update Geocode, if needed.
+function iec_node_update_geocode($node) {
+
+  $wrapper = entity_metadata_wrapper('node', $node);
+  $wrapper_original = entity_metadata_wrapper('node', $node->original);
+
+  // Check if address field was changed.
+  if ($node->is_new ||
+      $wrapper->field_place_address->value() != $wrapper_original->field_place_address->value() ||
+      $wrapper->field_place_locality->value() != $wrapper_original->field_place_locality->value()) {
+
+    // Prepare geocoder as static.
+    static $adapter  = null;
+    static $provider = null;
+    static $geocoder = null;
+    $adapter = $adapter ? $adapter : new \Geocoder\HttpAdapter\CurlHttpAdapter();
+    $provider = $provider ? $provider : new \Geocoder\Provider\GoogleMapsProvider($adapter);
+    $geocoder = $geocoder ? $geocoder : new \Geocoder\Geocoder($provider);
+
+    // Look for geocode.
+    $street_addr = $wrapper->field_place_address->value();
+    $city = $wrapper->field_place_locality->value();
+    $full_address = $street_addr . ', ' . $city;
+    $success = TRUE;
+    try {
+      $geocode = $geocoder->geocode($full_address);
+    }
+    catch (Exception $e) {
+      // Geolocating on full address failed, try locating on city name only.
+      drupal_set_message(t('לא ניתן היה לאתר את הכתובת "@address"', array('@address' => $full_address)), 'warning');
+      try {
+        $geocode = $geocoder->geocode($city);
+      }
+      catch (Exception $e) {
+        // Geolocation failed.
+        drupal_set_message(t('לא ניתן היה לאתר את העיר "@address"', array('@address' => $city)), 'warning');
+        $success = FALSE;
+      }
+    }
+    if ($success) {
+      // Set location field, only if geolocation succeeded.
+      $lat = +$geocode->getLatitude();
+      $lng = +$geocode->getLongitude();
+      $wrapper->field_location->set(array(
+        'lat' => $lat,
+        'lng' => $lng,
+        // @fixme: use geolocation_field_presave() in stead of hard code calculations.
+        'lat_sin' => sin(deg2rad($lat)),
+        'lat_cos' => cos(deg2rad($lat)),
+        'lng_rad' => deg2rad($lng),
+      ));
+    }
+    $wrapper->field_address->set(array(
+      'thoroughfare' => $street_addr,
+      'locality' => $city,
+      'country' => $geocode->getCountryCode(),
+    ));
+  }
 }
