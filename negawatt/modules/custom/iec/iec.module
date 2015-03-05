@@ -80,6 +80,8 @@ function iec_node_update_geocode($node) {
     $success = TRUE;
     try {
       $geocode = $geocoder->geocode($full_address);
+      // Geocoding on full address succeeded, set geocode-valid field.
+      $wrapper->field_geocode_valid->set(TRUE);
     }
     catch (Exception $e) {
       // Geolocating on full address failed, try locating on city name only.
