@@ -5,7 +5,6 @@
  */
 
 include_once 'iec.features.inc';
-require_once __DIR__ . '/../../../libraries/geocoder/src/autoload.php';
 
 /**
  * Implements hook_node_presave().
@@ -54,8 +53,19 @@ function iec_node_presave($node) {
   $wrapper->field_parent_contract->set($nid);
 }
 
-// Check and update Geocode, if needed.
+/**
+ * Check and update Geocode, if needed..
+ *
+ * For iec_meter, if place-address and/or place-locality were changed, resolve
+ * geocode using Geocoder package. First try to resolve whole address (stree, city),
+ * if fails, try resolving for city only.
+ *
+ * @param $node
+ *    The node to geocode.
+ */
 function iec_node_update_geocode($node) {
+  require_once _libraries_get_path('geocoder') . '/src/autoload.php';
+
   // Make sure wer'e dealing with an iec-meter.
   if ($node->type != 'iec_meter') {
     return;
@@ -71,9 +81,9 @@ function iec_node_update_geocode($node) {
       $wrapper->field_place_locality->value() != $wrapper_original->field_place_locality->value()) {
 
     // Prepare geocoder as static.
-    static $adapter  = null;
-    static $provider = null;
-    static $geocoder = null;
+    $adapter  = &drupal_static(__FUNCTION__ . '_adapter', NULL);
+    $provider = &drupal_static(__FUNCTION__ . '_provider', NULL);
+    $geocoder = &drupal_static(__FUNCTION__ . '_geocoder', NULL);
     $adapter = $adapter ? $adapter : new \Geocoder\HttpAdapter\CurlHttpAdapter();
     $provider = $provider ? $provider : new \Geocoder\Provider\GoogleMapsProvider($adapter);
     $geocoder = $geocoder ? $geocoder : new \Geocoder\Geocoder($provider);
