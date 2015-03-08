@@ -26,12 +26,13 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
    * Prepare meter nodes and raw data entities.
    */
   function setUp() {
-    parent::setUp('negawatt_normalizer');
+    parent::setUp('negawatt_normalizer', 'negawatt_account', 'satec', 'iec');
 
     // Create satec meter nodes.
     $settings = array(
       'type' => 'satec_meter',
       'field_max_frequency' => array('und' => array('0' => array('value' => \NegaWattNormalizerTimeManagerInterface::MINUTE))),
+      'field_location' => array('und' => array('0' => array('lat' => 0, 'lng' => 0))),
     );
 
     $meter_node1 = $this->drupalCreateNode($settings);
@@ -41,6 +42,7 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     $settings = array(
       'type' => 'iec_meter',
       'field_max_frequency' => array('und' => array('0' => array('value' => \NegaWattNormalizerTimeManagerInterface::MONTH))),
+      'field_location' => array('und' => array('0' => array('lat' => 0, 'lng' => 0))),
     );
 
     $meter_node3 = $this->drupalCreateNode($settings);
