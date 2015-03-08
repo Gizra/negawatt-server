@@ -64,7 +64,7 @@ function iec_node_presave($node) {
  *    The node to geocode.
  */
 function iec_node_update_geocode($node) {
-  require_once _libraries_get_path('geocoder') . '/src/autoload.php';
+  require_once libraries_get_path('geocoder') . '/src/autoload.php';
 
   // Make sure wer'e dealing with an iec-meter.
   if ($node->type != 'iec_meter') {
@@ -99,31 +99,40 @@ function iec_node_update_geocode($node) {
       $wrapper->field_location_valid->set(TRUE);
     }
     catch (Exception $e) {
-      // Geolocating on full address failed, try locating on city name only.
-      drupal_set_message(t('לא ניתן היה לאתר את הכתובת "@address"', array('@address' => $full_address)), 'warning');
+      watchdog('iec geocode', 'Couldn`t geocode the address "@address"', array('@address' => $full_address), WATCHDOG_WARNING);
       $wrapper->field_location_valid->set(FALSE);
+      $success = FALSE;
+    }
+
+    if (!$success) {
+      // Geocoding on full address failed, try locating on city name only.
       try {
         $geocode = $geocoder->geocode($city);
+        $success = TRUE;
       }
       catch (Exception $e) {
-        // Geolocation failed.
-        drupal_set_message(t('לא ניתן היה לאתר את העיר "@address"', array('@address' => $city)), 'warning');
+        // Geocoding failed.
+        watchdog('iec geocode', 'Couldn`t geocode the city "@address"', array('@address' => $city), WATCHDOG_WARNING);
         $success = FALSE;
       }
     }
-    if ($success) {
-      // Set location field, only if geolocation succeeded.
-      $lat = $geocode->getLatitude();
-      $lng = $geocode->getLongitude();
-      $wrapper->field_location->set(array(
-        'lat' => $lat,
-        'lng' => $lng,
-        // @fixme: use geolocation_field_presave() in stead of hard code calculations.
-        'lat_sin' => sin(deg2rad($lat)),
-        'lat_cos' => cos(deg2rad($lat)),
-        'lng_rad' => deg2rad($lng),
-      ));
+    
+    if (!$success) {
+      return;
     }
+
+    // Set location field, only if geolocation succeeded.
+    $lat = $geocode->getLatitude();
+    $lng = $geocode->getLongitude();
+    $wrapper->field_location->set(array(
+      'lat' => $lat,
+      'lng' => $lng,
+      // @fixme: use geolocation_field_presave() in stead of hard code calculations.
+      'lat_sin' => sin(deg2rad($lat)),
+      'lat_cos' => cos(deg2rad($lat)),
+      'lng_rad' => deg2rad($lng),
+    ));
+
     $wrapper->field_address->set(array(
       'thoroughfare' => $street_addr,
       'locality' => $city,
