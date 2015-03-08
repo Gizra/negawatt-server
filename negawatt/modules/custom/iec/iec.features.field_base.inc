@@ -42,13 +42,13 @@ function iec_field_default_field_bases() {
     'type' => 'number_integer',
   );
 
-  // Exported field_base: 'field_geocode_valid'
-  $field_bases['field_geocode_valid'] = array(
+  // Exported field_base: 'field_location_valid'
+  $field_bases['field_location_valid'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
-    'field_name' => 'field_geocode_valid',
+    'field_name' => 'field_location_valid',
     'foreign keys' => array(),
     'indexes' => array(
       'value' => array(

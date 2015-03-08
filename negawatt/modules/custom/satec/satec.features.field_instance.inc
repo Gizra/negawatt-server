@@ -72,8 +72,8 @@ function satec_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-satec_meter-field_geocode_valid'
-  $field_instances['node-satec_meter-field_geocode_valid'] = array(
+  // Exported field_instance: 'node-satec_meter-field_location_valid'
+  $field_instances['node-satec_meter-field_location_valid'] = array(
     'bundle' => 'satec_meter',
     'default_value' => array(
       0 => array(
@@ -98,7 +98,7 @@ function satec_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
-    'field_name' => 'field_geocode_valid',
+    'field_name' => 'field_location_valid',
     'label' => 'Geocode valid',
     'required' => 0,
     'settings' => array(

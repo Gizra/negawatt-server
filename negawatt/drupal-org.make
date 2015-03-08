@@ -28,8 +28,7 @@ projects[email][version] = "1.3"
 
 projects[entity][subdir] = "contrib"
 projects[entity][version] = "1.6"
-;projects[entity][patch][] = "https://www.drupal.org/files/issues/2264079-entity-wrapper-access-single-entity-reference-2.patch"
-;projects[entity][patch][] = "https://www.drupal.org/files/issues/2086225-entity-access-check-node-create-3.patch"
+projects[entity][patch][] = "https://www.drupal.org/files/issues/2086225-entity-access-check-node-create-3.patch"
 
 projects[entitycache][subdir] = "contrib"
 projects[entitycache][version] = 1.2
@@ -47,11 +46,6 @@ projects[features][version] = "2.3"
 
 projects[flag][subdir] = "contrib"
 projects[flag][version] = "2.2"
-
-projects[geocoder][download][type] = "git"
-projects[geocoder][download][url] = "https://github.com/geocoder-php/Geocoder.git"
-projects[geocoder][download][branch] = 2.8.2
-projects[geocoder][type] = "library"
 
 projects[geolocation][subdir] = "contrib"
 projects[geolocation][version] = "1.6"
@@ -76,7 +70,7 @@ projects[message][version] = "1.9"
 projects[message_notify][subdir] = "contrib"
 projects[message_notify][version] = "2.5"
 
-projects[migrate][version] = 2.7
+projects[migrate][version] = 2.5
 projects[migrate][subdir] = "contrib"
 
 projects[migrate_extras][version] = 2.5
@@ -123,6 +117,12 @@ projects[views][version] = "3.10"
 
 projects[views_bulk_operations][subdir] = "contrib"
 projects[views_bulk_operations][version] = "3.2"
+
+;Libraries
+projects[geocoder][download][type] = "url"
+projects[geocoder][download][url] = "https://github.com/geocoder-php/Geocoder.git"
+projects[geocoder][download][branch] = 2.8.2
+projects[geocoder][type] = "library"
 
 ; Themes
 projects[bootstrap][subdir] = "contrib"

@@ -22,8 +22,8 @@ class NegawattUsersMigrate extends Migration {
   public $dependencies = array(
     'NegawattAccountMigrate'
   );
-  public function __construct($arguments = array()) {
-    parent::__construct($arguments);
+  public function __construct() {
+    parent::__construct();
     $this->description = t('Import users from a CSV file.');
 
     $this->addFieldMapping('name', 'name');

@@ -62,7 +62,8 @@ function iec_node_update_geocode($node) {
   }
 
   $wrapper = entity_metadata_wrapper('node', $node);
-  $wrapper_original = entity_metadata_wrapper('node', $node->original);
+  // New node doesn't have 'original' field.
+  $wrapper_original = $node->is_new ? NULL : entity_metadata_wrapper('node', $node->original);
 
   // Check if address field was changed.
   if ($node->is_new ||
@@ -85,12 +86,12 @@ function iec_node_update_geocode($node) {
     try {
       $geocode = $geocoder->geocode($full_address);
       // Geocoding on full address succeeded, set geocode-valid field.
-      $wrapper->field_geocode_valid->set(TRUE);
+      $wrapper->field_location_valid->set(TRUE);
     }
     catch (Exception $e) {
       // Geolocating on full address failed, try locating on city name only.
       drupal_set_message(t('לא ניתן היה לאתר את הכתובת "@address"', array('@address' => $full_address)), 'warning');
-      $wrapper->field_geocode_valid->set(FALSE);
+      $wrapper->field_location_valid->set(FALSE);
       try {
         $geocode = $geocoder->geocode($city);
       }
@@ -102,8 +103,8 @@ function iec_node_update_geocode($node) {
     }
     if ($success) {
       // Set location field, only if geolocation succeeded.
-      $lat = +$geocode->getLatitude();
-      $lng = +$geocode->getLongitude();
+      $lat = $geocode->getLatitude();
+      $lng = $geocode->getLongitude();
       $wrapper->field_location->set(array(
         'lat' => $lat,
         'lng' => $lng,

@@ -28,8 +28,8 @@ class NegawattMeterCategoryTermsMigrate extends Migration {
   );
 
 
-  public function __construct($arguments = array()) {
-    parent::__construct($arguments);
+  public function __construct() {
+    parent::__construct();
 
     $this->description = t('Import @bundle terms from CSV file.', array('@bundle' => $this->bundle));
 
