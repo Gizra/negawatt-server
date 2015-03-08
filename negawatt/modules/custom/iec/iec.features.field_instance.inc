@@ -98,7 +98,7 @@ function iec_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_category_valid',
     'label' => 'Category valid',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'user_register_form' => FALSE,
     ),
@@ -277,7 +277,7 @@ function iec_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_location_valid',
     'label' => 'Location valid',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'user_register_form' => FALSE,
     ),
