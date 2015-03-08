@@ -116,7 +116,7 @@ function iec_node_update_geocode($node) {
         $success = FALSE;
       }
     }
-    
+
     if (!$success) {
       return;
     }
@@ -124,14 +124,19 @@ function iec_node_update_geocode($node) {
     // Set location field, only if geolocation succeeded.
     $lat = $geocode->getLatitude();
     $lng = $geocode->getLongitude();
-    $wrapper->field_location->set(array(
+    // hook_node_presave() is called after hook_field_presave(), so
+    // geolocation_field_presave() was already called and will not be called
+    // again. Has to call it explicitly to calc field-location's internal
+    // values after setting lat, long.
+    $field = field_info_field('field_location');
+    $entity = field_info_instance('node', 'field_location', 'iec_meter');
+    $langcode = LANGUAGE_NONE;
+    $items = array(array(
       'lat' => $lat,
       'lng' => $lng,
-      // @fixme: use geolocation_field_presave() in stead of hard code calculations.
-      'lat_sin' => sin(deg2rad($lat)),
-      'lat_cos' => cos(deg2rad($lat)),
-      'lng_rad' => deg2rad($lng),
     ));
+    geolocation_field_presave('node', $node, $field, $entity, $langcode, $items);
+    $wrapper->field_location->set($items[0]);
 
     $wrapper->field_address->set(array(
       'thoroughfare' => $street_addr,
