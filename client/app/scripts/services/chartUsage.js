@@ -410,10 +410,6 @@ angular.module('negawattClientApp')
       // Construct chart data object.
       var chartData = {
         'type': chartFrequencyInfo.chart_type,
-<<<<<<< HEAD
-        'cssStyle': 'height:100%; width:100%',
-=======
->>>>>>> master
         'data': {
           'cols': cols,
           'rows': rows
