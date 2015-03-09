@@ -4,6 +4,36 @@ angular.module('negawattClientApp')
   .service('ChartUsage', function ($q, Electricity, moment) {
     var ChartUsage = this;
 
+    // Frequencies information.
+    var frequencies = [
+      {
+        frequency: 'year',
+        label: 'שנה',
+        type: '1'
+      },
+      {
+        frequency: 'month',
+        label: 'חודש',
+        type: '2'
+      },
+      {
+        frequency: 'day',
+        label: 'יום',
+        type: '3'
+      },
+      {
+        frequency: 'hour',
+        label: 'שעה',
+        type: '4'
+      },
+      {
+        frequency: 'minute',
+        label: 'דקות',
+        type: '5'
+      }
+
+    ];
+
     // Chart parameters that will be passed to google chart.
     this.usageGoogleChartParams;
 
@@ -245,7 +275,7 @@ angular.module('negawattClientApp')
     this.meterSelected = function(meter) {
       // Get meter name
       var chartTitle = 'צריכת חשמל';
-      if (this.usageGoogleChartParams) {
+      if (this.usageGoogleChartParams && angular.isDefined(meter)) {
         chartTitle = meter.place_description + ', ' +
         meter.place_address + ', ' +
         meter.place_locality;
@@ -333,7 +363,7 @@ angular.module('negawattClientApp')
       var cols = [
         {
           'id': 'month',
-          'label': 'Month',
+          'label': 'חודש',
           'type': 'string',
           'p': {}
         },
@@ -380,7 +410,10 @@ angular.module('negawattClientApp')
       // Construct chart data object.
       var chartData = {
         'type': chartFrequencyInfo.chart_type,
+<<<<<<< HEAD
         'cssStyle': 'height:100%; width:100%',
+=======
+>>>>>>> master
         'data': {
           'cols': cols,
           'rows': rows
@@ -399,12 +432,21 @@ angular.module('negawattClientApp')
           'hAxis': {
             'title': chartFrequencyInfo.haxis_title
           }
-        },
-        'formatters': {},
-        'displayed': true
+        }
       };
 
       return chartData;
+    };
+
+    /**
+     * Return the frequencies collection.
+     *
+     * @returns {{frequency: string, label: string, type: string}[]}
+     *  The frequencies colleciton.
+     */
+    this.getFrequencies = function() {
+      return frequencies;
     }
+
 
   });

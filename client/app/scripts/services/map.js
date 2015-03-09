@@ -80,10 +80,6 @@ angular.module('negawattClientApp')
 
         // Set the new position position.
         map.setView(self.getCenter());
-
-        // Apply offset to center in the visible area.
-        map.panBy([((map.getSize()).x-750)/2,0], {animate: false});
-
       });
     };
 
