@@ -50,6 +50,7 @@ dependencies[] = views_bulk_operations
 
 ; Negawatt
 dependencies[] = iec
+dependencies[] = meter
 dependencies[] = negawatt_account
 dependencies[] = negawatt_electricity
 dependencies[] = negawatt_message
