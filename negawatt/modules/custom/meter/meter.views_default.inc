@@ -61,6 +61,10 @@ function meter_views_default_views() {
     'meter_category_account3' => 0,
     'meter_category' => 0,
   );
+  /* Field: Content: Max frequency */
+  $handler->display->display_options['fields']['field_max_frequency']['id'] = 'field_max_frequency';
+  $handler->display->display_options['fields']['field_max_frequency']['table'] = 'field_data_field_max_frequency';
+  $handler->display->display_options['fields']['field_max_frequency']['field'] = 'field_max_frequency';
   /* Field: Content: Last processed */
   $handler->display->display_options['fields']['field_last_processed']['id'] = 'field_last_processed';
   $handler->display->display_options['fields']['field_last_processed']['table'] = 'field_data_field_last_processed';
@@ -205,6 +209,50 @@ function meter_views_default_views() {
         'all' => 0,
         'account' => 0,
         'iec_meter' => 0,
+      ),
+    ),
+  );
+  /* Filter criterion: Content: Max frequency (field_max_frequency) */
+  $handler->display->display_options['filters']['field_max_frequency_value']['id'] = 'field_max_frequency_value';
+  $handler->display->display_options['filters']['field_max_frequency_value']['table'] = 'field_data_field_max_frequency';
+  $handler->display->display_options['filters']['field_max_frequency_value']['field'] = 'field_max_frequency_value';
+  $handler->display->display_options['filters']['field_max_frequency_value']['group'] = 1;
+  $handler->display->display_options['filters']['field_max_frequency_value']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_max_frequency_value']['expose']['operator_id'] = 'field_max_frequency_value_op';
+  $handler->display->display_options['filters']['field_max_frequency_value']['expose']['label'] = 'Max frequency (field_max_frequency)';
+  $handler->display->display_options['filters']['field_max_frequency_value']['expose']['operator'] = 'field_max_frequency_value_op';
+  $handler->display->display_options['filters']['field_max_frequency_value']['expose']['identifier'] = 'field_max_frequency_value';
+  $handler->display->display_options['filters']['field_max_frequency_value']['is_grouped'] = TRUE;
+  $handler->display->display_options['filters']['field_max_frequency_value']['group_info']['label'] = 'Max frequency';
+  $handler->display->display_options['filters']['field_max_frequency_value']['group_info']['identifier'] = 'field_max_frequency_value';
+  $handler->display->display_options['filters']['field_max_frequency_value']['group_info']['remember'] = 1;
+  $handler->display->display_options['filters']['field_max_frequency_value']['group_info']['group_items'] = array(
+    1 => array(
+      'title' => 'Month',
+      'operator' => 'or',
+      'value' => array(
+        2 => '2',
+      ),
+    ),
+    2 => array(
+      'title' => 'Day',
+      'operator' => 'or',
+      'value' => array(
+        3 => '3',
+      ),
+    ),
+    3 => array(
+      'title' => 'Hour',
+      'operator' => 'or',
+      'value' => array(
+        4 => '4',
+      ),
+    ),
+    4 => array(
+      'title' => 'Minute',
+      'operator' => 'or',
+      'value' => array(
+        5 => '5',
       ),
     ),
   );
