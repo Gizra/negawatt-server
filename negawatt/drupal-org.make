@@ -119,10 +119,8 @@ projects[views_bulk_operations][subdir] = "contrib"
 projects[views_bulk_operations][version] = "3.2"
 
 ;Libraries
-projects[geocoder][download][type] = "url"
-projects[geocoder][download][url] = "https://github.com/geocoder-php/Geocoder.git"
-projects[geocoder][download][branch] = 2.8.2
-projects[geocoder][type] = "library"
+libraries[geocoder][download][type] = "file"
+libraries[geocoder][download][url] = "https://github.com/geocoder-php/Geocoder/archive/2.8.2.tar.gz"
 
 ; Themes
 projects[bootstrap][subdir] = "contrib"
