@@ -40,6 +40,10 @@ angular.module('negawattClientApp')
         element = angular.element('ui-view[name="usage"]');
         element.css('height', newHeight + 'px');
         element.css('width', newWidth + 'px');
+
+        element = angular.element('#chart-usage');
+        element.css('height', newHeight + 'px');
+        element.css('width', newWidth + 'px');
       }
 
       resizeBlocks(+attrs.resizeBlocks);
