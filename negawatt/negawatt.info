@@ -55,7 +55,7 @@ dependencies[] = negawatt_message
 dependencies[] = negawatt_migrate
 dependencies[] = negawatt_normalizer
 dependencies[] = negawatt_restful
-dependencies[] = meter
+;dependencies[] = meter
 dependencies[] = iec
 dependencies[] = satec
 
