@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Meter feature.
+ */
+
+include_once 'meter.features.inc';
