@@ -27,28 +27,25 @@ angular.module('negawattClientApp')
         var newBottom = newHeight + 15;
 
         // Set elements.
-        var element = angular.element('ui-view[name="messages"]');//angular.element('#messages-view');
+        var element = angular.element('ui-view[name="messages"]');
         element.css('bottom', newBottom + 'px');
 
-        element = angular.element('ui-view[name="details"]');//angular.element('#details-view');
+        element = angular.element('ui-view[name="details"]');
         element.css('bottom', newBottom + 'px');
         var detailsHeight = +element.css('height').replace('px', '');
 
-        element = angular.element('ui-view[name="categories"]');//angular.element('#catigories-view');
+        element = angular.element('ui-view[name="categories"]');
         element.css('bottom', newBottom + detailsHeight + 5 + 'px');
 
-        element = angular.element('ui-view[name="usage"]');//angular.element('#usage-view');
+        element = angular.element('ui-view[name="usage"]');
         element.css('height', newHeight + 'px');
         element.css('width', newWidth + 'px');
-      };
+      }
 
       resizeBlocks(+attrs.resizeBlocks);
     }
 
     return {
-      //scope: {
-      //  chartHeight: '@'
-      //},
       link: link
     };
   });
