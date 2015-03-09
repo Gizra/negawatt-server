@@ -19,7 +19,7 @@ function satec_field_default_field_instances() {
         'thoroughfare' => '',
         'premise' => '',
         'locality' => '',
-        'country' => 'AF',
+        'country' => 'IL',
       ),
     ),
     'deleted' => 0,
