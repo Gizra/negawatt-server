@@ -118,6 +118,9 @@ projects[views][version] = "3.10"
 projects[views_bulk_operations][subdir] = "contrib"
 projects[views_bulk_operations][version] = "3.2"
 
+projects[views_aggregator][subdir] = "contrib"
+projects[views_aggregator][version] = "1.4"
+
 ;Libraries
 libraries[geocoder][download][type] = "file"
 libraries[geocoder][download][url] = "https://github.com/geocoder-php/Geocoder/archive/2.8.2.tar.gz"

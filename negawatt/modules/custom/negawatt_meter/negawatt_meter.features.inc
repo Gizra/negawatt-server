@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * meter.features.inc
+ * negawatt_meter.features.inc
  */
 
 /**
