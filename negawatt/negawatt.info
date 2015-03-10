@@ -52,11 +52,11 @@ dependencies[] = views_bulk_operations
 dependencies[] = negawatt_account
 dependencies[] = negawatt_electricity
 dependencies[] = negawatt_message
+dependencies[] = negawatt_meter
 dependencies[] = negawatt_migrate
 dependencies[] = negawatt_normalizer
 dependencies[] = negawatt_restful
 dependencies[] = iec
 dependencies[] = satec
-dependencies[] = meter
 
 

@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * meter.views_default.inc
+ * negawatt_meter.views_default.inc
  */
 
 /**
  * Implements hook_views_default_views().
  */
-function meter_views_default_views() {
+function negawatt_meter_views_default_views() {
   $export = array();
 
   $view = new view();

@@ -13,9 +13,6 @@ include_once 'iec.features.inc';
  * the original one, which always has the lowest node ID.
  */
 function iec_node_presave($node) {
-  // Check and update Geocode, if needed.
-  iec_node_update_geocode($node);
-
   if (!empty($node->nid)) {
     // Node is already saved.
     return;
@@ -51,97 +48,4 @@ function iec_node_presave($node) {
 
   $nid = key($result['node']);
   $wrapper->field_parent_contract->set($nid);
-}
-
-/**
- * Check and update Geocode, if needed..
- *
- * For iec_meter, if place-address and/or place-locality were changed, resolve
- * geocode using Geocoder package. First try to resolve whole address (stree, city),
- * if fails, try resolving for city only.
- *
- * @param $node
- *    The node to geocode.
- */
-function iec_node_update_geocode($node) {
-  require_once libraries_get_path('geocoder') . '/src/autoload.php';
-
-  // Make sure wer'e dealing with an iec-meter.
-  if ($node->type != 'iec_meter') {
-    return;
-  }
-
-  $wrapper = entity_metadata_wrapper('node', $node);
-  // New node doesn't have 'original' field.
-  $wrapper_original = $node->is_new ? NULL : entity_metadata_wrapper('node', $node->original);
-
-  // Check if address field was changed.
-  if (!empty($node->is_new) ||
-      $wrapper->field_place_address->value() != $wrapper_original->field_place_address->value() ||
-      $wrapper->field_place_locality->value() != $wrapper_original->field_place_locality->value()) {
-
-    // Prepare geocoder as static.
-    $adapter  = &drupal_static(__FUNCTION__ . '_adapter', NULL);
-    $provider = &drupal_static(__FUNCTION__ . '_provider', NULL);
-    $geocoder = &drupal_static(__FUNCTION__ . '_geocoder', NULL);
-    $adapter = $adapter ? $adapter : new \Geocoder\HttpAdapter\CurlHttpAdapter();
-    $provider = $provider ? $provider : new \Geocoder\Provider\GoogleMapsProvider($adapter);
-    $geocoder = $geocoder ? $geocoder : new \Geocoder\Geocoder($provider);
-
-    // Look for geocode.
-    $street_addr = $wrapper->field_place_address->value();
-    $city = $wrapper->field_place_locality->value();
-    $full_address = $street_addr . ', ' . $city;
-    $success = TRUE;
-    try {
-      $geocode = $geocoder->geocode($full_address);
-      // Geocoding on full address succeeded, set geocode-valid field.
-      $wrapper->field_location_valid->set(TRUE);
-    }
-    catch (Exception $e) {
-      watchdog('iec geocode', 'Couldn`t geocode the address "@address"', array('@address' => $full_address), WATCHDOG_WARNING);
-      $wrapper->field_location_valid->set(FALSE);
-      $success = FALSE;
-    }
-
-    if (!$success) {
-      // Geocoding on full address failed, try locating on city name only.
-      try {
-        $geocode = $geocoder->geocode($city);
-        $success = TRUE;
-      }
-      catch (Exception $e) {
-        // Geocoding failed.
-        watchdog('iec geocode', 'Couldn`t geocode the city "@address"', array('@address' => $city), WATCHDOG_WARNING);
-        $success = FALSE;
-      }
-    }
-
-    if (!$success) {
-      return;
-    }
-
-    // Set location field, only if geolocation succeeded.
-    $lat = $geocode->getLatitude();
-    $lng = $geocode->getLongitude();
-    // hook_node_presave() is called after hook_field_presave(), so
-    // geolocation_field_presave() was already called and will not be called
-    // again. Has to call it explicitly to calc field-location's internal
-    // values after setting lat, long.
-    $field = field_info_field('field_location');
-    $entity = field_info_instance('node', 'field_location', 'iec_meter');
-    $langcode = LANGUAGE_NONE;
-    $items = array(array(
-      'lat' => $lat,
-      'lng' => $lng,
-    ));
-    geolocation_field_presave('node', $node, $field, $entity, $langcode, $items);
-    $wrapper->field_location->set($items[0]);
-
-    $wrapper->field_address->set(array(
-      'thoroughfare' => $street_addr,
-      'locality' => $city,
-      'country' => $geocode->getCountryCode(),
-    ));
-  }
 }
