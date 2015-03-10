@@ -13,7 +13,7 @@ angular.module('negawattClientApp')
     // after lazy-load.
     $scope.frequencies = ChartUsage.getFrequencies();
 
-    var chart = ChartUsage.get(account.id, $stateParams)
+    var chart = ChartUsage.get(account.id, $stateParams, meters)
     // Revolve promise
     chart.then(function(response) {
       $scope.usageChartData = $scope.usageChartData || response;
@@ -31,7 +31,7 @@ angular.module('negawattClientApp')
         // Load electricity data in the chart according the chart frequency.
         $scope.isLoading = true;
 
-        ChartUsage.get(account.id, $stateParams).then(function(response) {
+        ChartUsage.get(account.id, $stateParams, meters).then(function(response) {
             $scope.usageChartData = response;
             $scope.isLoading = false;
         });

@@ -37,6 +37,12 @@ angular.module('negawattClientApp')
     // Chart parameters that will be passed to google chart.
     this.usageGoogleChartParams;
 
+    // List of used meters.
+    this.meters;
+
+    // Whether to draw multiple graphs or only one summary.
+    this.multipleGraphs;
+
     // Chart parameters.
     this.usageChartParams = {
       frequency: 2
@@ -52,9 +58,9 @@ angular.module('negawattClientApp')
         chart_default_time_frame: 10,
         chart_default_time_frame_end: 'now',
         chart_type: 'ColumnChart',
-        vaxis_title: 'קוט"ש בחודש',
-        haxis_format: 'YYYY',
-        haxis_title: 'שנה'
+        axis_v_title: 'קוט"ש בחודש',
+        axis_h_format: 'YYYY',
+        axis_h_title: 'שנה'
       },
       2: {
         frequency: 'month',
@@ -64,9 +70,9 @@ angular.module('negawattClientApp')
         chart_default_time_frame: 24,
         chart_default_time_frame_end: 'now',
         chart_type: 'ColumnChart',
-        vaxis_title: 'קוט"ש בשנה',
-        haxis_format: 'MM-YYYY',
-        haxis_title: 'חודש'
+        axis_v_title: 'קוט"ש בשנה',
+        axis_h_format: 'MM-YYYY',
+        axis_h_title: 'חודש'
       },
       3: {
         frequency: 'day',
@@ -77,9 +83,9 @@ angular.module('negawattClientApp')
         // @fixme: hard coded timestamp here (and below).
         chart_default_time_frame_end: 1388620800,
         chart_type: 'ColumnChart',
-        vaxis_title: 'קוט"ש ביום',
-        haxis_format: 'DD-MM',
-        haxis_title: 'תאריך'
+        axis_v_title: 'קוט"ש ביום',
+        axis_h_format: 'DD-MM',
+        axis_h_title: 'תאריך'
       },
       4: {
         frequency: 'hour',
@@ -89,9 +95,9 @@ angular.module('negawattClientApp')
         chart_default_time_frame: 48,
         chart_default_time_frame_end: 1388620800,
         chart_type: 'LineChart',
-        vaxis_title: 'KW',
-        haxis_format: 'HH',
-        haxis_title: 'שעה'
+        axis_v_title: 'KW',
+        axis_h_format: 'HH',
+        axis_h_title: 'שעה'
       },
       5: {
         frequency: 'minute',
@@ -101,9 +107,9 @@ angular.module('negawattClientApp')
         chart_default_time_frame: 48 * 60,
         chart_default_time_frame_end: 1388620800,
         chart_type: 'LineChart',
-        vaxis_title: 'KW',
-        haxis_format: 'HH',
-        haxis_title: 'שעה'
+        axis_v_title: 'KW',
+        axis_h_format: 'HH',
+        axis_h_title: 'שעה'
       }
     };
 
@@ -143,12 +149,6 @@ angular.module('negawattClientApp')
     this.filtersFromSelector = function(accountId, chartFreq, selectorType, selectorId) {
       // Calculate the time-frame for data request.
       var chartFrequency = chartFreq || this.usageChartParams.frequency;
-      // Fix a bug when there are two chartFrequency params in url's search
-      // string (issue #338).
-      // @todo: Remove after the bug is fixed.
-      if (chartFrequency instanceof Array) {
-        chartFrequency = chartFrequency[0];
-      }
       var chartFrequencyInfo = this.frequencyParams[chartFrequency];
       var chartTimeFrame = chartFrequencyInfo.chart_default_time_frame;
       var chartEndTimestamp = chartFrequencyInfo.chart_default_time_frame_end == 'now' ? Math.floor(Date.now() / 1000) : chartFrequencyInfo.chart_default_time_frame_end;
@@ -164,7 +164,23 @@ angular.module('negawattClientApp')
       };
 
       if (selectorType) {
-        filters['filter['+selectorType+']'] = selectorId;
+        if (this.multipleGraphs) {
+          // If multiple IDs are given, output in the format:
+          // filter[selector][operator] = IN
+          // filter[selector][value][0] = val-1
+          // filter[selector][value][1] = val-2
+          // ... etc.
+          filters['filter[' + selectorType + '][operator]'] = 'IN';
+          var i = 0;
+          angular.forEach(selectorId, function (id) {
+            filters['filter[' + selectorType + '][value][' + i++ +']'] = id;
+          });
+        }
+        else {
+          // A single ID was given, Output in the format:
+          // filter[selector] = val
+          filters['filter[' + selectorType + ']'] = selectorId;
+        }
       }
 
       return filters;
@@ -181,18 +197,23 @@ angular.module('negawattClientApp')
      * @returns {*}
      *   Promise for data in google-chart format.
      */
-    this.get = function(accountId, stateParams) {
+    this.get = function(accountId, stateParams, meters) {
       var deferred = $q.defer();
+
+      // Save meters data.
+      this.meters = meters;
 
       // Decipher selector type and id out of stateParams.
       var selectorType, selectorId;
       if (stateParams.markerId) {
         selectorType = 'meter';
-        selectorId = stateParams.markerId;
+        selectorId = stateParams.markerId.split(',');
+        this.multipleGraphs = (selectorId.length > 1);
       }
       else if (stateParams.categoryId) {
         selectorType = 'meter_category';
         selectorId = stateParams.categoryId;
+        this.multipleGraphs = false;
       }
 
       // Translate selector type and id to filters.
@@ -252,13 +273,6 @@ angular.module('negawattClientApp')
     this.electricityToChartData = function(chartFreq, electricity) {
       // Get frequency-info record.
       var chartFrequency = chartFreq || this.usageChartParams.frequency;
-      // Fix a bug when there are two chartFrequency params in url's search
-      // string (issue #338).
-      // @todo: Remove after the bug is fixed.
-      if (chartFrequency instanceof Array) {
-        chartFrequency = chartFrequency[0];
-      }
-
       var chartFrequencyInfo = this.frequencyParams[chartFrequency];
 
       // Translate electricity data to google charts format.
@@ -275,10 +289,11 @@ angular.module('negawattClientApp')
     this.meterSelected = function(meter) {
       // Get meter name
       var chartTitle = 'צריכת חשמל';
+      // @fixme: Handle multiple graphs here.
       if (this.usageGoogleChartParams && angular.isDefined(meter)) {
         chartTitle = meter.place_description + ', ' +
-        meter.place_address + ', ' +
-        meter.place_locality;
+          meter.place_address + ', ' +
+          meter.place_locality;
 
         // Set chart title
         this.usageGoogleChartParams.options.title = chartTitle;
@@ -293,14 +308,15 @@ angular.module('negawattClientApp')
      *
      *    data: [
      *        {
-     *          0: Object
-     *          id: 38
-     *          kwh: "10936"
-     *          meter: Object
-     *          min_power_factor: "0"
-     *          rate_type: "flat"
      *          timestamp: "1356991200"
-     *          type: "month"
+     *          rate_type: "flat"
+     *          type: 2
+     *          kwh: "10936"
+     *          avg_power: "12.5664"
+     *          meter: 10
+     *          meter_category: "6"
+     *          meter_account: "2"
+     *          min_power_factor: "0.98"
      *        },
      *        ...
      *      ]
@@ -335,77 +351,141 @@ angular.module('negawattClientApp')
      **/
     this.transformDataToDatasets = function(data, chartFrequencyInfo) {
 
-      // Create a temp array like { time: {low: 1, mid:4, peak:5}, time: {..}, ..}.
+      var cols = [], rows = [];
+      // Will hold a temp array like { time: [v1, v2, v3,...], time: [..], ..}.
       var values = {};
-      var prevRateType;
-      var isLineChart = (chartFrequencyInfo.chart_type == 'LineChart');
 
-      angular.forEach(data, function(item) {
-        if (!(item.timestamp in values)) {
-          // Never encountered this timestamp, create an empty object
-          values[item.timestamp] = {};
-        }
-        // Save the kWhs.
-        values[item.timestamp][item.rate_type] = +item.kwh;
+      if (this.multipleGraphs) {
+        // Prepare data for multiple graphs.
+        // ----------------------------------
 
-        // Handle problem with line chart:
-        // If having TOUse data, the lines should be elongated one data point forward
-        // when changing rate-type in order to 'connect' the lines of the different
-        // charts.
-        if (isLineChart && prevRateType && prevRateType != item.rate_type) {
-          values[item.timestamp][prevRateType] = +item.kwh;
-        }
+        // Map from meter ID to index into values.
+        var metersMap = {};
+        var numMeters = 0;
 
-        prevRateType = item.rate_type;
-      });
+        angular.forEach(data, function (item) {
+          if (!(item.timestamp in values)) {
+            // Never encountered this timestamp, create an empty object.
+            values[item.timestamp] = [];
+          }
+          if (!(item.meter in metersMap)) {
+            // Never encountered this meter, create a zero value.
+            metersMap[item.meter] = numMeters++;
+          }
+          // Save the kWhs.
+          // Must sum here, since we might have several rate-types for each
+          // meter and timestamp.
+          var value = values[item.timestamp][metersMap[item.meter]] || 0;
+          values[item.timestamp][metersMap[item.meter]] = value + +item.kwh;
+        });
 
-      // Prepare cols
-      var cols = [
-        {
-          'id': 'month',
-          'label': 'חודש',
-          'type': 'string',
-          'p': {}
-        },
-        {
-          'id': 'flat',
-          'label': 'אחיד',
-          'type': 'number',
-          'p': {}
-        },
-        {
-          'id': 'peak',
-          'label': 'פסגה',
-          'type': 'number',
-          'p': {}
-        },
-        {
-          'id': 'mid',
-          'label': 'גבע',
-          'type': 'number',
-          'p': {}
-        },
-        {
-          'id': 'low',
-          'label': 'שפל',
-          'type': 'number',
-          'p': {}
-        }
-      ];
+        // Prepare cols array.
+        cols = [
+          {
+            'id': 'month',
+            'label': 'חודש',
+            'type': 'string',
+            'p': {}
+          }
+        ];
 
-      // Build rows
-      var rows = [];
-      angular.forEach(values, function(item, timestamp) {
-        var label = moment.unix(timestamp).format(chartFrequencyInfo.haxis_format);
-        var col = [
-          { 'v': label },
-          { 'v': item.flat },
-          { 'v': item.peak },
-          { 'v': item.mid  },
-          { 'v': item.low  }
+        // Add meters to cols array.
+        angular.forEach(metersMap, function (index, meterId) {
+          var label = ChartUsage.meters[meterId].label;
+          cols.push({
+            'id': meterId,
+            'label': label,
+            'type': 'number',
+            'p': {}
+          });
+        });
+
+        // Build rows array
+        angular.forEach(values, function (item, timestamp) {
+          var label = moment.unix(timestamp).format(chartFrequencyInfo.axis_h_format);
+          // First value is the label.
+          var col = [{'v': label}];
+          // Loop and add meter values to column data.
+          for (var i = 0; i < numMeters; i++) {
+            col.push({'v': item[i]});
+          };
+          rows.push({'c': col});
+        });
+      }
+      else {
+        // Prepare data for a single graph
+        // ----------------------------------
+
+        // Create a temp array like { time: {low: 1, mid:4, peak:5}, time: {..}, ..}.
+        var prevRateType;
+        var isLineChart = (chartFrequencyInfo.chart_type == 'LineChart');
+
+        angular.forEach(data, function(item) {
+          if (!(item.timestamp in values)) {
+            // Never encountered this timestamp, create an empty object
+            values[item.timestamp] = {};
+          }
+          // Save the kWhs.
+          values[item.timestamp][item.rate_type] = +item.kwh;
+
+          // Handle problem with line chart:
+          // If having TOUse data, the lines should be elongated one data point forward
+          // when changing rate-type in order to 'connect' the lines of the different
+          // charts.
+          if (isLineChart && prevRateType && prevRateType != item.rate_type) {
+            values[item.timestamp][prevRateType] = +item.kwh;
+          }
+
+          prevRateType = item.rate_type;
+        });
+
+        // Prepare cols
+        cols = [
+          {
+            'id': 'month',
+            'label': 'Month',
+            'type': 'string',
+            'p': {}
+          },
+          {
+            'id': 'flat',
+            'label': 'אחיד',
+            'type': 'number',
+            'p': {}
+          },
+          {
+            'id': 'peak',
+            'label': 'פסגה',
+            'type': 'number',
+            'p': {}
+          },
+          {
+            'id': 'mid',
+            'label': 'גבע',
+            'type': 'number',
+            'p': {}
+          },
+          {
+            'id': 'low',
+            'label': 'שפל',
+            'type': 'number',
+            'p': {}
+          }
+        ];
+
+        // Build rows
+        angular.forEach(values, function(item, timestamp) {
+          var label = moment.unix(timestamp).format(chartFrequencyInfo.axis_h_format);
+          var col = [
+            { 'v': label },
+            { 'v': item.flat },
+            { 'v': item.peak },
+            { 'v': item.mid  },
+            { 'v': item.low  }
           ];
-        rows.push({ 'c': col });
-      });
+          rows.push({ 'c': col });
+        });
+      }
 
       // Construct chart data object.
       var chartData = {
@@ -420,13 +500,13 @@ angular.module('negawattClientApp')
           'fill': 20,
           'displayExactValues': true,
           'vAxis': {
-            'title': chartFrequencyInfo.vaxis_title,
+            'title': chartFrequencyInfo.axis_v_title,
             'gridlines': {
               'count': 6
             }
           },
           'hAxis': {
-            'title': chartFrequencyInfo.haxis_title
+            'title': chartFrequencyInfo.axis_h_title
           }
         }
       };
