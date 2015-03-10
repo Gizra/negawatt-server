@@ -76,7 +76,7 @@ function iec_node_update_geocode($node) {
   $wrapper_original = $node->is_new ? NULL : entity_metadata_wrapper('node', $node->original);
 
   // Check if address field was changed.
-  if ($node->is_new ||
+  if (!empty($node->is_new) ||
       $wrapper->field_place_address->value() != $wrapper_original->field_place_address->value() ||
       $wrapper->field_place_locality->value() != $wrapper_original->field_place_locality->value()) {
 
