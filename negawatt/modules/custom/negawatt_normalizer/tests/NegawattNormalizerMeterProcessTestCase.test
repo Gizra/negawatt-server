@@ -26,12 +26,14 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
    * Prepare meter nodes and raw data entities.
    */
   function setUp() {
-    parent::setUp('negawatt_normalizer');
+    parent::setUp('negawatt_normalizer', 'negawatt_account', 'satec', 'iec');
 
     // Create satec meter nodes.
     $settings = array(
       'type' => 'satec_meter',
       'field_max_frequency' => array('und' => array('0' => array('value' => \NegaWattNormalizerTimeManagerInterface::MINUTE))),
+      'field_place_address' => array('und' => array('0' => array('value' => 'לכיש 25'))),
+      'field_place_locality' => array('und' => array('0' => array('value' => 'קרית גת'))),
     );
 
     $meter_node1 = $this->drupalCreateNode($settings);
@@ -41,6 +43,8 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     $settings = array(
       'type' => 'iec_meter',
       'field_max_frequency' => array('und' => array('0' => array('value' => \NegaWattNormalizerTimeManagerInterface::MONTH))),
+      'field_place_address' => array('und' => array('0' => array('value' => 'some unknown address'))),
+      'field_place_locality' => array('und' => array('0' => array('value' => 'קרית גת'))),
     );
 
     $meter_node3 = $this->drupalCreateNode($settings);
@@ -189,6 +193,22 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
 
     $handler = negawatt_normalizer_get_electricity_normalizer_handler('satec');
 
+    // Make sure geolocation went well
+    $wrapper = entity_metadata_wrapper('node', $this->meterNode1);
+    $location = $wrapper->field_location->value();
+    $address = $wrapper->field_address->value();
+    $this->assertTrue($wrapper->field_location_valid->value(), 'Geocoding succeeded.');
+    $this->assertTrue($location['lat'] == 31.6087049 && $location['lng'] == 34.7735353 && $location['lat_sin'] != 0, 'Lat/Long OK.');
+    $this->assertTrue($address['thoroughfare'] == 'לכיש 25' && $address['locality'] == 'קרית גת' && $address['country'] == 'IL', 'Address field OK.');
+
+    // Node 3 got wrong address
+    $wrapper = entity_metadata_wrapper('node', $this->meterNode3);
+    $location = $wrapper->field_location->value();
+    $address = $wrapper->field_address->value();
+    $this->assertTrue(!$wrapper->field_location_valid->value(), 'Geocoding with wrong address failed.');
+    $this->assertTrue($location['lat'] == 31.611148 && $location['lng'] == 34.768459 && $location['lat_sin'] != 0, 'Lat/Long OK.');
+    $this->assertTrue($address['thoroughfare'] == '' && $address['locality'] == 'קרית גת' && $address['country'] == 'IL', 'Address field OK.');
+
     // Call process() with no raw data.
     // When requesting MINUTE data from a meter with max-frequency of MINUTE,
     // process() will try to normalize raw-electricity entities.
@@ -198,7 +218,7 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
       strtotime('2014-3-1 12:00'), strtotime('2014-3-1 12:00'));
 
     // Should be empty array.
-    $this->assertTrue(is_array($result_entities) && count($result_entities) == 0, 'process() with no RAW data returns an empty array.');
+    $this->assertTrue(is_array($result_entities) && count($result_entities) == 0, '<b>Testing normalizer basics</b><br>process() with no RAW data returns an empty array.');
 
     // Call process() with no normalized data.
     // When requesting HOUR data from a meter with max-frequency of MINUTE,

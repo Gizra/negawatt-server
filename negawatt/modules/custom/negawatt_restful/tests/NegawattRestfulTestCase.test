@@ -31,9 +31,10 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     // Create satec meter nodes.
     $settings = array(
       'type' => 'satec_meter',
-      'field_location' => array('und' => array('0' => array('lat' => 31.6172559, 'lng' => 34.7661047, 'lat_sin' => 0.52424239873671, 'lat_cos' => 0.85156908549264, 'lng_rad' => 0.60678299510808))),
       'field_max_frequency' => array('und' => array('0' => array('value' => \NegaWattNormalizerTimeManagerInterface::MINUTE))),
       'field_meter_id' => array('und' => array('0' => array('value' => 1))),
+      'field_place_address' => array('und' => array('0' => array('value' => 'לכיש 25'))),
+      'field_place_locality' => array('und' => array('0' => array('value' => 'קרית גת'))),
     );
 
     $meter_node1 = $this->drupalCreateNode($settings);
@@ -48,6 +49,8 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     $settings = array(
       'type' => 'iec_meter',
       'field_max_frequency' => array('und' => array('0' => array('value' => \NegaWattNormalizerTimeManagerInterface::MONTH))),
+      'field_place_address' => array('und' => array('0' => array('value' => 'לכיש 25'))),
+      'field_place_locality' => array('und' => array('0' => array('value' => 'קרית גת'))),
     );
 
     $meter_node3 = $this->drupalCreateNode($settings);

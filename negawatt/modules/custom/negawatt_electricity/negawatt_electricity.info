@@ -15,4 +15,3 @@ files[] = includes/ElectricityRawMetadataController.php
 files[] = includes/Electricity.php
 files[] = includes/ElectricityRaw.php
 files[] = tests/NegawattWebTestCase.test
-mtime = 1420634885

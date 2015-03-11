@@ -56,6 +56,7 @@ function iec_field_default_field_instances() {
       'module' => 'addressfield',
       'settings' => array(
         'available_countries' => array(),
+        'default_country' => '',
         'format_handlers' => array(
           'address' => 'address',
           'address-hide-country' => 0,
@@ -66,6 +67,49 @@ function iec_field_default_field_instances() {
       ),
       'type' => 'addressfield_standard',
       'weight' => 10,
+    ),
+  );
+
+  // Exported field_instance: 'node-iec_meter-field_category_valid'
+  $field_instances['node-iec_meter-field_category_valid'] = array(
+    'bundle' => 'iec_meter',
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => 'Did the meter category decipher correctly?',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 20,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_category_valid',
+    'label' => 'Category valid',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'display_label' => 1,
+      ),
+      'type' => 'options_onoff',
+      'weight' => 16,
     ),
   );
 
@@ -202,6 +246,49 @@ function iec_field_default_field_instances() {
       'settings' => array(),
       'type' => 'geolocation_text',
       'weight' => 3,
+    ),
+  );
+
+  // Exported field_instance: 'node-iec_meter-field_location_valid'
+  $field_instances['node-iec_meter-field_location_valid'] = array(
+    'bundle' => 'iec_meter',
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => 'Did the address geocode correctly into location field?',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 18,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_location_valid',
+    'label' => 'Location valid',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'display_label' => 1,
+      ),
+      'type' => 'options_onoff',
+      'weight' => 4,
     ),
   );
 
@@ -456,7 +543,7 @@ function iec_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 4,
+      'weight' => 5,
     ),
   );
 
@@ -496,7 +583,7 @@ function iec_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 5,
+      'weight' => 6,
     ),
   );
 
@@ -536,7 +623,7 @@ function iec_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 6,
+      'weight' => 7,
     ),
   );
 
@@ -644,11 +731,15 @@ function iec_field_default_field_instances() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Address');
+  t('Category valid');
   t('Contract ID');
+  t('Did the address geocode correctly into location field?');
+  t('Did the meter category decipher correctly?');
   t('Groups audience');
   t('In case we have 2 or more meters for a single contract, this field will reference to the \'main\' contract ID, which is used to save the electricity Data.');
   t('Last processed');
   t('Location');
+  t('Location valid');
   t('Max frequency');
   t('Maximal sampling frequency for the meter.');
   t('Meter Code');

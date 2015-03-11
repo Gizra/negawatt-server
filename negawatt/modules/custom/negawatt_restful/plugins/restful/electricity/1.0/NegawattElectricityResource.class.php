@@ -95,7 +95,7 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
 
     // Set grouping.
     // If filtering for 'meter IN ...', don't sum over meters - add a group by meter.
-    if (($m = $this->request['filter']['meter']) && ($o = $m['operator']) && $o == 'IN') {
+    if (!empty($this->request['filter']['meter']['operator']) && $this->request['filter']['meter']['operator'] == 'IN') {
       $query->groupBy('meter_nid');
     }
     $query->groupBy('timestamp');
