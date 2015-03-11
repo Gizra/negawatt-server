@@ -16,7 +16,7 @@ include_once 'negawatt_meter.features.inc';
  *    True if the node-type is a meter-type.
  */
 function negawatt_meter_is_meter($node_type) {
-  return strpos($node_type, '_meter') !== FALSE;
+  return in_array($node_type, array('iec_meter', 'satec_meter'));
 }
 
 /**
@@ -62,6 +62,10 @@ function negawatt_meter_node_presave($node) {
     $success = TRUE;
     try {
       $geocode = $geocoder->geocode($full_address);
+      // Test that indeed geocode managed to decipher street address
+      if (!$geocode->getStreetName()) {
+        throw new Exception();
+      }
       // Geocoding on full address succeeded, set geocode-valid field.
       $wrapper->field_location_valid->set(TRUE);
     }
@@ -74,6 +78,7 @@ function negawatt_meter_node_presave($node) {
     if (!$success) {
       // Geocoding on full address failed, try locating on city name only.
       try {
+        $street_addr = '';
         $geocode = $geocoder->geocode($city);
         $success = TRUE;
       }
