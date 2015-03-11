@@ -16,6 +16,8 @@
 <span class="menu-timedate">{{timedate.today | amDateFormat: 'YYYY MMMM DD'}}</span>
 <span class="menu-separator"></span>
 <span class="menu-timedate">{{timedate.now | amDateFormat: 'H:mm'}}</span>
+<span class="menu-separator"></span>
+<span class="menu-timedate"><a href = "#/report/{{account.id}}/meters" target="_blank">Report</a></span>
 
 <div class="menu-logo">
   <img ng-src="{{ account.logo.styles.thumbnail }}" alt=""/>
