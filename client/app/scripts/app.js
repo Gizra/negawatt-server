@@ -110,10 +110,10 @@ angular
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
               // Get electricity data and transform it into chart format.
-              usage: function(ChartUsage, $state, $stateParams, account) {
+              usage: function(ChartUsage, $state, $stateParams, account, meters) {
                 // Perform the GET only if we're in the proper (parent) state.
                 if ($state.current.name == 'dashboard.withAccount') {
-                  return ChartUsage.get(account.id, $stateParams);
+                  return ChartUsage.get(account.id, $stateParams, meters);
                 } else {
                   return {};
                 }
@@ -142,8 +142,8 @@ angular
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
               // Get electricity data and transform it into chart format.
-              usage: function(ChartUsage, $stateParams, account) {
-                return ChartUsage.get(account.id, $stateParams);
+              usage: function(ChartUsage, $stateParams, account, meters) {
+                return ChartUsage.get(account.id, $stateParams, meters);
               }
             },
             controller: 'UsageCtrl'
@@ -198,8 +198,8 @@ angular
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
               // Get electricity data and transform it into chart format.
-              usage: function(ChartUsage, $stateParams, account) {
-                return ChartUsage.get(account.id, $stateParams);
+              usage: function(ChartUsage, $stateParams, account, meters) {
+                return ChartUsage.get(account.id, $stateParams, meters);
               }
             },
             controller: 'UsageCtrl'
