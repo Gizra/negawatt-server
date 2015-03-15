@@ -284,7 +284,7 @@ function negawatt_normalizer_process_meters_once($meter_ids = array(), $from_tim
   drush_log(format_string('Total electricity-entities returned: @count', array('@count'=> $total_entities_count)));
 }
 
-function util_rate_type_to_string($rate_type) {
+function util_frequency_to_string($rate_type) {
   switch ($rate_type) {
     case 1:
       return 'Year';
