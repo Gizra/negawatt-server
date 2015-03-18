@@ -34,6 +34,7 @@ features[field_base][] = field_place_locality
 features[field_instance][] = node-iec_meter-field_address
 features[field_instance][] = node-iec_meter-field_category_valid
 features[field_instance][] = node-iec_meter-field_contract_id
+features[field_instance][] = node-iec_meter-field_has_electricity
 features[field_instance][] = node-iec_meter-field_last_processed
 features[field_instance][] = node-iec_meter-field_location
 features[field_instance][] = node-iec_meter-field_location_valid
