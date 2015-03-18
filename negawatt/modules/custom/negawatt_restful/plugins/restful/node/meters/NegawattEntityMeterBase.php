@@ -49,6 +49,10 @@ class NegawattEntityMeterBase extends \NegawattEntityBaseNode {
       'property' => 'field_max_frequency',
     );
 
+    $public_fields['electricity_time_interval'] = array(
+      'callback' => array($this, 'electricityMinMax'),
+    );
+
     $public_fields['meter_categories'] = array(
       'property' => 'nid',
       'process_callbacks' => array(
@@ -57,6 +61,38 @@ class NegawattEntityMeterBase extends \NegawattEntityBaseNode {
     );
 
     return $public_fields;
+  }
+
+  /**
+   * Callback function to calculate the min and max timestamps of normalized-
+   * electricity data related to the meter.
+   *
+   * @param $value
+   *   The meter object.
+   *
+   * @return array
+   *   {
+   *    min: min timestamp,
+   *    max: max timestmp
+   *   }
+   *  If no electricity data is found, return false.
+   */
+  protected function electricityMinMax($value) {
+    // Find normalized-electricity entities that are related to this meter
+    // min and max timestamps
+    $query = db_select('negawatt_electricity_normalized', 'e');
+
+    // Find only electricity entities which are related to this node
+    $query->condition('e.meter_nid', $value->nid->value());
+
+    // Add a query for electricity min and max timestamps
+    $query->addExpression('MIN(e.timestamp)', 'min');
+    $query->addExpression('MAX(e.timestamp)', 'max');
+
+    // Set grouping.
+    $query->groupBy('e.meter_nid');
+
+    return $query->execute()->fetchObject();
   }
 
   /**
