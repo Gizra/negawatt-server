@@ -61,7 +61,7 @@ angular.module('negawattClientApp')
       pageNumber = pageNumber || 1;
 
       // Define endpoint.
-      url = Config.backend + '/api/iec_meters?filter[account]=' + accountId + '&page=' + pageNumber;
+      url = Config.backend + '/api/meters?filter[account]=' + accountId + '&page=' + pageNumber;
 
       $http({
         method: 'GET',

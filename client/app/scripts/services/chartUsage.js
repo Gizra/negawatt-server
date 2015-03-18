@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('ChartUsage', function ($q, Electricity, moment) {
+  .service('ChartUsage', function ($q, Electricity, UsagePeriod, moment) {
     var ChartUsage = this;
 
     // Frequencies information.
@@ -35,7 +35,7 @@ angular.module('negawattClientApp')
     ];
 
     // Chart parameters that will be passed to google chart.
-    this.usageGoogleChartParams;
+    this.usageGoogleChartParams = {};
 
     // List of used meters.
     this.meters;
@@ -92,7 +92,8 @@ angular.module('negawattClientApp')
         label: 'שעה',
         type: '4',
         unit_num_seconds: 60 * 60,
-        chart_default_time_frame: 48,
+        // One week.
+        chart_default_time_frame: 168,
         chart_default_time_frame_end: 1388620800,
         chart_type: 'LineChart',
         axis_v_title: 'KW',
@@ -104,7 +105,8 @@ angular.module('negawattClientApp')
         label: 'דקות',
         type: '5',
         unit_num_seconds: 60,
-        chart_default_time_frame: 48 * 60,
+        // 48 hours.
+        chart_default_time_frame: 1440,
         chart_default_time_frame_end: 1388620800,
         chart_type: 'LineChart',
         axis_v_title: 'KW',
@@ -142,17 +144,29 @@ angular.module('negawattClientApp')
      *   Type of filter, e.g. 'meter' or 'meter_category'.
      * @param selectorId
      *   ID of the selector, e.g. meter ID or category ID.
+     * @param period
+     *   Object with the period selected.
      *
      * @returns {Object}
      *   Filters array in the form required by get().
      */
-    this.filtersFromSelector = function(accountId, chartFreq, selectorType, selectorId) {
+    this.filtersFromSelector = function(accountId, chartFreq, selectorType, selectorId, period) {
       // Calculate the time-frame for data request.
       var chartFrequency = chartFreq || this.usageChartParams.frequency;
       var chartFrequencyInfo = this.frequencyParams[chartFrequency];
       var chartTimeFrame = chartFrequencyInfo.chart_default_time_frame;
-      var chartEndTimestamp = chartFrequencyInfo.chart_default_time_frame_end == 'now' ? Math.floor(Date.now() / 1000) : chartFrequencyInfo.chart_default_time_frame_end;
-      var chartBeginTimestamp = chartEndTimestamp - chartTimeFrame * chartFrequencyInfo.unit_num_seconds;
+      var chartEndTimestamp;
+      var chartBeginTimestamp;
+
+      if (!period) {
+        chartEndTimestamp = period && period.chartEndTimestamp || chartFrequencyInfo.chart_default_time_frame_end === 'now' ? moment().unix() : chartFrequencyInfo.chart_default_time_frame_end;
+        chartBeginTimestamp = period && period.chartBeginTimestamp || moment.unix(chartEndTimestamp).subtract(chartFrequencyInfo.chart_default_time_frame, chartFrequencyInfo.frequency).unix();
+      }
+      else {
+        // Comming from the calculation.
+        chartEndTimestamp = period.next;
+        chartBeginTimestamp = period.previous;
+      }
 
       // Prepare filters for data request.
       var filters = {
@@ -193,11 +207,13 @@ angular.module('negawattClientApp')
      *   User account ID.
      * @param stateParams
      *   State parameters, including frequency, marker-id, etc.
+     * @param period
+     *   Period of time to use in the electricity request.
      *
      * @returns {*}
      *   Promise for data in google-chart format.
      */
-    this.get = function(accountId, stateParams, meters) {
+    this.get = function(accountId, stateParams, meters, period) {
       var deferred = $q.defer();
 
       // Save meters data.
@@ -217,7 +233,7 @@ angular.module('negawattClientApp')
       }
 
       // Translate selector type and id to filters.
-      var filters = this.filtersFromSelector(accountId, stateParams.chartFreq, selectorType, selectorId);
+      var filters = this.filtersFromSelector(accountId, stateParams.chartFreq, selectorType, selectorId, period);
 
       // Save filters-hash code and map to frequency for later use.
       var filtersHash = Electricity.hashFromFilters(filters);
@@ -226,6 +242,8 @@ angular.module('negawattClientApp')
 
       // Get electricity data.
       Electricity.get(filters).then(function(electricity) {
+        // Add periods.
+        angular.extend(ChartUsage.usageGoogleChartParams, hasMorePeriods(electricity, stateParams, filters))
         // Translate electricity data to google charts format.
         deferred.resolve(ChartUsage.electricityToChartData(stateParams.chartFreq, electricity));
       });
@@ -276,7 +294,7 @@ angular.module('negawattClientApp')
       var chartFrequencyInfo = this.frequencyParams[chartFrequency];
 
       // Translate electricity data to google charts format.
-      ChartUsage.usageGoogleChartParams = ChartUsage.transformDataToDatasets(electricity, chartFrequencyInfo);
+      angular.extend(ChartUsage.usageGoogleChartParams, ChartUsage.transformDataToDatasets(electricity, chartFrequencyInfo));
       return ChartUsage.usageGoogleChartParams;
     };
 
@@ -524,5 +542,19 @@ angular.module('negawattClientApp')
       return frequencies;
     }
 
+
+    /**
+     * Check the electricity response, if have more data in previous or next period,
+     * set true true/false the object.
+     *
+     * @return controls {*}
+     *   The controls data {next:boolean, previous:boolean}
+     */
+    function hasMorePeriods(electricity, stateParams, filters) {
+      //
+      UsagePeriod.setFrequency(ChartUsage.frequencyParams[stateParams.chartFreq], filters)
+
+      return UsagePeriod;
+    }
 
   });

@@ -16,6 +16,7 @@ angular.module('negawattClientApp')
 
     $scope.categories = categories;
     $scope.accountId = $stateParams.accountId;
+    $scope.chartFreq = $stateParams.chartFreq;
 
     // Activate filter of meters only if we are in the principal state.
     if ($state.is('dashboard.withAccount')) {
@@ -42,6 +43,15 @@ angular.module('negawattClientApp')
     $scope.toggleMetersByCategory = function() {
       // Update meters on the map.
       $scope.$parent.$broadcast('nwMetersChanged', $filter('filterMeterByCategories')(meters, getCategoriesChecked()));
+    }
+
+    /**
+     * Select a category forcing reload of the state, used after query search without reloading.
+     *
+     * @param categoryId
+     */
+    $scope.select = function(categoryId) {
+      $state.forceGo('dashboard.withAccount.categories', {categoryId: categoryId});
     }
 
     /**
