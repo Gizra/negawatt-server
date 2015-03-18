@@ -68,6 +68,32 @@ function iec_field_default_field_bases() {
     'type' => 'number_integer',
   );
 
+  // Exported field_base: 'field_has_electricity'
+  $field_bases['field_has_electricity'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_has_electricity',
+    'foreign keys' => array(),
+    'indexes' => array(
+      'value' => array(
+        0 => 'value',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'list',
+    'settings' => array(
+      'allowed_values' => array(
+        0 => 'No',
+        1 => 'Yes',
+      ),
+      'allowed_values_function' => '',
+    ),
+    'translatable' => 0,
+    'type' => 'list_boolean',
+  );
+
   // Exported field_base: 'field_last_processed'
   $field_bases['field_last_processed'] = array(
     'active' => 1,

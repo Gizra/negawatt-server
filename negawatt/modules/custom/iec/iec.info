@@ -21,6 +21,7 @@ features[features_api][] = api:2
 features[field_base][] = field_address
 features[field_base][] = field_category_valid
 features[field_base][] = field_contract_id
+features[field_base][] = field_has_electricity
 features[field_base][] = field_last_processed
 features[field_base][] = field_location_valid
 features[field_base][] = field_max_frequency

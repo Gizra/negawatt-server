@@ -16,7 +16,6 @@ dependencies[] = strongarm
 dependencies[] = text
 features[ctools][] = strongarm:strongarm:1
 features[features_api][] = api:2
-features[field_base][] = field_has_electricity
 features[field_base][] = field_mac_address
 features[field_base][] = field_meter_id
 features[field_base][] = field_meter_ip_address
