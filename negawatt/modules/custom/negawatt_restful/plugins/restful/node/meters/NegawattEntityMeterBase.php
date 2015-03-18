@@ -49,6 +49,10 @@ class NegawattEntityMeterBase extends \NegawattEntityBaseNode {
       'property' => 'field_max_frequency',
     );
 
+    $public_fields['has_electricity'] = array(
+      'property' => 'field_has_electricity',
+    );
+
     $public_fields['electricity_time_interval'] = array(
       'callback' => array($this, 'electricityMinMax'),
     );
