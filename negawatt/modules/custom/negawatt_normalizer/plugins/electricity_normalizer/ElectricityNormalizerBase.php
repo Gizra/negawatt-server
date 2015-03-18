@@ -227,6 +227,12 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
     $wrapper = entity_metadata_wrapper('node', $this->getMeterNode());
     $wrapper->field_meter_processed->set(TRUE);
     $wrapper->field_last_processed->set($last_processed);
+
+    // Set 'has_electricity' field.
+    if ($num_entities) {
+      $wrapper->field_has_electricity->set(TRUE);
+    }
+
     $wrapper->save();
 
     // Also save in cache
