@@ -60,8 +60,12 @@ angular.module('negawattClientApp')
       var url;
       pageNumber = pageNumber || 1;
 
-      // Define endpoint.
-      url = Config.backend + '/api/meters?filter[account]=' + accountId + '&page=' + pageNumber;
+      // Define endpoint with filters.
+      // Get only meters that has electricity data.
+      url = Config.backend + '/api/meters?'
+        + 'filter[has_electricity]=1'
+        + '&filter[account]=' + accountId
+        + '&page=' + pageNumber;
 
       $http({
         method: 'GET',
