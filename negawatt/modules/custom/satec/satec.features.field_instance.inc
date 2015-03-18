@@ -115,6 +115,49 @@ function satec_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-satec_meter-field_has_electricity'
+  $field_instances['node-satec_meter-field_has_electricity'] = array(
+    'bundle' => 'satec_meter',
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => 'Does the meter has any normalized electricity data?',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 16,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_has_electricity',
+    'label' => 'Has electricity',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'display_label' => 1,
+      ),
+      'type' => 'options_onoff',
+      'weight' => 18,
+    ),
+  );
+
   // Exported field_instance: 'node-satec_meter-field_last_processed'
   $field_instances['node-satec_meter-field_last_processed'] = array(
     'bundle' => 'satec_meter',
@@ -715,7 +758,9 @@ function satec_field_default_field_instances() {
   t('Category valid');
   t('Did the address geocode correctly into location field?');
   t('Did the meter category decipher correctly?');
+  t('Does the meter has any normalized electricity data?');
   t('Groups audience');
+  t('Has electricity');
   t('Last processed');
   t('Location');
   t('Location valid');

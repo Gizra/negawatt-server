@@ -159,6 +159,49 @@ function iec_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-iec_meter-field_has_electricity'
+  $field_instances['node-iec_meter-field_has_electricity'] = array(
+    'bundle' => 'iec_meter',
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => 'Does the meter have any normalized electricity data?',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 22,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_has_electricity',
+    'label' => 'Has electricity',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'display_label' => 1,
+      ),
+      'type' => 'options_onoff',
+      'weight' => 18,
+    ),
+  );
+
   // Exported field_instance: 'node-iec_meter-field_last_processed'
   $field_instances['node-iec_meter-field_last_processed'] = array(
     'bundle' => 'iec_meter',
@@ -704,7 +747,7 @@ function iec_field_default_field_instances() {
           'concatenate' => FALSE,
         ),
         'type' => 'og_vocab',
-        'weight' => 21,
+        'weight' => 23,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -724,7 +767,7 @@ function iec_field_default_field_instances() {
       'module' => 'og_vocab',
       'settings' => array(),
       'type' => 'og_vocab_complex',
-      'weight' => 17,
+      'weight' => 19,
     ),
   );
 
@@ -735,7 +778,9 @@ function iec_field_default_field_instances() {
   t('Contract ID');
   t('Did the address geocode correctly into location field?');
   t('Did the meter category decipher correctly?');
+  t('Does the meter have any normalized electricity data?');
   t('Groups audience');
+  t('Has electricity');
   t('In case we have 2 or more meters for a single contract, this field will reference to the \'main\' contract ID, which is used to save the electricity Data.');
   t('Last processed');
   t('Location');
