@@ -13,7 +13,7 @@ angular.module('negawattClientApp')
     // after lazy-load.
     $scope.frequencies = ChartUsage.getFrequencies();
 
-    var chart = ChartUsage.get(account.id, $stateParams, meters)
+    var chart = ChartUsage.get(account.id, $stateParams, meters);
     // Revolve promise
     chart.then(function(response) {
       $scope.usageChartData = $scope.usageChartData || response;
@@ -23,24 +23,38 @@ angular.module('negawattClientApp')
 
     /**
     * Search the data with the new chart frequency.
+    *
+    * @param period
+    *   Period of time expresed in timestamp, used to request specific electricity data.
     */
-    $scope.select = function() {
+    $scope.select = function(period) {
 
-      // Prevent only one excetion.
-      if ($stateParams.chartFreq !== this.frequencies[this.$index].type) {
-        $stateParams.chartFreq = this.frequencies[this.$index].type;
+      if (!period) {
+        // Prevent only one execution.
+        if ($stateParams.chartFreq !== this.frequencies[this.$index].type) {
+          $stateParams.chartFreq = this.frequencies[this.$index].type;
+          // Load electricity data in the chart according the chart frequency.
+          $scope.isLoading = true;
+
+          ChartUsage.get(account.id, $stateParams, meters, period).then(function(response) {
+            $scope.usageChartData = response;
+            $scope.isLoading = false;
+          });
+
+          $location.search('chartFreq', $stateParams.chartFreq);
+          $urlRouter.update(true);
+        }
+      }
+      else {
         // Load electricity data in the chart according the chart frequency.
         $scope.isLoading = true;
 
-        ChartUsage.get(account.id, $stateParams, meters).then(function(response) {
-            $scope.usageChartData = response;
-            $scope.isLoading = false;
+        ChartUsage.get(account.id, $stateParams, meters, period).then(function(response) {
+          $scope.usageChartData = response;
+          $scope.isLoading = false;
         });
-
-        $location.search('chartFreq', $stateParams.chartFreq);
-        $urlRouter.update(true);
-        // $state.go($state.current, $stateParams);
       }
+
     }
 
     // Handle lazy-load of electricity data.

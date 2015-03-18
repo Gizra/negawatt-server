@@ -4,5 +4,13 @@
   <tab ng-repeat="frequency in frequencies" heading="{{frequency.label}}" active="frequency.active" disabled="frequency.disabled" select="select()"></tab>
 </tabset>
 <div google-chart chart="usageChartData"  ng-hide="isLoading" id="chart-usage" class="usageChart"/>
+<span>
+  <button type="button" id="chart-usage-btn-arrow-left" class="btn btn-transparent btn-arrow btn-arrow-left" ng-hide="usageChartData.hideControl('previous')" ng-click="select(usageChartData.period('previous'))" >
+    <span ng-click="select(usageChartData.period('previous'))"  class="glyphicon glyphicon-chevron-left"></span>
+  </button>
+  <button type="button" id="chart-usage-btn-arrow-right" class="btn btn-transparent btn-arrow btn-arrow-right" ng-hide="usageChartData.hideControl('next')" ng-click="select(usageChartData.period('next'))">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+  </button>
+</span>
 
 
