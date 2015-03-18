@@ -7,11 +7,11 @@ Feature: Chart
   Scenario: Show chart usage monthly of the total kws of the meters.
     Given I login with user "carlos"
     When I visit "/#/dashboard/1"
-    Then I see the monthly kws chart of all meters
+    Then I should see the monthly kws chart of all meters
 
   @javascript
   Scenario: Show chart usage monthly of a selected meter.
     Given I login with user "carlos"
     When I visit "/#/dashboard/1/marker/5?chartFreq=2"
     Then I should see a marker selected
-    Then I see the monthly kws chart a meter
+    Then I should see the monthly kws chart a meter
