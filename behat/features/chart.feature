@@ -15,3 +15,12 @@ Feature: Chart
     When I visit "/#/dashboard/1/marker/5?chartFreq=2"
     Then I should see a marker selected
     Then I should see the monthly kws chart a meter
+
+  @javascript
+  Scenario: Show chart monthly electricity data from diferent periods.
+    Given I login with user "carlos"
+    When I visit "/#/dashboard/1"
+    And I press the "previous" button on the charts
+    Then I should see the previous monthly kws chart of all meters
+    And I press the "next" button on the charts
+    Then I should see the monthly kws chart of all meters
