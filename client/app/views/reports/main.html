@@ -1,5 +1,18 @@
-<div id="report-container">
-    <h1>דוח</h1>
+<div id="report-container" class="container-fluid">
+    <div class="row">
+        <div class="col-md-4 negawat-report-negawatt-logo">
+            Negawatt
+        </div>
+        <div class="col-md-4 col-md-offset-4 negawat-report-client-logo">
+            <img src="{{account.logo.self}}">
+            {{account.label}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4 negawat-report-title">
+            <h1>דוח מונים</h1>
+        </div>
+    </div>
     <div ui-view></div>
 </div>
 

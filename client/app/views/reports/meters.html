@@ -8,8 +8,8 @@
     <tr ng-repeat="meter in meters">
         <td>{{meter.place_description}}</td>
         <td>{{meter.place_address}}</td>
-        <td>{{meter.max_frequency}}</td>
-        <td>{{meter.meter_categories[0]}}</td>
+        <td>{{maxFreqText(meter.max_frequency)}}</td>
+        <td>{{categoryText(meter.meter_categories[0])}}</td>
     </tr>
 </table>
 

@@ -209,30 +209,28 @@ angular
       .state('report', {
         url: '/report/{accountId:int}',
         templateUrl: 'views/reports/main.html',
+        controller: 'ReportCtrl',
         resolve: {
           profile: function(Profile) {
             return Profile.get();
           },
           account: function($stateParams, Profile, profile) {
-            // Get account infor.
+            // Get account info.
             return Profile.selectAccount($stateParams.accountId, profile);
           },
           categories: function(Category, account) {
             // Get a list of categories.
             return Category.get(account.id);
+          },
+          meters: function(Meter, account, $stateParams) {
+            // Get List of meters.
+            return Meter.get(account.id);
           }
         }
       })
       .state('report.meters', {
         url: '/meters',
-        templateUrl: 'views/reports/meters.html',
-        controller: 'ReportCtrl',
-        resolve: {
-          // Get List of meters.
-          meters: function(Meter, account, $stateParams, Category) {
-            return Meter.get(account.id);
-          }
-        }
+        templateUrl: 'views/reports/meters.html'
       });
 
     // Define interceptors.
