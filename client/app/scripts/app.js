@@ -230,13 +230,14 @@ angular
       })
       .state('report.meters', {
         url: '/meters',
-        templateUrl: 'views/reports/meters.html',
-        resolve: {
-          // Get List of meters.
-          meters: function(Meter, account, $stateParams, Category) {
-            return Meter.get(account.id);
-          }
-        }
+        //templateUrl: 'views/reports/meters.html',
+        //controller: 'ReportCtrl',
+        //resolve: {
+        //  // Get List of meters.
+        //  meters: function(Meter, account, $stateParams, Category) {
+        //    return Meter.get(account.id);
+        //  }
+        //}
       });
 
     // Define interceptors.
