@@ -208,7 +208,7 @@ angular
       })
       .state('report', {
         url: '/report/{accountId:int}',
-        templateUrl: 'views/reports/meters.html',
+        templateUrl: 'views/reports/main.html',
         resolve: {
           profile: function(Profile) {
             return Profile.get();
@@ -217,27 +217,22 @@ angular
             // Get account infor.
             return Profile.selectAccount($stateParams.accountId, profile);
           },
-          meters: function(Meter, account, $stateParams, Category) {
-            // Get first 100 records.
-            return Meter.get(account.id);
-          },
           categories: function(Category, account) {
             // Get a list of categories.
             return Category.get(account.id);
           }
-        },
-        controller: 'ReportCtrl'
+        }
       })
       .state('report.meters', {
         url: '/meters',
-        //templateUrl: 'views/reports/meters.html',
-        //controller: 'ReportCtrl',
-        //resolve: {
-        //  // Get List of meters.
-        //  meters: function(Meter, account, $stateParams, Category) {
-        //    return Meter.get(account.id);
-        //  }
-        //}
+        templateUrl: 'views/reports/meters.html',
+        controller: 'ReportCtrl',
+        resolve: {
+          // Get List of meters.
+          meters: function(Meter, account, $stateParams, Category) {
+            return Meter.get(account.id);
+          }
+        }
       });
 
     // Define interceptors.

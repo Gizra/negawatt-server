@@ -1,19 +1,15 @@
-<div ui-view></div>
-<div id="report-container">
-  <h1>דוח</h1>
-    <table class="table-bordered" width="80%">
-        <tr>
-            <th>תיאור</th>
-            <th>כתובת</th>
-            <th>תדירות מכסימלית</th>
-            <th>קטגוריה</th>
-        </tr>
-        <tr ng-repeat="meter in meters">
-            <td>{{meter.place_description}}</td>
-            <td>{{meter.place_address}}</td>
-            <td>{{meter.max_frequency}}</td>
-            <td>{{meter.meter_categories[0]}}</td>
-        </tr>
-    </table>
-</div>
+<table class="table-bordered" width="80%">
+    <tr>
+        <th>תיאור</th>
+        <th>כתובת</th>
+        <th>תדירות מכסימלית</th>
+        <th>קטגוריה</th>
+    </tr>
+    <tr ng-repeat="meter in meters">
+        <td>{{meter.place_description}}</td>
+        <td>{{meter.place_address}}</td>
+        <td>{{meter.max_frequency}}</td>
+        <td>{{meter.meter_categories[0]}}</td>
+    </tr>
+</table>
 
