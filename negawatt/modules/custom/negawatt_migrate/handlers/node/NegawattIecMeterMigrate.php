@@ -82,5 +82,9 @@ class NegawattIecMeterMigrate extends NegawattMigration {
       'country' => $row->country,
       'locality' => $row->field_place_locality,
     ));
+
+    // Assume meter will have electricity
+    // @fixme: Should move to NegawattElectricityMigrate, that will update the meter node.
+    $wrapper->field_has_electricity->set(TRUE);
   }
 }
