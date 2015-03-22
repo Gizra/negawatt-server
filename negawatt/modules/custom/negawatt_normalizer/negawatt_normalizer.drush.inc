@@ -239,7 +239,7 @@ function negawatt_normalizer_process_meters_once($meter_ids = array(), $from_tim
       foreach ($result as $frequency => $timestamps_array) {
         ++$frequencies_delta;
         drush_log(format_string(' frequency @frequency, @delta/@count:', array(
-          '@frequency' => $frequency . '(' . util_frequency_to_string($frequency) . ')',
+          '@frequency' => $frequency . '(' . negawatt_normalizer_frequency_to_string($frequency) . ')',
           '@count' => $frequencies_count,
           '@delta' => $frequencies_delta
         )));
@@ -284,8 +284,17 @@ function negawatt_normalizer_process_meters_once($meter_ids = array(), $from_tim
   drush_log(format_string('Total electricity-entities returned: @count', array('@count'=> $total_entities_count)));
 }
 
-function util_frequency_to_string($rate_type) {
-  switch ($rate_type) {
+/**
+ * Convert frequency int to string.
+ *
+ * @param $frequency
+ *    Int frequency.
+ *
+ * @return string
+ *    String frequency.
+ */
+function negawatt_normalizer_frequency_to_string($frequency) {
+  switch ($frequency) {
     case 1:
       return 'Year';
     case 2:
@@ -297,5 +306,4 @@ function util_frequency_to_string($rate_type) {
     case 5:
       return 'Minute';
   }
-  return 'Unknown';
 }

@@ -143,10 +143,13 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
   }
 
   /**
-   * Calc TOUse rate tape according to current timestamp
+   * Calc TOUse rate tape according to current timestamp.
+   *
    * @param $timestamp
+   *    The time of consumption.
+   *
    * @return string
-   *    One of 'peak', 'mid', 'low'.
+   *    The touse rate type - one of 'peak', 'mid', 'low'.
    */
   protected function calcTouseRateType($timestamp) {
     // @fixme: Calc touse rate type here.

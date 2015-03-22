@@ -51,10 +51,6 @@ class NegawattMeterResource extends \RestfulEntityBaseMultipleBundles {
       'property' => 'field_has_electricity',
     );
 
-    $public_fields['electricity_time_interval'] = array(
-      'callback' => array($this, 'electricityMinMax'),
-    );
-
     $public_fields['meter_categories'] = array(
       'property' => 'nid',
       'process_callbacks' => array(
