@@ -12,13 +12,13 @@ Feature: Meter
   @javascript
   Scenario: Show only meters of a selected
     Given I login with user "carlos"
-    When I visit "/#/dashboard/1/marker/6"
+    When I visit "/#/dashboard/1/marker/7"
     Then I should see a marker selected
 
   @javascript
   Scenario: Show only meters of a selected in a category
     Given I login with user "carlos"
-    When I visit "/#/dashboard/1/marker/6?categoryId=14"
+    When I visit "/#/dashboard/1/marker/7?categoryId=14"
     Then I should see a marker selected
 
   @javascript
