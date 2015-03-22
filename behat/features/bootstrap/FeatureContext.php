@@ -178,8 +178,8 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     // Testing the height of the first and last column, with the default chart size and data of the migration.
     $start_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(1) > td:nth-child(2)';
     $end_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(9) > td:nth-child(2)';
-    $this->waitForTextNgElement($start_chart, '4941');
-    $this->waitForTextNgElement($end_chart, '827');
+    $this->waitForTextNgElement($start_chart, '3081');
+    $this->waitForTextNgElement($end_chart, '3606');
   }
 
   /**
