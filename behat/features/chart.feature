@@ -12,7 +12,7 @@ Feature: Chart
   @javascript
   Scenario: Show chart usage monthly of a selected meter.
     Given I login with user "carlos"
-    When I visit "/#/dashboard/1/marker/5?chartFreq=2"
+    When I visit "/#/dashboard/1/marker/8?chartFreq=2"
     Then I should see a marker selected
     Then I should see the monthly kws chart a meter
 

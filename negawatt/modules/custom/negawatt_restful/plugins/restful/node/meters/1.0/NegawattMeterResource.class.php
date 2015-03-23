@@ -47,6 +47,10 @@ class NegawattMeterResource extends \RestfulEntityBaseMultipleBundles {
       'property' => 'field_max_frequency',
     );
 
+    $public_fields['has_electricity'] = array(
+      'property' => 'field_has_electricity',
+    );
+
     $public_fields['meter_categories'] = array(
       'property' => 'nid',
       'process_callbacks' => array(
