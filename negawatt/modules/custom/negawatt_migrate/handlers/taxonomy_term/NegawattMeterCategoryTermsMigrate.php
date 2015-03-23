@@ -89,7 +89,7 @@ class NegawattMeterCategoryTermsMigrate extends Migration {
       $account_id = $term->account_id['destid1'];
       $settings = array(
         'cardinality' => 1,
-        'required' => TRUE,
+        'required' => FALSE,
       );
       // Loop for all meter content-types and create og-vocabulary.
       $node_types = node_type_get_types();

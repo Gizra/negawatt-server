@@ -12,13 +12,13 @@ Feature: Meter
   @javascript
   Scenario: Show only meters of a selected
     Given I login with user "carlos"
-    When I visit "/#/dashboard/1/marker/6"
+    When I visit "/#/dashboard/1/marker/7"
     Then I should see a marker selected
 
   @javascript
   Scenario: Show only meters of a selected in a category
     Given I login with user "carlos"
-    When I visit "/#/dashboard/1/marker/6?categoryId=14"
+    When I visit "/#/dashboard/1/marker/7?categoryId=5"
     Then I should see a marker selected
 
   @javascript
@@ -38,3 +38,10 @@ Feature: Meter
     Then I uncheck the box "מקלט"
     Then the "מקלט" checkbox should not be checked
     Then I should see "1" markers
+
+  @javascript @wip
+  Scenario: Show only meters of the category selected
+    Given I login with user "carlos"
+    When I visit "/#/dashboard/1"
+    Then I click meter "4"
+    Then I see a marker "4" selected

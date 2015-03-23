@@ -3,16 +3,16 @@ api = 2
 
 ; Modules
 projects[admin_menu][subdir] = "contrib"
-projects[admin_menu][version] = "3.0-rc4"
+projects[admin_menu][version] = "3.0-rc5"
 
 projects[admin_views][subdir] = "contrib"
-projects[admin_views][version] = "1.3"
+projects[admin_views][version] = "1.4"
 
 projects[addressfield][subdir] = "contrib"
-projects[addressfield][version] = "1.0-beta5"
+projects[addressfield][version] = "1.0"
 
 projects[ctools][subdir] = "contrib"
-projects[ctools][version] = "1.4"
+projects[ctools][version] = "1.6"
 
 projects[date][subdir] = "contrib"
 projects[date][version] = "2.8"
@@ -27,8 +27,7 @@ projects[email][subdir] = "contrib"
 projects[email][version] = "1.3"
 
 projects[entity][subdir] = "contrib"
-projects[entity][version] = "1.5"
-projects[entity][patch][] = "https://www.drupal.org/files/issues/2264079-entity-wrapper-access-single-entity-reference-2.patch"
+projects[entity][version] = "1.6"
 projects[entity][patch][] = "https://www.drupal.org/files/issues/2086225-entity-access-check-node-create-3.patch"
 
 projects[entitycache][subdir] = "contrib"
@@ -43,13 +42,13 @@ projects[entity_validator][download][type] = "file"
 projects[entity_validator][download][url] = "https://github.com/Gizra/entity_validator/archive/7.x-1.x.zip"
 
 projects[features][subdir] = "contrib"
-projects[features][version] = "2.2"
+projects[features][version] = "2.3"
 
 projects[flag][subdir] = "contrib"
 projects[flag][version] = "2.2"
 
 projects[geolocation][subdir] = "contrib"
-projects[geolocation][version] = "1.5"
+projects[geolocation][version] = "1.6"
 
 projects[jquery_update][subdir] = "contrib"
 projects[jquery_update][version] = "2.4"
@@ -81,7 +80,7 @@ projects[mimemail][version] = 1.0-beta3
 projects[mimemail][subdir] = "contrib"
 
 projects[module_filter][subdir] = "contrib"
-projects[module_filter][version] = 2.0-alpha2
+projects[module_filter][version] = 2.0
 
 projects[og][subdir] = "contrib"
 projects[og][version] = 2.x-dev
@@ -111,13 +110,20 @@ projects[title][subdir] = "contrib"
 projects[title][version] = "1.0-alpha7"
 
 projects[token][subdir] = "contrib"
-projects[token][version] = "1.5"
+projects[token][version] = "1.6"
 
 projects[views][subdir] = "contrib"
 projects[views][version] = "3.10"
 
 projects[views_bulk_operations][subdir] = "contrib"
 projects[views_bulk_operations][version] = "3.2"
+
+projects[views_aggregator][subdir] = "contrib"
+projects[views_aggregator][version] = "1.4"
+
+;Libraries
+libraries[geocoder][download][type] = "file"
+libraries[geocoder][download][url] = "https://github.com/geocoder-php/Geocoder/archive/2.8.2.tar.gz"
 
 ; Themes
 projects[bootstrap][subdir] = "contrib"
