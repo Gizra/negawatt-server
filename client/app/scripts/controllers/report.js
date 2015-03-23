@@ -20,7 +20,7 @@ angular.module('negawattClientApp')
       }
     };
     $scope.categoryText = function(categoryId) {
-      return categories.list[categoryId].label;
+      return categories.collection[categoryId].label;
     }
 
   });
