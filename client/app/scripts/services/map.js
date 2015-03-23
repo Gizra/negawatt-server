@@ -77,6 +77,7 @@ angular.module('negawattClientApp')
       leafletData.getMap().then(function(map){
         // Save the new center.
         self.setCenter(marker.getPosition());
+
         // Set the new position position.
         map.setView(self.getCenter());
       });

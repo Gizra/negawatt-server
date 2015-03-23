@@ -116,7 +116,6 @@ angular.module('negawattClientApp')
      * @param data
      */
     function setCache(data) {
-
       // Cache account data.
       cache = {
         data: {

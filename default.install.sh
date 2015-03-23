@@ -29,6 +29,19 @@ drush en devel diff views_ui field_ui migrate_ui mimemail -y
 
 # These commands migrates dummy content and is used for development and testing.
 drush en negawatt_migrate -y
+
+# Must allow access to these dirs for logo images migration and processing.
+chmod 777 sites/default/files
+chmod 777 sites/default/files/styles
+
+echo 'Migrating data...'
+DATA_DIR="../../negawatt-data/sql-migrate-unified"
+drush vset negawatt_migrate_sql 0
+`drush sql-connect` < $DATA_DIR/_negawatt_account_migrate.sql
+`drush sql-connect` < $DATA_DIR/_negawatt_satec_meter_migrate.sql
+`drush sql-connect` < $DATA_DIR/_negawatt_iec_meter_migrate.sql
+`drush sql-connect` < $DATA_DIR/_negawatt_electricity_migrate.sql
+`drush sql-connect` < $DATA_DIR/_negawatt_electricity_normalized_migrate.sql
 drush mi --all --user=1
 
 # This command does the login for you when the build script is done. It will open a new tab in your default browser and login to your project as the Administrator. Comment out this line if you do not want the login to happen automatically.

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('ChartCategories', function ($q, $filter, Category, Utils) {
+  .service('ChartCategories', function ($q, $filter, Utils) {
 
     /**
      * Get the chart data and plot.
@@ -10,15 +10,20 @@ angular.module('negawattClientApp')
      *  The account ID.
      * @param categoryId
      *  The category ID.
+     * @param collection
+     *  The categories as collection.
      *
      * @returns {$q.promise}
      */
-    this.get = function(accountId, categoryId) {
+    this.get = function(accountId, categoryId, collection) {
       var deferred = $q.defer();
 
-      Category.get(accountId, categoryId).then(function(categories) {
-        deferred.resolve((categories.collection) ? transformDataToDatasets(categories.collection, categoryId) : {});
-      });
+      // Filter collection if a category was selected.
+      if (angular.isDefined(categoryId)) {
+        collection = $filter('filter')(Utils.toArray(collection), {id: parseInt(categoryId)}, true).pop().children;
+      }
+
+      deferred.resolve((collection) ? transformDataToDatasets(angular.copy(collection), categoryId) : {});
 
       return deferred.promise;
     };

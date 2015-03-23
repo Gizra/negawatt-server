@@ -37,15 +37,15 @@ interface NegaWattNormalizerDataProviderInterface {
   public static function getOldestRawElectricityEntity($node);
 
   /**
-   * The timestamp of raw entity before a given time.
+   * The raw entity before a given time.
    *
-   * The function returns the timestamp of the raw-electricity entity for
-   * the current meter node, that is immediately before a given timestamp.
+   * The function returns the raw-electricity entity for the current meter node,
+   * that is immediately before a given timestamp.
    *
-   * @return int|null
-   *    The timestamp of the entity before, or NULL.
+   * @return StdClass|null
+   *    The entity object, or NULL.
    */
-  public function getTimestampOfRawEntitiesBefore();
+  public function getRawEntityBefore();
 
   /**
    * Get or create the normalized entity for a time period, rate-type, frequency, and meter.

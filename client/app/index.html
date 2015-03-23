@@ -49,18 +49,7 @@
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
-    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/affix.js"></script>
-    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/alert.js"></script>
-    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/button.js"></script>
-    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/carousel.js"></script>
-    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/collapse.js"></script>
-    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/dropdown.js"></script>
-    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/tab.js"></script>
-    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/transition.js"></script>
-    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/scrollspy.js"></script>
-    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/modal.js"></script>
-    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/tooltip.js"></script>
-    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/popover.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/leaflet/dist/leaflet.js"></script>
     <script src="bower_components/leaflet/dist/leaflet-src.js"></script>
@@ -81,13 +70,13 @@
     <script src="bower_components/angular-spinner/angular-spinner.js"></script>
     <script src="bower_components/angular-ui-tree/dist/angular-ui-tree.js"></script>
     <script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
+    <script src="bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js"></script>
     <script src="../bower_components/angular-weather-directive/dist/angular-weather-directive.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
-
+    <script src="bower_components/moment/locale/he.js"></script>
     <script src="scripts/config.js"></script>
-
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/app.js"></script>
@@ -102,6 +91,7 @@
     <script src="scripts/services/meter.js"></script>
     <script src="scripts/services/category.js"></script>
     <script src="scripts/services/chartUsage.js"></script>
+    <script src="scripts/services/chartUsagePeriods.js"></script>
     <script src="scripts/services/chartCategories.js"></script>
     <script src="scripts/services/electricity.js"></script>
     <script src="scripts/services/auth.js"></script>
@@ -110,7 +100,11 @@
     <script src="scripts/services/message.js"></script>
     <script src="scripts/services/profile.js"></script>
     <script src="scripts/services/utils.js"></script>
+    <script src="scripts/services/timedate.js"></script>
     <script src="scripts/directives/loadingbartext.js"></script>
+    <script src="scripts/filters/meterFilters.js"></script>
+    <script src="scripts/filters/uiRouterFilters.js"></script>
+    <script src="scripts/decorators/uiRouterDecorators.js"></script>
     <!-- endbuild -->
 </body>
 </html>

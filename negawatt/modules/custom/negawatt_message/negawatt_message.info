@@ -18,4 +18,3 @@ features[message_type][] = anomalous_consumption
 features[message_type][] = normalization_completed
 features[variable][] = field_bundle_settings_message__anomalous_consumption
 features[variable][] = field_bundle_settings_message__normalization_completed
-mtime = 1420634885

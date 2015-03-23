@@ -1,0 +1,9 @@
+name = Meter
+core = 7.x
+package = Negawatt
+dependencies[] = views
+dependencies[] = views_aggregator
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = meters
+features_exclude[dependencies][ctools] = ctools

@@ -26,6 +26,7 @@ ol, ul {
   }
 
   .tree-level-top {
+    margin-left: 10px;
 
     a {
       color: #2c2c2c;
@@ -42,10 +43,12 @@ ol, ul {
     a.active-category span {
       color: #26858d;
     }
+
   }
 
   .tree-level-middle {
     font-size: 13px;
+    margin-left: 10px;
 
     a {
       color: #3e3e3e;
@@ -63,6 +66,8 @@ ol, ul {
 
   .tree-level-bottom {
     font-size: 12px;
+    margin-left: 10px;
+
     a {
       color: #3e3e3e;
 
@@ -76,5 +81,11 @@ ol, ul {
       }
     }
 
+  }
+
+  // Style of the input checkbox.
+  input.hide-meters-category {
+    float: left;
+    margin: 7px;
   }
 }

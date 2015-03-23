@@ -9,6 +9,8 @@ $plugin = array(
   'name' => 'electricity__1_0',
   'entity_type' => 'electricity',
   'authentication_types' => TRUE,
-  // Output the data in our own formatter.
-  'formatter' => 'electricity_hal_json',
+  'data_provider_options' => array(
+    'table_name' => 'negawatt_electricity_normalized',
+    'id_column' => 'id',
+  ),
 );

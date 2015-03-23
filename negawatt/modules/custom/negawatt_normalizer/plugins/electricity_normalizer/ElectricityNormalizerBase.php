@@ -143,6 +143,20 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
   }
 
   /**
+   * Calc TOUse rate tape according to current timestamp.
+   *
+   * @param $timestamp
+   *    The time of consumption.
+   *
+   * @return string
+   *    The touse rate type - one of 'peak', 'mid', 'low'.
+   */
+  protected function calcTouseRateType($timestamp) {
+    // @fixme: Calc touse rate type here.
+    return 'flat';
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function process($frequencies = array(), $from_timestamp = NULL, $to_timestamp = NULL) {
@@ -227,6 +241,12 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
     $wrapper = entity_metadata_wrapper('node', $this->getMeterNode());
     $wrapper->field_meter_processed->set(TRUE);
     $wrapper->field_last_processed->set($last_processed);
+
+    // Set 'has_electricity' field.
+    if ($num_entities) {
+      $wrapper->field_has_electricity->set(TRUE);
+    }
+
     $wrapper->save();
 
     // Also save in cache
@@ -339,6 +359,18 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function processRawEntity($record, $prev_record) {
+    // Set TOUse rate-type if necessary
+    if (empty($record->rate_type)) {
+      $record->rate_type = $this->calcTouseRateType($record->timestamp);
+    }
+
+    return $record;
+  }
+
+  /**
    * Process raw entities in a certain time frame.
    *
    * Process raw-electricity entities between two given timestamps, and create
@@ -368,36 +400,39 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
 
     // Loop for received rate types and save the entities.
     $processed_entities = array();
-    $prev_timestamp = $data_provider->getTimestampOfRawEntitiesBefore();
+    $prev_record = $data_provider->getRawEntityBefore();
     $prev_time_delta = NULL;
     foreach ($result as $record) {
+      // Allow the sub-classed meter-normalizer to process the data
+      $processed_record = $this->processRawEntity($record, $prev_record);
+
       // Calc time difference from last entity, in hours.
-      $time_delta = $prev_timestamp ? ($record->timestamp - $prev_timestamp) / 60.0 / 60 : NULL;
+      $time_delta = ($prev_record && $prev_record->timestamp) ? ($processed_record->timestamp - $prev_record->timestamp) / 60.0 / 60 : NULL;
       // When having several raw entities from the same time period (with
       // different rate types), delta time will be set to 0 on the 2nd iteration
       // and on. In such cases, use previous delta time.
       $time_delta = $time_delta ? $time_delta : $prev_time_delta;
 
-      // Save timestamp and time-delta for next iteration.
-      $prev_timestamp = $record->timestamp;
-      $prev_time_delta = $time_delta;
-
       // Calc average power at entity's time slice.
       // Note that for the first raw entity for a meter, there's no 'previous
       // timestamp', hence the average power cannot be computed.
-      $avg_power = $time_delta ? ($record->kwh / $time_delta) : NULL;
+      $avg_power = $time_delta ? ($processed_record->kwh / $time_delta) : NULL;
 
       // Set entity's values.
-      $normalized_entity = $data_provider->saveNormalizedEntity($record->timestamp, $frequency, $record->rate_type, $record->power_factor, $avg_power, $record->kwh);
+      $normalized_entity = $data_provider->saveNormalizedEntity($processed_record->timestamp, $frequency, $processed_record->rate_type, $processed_record->power_factor, $avg_power, $processed_record->kwh);
 
-      $processed_entities[$record->timestamp][$record->rate_type] = $normalized_entity;
+      $processed_entities[$processed_record->timestamp][$processed_record->rate_type] = $normalized_entity;
+
+      // Save record and time-delta for next iteration.
+      $prev_record = $record;
+      $prev_time_delta = $time_delta;
 
       // Output debug message.
-      self::debugMessage("rate-type: $record->rate_type, time-stamp: @time_from, sum-kwh: $record->kwh", 3, $record->timestamp);
+      self::debugMessage("rate-type: $processed_record->rate_type, time-stamp: @time_from, sum-kwh: $processed_record->kwh", 3, $processed_record->timestamp);
     }
 
     // The last timestamp processed is the timestamp of last iteration.
-    $last_processed = $prev_timestamp;
+    $last_processed = $prev_record ? $prev_record->timestamp : NULL;
 
     // Output debug message.
     self::debugMessage(format_string('total entities: @count, last processed: @time_from', array('@count' => count($processed_entities))), 3, $last_processed);

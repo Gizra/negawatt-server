@@ -15,4 +15,13 @@ class ElectricityNormalizerIec extends \ElectricityNormalizerBase {
     return $node->type == 'iec_meter';
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function processRawEntity($record, $prev_record) {
+    parent::processRawEntity($record, $prev_record);
+
+    // Nothing to do.
+    return $record;
+  }
 }

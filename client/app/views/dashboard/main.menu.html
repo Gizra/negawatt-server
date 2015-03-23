@@ -1,16 +1,27 @@
 <span class="menu-buttom glyphicon glyphicon-th-list" aria-hidden="true"></span>
 <h3 class="menu-title">NegaWatt</h3>
 <span class="menu-separator"></span>
-<div ng-controller="AccessCtrl" class="menu-account">
-  <img src="../../images/photo.png" alt=""/><span> שלום,   {{ user.label }} </span> <a ng-click="logout()">  התנתק </a>
+<div class="menu-home">
+  <a ng-click="reloadDashboard()" href="">
+    <img src="../../images/icon-home.png" alt=""/>
+  </a>
 </div>
+<span class="menu-separator"></span>
+<div ng-controller="AccessCtrl" class="menu-account">
+  <img class="menu-account-photo" src="../../images/photo.png" alt=""/><span> שלום,   {{ user.label }} </span>
+  <img class="menu-account-logout" src="../../images/icon-arrow.png" alt=""/>
+  <a ng-click="logout()">  התנתק </a>
+</div>
+<span class="menu-separator"></span>
+<span class="menu-timedate">{{timedate.today | amDateFormat: 'YYYY MMMM DD'}}</span>
+<span class="menu-separator"></span>
+<span class="menu-timedate">{{timedate.now | amDateFormat: 'H:mm'}}</span>
+
 <span class="menu-separator"></span>
 <todays-weather location="Kiryat Gat, IL" custom-size="25"></todays-weather>
 <span class="menu-separator"></span>
 <div class="menu-logo">
-  <a ng-click="reloadDashboard()" href="">
-    <img ng-src="{{ account.logo.styles.thumbnail }}" alt=""/>
-    <h4> {{ account.label }} </h4>
-  </a>
+  <img ng-src="{{ account.logo.styles.thumbnail }}" alt=""/>
+  <h4> {{ account.label }} </h4>
 </div>
 <ui-view></ui-view>

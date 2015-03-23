@@ -1,9 +1,11 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .controller('MenuCtrl', function($scope, $state, $stateParams, weatherService, Category, account, profile) {
+  .controller('MenuCtrl', function($scope, $state, $stateParams, weatherService, amMoment, Timedate, Category, account, profile) {
     $scope.account = account;
     $scope.user = profile.user;
+    $scope.timedate = Timedate;
+    $scope.accountId = $stateParams.accountId;
 
     var weather = weatherService.getWeather('Tel');
 
@@ -11,8 +13,8 @@ angular.module('negawattClientApp')
      * Reset category selection and back to the home.
      */
     $scope.reloadDashboard = function() {
-      Category.setSelectedCategory();
-      $state.go('dashboard.withAccount.preload', {accountId: $stateParams.accountId});
+      Category.clearSelectedCategory();
+      $state.forceGo('dashboard.withAccount', {accountId: $stateParams.accountId});
     };
 
   });

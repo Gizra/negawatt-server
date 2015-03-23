@@ -1,0 +1,119 @@
+<?php
+/**
+ * @file
+ * Code for the Meter feature and functionality.
+ */
+
+include_once 'negawatt_meter.features.inc';
+
+/**
+ * Checks whether node-type is a meter type.
+ *
+ * @param $node_type
+ *    The type to test
+ *
+ * @return bool
+ *    True if the node-type is a meter-type.
+ */
+function negawatt_meter_is_meter($node_type) {
+  return in_array($node_type, array('iec_meter', 'satec_meter'));
+}
+
+/**
+ * Implements hook_node_presave() - Check and update Geocode, if needed.
+ *
+ * For iec_meter, if place-address and/or place-locality were changed, resolve
+ * geocode using Geocoder package. First try to resolve whole address (stree, city),
+ * if fails, try resolving for city only.
+ *
+ * @param $node
+ *    The node to geocode.
+ */
+function negawatt_meter_node_presave($node) {
+
+  require_once libraries_get_path('geocoder') . '/src/autoload.php';
+
+  // Make sure we're dealing with a meter.
+  if (!negawatt_meter_is_meter($node->type)) {
+    return;
+  }
+
+  $wrapper = entity_metadata_wrapper('node', $node);
+  // New node doesn't have 'original' field.
+  $wrapper_original = $node->is_new ? NULL : entity_metadata_wrapper('node', $node->original);
+
+  // Check if address field was changed.
+  if (!empty($node->is_new) ||
+    $wrapper->field_place_address->value() != $wrapper_original->field_place_address->value() ||
+    $wrapper->field_place_locality->value() != $wrapper_original->field_place_locality->value()) {
+
+    // Prepare geocoder as static.
+    $adapter  = &drupal_static(__FUNCTION__ . '_adapter', NULL);
+    $provider = &drupal_static(__FUNCTION__ . '_provider', NULL);
+    $geocoder = &drupal_static(__FUNCTION__ . '_geocoder', NULL);
+    $adapter = $adapter ? $adapter : new \Geocoder\HttpAdapter\CurlHttpAdapter();
+    $provider = $provider ? $provider : new \Geocoder\Provider\GoogleMapsProvider($adapter);
+    $geocoder = $geocoder ? $geocoder : new \Geocoder\Geocoder($provider);
+
+    // Look for geocode.
+    $street_addr = $wrapper->field_place_address->value();
+    $city = $wrapper->field_place_locality->value();
+    $full_address = $street_addr . ', ' . $city;
+    $success = TRUE;
+    try {
+      $geocode = $geocoder->geocode($full_address);
+      // Test that indeed geocode managed to decipher street address
+      if (!$geocode->getStreetName()) {
+        throw new Exception();
+      }
+      // Geocoding on full address succeeded, set geocode-valid field.
+      $wrapper->field_location_valid->set(TRUE);
+    }
+    catch (Exception $e) {
+      watchdog('iec geocode', 'Couldn`t geocode the address "@address"', array('@address' => $full_address), WATCHDOG_WARNING);
+      $wrapper->field_location_valid->set(FALSE);
+      $success = FALSE;
+    }
+
+    if (!$success) {
+      // Geocoding on full address failed, try locating on city name only.
+      try {
+        $street_addr = '';
+        $geocode = $geocoder->geocode($city);
+        $success = TRUE;
+      }
+      catch (Exception $e) {
+        // Geocoding failed.
+        watchdog('iec geocode', 'Couldn`t geocode the city "@address"', array('@address' => $city), WATCHDOG_WARNING);
+        $success = FALSE;
+      }
+    }
+
+    if (!$success) {
+      return;
+    }
+
+    // Set location field, only if geolocation succeeded.
+    $lat = $geocode->getLatitude();
+    $lng = $geocode->getLongitude();
+    // hook_node_presave() is called after hook_field_presave(), so
+    // geolocation_field_presave() was already called and will not be called
+    // again. Has to call it explicitly to calc field-location's internal
+    // values after setting lat, long.
+    $field = field_info_field('field_location');
+    $entity = field_info_instance('node', 'field_location', 'iec_meter');
+    $langcode = LANGUAGE_NONE;
+    $items = array(array(
+      'lat' => $lat,
+      'lng' => $lng,
+    ));
+    geolocation_field_presave('node', $node, $field, $entity, $langcode, $items);
+    $wrapper->field_location->set($items[0]);
+
+    $wrapper->field_address->set(array(
+      'thoroughfare' => $street_addr,
+      'locality' => $city,
+      'country' => $geocode->getCountryCode(),
+    ));
+  }
+}
