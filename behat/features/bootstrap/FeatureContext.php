@@ -224,6 +224,23 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
+   * @Then I should see the monthly kws chart for multiple markers
+   */
+  public function iShouldSeeTheMonthlyKwsChartForMultipleMarkers() {
+    // Testing the height of the first and last column, with the default chart size and data of the migration.
+    $start_chart_meter1 = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(1) > td:nth-child(2)';
+    $end_chart_meter1 = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(9) > td:nth-child(2)';
+    $start_chart_meter2 = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(1) > td:nth-child(3)';
+    $end_chart_meter2 = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(9) > td:nth-child(3)';
+    // Meter 1.
+    $this->waitForTextNgElement($start_chart_meter1, '4941');
+    $this->waitForTextNgElement($end_chart_meter1, '827');
+    // Meter 2.
+    $this->waitForTextNgElement($start_chart_meter2, '3081');
+    $this->waitForTextNgElement($end_chart_meter2, '3606');
+  }
+
+  /**
    * @AfterStep
    *
    * Take a screen shot after failed steps for Selenium drivers (e.g.
