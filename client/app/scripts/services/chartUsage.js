@@ -156,33 +156,33 @@ angular.module('negawattClientApp')
       var chartFrequencyInfo = this.frequencyParams[chartFrequency];
       var chartTimeFrame = chartFrequencyInfo.chart_default_time_frame;
 
-      // Set chart limit period from default
-      var chartEndTimestamp = (chartFrequencyInfo.chart_default_time_frame_end === 'now') ? moment().unix() : chartFrequencyInfo.chart_default_time_frame_end;
-      var chartBeginTimestamp = moment.unix(chartEndTimestamp).subtract(chartFrequencyInfo.chart_default_time_frame, chartFrequencyInfo.frequency).unix();
-
-      // If period is defined update limit of the chart.
-      if (angular.isDefined(period)) {
-        // Check the chart limits, with the information obtained from the server. (example meters).
-        if (angular.isDefined(period.max) && angular.isDefined(period.min)) {
-          chartEndTimestamp = (momemt.unix(chartEndTimestamp).isAfter(moment.unix(period.max))) ? chartEndTimestamp : period.max;
-          chartBeginTimestamp = (momemt.unix(chartBeginTimestamp).isAfter(moment.unix(period.min))) ? chartBeginTimestamp : period.min;
-        }
-
-        // Set according current period.
-        if (angular.isDefined(period.next) && angular.isDefined(period.previous)) {
-          // Comming from the calculation.
-          chartEndTimestamp = period.next;
-          chartBeginTimestamp = period.previous;
-        }
-      }
+      //// Set chart limit period from default
+      //var chartEndTimestamp = (chartFrequencyInfo.chart_default_time_frame_end === 'now') ? moment().unix() : chartFrequencyInfo.chart_default_time_frame_end;
+      //var chartBeginTimestamp = moment.unix(chartEndTimestamp).subtract(chartFrequencyInfo.chart_default_time_frame, chartFrequencyInfo.frequency).unix();
+      //
+      //// If period is defined update limit of the chart.
+      //if (angular.isDefined(period)) {
+      //  // Check the chart limits, with the information obtained from the server. (example meters).
+      //  if (angular.isDefined(period.max) && angular.isDefined(period.min)) {
+      //    chartEndTimestamp = (moment.unix(chartEndTimestamp).isAfter(moment.unix(period.max))) ? chartEndTimestamp : period.max;
+      //    chartBeginTimestamp = (moment.unix(chartBeginTimestamp).isAfter(moment.unix(period.min))) ? chartBeginTimestamp : period.min;
+      //  }
+      //
+      //  // Set according current period.
+      //  if (angular.isDefined(period.next) && angular.isDefined(period.previous)) {
+      //    // Comming from the calculation.
+      //    chartEndTimestamp = period.next;
+      //    chartBeginTimestamp = period.previous;
+      //  }
+      //}
 
       // Prepare filters for data request.
       var filters = {
         'filter[meter_account]': accountId,
         'filter[type]': chartFrequency,
         'filter[timestamp][operator]': 'BETWEEN',
-        'filter[timestamp][value][0]': chartBeginTimestamp,
-        'filter[timestamp][value][1]': chartEndTimestamp
+        'filter[timestamp][value][0]': period.previous, // chartBeginTimestamp,
+        'filter[timestamp][value][1]': period.next // chartEndTimestamp
       };
 
       if (selectorType) {
@@ -240,6 +240,12 @@ angular.module('negawattClientApp')
         this.multipleGraphs = false;
       }
 
+      // Caculate period object.
+      UsagePeriod.config(stateParams.chartFreq, period);
+
+      // Update period information.
+      period = UsagePeriod.getPeriod();
+
       // Translate selector type and id to filters.
       var filters = this.filtersFromSelector(accountId, stateParams.chartFreq, selectorType, selectorId, period);
 
@@ -251,7 +257,7 @@ angular.module('negawattClientApp')
       // Get electricity data.
       Electricity.get(filters).then(function(electricity) {
         // Add periods.
-        angular.extend(ChartUsage.usageGoogleChartParams, UsagePeriod.getConfig(ChartUsage.frequencyParams[stateParams.chartFreq], filters))
+        angular.extend(ChartUsage.usageGoogleChartParams, UsagePeriod)
         // Translate electricity data to google charts format.
         deferred.resolve(ChartUsage.electricityToChartData(stateParams.chartFreq, electricity));
       });
