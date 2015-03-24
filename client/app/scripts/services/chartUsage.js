@@ -169,7 +169,7 @@ angular.module('negawattClientApp')
         }
 
         // Set according current period.
-        if (angular.isDefined(period.next) && angular.isDefined(period.previous))
+        if (angular.isDefined(period.next) && angular.isDefined(period.previous)) {
           // Comming from the calculation.
           chartEndTimestamp = period.next;
           chartBeginTimestamp = period.previous;
