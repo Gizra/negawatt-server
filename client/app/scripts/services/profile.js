@@ -10,9 +10,6 @@ angular.module('negawattClientApp')
     // Update event broadcast name.
     var broadcastUpdateEventName = 'nwProfileChanged';
 
-    // Save the account ID of the active account.
-    var activeAccountId;
-
     /**
      * Return the promise with the account, from cache or the server.
      *
@@ -34,29 +31,19 @@ angular.module('negawattClientApp')
      *  The account object selected.
      */
     this.selectAccount = function(accountId, profile) {
-      var active,
-        position;
+      // Cast integer.
+      accountId = +accountId;
+      // Check if accountId is the same of active.
+      if (angular.isUndefined(profile.active) || profile.active.id !== accountId) {
+        // Get select the account as active.
+        profile.active = ($filter('filter')(profile.account, {id: accountId})).pop();
 
-      // Get select the account as active.
-      active = $filter('filter')(profile.account, {id: accountId});
-
-      profile.account.map(function(item, index) {
-        if (item.id === accountId) {
-          // Remove the selection from the original array.
-          profile.account.splice(index, 1);
-          return;
-        }
-      });
-
-      // Insert in the beginning of the Array.
-      profile.account.unshift(active.pop());
-
-      // Clear app cache, if new account was selected or there not define the active account.
-      if (activeAccountId !== profile.account[0].id) {
+        // Clear app cache, if new account was selected or there not define the active account.
         $rootScope.$broadcast('nwClearCache');
+
       }
 
-      return profile.account[0];
+      return profile.active;
     };
 
     /**
