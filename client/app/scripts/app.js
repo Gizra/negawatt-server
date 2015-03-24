@@ -33,6 +33,7 @@ angular
     // Complete urls if Route not defined in the $stateProvider.
     $urlRouterProvider.when('/login/', '/login');
     $urlRouterProvider.when('/logout/', '/logout');
+    $urlRouterProvider.when('/dashboard/', '/');
     // For any unmatched url, redirect to '/'.
     $urlRouterProvider.otherwise('/');
 
@@ -60,7 +61,8 @@ angular
             return Profile.get();
           }
         },
-        controller: 'DashboardCtrl'
+        controller: 'DashboardCtrl',
+        reload: true
       })
       .state('dashboard.withAccount', {
         url: 'dashboard/{accountId:int}?{chartFreq:int}&{chartNextPeriod:int}&{chartPreviousPeriod:int}',
@@ -87,11 +89,11 @@ angular
           }
         },
         views: {
-          'menu@dashboard': {
+          'menu': {
             templateUrl: 'views/dashboard/main.menu.html',
             controller: 'MenuCtrl'
           },
-          'map@dashboard': {
+          'map': {
             templateUrl: 'views/dashboard/main.map.html',
             controller: 'MapCtrl'
           },
@@ -272,6 +274,7 @@ angular
 
       $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
         $log.info('$stateChangeSuccess to ' + toState.name + '- fired once the state transition is complete.');
+        $log.log(arguments);
       });
 
       //$rootScope.$on('$viewContentLoaded', function (event) {
