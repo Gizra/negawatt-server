@@ -158,7 +158,7 @@ angular.module('negawattClientApp')
       var chartEndTimestamp;
       var chartBeginTimestamp;
 
-      if (!period) {
+      if (angular.isUndefined(period.next) || angular.isUndefined(period.previous)) {
         chartEndTimestamp = period && period.chartEndTimestamp || chartFrequencyInfo.chart_default_time_frame_end === 'now' ? moment().unix() : chartFrequencyInfo.chart_default_time_frame_end;
         chartBeginTimestamp = period && period.chartBeginTimestamp || moment.unix(chartEndTimestamp).subtract(chartFrequencyInfo.chart_default_time_frame, chartFrequencyInfo.frequency).unix();
       }

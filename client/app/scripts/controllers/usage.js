@@ -114,6 +114,11 @@ angular.module('negawattClientApp')
       // Load electricity data in the chart according the chart frequency.
       $scope.isLoading = true;
 
+      // Extend period with the maximum and minimum time, if a marker is selected.
+      if (angular.isDefined($stateParams.markerId)) {
+        period = angular.extend(period || {}, meters[$stateParams.markerId].electricity_time_interval);
+      }
+
       ChartUsage.get(account.id, $stateParams, meters, period).then(function(response) {
         $scope.usageChartData = response;
         $scope.isLoading = false;
