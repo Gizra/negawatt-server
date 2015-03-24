@@ -24,7 +24,7 @@ angular.module('negawattClientApp')
      * @param frequency
      *  String with the frequency to add od substract to the actual timestamp. (second, minute, day, month or year)
      */
-    function setParams(frequency, filters) {
+    function config(frequency, filters) {
       // Set the last timestamp.
       params = {
         last: (frequency.chart_default_time_frame_end === 'now') ? times.last = moment().unix() : frequency.chart_default_time_frame_end,
@@ -107,8 +107,8 @@ angular.module('negawattClientApp')
     }
 
     return {
-      // Get acctual configuration.
-      setFrequency: setParams,
+      // Get initial period configuration.
+      getConfig: config,
       // Return boolean to indicate if hide or no the next/previous period control.
       hideControl: hideControl,
       // Calculate the next and previous version.
