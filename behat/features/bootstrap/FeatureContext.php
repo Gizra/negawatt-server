@@ -224,6 +224,15 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
+   * @When I reload :url
+   */
+  public function iReload($url) {
+    $this->getSession()->visit($this->locatePath($url));
+    // Reload to force refresh button of the browser. "ui-router reload the state."
+    $this->getSession()->reload();
+  }
+
+  /**
    * @Then I should see the monthly kws chart for multiple markers
    */
   public function iShouldSeeTheMonthlyKwsChartForMultipleMarkers() {
@@ -253,7 +262,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     }
 
     if ($this->getSession()->getDriver() instanceof \Behat\Mink\Driver\Selenium2Driver) {
-      $file_name = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat-failed-step.png';
+      $file_name = sys_get_temp_dir() . DIRECTORY_SEPARATOR . time() . 'behat-failed-step.png';
       $screenshot = $this->getSession()->getDriver()->getScreenshot();
       file_put_contents($file_name, $screenshot);
       print "Screenshot for failed step created in $file_name";

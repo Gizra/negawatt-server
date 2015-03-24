@@ -6,7 +6,7 @@ Feature: Chart
   @javascript
   Scenario: Show chart usage monthly of the total kws of the meters.
     Given I login with user "carlos"
-    When I visit "/#/dashboard/1"
+    When I reload "/#/dashboard/1"
     Then I should see the monthly kws chart of all meters
 
   @javascript
@@ -30,3 +30,11 @@ Feature: Chart
     Given I login with user "carlos"
     When I visit "/#/dashboard/1/marker/7,8"
     Then I should see the monthly kws chart for multiple markers
+
+  @javascript @wip
+  Scenario: Show chart monthly electricity data of previous period on enter URL.
+    Given I login with user "carlos"
+    When I reload "/#/dashboard/1"
+    And I should see the monthly kws chart of all meters
+    Then I reload "/#/dashboard/1?chartFreq=2&chartNextPeriod=1363960337&chartPreviousPeriod=1300801937"
+    And I should see the previous monthly kws chart of all meters
