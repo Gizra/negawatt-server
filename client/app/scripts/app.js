@@ -30,15 +30,20 @@ angular
     'angularMoment'
   ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
+    // Complete urls if Route not defined in the $stateProvider.
+    $urlRouterProvider.when('/login/', '/login');
+    $urlRouterProvider.when('/logout/', '/logout');
     // For any unmatched url, redirect to '/'.
     $urlRouterProvider.otherwise('/');
 
     // Setup the states.
     $stateProvider
+      // path: /#/login
       .state('login', {
         url: '/login',
         templateUrl: 'views/login.html'
       })
+      // path: /#/logout
       .state('logout', {
         url: '/logout',
         template: '<ui-view/>',
