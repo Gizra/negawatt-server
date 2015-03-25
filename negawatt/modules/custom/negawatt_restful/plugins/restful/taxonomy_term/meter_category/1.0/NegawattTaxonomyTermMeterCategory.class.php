@@ -141,26 +141,27 @@ class NegawattTaxonomyTermMeterCategory extends \RestfulEntityBaseTaxonomyTerm {
     // Find normalized-electricity entities that are related to this meter
     // min and max timestamps
 
-    // first, list all children of category.
+    // First, list all children categories of the category.
     $categories = $this->getChildren($wrapper);
     $categories[] = $wrapper->getIdentifier();
 
+    // Gather the meters related to these categories.
     $meters = array();
     foreach($categories as $category) {
-      $meters += taxonomy_select_nodes($wrapper->getIdentifier());
+      $meters = array_merge($meters, taxonomy_select_nodes($category));
     }
 
     if (empty($meters)) {
       return NULL;
     }
 
-    // Query min and max timestamps
+    // Query min and max timestamps of the meters.
     $query = db_select('negawatt_electricity_normalized', 'e');
 
-    // Find only electricity entities which are related to this node
+    // Find electricity entities which are related to the relevant meters.
     $query->condition('e.meter_nid', $meters, 'IN');
 
-    // Add a query for electricity min and max timestamps
+    // Add a query for electricity min and max timestamps.
     $query->addExpression('MIN(e.timestamp)', 'min');
     $query->addExpression('MAX(e.timestamp)', 'max');
 
