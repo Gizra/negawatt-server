@@ -38,6 +38,13 @@ class NegawattIecMeterValidator extends EntityValidateBase {
       return;
     }
 
+    // If the node found is the same as the wrapper (that is, we're in update
+    // mode), don't complaint.
+    $keys = array_keys($result['node']);
+    if (count($keys) == 1 && $keys[0] == $wrapper->getIdentifier()) {
+      return;
+    }
+
     $params = array('@serial' => $meter_serial);
     $this->setError($field_name, 'The @field already has a meter with this serial @serial.', $params);
   }
