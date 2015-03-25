@@ -46,6 +46,13 @@ angular.module('negawattClientApp')
     };
 
     /**
+     * Return the electricity time interval according the meters requested.
+     */
+    this.getElectricityInterval = function() {
+      return cache.electricity_time_interval;
+    }
+
+    /**
      * Return meters array from the server.
      *
      * @param accountId
@@ -95,10 +102,10 @@ angular.module('negawattClientApp')
      */
     function setCache(data) {
       // Extend meters list.
-      cache = {
+      angular.extend(cache, {
         data: angular.extend(cache.data || {}, data),
         timestamp: new Date()
-      };
+      });
 
       // Broadcast and event to update the markers in the map.
       $rootScope.$broadcast(broadcastUpdateEventName, cache.data);
@@ -166,6 +173,9 @@ angular.module('negawattClientApp')
         meters.data[item.id].unselect();
       });
 
+      // Add total property inside the meter data object, as private property.
+      angular.extend(cache, response.total);
+
       return meters;
     }
 
@@ -215,6 +225,7 @@ angular.module('negawattClientApp')
 
       return regex.exec(url).pop();
     }
+
 
     $rootScope.$on('nwClearCache', function() {
       cache = {};

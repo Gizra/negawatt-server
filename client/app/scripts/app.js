@@ -80,6 +80,14 @@ angular
           },
           messages: function(Message) {
             return Message.get();
+          },
+          // We inject meters to be sure the cache in Meter object was filled.
+          limits: function(Meter, meters) {
+            var interval = Meter.getElectricityInterval();
+            return {
+              max: interval.max,
+              min: interval.min
+            }
           }
         },
         views: {
