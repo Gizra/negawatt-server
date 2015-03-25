@@ -1,3 +1,105 @@
+// Menu Style.
+.dashboard-menu {
+  font-family: Alef, 'Noto Serif', serif;
+  background-color: #353434;
+  position: fixed;
+  z-index: 10;
+  height: 62px;
+  width: auto;
+  top: 5px;
+  right: 0;
+  left: 5px;
+  font-size: 12px;
+
+  * {
+    display: inline-block;
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 62px;
+    vertical-align: middle;
+    height: 100%;
+    color: white;
+  }
+
+  .menu-separator {
+    border-left: 1px solid white;
+    height: 35%;
+    width: 1px;
+  }
+
+  .menu-buttom {
+    padding-right: 10px;
+  }
+
+  .menu-title {
+    width: 190px;
+    text-align: center;
+    font-size: 24px;
+  }
+
+  .menu-account {
+    width: 250px;
+    padding-right: 15px;
+
+    img.menu-account-photo {
+      width: 33px;
+      height: 33px;
+      margin-left: 5px;
+    }
+
+    img.menu-account-logout {
+      width: auto;
+      height: auto;
+      margin: 0;
+    }
+
+    span {
+      width: auto;
+      margin-left: 20px;
+
+    }
+
+  }
+
+  .menu-messages {
+    padding-right: 25px;
+
+    img {
+      width: 22px;
+      height: 22px;
+      margin-left: 5px;
+    }
+
+    span {
+      width: 110px;
+    }
+
+  }
+
+  .menu-logo {
+    float: left;
+    margin-left: 35px;
+
+    img {
+      margin-top: 11px;
+    }
+
+    h4 {
+      margin-right: 10px;
+      margin-top: -11px;
+    }
+
+  }
+
+  .menu-home {
+    img {
+      width: auto;
+      height: auto;
+      margin: 0 10px 4px;
+    }
+  }
+}
+
 .menu-timedate {
   padding: 0 10px 0 10px;
 }

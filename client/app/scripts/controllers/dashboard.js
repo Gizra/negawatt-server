@@ -8,7 +8,7 @@ angular.module('negawattClientApp')
       if (!(Object.keys($stateParams).length) && $state.is('dashboard')) {
         // Get active account after login.
         defaultAccountId = profile.account[0].id;
-        $state.go('dashboard.withAccount', {accountId: defaultAccountId});
+        $state.go('main.menu.map', {accountId: defaultAccountId});
       }
     }
     else {
