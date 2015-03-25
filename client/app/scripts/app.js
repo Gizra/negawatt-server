@@ -27,7 +27,8 @@ angular
     'ui.bootstrap.tabs',
     'template/tabs/tab.html',
     'template/tabs/tabset.html',
-    'angularMoment'
+    'angularMoment',
+    'angular-nw-weather'
   ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
     // For any unmatched url, redirect to '/'.
@@ -214,7 +215,7 @@ angular
     $httpProvider.interceptors.push(function ($q, Auth, $location, localStorageService) {
       return {
         'request': function (config) {
-          if (!config.url.match(/login-token/)) {
+          if (!config.withoutToken) {
             config.headers = {
               'access-token': localStorageService.get('access_token')
             };
