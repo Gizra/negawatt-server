@@ -7,13 +7,6 @@
  *    Resize display blocks to let usage-chart block be of a given height.
  */
 angular.module('negawattClientApp')
-  .service('ResizeBlocks', function ($stateParams) {
-    var self = this;
-
-    this.update = function($stateParams) {
-      console.log('ResizeBlocks', $stateParams.chartHeight);
-    }
-  })
   .directive('resizeBlocks', function () {
 
     /**
@@ -22,7 +15,7 @@ angular.module('negawattClientApp')
      * @param isLoading - Boolean
      *  True show the text, false hide it.
      */
-    function resizeBlocks(oldHeight, newHeight, $scope) {
+    function resizeBlocks(newHeight) {
 
       // Calculate new width and height.
       var newWidth = newHeight * 510 / 220;
@@ -54,16 +47,18 @@ angular.module('negawattClientApp')
      * @param isLoading - Boolean
      *  True show the text, false hide it.
      */
-    function link($scope, element, attrs) {
-      $scope.$watch('chartHeight', resizeBlocks)
-      $scope.$watch('resizeBlocks', resizeBlocks)
+    function link(scope) {
+      scope.$on('$locationChangeSuccess', function (param, newLocation) {
+        var match = /chartHeight=(\d+)/.exec(newLocation);
+        if (match && match.length < 2) {
+          return;
+        }
+        var height = match[1];
+        resizeBlocks(+height);
+      });
     }
 
     return {
-      link: link,
-      // Isolate scope.
-      scope: {
-        account: '='
-      }
+      link: link
     };
   });
