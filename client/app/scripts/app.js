@@ -33,7 +33,7 @@ angular
     // Complete urls if Route not defined in the $stateProvider.
     $urlRouterProvider.when('/login/', '/login');
     $urlRouterProvider.when('/logout/', '/logout');
-    $urlRouterProvider.when('/dashboard/', '/');
+
     // For any unmatched url, redirect to '/'.
     $urlRouterProvider.otherwise('/');
 
@@ -63,21 +63,21 @@ angular
         },
         controller: 'MainCtrl',
       })
-      .state('main.menu', {
-        abstract: true,
-        templateUrl: 'views/dashboard/menu.html',
-        controller: 'MenuCtrl',
-      })
-      .state('main.menu.map', {
-        url: 'home',
+      .state('main.map', {
+        url: 'home/{accountId:int}',
+        templateUrl: 'views/dashboard/menu.map.html',
         resolve: {
+          account: function(account) {
+            console.log(account);
+            return account;
+          },
           meters: function(Meter, account, $stateParams, Category) {
+            debugger;
             // Get first 100 records.
             return Meter.get(account.id);
           }
         },
-        templateUrl: 'views/dashboard/menu.map.html',
-        controller: 'MapCtrl',
+        controller: 'MainMapCtrl',
       });
 
     // Define interceptors.
