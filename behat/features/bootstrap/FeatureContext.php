@@ -150,25 +150,103 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
-   * @Then I see the monthly kws chart of all meters
+   * @Then I should see the monthly kws chart of all meters
    */
-  public function iSeeTheMonthlyKwsChartOfAllMeters() {
+  public function iShouldSeeTheMonthlyKwsChartOfAllMeters() {
     // Testing the height of the first and last column, with the default chart size and data of the migration.
     $start_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(1) > td:nth-child(2)';
-    $end_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(10) > td:nth-child(2)';
-    $this->waitForTextNgElement($start_chart, '12188');
+    $end_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(9) > td:nth-child(2)';
+    $this->waitForTextNgElement($start_chart, '8787');
     $this->waitForTextNgElement($end_chart, '12318');
   }
 
   /**
-   * @Then I see the monthly kws chart a meter
+   * @Then I should see the previous monthly kws chart of all meters
    */
-  public function iSeeTheMonthlyKwsChartAMeter() {
+  public function iShouldSeeThePreviousMonthlyKwsChartOfAllMeters() {
+    $start_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(1) > td:nth-child(2)';
+    $end_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(3) > td:nth-child(2)';
+    $this->waitForTextNgElement($start_chart, '13111');
+    $this->waitForTextNgElement($end_chart, '12188');
+  }
+
+
+  /**
+   * @Then I should see the monthly kws chart a meter
+   */
+  public function iShouldSeeTheMonthlyKwsChartAMeter() {
     // Testing the height of the first and last column, with the default chart size and data of the migration.
     $start_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(1) > td:nth-child(2)';
-    $end_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(10) > td:nth-child(2)';
-    $this->waitForTextNgElement($start_chart, '7540');
-    $this->waitForTextNgElement($end_chart, '827');
+    $end_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(9) > td:nth-child(2)';
+    $this->waitForTextNgElement($start_chart, '3081');
+    $this->waitForTextNgElement($end_chart, '3606');
+  }
+
+  /**
+   * @When I click meter :meter
+   */
+  public function iClickMeter($meter) {
+    $this->getSession()->evaluateScript('function clickMeter(e){var a={},l=Object.keys(angular.element("div.angular-leaflet-map").scope().meters);angular.element(".leaflet-marker-icon").map(function(e,r){var c=l[e];a[c]={L:r,id:c,marker:angular.element(r).bind("click")}}),a[e].marker.click()};clickMeter(' . $meter . ');');
+  }
+
+
+  /**
+   * @Then I see a marker :meter selected
+   */
+  public function iSeeAMarkerSelected($meter) {
+    $this->waitFor(function($context) use ($meter) {
+      try {
+        $element_attribute = $context->getSession()->evaluateScript('function getMetersImgSrc(e){var r={},a=Object.keys(angular.element("div.angular-leaflet-map").scope().meters);return angular.element(".leaflet-marker-icon").map(function(e,t){var n=a[e];r[n]={L:t,id:n,marker:angular.element(t).bind("click")}}),angular.element(r[e].L).attr("src")}getMetersImgSrc(' . $meter . ');');
+        if ($element_attribute !== NULL && $element_attribute == $value) {
+          return TRUE;
+        }
+        return FALSE;
+      }
+      catch (WebDriver\Exception $e) {
+        if ($e->getCode() == WebDriver\Exception::NO_SUCH_ELEMENT) {
+          return FALSE;
+        }
+        throw $e;
+      }
+    });
+  }
+
+  /**
+   * @When I press the :name button on the charts
+   */
+  public function iPressTheButtonOnTheCharts($name) {
+    if ($name === 'previous') {
+      $this->getSession()->getPage()->pressButton('chart-usage-btn-arrow-left');
+    }
+    else if ($name === 'next') {
+      $this->getSession()->getPage()->pressButton('chart-usage-btn-arrow-right');
+    }
+  }
+
+  /**
+   * @When I reload :url
+   */
+  public function iReload($url) {
+    $this->getSession()->visit($this->locatePath($url));
+    // Reload to force refresh button of the browser. "ui-router reload the state."
+    $this->getSession()->reload();
+  }
+
+  /**
+   * @Then I should see the monthly kws chart for multiple markers
+   */
+  public function iShouldSeeTheMonthlyKwsChartForMultipleMarkers() {
+    // Testing the height of the first and last column, with the default chart size and data of the migration.
+    $start_chart_meter1 = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(1) > td:nth-child(2)';
+    $end_chart_meter1 = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(9) > td:nth-child(2)';
+    $start_chart_meter2 = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(1) > td:nth-child(3)';
+    $end_chart_meter2 = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(9) > td:nth-child(3)';
+    // Meter 1.
+    $this->waitForTextNgElement($start_chart_meter1, '4941');
+    $this->waitForTextNgElement($end_chart_meter1, '827');
+    // Meter 2.
+    $this->waitForTextNgElement($start_chart_meter2, '3081');
+    $this->waitForTextNgElement($end_chart_meter2, '3606');
   }
 
   /**
@@ -184,7 +262,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     }
 
     if ($this->getSession()->getDriver() instanceof \Behat\Mink\Driver\Selenium2Driver) {
-      $file_name = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat-failed-step.png';
+      $file_name = sys_get_temp_dir() . DIRECTORY_SEPARATOR . time() . 'behat-failed-step.png';
       $screenshot = $this->getSession()->getDriver()->getScreenshot();
       file_put_contents($file_name, $screenshot);
       print "Screenshot for failed step created in $file_name";

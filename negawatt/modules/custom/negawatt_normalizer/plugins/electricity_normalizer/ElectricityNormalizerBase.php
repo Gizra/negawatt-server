@@ -143,6 +143,20 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
   }
 
   /**
+   * Calc TOUse rate tape according to current timestamp.
+   *
+   * @param $timestamp
+   *    The time of consumption.
+   *
+   * @return string
+   *    The touse rate type - one of 'peak', 'mid', 'low'.
+   */
+  protected function calcTouseRateType($timestamp) {
+    // @fixme: Calc touse rate type here.
+    return 'flat';
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function process($frequencies = array(), $from_timestamp = NULL, $to_timestamp = NULL) {
@@ -227,6 +241,12 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
     $wrapper = entity_metadata_wrapper('node', $this->getMeterNode());
     $wrapper->field_meter_processed->set(TRUE);
     $wrapper->field_last_processed->set($last_processed);
+
+    // Set 'has_electricity' field.
+    if ($num_entities) {
+      $wrapper->field_has_electricity->set(TRUE);
+    }
+
     $wrapper->save();
 
     // Also save in cache
@@ -336,6 +356,18 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
       'entities' => $processed_entities,
       'last_processed' => $last_processed,
     );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function processRawEntity($record, $prev_record) {
+    // Set TOUse rate-type if necessary
+    if (empty($record->rate_type)) {
+      $record->rate_type = $this->calcTouseRateType($record->timestamp);
+    }
+
+    return $record;
   }
 
   /**

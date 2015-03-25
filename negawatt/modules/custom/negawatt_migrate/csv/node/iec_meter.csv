@@ -1,7 +1,7 @@
 Unique ID,title,Account ref,Location,Contract ID,locality,address,Place Description,Meter Code,Meter Serial,Country,Last processed,Meter category,Max frequency
-meter1,meter1,account1,31.6111984|34.7744589,1339935,kytiat gat,herzel 22,school,442,36088587,IL,2014-8-1 00:00,school,2
-meter2,meter2,account1,31.611148|34.768459,9311819,kytiat gat,herzel 28,building,74,1203513,IL,2014-8-1 00:00,shelter,2
-meter3,meter3,account1,31.6027561|34.760065,968881,kytiat gat,herzel 80,school,464,10187716,IL,2014-8-1 00:00,security,5
+meter1,meter1,account1,31.6111984|34.7744589,1339935,kiryat gat,hazmaut 22,school,442,36088587,IL,2014-8-1 00:00,school,2
+meter2,meter2,account1,31.611148|34.768459,9311819,kiryat gat,zahal 28,building,74,1203513,IL,2014-8-1 00:00,shelter,2
+meter3,meter3,account1,31.6027561|34.760065,968881,kiryat gat,gat 80,school,464,10187716,IL,2014-8-1 00:00,security,5
 meter10,meter10,account2,29.5523145|34.9543239,1339935,Eilat,Tarshish St,מונה ראשי,335,86088587,IL,2014-8-1 00:00,nirvana-iec,2
 meter11,meter11,account2,29.551895|34.951700,5985819,Eilat,Derekh Yotam 4,מונה משנה - צ'ילרים,74,1203513,IL,2014-8-1 00:00,nirvana-iec,2
 meter12,meter12,account2,29.551474|34.957052,968881,Eilat,Ofira Park,מונה ראשי,564,10456716,IL,2014-8-1 00:00,seaside-iec,5

@@ -58,6 +58,7 @@ function satec_field_default_field_instances() {
         'available_countries' => array(
           'IL' => 'IL',
         ),
+        'default_country' => '',
         'format_handlers' => array(
           'address' => 'address',
           'address-hide-country' => 0,
@@ -67,7 +68,93 @@ function satec_field_default_field_instances() {
         ),
       ),
       'type' => 'addressfield_standard',
-      'weight' => 11,
+      'weight' => 12,
+    ),
+  );
+
+  // Exported field_instance: 'node-satec_meter-field_category_valid'
+  $field_instances['node-satec_meter-field_category_valid'] = array(
+    'bundle' => 'satec_meter',
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => 'Did the meter category decipher correctly?',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 15,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_category_valid',
+    'label' => 'Category valid',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'display_label' => 1,
+      ),
+      'type' => 'options_onoff',
+      'weight' => 16,
+    ),
+  );
+
+  // Exported field_instance: 'node-satec_meter-field_has_electricity'
+  $field_instances['node-satec_meter-field_has_electricity'] = array(
+    'bundle' => 'satec_meter',
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => 'Does the meter has any normalized electricity data?',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 16,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_has_electricity',
+    'label' => 'Has electricity',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'display_label' => 1,
+      ),
+      'type' => 'options_onoff',
+      'weight' => 18,
     ),
   );
 
@@ -120,7 +207,7 @@ function satec_field_default_field_instances() {
         'year_range' => '-3:+3',
       ),
       'type' => 'date_text',
-      'weight' => 13,
+      'weight' => 14,
     ),
   );
 
@@ -158,6 +245,49 @@ function satec_field_default_field_instances() {
       'settings' => array(),
       'type' => 'geolocation_text',
       'weight' => 3,
+    ),
+  );
+
+  // Exported field_instance: 'node-satec_meter-field_location_valid'
+  $field_instances['node-satec_meter-field_location_valid'] = array(
+    'bundle' => 'satec_meter',
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => 'Did the address geocode correctly into location field?',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 14,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_location_valid',
+    'label' => 'Location valid',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'display_label' => 1,
+      ),
+      'type' => 'options_onoff',
+      'weight' => 4,
     ),
   );
 
@@ -234,7 +364,7 @@ function satec_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 14,
+      'weight' => 15,
     ),
   );
 
@@ -280,7 +410,7 @@ function satec_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 10,
+      'weight' => 11,
     ),
   );
 
@@ -320,7 +450,7 @@ function satec_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 8,
+      'weight' => 9,
     ),
   );
 
@@ -366,7 +496,7 @@ function satec_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 9,
+      'weight' => 10,
     ),
   );
 
@@ -409,7 +539,7 @@ function satec_field_default_field_instances() {
         'display_label' => 1,
       ),
       'type' => 'options_onoff',
-      'weight' => 12,
+      'weight' => 13,
     ),
   );
 
@@ -449,7 +579,7 @@ function satec_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 4,
+      'weight' => 5,
     ),
   );
 
@@ -489,7 +619,7 @@ function satec_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 5,
+      'weight' => 6,
     ),
   );
 
@@ -529,7 +659,7 @@ function satec_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 6,
+      'weight' => 7,
     ),
   );
 
@@ -618,16 +748,22 @@ function satec_field_default_field_instances() {
       'module' => 'og_vocab',
       'settings' => array(),
       'type' => 'og_vocab_complex',
-      'weight' => 7,
+      'weight' => 8,
     ),
   );
 
   // Translatables
   // Included for use with string extractors like potx.
   t('Address');
+  t('Category valid');
+  t('Did the address geocode correctly into location field?');
+  t('Did the meter category decipher correctly?');
+  t('Does the meter has any normalized electricity data?');
   t('Groups audience');
+  t('Has electricity');
   t('Last processed');
   t('Location');
+  t('Location valid');
   t('MAC address');
   t('Max frequency');
   t('Maximal sampling frequency for the meter.');

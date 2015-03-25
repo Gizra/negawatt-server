@@ -27,7 +27,8 @@ angular
     'ui.bootstrap.tabs',
     'template/tabs/tab.html',
     'template/tabs/tabset.html',
-    'angularMoment'
+    'angularMoment',
+    'angular-nw-weather'
   ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
     // For any unmatched url, redirect to '/'.
@@ -58,7 +59,8 @@ angular
         controller: 'DashboardCtrl'
       })
       .state('dashboard.withAccount', {
-        url: 'dashboard/{accountId:int}?:chartFreq,chartHeight',
+        url: 'dashboard/{accountId:int}?{chartFreq:int}&{chartHeight:int}&{chartNextPeriod:int}&{chartPreviousPeriod:int}',
+        reloadOnSearch: false,
         params: {
           chartFreq: {
             // Keep monthly chart type by default.
@@ -113,10 +115,10 @@ angular
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
               // Get electricity data and transform it into chart format.
-              usage: function(ChartUsage, $state, $stateParams, account) {
+              usage: function(ChartUsage, $state, $stateParams, account, meters) {
                 // Perform the GET only if we're in the proper (parent) state.
                 if ($state.current.name == 'dashboard.withAccount') {
-                  return ChartUsage.get(account.id, $stateParams);
+                  return ChartUsage.get(account.id, $stateParams, meters);
                 } else {
                   return {};
                 }
@@ -128,6 +130,7 @@ angular
       })
       .state('dashboard.withAccount.categories', {
         url: '/category/{categoryId:int}',
+        reloadOnSearch: false,
         views: {
           // Replace `meters` data previous resolved, with the cached data
           // filtered by the selected category.
@@ -145,8 +148,8 @@ angular
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
               // Get electricity data and transform it into chart format.
-              usage: function(ChartUsage, $stateParams, account) {
-                return ChartUsage.get(account.id, $stateParams);
+              usage: function(ChartUsage, $stateParams, account, meters) {
+                return ChartUsage.get(account.id, $stateParams, meters);
               }
             },
             controller: 'UsageCtrl'
@@ -169,6 +172,7 @@ angular
       })
       .state('dashboard.withAccount.markers', {
         url: '/marker/:markerId?categoryId',
+        reloadOnSearch: false,
         views: {
           // Replace `meters` data previous resolved, with the cached data
           // if is the case filtered by the selected category.
@@ -201,8 +205,8 @@ angular
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
               // Get electricity data and transform it into chart format.
-              usage: function(ChartUsage, $stateParams, account) {
-                return ChartUsage.get(account.id, $stateParams);
+              usage: function(ChartUsage, $stateParams, account, meters) {
+                return ChartUsage.get(account.id, $stateParams, meters);
               }
             },
             controller: 'UsageCtrl'
@@ -214,7 +218,7 @@ angular
     $httpProvider.interceptors.push(function ($q, Auth, $location, localStorageService) {
       return {
         'request': function (config) {
-          if (!config.url.match(/login-token/)) {
+          if (!config.withoutToken) {
             config.headers = {
               'access-token': localStorageService.get('access_token')
             };

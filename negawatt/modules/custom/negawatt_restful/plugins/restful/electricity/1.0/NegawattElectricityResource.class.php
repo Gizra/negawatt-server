@@ -94,6 +94,10 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     $query->addExpression('AVG(avg_power)', 'avg_power');
 
     // Set grouping.
+    // If filtering for 'meter IN ...', don't sum over meters - add a group by meter.
+    if (!empty($this->request['filter']['meter']['operator']) && $this->request['filter']['meter']['operator'] == 'IN') {
+      $query->groupBy('meter_nid');
+    }
     $query->groupBy('timestamp');
     $query->groupBy('rate_type');
     $query->groupBy('negawatt_electricity_normalized.type');

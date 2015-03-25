@@ -134,6 +134,30 @@
         z-index: 20;
       }
 
+      .btn-arrow {
+        width: 30px;
+        height: 30px;
+        position: absolute;
+        top: 0px;
+        z-index: 25;
+
+        .glyphicon {
+          left: 5px;
+        }
+
+        &.btn-transparent {
+          border-radius: 50%;
+        }
+
+        &.btn-arrow-left {
+          left: 50px;
+        }
+
+        &.btn-arrow-right {
+          right: 65px;
+        }
+      }
+
       .title {
         font-size: large;
         font-weight: bold;

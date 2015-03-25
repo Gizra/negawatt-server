@@ -19,6 +19,8 @@ class ElectricityNormalizerSatec extends \ElectricityNormalizerBase {
    * {@inheritdoc}
    */
   public function processRawEntity($record, $prev_record) {
+    parent::processRawEntity($record, $prev_record);
+
     $processed_record = clone $record;
     if (!$prev_record) {
       // No previous record, can't figure out kWhs...

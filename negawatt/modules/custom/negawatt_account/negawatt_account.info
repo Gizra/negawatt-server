@@ -42,5 +42,4 @@ features[variable][] = node_options_account
 features[variable][] = node_preview_account
 features[variable][] = node_submitted_account
 features_exclude[dependencies][options] = options
-mtime = 1420634885
 project path = profiles/negawatt/modules/custom

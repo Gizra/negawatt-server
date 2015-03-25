@@ -1,2 +1,2 @@
 Unique ID,title,Account ref,Location,MAC address,locality,address,Place Description,IP address,Port,Meter id,Country,Last processed,Meter category,Max frequency
-satec1,satec1,account2,31.603466403994243|34.77099895477295,123:456:7890,kytiat gat,herzel 22,A/C line in Ben Gurion sports club,123.456.789.012,442,1,IL,2014-7-1 12:34,hall|pool,5
+satec1,satec1,account2,31.603466403994243|34.77099895477295,123:456:7890,kytiat gat,herzel 22,A/C line in Ben Gurion sports club,123.456.789.012,442,1,IL,2014-7-1 12:34,seaside|seaside-satec,5

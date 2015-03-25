@@ -19,6 +19,8 @@ class ElectricityNormalizerIec extends \ElectricityNormalizerBase {
    * {@inheritdoc}
    */
   public function processRawEntity($record, $prev_record) {
+    parent::processRawEntity($record, $prev_record);
+
     // Nothing to do.
     return $record;
   }
