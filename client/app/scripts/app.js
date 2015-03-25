@@ -83,6 +83,9 @@ angular
           },
           messages: function(Message) {
             return Message.get();
+          },
+          chartHeight: function(ResizeBlocks, $stateParams) {
+            return ResizeBlocks.update($stateParams);
           }
         },
         views: {
