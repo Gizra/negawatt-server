@@ -65,18 +65,17 @@ angular
       })
       .state('main.map', {
         url: 'home/{accountId:int}',
-        templateUrl: 'views/dashboard/menu.map.html',
         resolve: {
           account: function(account) {
             console.log(account);
             return account;
           },
           meters: function(Meter, account, $stateParams, Category) {
-            debugger;
             // Get first 100 records.
             return Meter.get(account.id);
           }
         },
+        templateUrl: 'views/dashboard/menu.map.html',
         controller: 'MainMapCtrl',
       });
 
