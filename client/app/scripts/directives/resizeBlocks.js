@@ -48,9 +48,9 @@ angular.module('negawattClientApp')
      *  True show the text, false hide it.
      */
     function link(scope) {
-      scope.$on('$locationChangeSuccess', function (param, newLocation) {
+      scope.$on('$locationChangeSuccess', function (event, newLocation) {
         var match = /chartHeight=(\d+)/.exec(newLocation);
-        if (match && match.length < 2) {
+        if (!match || match.length < 2) {
           return;
         }
         var height = match[1];
