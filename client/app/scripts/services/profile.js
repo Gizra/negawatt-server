@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Profile', function ($q, $http, $timeout, $filter, $state, $rootScope, Config) {
+  .service('Profile', function ($q, $http, $timeout, $filter, $state, $rootScope, Config, localStorageService) {
     var self = this;
 
     // A private cache key.
@@ -9,6 +9,16 @@ angular.module('negawattClientApp')
 
     // Update event broadcast name.
     var broadcastUpdateEventName = 'nwProfileChanged';
+
+    /**
+     * Return the active account.
+     *
+     * @returns {*}
+     *  The account object.
+     */
+    function getAccount() {
+      return localStorageService.get('activeAccount');
+    }
 
     /**
      * Return the promise with the account, from cache or the server.
@@ -20,7 +30,7 @@ angular.module('negawattClientApp')
     };
 
     /**
-     * Return the account active
+     * Select from a account id the active account to use in the application.
      *
      * @param accountId
      *  The account ID comming form the URL params.
@@ -31,19 +41,22 @@ angular.module('negawattClientApp')
      *  The account object selected.
      */
     this.selectAccount = function(accountId, profile) {
+      var active;
+
       // Cast integer.
       accountId = +accountId;
+      active = getAccount();
+
       // Check if accountId is the same of active.
-      if (angular.isUndefined(profile.active) || profile.active.id !== accountId) {
+      if (!active || (active && active.id !== accountId)) {
         // Get select the account as active.
-        profile.active = ($filter('filter')(profile.account, {id: accountId})).pop();
+        localStorageService.set('activeAccount', ($filter('filter')(profile.account, {id: accountId})).pop());
 
         // Clear app cache, if new account was selected or there not define the active account.
         $rootScope.$broadcast('nwClearCache');
-
       }
 
-      return profile.active;
+      return getAccount();
     };
 
     /**

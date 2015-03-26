@@ -66,8 +66,9 @@ angular
       .state('main.map', {
         url: 'home/{accountId:int}',
         resolve: {
-          account: function(account) {
-            console.log(account);
+          account: function($stateParams, Profile, profile) {
+            var account = Profile.selectAccount($stateParams.accountId, profile);
+
             return account;
           },
           meters: function(Meter, account, $stateParams, Category) {
