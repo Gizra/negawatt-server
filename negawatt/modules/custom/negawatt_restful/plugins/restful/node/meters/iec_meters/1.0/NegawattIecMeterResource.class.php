@@ -39,7 +39,6 @@ class NegawattIecMeterResource extends \NegawattEntityMeterBase {
     $entities = $query->entityCondition('entity_type', 'node')
       ->propertyCondition('type', array('iec_meter', 'satec_meter'), 'IN')
       ->propertyCondition('title', $this->request['label'])
-      ->propertyCondition('status', NODE_PUBLISHED)
       ->range(0,1)
       ->execute();
 
