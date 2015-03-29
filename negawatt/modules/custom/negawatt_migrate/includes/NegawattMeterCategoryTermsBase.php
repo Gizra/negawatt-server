@@ -2,17 +2,11 @@
 
 /**
  * @file
- * Contains \NegawattItemStatusTermsMigrate.
+ * Contains \NegawattMeterCategoryTermsBase.
  */
 
-/**
- * Migrate Meter-category taxonomy terms.
- */
-
-class NegawattMeterCategoryTermsMigrate extends Migration {
-
+abstract class NegawattMeterCategoryTermsBase extends Migration {
   public $entityType = 'taxonomy_term';
-  public $bundle = 'meter_category';
 
   protected $csvColumns = array(
     array('account_id', 'account_id'),
@@ -70,14 +64,16 @@ class NegawattMeterCategoryTermsMigrate extends Migration {
   /**
    * Override Migration::prepare().
    *
-   * Set the term parent for hierarchical terms
+   * Set the term parent for heirarchical terms
    *
    * @param $term
    * @param $row
    */
   public function prepare($term, $row) {
+
     // Handle og_vocab
-    $vocab_name = $this->bundle . '_' . $row->account_id;
+    $vocab_name = $this->bundle;
+
     if (!$vocabulary = taxonomy_vocabulary_machine_name_load($vocab_name)) {
       // Create a new vocabulary
       $vocabulary = (object) array(
@@ -86,25 +82,25 @@ class NegawattMeterCategoryTermsMigrate extends Migration {
         'machine_name' => $vocab_name,
       );
       taxonomy_vocabulary_save($vocabulary);
-
-      // Create an OG-vocab and relate new vocabulary with OG.
-      $account_id = $term->account_id['destid1'];
-      $settings = array(
-        'cardinality' => 1,
-        'required' => FALSE,
-      );
-      // Loop for all meter content-types and create og-vocabulary.
-      $node_types = node_type_get_types();
-      foreach ($node_types as $content_type) {
-        if (strpos($content_type->type, '_meter') === FALSE) {
-          // Not a meter type, skip.
-          continue;
-        }
-        $og_vocab = og_vocab_create_og_vocab($vocabulary->vid, 'node', $content_type->type, OG_VOCAB_FIELD, $settings);
-        $og_vocab->save();
-      }
-      og_vocab_relation_save($vocabulary->vid, 'node', $account_id);
     }
+
+    // Create an OG-vocab and relate new vocabulary with OG.
+    $account_id = $term->account_id['destid1'];
+    $settings = array(
+      'cardinality' => 1,
+      'required' => TRUE,
+    );
+    // Loop for all meter content-types and create og-vocabulary.
+    $node_types = node_type_get_types();
+    foreach ($node_types as $content_type) {
+      if (strpos($content_type->type, '_meter') === FALSE) {
+        // Not a meter type, skip.
+        continue;
+      }
+      $og_vocab = og_vocab_create_og_vocab($vocabulary->vid, 'node', $content_type->type, OG_VOCAB_FIELD, $settings);
+      $og_vocab->save();
+    }
+    og_vocab_relation_save($vocabulary->vid, 'node', $account_id);
 
     // Save vocabulary id.
     $term->vid = $vocabulary->vid;

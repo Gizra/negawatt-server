@@ -193,6 +193,30 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
 
     $handler = negawatt_normalizer_get_electricity_normalizer_handler('satec');
 
+    // Test TOUse functionality
+
+    // Standard day, winter
+    $this->assertTrue($handler->calcTouseRateType(strtotime('2014-2-20 7:00'))->rate_type == 'mid', 'TOUse calc mid succeeded.');
+    $this->assertTrue($handler->calcTouseRateType(strtotime('2014-2-20 10:00'))->rate_type == 'low', 'TOUse calc low succeeded.');
+    $this->assertTrue($handler->calcTouseRateType(strtotime('2014-2-20 18:00'))->rate_type == 'peak', 'TOUse calc peak succeeded.');
+    // Friday
+    $this->assertTrue($handler->calcTouseRateType(strtotime('2014-2-21 7:00'))->rate_type == 'low', 'TOUse calc Friday low succeeded.');
+    $this->assertTrue($handler->calcTouseRateType(strtotime('2014-2-21 18:00'))->rate_type == 'mid', 'TOUse calc Friday mid succeeded.');
+    $this->assertTrue($handler->calcTouseRateType(strtotime('2014-2-21 21:00'))->rate_type == 'low', 'TOUse calc Friday low 2 succeeded.');
+    // Saturday
+    $this->assertTrue($handler->calcTouseRateType(strtotime('2014-2-22 16:00'))->rate_type == 'low', 'TOUse calc Saturday low succeeded.');
+    $this->assertTrue($handler->calcTouseRateType(strtotime('2014-2-22 18:00'))->rate_type == 'peak', 'TOUse calc Saturday peak succeeded.');
+    $this->assertTrue($handler->calcTouseRateType(strtotime('2014-2-22 19:00'))->rate_type == 'mid', 'TOUse calc Saturday peak succeeded.');
+    // Standard day, summer
+    $this->assertTrue($handler->calcTouseRateType(strtotime('2014-3-19 7:00'))->rate_type == 'peak', 'TOUse calc summer peak succeeded.');
+    $this->assertTrue($handler->calcTouseRateType(strtotime('2014-3-19 20:00'))->rate_type == 'mid', 'TOUse calc summer mid succeeded.');
+    $this->assertTrue($handler->calcTouseRateType(strtotime('2014-3-19 23:00'))->rate_type == 'low', 'TOUse calc summer low succeeded.');
+    // Holiday, summer
+    // @fixme: change after adding holidays.
+    $this->assertTrue($handler->calcTouseRateType(strtotime('2014-3-16 7:00'))->rate_type == 'peak', 'TOUse calc summer peak succeeded.');
+    $this->assertTrue($handler->calcTouseRateType(strtotime('2014-3-16 20:00'))->rate_type == 'mid', 'TOUse calc summer mid succeeded.');
+    $this->assertTrue($handler->calcTouseRateType(strtotime('2014-3-16 23:00'))->rate_type == 'low', 'TOUse calc summer low succeeded.');
+
     // Make sure geolocation went well
     $wrapper = entity_metadata_wrapper('node', $this->meterNode1);
     $location = $wrapper->field_location->value();
