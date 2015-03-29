@@ -17,6 +17,10 @@ class NegawattTaxonomyTermMeterCategory extends \RestfulEntityBaseTaxonomyTerm {
       'callback' => array($this, 'getChildren',)
     );
 
+    $public_fields['icon'] = array(
+      'property' => 'field_icon_categories',
+    );
+
     return $public_fields;
   }
 

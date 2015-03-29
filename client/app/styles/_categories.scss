@@ -1,6 +1,6 @@
 // Categories Style
 ol, ul {
-  padding-right: 10px;
+  padding-right: 7px;
   list-style-type: none;
 }
 
@@ -22,21 +22,30 @@ ol, ul {
   }
 
   li {
-    line-height: 28px;
+    line-height: 25px;
   }
 
   .tree-level-top {
     margin-left: 10px;
 
+    img {
+      position: relative;
+      right: 13px;
+      bottom: 3px;
+      width: 17px;
+    }
+
     a {
       color: #2c2c2c;
+      font-size: 12px;
+      font-weight: bolder;
 
       span {
-        padding-right: 7px;
+        padding-right: 16px;
         color: #2c2c2c;
-        font-size: 16px;
+        font-size: 13px;
         font-weight: bold;
-        line-height: 21px;
+        line-height: 17px;
       }
     }
 
@@ -47,18 +56,20 @@ ol, ul {
   }
 
   .tree-level-middle {
-    font-size: 13px;
+    font-size: 12px;
     margin-left: 10px;
 
     a {
       color: #3e3e3e;
 
       span {
-        padding-right: 14px;
+        padding-right: 43px;
       }
 
       i {
         font-size: 9px;
+        position: relative;
+        right: 26px;
       }
     }
 
@@ -86,6 +97,5 @@ ol, ul {
   // Style of the input checkbox.
   input.hide-meters-category {
     float: left;
-    margin: 7px;
   }
 }

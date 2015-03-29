@@ -1,64 +1,49 @@
-account_id,id,name,parent,weight,description
-account1,public,מבנה ציבור,,,מבנים ציבוריים כגון משרדים
-account1,office,מבנה משרדים,מבנה ציבור,,מבנה משרדים
-account1,municipality,משרדי העירייה,מבנה ציבור,,משרדי העירייה
-account1,library,ספריה,מבנה ציבור,,ספריה
-account1,edu,מבנה חינוך,,,מבנה חינוך
-account1,kindergarten,גן ילדים,מבנה חינוך,,גני ילדים
-account1,school,בית ספר,מבנה חינוך,,בתי ספר
-account1,pais,אשכול פיס,מבנה חינוך,,אשכול פיס
-account1,youth,מרכז נוער,מבנה חינוך,,מרכז נוער
-account1,pedago,מרכז פדגוגי,מבנה חינוך,,מרכז פדגוגי
-account1,outdoor,תאורת חוץ,,,תאורת חוץ
-account1,street,תאורת רחובות,תאורת חוץ,,תאורת רחובות
-account1,traffic,רמזור,תאורת חוץ,,רמזור
-account1,security,בטחון,,,בטחון
-account1,shelter,מקלט,בטחון,,מקלט
-account1,storeroom,מחסן חרום,בטחון,,מחסן חרום
-account1,police,שיטור קהילתי,בטחון,,שיטור קהילתי
-account1,sport,מתקן ספורט,,,מתקן ספורט
-account1,pool,בריכת שחייה,מתקן ספורט,,בריכת שחייה
-account1,field,מגרש ספורט,מתקן ספורט,,מגרש ספורט
-account1,hall,אולם ספורט,מתקן ספורט,,אולם ספורט
-account1,religion,שרותי דת,,,שרותי דת
-account1,prayer,בית תפילה,שרותי דת,,בית תפילה
-account1,synagogue,בית כנסת,בית תפילה,,בית כנסת
-account1,church,כנסיה,בית תפילה,,כנסיה
-account1,mosque,מסגד,בית תפילה,,מסגד
-account1,relcouncil,מועצה דתית,שרותי דת,,מועצה דתית
-account1,mikve,מקווה,שרותי דת,,מקווה
-account1,health,בריאות,,,בריאות
-account1,mental,בריאות הנפש,בריאות,,בריאות הנפש
-account1,paishealth,פיס לבריאות,בריאות,,פיס לבריאות
-account1,water,מתקן מים,,,מתקן מים
-account1,welfare,רווחה,,,רווחה
-account1,apartment,דירת רווחה,רווחה,,דירת רווחה
-account1,psyco,השירות הפסיכולוגי,רווחה,,השירות הפסיכולוגי
-account1,club,מועדון,רווחה,,מועדון
-account1,elderly,מרכז יום לקשיש,רווחה,,מרכז יום לקשיש
-account1,community,מרכז קהילתי,רווחה,,מרכז קהילתי
-account1,culture,תרבות,,,תרבות
-account1,other,אחר,,,אחר
-account2,astral,רשת מלונות אסטרל,,,מלון
-account2,nirvana,נירוונה,רשת מלונות אסטרל,,מלון
-account2,nirvana-iec,מונה ראשי - נירוונה,נירוונה,,מלון
-account2,seaside,סיסייד,רשת מלונות אסטרל,,מלון
-account2,seaside-iec,מונה ראשי - סיסייד,סיסייד,,מלון
-account2,seaside-satec,צ׳ילרים - סיסייד,סיסייד,,מלון
-account2,coral,קורל,רשת מלונות אסטרל,,מלון
-account2,coral-iec,מונה ראשי - קורל,קורל,,מלון
-account2,other2,אחר,,,אחר
-account3,public3,מבנה ציבור,,,מבנים ציבוריים כגון משרדים
-account3,office3,מבנה משרדים,מבנה ציבור,,מבנה משרדים
-account3,municipality3,משרדי העירייה,מבנה ציבור,,משרדי העירייה
-account3,library3,ספריה,מבנה ציבור,,ספריה
-account3,edu3,מבנה חינוך,,,מבנה חינוך
-account3,kindergarten3,גן ילדים,מבנה חינוך,,גני ילדים
-account3,school3,בית ספר,מבנה חינוך,,בתי ספר
-account3,pais3,אשכול פיס,מבנה חינוך,,אשכול פיס
-account3,youth3,מרכז נוער,מבנה חינוך,,מרכז נוער
-account3,pedago3,מרכז פדגוגי,מבנה חינוך,,מרכז פדגוגי
-account3,outdoor3,תאורת חוץ,,,תאורת חוץ
-account3,street3,תאורת רחובות,תאורת חוץ,,תאורת רחובות
-account3,traffic3,רמזור,תאורת חוץ,,רמזור
-account3,other3,אחר,,,אחר
+account_id,id,name,parent,weight,description,field_icon_categories
+account1,public,מבנה ציבור,,,מבנים ציבוריים כגון משרדים,public_building
+account1,office,מבנה משרדים,מבנה ציבור,,מבנה משרדים,public_building
+account1,municipality,משרדי העירייה,מבנה ציבור,,משרדי העירייה,public_building
+account1,library,ספריה,מבנה ציבור,,ספריה,public_building
+account1,edu,מבנה חינוך,,,מבנה חינוך,education
+account1,kindergarten,גן ילדים,מבנה חינוך,,גני ילדים,education
+account1,school,בית ספר,מבנה חינוך,,בתי ספר,education
+account1,pais,אשכול פיס,מבנה חינוך,,אשכול פיס,education
+account1,youth,מרכז נוער,מבנה חינוך,,מרכז נוער,education
+account1,pedago,מרכז פדגוגי,מבנה חינוך,,מרכז פדגוגי,education
+account1,outdoor,תאורת חוץ,,,תאורת חוץ,lighting
+account1,street,תאורת רחובות,תאורת חוץ,,תאורת רחובות,lighting
+account1,traffic,רמזור,תאורת חוץ,,רמזור,traffic_light
+account1,security,בטחון,,,בטחון,security
+account1,shelter,מקלט,בטחון,,מקלט,security
+account1,storeroom,מחסן חרום,בטחון,,מחסן חרום,security
+account1,police,שיטור קהילתי,בטחון,,שיטור קהילתי,security
+account1,sport,מתקן ספורט,,,מתקן ספורט,sports
+account1,pool,בריכת שחייה,מתקן ספורט,,בריכת שחייה,sports
+account1,field,מגרש ספורט,מתקן ספורט,,מגרש ספורט,sports
+account1,hall,אולם ספורט,מתקן ספורט,,אולם ספורט,sports
+account1,religion,שרותי דת,,,שרותי דת,religion
+account1,prayer,בית תפילה,שרותי דת,,בית תפילה,religion
+account1,synagogue,בית כנסת,בית תפילה,,בית כנסת,religion
+account1,church,כנסיה,בית תפילה,,כנסיה,religion
+account1,mosque,מסגד,בית תפילה,,מסגד,religion
+account1,relcouncil,מועצה דתית,שרותי דת,,מועצה דתית,religion
+account1,mikve,מקווה,שרותי דת,,מקווה,religion
+account1,health,בריאות,,,בריאות,health
+account1,mental,בריאות הנפש,בריאות,,בריאות הנפש,health
+account1,paishealth,פיס לבריאות,בריאות,,פיס לבריאות,health
+account1,water,מתקן מים,,,מתקן מים,water
+account1,welfare,רווחה,,,רווחה,welfare
+account1,apartment,דירת רווחה,רווחה,,דירת רווחה,welfare
+account1,psyco,השירות הפסיכולוגי,רווחה,,השירות הפסיכולוגי,welfare
+account1,club,מועדון,רווחה,,מועדון,welfare
+account1,elderly,מרכז יום לקשיש,רווחה,,מרכז יום לקשיש,welfare
+account1,community,מרכז קהילתי,רווחה,,מרכז קהילתי,welfare
+account1,culture,תרבות,,,תרבות,culture
+account1,other,אחר,,,אחר,other
+account2,astral,"רשת מלונות אסטרל",,,מלון,astral
+account2,nirvana,נירוונה,"רשת מלונות אסטרל",,מלון,nirvana
+account2,nirvana-iec,"מונה ראשי - נירוונה",נירוונה,,מלון,nirvana-iec
+account2,seaside,סיסייד,"רשת מלונות אסטרל",,מלון,seaside
+account2,seaside-iec,"מונה ראשי - סיסייד",סיסייד,,מלון,seaside-iec
+account2,coral,קורל,"רשת מלונות אסטרל",,מלון,coral
+account2,coral-iec,"מונה ראשי - קורל",קורל,,מלון,coral-iec
+account2,other2,אחר,,,אחר,other
