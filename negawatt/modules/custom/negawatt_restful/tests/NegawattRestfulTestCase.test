@@ -180,7 +180,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     $id = $result['id'];
     $this->assertEqual($result['id'], 3, '<b>Testing POST request</b><br>Meter created successfuly.');
 
-    $request['max_frequency'] = 5;;
+    $request['max_frequency'] = 5;
     $result = $handler->post('', $request);
 
     $this->assertEqual($result['id'], $id, 'Meter update successful.');
