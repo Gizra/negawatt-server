@@ -110,6 +110,11 @@ class NegawattEntityMeterBase extends \NegawattEntityBaseNode {
    *   A categories id array.
    */
   protected function meterCategories($value) {
+    // Callback supports only GET requests.
+    if ($this->method != 'GET') {
+      return;
+    }
+
     $wrapper = entity_metadata_wrapper('node', $value);
     $meter_categories = $wrapper->{OG_VOCAB_FIELD}->value();
     // Loop for meter-category vocabularies only

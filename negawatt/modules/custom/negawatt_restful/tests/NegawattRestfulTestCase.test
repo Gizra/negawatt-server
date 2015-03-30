@@ -177,14 +177,15 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
       'max_frequency' => 2,
     );
     $result = $handler->post('', $request);
-    $id = $result['id'];
-    $this->assertEqual($result['id'], 3, '<b>Testing POST request</b><br>Meter created successfuly.');
+    $id = $result[0]['id'];
+    $this->assertEqual($result[0]['label'], '4135364-604-1536093', '<b>Testing POST request</b><br>Meter created successfuly.');
+    $this->assertEqual($result[0]['max_frequency'], 2, 'max_frequency field is OK.');
 
     $request['max_frequency'] = 5;
     $result = $handler->post('', $request);
 
-    $this->assertEqual($result['id'], $id, 'Meter update successful.');
-    $this->assertEqual($result['max_frequency'], 5, 'Meter max_frequency was updated.');
+    $this->assertEqual($result[0]['id'], $id, 'Meter update successful.');
+    $this->assertEqual($result[0]['max_frequency'], 5, 'Meter max_frequency was updated.');
 
     // @todo: Test 'meters' API call
     // @todo: Test that both satec and iec meters are returned.
