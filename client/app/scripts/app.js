@@ -215,10 +215,10 @@ angular
     $httpProvider.interceptors.push(function ($q, Auth, $location, localStorageService) {
       return {
         'request': function (config) {
-          if (!config.withoutToken) {
-            config.headers = {
+          if (!config.withoutToken && !config.url.match(/.html/)) {
+            angular.extend(config.headers, {
               'access-token': localStorageService.get('access_token')
-            };
+            });
           }
           return config;
         },
