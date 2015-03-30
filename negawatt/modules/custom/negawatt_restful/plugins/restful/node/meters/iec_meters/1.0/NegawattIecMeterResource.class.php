@@ -36,15 +36,16 @@ class NegawattIecMeterResource extends \NegawattEntityMeterBase {
   public function createEntity() {
     // Check if a meter with the same label exists.
     $query = new EntityFieldQuery();
-    $entities = $query->entityCondition('entity_type', 'node')
+    $result = $query->entityCondition('entity_type', 'node')
       ->propertyCondition('type', array('iec_meter', 'satec_meter'), 'IN')
       ->propertyCondition('title', $this->request['label'])
       ->range(0,1)
       ->execute();
 
-    if (!empty($entities['node'])) {
+    if (!empty($result['node'])) {
       // Node exists, update it.
-      return parent::updateEntity(array_keys($entities['node'])[0]);
+      $id = key($result['node']);
+      return parent::updateEntity($id);
     }
     // New node.
     return parent::createEntity();
