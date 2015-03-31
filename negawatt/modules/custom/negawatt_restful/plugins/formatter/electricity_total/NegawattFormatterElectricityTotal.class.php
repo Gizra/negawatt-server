@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * Contains NegawattFormatterMetersTotal.
+ * Contains NegawattFormatterElectricityTotal.
  */
-class NegawattFormatterMetersTotal extends \RestfulFormatterJson {
+class NegawattFormatterElectricityTotal extends \RestfulFormatterJson {
   /**
    * {@inheritdoc}
    *
-   * Add 'total' section to meters' output.
+   * Add 'total' section to electricity output.
    */
   public function prepare(array $data) {
     // If we're returning an error then set the content type to
@@ -20,22 +20,34 @@ class NegawattFormatterMetersTotal extends \RestfulFormatterJson {
     // Let parent formatter prepare the output.
     $output = parent::prepare($data);
 
-    // Prepare a min/max query.
+    // Prepare a sum query.
     $request = $this->handler->getRequest();
     $filter = $request['filter'];
-    unset($filter['has_electricity']);
 
     $query = db_select('negawatt_electricity_normalized', 'e');
 
     // Handle 'account' filter (if exists)
-    if (!empty($filter['account'])) {
+    if (!empty($filter['meter_account'])) {
       // Add condition - the OG membership of the meter-node is equal to the
       // account id in the request.
       $query->join('node', 'n', 'n.nid = e.meter_nid');
       $query->join('og_membership', 'og', 'og.etid = n.nid');
       $query->condition('og.entity_type', 'node');
-      $query->condition('og.gid', $filter['account']);
-      unset($filter['account']);
+      $query->condition('og.gid', $filter['meter_account']);
+      unset($filter['meter_account']);
+    }
+
+    // Handle 'type' filter
+    if (!empty($filter['type'])) {
+      $query->condition('e.type', $filter['type']);
+      unset($filter['type']);
+    }
+
+    // Handle 'timestamp' filter
+    if (!empty($filter['timestamp']) && !empty($filter['timestamp']['operator']) && $filter['timestamp']['operator'] == 'BETWEEN') {
+      $query->condition('e.timestamp', $filter['timestamp']['value'][0], '>=');
+      $query->condition('e.timestamp', $filter['timestamp']['value'][1], '<');
+      unset($filter['timestamp']);
     }
 
     // Make sure we handled all the filter fields.
@@ -44,14 +56,12 @@ class NegawattFormatterMetersTotal extends \RestfulFormatterJson {
     }
 
     // Add expressions for electricity min and max timestamps.
-    $query->addExpression('MIN(e.timestamp)', 'min');
-    $query->addExpression('MAX(e.timestamp)', 'max');
+    $query->addExpression('SUM(e.sum_kwh)', 'sum');
 
-    $result =  $query->execute()->fetchObject();
+    $result = $query->execute()->fetchObject();
 
     // Add total section to output.
-    $output['total']['electricity_time_interval']['min'] = $result->min;
-    $output['total']['electricity_time_interval']['max'] = $result->max;
+    $output['total']['sum_kwh'] = $result->sum;
 
     return $output;
   }
