@@ -3,7 +3,8 @@
 angular.module('negawattClientApp')
   .controller('DetailsCtrl', function ($scope, $state, $stateParams, ChartCategories, categoriesChart, meters) {
     var categoryId;
-    $scope.categoriesChart = categoriesChart;
+
+    $scope.categoriesChart = categoriesChart || {};
 
     // Select category form the pie chart.
     $scope.onSelect = function(selectedItem, chartData) {

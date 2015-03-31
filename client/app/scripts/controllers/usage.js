@@ -10,6 +10,7 @@
 angular.module('negawattClientApp')
   .controller('UsageCtrl', function ($scope, $q, $location, $state, $stateParams, $urlRouter, ChartUsage, UsagePeriod, limits, account, usage, meters) {
     var chartUpdated;
+    $scope.usageChartData = {};
 
     // Get chart frequencies.
     $scope.frequencies = ChartUsage.getFrequencies();
