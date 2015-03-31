@@ -515,7 +515,7 @@ angular.module('negawattClientApp')
           }
         },
         messages: {
-          empty: 'אין לנו מספיק נתונים כדי להציג את התרשים.'
+          empty: 'אין מספיק נתונים כדי להציג את התרשים.'
         }
       };
 
