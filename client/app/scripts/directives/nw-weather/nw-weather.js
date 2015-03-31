@@ -107,8 +107,6 @@ angular.module('angular-nw-weather', [])
     }
 
     /**
-     * Add the number of the meters to each Weather.
-     *
      * Prepare Weather object with order by list, tree and collection indexed by id.
      *
      * Return the Weather object into a promises.

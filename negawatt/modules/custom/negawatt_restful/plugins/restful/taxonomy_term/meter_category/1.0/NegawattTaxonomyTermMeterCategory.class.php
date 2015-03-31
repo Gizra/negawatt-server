@@ -21,11 +21,15 @@ class NegawattTaxonomyTermMeterCategory extends \RestfulEntityBaseTaxonomyTerm {
       'property' => 'field_icon_categories',
     );
 
+    $public_fields['electricity_time_interval'] = array(
+      'callback' => array($this, 'electricityMinMax'),
+    );
+
     return $public_fields;
   }
 
   /**
-   *  Get the chidren of the current catetegory item by id.
+   *  Get the children of the current category item by id.
    */
   protected function getChildren(\EntityMetadataWrapper $wrapper) {
     $vocabulary = taxonomy_vocabulary_machine_name_load($this->getBundle());
@@ -121,6 +125,54 @@ class NegawattTaxonomyTermMeterCategory extends \RestfulEntityBaseTaxonomyTerm {
     unset($request['account']);
 
     return parent::process($path, $request, $method, $check_rate_limit);
+  }
+
+  /**
+   * Callback function to calculate the min and max timestamps of normalized-
+   * electricity data related to the meter.
+   *
+   * @param $wrapper
+   *   A wrapper to the meter object.
+   *
+   * @return array
+   *   {
+   *    min: min timestamp,
+   *    max: max timestmp
+   *   }
+   *  If no electricity data is found, return false.
+   */
+  protected function electricityMinMax($wrapper) {
+    // Find normalized-electricity entities that are related to this meter
+    // min and max timestamps
+
+    // First, list all children categories of the category.
+    $categories = $this->getChildren($wrapper);
+    $categories[] = $wrapper->getIdentifier();
+
+    // Gather the meters related to these categories.
+    $meters = array();
+    foreach($categories as $category) {
+      $meters = array_merge($meters, taxonomy_select_nodes($category));
+    }
+
+    if (empty($meters)) {
+      return NULL;
+    }
+
+    // Query min and max timestamps of the meters.
+    $query = db_select('negawatt_electricity_normalized', 'e');
+
+    // Find electricity entities which are related to the relevant meters.
+    $query->condition('e.meter_nid', $meters, 'IN');
+
+    // Add a query for electricity min and max timestamps.
+    $query->addExpression('MIN(e.timestamp)', 'min');
+    $query->addExpression('MAX(e.timestamp)', 'max');
+
+    // Set grouping.
+    $query->groupBy('e.meter_nid');
+
+    return $query->execute()->fetchObject();
   }
 
 }

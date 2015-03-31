@@ -136,6 +136,10 @@
         z-index: 20;
       }
 
+      .btn:focus {
+        outline: none;
+      }
+
       .btn-arrow {
         width: 30px;
         height: 30px;
@@ -249,9 +253,4 @@
 
 }
 
-// Necesary to apply the dynamic css.
-.usageChart {
-  border: 1px solid white;
-  width: 510px;
-  height: 220px;
-}
+
