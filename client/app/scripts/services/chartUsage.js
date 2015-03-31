@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('ChartUsage', function ($q, Electricity, UsagePeriod, moment) {
+  .service('ChartUsage', function ($q, Electricity, UsagePeriod, Chart, moment) {
     var ChartUsage = this;
 
     // Frequencies information.
@@ -513,11 +513,10 @@ angular.module('negawattClientApp')
           'hAxis': {
             'title': chartFrequencyInfo.axis_h_title
           }
-        },
-        messages: {
-          empty: 'אין מספיק נתונים כדי להציג את התרשים.'
         }
       };
+
+      angular.extend(chartData, Chart);
 
       return chartData;
     };
