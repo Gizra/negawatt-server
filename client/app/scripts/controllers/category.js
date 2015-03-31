@@ -42,7 +42,9 @@ angular.module('negawattClientApp')
      */
     $scope.toggleMetersByCategory = function() {
       // Update meters on the map.
-      $scope.$parent.$broadcast('nwMetersChanged', $filter('filterMeterByCategories')(meters, getCategoriesChecked()));
+      $scope.$parent.$broadcast('nwMetersChanged', {
+        list: $filter('filterMeterByCategories')(meters.list, getCategoriesChecked())
+      });
     }
 
     /**

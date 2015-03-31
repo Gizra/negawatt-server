@@ -25,8 +25,8 @@ Feature: Chart
     And I press the "next" button on the charts
     Then I should see the monthly kws chart of all meters
     
-  @javascript
-  Scenario: Show chart usage monthly of a selected meter.
+  @javascript @wip
+  Scenario: Show chart usage monthly for multiple meters.
     Given I login with user "carlos"
     When I visit "/#/dashboard/1/marker/7,8"
     Then I should see the monthly kws chart for multiple markers

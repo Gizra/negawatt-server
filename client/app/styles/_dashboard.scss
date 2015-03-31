@@ -15,11 +15,17 @@
       padding: 9px 0 9px;
 
       .icon-options {
-        background-image: url('../images/option.png');
-        width: 26px;
-        height: 26px;
+        background-image: url("../images/option.png");
+        background-size: 24px;
+        width: 24px;
+        height: 24px;
         position: fixed;
+        margin-top: 1px;
         z-index: 20;
+      }
+
+      .btn:focus {
+        outline: none;
       }
 
       .btn-arrow {
@@ -72,6 +78,7 @@
       }
 
       &.dashboard-categories {
+        padding-top: 0px !important;
         top: inherit;
         right: 0;
         bottom: 420px;
@@ -134,9 +141,4 @@
 
 }
 
-// Necesary to apply the dynamic css.
-.usageChart {
-  border: 1px solid white;
-  width: 510px;
-  height: 220px;
-}
+

@@ -18,7 +18,7 @@ angular.module('negawattClientApp')
         headers: {
           'Authorization': 'Basic ' + Utils.Base64.encode(user.username + ':' + user.password)
         },
-        cache: true
+        withoutToken: true
       });
     };
 

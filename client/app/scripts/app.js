@@ -27,7 +27,8 @@ angular
     'ui.bootstrap.tabs',
     'template/tabs/tab.html',
     'template/tabs/tabset.html',
-    'angularMoment'
+    'angularMoment',
+    'angular-nw-weather'
   ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
     // Complete urls if Route not defined in the $stateProvider.
@@ -84,10 +85,10 @@ angular
     $httpProvider.interceptors.push(function ($q, Auth, $location, localStorageService) {
       return {
         'request': function (config) {
-          if (!config.url.match(/login-token/)) {
-            config.headers = {
+          if (!config.withoutToken && !config.url.match(/.html/)) {
+            angular.extend(config.headers, {
               'access-token': localStorageService.get('access_token')
-            };
+            });
           }
           return config;
         },

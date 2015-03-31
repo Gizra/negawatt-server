@@ -9,4 +9,6 @@ $plugin = array(
   'entity_type' => 'node',
   'bundle' => 'satec_meter',
   'authentication_types' => TRUE,
+  // Add totals to output.
+  'formatter' => 'meters_total',
 );

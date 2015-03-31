@@ -96,8 +96,7 @@ angular.module('negawattClientApp')
       $http({
         method: 'GET',
         url: url,
-        params: params,
-        cache: true
+        params: params
       }).success(function(electricity) {
         setCache(electricity.data, filters, filtersHash, skipResetCache);
 

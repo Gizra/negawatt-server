@@ -155,8 +155,8 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   public function iShouldSeeTheMonthlyKwsChartOfAllMeters() {
     // Testing the height of the first and last column, with the default chart size and data of the migration.
     $start_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(1) > td:nth-child(2)';
-    $end_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(9) > td:nth-child(2)';
-    $this->waitForTextNgElement($start_chart, '8787');
+    $end_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(24) > td:nth-child(2)';
+    $this->waitForTextNgElement($start_chart, '7836');
     $this->waitForTextNgElement($end_chart, '12318');
   }
 
@@ -165,9 +165,9 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    */
   public function iShouldSeeThePreviousMonthlyKwsChartOfAllMeters() {
     $start_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(1) > td:nth-child(2)';
-    $end_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(3) > td:nth-child(2)';
-    $this->waitForTextNgElement($start_chart, '13111');
-    $this->waitForTextNgElement($end_chart, '12188');
+    $end_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(20) > td:nth-child(2)';
+    $this->waitForTextNgElement($start_chart, '7836');
+    $this->waitForTextNgElement($end_chart, '256');
   }
 
 
@@ -177,8 +177,8 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   public function iShouldSeeTheMonthlyKwsChartAMeter() {
     // Testing the height of the first and last column, with the default chart size and data of the migration.
     $start_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(1) > td:nth-child(2)';
-    $end_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(9) > td:nth-child(2)';
-    $this->waitForTextNgElement($start_chart, '3081');
+    $end_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(12) > td:nth-child(2)';
+    $this->waitForTextNgElement($start_chart, '10936');
     $this->waitForTextNgElement($end_chart, '3606');
   }
 
@@ -242,7 +242,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     $start_chart_meter2 = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(1) > td:nth-child(3)';
     $end_chart_meter2 = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(9) > td:nth-child(3)';
     // Meter 1.
-    $this->waitForTextNgElement($start_chart_meter1, '4941');
+    $this->waitForTextNgElement($start_chart_meter1, '7836');
     $this->waitForTextNgElement($end_chart_meter1, '827');
     // Meter 2.
     $this->waitForTextNgElement($start_chart_meter2, '3081');

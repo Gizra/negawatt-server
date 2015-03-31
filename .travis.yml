@@ -80,4 +80,4 @@ script:
   # - cat ~/selenium.log
 
   # SimpleTest
-  - drush @negawatt test-run "Negawatt Normalizer" --uri=http://127.0.0.1:8080
+  - drush @negawatt test-run "Negawatt" --uri=http://127.0.0.1:8080
