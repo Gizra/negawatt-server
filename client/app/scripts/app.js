@@ -55,12 +55,20 @@ angular
         }
       })
       .state('main', {
+        abstract: true,
         url: '/',
         templateUrl: 'views/dashboard/menu.html',
         resolve: {
+          enter: function() {
+            console.log('Resolve main $state');
+          },
           profile: function(Profile) {
+            console.log('Resolve::Profile main $state');
             return Profile.get();
           }
+        },
+        onEnter: function(){
+          console.log('onEnter main $state');
         },
         controller: 'MainCtrl',
       })
