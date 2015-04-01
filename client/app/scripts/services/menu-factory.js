@@ -31,7 +31,7 @@ angular.module('negawattClientApp')
       // Return active account form default account or selected via url,
       // otherwise return undefiend.
       getActiveAccount: function() {
-        return profile.active;
+        return Profile.getActiveAccount();
       },
       // Return active user information.
       getUser: function() {

@@ -40,12 +40,19 @@ angular.module('negawattClientApp')
      */
     this.selectActiveAccount = function(accountId) {
       var active;
+      var accounts = cache.data && cache.data.account;
+
+      // if account undefined throw an error.
+      if (angular.isUndefined(accounts)) {
+        throw 'Undefined accounts, is not possible select an active account.'
+      }
+
       // Defined as active account the first object of the account.
-      if (cache.account && angular.isUndefined(id)) {
+      if (cache.account && angular.isUndefined(accountId)) {
         active = cache.account[Object.keys(cache.account)[0]];
       }
-      else if (cache.account && cache.account[id]) {
-        active = cache.account[id];
+      else if (cache.account && cache.account[accountId]) {
+        active = cache.account[accountId];
       }
       else {
         // Get select the account as active.
@@ -54,8 +61,6 @@ angular.module('negawattClientApp')
 
       // Get select the account as active.
       localStorageService.set('activeAccount', active);
-
-
 
       // Clear app cache, if new account was selected or there not define the active account.
       $rootScope.$broadcast('nwClearCache');
