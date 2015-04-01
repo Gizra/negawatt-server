@@ -56,9 +56,9 @@ script:
 
   # Run client application.
   - cd ../client
-  - sudo npm clean cache
+  - sudo npm cache clean
   - npm install
-  - bower clean cache
+  - bower cache clean
   - bower install
   - cp config.travis.json config.json
   - grunt serve > ~/grunt.log 2>&1 &
