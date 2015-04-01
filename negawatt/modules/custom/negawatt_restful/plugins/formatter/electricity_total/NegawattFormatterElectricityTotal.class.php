@@ -22,8 +22,12 @@ class NegawattFormatterElectricityTotal extends \RestfulFormatterJson {
 
     // Prepare a sum query.
     $request = $this->handler->getRequest();
-    $filter = $request['filter'];
-    $account = $filter['meter_account'];
+    $filter = !empty($request['filter']) ? $request['filter'] : array();
+    $account = !empty($filter['meter_account']) ? $filter['meter_account'] : null;
+
+    if ($request['q'] != 'api/electricity') {
+      return $output;
+    }
 
     $query = db_select('negawatt_electricity_normalized', 'e');
 
