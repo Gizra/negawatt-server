@@ -1,18 +1,8 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .factory('MenuFactory', function menuFactory(Timedate, Profile) {
+  .factory('MenuFactory', function menuFactory(Timedate, Profile, Utils) {
     var profile = {};
-
-    /**
-     *
-     * @returns {*}
-     */
-    function getActiveAccount() {
-      // Return account by parameter.
-      profile.active = (profile.account) ? profile.active : profile.account[0];
-      return profile.active;
-    }
 
     return {
       /**
@@ -23,6 +13,10 @@ angular.module('negawattClientApp')
        */
       updateProfile: function (value) {
         profile = value;
+
+        profile.account = Utils.indexById(profile.account);
+
+        this.setActiveAccount();
       },
       /**
        * Update the active account from de list of accounts wirh access garanted
@@ -32,15 +26,17 @@ angular.module('negawattClientApp')
        *  Account Id
        */
       setActiveAccount: function (id) {
-
-        profile.active = profile;
+        Profile.selectActiveAccount(id);
       },
-      /**
-       * Return active account.
-       */
-      getActiveAccount: getActiveAccount(),
+      // Return active account form default account or selected via url,
+      // otherwise return undefiend.
+      getActiveAccount: function() {
+        return profile.active;
+      },
       // Return active user information.
-      user: profile.user,
+      getUser: function() {
+        return profile.user;
+      },
       timedate: Timedate
     };
 

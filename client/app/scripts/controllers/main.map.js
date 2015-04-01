@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .controller('MainMapCtrl', function ($scope, $state, $stateParams, Category, ChartUsage, Map, leafletData, $timeout, account, meters) {
+  .controller('MainMapCtrl', function ($scope, $state, $stateParams, Category, ChartUsage, Map, MenuFactory, leafletData, $timeout, account, meters) {
 
     // Config map.
     $scope.defaults = Map.getConfig();
@@ -9,7 +9,7 @@ angular.module('negawattClientApp')
     $scope.meters = meters.list;
 
     // Update account.
-    $scope.TopMenuCtrl.account = account;
+    $scope.TopMenuCtrl.setActiveAccount(account.id);
 
     //debugger;
 

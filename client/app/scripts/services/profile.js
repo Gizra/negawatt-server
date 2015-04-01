@@ -16,7 +16,7 @@ angular.module('negawattClientApp')
      * @returns {*}
      *  The account object.
      */
-    function getAccount() {
+    function getActiveAccount() {
       return localStorageService.get('activeAccount');
     }
 
@@ -34,29 +34,32 @@ angular.module('negawattClientApp')
      *
      * @param accountId
      *  The account ID comming form the URL params.
-     * @param profile
-     *  The object profile
      *
      * @returns {*}
      *  The account object selected.
      */
-    this.selectAccount = function(accountId, profile) {
+    this.selectActiveAccount = function(accountId) {
       var active;
-
-      // Cast integer.
-      accountId = +accountId;
-      active = getAccount();
-
-      // Check if accountId is the same of active.
-      if (!active || (active && active.id !== accountId)) {
+      // Defined as active account the first object of the account.
+      if (cache.account && angular.isUndefined(id)) {
+        active = cache.account[Object.keys(cache.account)[0]];
+      }
+      else if (cache.account && cache.account[id]) {
+        active = cache.account[id];
+      }
+      else {
         // Get select the account as active.
-        localStorageService.set('activeAccount', ($filter('filter')(profile.account, {id: accountId})).pop());
-
-        // Clear app cache, if new account was selected or there not define the active account.
-        $rootScope.$broadcast('nwClearCache');
+        active = undefined;
       }
 
-      return getAccount();
+      // Get select the account as active.
+      localStorageService.set('activeAccount', active);
+
+
+
+      // Clear app cache, if new account was selected or there not define the active account.
+      $rootScope.$broadcast('nwClearCache');
+
     };
 
     /**

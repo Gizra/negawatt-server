@@ -72,7 +72,8 @@ angular
         url: 'home/{accountId:int}',
         resolve: {
           account: function($stateParams, Profile, profile) {
-            var account = Profile.selectAccount($stateParams.accountId, profile);
+
+            Profile.selectActiveAccount($stateParams.accountId);
 
             return account;
           },
