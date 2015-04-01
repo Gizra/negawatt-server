@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .controller('MapCtrl', function ($scope, $state, $stateParams, Category, ChartUsage, Map, leafletData, $timeout,  account, meters) {
+  .controller('MapCtrl', function ($scope, $state, $stateParams, Category, ChartUsage, Map, leafletData, $timeout, account, meters) {
 
     // Config map.
     $scope.defaults = Map.getConfig();
     $scope.center = Map.getCenter(account);
-    $scope.meters = meters;
+    $scope.meters = meters.list;
 
     // Hover above marker in the Map -  open tooltip.
     $scope.$on("leafletDirectiveMarker.mouseover", function(event, args) {
@@ -44,7 +44,7 @@ angular.module('negawattClientApp')
 
     // Reload the current $state when meters added more.
     $scope.$on('nwMetersChanged', function(event, meters) {
-      $scope.meters = meters;
+      $scope.meters = meters.list;
     });
 
     // Select marker in the Map.
@@ -73,7 +73,6 @@ angular.module('negawattClientApp')
           Map.setMarkerSelected(id);
         }
       });
-
     }
 
     if ($stateParams.markerId) {
