@@ -67,7 +67,8 @@ class NegawattFormatterElectricityTotal extends \RestfulFormatterJson {
       ->execute()
       ->fetchField();
     // Get list of child taxonomy terms.
-    $taxonomy_array = taxonomy_get_tree($vocabulary_id, $parent_category, 1);
+    $taxonomy_array = taxonomy_get_tree($vocabulary_id, $parent_category);
+    // @todo: build an array(cat_id => array(all child cat ids);
     // Extract only tid from the taxonomy terms.
     $child_categories = array_map(function($term) {return $term->tid;}, $taxonomy_array);
     $query->join('field_data_og_vocabulary', 'cat', 'cat.entity_id = e.meter_nid');
@@ -86,6 +87,7 @@ class NegawattFormatterElectricityTotal extends \RestfulFormatterJson {
     $query->addExpression('SUM(e.sum_kwh)', 'sum');
 
     $result = $query->execute()->fetchAllKeyed();
+    // @todo: sum all child cat totals into the parent category.
 
     // Add total section to output.
     $output['total'] = $result;
