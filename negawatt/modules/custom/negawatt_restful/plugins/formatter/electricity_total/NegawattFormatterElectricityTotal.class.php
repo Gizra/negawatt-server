@@ -23,6 +23,7 @@ class NegawattFormatterElectricityTotal extends \RestfulFormatterJson {
     // Prepare a sum query.
     $request = $this->handler->getRequest();
     $filter = $request['filter'];
+    $account = $filter['meter_account'];
 
     $query = db_select('negawatt_electricity_normalized', 'e');
 
@@ -54,7 +55,17 @@ class NegawattFormatterElectricityTotal extends \RestfulFormatterJson {
     // Handle meter categories.
     // If none given, take 0 (root) as default.
     $parent_category = !empty($filter['meter_category']) ? $filter['meter_category'] : 0;
-    $child_categories = array_keys(taxonomy_get_children($parent_category));
+    // @fixme: will account be always present?
+    // Figure out vocab id from group id (the reverse of og_vocab_relation_get().
+    $vocabulary_id = db_select('og_vocab_relation', 'ogr')
+      ->fields('ogr', array('vid'))
+      ->condition('gid', $account)
+      ->execute()
+      ->fetchField();
+    // Get list of child taxonomy terms.
+    $taxonomy_array = taxonomy_get_tree($vocabulary_id, $parent_category, 1);
+    // Extract only tid from the taxonomy terms.
+    $child_categories = array_map(function($term) {return $term->tid;}, $taxonomy_array);
     $query->join('field_data_og_vocabulary', 'cat', 'cat.entity_id = e.meter_nid');
     $query->condition('cat.og_vocabulary_target_id', $child_categories, 'IN');
     $query->join('taxonomy_term_data', 'tax', 'tax.tid = cat.og_vocabulary_target_id');
