@@ -44,11 +44,23 @@ class NegawattFormatterElectricityTotal extends \RestfulFormatterJson {
     }
 
     // Handle 'timestamp' filter
+    // Make sure it's a 'BETWEEN' filter
     if (!empty($filter['timestamp']) && !empty($filter['timestamp']['operator']) && $filter['timestamp']['operator'] == 'BETWEEN') {
       $query->condition('e.timestamp', $filter['timestamp']['value'][0], '>=');
       $query->condition('e.timestamp', $filter['timestamp']['value'][1], '<');
       unset($filter['timestamp']);
     }
+
+    // Handle meter categories.
+    // If none given, take 0 (root) as default.
+    $parent_category = !empty($filter['meter_category']) ? $filter['meter_category'] : 0;
+    $child_categories = array_keys(taxonomy_get_children($parent_category));
+    $query->join('field_data_og_vocabulary', 'cat', 'cat.entity_id = e.meter_nid');
+    $query->condition('cat.og_vocabulary_target_id', $child_categories, 'IN');
+    $query->join('taxonomy_term_data', 'tax', 'tax.tid = cat.og_vocabulary_target_id');
+    $query->fields('tax', array('name'));
+    $query->groupBy('cat.og_vocabulary_target_id');
+    unset($filter['meter_category']);
 
     // Make sure we handled all the filter fields.
     if (!empty($filter)) {
@@ -58,10 +70,10 @@ class NegawattFormatterElectricityTotal extends \RestfulFormatterJson {
     // Add expressions for electricity min and max timestamps.
     $query->addExpression('SUM(e.sum_kwh)', 'sum');
 
-    $result = $query->execute()->fetchObject();
+    $result = $query->execute()->fetchAllKeyed();
 
     // Add total section to output.
-    $output['total']['sum_kwh'] = $result->sum;
+    $output['total'] = $result;
 
     return $output;
   }
