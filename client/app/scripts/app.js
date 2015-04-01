@@ -36,7 +36,7 @@ angular
     $urlRouterProvider.when('/logout/', '/logout');
 
     // For any unmatched url, redirect to '/'.
-    $urlRouterProvider.otherwise('/');
+    $urlRouterProvider.otherwise('');
 
     // Setup the states.
     $stateProvider
@@ -55,22 +55,18 @@ angular
         }
       })
       .state('main', {
-        abstract: true,
         url: '/',
         templateUrl: 'views/dashboard/menu.html',
         resolve: {
-          enter: function() {
-            console.log('Resolve main $state');
-          },
           profile: function(Profile) {
-            console.log('Resolve::Profile main $state');
             return Profile.get();
           }
         },
-        onEnter: function(){
-          console.log('onEnter main $state');
-        },
         controller: 'MainCtrl',
+        controllerAs: 'TopMenuCtrl'
+      })
+      .state('main.home', {
+        url: 'home',
       })
       .state('main.map', {
         url: 'home/{accountId:int}',
@@ -86,7 +82,7 @@ angular
           }
         },
         templateUrl: 'views/dashboard/menu.map.html',
-        controller: 'MainMapCtrl',
+        controller: 'MainMapCtrl'
       });
 
     // Define interceptors.

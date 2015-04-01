@@ -1,12 +1,17 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .controller('MainMapCtrl', function ($scope, $state, $stateParams, Category, ChartUsage, Map, leafletData, $timeout,  account, meters) {
+  .controller('MainMapCtrl', function ($scope, $state, $stateParams, Category, ChartUsage, Map, leafletData, $timeout, account, meters) {
 
     // Config map.
     $scope.defaults = Map.getConfig();
     $scope.center = Map.getCenter(account);
     $scope.meters = meters.list;
+
+    // Update account.
+    $scope.TopMenuCtrl.account = account;
+
+    //debugger;
 
     // Hover above marker in the Map -  open tooltip.
     $scope.$on("leafletDirectiveMarker.mouseover", function(event, args) {
