@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('ChartCategories', function ($q, $filter, Utils) {
+  .service('ChartCategories', function ($q, $filter, Utils, Chart) {
 
     /**
      * Get the chart data and plot.
@@ -23,7 +23,8 @@ angular.module('negawattClientApp')
         collection = $filter('filter')(Utils.toArray(collection), {id: parseInt(categoryId)}, true).pop().children;
       }
 
-      deferred.resolve((collection) ? transformDataToDatasets(angular.copy(collection), categoryId) : {});
+      // If the collection if filled return the chart object, otherwise return a message.
+      deferred.resolve((collection) ? transformDataToDatasets(angular.copy(collection), categoryId) : Chart);
 
       return deferred.promise;
     };

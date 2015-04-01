@@ -3,6 +3,7 @@
 angular.module('negawattClientApp')
   .controller('DetailsCtrl', function ($scope, $state, $stateParams, ChartCategories, categoriesChart, meters) {
     var categoryId;
+    // The initialization in a empty object is need it to avoid an error in the initial rendering.
     $scope.categoriesChart = categoriesChart;
 
     // Select category form the pie chart.

@@ -4,7 +4,7 @@
     <ol ui-tree-nodes="">
       <li ng-repeat="category in categories.tree" ui-tree-node ng-show="hasMeters(category)">
         <div ui-tree-handle class="tree-level-top">
-          <a ui-sref="dashboard.withAccount.categories({categoryId: category.id})" ng-class="{'active-category':  ('categoryId' | includedByParams:category.id) }">
+          <a ng-click="select(category.id)" ng-class="{'active-category':  ('categoryId' | includedByParams:category.id) }" href="">
             <img ng-src="images/categories/{{category.icon}}.png" alt="icon-{{category.icon}}"/>
             <span>{{category.label}}</span> ({{category.meters}})
           </a>
