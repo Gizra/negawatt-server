@@ -10,6 +10,8 @@
 angular.module('negawattClientApp')
   .controller('UsageCtrl', function ($scope, $q, $location, $state, $stateParams, $urlRouter, ChartUsage, UsagePeriod, limits, account, usage, meters) {
     var chartUpdated;
+    // The initialization in a empty object is need it to avoid an error in the initial rendering.
+    $scope.usageChartData = {};
 
     // Get chart frequencies.
     $scope.frequencies = ChartUsage.getFrequencies();
