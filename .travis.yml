@@ -3,6 +3,9 @@ language: php
 php:
   - 5.4
 
+nodejs:
+  - 0.12
+
 mysql:
   database: drupal
   username: root
