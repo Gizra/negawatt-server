@@ -59,6 +59,7 @@ script:
 
   # Run client application.
   - cd ../client
+  - npm cache clean
   - npm install
   - bower install
   - cp config.travis.json config.json
