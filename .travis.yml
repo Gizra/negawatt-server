@@ -3,9 +3,6 @@ language: php
 php:
   - 5.4
 
-node_js:
-  - 0.12
-
 mysql:
   database: drupal
   username: root
@@ -59,7 +56,6 @@ script:
 
   # Run client application.
   - cd ../client
-  - npm cache clean
   - npm install
   - bower install
   - cp config.travis.json config.json
