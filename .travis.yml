@@ -56,7 +56,7 @@ script:
 
   # Run client application.
   - cd ../client
-  - sudo npm cache clean
+  - npm cache clean
   - npm install
   - bower cache clean
   - bower install
