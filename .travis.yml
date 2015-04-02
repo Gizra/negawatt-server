@@ -59,10 +59,7 @@ script:
 
   # Run client application.
   - cd ../client
-  - npm cache clean
-  - rm -Rf /home/travis/.npm/83f1dfb7-vis-npm-lodash-2-4-1-package-tgz.lock
   - npm install
-  - bower cache clean
   - bower install
   - cp config.travis.json config.json
   - grunt serve > ~/grunt.log 2>&1 &
