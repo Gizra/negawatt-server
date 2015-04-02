@@ -3,7 +3,7 @@ language: php
 php:
   - 5.4
 
-nodejs:
+node_js:
   - 0.12
 
 mysql:
