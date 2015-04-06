@@ -47,6 +47,9 @@ drush mi --all --user=1
 # This command does the login for you when the build script is done. It will open a new tab in your default browser and login to your project as the Administrator. Comment out this line if you do not want the login to happen automatically.
 drush uli --uri=$BASE_DOMAIN_URL
 
+# Activate user epicture.
+drush vset --exact user_pictures 1
+
 # Install client application.
 cd ../client
 npm install && bower install
