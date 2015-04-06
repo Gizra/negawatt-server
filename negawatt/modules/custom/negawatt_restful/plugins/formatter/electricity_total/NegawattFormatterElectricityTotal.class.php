@@ -50,12 +50,16 @@ class NegawattFormatterElectricityTotal extends \RestfulFormatterJson {
 
     // Handle 'account' filter (if exists)
     if (!empty($filter['meter_account'])) {
-      // Add condition - the OG membership of the meter-node is equal to the
-      // account id in the request.
-      $query->join('node', 'n', 'n.nid = e.meter_nid');
-      $query->join('og_membership', 'og', 'og.etid = n.nid');
-      $query->condition('og.entity_type', 'node');
-      $query->condition('og.gid', $filter['meter_account']);
+      // Bother add account filtering only if no 'meter' filter exists.
+      // If meter filter exists, it'll also filter for the account.
+      if (empty($filter['meter'])) {
+        // Add condition - the OG membership of the meter-node is equal to the
+        // account id in the request.
+        $query->join('node', 'n', 'n.nid = e.meter_nid');
+        $query->join('og_membership', 'og', 'og.etid = n.nid');
+        $query->condition('og.entity_type', 'node');
+        $query->condition('og.gid', $filter['meter_account']);
+      }
       unset($filter['meter_account']);
     }
 
@@ -74,62 +78,78 @@ class NegawattFormatterElectricityTotal extends \RestfulFormatterJson {
     }
 
     // Handle meter categories.
-    // If none given, take 0 (root) as default.
-    $parent_category = !empty($filter['meter_category']) ? $filter['meter_category'] : 0;
-    // Figure out vocab id from group id (the reverse of og_vocab_relation_get() function.
-    $vocabulary_id = db_select('og_vocab_relation', 'ogr')
-      ->fields('ogr', array('vid'))
-      ->condition('gid', $account)
-      ->execute()
-      ->fetchField();
 
-    // Get list of child taxonomy terms.
+    // Bother handling category filtering only if no 'meter' filter exists.
+    // If meter filter exists, it'll also filter for the category.
     $result_type = '';
-    $taxonomy_array = taxonomy_get_tree($vocabulary_id, $parent_category);
-    if (empty($taxonomy_array)) {
-      // No sub categories were found. Show division by meters.
-      $result_type = 'meter';
+    if (empty($filter['meter'])) {
+      // If none given, take 0 (root) as default.
+      $parent_category = !empty($filter['meter_category']) ? $filter['meter_category'] : 0;
+      // Figure out vocab id from group id (the reverse of og_vocab_relation_get() function.
+      $vocabulary_id = db_select('og_vocab_relation', 'ogr')
+        ->fields('ogr', array('vid'))
+        ->condition('gid', $account)
+        ->execute()
+        ->fetchField();
 
-      // Find all meters attached to the category.
-      $meters = taxonomy_select_nodes($parent_category, FALSE);
-      // Sum electricity according to meters in category.
-      $query->condition('e.meter_nid', $meters, 'IN');
-      $query->fields('e', array('meter_nid'));
-      $query->groupBy('e.meter_nid');
-    }
-    else {
-      // Sub categories were found, show division by sub categories.
-      $result_type = 'category';
+      // Get list of child taxonomy terms.
+      $taxonomy_array = taxonomy_get_tree($vocabulary_id, $parent_category);
+      if (empty($taxonomy_array)) {
+        // No sub categories were found. Show division by meters.
+        $result_type = 'meter';
 
-      // Build an mapping array: cat_id => array(all child cat ids);
-      $child_cat_mapping = array();
-      foreach ($taxonomy_array as $term) {
-        if ($term->depth == 0) {
-          // Direct child, add new row to child-cat-mapping.
-          $child_cat_mapping[$term->tid] = array($term->tid);
-        }
-        else {
-          // Deep level child, add to the proper row.
-          foreach ($child_cat_mapping as $key => $map) {
-            // @fixme: is it possible that a term will have more than one parent?
-            $parent = $term->parents[0];
-            if (in_array($parent, $map)) {
-              // Add the parent to the list under key.
-              $child_cat_mapping[$key][] = $term->tid;
-              break;
+        // Find all meters attached to the category.
+        $meters = taxonomy_select_nodes($parent_category, FALSE);
+        // Sum electricity according to meters in category.
+        $query->condition('e.meter_nid', $meters, 'IN');
+        $query->fields('e', array('meter_nid'));
+        $query->groupBy('e.meter_nid');
+      }
+      else {
+        // Sub categories were found, show division by sub categories.
+        $result_type = 'category';
+
+        // Build an mapping array: cat_id => array(all child cat ids);
+        $child_cat_mapping = array();
+        foreach ($taxonomy_array as $term) {
+          if ($term->depth == 0) {
+            // Direct child, add new row to child-cat-mapping.
+            $child_cat_mapping[$term->tid] = array($term->tid);
+          }
+          else {
+            // Deep level child, add to the proper row.
+            foreach ($child_cat_mapping as $key => $map) {
+              // @fixme: is it possible that a term will have more than one parent?
+              $parent = $term->parents[0];
+              if (in_array($parent, $map)) {
+                // Add the parent to the list under key.
+                $child_cat_mapping[$key][] = $term->tid;
+                break;
+              }
             }
           }
         }
+        // Extract only tid from the taxonomy terms.
+        $child_categories = array_map(function ($term) {
+          return $term->tid;
+        }, $taxonomy_array);
+        $query->join('field_data_og_vocabulary', 'cat', 'cat.entity_id = e.meter_nid');
+        $query->condition('cat.og_vocabulary_target_id', $child_categories, 'IN');
+        $query->join('taxonomy_term_data', 'tax', 'tax.tid = cat.og_vocabulary_target_id');
+        $query->fields('tax', array('tid', 'name'));
+        $query->groupBy('cat.og_vocabulary_target_id');
       }
-      // Extract only tid from the taxonomy terms.
-      $child_categories = array_map(function($term) {return $term->tid;}, $taxonomy_array);
-      $query->join('field_data_og_vocabulary', 'cat', 'cat.entity_id = e.meter_nid');
-      $query->condition('cat.og_vocabulary_target_id', $child_categories, 'IN');
-      $query->join('taxonomy_term_data', 'tax', 'tax.tid = cat.og_vocabulary_target_id');
-      $query->fields('tax', array('tid', 'name'));
-      $query->groupBy('cat.og_vocabulary_target_id');
     }
     unset($filter['meter_category']);
+
+    // Handle 'meter' filter (if exists)
+    if (!empty($filter['meter'])) {
+      $result_type = 'meter';
+      $query->condition('e.meter_nid', $filter['meter']);
+      $query->fields('e', array('meter_nid'));
+      $query->groupBy('e.meter_nid');
+      unset($filter['meter']);
+    }
 
     // Make sure we handled all the filter fields.
     if (!empty($filter)) {
