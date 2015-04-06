@@ -148,12 +148,42 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
    * @param $timestamp
    *    The time of consumption.
    *
-   * @return string
-   *    The touse rate type - one of 'peak', 'mid', 'low'.
+   * @return object
+   *    rate_type: The touse rate type - one of 'peak', 'mid', 'low',
+   *    rate: The rate in NIS without VAT.
    */
-  protected function calcTouseRateType($timestamp) {
-    // @fixme: Calc touse rate type here.
-    return 'flat';
+  public function calcTouseRateType($timestamp) {
+    $rate_class = 3; // תעו"ז נמוך
+    $week_day = date('w', $timestamp);
+    // Sat is 3, Fri is 2, others are 1.
+    // @todo: read day type from holidays table
+    $day_type = ($week_day == 6) ? 3 : (($week_day == 5) ? 2 : 1);
+    $month = date('n', $timestamp);
+    $hour = date('G', $timestamp);
+
+    foreach ($this->touse_seasons as $effective_to => $seasons_data) {
+      // Find 'effective from' timestamp
+      if ($timestamp >= $effective_to) {
+        continue;
+      }
+      // Find season
+      foreach ($seasons_data as $to_month => $season) {
+        if ($month >= $to_month) {
+          continue;
+        }
+        // Find rate-type
+        foreach ($this->touse_rate_types[$effective_to][$season][$day_type] as $to_hour => $rate_type) {
+          if ($hour >= $to_hour) {
+            continue;
+          }
+          $rate = $this->touse_rates[$effective_to][$rate_class][$season][$rate_type];
+          return (object) array(
+            'rate_type' => $rate_type,
+            'rate' => $rate,
+          );
+        }
+      }
+    }
   }
 
   /**
@@ -529,6 +559,134 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
       debug($message);
     }
   }
+
+  // TOUse calculation tables.
+
+  protected $touse_seasons = array(
+    // Effective to 2099-1-1
+    4070908800 => array(
+      // To month -> season
+      3 => 'winter',
+      7 => 'transition',
+      9 => 'summer',
+      12 => 'transition',
+      13 => 'winter',
+    ),
+  );
+
+  protected $touse_rate_types = array(
+    // Effective to 2099-1-1
+    4070908800 => array(
+      'summer' => array(
+        // Normal day
+        1 => array(
+          // To hour -> rate_type
+          7 => 'low',
+          10 => 'mid',
+          17 => 'peak',
+          21 => 'mid',
+          25 => 'low',
+        ),
+        // Friday
+        2 => array(
+          // To hour -> rate_type
+          25 => 'low',
+        ),
+        // Saturday
+        3 => array(
+          // To hour -> rate_type
+          25 => 'low',
+        ),
+      ),
+      'winter' => array(
+        // Normal day
+        1 => array(
+          // To hour -> rate_type
+          6 => 'low',
+          8 => 'mid',
+          16 => 'low',
+          22 => 'peak',
+          25 => 'low',
+        ),
+        // Friday
+        2 => array(
+          // To hour -> rate_type
+          16 => 'low',
+          20 => 'mid',
+          25 => 'low',
+        ),
+        // Saturday
+        3 => array(
+          // To hour -> rate_type
+          17 => 'low',
+          19 => 'peak',
+          21 => 'mid',
+          25 => 'low',
+        ),
+      ),
+      'transition' => array(
+        // Normal day
+        1 => array(
+          // To hour -> rate_type
+          6 => 'low',
+          20 => 'peak',
+          22 => 'mid',
+          25 => 'low',
+        ),
+        // Friday
+        2 => array(
+          // To hour -> rate_type
+          6 => 'low',
+          20 => 'mid',
+          25 => 'low',
+        ),
+        // Saturday
+        3 => array(
+          // To hour -> rate_type
+          17 => 'low',
+          21 => 'mid',
+          25 => 'low',
+        ),
+      ),
+    ),
+  );
+
+  // Not including 18% VAT
+  protected $touse_rates = array(
+    // Effective to 2099-1-1
+    4070908800 => array(
+      // Rate class: TOUse low voltage
+      3 => array(
+        'summer' => array(
+          'peak' => 1.3008,
+          'mid' => 0.5629,
+          'low' => 0.3734,
+        ),
+        'winter' => array(
+          'peak' => 1.1878,
+          'mid' => 0.7010,
+          'low' => 0.4094
+        ),
+        'transition' => array(
+          'peak' => 0.5480,
+          'mid' => 0.4462,
+          'low' => 0.3596,
+        ),
+      ),
+      // Rate class: TOUse high voltage
+      4 => array(
+
+      ),
+      // Rate class: TOUse supra-high voltage
+      5 => array(
+
+      ),
+      // Rate class: TOUse choice
+      6 => array(
+
+      ),
+    )
+  );
 
 }
 

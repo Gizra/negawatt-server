@@ -1,10 +1,18 @@
 {
   "development": {
     "backend": "http://localhost/negawatt-server/www",
-    "debugUiRouter": true
+    "debugUiRouter": false,
+    "openweather": {
+      "endpoint": null,
+      "apikey": "5znrzehcfsa35jarjywbsy9dymvnmxzq"
+    }
   },
   "production": {
     "backend": "http://server.com/api",
-    "debugUiRouter": false
+    "debugUiRouter": false,
+    "openweather": {
+      "endpoint": null,
+      "apikey": "5znrzehcfsa35jarjywbsy9dymvnmxzq"
+    }
   }
 }

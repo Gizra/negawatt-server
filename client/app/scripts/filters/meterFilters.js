@@ -32,8 +32,9 @@ angular.module('negawattClientApp')
         if (visible.indexOf(false) === -1) {
           return meter;
         }
-
       });
+
+      meters = Utils.indexById(meters);
 
       return meters;
     }

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('ChartUsage', function ($q, Electricity, UsagePeriod, moment) {
+  .service('ChartUsage', function ($q, Electricity, UsagePeriod, Chart, moment) {
     var ChartUsage = this;
 
     // Frequencies information.
@@ -56,7 +56,6 @@ angular.module('negawattClientApp')
         type: '1',
         unit_num_seconds: 365 * 24 * 60 * 60,
         chart_default_time_frame: 10,
-        chart_default_time_frame_end: 'now',
         chart_type: 'ColumnChart',
         axis_v_title: 'קוט"ש בחודש',
         axis_h_format: 'YYYY',
@@ -68,7 +67,6 @@ angular.module('negawattClientApp')
         type: '2',
         unit_num_seconds: 31 * 24 * 60 * 60,
         chart_default_time_frame: 24,
-        chart_default_time_frame_end: 'now',
         chart_type: 'ColumnChart',
         axis_v_title: 'קוט"ש בשנה',
         axis_h_format: 'MM-YYYY',
@@ -80,8 +78,6 @@ angular.module('negawattClientApp')
         type: '3',
         unit_num_seconds: 24 * 60 * 60,
         chart_default_time_frame: 14,
-        // @fixme: hard coded timestamp here (and below).
-        chart_default_time_frame_end: 1388620800,
         chart_type: 'ColumnChart',
         axis_v_title: 'קוט"ש ביום',
         axis_h_format: 'DD-MM',
@@ -94,7 +90,6 @@ angular.module('negawattClientApp')
         unit_num_seconds: 60 * 60,
         // One week.
         chart_default_time_frame: 168,
-        chart_default_time_frame_end: 1388620800,
         chart_type: 'LineChart',
         axis_v_title: 'KW',
         axis_h_format: 'HH',
@@ -107,7 +102,6 @@ angular.module('negawattClientApp')
         unit_num_seconds: 60,
         // 48 hours.
         chart_default_time_frame: 1440,
-        chart_default_time_frame_end: 1388620800,
         chart_type: 'LineChart',
         axis_v_title: 'KW',
         axis_h_format: 'HH',
@@ -151,30 +145,14 @@ angular.module('negawattClientApp')
      *   Filters array in the form required by get().
      */
     this.filtersFromSelector = function(accountId, chartFreq, selectorType, selectorId, period) {
-      // Calculate the time-frame for data request.
-      var chartFrequency = chartFreq || this.usageChartParams.frequency;
-      var chartFrequencyInfo = this.frequencyParams[chartFrequency];
-      var chartTimeFrame = chartFrequencyInfo.chart_default_time_frame;
-      var chartEndTimestamp;
-      var chartBeginTimestamp;
-
-      if (!period) {
-        chartEndTimestamp = period && period.chartEndTimestamp || chartFrequencyInfo.chart_default_time_frame_end === 'now' ? moment().unix() : chartFrequencyInfo.chart_default_time_frame_end;
-        chartBeginTimestamp = period && period.chartBeginTimestamp || moment.unix(chartEndTimestamp).subtract(chartFrequencyInfo.chart_default_time_frame, chartFrequencyInfo.frequency).unix();
-      }
-      else {
-        // Comming from the calculation.
-        chartEndTimestamp = period.next;
-        chartBeginTimestamp = period.previous;
-      }
 
       // Prepare filters for data request.
       var filters = {
         'filter[meter_account]': accountId,
-        'filter[type]': chartFrequency,
+        'filter[type]': chartFreq || this.usageChartParams.frequency,
         'filter[timestamp][operator]': 'BETWEEN',
-        'filter[timestamp][value][0]': chartBeginTimestamp,
-        'filter[timestamp][value][1]': chartEndTimestamp
+        'filter[timestamp][value][0]': period.previous, // chartBeginTimestamp,
+        'filter[timestamp][value][1]': period.next // chartEndTimestamp
       };
 
       if (selectorType) {
@@ -216,6 +194,9 @@ angular.module('negawattClientApp')
     this.get = function(accountId, stateParams, meters, period) {
       var deferred = $q.defer();
 
+      var chartFreq = stateParams.chartFreq;
+      var chart = this.frequencyParams[chartFreq];
+
       // Save meters data.
       this.meters = meters;
 
@@ -232,20 +213,26 @@ angular.module('negawattClientApp')
         this.multipleGraphs = false;
       }
 
+      // Caculate period object.
+      UsagePeriod.setPeriod(chart, period);
+
+      // Update period information.
+      period = UsagePeriod.getPeriod();
+
       // Translate selector type and id to filters.
-      var filters = this.filtersFromSelector(accountId, stateParams.chartFreq, selectorType, selectorId, period);
+      var filters = this.filtersFromSelector(accountId, chartFreq, selectorType, selectorId, period);
 
       // Save filters-hash code and map to frequency for later use.
       var filtersHash = Electricity.hashFromFilters(filters);
       this.activeRequestHash = filtersHash;
-      this.filtersHashToFreq[filtersHash] = stateParams.chartFreq;
+      this.filtersHashToFreq[filtersHash] = chartFreq;
 
       // Get electricity data.
       Electricity.get(filters).then(function(electricity) {
         // Add periods.
-        angular.extend(ChartUsage.usageGoogleChartParams, hasMorePeriods(electricity, stateParams, filters))
+        angular.extend(ChartUsage.usageGoogleChartParams, UsagePeriod)
         // Translate electricity data to google charts format.
-        deferred.resolve(ChartUsage.electricityToChartData(stateParams.chartFreq, electricity));
+        deferred.resolve(ChartUsage.electricityToChartData(chartFreq, electricity));
       });
 
       return deferred.promise;
@@ -529,6 +516,8 @@ angular.module('negawattClientApp')
         }
       };
 
+      angular.extend(chartData, Chart);
+
       return chartData;
     };
 
@@ -540,21 +529,6 @@ angular.module('negawattClientApp')
      */
     this.getFrequencies = function() {
       return frequencies;
-    }
-
-
-    /**
-     * Check the electricity response, if have more data in previous or next period,
-     * set true true/false the object.
-     *
-     * @return controls {*}
-     *   The controls data {next:boolean, previous:boolean}
-     */
-    function hasMorePeriods(electricity, stateParams, filters) {
-      //
-      UsagePeriod.setFrequency(ChartUsage.frequencyParams[stateParams.chartFreq], filters)
-
-      return UsagePeriod;
     }
 
   });

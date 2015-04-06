@@ -155,8 +155,8 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   public function iShouldSeeTheMonthlyKwsChartOfAllMeters() {
     // Testing the height of the first and last column, with the default chart size and data of the migration.
     $start_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(1) > td:nth-child(2)';
-    $end_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(9) > td:nth-child(2)';
-    $this->waitForTextNgElement($start_chart, '8787');
+    $end_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(24) > td:nth-child(2)';
+    $this->waitForTextNgElement($start_chart, '7836');
     $this->waitForTextNgElement($end_chart, '12318');
   }
 
@@ -165,9 +165,9 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    */
   public function iShouldSeeThePreviousMonthlyKwsChartOfAllMeters() {
     $start_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(1) > td:nth-child(2)';
-    $end_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(3) > td:nth-child(2)';
-    $this->waitForTextNgElement($start_chart, '13111');
-    $this->waitForTextNgElement($end_chart, '12188');
+    $end_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(20) > td:nth-child(2)';
+    $this->waitForTextNgElement($start_chart, '7836');
+    $this->waitForTextNgElement($end_chart, '256');
   }
 
 
@@ -177,8 +177,8 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   public function iShouldSeeTheMonthlyKwsChartAMeter() {
     // Testing the height of the first and last column, with the default chart size and data of the migration.
     $start_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(1) > td:nth-child(2)';
-    $end_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(9) > td:nth-child(2)';
-    $this->waitForTextNgElement($start_chart, '3081');
+    $end_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(12) > td:nth-child(2)';
+    $this->waitForTextNgElement($start_chart, '10936');
     $this->waitForTextNgElement($end_chart, '3606');
   }
 
@@ -224,6 +224,32 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
+   * @When I reload :url
+   */
+  public function iReload($url) {
+    $this->getSession()->visit($this->locatePath($url));
+    // Reload to force refresh button of the browser. "ui-router reload the state."
+    $this->getSession()->reload();
+  }
+
+  /**
+   * @Then I should see the monthly kws chart for multiple markers
+   */
+  public function iShouldSeeTheMonthlyKwsChartForMultipleMarkers() {
+    // Testing the height of the first and last column, with the default chart size and data of the migration.
+    $start_chart_meter1 = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(1) > td:nth-child(2)';
+    $end_chart_meter1 = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(9) > td:nth-child(2)';
+    $start_chart_meter2 = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(1) > td:nth-child(3)';
+    $end_chart_meter2 = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(9) > td:nth-child(3)';
+    // Meter 1.
+    $this->waitForTextNgElement($start_chart_meter1, '7836');
+    $this->waitForTextNgElement($end_chart_meter1, '827');
+    // Meter 2.
+    $this->waitForTextNgElement($start_chart_meter2, '3081');
+    $this->waitForTextNgElement($end_chart_meter2, '3606');
+  }
+
+  /**
    * @AfterStep
    *
    * Take a screen shot after failed steps for Selenium drivers (e.g.
@@ -236,7 +262,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     }
 
     if ($this->getSession()->getDriver() instanceof \Behat\Mink\Driver\Selenium2Driver) {
-      $file_name = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat-failed-step.png';
+      $file_name = sys_get_temp_dir() . DIRECTORY_SEPARATOR . time() . 'behat-failed-step.png';
       $screenshot = $this->getSession()->getDriver()->getScreenshot();
       file_put_contents($file_name, $screenshot);
       print "Screenshot for failed step created in $file_name";
