@@ -1,0 +1,23 @@
+// Necesary to apply the dynamic css.
+.usageChart {
+  border: 1px solid white;
+  width: 510px;
+  height: 220px;
+}
+
+.col-centered{
+  float: none;
+  margin: 0 auto;
+}
+
+.chart-empty {
+  display: table;
+  table-layout: fixed;
+  height: 100%;
+
+  .chart-message {
+    display:table-cell;
+    vertical-align:middle;
+    text-align:center;
+  }
+}

@@ -12,4 +12,6 @@ $plugin = array(
     'satec_meter' => 'satec_meters',
   ),
   'authentication_types' => TRUE,
+  // Add totals to output.
+  'formatter' => 'meters_total',
 );

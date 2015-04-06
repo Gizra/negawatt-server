@@ -76,8 +76,7 @@ angular.module('negawattClientApp')
       return $http({
         method: 'GET',
         url: url,
-        transformResponse: prepareUserData,
-        cache: true
+        transformResponse: prepareUserData
       });
     }
 
@@ -91,8 +90,7 @@ angular.module('negawattClientApp')
       return $http({
         method: 'GET',
         url: url,
-        transformResponse: prepareAccountData,
-        cache: true
+        transformResponse: prepareAccountData
       });
 
     }

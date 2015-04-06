@@ -75,7 +75,7 @@ function negawatt_install() {
   // Create a default vocabulary named "Meter Category", enabled for the 'node' content type.
   $vocabulary = (object) array(
     'name' => st('Meter Category'),
-    'description' => st('Use tags to group meters by categories.'),
+    'description' => st('Dummy vocab, used to allow migration.'),
     'machine_name' => 'meter_category',
   );
   taxonomy_vocabulary_save($vocabulary);

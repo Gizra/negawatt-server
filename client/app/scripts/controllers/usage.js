@@ -8,19 +8,94 @@
  * Controller of the negawattClientApp
  */
 angular.module('negawattClientApp')
-  .controller('UsageCtrl', function ($scope, $q, $location, $state, $stateParams, $urlRouter, account, usage, meters, ChartUsage) {
+  .controller('UsageCtrl', function ($scope, $q, $location, $state, $stateParams, $urlRouter, ChartUsage, UsagePeriod, limits, account, usage, meters) {
     var chartUpdated;
-    // Get data from the cache, since 'usage' might not be up to date
-    // after lazy-load.
+    // The initialization in a empty object is need it to avoid an error in the initial rendering.
+    $scope.usageChartData = {};
+
+    // Get chart frequencies.
     $scope.frequencies = ChartUsage.getFrequencies();
 
-    var chart = ChartUsage.get(account.id, $stateParams, meters);
-    // Revolve promise
+    // Set period limits, according the state.
+    UsagePeriod.setLimits(limits);
+
+    // Get data from the cache, since 'usage' might not be up to date
+    // after lazy-load.
+    var chart = ChartUsage.get(account.id, $stateParams, meters.list, UsagePeriod.getPeriod());
     chart.then(function(response) {
       $scope.usageChartData = $scope.usageChartData || response;
       chart = undefined;
     });
 
+    // Get the parameters chart frecuency.
+    if (angular.isDefined($stateParams.chartFreq)) {
+      setActiveFrequencyTab($scope.frequencies[$stateParams.chartFreq-1]);
+    }
+
+    // Get from parameters information of the selected marker.
+    if (angular.isDefined($stateParams.markerId)) {
+      // Share meter selected.
+      $scope.meterSelected = meters.list[$stateParams.markerId];
+
+      // Chart usage information of the selected marker.
+      ChartUsage.meterSelected(meters.list[$stateParams.markerId]);
+    }
+
+
+    // Active the seleced chart frequency.
+    function setActiveFrequencyTab(frequency) {
+      frequency.active = true;
+    }
+
+    /**
+     * Keep parameters syncronization between url and router.
+     *
+     * @param params
+     *  Parameters of the current search.
+     */
+    function syncUrl(params) {
+      $location.search(params);
+      $urlRouter.update(true);
+      chartUpdated = true;
+    }
+
+    /**
+     * Search the data with the new chart frequency.
+     *
+     * @param params
+     *   Search params used to the query string the next time.
+     * @param period
+     *   Period of time expresed in timestamp, used to request specific electricity data.
+     */
+    function updateUsageChart(params, period) {
+
+      // In case the state activation is enter via URL.
+      if (angular.isUndefined(period) && !$state.transition && (angular.isDefined($stateParams.chartNextPeriod) || angular.isDefined($stateParams.chartNextPeriod) )) {
+        period = {
+          next: $stateParams.chartNextPeriod,
+          previous: $stateParams.chartPreviousPeriod
+        };
+        angular.extend(params, {
+          chartNextPeriod: $stateParams.chartNextPeriod,
+          chartPreviousPeriod: $stateParams.chartPreviousPeriod
+        });
+      }
+
+      // Load electricity data in the chart according the chart frequency.
+      $scope.isLoading = true;
+
+      // Extend period with the maximum and minimum time, if a marker is selected.
+      if (angular.isDefined($stateParams.markerId)) {
+        period = angular.extend(period || {}, meters.list[$stateParams.markerId].electricity_time_interval);
+      }
+
+      ChartUsage.get(account.id, $stateParams, meters.list, period).then(function(response) {
+        $scope.usageChartData = response;
+        $scope.isLoading = false;
+      });
+
+      syncUrl(params);
+    }
 
     /**
      * Get electricity data in the new chart frequency.
@@ -50,6 +125,9 @@ angular.module('negawattClientApp')
 
     /**
      * Get electricity data for the new period into the chart frequency.
+     *
+     * @param period
+     *  The period to next ot previous to do the new request.
      */
     $scope.changePeriod = function(period) {
       var params = {};
@@ -57,8 +135,8 @@ angular.module('negawattClientApp')
       // Query string params.
       angular.extend(params, {
         chartFreq: $stateParams.chartFreq,
-        chartNextPeriod: $stateParams.chartNextPeriod || period.next,
-        chartPreviousPeriod: $stateParams.chartPreviousPeriod || period.previous
+        chartNextPeriod: period.next,
+        chartPreviousPeriod: period.previous
       })
 
       // Udpate chart.
@@ -79,60 +157,6 @@ angular.module('negawattClientApp')
         $scope.usageChartData = response;
       });
     });
-
-    // Active the seleced chart frequency.
-    function setActiveFrequencyTab(frequency) {
-      frequency.active = true;
-    }
-
-    if (angular.isDefined($stateParams.chartFreq)) {
-      setActiveFrequencyTab($scope.frequencies[$stateParams.chartFreq-1])
-    }
-
-    /**
-     * Search the data with the new chart frequency.
-     *
-     * @param params
-     *   Search params used to the query string the next time.
-     * @param period
-     *   Period of time expresed in timestamp, used to request specific electricity data.
-     */
-    function updateUsageChart(params, period) {
-
-      // In case the state activation is enter via URL.
-      if (angular.isUndefined(period) && !$state.transition && (angular.isDefined($stateParams.chartNextPeriod) || angular.isDefined($stateParams.chartNextPeriod) )) {
-        period = {
-          next: $stateParams.chartNextPeriod,
-          previous: $stateParams.chartPreviousPeriod
-        };
-        angular.extend(params, {
-          chartNextPeriod: $stateParams.chartNextPeriod,
-          chartPreviousPeriod: $stateParams.chartPreviousPeriod
-        });
-      }
-
-      // Load electricity data in the chart according the chart frequency.
-      $scope.isLoading = true;
-
-      ChartUsage.get(account.id, $stateParams, meters, period).then(function(response) {
-        $scope.usageChartData = response;
-        $scope.isLoading = false;
-      });
-
-      // Keep parameters syncronization between url and router.
-      $location.search(params);
-      $urlRouter.update(true);
-      chartUpdated = true;
-    }
-
-    // Detail information of the selected marker.
-    if (angular.isDefined($stateParams.markerId)) {
-      // Share meter selected.
-      $scope.meterSelected = meters[$stateParams.markerId];
-
-      // Chart usage information of the selected marker.
-      ChartUsage.meterSelected(meters[$stateParams.markerId]);
-    }
 
 
   });

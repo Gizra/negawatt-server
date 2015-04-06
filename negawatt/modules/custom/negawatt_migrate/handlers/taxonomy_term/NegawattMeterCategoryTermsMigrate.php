@@ -21,6 +21,7 @@ class NegawattMeterCategoryTermsMigrate extends Migration {
     array('parent', 'parent'),
     array('weight', 'weight'),
     array('description', 'description'),
+    array('field_icon_categories', 'field_icon_categories'),
   );
 
   public $dependencies = array(
@@ -39,6 +40,7 @@ class NegawattMeterCategoryTermsMigrate extends Migration {
       'name',
       'weight',
       'description',
+      'field_icon_categories',
     );
 
     $this->addSimpleMappings($field_names);
@@ -68,7 +70,7 @@ class NegawattMeterCategoryTermsMigrate extends Migration {
   /**
    * Override Migration::prepare().
    *
-   * Set the term parent for heirarchical terms
+   * Set the term parent for hierarchical terms
    *
    * @param $term
    * @param $row

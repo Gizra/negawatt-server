@@ -117,3 +117,93 @@ function negawatt_meter_node_presave($node) {
     ));
   }
 }
+
+
+/**
+ * Implements hook_field_attach_create_bundle().
+ *
+ * Add icon categories to newly created vocabs.
+ */
+function negawatt_meter_field_attach_create_bundle($entity_type, $bundle) {
+  if ($entity_type != 'taxonomy_term') {
+    // Not a vocabulary.
+    return;
+  }
+
+  if (strpos($bundle, 'meter_category') !== 0) {
+    // Not a meter category bundle.
+    return;
+  }
+
+  // Create a taxonomy field and use the taxonomy entity we created earlier
+
+  // Prepare icon categories field.
+  if (!field_info_field('field_icon_categories')) {
+    // @todo: Make a select list.
+    $field = array(
+      'active' => 1,
+      'cardinality' => 1,
+      'deleted' => 0,
+      'entity_types' => array(),
+      'field_name' => 'field_icon_categories',
+      'foreign keys' => array(),
+      'indexes' => array(
+        'value' => array(
+          0 => 'value',
+        ),
+      ),
+      'locked' => 0,
+      'module' => 'list',
+      'settings' => array(
+        'allowed_values' => array(
+          'alarm' => 'alarm',
+          'arrow' => 'arrow',
+          'book' => 'book',
+          'buho' => 'buho',
+          'electricity' => 'electricity',
+          'home' => 'home',
+          'people' => 'people',
+          'public-buildings' => 'public-buildings',
+          'security' => 'security',
+        ),
+        'allowed_values_function' => '',
+      ),
+      'translatable' => 0,
+      'type' => 'list_text',
+    );
+    field_create_field($field);
+  }
+  
+  $instance = array(
+    'bundle' => $bundle,
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'taxonomy_term',
+    'field_name' => 'field_icon_categories',
+    'label' => 'Icon categories',
+    'required' => FALSE,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'module' => 'options',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'options_select',
+      'weight' => 1,
+    ),
+  );
+  field_create_instance($instance);
+}
