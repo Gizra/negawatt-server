@@ -8,6 +8,21 @@ class NegawattFormatterElectricityTotal extends \RestfulFormatterJson {
    * {@inheritdoc}
    *
    * Add 'total' section to electricity output.
+   * If no category filter is present, add total for the top level categories.
+   * If category filter is present, and there are sub categories, add totals
+   * for each of the sub categories.
+   * If category filter is present and there are no sub categories, add totals
+   * for the meters under the category.
+   *
+   * The format of the totals section is as follows:
+   *
+   * total: {
+   *   type: "category" | "meter"
+   *   values: {
+   *     id: value,
+   *     ...
+   *   }
+   * }
    */
   public function prepare(array $data) {
     // If we're returning an error then set the content type to
@@ -25,6 +40,8 @@ class NegawattFormatterElectricityTotal extends \RestfulFormatterJson {
     $filter = !empty($request['filter']) ? $request['filter'] : array();
     $account = !empty($filter['meter_account']) ? $filter['meter_account'] : null;
 
+    // Fix a bug when this formatter is called not for electricity.
+    // Should be removed when the bug is fixed.
     if ($request['q'] != 'api/electricity') {
       return $output;
     }
@@ -59,41 +76,59 @@ class NegawattFormatterElectricityTotal extends \RestfulFormatterJson {
     // Handle meter categories.
     // If none given, take 0 (root) as default.
     $parent_category = !empty($filter['meter_category']) ? $filter['meter_category'] : 0;
-    // @fixme: will account be always present?
-    // Figure out vocab id from group id (the reverse of og_vocab_relation_get().
+    // Figure out vocab id from group id (the reverse of og_vocab_relation_get() function.
     $vocabulary_id = db_select('og_vocab_relation', 'ogr')
       ->fields('ogr', array('vid'))
       ->condition('gid', $account)
       ->execute()
       ->fetchField();
+
     // Get list of child taxonomy terms.
+    $result_type = '';
     $taxonomy_array = taxonomy_get_tree($vocabulary_id, $parent_category);
-    // Build an mapping array: cat_id => array(all child cat ids);
-    $child_cat_mapping = array();
-    foreach ($taxonomy_array as $term) {
-      if ($term->depth == 0) {
-        // Direct child, add new row to child-cat-mapping.
-        $child_cat_mapping[$term->tid] = array($term->tid);
-      }
-      else {
-        // Deep level child, add to the proper row.
-        foreach ($child_cat_mapping as $key => $map) {
-          $parent = $term->parents[0];
-          if (in_array($parent, $map)) {
-            // Add the parent to the list under key.
-            $child_cat_mapping[$key][] = $term->tid;
-            break;
+    if (empty($taxonomy_array)) {
+      // No sub categories were found. Show division by meters.
+      $result_type = 'meter';
+
+      // Find all meters attached to the category.
+      $meters = taxonomy_select_nodes($parent_category, FALSE);
+      // Sum electricity according to meters in category.
+      $query->condition('e.meter_nid', $meters, 'IN');
+      $query->fields('e', array('meter_nid'));
+      $query->groupBy('e.meter_nid');
+    }
+    else {
+      // Sub categories were found, show division by sub categories.
+      $result_type = 'category';
+
+      // Build an mapping array: cat_id => array(all child cat ids);
+      $child_cat_mapping = array();
+      foreach ($taxonomy_array as $term) {
+        if ($term->depth == 0) {
+          // Direct child, add new row to child-cat-mapping.
+          $child_cat_mapping[$term->tid] = array($term->tid);
+        }
+        else {
+          // Deep level child, add to the proper row.
+          foreach ($child_cat_mapping as $key => $map) {
+            // @fixme: is it possible that a term will have more than one parent?
+            $parent = $term->parents[0];
+            if (in_array($parent, $map)) {
+              // Add the parent to the list under key.
+              $child_cat_mapping[$key][] = $term->tid;
+              break;
+            }
           }
         }
       }
+      // Extract only tid from the taxonomy terms.
+      $child_categories = array_map(function($term) {return $term->tid;}, $taxonomy_array);
+      $query->join('field_data_og_vocabulary', 'cat', 'cat.entity_id = e.meter_nid');
+      $query->condition('cat.og_vocabulary_target_id', $child_categories, 'IN');
+      $query->join('taxonomy_term_data', 'tax', 'tax.tid = cat.og_vocabulary_target_id');
+      $query->fields('tax', array('tid', 'name'));
+      $query->groupBy('cat.og_vocabulary_target_id');
     }
-    // Extract only tid from the taxonomy terms.
-    $child_categories = array_map(function($term) {return $term->tid;}, $taxonomy_array);
-    $query->join('field_data_og_vocabulary', 'cat', 'cat.entity_id = e.meter_nid');
-    $query->condition('cat.og_vocabulary_target_id', $child_categories, 'IN');
-    $query->join('taxonomy_term_data', 'tax', 'tax.tid = cat.og_vocabulary_target_id');
-    $query->fields('tax', array('tid', 'name'));
-    $query->groupBy('cat.og_vocabulary_target_id');
     unset($filter['meter_category']);
 
     // Make sure we handled all the filter fields.
@@ -101,25 +136,33 @@ class NegawattFormatterElectricityTotal extends \RestfulFormatterJson {
       throw new \Exception('Unknown fields in filter: ' . implode(', ', array_keys($filter)));
     }
 
-    // Add expressions for electricity min and max timestamps.
+    // Add expressions for electricity total.
     $query->addExpression('SUM(e.sum_kwh)', 'sum');
 
     $result = $query->execute();
-    // Sum all child categories' totals into the parent category.
+
     $total = array();
-    foreach ($result as $row) {
-      // Look for the parent category, under which to sum the kwhs
-      foreach ($child_cat_mapping as $parent => $children_map) {
-        if (in_array($row->tid, $children_map)) {
-          // Add the parent to the list under key.
-          $total[$parent] += $row->sum;
-          break;
+    if ($result_type == 'meter') {
+      // Collect meters' totals.
+      $total = $result->fetchAllKeyed();
+    }
+    else {
+      // Sum all child categories' totals into the parent category.
+      foreach ($result as $row) {
+        // Look for the parent category, under which to sum the kWhs
+        foreach ($child_cat_mapping as $parent => $children_map) {
+          if (in_array($row->tid, $children_map)) {
+            // Add the parent to the list under key.
+            $total[$parent] += $row->sum;
+            break;
+          }
         }
       }
     }
 
     // Add total section to output.
-    $output['total'] = $total;
+    $output['total']['type'] = $result_type;
+    $output['total']['values'] = $total;
 
     return $output;
   }
