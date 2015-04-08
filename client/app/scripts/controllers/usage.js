@@ -115,9 +115,9 @@ angular.module('negawattClientApp')
       }
 
       // Query string params.
-      angular.extend(params, {
+      angular.extend(params, $location.search(), {
         chartFreq: $stateParams.chartFreq
-      })
+      });
 
       // Udpate chart.
       updateUsageChart(params);
