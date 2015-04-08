@@ -31,7 +31,6 @@ class NegawattFormatterElectricityTotal extends \RestfulFormatterJson {
       $this->contentType = 'application/problem+json; charset=utf-8';
       return $data;
     }
-
     // Let parent formatter prepare the output.
     $output = parent::prepare($data);
 
@@ -40,9 +39,14 @@ class NegawattFormatterElectricityTotal extends \RestfulFormatterJson {
     $filter = !empty($request['filter']) ? $request['filter'] : array();
     $account = !empty($filter['meter_account']) ? $filter['meter_account'] : null;
 
+    // Make sure there is 'meter_account' filter.
+    if (!$account) {
+      throw new \Exception('Please supply filter[meter_account].');
+    }
+
     // Fix a bug when this formatter is called not for electricity.
     // Should be removed when the bug is fixed.
-    if ($request['q'] != 'api/electricity') {
+    if ($request['q'] != 'api/electricity' && $request['q'] != 'api/v1.0/electricity') {
       return $output;
     }
 
@@ -100,6 +104,15 @@ class NegawattFormatterElectricityTotal extends \RestfulFormatterJson {
 
         // Find all meters attached to the category.
         $meters = taxonomy_select_nodes($parent_category, FALSE);
+
+        // Check that there are meters in this category.
+        if (empty($meters)) {
+          // Return empty total section.
+          $output['total']['type'] = $result_type;
+          $output['total']['values'] = new stdClass();
+          return $output;
+        }
+
         // Sum electricity according to meters in category.
         $query->condition('e.meter_nid', $meters, 'IN');
         $query->fields('e', array('meter_nid'));
