@@ -1,6 +1,10 @@
 {
   "development": {
     "backend": "http://127.0.0.1:8080",
-    "debugUiRouter": false
+    "debugUiRouter": false,
+    "openweather": {
+      "endpoint": null,
+      "apikey": "9a67a4889f54dd2a86858f692bfbe62e"
+    }
   }
 }

@@ -23,6 +23,10 @@ class NegawattMeResource extends \RestfulEntityBaseUser {
    */
   public function viewEntity($entity_id) {
     $account = $this->getAccount();
-    return parent::viewEntity($account->uid);
+
+    $me = parent::viewEntity($account->uid);
+    $me['picture'] = $account->picture ? file_create_url($account->picture->uri) : file_create_url(file_load(variable_get('default_user_picture_fid'))->uri);
+
+    return $me;
   }
 }

@@ -79,4 +79,24 @@ function negawatt_install() {
     'machine_name' => 'meter_category',
   );
   taxonomy_vocabulary_save($vocabulary);
+
+  // Create user default profile image.
+  negawatt_users_install();
+}
+
+/**
+ * Implements hook_install().
+ */
+function negawatt_users_install() {
+  $uri = file_unmanaged_copy(DRUPAL_ROOT . '/' . drupal_get_path('module', 'negawatt_migrate') . '/images/default_profile_white.png', 'public://default_profile_white.png');
+  // Create the file manage entry.
+  $file = new stdClass;
+  $file->uid = 1;
+  $file->filename = 'default_profile_white.png';
+  $file->uri = $uri;
+  $file->status = 1;
+  $file->filemime = 'image/png';
+  file_save($file);
+
+  variable_set('default_user_picture_fid', $file->fid);
 }
