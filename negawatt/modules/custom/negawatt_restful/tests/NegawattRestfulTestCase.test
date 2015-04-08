@@ -28,6 +28,10 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
   function setUp() {
     parent::setUp('negawatt_restful');
 
+    // Add the OG_VOCAB field to meter nodes.
+    og_create_field(OG_VOCAB_FIELD, 'node', 'satec_meter');
+    og_create_field(OG_VOCAB_FIELD, 'node', 'iec_meter');
+
     // Create satec meter nodes.
     $settings = array(
       'type' => 'satec_meter',
@@ -159,6 +163,33 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     $this->assertEqual($meter['max_frequency'], 5, 'Max-frequency field is correct.');
     $this->assertEqual($meter['meter_id'], 1, 'Meter ID field is correct.');
     // @todo: Test meter_category.
+
+    // Test POST request
+
+    $handler = restful_get_restful_handler('iec_meters');
+
+    // Create a new meter
+    $request = array(
+      'label' =>'4135364-604-1536093',
+      'account' => 2,
+      'contract' => 4135364,
+      'place_address' => 'דרבן 6',
+      'place_description' => '',
+      'place_locality' => 'אילת',
+      'meter_code' => 604,
+      'meter_serial' => 1536093,
+      'max_frequency' => 2,
+    );
+    $result = $handler->post('', $request);
+    $id = $result[0]['id'];
+    $this->assertEqual($result[0]['label'], '4135364-604-1536093', '<b>Testing POST request</b><br>Meter created successfuly.');
+    $this->assertEqual($result[0]['max_frequency'], 2, 'max_frequency field is OK.');
+
+    $request['max_frequency'] = 5;
+    $result = $handler->post('', $request);
+
+    $this->assertEqual($result[0]['id'], $id, 'Meter update successful.');
+    $this->assertEqual($result[0]['max_frequency'], 5, 'Meter max_frequency was updated.');
 
     // @todo: Test 'meters' API call
     // @todo: Test that both satec and iec meters are returned.
