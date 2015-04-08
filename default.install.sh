@@ -20,6 +20,10 @@ mkdir www
 
 bash scripts/build
 
+# must create the styles/thumbnails/public dir, otherwise the apache will create
+# it with www-data owner an we wouldn't be able to delete it.
+mkdir -p www/sites/default/files/styles/thumbnail/public
+
 cd www
 
 drush si -y negawatt --account-name=$ADMIN_USERNAME --account-pass=$ADMIN_PASSWORD --account-mail=$ADMIN_EMAIL --db-url=mysql://$MYSQL_USERNAME:$MYSQL_PASSWORD@$MYSQL_HOST/$MYSQL_DB_NAME --uri=$BASE_DOMAIN_URL
@@ -46,6 +50,9 @@ drush mi --all --user=1
 
 # This command does the login for you when the build script is done. It will open a new tab in your default browser and login to your project as the Administrator. Comment out this line if you do not want the login to happen automatically.
 drush uli --uri=$BASE_DOMAIN_URL
+
+# Activate user picture on Drupal User Administration.
+drush vset --exact user_pictures 1
 
 # Install client application.
 cd ../client

@@ -250,6 +250,34 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
+   * @Then I should see a greeting as :greeting
+   */
+  public function iShouldSeeAsUsername($greeting) {
+    $css_path_greeting = '#dashboard-controls > ui-view > div.menu-account.ng-scope > span';
+    $this->waitForTextNgElement($css_path_greeting, $greeting);
+  }
+
+  /**
+   * @Then I should see logo account
+   */
+  public function iShouldSeeLogoAccount() {
+    $csspath = '#dashboard-controls > ui-view > div.menu-logo.ng-scope > img';
+    $logo_filename = 'logo.png';
+    $attr = 'src';
+    $this->waitForAttrNgElement($csspath, $attr, $logo_filename);
+  }
+
+  /**
+   * @Then I should see default profile image
+   */
+  public function iShouldSeeDefaultProfileImage() {
+    $csspath = '#dashboard-controls > ui-view > div.menu-account.ng-scope > img.menu-account-photo';
+    $img_filename = 'default_profile_white.png';
+    $attr = 'src';
+    $this->waitForAttrNgElement($csspath, $attr, $img_filename);
+  }
+
+  /**
    * @AfterStep
    *
    * Take a screen shot after failed steps for Selenium drivers (e.g.
@@ -421,7 +449,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     $this->waitFor(function($context) use ($csspath, $attr, $value) {
       try {
         $element_attribute = $context->getSession()->evaluateScript('angular.element("' . $csspath . '").attr("' . $attr . '");');
-        if ($element_attribute !== NULL && $element_attribute == $value) {
+        if (strripos($element_attribute, $value) !== false) {
           return TRUE;
         }
         return FALSE;
