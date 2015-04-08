@@ -200,9 +200,9 @@ angular.module('negawattClientApp')
         });
 
       angular.forEach(metersCategories, function(categories) {
-        angular.forEach(categories, function(categoryId) {
+        angular.forEach(categories, function(category) {
           // Set selected categories.
-          var categoriesIds = [parseInt(categoryId)] ;
+          var categoriesIds = [+category.id] ;
 
           // Increase amount of meters.
           angular.forEach(categoriesIds, function(itemsId) {

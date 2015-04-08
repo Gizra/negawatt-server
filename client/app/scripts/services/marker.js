@@ -1,45 +1,41 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .factory('Marker', function ($state, Map) {
+  .factory('Marker', function ($injector, $state, $q, $timeout, Map, IconFactory) {
+
     // Save last marker selected.
     var selected;
-    // Definitions of the map icons.
-    var icons = {
-      default: {
-        iconUrl: '../images/marker-blue.png',
-        shadowUrl: '../images/shadow.png',
-        iconSize:     [40, 40], // size of the icon
-        shadowSize:   [26, 26],
-        iconAnchor:   [32, 30], // point of the icon which will correspond to marker's location
-        shadowAnchor: [25, 7],  // the same for the shadow
-        popupAnchor:  [-10, -25] // where the pop-up window will appear
-      },
-      selected: {
-        iconUrl: '../images/marker-red.png',
-        shadowUrl: '../images/shadow.png',
-        iconSize:     [40, 40], // size of the icon
-        shadowSize: [26, 26],
-        iconAnchor:   [32, 30], // point of the icon which will correspond to marker's location
-        shadowAnchor: [25, 7],  // the same for the shadow
-        popupAnchor:  [-10, -25] // where the pop-up window will appear
-      }
-    };
 
     /**
      * Get the icon properties of a marker.
      *
      * @param type
      *    Name of the existing icons.
+     * @param state
+     *    Diferent state of the same icon (unselect / select).
      *
      * @returns {*}
      *    Properties of the icon.
      */
-    function getIcon(type) {
-      return icons[type];
+    function getIcon(type, state) {
+      var testValue;
+      // Get defined icon object.
+      var icon = IconFactory[type] && IconFactory[type][state] || IconFactory.getIcon(type, state);
+
+      return $q.when(icon);
     }
 
     return {
+      // Initial definition.
+      icon: {},
+      /**
+       * Return the name of icon according the category of the meter (defined first in the first position).
+       *
+       * @returns {*|string}
+       */
+      getCategory: function() {
+        return this.meter_categories[Object.keys(this.meter_categories)[0]].name || 'default';
+      },
       /**
        * Return "default" icon to set icon marker is unselected.
        */
@@ -50,7 +46,10 @@ angular.module('negawattClientApp')
        * Return "default" icon to set icon marker is unselected.
        */
       unselect: function() {
-        this.icon = getIcon('default');
+        var self = this;
+        getIcon(this.getCategory(), 'unselect').then(function(icon) {
+          self.icon = icon;
+        });
       },
       /**
        * Select a new marker.
@@ -58,11 +57,14 @@ angular.module('negawattClientApp')
        * Unselect previous marker, and return the "selected" icon.
        */
       select: function() {
+        var self = this;
         if (angular.isDefined(selected)) {
           selected.unselect();
         }
         selected = this;
-        this.icon = getIcon('selected');
+        getIcon(this.getCategory(), 'select').then(function(icon) {
+          self.icon = icon;
+        });
         Map.centerMapByMarker(this);
       },
       /**

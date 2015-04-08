@@ -13,28 +13,19 @@ angular.module('negawattClientApp')
      *  The meters collection filtered.
      */
     return function (meters, categories){
-      // Assert the filter recive a meters array.
-      if (angular.isObject(meters)) {
-        meters = Utils.toArray(meters);
-      }
-
-      // Filter meters from the collection with the categories in the list.
-      meters = $filter('filter')(meters, function(meter){
-        var visible;
-        visible = meter.meter_categories.map(function(meter_category) {
-          if (categories.indexOf(meter_category) === -1) {
-            return true;
-          }
-          return false;
-        })
-
-        // Return meter not filter.
-        if (visible.indexOf(false) === -1) {
-          return meter;
+      var filter = [];
+      if (categories.length) {
+        // Assert the filter recive a meters array.
+        if (angular.isObject(meters)) {
+          meters = Utils.toArray(meters);
         }
-      });
 
-      meters = Utils.indexById(meters);
+        angular.forEach(categories, function(category) {
+          filter = filter.concat($filter('filter')(meters, {meter_categories: {$: {id: category}}}, true));
+        });
+
+        meters = Utils.indexById(filter);
+      }
 
       return meters;
     }

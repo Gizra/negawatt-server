@@ -113,13 +113,16 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @Then I should see a marker selected
    */
   public function iShouldSeeAMarkerSelected() {
-    $selected_src_image = '../images/marker-red.png';
+    $selected_src_image = '-red.png';
     // check if exist and is selected.
     $this->waitFor(function($context) use ($selected_src_image) {
       try {
-        // Get an array of string <img src="...">, filled with the value of the src attribute of the marker icon image.
-        $marker_selected = $context->getSession()->evaluateScript('angular.element(".leaflet-marker-icon").map(function(index, element){ return angular.element(element).attr("src") }).toArray().indexOf("' . $selected_src_image . '");');
-        if ($marker_selected !== -1) {
+        // Get an array of string <img src="...">, filled with the value of the src attribute of the marker icon image and check id selected (if have ) '-red.png'.
+        $marker_selected = $context->getSession()->evaluateScript('angular.element(".leaflet-marker-icon").map(function(index, element){ return angular.element(element).attr("src").indexOf("' . $selected_src_image . '") }).toArray();');
+        // Reduce the array to empty or the position of the selected marker.
+        $result = max($marker_selected);
+
+        if ($result > 0) {
           return TRUE;
         }
         return FALSE;

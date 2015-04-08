@@ -121,7 +121,11 @@ class NegawattEntityMeterBase extends \NegawattEntityBaseNode {
       }
       $categories = taxonomy_get_parents_all($meter_category->tid);
       foreach ($categories as $category) {
-        $category_ids[] = $category->tid;
+        $wrapper_category = entity_metadata_wrapper('taxonomy_term', $category);
+        $category_ids[$wrapper_category->tid->value()] = array(
+          "id" => $wrapper_category->tid->value(),
+          "name" => $wrapper_category->field_icon_categories->value(),
+        );
       }
     }
 
