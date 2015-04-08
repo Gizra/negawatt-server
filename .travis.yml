@@ -28,6 +28,7 @@ install:
 before_script:
   - bash scripts/ci/setup
   - bash scripts/build
+  - mkdir -p www/sites/default/files/styles/thumbnail/public
   - cd www
   - drush si negawatt --db-url=mysql://root:@127.0.0.1/drupal --account-pass=admin --yes
   - drush cc all --yes
