@@ -40,18 +40,18 @@ class NegawattFormatterMetersTotal extends \RestfulFormatterJson {
 
     // Make sure we handled all the filter fields.
     if (!empty($filter)) {
-      throw new \Exception('Unknown fields in filter.');
+      throw new \Exception('Unknown fields in filter: ' . implode(', ', array_keys($filter)));
     }
 
     // Add expressions for electricity min and max timestamps.
     $query->addExpression('MIN(e.timestamp)', 'min');
     $query->addExpression('MAX(e.timestamp)', 'max');
 
-    $minmax =  $query->execute()->fetchObject();
+    $result =  $query->execute()->fetchObject();
 
     // Add total section to output.
-    $output['total']['electricity_time_interval']['min'] = $minmax->min;
-    $output['total']['electricity_time_interval']['max'] = $minmax->max;
+    $output['total']['electricity_time_interval']['min'] = $result->min;
+    $output['total']['electricity_time_interval']['max'] = $result->max;
 
     return $output;
   }
