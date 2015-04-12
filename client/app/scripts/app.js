@@ -133,7 +133,7 @@ angular
         url: '/category/{categoryId:int}',
         reloadOnSearch: false,
         resolve: {
-          meters: function(Meter, $stateParams, account) {
+          meters: function(Meter, $stateParams, account, meters) {
             return Meter.get(account.id, $stateParams.categoryId);
           }
         },
@@ -192,9 +192,10 @@ angular
           'map@dashboard': {
             templateUrl: 'views/dashboard/main.map.html',
             resolve: {
-              meters: function(Meter, $stateParams, account) {
+              meters: function(Meter, $stateParams, account, meters) {
                 // Necessary to resolve again to apply the filter, of category id.
-                return Meter.get(account.id, $stateParams.categoryId);
+                //return Meter.get(account.id, $stateParams.categoryId);
+                return meters;
               }
             },
             controller: 'MapCtrl'

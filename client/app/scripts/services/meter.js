@@ -117,11 +117,15 @@ angular.module('negawattClientApp')
      *    The meter list.
      */
     function setCache(data) {
+      if (angular.isUndefined(cache.data)) {
+        cache.data = {
+          list: {}
+        };
+      }
+
       // Extend meters list.
-      angular.extend(cache, {
-        data: angular.extend(cache.data || {}, data),
-        timestamp: new Date()
-      });
+      angular.extend(cache.data.list, data.list);
+      cache.timestamp = new Date();
 
       // Broadcast and event to update the markers in the map.
       $rootScope.$broadcast(broadcastUpdateEventName, cache.data);
