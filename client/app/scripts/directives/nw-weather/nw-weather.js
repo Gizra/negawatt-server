@@ -5,7 +5,7 @@ angular.module('angular-nw-weather', ['config'])
   .directive('nwWeatherTemperature', function () {
     return {
       restrict: 'EA',
-      template: '<div> {{ctrlWeather.data.temperature}}&deg; <i class="wi {{ctrlWeather.data.iconClass}}"></i></div>',
+      template: '<div> {{ctrlWeather.data.temperature | number:0 }}&deg; <i class="wi {{ctrlWeather.data.iconClass}}"></i></div>',
       controller: function(nwWeather, nwWeatherIcons) {
         var weather = this;
 
