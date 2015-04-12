@@ -34,7 +34,8 @@ angular.module('negawattClientApp')
        * @returns {*|string}
        */
       getCategory: function() {
-        return this.meter_categories[Object.keys(this.meter_categories)[0]].name || 'default';
+        var category = Object.keys(this.meter_categories)[0];
+        return category && this.meter_categories[category].name || 'default';
       },
       /**
        * Return "default" icon to set icon marker is unselected.
