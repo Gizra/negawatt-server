@@ -44,7 +44,7 @@ angular.module('negawattClientApp')
 
     // Reload the current $state when meters added more.
     $scope.$on('nwMetersChanged', function(event, meters) {
-      $scope.meters = meters.list;
+      angular.extend($scope.meters, meters.list);
     });
 
     // Select marker in the Map.
