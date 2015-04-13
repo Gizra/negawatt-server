@@ -31,6 +31,15 @@ angular
     'angular-nw-weather'
   ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
+    // Handle state 'dashboard' activation via browser url '/'
+    $urlRouterProvider.when('/', function($injector, $location, $state, Profile) {
+      Profile.get().then(function(profile) {
+        if (profile) {
+          $state.go('dashboard.withAccount', {accountId: profile.account[0].id});
+        }
+      });
+    });
+
     // For any unmatched url, redirect to '/'.
     $urlRouterProvider.otherwise('');
 
@@ -49,6 +58,7 @@ angular
         }
       })
       .state('dashboard', {
+        abstract: true,
         url: '/',
         templateUrl: 'views/dashboard/main.html',
         resolve: {
