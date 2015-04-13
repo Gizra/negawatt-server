@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .controller('MenuCtrl', function($scope, $state, $stateParams, amMoment, Timedate, Category, account, profile) {
+  .controller('MenuCtrl', function($scope, $state, $stateParams, $location, $window, amMoment, Timedate, Category, account, profile) {
     $scope.account = account;
     $scope.user = profile.user;
     $scope.timedate = Timedate;
@@ -12,7 +12,7 @@ angular.module('negawattClientApp')
      */
     $scope.reloadDashboard = function() {
       Category.clearSelectedCategory();
-      $state.forceGo('dashboard.withAccount', {accountId: $stateParams.accountId});
+      $window.location = $state.href('dashboard.withAccount');
     };
 
   });

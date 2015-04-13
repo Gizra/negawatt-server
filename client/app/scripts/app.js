@@ -32,7 +32,7 @@ angular
   ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
     // For any unmatched url, redirect to '/'.
-    $urlRouterProvider.otherwise('/');
+    $urlRouterProvider.otherwise('');
 
     // Setup the states.
     $stateProvider
@@ -132,16 +132,16 @@ angular
       .state('dashboard.withAccount.categories', {
         url: '/category/{categoryId:int}',
         reloadOnSearch: false,
-        resolve: {
-          meters: function(Meter, $stateParams, account, meters) {
-            return Meter.get(account.id, $stateParams.categoryId);
-          }
-        },
         views: {
           // Replace `meters` data previous resolved, with the cached data
           // filtered by the selected category.
           'map@dashboard': {
             templateUrl: 'views/dashboard/main.map.html',
+            resolve: {
+              meters: function(Meter, $stateParams, account, meters) {
+                return Meter.get(account.id, $stateParams.categoryId);
+              }
+            },
             controller: 'MapCtrl'
           },
           // Update usage-chart to show category summary.
@@ -194,8 +194,7 @@ angular
             resolve: {
               meters: function(Meter, $stateParams, account, meters) {
                 // Necessary to resolve again to apply the filter, of category id.
-                //return Meter.get(account.id, $stateParams.categoryId);
-                return meters;
+                return Meter.get(account.id, $stateParams.categoryId);
               }
             },
             controller: 'MapCtrl'
