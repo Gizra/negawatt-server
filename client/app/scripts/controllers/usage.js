@@ -86,7 +86,7 @@ angular.module('negawattClientApp')
 
       // Extend period with the maximum and minimum time, if a marker is selected.
       if (angular.isDefined($stateParams.markerId)) {
-        period = angular.extend(period || {}, meters.list[$stateParams.markerId].electricity_time_interval);
+        period = angular.extend(period || {}, meters.list[$stateParams.markerId] && meters.list[$stateParams.markerId].electricity_time_interval);
       }
 
       ChartUsage.get(account.id, $stateParams, meters.list, period).then(function(response) {
