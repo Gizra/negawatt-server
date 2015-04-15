@@ -31,8 +31,17 @@ angular
     'angular-nw-weather'
   ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
+    // Handle state 'dashboard' activation via browser url '/'
+    $urlRouterProvider.when('/', function($injector, $location, $state, Profile) {
+      Profile.get().then(function(profile) {
+        if (profile) {
+          $state.go('dashboard.withAccount', {accountId: profile.account[0].id});
+        }
+      });
+    });
+
     // For any unmatched url, redirect to '/'.
-    $urlRouterProvider.otherwise('/');
+    $urlRouterProvider.otherwise('');
 
     // Setup the states.
     $stateProvider
@@ -49,6 +58,7 @@ angular
         }
       })
       .state('dashboard', {
+        abstract: true,
         url: '/',
         templateUrl: 'views/dashboard/main.html',
         resolve: {
@@ -71,8 +81,8 @@ angular
           account: function($stateParams, Profile, profile) {
             return Profile.selectAccount($stateParams.accountId, profile);
           },
-          meters: function(Meter, account, $stateParams, Category) {
-            // Get first 100 records.
+          meters: function(Meter, account, $stateParams, Category, MeterFilter) {
+            // Get first records.
             return Meter.get(account.id);
           },
           categories: function(Category, account) {
@@ -133,7 +143,8 @@ angular
         url: '/category/{categoryId:int}',
         reloadOnSearch: false,
         resolve: {
-          meters: function(Meter, $stateParams, account, meters) {
+          meters: function(Meter, $stateParams, account, MeterFilter) {
+            MeterFilter.filters.category = +$stateParams.categoryId;
             return Meter.get(account.id, $stateParams.categoryId);
           }
         },
@@ -186,18 +197,19 @@ angular
       .state('dashboard.withAccount.markers', {
         url: '/marker/:markerId?categoryId',
         reloadOnSearch: false,
+        resolve: {
+          meters: function(Meter, $stateParams, account, MeterFilter) {
+            MeterFilter.filters.category = +$stateParams.categoryId;
+            MeterFilter.filters.meter = +$stateParams.markerId;
+            // Necessary to resolve again to apply the filter, of category id.
+            return Meter.get(account.id, $stateParams.categoryId);
+          }
+        },
         views: {
           // Replace `meters` data previous resolved, with the cached data
           // if is the case filtered by the selected category.
           'map@dashboard': {
             templateUrl: 'views/dashboard/main.map.html',
-            resolve: {
-              meters: function(Meter, $stateParams, account, meters) {
-                // Necessary to resolve again to apply the filter, of category id.
-                //return Meter.get(account.id, $stateParams.categoryId);
-                return meters;
-              }
-            },
             controller: 'MapCtrl'
           },
           'categories@dashboard': {
@@ -220,12 +232,12 @@ angular
             resolve: {
               // Insert the limits to the chart.
               limits: function(meters, $stateParams) {
-                var interval = meters.list[$stateParams.markerId].electricity_time_interval;
+                var interval = meters.list[$stateParams.markerId] && meters.list[$stateParams.markerId].electricity_time_interval;
 
                 return {
-                  max: interval.max,
-                  min: interval.min
-                }
+                  max: interval && interval.max || {},
+                  min: interval && interval.min || {}
+                };
               },
               // Get electricity data and transform it into chart format.
               usage: function(ChartUsage, $stateParams, account, meters, UsagePeriod, limits) {

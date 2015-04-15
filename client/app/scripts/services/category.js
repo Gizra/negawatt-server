@@ -157,7 +157,7 @@ angular.module('negawattClientApp')
 
       // Get all the meters.
       Meter.get(accountId).then(function(meters) {
-        self.meters = Utils.toArray(meters.list);
+        self.meters = Utils.toArray(meters.listAll);
         getCategories
           .then(addNumberOfMetersByCategory)
           .then(prepareData)

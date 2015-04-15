@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Meter', function ($q, $http, $timeout, $filter, $state, $rootScope, Config, Marker, Utils) {
+  .service('Meter', function ($q, $http, $timeout, $rootScope, Config, Marker, Utils, MeterFilter) {
     var self = this;
 
     // A private cache key.
@@ -28,12 +28,12 @@ angular.module('negawattClientApp')
      *
      */
     this.get = function(accountId, categoryId) {
-      // We return the promise in progress, cache data or data from the server.
-      getMeters = $q.when(getMeters || angular.copy(cache.data) || getDataFromBackend(accountId));
+      // We return the promise in progress, cache data filtered or data from the server.
+      getMeters = $q.when(getMeters || metersFiltered() || getDataFromBackend(accountId));
 
       // Filtering in the case we have categoryId defined.
       if (angular.isDefined(categoryId)) {
-        getMeters = getMetersFilterByCategory(getMeters, categoryId);
+        MeterFilter.filters.category = categoryId;
       }
 
       // Clear the promise cached, after resolve or reject the promise. Permit access to the cache data, when
@@ -46,27 +46,12 @@ angular.module('negawattClientApp')
     };
 
     /**
-     * Return the electricity time interval according the meters requested.
+     * Broadcast a notification of the meter data and it filters had changed.
      */
-    this.getElectricityInterval = function() {
-      var deferred = $q.defer();
-
-      self.get().then(function(response) {
-        var interval = {};
-        //response.electricity_time_interval
-        //interval = {
-        //  max: interval.max,
-        //  min: interval.min
-        //}
-        console.log('interval', interval);
-
-        deferred.resolve(interval);
-      });
-
-
-      return deferred.promise;
-
-    }
+    this.refresh = function() {
+      // Broadcast and event to update the markers in the map.
+      $rootScope.$broadcast(broadcastUpdateEventName, metersFiltered());
+    };
 
     /**
      * Return meters array from the server.
@@ -96,7 +81,9 @@ angular.module('negawattClientApp')
         transformResponse: prepareMetersForLeafletMarkers
       }).success(function(meters) {
         setCache(meters.data);
-        deferred.resolve(meters.data);
+
+        // Resolve with the meters filtered from cache.data.
+        deferred.resolve(metersFiltered());
 
         // Update with the rest of the markers.
         if (meters.hasNextPage) {
@@ -119,16 +106,23 @@ angular.module('negawattClientApp')
     function setCache(data) {
       if (angular.isUndefined(cache.data)) {
         cache.data = {
-          list: {}
+          // Save all the meters during the cache are avalible.
+          listAll: {},
+          // Keep the actual collection filtered, used to show into the map.
+          list: {},
+          // Interval information for electricity chart.
+          total: {}
         };
       }
 
-      // Extend meters list.
-      angular.extend(cache.data.list, data.list);
+      // Extend meters properties explicit because we don have deep copy.
+      // TODO: from angular v1.4 use angular.merge().
+      angular.extend(cache.data.listAll, data.list);
+      angular.extend(cache.data.total, data.total);
       cache.timestamp = new Date();
 
       // Broadcast and event to update the markers in the map.
-      $rootScope.$broadcast(broadcastUpdateEventName, cache.data);
+      $rootScope.$broadcast(broadcastUpdateEventName, metersFiltered());
 
       // Active the reset after update the cache.
       skipResetCache = false;
@@ -202,33 +196,15 @@ angular.module('negawattClientApp')
     }
 
     /**
-     * Return a promise with the meter list, from cache or the server. Filter by a category.
+     * Return meters filter by the active filters.
      *
-     * @param getMeters - {$q.promise}
-     *    Promise with the list of meters.
-     *
-     * @param categoryId
-     *    The category ID.
-     *
-     * @returns {$q.promise}
-     *    Promise of a list of meters filter by category..
+     * @returns {*|cache.data|{list, total}}
      */
-    function getMetersFilterByCategory(getMeters, categoryId) {
-      var deferred = $q.defer();
-
-      // Filter meters with a category.
-      getMeters.then(function(meters) {
-        meters.list = Utils.indexById($filter('filter')(Utils.toArray(meters.list), function(meter) {
-          // Return valid meters.
-          if (meter.meter_categories && meter.meter_categories[categoryId]) {
-            return meter;
-          }
-        }, true));
-
-        deferred.resolve(meters);
-      });
-
-      return deferred.promise;
+    function metersFiltered() {
+      if (angular.isDefined(cache.data)) {
+        cache.data.list = MeterFilter.byCategory(cache.data);
+      }
+      return cache.data;
     }
 
     /**

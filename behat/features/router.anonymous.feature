@@ -6,5 +6,5 @@ Feature: Router
   @javascript
   Scenario: Anonymous user have to see login page when set url "/"
     Given I am an anonymous user
-    When I visit "/"
+    When I visit "/#/"
     Then I should see the login page

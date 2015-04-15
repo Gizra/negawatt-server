@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .controller('MapCtrl', function ($scope, $state, $stateParams, Category, ChartUsage, Map, leafletData, $timeout, account, meters) {
+  .controller('MapCtrl', function ($scope, $state, $stateParams, Category, ChartUsage, Map, leafletData, $timeout, account, meters, MeterFilter) {
+    var isMeterSelected = false;
 
     // Config map.
     $scope.defaults = Map.getConfig();
@@ -44,8 +45,10 @@ angular.module('negawattClientApp')
 
     // Reload the current $state when meters added more.
     $scope.$on('nwMetersChanged', function(event, meters) {
-      //angular.extend($scope.meters, meters.list);
       $scope.meters = meters.list;
+      if (MeterFilter.filters.meter && $scope.meters[MeterFilter.filters.meter] && !isMeterSelected) {
+        setSelectedMarker(MeterFilter.filters.meter);
+      }
     });
 
     // Select marker in the Map.
@@ -72,12 +75,14 @@ angular.module('negawattClientApp')
         if (angular.isDefined($scope.meters[id])) {
           $scope.meters[id].select();
           Map.setMarkerSelected(id);
+          isMeterSelected = true;
         }
       });
     }
 
+
     if ($stateParams.markerId) {
-      setSelectedMarker($stateParams.markerId);
+      isMeterSelected = setSelectedMarker($stateParams.markerId);
     }
 
   });

@@ -6,7 +6,7 @@ Feature: Router
   @javascript
   Scenario: Authenticate user have to see homepage when set url "/"
     Given I login with user "carlos"
-    When I visit "/"
+    When I visit "/#/"
     Then I should see "3" markers
 
   @javascript
