@@ -32,6 +32,7 @@ angular
   ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
     // Handle state 'dashboard' activation via browser url '/'
+    $urlRouterProvider.when('', '/');
     $urlRouterProvider.when('/', function($injector, $location, $state, Profile) {
       Profile.get().then(function(profile) {
         if (profile) {
@@ -164,8 +165,8 @@ angular
                 var interval = categories.collection[$stateParams.categoryId].electricity_time_interval;
 
                 return {
-                  max: interval.max,
-                  min: interval.min
+                  max: interval && interval.max || {},
+                  min: interval && interval.min || {}
                 }
               },
               // Get electricity data and transform it into chart format.
