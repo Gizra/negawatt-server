@@ -51,6 +51,30 @@ angular.module('negawattClientApp')
         return $delegate.transitionTo(to, params, extend({ inherit: true, relative: $delegate.$current }, options));
       };
 
+      /**
+       * Update the resolved object in the global and views defined in the states.
+       *
+       * @param name
+       *  Name of the object to be updated.
+       * @param obj
+       *  New object.
+       */
+      $delegate.setGlobal = function setGlobal(name, obj) {
+        if (angular.isUndefined($delegate.$current.locals.globals[name])) {
+          return;
+        }
+        // Access to the resolved property, in each view defined and the globals.
+        var locals = $delegate.$current.locals;
+        angular.forEach(locals, function(local, key) {
+          if (key === 'resolve') {
+            return;
+          }
+          // Update property.
+          local[name] = obj;
+        })
+
+      };
+
       return $delegate;
     });
 });

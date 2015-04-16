@@ -53,7 +53,7 @@ angular.module('negawattClientApp')
      */
     this.get = function(accountId, categoryId) {
 
-      getCategories = $q.when(getCategories || angular.copy(cache.data) || getCategoriesFromServer(accountId));
+      getCategories = $q.when(getCategories || cache.data || getCategoriesFromServer(accountId));
 
       // Prepare the categories object.
       getCategories = prepareCategories(getCategories, accountId);
@@ -110,7 +110,7 @@ angular.module('negawattClientApp')
       // Filter meters with a category.
       getCategories.then(function getCategoriesFilterByCategoryResolve(categories) {
         // Necessary to separate the cache from the filtering.
-        categories = angular.copy(categories);
+        categories = categories;
         categories.collection = $filter('filter')(Utils.toArray(categories.collection), {id: parseInt(categoryId)}, true).pop().children;
         deferred.resolve(categories);
       });
