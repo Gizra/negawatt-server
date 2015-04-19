@@ -27,8 +27,7 @@ angular
     'ui.bootstrap.tabs',
     'template/tabs/tab.html',
     'template/tabs/tabset.html',
-    'angularMoment',
-    'angular-nw-weather'
+    'angularMoment'
   ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
     // Handle state 'dashboard' activation via browser url '/'
