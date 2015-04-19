@@ -7,7 +7,7 @@ angular.module('negawattClientApp')
     $scope.loginButtonEnabled = true;
 
     // Will be TRUE after failed login attempt.
-    $scope.loginFailed = false;
+    $scope.message = {};
 
     /**
      * Login a given user.
@@ -20,12 +20,22 @@ angular.module('negawattClientApp')
     $scope.login = function(user) {
       $scope.loginButtonEnabled = false;
       Auth.login(user).then(function() {
-        //$state.go('dashboard.withAccount');
         $window.location = '#/'
-      }, function() {
+      }, function(response) {
         $state.go('login');
         $scope.loginButtonEnabled = true;
-        $scope.loginFailed = true;
+
+        // Handle error messages.
+        if (!response.data) {
+          $scope.message.noServerConnection = true;
+        }
+        else if (response.data && response.status === 401) {
+          $scope.message.loginFailed = true;
+        }
+        else {
+          $scope.message.generalError = response.statusText;
+        }
+
       });
     };
 
@@ -37,5 +47,14 @@ angular.module('negawattClientApp')
     $scope.logout = function() {
       Auth.logout();
       $state.go('login');
+    };
+
+    /**
+     * Clear message error messages.
+     *
+     * Do whatever cleaning up is required and change state to 'login'.
+     */
+    $scope.clear = function() {
+      $scope.message = {};
     };
   });
