@@ -77,4 +77,5 @@ angular.module('negawattClientApp')
 
       return $delegate;
     });
+
 });

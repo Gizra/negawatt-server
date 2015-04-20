@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .factory('MeterFilter', function ($filter, Utils) {
+  .factory('MeterFilter', function ($filter, $stateParams, Utils) {
 
     return {
       filters: {},
@@ -16,6 +16,9 @@ angular.module('negawattClientApp')
         }.bind(this), true));
       },
       clear: function() {
+        $stateParams.chartNextPeriod = undefined;
+        $stateParams.chartPreviousPeriod = undefined;
+
         this.filters = {};
       }
     };
