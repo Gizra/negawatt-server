@@ -27,11 +27,11 @@ angular
     'ui.bootstrap.tabs',
     'template/tabs/tab.html',
     'template/tabs/tabset.html',
-    'angularMoment',
-    'angular-nw-weather'
+    'angularMoment'
   ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
     // Handle state 'dashboard' activation via browser url '/'
+    $urlRouterProvider.when('', '/');
     $urlRouterProvider.when('/', function($injector, $location, $state, Profile) {
       Profile.get().then(function(profile) {
         if (profile) {
@@ -59,7 +59,7 @@ angular
       })
       .state('dashboard', {
         abstract: true,
-        url: '/',
+        url: '/dashboard',
         templateUrl: 'views/dashboard/main.html',
         resolve: {
           profile: function(Profile) {
@@ -69,7 +69,7 @@ angular
         controller: 'DashboardCtrl'
       })
       .state('dashboard.withAccount', {
-        url: 'dashboard/{accountId:int}?{chartFreq:int}&{chartNextPeriod:int}&{chartPreviousPeriod:int}',
+        url: '/{accountId:int}?{chartFreq:int}&{chartNextPeriod:int}&{chartPreviousPeriod:int}',
         reloadOnSearch: false,
         params: {
           chartFreq: {
@@ -146,6 +146,9 @@ angular
           meters: function(Meter, $stateParams, account, MeterFilter) {
             MeterFilter.filters.category = +$stateParams.categoryId;
             return Meter.get(account.id, $stateParams.categoryId);
+          },
+          categories: function(Category, account, categories) {
+            return Category.get(account.id);
           }
         },
         views: {
@@ -164,8 +167,8 @@ angular
                 var interval = categories.collection[$stateParams.categoryId].electricity_time_interval;
 
                 return {
-                  max: interval.max,
-                  min: interval.min
+                  max: interval && interval.max || {},
+                  min: interval && interval.min || {}
                 }
               },
               // Get electricity data and transform it into chart format.
@@ -203,6 +206,9 @@ angular
             MeterFilter.filters.meter = +$stateParams.markerId;
             // Necessary to resolve again to apply the filter, of category id.
             return Meter.get(account.id, $stateParams.categoryId);
+          },
+          categories: function(Category, account, categories) {
+            return Category.get(account.id);
           }
         },
         views: {

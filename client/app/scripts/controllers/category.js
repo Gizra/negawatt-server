@@ -53,8 +53,17 @@ angular.module('negawattClientApp')
      * @param categoryId
      */
     $scope.select = function(categoryId) {
-      $state.forceGo('dashboard.withAccount.categories', {categoryId: categoryId});
+      $state.forceGo('dashboard.withAccount.categories', {categoryId: categoryId, chartNextPeriod: undefined, chartPreviousPeriod: undefined});
     }
+
+    // Reload the categories when added new meters to the map.
+    $scope.$on('nwMetersChanged', function(event, meters) {
+      Category.get($stateParams.accountId)
+        .then(function(categories) {
+          $state.setGlobal('categories', categories);
+          $scope.categories = categories;
+        });
+    });
 
     /**
      * Return an array of the category ids, checeked.

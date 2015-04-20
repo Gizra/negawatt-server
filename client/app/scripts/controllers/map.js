@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .controller('MapCtrl', function ($scope, $state, $stateParams, Category, ChartUsage, Map, leafletData, $timeout, account, meters, MeterFilter) {
+  .controller('MapCtrl', function ($scope, $state, $stateParams, $location, Category, ChartUsage, Map, leafletData, $timeout, account, meters, MeterFilter) {
     var isMeterSelected = false;
 
     // Config map.
@@ -53,7 +53,7 @@ angular.module('negawattClientApp')
 
     // Select marker in the Map.
     $scope.$on('leafletDirectiveMarker.click', function(event, args) {
-      $state.forceGo('dashboard.withAccount.markers', {markerId: args.markerName, categoryId: Category.getSelectedCategory(), });
+      $state.forceGo('dashboard.withAccount.markers', {markerId: args.modelName, categoryId: Category.getSelectedCategory(), chartNextPeriod: undefined, chartPreviousPeriod: undefined} );
     });
 
     /**

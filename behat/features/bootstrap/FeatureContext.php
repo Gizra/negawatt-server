@@ -37,7 +37,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     $element = $this->getSession()->getPage();
     $element->fillField('username', $name);
     $element->fillField('password', $password);
-    $submit = $element->findButton('Log in');
+    $submit = $element->findButton('התחבר');
 
     if (empty($submit)) {
       throw new \Exception(sprintf("No submit button at %s", $this->getSession()->getCurrentUrl()));

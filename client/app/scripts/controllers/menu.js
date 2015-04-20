@@ -13,8 +13,8 @@ angular.module('negawattClientApp')
     $scope.reloadDashboard = function() {
       Category.clearSelectedCategory();
       MeterFilter.clear();
+      $location.url($state.href('dashboard.withAccount').slice(2));
       Meter.refresh();
-      $window.location = $state.href('dashboard.withAccount');
     };
 
   });

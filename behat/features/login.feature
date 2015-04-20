@@ -7,4 +7,4 @@ Feature: Login
   Scenario: Login with bad credentials
     Given I am an anonymous user
     When I login with bad credentials
-    Then I should wait for the text "Login name or password is incorrect." to "appear"
+    Then I should wait for the text "משתמש או סיסמא שגויה." to "appear"

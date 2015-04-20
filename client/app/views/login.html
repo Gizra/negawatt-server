@@ -16,7 +16,7 @@
                 <span class="input-group-addon">
                     <span class="ti-email"></span>
                 </span>
-                  <input ng-model="user.username" name="username" type="text" class="form-control input-lg" placeholder="Username" required>
+                  <input ng-model="user.username" ng-change="clear()" name="username" type="text" class="form-control input-lg" placeholder="משתמש" required>
                 </div>
               </div>
 
@@ -25,23 +25,22 @@
                 <span class="input-group-addon">
                     <span class="ti-lock"></span>
                 </span>
-                  <input ng-model="user.password" name="password" type="password" class="form-control input-lg" placeholder="Password" required>
+                  <input ng-model="user.password" ng-change="clear()" name="password" type="password" class="form-control input-lg" placeholder="סיסמא" required>
                 </div>
               </div>
 
               <div class="form-group">
-                <input ng-disabled="!loginButtonEnabled || !user.username || !user.password" type="submit" class="btn btn-primary btn-lg btn-block text-center" id="submit" value="Log in" />
+                <input ng-disabled="!loginButtonEnabled || !user.username || !user.password" type="submit" class="btn btn-primary btn-lg btn-block text-center" id="submit" value="התחבר" />
               </div>
 
               <div class="divider divider-xl"></div>
 
               <div class="message error">
-                <p ng-show="loginFailed">Login name or password is incorrect.</p>
+                <p ng-show="message.loginFailed">משתמש או סיסמא שגויה.</p>
+                <p ng-show="message.noServerConnection">אין חיבור לשרת.</p>
+                <p ng-show="message.generalError">{{ message.generalError }}</p>
               </div>
 
-              <div class="message error">
-                <p ng-show="loginFailed()">Login name or password is incorrect.</p>
-              </div>
             </fieldset>
           </form>
         </div>
