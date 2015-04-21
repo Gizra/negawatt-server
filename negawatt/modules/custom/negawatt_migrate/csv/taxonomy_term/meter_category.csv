@@ -1,11 +1,11 @@
-account_id,id,name,parent,weight,description,field_icon_categories
+account_id,id,name,parent,weight,description,field_icon_categories,field_match_strings
 account1,public,מבנה ציבור,,,מבנים ציבוריים כגון משרדים,public_building
 account1,office,מבנה משרדים,מבנה ציבור,,מבנה משרדים,public_building
 account1,municipality,משרדי העירייה,מבנה ציבור,,משרדי העירייה,public_building
 account1,library,ספריה,מבנה ציבור,,ספריה,public_building
 account1,edu,מבנה חינוך,,,מבנה חינוך,education
 account1,kindergarten,גן ילדים,מבנה חינוך,,גני ילדים,education
-account1,school,בית ספר,מבנה חינוך,,בתי ספר,education
+account1,school,בית ספר,מבנה חינוך,,בתי ספר,education,בית ספר|בית הספר|בי"ס|ביה"ס
 account1,pais,אשכול פיס,מבנה חינוך,,אשכול פיס,education
 account1,youth,מרכז נוער,מבנה חינוך,,מרכז נוער,education
 account1,pedago,מרכז פדגוגי,מבנה חינוך,,מרכז פדגוגי,education
