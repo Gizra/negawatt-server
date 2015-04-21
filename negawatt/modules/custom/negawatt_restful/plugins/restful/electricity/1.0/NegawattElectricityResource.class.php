@@ -68,14 +68,7 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     return $public_fields;
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getQuery() {
-    // Handle summary section
-    // Pass to the formatter a summary of all categories and their total kWh consumption.
-
-    // Prepare a sum query.
+  protected function prepareSummary() {
     $request = $this->getRequest();
     $filter = !empty($request['filter']) ? $request['filter'] : array();
     $meter_account = $filter['meter_account'];
@@ -138,9 +131,12 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
         // Check that there are meters in this category.
         if (empty($meters)) {
           // Return empty total section.
-          $output['total']['type'] = $result_type;
-          $output['total']['values'] = new stdClass();
-          return $output;
+          $summary['type'] = $result_type;
+          $summary['values'] = new stdClass();
+
+          // Pass info to the formatter
+          $this->valueMetadata[$_SERVER['REQUEST_TIME_FLOAT']]['summary'] = $summary;
+          return;
         }
 
         // Sum electricity according to meters in category.
@@ -223,17 +219,25 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
       }
     }
 
-    // Add total section to output.
+    // Prepare total section to output by the formatter.
     $summary['type'] = $result_type;
     $summary['values'] = $total;
 
-    // Pass info to formatter
+    // Pass info to the formatter
     $this->valueMetadata[$_SERVER['REQUEST_TIME_FLOAT']]['summary'] = $summary;
+  }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getQuery() {
+    // Handle summary section
+    // Pass to the formatter a summary of all categories and their total kWh consumption.
 
-    // Done preparing data for the formatter.
+    // Prepare summary data for the formatter.
+    $this->prepareSummary();
+
     // Prepare a sum query.
-
     $request = $this->getRequest();
     $filter = !empty($request['filter']) ? $request['filter'] : array();
     $meter_account = !empty($filter['meter_account']) ? $filter['meter_account'] : NULL;
