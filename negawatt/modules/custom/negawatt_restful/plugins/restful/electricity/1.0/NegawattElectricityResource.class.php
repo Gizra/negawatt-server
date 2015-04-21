@@ -72,6 +72,16 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
    * {@inheritdoc}
    */
   public function getQuery() {
+    // Prepare a sum query.
+    $request = $this->getRequest();
+    $filter = !empty($request['filter']) ? $request['filter'] : array();
+    $meter_account = !empty($filter['meter_account']) ? $filter['meter_account'] : NULL;
+
+    // Make sure there is 'meter_account' filter.
+    if (!$meter_account) {
+      throw new \RestfulBadRequestException('Please supply filter[meter_account].');
+    }
+
     $query = parent::getQuery();
 
     // Add a query for meter_category.

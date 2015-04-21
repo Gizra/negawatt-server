@@ -37,18 +37,7 @@ class NegawattFormatterElectricityTotal extends \RestfulFormatterJson {
     // Prepare a sum query.
     $request = $this->handler->getRequest();
     $filter = !empty($request['filter']) ? $request['filter'] : array();
-    $account = !empty($filter['meter_account']) ? $filter['meter_account'] : null;
-
-    // Fix a bug when this formatter is called not for electricity.
-    // Should be removed when the bug is fixed.
-    if ($request['q'] != 'api/electricity' && $request['q'] != 'api/v1.0/electricity') {
-      return $output;
-    }
-
-    // Make sure there is 'meter_account' filter.
-    if (!$account) {
-      throw new \Exception('Please supply filter[meter_account].');
-    }
+    $meter_account = $filter['meter_account'];
 
     $query = db_select('negawatt_electricity_normalized', 'e');
 
@@ -92,7 +81,7 @@ class NegawattFormatterElectricityTotal extends \RestfulFormatterJson {
       // Figure out vocab id from group id (the reverse of og_vocab_relation_get() function.
       $vocabulary_id = db_select('og_vocab_relation', 'ogr')
         ->fields('ogr', array('vid'))
-        ->condition('gid', $account)
+        ->condition('gid', $meter_account)
         ->execute()
         ->fetchField();
 

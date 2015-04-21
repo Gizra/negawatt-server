@@ -25,12 +25,6 @@ class NegawattFormatterMetersTotal extends \RestfulFormatterJson {
     $filter = $request['filter'];
     unset($filter['has_electricity']);
 
-    // Fix a bug when this formatter is called not for electricity.
-    // Should be removed when the bug is fixed.
-    if ($request['q'] != 'api/meters' && $request['q'] != 'api/v1.0/meters') {
-      return $output;
-    }
-
     $query = db_select('negawatt_electricity_normalized', 'e');
 
     // Handle 'account' filter (if exists)
