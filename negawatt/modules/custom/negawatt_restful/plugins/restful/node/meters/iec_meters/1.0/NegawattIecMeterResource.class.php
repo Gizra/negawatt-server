@@ -48,6 +48,29 @@ class NegawattIecMeterResource extends \NegawattEntityMeterBase {
       return parent::updateEntity($id);
     }
     // New node.
-    return parent::createEntity();
+    $return = parent::createEntity();
+
+    // Set meter category.
+    $new_meter_id = $return[0]['id'];
+    $wrapper = entity_metadata_wrapper('node', $new_meter_id);
+
+    // Get vocabulary according to meter account (organic-group).
+    $account = $wrapper->{OG_AUDIENCE_FIELD}->value();
+    $group_id = $account->nid;
+    $arr_vocabularies = og_vocab_relation_get_by_group('node', $group_id);
+    $vocabulary = taxonomy_vocabulary_load($arr_vocabularies[0]->vid);
+
+    // Set meter-category.
+    $category = 'אחר';
+    $arr_terms = taxonomy_get_term_by_name($category, $vocabulary->machine_name);
+    $term_id = array_keys($arr_terms)[0];
+
+    $wrapper->{OG_VOCAB_FIELD}->set(array($term_id));
+    $wrapper->save();
+
+    // Update returned node with new category.
+    $return = array($this->viewEntity($new_meter_id));
+
+    return $return;
   }
 }
