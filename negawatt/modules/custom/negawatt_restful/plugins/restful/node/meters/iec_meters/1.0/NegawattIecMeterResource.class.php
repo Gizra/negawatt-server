@@ -50,7 +50,9 @@ class NegawattIecMeterResource extends \NegawattEntityMeterBase {
     // New node.
     $return = parent::createEntity();
 
+
     // Set meter category.
+
     $new_meter_id = $return[0]['id'];
     $wrapper = entity_metadata_wrapper('node', $new_meter_id);
 
@@ -58,7 +60,15 @@ class NegawattIecMeterResource extends \NegawattEntityMeterBase {
     $account = $wrapper->{OG_AUDIENCE_FIELD}->value();
     $group_id = $account->nid;
     $arr_vocabularies = og_vocab_relation_get_by_group('node', $group_id);
-    $vocabulary = taxonomy_vocabulary_load($arr_vocabularies[0]->vid);
+    $vocabulary_id = $arr_vocabularies[0]->vid;
+    $vocabulary = taxonomy_vocabulary_load($vocabulary_id);
+
+    // Try match meter description with any of the categories' match-strings
+    $taxonomy_tree = taxonomy_get_tree($vocabulary_id);
+    // @todo: UP TO HERE
+    foreach ($taxonomy_tree as $term) {
+      $match_strings = $term;
+    }
 
     // Set meter-category.
     $category = 'אחר';
