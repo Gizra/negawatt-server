@@ -133,16 +133,17 @@ class NegawattEntityMeterBase extends \NegawattEntityBaseNode {
   }
 
   /**
-   * {@inheritdoc}
+   * Prepare data for summary section.
    *
-   * Prepare summary section for the formatter.
+   * Prepare a min and max electricity_time_interval. The summary will be used
+   * by the formatter to add a 'summary' section at the end of the RESTFUL reply.
+   *
+   * @throws RestfulBadRequestException
+   *  If an unknown filter field was supplied.
    */
-  public function getQueryForList() {
-    // Handle summary section
-    // Pass to the formatter a summary of all categories and their total kWh consumption.
-
+  static function prepareSummary(\RestfulEntityInterface $restful_entity) {
     // Prepare a min/max query.
-    $request = $this->getRequest();
+    $request = $restful_entity->getRequest();
     $filter = empty($request['filter']) ? array() : $request['filter'];
     unset($filter['has_electricity']);
 
@@ -184,7 +185,20 @@ class NegawattEntityMeterBase extends \NegawattEntityBaseNode {
     $summary['electricity_time_interval']['max'] = $result->max;
 
     // Pass info to formatter
-    $this->valueMetadata[$_SERVER['REQUEST_TIME_FLOAT']]['summary'] = $summary;
+    $restful_entity->valueMetadata[$_SERVER['REQUEST_TIME_FLOAT']]['summary'] = $summary;
+  }
+
+    /**
+   * {@inheritdoc}
+   *
+   * Prepare summary section for the formatter.
+   */
+  public function getQueryForList() {
+    // Handle summary section
+    // Pass to the formatter a summary of min and max electricity_time_interval.
+
+    // Prepare summary data for the formatter.
+    \NegawattEntityMeterBase::prepareSummary($this);
 
     return parent::getQueryForList();
   }

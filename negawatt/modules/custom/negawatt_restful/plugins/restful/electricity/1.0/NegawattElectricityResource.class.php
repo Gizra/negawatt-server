@@ -68,6 +68,16 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     return $public_fields;
   }
 
+  /**
+   * Prepare data for summary section.
+   *
+   * Prepare a list of sub-categories and their total electricity (kWh)
+   * consumption. The summary will be used by the formatter to add a 'summary'
+   * section at the end of the RESTFUL reply.
+   *
+   * @throws RestfulBadRequestException
+   *  If an unknown filter field was supplied.
+   */
   protected function prepareSummary() {
     $request = $this->getRequest();
     $filter = !empty($request['filter']) ? $request['filter'] : array();
@@ -192,7 +202,7 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
 
     // Make sure we handled all the filter fields.
     if (!empty($filter)) {
-      throw new \Exception('Unknown fields in filter: ' . implode(', ', array_keys($filter)));
+      throw new \RestfulBadRequestException('Unknown fields in filter: ' . implode(', ', array_keys($filter)));
     }
 
     // Add expressions for electricity total.
