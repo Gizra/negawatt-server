@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .factory('Marker', function ($injector, $state, $q, $timeout, Map, IconFactory) {
+  .factory('Marker', function ($injector, $state, $q, $timeout, Map, IconFactory, MeterFilter) {
 
     // Save last marker selected.
-    var selected;
+    var selected = MeterFilter.getMeterSelected();
 
     /**
      * Get the icon properties of a marker.
@@ -62,7 +62,7 @@ angular.module('negawattClientApp')
         if (angular.isDefined(selected)) {
           selected.unselect();
         }
-        selected = this;
+        MeterFilter.setMeterSelected(this);
         getIcon(this.getCategory(), 'select').then(function(icon) {
           self.icon = icon;
         });

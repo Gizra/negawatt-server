@@ -40,9 +40,18 @@ Feature: Meter
     And the "בטחון" checkbox should not be checked
     And I should see "2" markers
 
-  @javascript @wip
-  Scenario: Show only meters of the category selected
+  @javascript
+  Scenario: Show meter selected when click it.
     Given I login with user "carlos"
     When I visit "/#/dashboard/1"
-    Then I click meter "4"
-    Then I see a marker "4" selected
+    And I click meter "7"
+    Then I see a marker "7" selected
+
+  @javascript
+  Scenario: Show meter unselected when click on category, after his selection.
+    Given I login with user "carlos"
+    When I visit "/#/dashboard/1"
+    And I click meter "7"
+    And I see a marker "7" selected
+    And I click "בטחון"
+    Then I see a marker "7" not selected

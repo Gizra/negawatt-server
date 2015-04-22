@@ -114,6 +114,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    */
   public function iShouldSeeAMarkerSelected() {
     $selected_src_image = '-red.png';
+
     // check if exist and is selected.
     $this->waitFor(function($context) use ($selected_src_image) {
       try {
@@ -189,18 +190,93 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @When I click meter :meter
    */
   public function iClickMeter($meter) {
-    $this->getSession()->evaluateScript('function clickMeter(e){var a={},l=Object.keys(angular.element("div.angular-leaflet-map").scope().meters);angular.element(".leaflet-marker-icon").map(function(e,r){var c=l[e];a[c]={L:r,id:c,marker:angular.element(r).bind("click")}}),a[e].marker.click()};clickMeter(' . $meter . ');');
+    try
+    {
+      //Wait for Angular
+      if($this->getSession()->evaluateScript("return (typeof angular != 'undefined')"))
+      {
+        $angular = 'angular.getTestability(document.body).whenStable(function() {
+                    window.__testable = true;
+                })';
+        $this->getSession()->evaluateScript($angular);
+        $this->getSession()->wait(5000, 'window.__testable == true');
+        // Update with the script to click on a meter
+        $script = '(function clickMeter(id) {
+            var $injector = angular.element("body").injector();
+            var leafletData = $injector.get("leafletData");
+            var Utils = $injector.get("Utils");
+            var $filter = $injector.get("$filter");
+            var scopeMeters = angular.element(".angular-leaflet-map").scope().meters;
+
+            leafletData.getMarkers().then(function(meters) {
+              angular.forEach(meters, function(meter, index) {
+                meter.options.idLeaflet = index;
+              });
+
+              this.meterData = ($filter("filter")(Utils.toArray(meters), {options: {idLeaflet: id}})).pop();
+
+              scopeMeters[this.meterData.options.id].select();
+            }.bind(this));
+
+          })(' . $meter . ')';
+        $this->getSession()->evaluateScript($script);
+      }
+
+      //Wait for jQuery
+      if($this->getSession()->evaluateScript("return (typeof jQuery != 'undefined')"))
+      {
+        $this->getSession()->wait(5000, '(0 === jQuery.active && 0 === jQuery(\':animated\').length)');
+      }
+
+    }catch(Exception $e)
+    {
+
+    }
+
+  }
+
+  /**
+   * @Then I see a marker :meter not selected
+   */
+  public function iSeeAMarkerNotSelected($meter) {
+    $this->iSeeAMarkerSelected($meter, FALSE);
   }
 
 
   /**
    * @Then I see a marker :meter selected
    */
-  public function iSeeAMarkerSelected($meter) {
-    $this->waitFor(function($context) use ($meter) {
+  public function iSeeAMarkerSelected($meter, $is_selected = TRUE) {
+    $selected_src_image = ($is_selected) ? '-red.png' : '-blue.png';
+
+    $this->waitFor(function($context) use ($meter, $selected_src_image) {
       try {
-        $element_attribute = $context->getSession()->evaluateScript('function getMetersImgSrc(e){var r={},a=Object.keys(angular.element("div.angular-leaflet-map").scope().meters);return angular.element(".leaflet-marker-icon").map(function(e,t){var n=a[e];r[n]={L:t,id:n,marker:angular.element(t).bind("click")}}),angular.element(r[e].L).attr("src")}getMetersImgSrc(' . $meter . ');');
-        if ($element_attribute !== NULL && $element_attribute == $value) {
+
+        // Script to get the hmtl icon image.
+        $script = '(function getMeterImgSrc(id) {
+            var $injector = angular.element("body").injector();
+            var leafletData = $injector.get("leafletData");
+            var Utils = $injector.get("Utils");
+            var $filter = $injector.get("$filter");
+            var $rootScope = $injector.get("$rootScope");
+
+            leafletData.getMarkers().then(function(meters) {
+              angular.forEach(meters, function(meter, index) {
+                meter.options.idLeaflet = index;
+              });
+
+              this.meterData = ($filter("filter")(Utils.toArray(meters), {options: {idLeaflet: id}})).pop();
+
+            }.bind(this));
+
+            $rootScope.$apply();
+            return angular.element(this.meterData._icon).attr("src").indexOf("' . $selected_src_image . '");
+
+          })(' . $meter . ')';
+
+        $result = $context->getSession()->evaluateScript($script);
+
+        if ($result > 0) {
           return TRUE;
         }
         return FALSE;
