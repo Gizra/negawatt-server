@@ -39,6 +39,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
       'field_meter_id' => array('und' => array('0' => array('value' => 1))),
       'field_place_address' => array('und' => array('0' => array('value' => 'לכיש 25'))),
       'field_place_locality' => array('und' => array('0' => array('value' => 'קרית גת'))),
+      OG_AUDIENCE_FIELD => array('und' => array('0' => array('target_id' => 1))),
     );
 
     $meter_node1 = $this->drupalCreateNode($settings);
@@ -55,6 +56,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
       'field_max_frequency' => array('und' => array('0' => array('value' => \NegaWattNormalizerTimeManagerInterface::MONTH))),
       'field_place_address' => array('und' => array('0' => array('value' => 'לכיש 25'))),
       'field_place_locality' => array('und' => array('0' => array('value' => 'קרית גת'))),
+      OG_AUDIENCE_FIELD => array('und' => array('0' => array('target_id' => 1))),
     );
 
     $meter_node3 = $this->drupalCreateNode($settings);

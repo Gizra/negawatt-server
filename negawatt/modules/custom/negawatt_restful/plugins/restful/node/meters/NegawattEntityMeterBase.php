@@ -143,7 +143,7 @@ class NegawattEntityMeterBase extends \NegawattEntityBaseNode {
 
     // Prepare a min/max query.
     $request = $this->getRequest();
-    $filter = $request['filter'];
+    $filter = empty($request['filter']) ? array() : $request['filter'];
     unset($filter['has_electricity']);
 
     $query = db_select('negawatt_electricity_normalized', 'e');
