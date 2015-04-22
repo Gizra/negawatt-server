@@ -82,7 +82,8 @@ class NegawattIecMeterResource extends \NegawattEntityMeterBase {
 
     // Set meter-category.
     $arr_terms = taxonomy_get_term_by_name($category, $vocabulary->machine_name);
-    $term_id = array_keys($arr_terms)[0];
+    $term_ids = array_keys($arr_terms);
+    $term_id = $term_ids[0];
 
     $wrapper->{OG_VOCAB_FIELD}->set(array($term_id));
     $wrapper->save();
