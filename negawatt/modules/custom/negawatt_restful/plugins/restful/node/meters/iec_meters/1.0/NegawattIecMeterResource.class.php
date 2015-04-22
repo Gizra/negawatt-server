@@ -64,14 +64,23 @@ class NegawattIecMeterResource extends \NegawattEntityMeterBase {
     $vocabulary = taxonomy_vocabulary_load($vocabulary_id);
 
     // Try match meter description with any of the categories' match-strings
+    $category = 'אחר';
     $taxonomy_tree = taxonomy_get_tree($vocabulary_id);
-    // @todo: UP TO HERE
+    $search_string = $wrapper->field_place_address->value() . ' ' . $wrapper->field_place_description->value();
     foreach ($taxonomy_tree as $term) {
-      $match_strings = $term;
+      $tax_wrapper = entity_metadata_wrapper('taxonomy_term', $term->tid);
+      $match_strings = $tax_wrapper->field_match_strings->value();
+      $match_strings = explode('|', $match_strings);
+      foreach ($match_strings as $match_str) {
+        if (strpos($search_string, $match_str) !== FALSE) {
+          $category = $tax_wrapper->name->value();
+          // Leave both loops.
+          break 2;
+        }
+      }
     }
 
     // Set meter-category.
-    $category = 'אחר';
     $arr_terms = taxonomy_get_term_by_name($category, $vocabulary->machine_name);
     $term_id = array_keys($arr_terms)[0];
 
