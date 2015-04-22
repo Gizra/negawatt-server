@@ -2,18 +2,18 @@ account_id,id,name,parent,weight,description,field_icon_categories,field_match_s
 account1,public,מבנה ציבור,,,מבנים ציבוריים כגון משרדים,public_building
 account1,office,מבנה משרדים,מבנה ציבור,,מבנה משרדים,public_building
 account1,municipality,משרדי העירייה,מבנה ציבור,,משרדי העירייה,public_building
-account1,library,ספריה,מבנה ציבור,,ספריה,public_building
+account1,library,ספריה,מבנה ציבור,,ספריה,public_building,ספריה
 account1,edu,מבנה חינוך,,,מבנה חינוך,education
-account1,kindergarten,גן ילדים,מבנה חינוך,,גני ילדים,education
+account1,kindergarten,גן ילדים,מבנה חינוך,,גני ילדים,education,גן
 account1,school,בית ספר,מבנה חינוך,,בתי ספר,education,בית ספר|בית הספר|בי"ס|ביה"ס
 account1,pais,אשכול פיס,מבנה חינוך,,אשכול פיס,education
 account1,youth,מרכז נוער,מבנה חינוך,,מרכז נוער,education
 account1,pedago,מרכז פדגוגי,מבנה חינוך,,מרכז פדגוגי,education
 account1,outdoor,תאורת חוץ,,,תאורת חוץ,lighting
-account1,street,תאורת רחובות,תאורת חוץ,,תאורת רחובות,lighting
-account1,traffic,רמזור,תאורת חוץ,,רמזור,traffic_light
+account1,street,תאורת רחובות,תאורת חוץ,,תאורת רחובות,lighting,תאורת|מאור|מרכזיה
+account1,traffic,רמזור,תאורת חוץ,,רמזור,traffic_light,רמזור
 account1,security,בטחון,,,בטחון,security
-account1,shelter,מקלט,בטחון,,מקלט,security
+account1,shelter,מקלט,בטחון,,מקלט,security,מקלט
 account1,storeroom,מחסן חרום,בטחון,,מחסן חרום,security
 account1,police,שיטור קהילתי,בטחון,,שיטור קהילתי,security
 account1,sport,מתקן ספורט,,,מתקן ספורט,sports
