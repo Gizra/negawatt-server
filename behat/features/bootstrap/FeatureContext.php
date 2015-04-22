@@ -281,6 +281,35 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
+   * @Then I should see today date
+   */
+  public function iShouldSeeTodayDate() {
+    $csspath = '.menu-timedate-date';
+    // Get today date direct from momentjs object in tha same format.
+    $today = $this->getSession()->evaluateScript("moment().locale('he').format('YYYY MMMM DD');");
+
+    $this->waitForTextNgElement($csspath, $today);
+  }
+
+  /**
+   * @Then I should see the clock increase every minute
+   */
+  public function iShouldSeeTheClockIncreaseEveryMinute()  {
+    $csspath = '.menu-timedate-time';
+    // Get today date direct from momentjs object in tha same format.
+    $now = $this->getSession()->evaluateScript("moment().format('HH:mm');");
+    $next_minute = $this->getSession()->evaluateScript("moment().add(1, 'minutes').format('HH:mm')");
+
+    // Check actual time.
+    $this->waitForTextNgElement($csspath, $now);
+    // Check change of the clock for one minute.
+    $this->waitForTextNgElement($csspath, $next_minute, 1200000);
+
+  }
+
+
+
+  /**
    * @AfterStep
    *
    * Take a screen shot after failed steps for Selenium drivers (e.g.
@@ -343,6 +372,10 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @throws Exception
    */
   private function waitFor($fn, $timeout = 30000) {
+    if (empty($timeout)) {
+      $timeout = 30000;
+    }
+
     $start = microtime(true);
     $end = $start + $timeout / 1000.0;
     while (microtime(true) < $end) {
@@ -392,7 +425,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    *
    * @throws Exception
    */
-  private function waitForTextNgElement($csspath, $text) {
+  private function waitForTextNgElement($csspath, $text, $timeout = NULL) {
     $this->waitFor(function($context) use ($csspath, $text) {
       try {
         $element_text = $context->getSession()->evaluateScript('angular.element("' . $csspath . '").text();');
@@ -407,7 +440,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
         }
         throw $e;
       }
-    });
+    }, $timeout);
   }
 
   /**

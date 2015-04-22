@@ -13,9 +13,9 @@
   <a ng-click="logout()">  התנתק </a>
 </div>
 <span class="menu-separator"></span>
-<span class="menu-timedate">{{timedate.today | amDateFormat: 'YYYY MMMM DD'}}</span>
+<span class="menu-timedate menu-timedate-date">{{timedate.today | amDateFormat: 'YYYY MMMM DD'}}</span>
 <span class="menu-separator"></span>
-<span class="menu-timedate">{{timedate.now | amDateFormat: 'H:mm'}}</span>
+<span class="menu-timedate menu-timedate-time">{{timedate.now | amDateFormat: 'H:mm'}}</span>
 
 <div class="menu-logo">
   <img ng-src="{{ account.logo.styles.thumbnail }}" alt=""/>
