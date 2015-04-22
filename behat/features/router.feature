@@ -21,3 +21,24 @@ Feature: Router
     When I visit "/#/dashboard/1"
     Then I click "בטחון"
     Then I should have "חודש" as chart usage label
+
+  @javascript
+  Scenario: Remove period parameters when click on a category.
+    Given I login with user "carlos"
+    When I visit "/#/dashboard/1"
+    And I press the "previous" button on the charts
+    Then the url should match "chartNextPeriod|chartPreviousPeriod"
+    And I click "בטחון"
+    And I am on "http://localhost:9000/#/dashboard/1/category/14?chartFreq=2"
+
+  @javascript
+  Scenario: Remove period parameters when click on home link.
+    Given I login with user "carlos"
+    When I visit "/#/dashboard/1"
+    And I click meter 7
+    And I press the "previous" button on the charts
+    Then the url should match "chartNextPeriod|chartPreviousPeriod"
+    And I click "menu-home-link"
+    And I am on "http://localhost:9000/#/dashboard/1?chartFreq=2"
+
+
