@@ -28,9 +28,75 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
   function setUp() {
     parent::setUp('negawatt_restful');
 
+    global $user;
+
+    // Create two OG account nodes.
+    $account_node_info = new stdClass();
+
+    $account_node_info->type     = "group";
+    $account_node_info->uid      = $user->uid;
+    $account_node_info->title    = t("Meter Account 1");
+    $account_node_info->body     = t("OG for Meter Account 1");
+    $account_node_info->status   = 1;
+    $account_node_info->promote  = 0;
+    $account_node_info->comment  = 0;
+
+    $account_node_info->og_description   = t("Meter Account");
+    $account_node_info->og_register  = 0;
+    $account_node_info->og_directory = 0;
+    $account_node_info->og_private   = 1;
+    $account_node_info->og_selective = 3;
+
+    $account_node1 = node_submit($account_node_info);
+    node_save($account_node1);
+
+    $account_node_info->title    = t("Meter Account 2");
+    $account_node_info->body     = t("OG for Meter Account 2");
+
+    $account_node2 = node_submit($account_node_info);
+    node_save($account_node2);
+
+    // Create vocabularies and OG_Vocabs
+    // Create a new vocabulary
+    $vocabulary = (object) array(
+        'name' => 'Meter categories for account 1',
+        'description' => 'Meter categories for account 1',
+        'machine_name' => 'taxonomy_account1',
+    );
+    taxonomy_vocabulary_save($vocabulary);
+
+    // Create an OG-vocab and relate new vocabulary with OG.
+    $og_vocab_settings = array(
+        'cardinality' => 1,
+        'required' => FALSE,
+    );
+    // Create og-vocabulary for meter types.
+    $og_vocab = og_vocab_create_og_vocab($vocabulary->vid, 'node', 'iec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
+    $og_vocab->save();
+    $og_vocab = og_vocab_create_og_vocab($vocabulary->vid, 'node', 'satec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
+    $og_vocab->save();
+
+    og_vocab_relation_save($vocabulary->vid, 'node', 1/*account id*/);
+
+    $vocabulary = (object) array(
+        'name' => 'Meter categories for account 2',
+        'description' => 'Meter categories for account 2',
+        'machine_name' => 'taxonomy_account2',
+    );
+    taxonomy_vocabulary_save($vocabulary);
+
+    // Create og-vocabulary for meter types.
+    $og_vocab = og_vocab_create_og_vocab($vocabulary->vid, 'node', 'iec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
+    $og_vocab->save();
+    $og_vocab = og_vocab_create_og_vocab($vocabulary->vid, 'node', 'satec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
+    $og_vocab->save();
+
+    og_vocab_relation_save($vocabulary->vid, 'node', 2/*account id*/);
+
+
     // Add the OG_VOCAB field to meter nodes.
-    og_create_field(OG_VOCAB_FIELD, 'node', 'satec_meter');
-    og_create_field(OG_VOCAB_FIELD, 'node', 'iec_meter');
+//    og_create_field(OG_VOCAB_FIELD, 'node', 'satec_meter');
+//    og_create_field(OG_VOCAB_FIELD, 'node', 'iec_meter');
 
     // Create satec meter nodes.
     $settings = array(
@@ -44,10 +110,15 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     $meter_node1 = $this->drupalCreateNode($settings);
     $wrapper = entity_metadata_wrapper('node', $meter_node1);
     $wrapper->{OG_VOCAB_FIELD}->set(array(7));
+    // Add node to account-1
+    og_group($account_node1->nid, array('entity type' => 'node', 'entity' => $meter_node1,'state' => OG_STATE_ACTIVE));
+
 
     $meter_node2 = $this->drupalCreateNode($settings);
     $wrapper = entity_metadata_wrapper('node', $meter_node2);
     $wrapper->{OG_VOCAB_FIELD}->set(array(6));
+    // Add node to account-1
+    og_group($account_node1->nid, array('entity type' => 'node', 'entity' => $meter_node2,'state' => OG_STATE_ACTIVE));
 
     // Create IEC meter nodes.
     $settings = array(
@@ -59,8 +130,14 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
 
     $meter_node3 = $this->drupalCreateNode($settings);
     $meter_node4 = $this->drupalCreateNode($settings);
+    // Add nodes to account-2
+    og_group($account_node2->nid, array('entity type' => 'node', 'entity' => $meter_node3,'state' => OG_STATE_ACTIVE));
+    og_group($account_node2->nid, array('entity type' => 'node', 'entity' => $meter_node4,'state' => OG_STATE_ACTIVE));
 
     // Save nodes for later.
+    $this->accountNode1 = $account_node1;
+    $this->accountNode2 = $account_node2;
+
     $this->meterNode1 = $meter_node1;
     $this->meterNode2 = $meter_node2;
     $this->meterNode3 = $meter_node3;
