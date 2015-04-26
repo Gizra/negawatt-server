@@ -1,44 +1,44 @@
 account_id,id,name,parent,weight,description,field_icon_categories,field_match_strings
-account1,public1,מבנה ציבור,,,מבנים ציבוריים כגון משרדים,public_building
-account1,office1,מבנה משרדים,מבנה ציבור,,מבנה משרדים,public_building
-account1,municipality1,משרדי העירייה,מבנה ציבור,,משרדי העירייה,public_building,עירייה|משרד
-account1,library1,ספריה,מבנה ציבור,,ספריה,public_building,ספריה
-account1,edu1,מבנה חינוך,,,מבנה חינוך,education
-account1,kindergarten1,גן ילדים,מבנה חינוך,,גני ילדים,education,גן|פעוטון
-account1,school1,בית ספר,מבנה חינוך,,בתי ספר,education,בית ספר|בית הספר|בי"ס|ביה"ס|ביהס
-account1,pais1,אשכול פיס,מבנה חינוך,,אשכול פיס,education,פיס
-account1,youth1,מרכז נוער,מבנה חינוך,,מרכז נוער,education
-account1,pedago1,מרכז פדגוגי,מבנה חינוך,,מרכז פדגוגי,education,פדגוגי
-account1,outdoor1,תאורת חוץ,,,תאורת חוץ,lighting
-account1,street1,תאורת רחובות,תאורת חוץ,,תאורת רחובות,lighting,תאורת|מאור|מרכזיה|מ.רחובות
-account1,traffic1,רמזור,תאורת חוץ,,רמזור,traffic_light,רמזור
-account1,security1,בטחון,,,בטחון,security
-account1,shelter1,מקלט,בטחון,,מקלט,security,מקלט
-account1,storeroom1,מחסן חרום,בטחון,,מחסן חרום,security,מחסן
-account1,police1,שיטור קהילתי,בטחון,,שיטור קהילתי,security,שיטור|משמר
-account1,sport1,מתקן ספורט,,,מתקן ספורט,sports
-account1,pool1,בריכת שחייה,מתקן ספורט,,בריכת שחייה,sports,בריכת
-account1,field1,מגרש ספורט,מתקן ספורט,,מגרש ספורט,sports,מגרש
-account1,hall1,אולם ספורט,מתקן ספורט,,אולם ספורט,sports,אולם
-account1,religion1,שרותי דת,,,שרותי דת,religion
-account1,prayer1,בית תפילה,שרותי דת,,בית תפילה,religion
-account1,synagogue1,בית כנסת,בית תפילה,,בית כנסת,religion,כנסת
-account1,church1,כנסיה,בית תפילה,,כנסיה,religion,כנסיה
-account1,mosque1,מסגד,בית תפילה,,מסגד,religion,מסגד
-account1,relcouncil1,מועצה דתית,שרותי דת,,מועצה דתית,religion
-account1,mikve1,מקווה,שרותי דת,,מקווה,religion,מקווה
-account1,health1,בריאות,,,בריאות,health
-account1,mental1,בריאות הנפש,בריאות,,בריאות הנפש,health
-account1,paishealth1,פיס לבריאות,בריאות,,פיס לבריאות,health
-account1,water1,מתקן מים,,,מתקן מים,water,מים
-account1,welfare1,רווחה,,,רווחה,welfare,רווחה
-account1,apartment1,דירת רווחה,רווחה,,דירת רווחה,welfare
-account1,psyco1,השירות הפסיכולוגי,רווחה,,השירות הפסיכולוגי,welfare
-account1,club1,מועדון,רווחה,,מועדון,welfare,מועדון|מועדונית
-account1,elderly1,מרכז יום לקשיש,רווחה,,מרכז יום לקשיש,welfare,קשישים|לקשיש
-account1,community1,מרכז קהילתי,רווחה,,מרכז קהילתי,welfare
-account1,culture1,תרבות,,,תרבות,culture
-account1,other1,אחר,,,אחר,other
+account1,public_1,מבנה ציבור,,,מבנים ציבוריים כגון משרדים,public_building
+account1,office_1,מבנה משרדים,מבנה ציבור,,מבנה משרדים,public_building
+account1,municipality_1,משרדי העירייה,מבנה ציבור,,משרדי העירייה,public_building,עירייה|משרד
+account1,library_1,ספריה,מבנה ציבור,,ספריה,public_building,ספריה
+account1,edu_1,מבנה חינוך,,,מבנה חינוך,education
+account1,kindergarten_1,גן ילדים,מבנה חינוך,,גני ילדים,education,גן|פעוטון
+account1,school_1,בית ספר,מבנה חינוך,,בתי ספר,education,בית ספר|בית הספר|בי"ס|ביה"ס|ביהס
+account1,pais_1,אשכול פיס,מבנה חינוך,,אשכול פיס,education,פיס
+account1,youth_1,מרכז נוער,מבנה חינוך,,מרכז נוער,education
+account1,pedago_1,מרכז פדגוגי,מבנה חינוך,,מרכז פדגוגי,education,פדגוגי
+account1,outdoor_1,תאורת חוץ,,,תאורת חוץ,lighting
+account1,street_1,תאורת רחובות,תאורת חוץ,,תאורת רחובות,lighting,תאורת|מאור|מרכזיה|מ.רחובות
+account1,traffic_1,רמזור,תאורת חוץ,,רמזור,traffic_light,רמזור
+account1,security_1,בטחון,,,בטחון,security
+account1,shelter_1,מקלט,בטחון,,מקלט,security,מקלט
+account1,storeroom_1,מחסן חרום,בטחון,,מחסן חרום,security,מחסן
+account1,police_1,שיטור קהילתי,בטחון,,שיטור קהילתי,security,שיטור|משמר
+account1,sport_1,מתקן ספורט,,,מתקן ספורט,sports
+account1,pool_1,בריכת שחייה,מתקן ספורט,,בריכת שחייה,sports,בריכת
+account1,field_1,מגרש ספורט,מתקן ספורט,,מגרש ספורט,sports,מגרש
+account1,hall_1,אולם ספורט,מתקן ספורט,,אולם ספורט,sports,אולם
+account1,religion_1,שרותי דת,,,שרותי דת,religion
+account1,prayer_1,בית תפילה,שרותי דת,,בית תפילה,religion
+account1,synagogue_1,בית כנסת,בית תפילה,,בית כנסת,religion,כנסת
+account1,church_1,כנסיה,בית תפילה,,כנסיה,religion,כנסיה
+account1,mosque_1,מסגד,בית תפילה,,מסגד,religion,מסגד
+account1,relcouncil_1,מועצה דתית,שרותי דת,,מועצה דתית,religion
+account1,mikve_1,מקווה,שרותי דת,,מקווה,religion,מקווה
+account1,health_1,בריאות,,,בריאות,health
+account1,mental_1,בריאות הנפש,בריאות,,בריאות הנפש,health
+account1,paishealth_1,פיס לבריאות,בריאות,,פיס לבריאות,health
+account1,water_1,מתקן מים,,,מתקן מים,water,מים
+account1,welfare_1,רווחה,,,רווחה,welfare,רווחה
+account1,apartment_1,דירת רווחה,רווחה,,דירת רווחה,welfare
+account1,psyco_1,השירות הפסיכולוגי,רווחה,,השירות הפסיכולוגי,welfare
+account1,club_1,מועדון,רווחה,,מועדון,welfare,מועדון|מועדונית
+account1,elderly_1,מרכז יום לקשיש,רווחה,,מרכז יום לקשיש,welfare,קשישים|לקשיש
+account1,community_1,מרכז קהילתי,רווחה,,מרכז קהילתי,welfare
+account1,culture_1,תרבות,,,תרבות,culture
+account1,other_1,אחר,,,אחר,other
 account2,astral,"רשת מלונות אסטרל",,,מלון,astral
 account2,nirvana,נירוונה,"רשת מלונות אסטרל",,מלון,nirvana
 account2,nirvana-iec,"מונה ראשי - נירוונה",נירוונה,,מלון,nirvana-iec,נירוונה
@@ -46,12 +46,52 @@ account2,seaside,סיסייד,"רשת מלונות אסטרל",,מלון,seaside
 account2,seaside-iec,"מונה ראשי - סיסייד",סיסייד,,מלון,seaside-iec,סיסייד
 account2,coral,קורל,"רשת מלונות אסטרל",,מלון,coral
 account2,coral-iec,"מונה ראשי - קורל",קורל,,מלון,coral-iec,קורל
-account2,other2,אחר,,,אחר,other
-account6,edu6,מבנה חינוך,,,מבנה חינוך,education
-account6,kindergarten6,גן ילדים,מבנה חינוך,,גני ילדים,education,גן
-account6,school6,בית ספר,מבנה חינוך,,בתי ספר,education,בית ספר|בית הספר|בי"ס|ביה"ס
-account6,pais6,אשכול פיס,מבנה חינוך,,אשכול פיס,education
-account6,outdoor6,תאורת חוץ,,,תאורת חוץ,lighting
-account6,street6,תאורת רחובות,תאורת חוץ,,תאורת רחובות,lighting,תאורת|מאור|מרכזיה
-account6,traffic6,רמזור,תאורת חוץ,,רמזור,traffic_light,רמזור
-account6,other6,אחר,,,אחר,other
+account2,other_2,אחר,,,אחר,other
+account4,public_4,מבנה ציבור,,,מבנים ציבוריים כגון משרדים,public_building
+account4,office_4,מבנה משרדים,מבנה ציבור,,מבנה משרדים,public_building
+account4,municipality_4,משרדי העירייה,מבנה ציבור,,משרדי העירייה,public_building,עירייה|משרד
+account4,library_4,ספריה,מבנה ציבור,,ספריה,public_building,ספריה
+account4,edu_4,מבנה חינוך,,,מבנה חינוך,education
+account4,kindergarten_4,גן ילדים,מבנה חינוך,,גני ילדים,education,גן|פעוטון
+account4,school_4,בית ספר,מבנה חינוך,,בתי ספר,education,בית ספר|בית הספר|בי"ס|ביה"ס|ביהס
+account4,pais_4,אשכול פיס,מבנה חינוך,,אשכול פיס,education,פיס
+account4,youth_4,מרכז נוער,מבנה חינוך,,מרכז נוער,education
+account4,pedago_4,מרכז פדגוגי,מבנה חינוך,,מרכז פדגוגי,education,פדגוגי
+account4,outdoor_4,תאורת חוץ,,,תאורת חוץ,lighting
+account4,street_4,תאורת רחובות,תאורת חוץ,,תאורת רחובות,lighting,תאורת|מאור|מרכזיה|מ.רחובות
+account4,traffic_4,רמזור,תאורת חוץ,,רמזור,traffic_light,רמזור
+account4,security_4,בטחון,,,בטחון,security
+account4,shelter_4,מקלט,בטחון,,מקלט,security,מקלט
+account4,storeroom_4,מחסן חרום,בטחון,,מחסן חרום,security,מחסן
+account4,police_4,שיטור קהילתי,בטחון,,שיטור קהילתי,security,שיטור|משמר
+account4,sport_4,מתקן ספורט,,,מתקן ספורט,sports
+account4,pool_4,בריכת שחייה,מתקן ספורט,,בריכת שחייה,sports,בריכת
+account4,field_4,מגרש ספורט,מתקן ספורט,,מגרש ספורט,sports,מגרש
+account4,hall_4,אולם ספורט,מתקן ספורט,,אולם ספורט,sports,אולם
+account4,religion_4,שרותי דת,,,שרותי דת,religion
+account4,prayer_4,בית תפילה,שרותי דת,,בית תפילה,religion
+account4,synagogue_4,בית כנסת,בית תפילה,,בית כנסת,religion,כנסת
+account4,church_4,כנסיה,בית תפילה,,כנסיה,religion,כנסיה
+account4,mosque_4,מסגד,בית תפילה,,מסגד,religion,מסגד
+account4,relcouncil_4,מועצה דתית,שרותי דת,,מועצה דתית,religion
+account4,mikve_4,מקווה,שרותי דת,,מקווה,religion,מקווה
+account4,health_4,בריאות,,,בריאות,health
+account4,mental_4,בריאות הנפש,בריאות,,בריאות הנפש,health
+account4,paishealth_4,פיס לבריאות,בריאות,,פיס לבריאות,health
+account4,water_4,מתקן מים,,,מתקן מים,water,מים
+account4,welfare_4,רווחה,,,רווחה,welfare,רווחה
+account4,apartment_4,דירת רווחה,רווחה,,דירת רווחה,welfare
+account4,psyco_4,השירות הפסיכולוגי,רווחה,,השירות הפסיכולוגי,welfare
+account4,club_4,מועדון,רווחה,,מועדון,welfare,מועדון|מועדונית
+account4,elderly_4,מרכז יום לקשיש,רווחה,,מרכז יום לקשיש,welfare,קשישים|לקשיש
+account4,community_4,מרכז קהילתי,רווחה,,מרכז קהילתי,welfare
+account4,culture_4,תרבות,,,תרבות,culture
+account4,other_4,אחר,,,אחר,other
+account6,edu_6,מבנה חינוך,,,מבנה חינוך,education
+account6,kindergarten_6,גן ילדים,מבנה חינוך,,גני ילדים,education,גן
+account6,school_6,בית ספר,מבנה חינוך,,בתי ספר,education,בית ספר|בית הספר|בי"ס|ביה"ס
+account6,pais_6,אשכול פיס,מבנה חינוך,,אשכול פיס,education
+account6,outdoor_6,תאורת חוץ,,,תאורת חוץ,lighting
+account6,street_6,תאורת רחובות,תאורת חוץ,,תאורת רחובות,lighting,תאורת|מאור|מרכזיה
+account6,traffic_6,רמזור,תאורת חוץ,,רמזור,traffic_light,רמזור
+account6,other_6,אחר,,,אחר,other
