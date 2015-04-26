@@ -105,6 +105,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
       'field_meter_id' => array('und' => array('0' => array('value' => 1))),
       'field_place_address' => array('und' => array('0' => array('value' => 'לכיש 25'))),
       'field_place_locality' => array('und' => array('0' => array('value' => 'קרית גת'))),
+      OG_AUDIENCE_FIELD => array('und' => array('0' => array('target_id' => 1))),
     );
 
     $meter_node1 = $this->drupalCreateNode($settings);
@@ -126,6 +127,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
       'field_max_frequency' => array('und' => array('0' => array('value' => \NegaWattNormalizerTimeManagerInterface::MONTH))),
       'field_place_address' => array('und' => array('0' => array('value' => 'לכיש 25'))),
       'field_place_locality' => array('und' => array('0' => array('value' => 'קרית גת'))),
+      OG_AUDIENCE_FIELD => array('und' => array('0' => array('target_id' => 1))),
     );
 
     $meter_node3 = $this->drupalCreateNode($settings);
@@ -283,7 +285,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
   function testElectricityApi() {
 
     $handler = restful_get_restful_handler('electricity');
-    $response = $handler->get();
+    $response = $handler->get('', array('filter' => array('meter_account' => 1)));
 
     // There should be 6 entities (due to sum over meters).
     $this->assertTrue(is_array($response) && count($response) == 6, '<b>Testing electricity API</b><br>6 entities were found.');
@@ -311,7 +313,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     // need to get the data from a database.
 
     // Test filter on type=2 (MONTH)
-    $response = $handler->get('', array('filter' => array('type' => 4)));
+    $response = $handler->get('', array('filter' => array('meter_account' => 1, 'type' => 4)));
     // There should be 2 entities.
     $this->assertTrue(is_array($response) && count($response) == 2, '<b>Testing electricity with filter for type=MONTH</b><br>2 entities were found.');
     $entity = $response[0];
