@@ -89,6 +89,14 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
+   * @Then I should see all categories inactive
+   */
+  public function iShouldSeeAllCategoriesInactive() {
+    $this->iWaitForCssElement('.active-category', 'disappear');
+  }
+
+
+  /**
    * @Then I should see :markers markers
    */
   public function iShouldSeeMarkers($markers, $equals = TRUE) {
@@ -383,6 +391,13 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
 
   }
 
+  /**
+   * @Then I should see :message in the chart of kws usage
+   */
+  public function iShouldSeeInTheChartOfKwsUsage($message) {
+    $csspath = '#dashboard-controls > div > ui-view.dashboard-controls.dashboard-controls-row.dashboard-usage.ng-scope > div.row.chart-empty.ng-scope > div';
+    $this->waitForTextNgElement($csspath, $message);
+  }
 
 
   /**
