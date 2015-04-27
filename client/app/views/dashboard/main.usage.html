@@ -4,9 +4,15 @@
 <tabset class="box-chart-usage" vertical="true">
   <tab ng-repeat="frequency in frequencies" heading="{{frequency.label}}" active="frequency.active" disabled="frequency.disabled" select="changeFrequency()"></tab>
 </tabset>
-<!-- Chart -->
+
+<div ng-if="!usageChartData.data.rows.length" class="row chart-empty">
+  <!-- No Chart -->
+  <div class="title col-md-6 col-centered text-center chart-message">{{usageChartData.messages.empty}}</div>
+</div>
+
 <div ng-if="usageChartData.data.rows.length">
-  <div google-chart chart="usageChartData"  ng-hide="isLoading" id="chart-usage" class="usageChart"/>
+  <!-- Chart -->
+  <div google-chart chart="usageChartData"  ng-hide="isLoading" id="chart-usage" class="usageChart"></div>
   <span>
     <button type="button" id="chart-usage-btn-arrow-left" class="btn btn-transparent btn-arrow btn-arrow-left" ng-show="usageChartData.showControl('previous')" ng-click="changePeriod(usageChartData.period('previous'))" >
       <span class="glyphicon glyphicon-chevron-left"></span>
@@ -16,8 +22,6 @@
     </button>
   </span>
 </div>
-<!-- No Chart -->
-<div class="row chart-empty" ng-if="!usageChartData.data.rows.length">
-  <div class="title col-md-6 col-centered text-center chart-message">{{usageChartData.messages.empty}}</div>
+
 </div>
 

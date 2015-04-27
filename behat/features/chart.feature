@@ -24,7 +24,13 @@ Feature: Chart
     Then I should see the previous monthly kws chart of all meters
     And I press the "next" button on the charts
     Then I should see the monthly kws chart of all meters
-    
+
+  @javascript
+  Scenario: Show not enough data message into the usage chart.
+    Given I login with user "carlos"
+    When I reload "/#/dashboard/1?chartFreq=3"
+    Then I should see "אין מספיק נתונים כדי להציג את התרשים." in the chart of kws usage
+
   @javascript @wip
   Scenario: Show chart usage monthly for multiple meters.
     Given I login with user "carlos"
