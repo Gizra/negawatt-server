@@ -162,16 +162,28 @@ class NegawattEntityMeterBase extends \NegawattEntityBaseNode {
 
     // Handle 'contract' filter (if exists)
     if (!empty($filter['contract'])) {
-      // Add condition - the OG membership of the meter-node is equal to the
-      // account id in the request.
       $query->join('field_data_field_contract_id', 'c', 'c.entity_id = e.meter_nid');
       $query->condition('c.field_contract_id_value', $filter['contract']);
       unset($filter['contract']);
     }
 
+    // Handle 'max_frequency' filter (if exists)
+    if (!empty($filter['max_frequency'])) {
+      $query->join('field_data_field_max_frequency', 'f', 'f.entity_id = e.meter_nid');
+      $query->condition('f.field_max_frequency_value', $filter['max_frequency']);
+      unset($filter['max_frequency']);
+    }
+
+    // Handle 'label' filter (if exists)
+    if (!empty($filter['label'])) {
+      $query->join('node', 'n', 'n.nid = e.meter_nid');
+      $query->condition('n.title', $filter['label']);
+      unset($filter['label']);
+    }
+
     // Make sure we handled all the filter fields.
     if (!empty($filter)) {
-      throw new \Exception('Unknown fields in filter: ' . implode(', ', array_keys($filter)));
+      throw new \RestfulBadRequestException(format_string('Unknown fields in filter: @filters', array('@filters' => implode(', ', array_keys($filter)))));
     }
 
     // Add expressions for electricity min and max timestamps.
