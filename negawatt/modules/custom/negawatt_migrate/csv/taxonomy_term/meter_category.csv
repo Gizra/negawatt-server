@@ -47,6 +47,7 @@ account2,seaside-iec,"מונה ראשי - סיסייד",סיסייד,,מלון,s
 account2,coral,קורל,"רשת מלונות אסטרל",,מלון,coral
 account2,coral-iec,"מונה ראשי - קורל",קורל,,מלון,coral-iec,קורל
 account2,other_2,אחר,,,אחר,other
+account3,other_3,אחר,,,אחר,other
 account4,public_4,מבנה ציבור,,,מבנים ציבוריים כגון משרדים,public_building
 account4,office_4,מבנה משרדים,מבנה ציבור,,מבנה משרדים,public_building
 account4,municipality_4,משרדי העירייה,מבנה ציבור,,משרדי העירייה,public_building,עירייה|משרד|עיריה|עיריית
@@ -87,6 +88,7 @@ account4,elderly_4,מרכז יום לקשיש,רווחה,,מרכז יום לקש
 account4,community_4,מרכז קהילתי,רווחה,,מרכז קהילתי,welfare
 account4,culture_4,תרבות,,,תרבות,culture
 account4,other_4,אחר,,,אחר,other
+account5,other_5,אחר,,,אחר,other
 account6,edu_6,מבנה חינוך,,,מבנה חינוך,education
 account6,kindergarten_6,גן ילדים,מבנה חינוך,,גני ילדים,education,גן
 account6,school_6,בית ספר,מבנה חינוך,,בתי ספר,education,בית ספר|בית הספר|בי"ס|ביה"ס|ביהס|בה"ס
