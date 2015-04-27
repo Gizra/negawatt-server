@@ -31,6 +31,10 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     global $user;
 
     // Create two OG account nodes.
+//    $migration = Migration::getInstance('NegawattAccountMigrate');
+//    $result = $migration->processImport();
+//    $migration = Migration::getInstance('NegawattMeterCategoryTermsMigrate');
+//    $result = $migration->processImport();
     $account_node_info = new stdClass();
 
     $account_node_info->type     = "group";
