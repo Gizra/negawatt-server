@@ -117,8 +117,8 @@ angular.module('negawattClientApp')
 
       // Extend meters properties explicit because we don have deep copy.
       // TODO: from angular v1.4 use angular.merge().
-      angular.extend(cache.data.listAll, data.list);
-      angular.extend(cache.data.total, data.total);
+      angular.extend(cache.data.listAll, data && data.list);
+      angular.extend(cache.data.total, data && data.total);
       cache.timestamp = new Date();
 
       // Broadcast and event to update the markers in the map.
