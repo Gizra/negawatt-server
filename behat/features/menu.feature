@@ -21,4 +21,16 @@ Feature: Menu
     When I visit "/#/dashboard/1"
     Then I should see default profile image
 
+  @javascript
+  Scenario: Show today date in the menu
+    Given I login with user "carlos"
+    When I visit "/#/dashboard/1"
+    Then I should see today date
+
+  @javascript
+  Scenario: Show in the menu a clock updating every minute.
+    Given I login with user "carlos"
+    When I visit "/#/dashboard/1"
+    Then I should see the clock increase every minute
+
 

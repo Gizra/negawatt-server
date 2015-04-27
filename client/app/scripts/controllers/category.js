@@ -8,7 +8,7 @@
  * Controller of the negawattClientApp
  */
 angular.module('negawattClientApp')
-  .controller('CategoryCtrl', function ($scope, $state, $stateParams, $filter, Category, Meter, categories, meters) {
+  .controller('CategoryCtrl', function ($scope, $state, $stateParams, $filter, Category, Meter, MeterFilter, categories, meters) {
 
     // Define property in the parent scope, permit to be accesable
     // by scope methods of the controller.
@@ -53,6 +53,7 @@ angular.module('negawattClientApp')
      * @param categoryId
      */
     $scope.select = function(categoryId) {
+      MeterFilter.clearMeterSelection();
       $state.forceGo('dashboard.withAccount.categories', {categoryId: categoryId, chartNextPeriod: undefined, chartPreviousPeriod: undefined});
     }
 

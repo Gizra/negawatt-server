@@ -16,10 +16,26 @@ angular.module('negawattClientApp')
         }.bind(this), true));
       },
       clear: function() {
+        this.clearMeterSelection();
         $stateParams.chartNextPeriod = undefined;
         $stateParams.chartPreviousPeriod = undefined;
 
         this.filters = {};
+      },
+      getMeterSelected: function() {
+        return this.filters.meterSelected || undefined;
+      },
+      setMeterSelected: function(meter) {
+        this.filters.meterSelected = meter;
+      },
+      clearMeterSelection: function() {
+        if (angular.isDefined(this.filters.meterSelected)) {
+          this.filters.meterSelected.unselect();
+        }
+
+        //Clear filters.
+        this.filters.meterSelected = undefined;
+        this.filters.meter = undefined;
       }
     };
 

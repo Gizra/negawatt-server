@@ -202,7 +202,7 @@ angular
         reloadOnSearch: false,
         resolve: {
           meters: function(Meter, $stateParams, account, MeterFilter) {
-            MeterFilter.filters.category = +$stateParams.categoryId;
+            MeterFilter.filters.category = +$stateParams.categoryId || undefined;
             MeterFilter.filters.meter = +$stateParams.markerId;
             // Necessary to resolve again to apply the filter, of category id.
             return Meter.get(account.id, $stateParams.categoryId);
