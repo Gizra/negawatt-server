@@ -33,7 +33,7 @@ angular.module('negawattClientApp')
 
       // Filtering in the case we have categoryId defined.
       if (angular.isDefined(categoryId)) {
-        MeterFilter.filters.category = categoryId;
+        MeterFilter.set('category', categoryId);
       }
 
       // Clear the promise cached, after resolve or reject the promise. Permit access to the cache data, when

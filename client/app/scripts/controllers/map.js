@@ -46,14 +46,14 @@ angular.module('negawattClientApp')
     // Reload the current $state when meters added more.
     $scope.$on('nwMetersChanged', function(event, meters) {
       $scope.meters = meters.list;
-      if (MeterFilter.filters.meter && $scope.meters[MeterFilter.filters.meter] && !isMeterSelected) {
-        setSelectedMarker(MeterFilter.filters.meter);
+      if (MeterFilter.get('meter') && $scope.meters[MeterFilter.get('meter')] && !isMeterSelected) {
+        setSelectedMarker(MeterFilter.get('meter'));
       }
     });
 
     // Select marker in the Map.
     $scope.$on('leafletDirectiveMarker.click', function(event, args) {
-      $state.forceGo('dashboard.withAccount.markers', {markerId: args.modelName, categoryId: MeterFilter.filters.category, chartNextPeriod: undefined, chartPreviousPeriod: undefined} );
+      $state.forceGo('dashboard.withAccount.markers', {markerId: args.modelName, categoryId: MeterFilter.get('category'), chartNextPeriod: undefined, chartPreviousPeriod: undefined} );
     });
 
     /**

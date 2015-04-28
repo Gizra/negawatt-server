@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .factory('MeterFilter', function ($filter, $stateParams, Utils) {
+  .factory('MeterFilter', function ($filter, $stateParams, $rootScope, Utils) {
 
     return {
       filters: {},
@@ -36,7 +36,17 @@ angular.module('negawattClientApp')
         //Clear filters.
         this.filters.meterSelected = undefined;
         this.filters.meter = undefined;
+      },
+      set: function(name, value) {
+        this.filters[name] = value;
+        if (name === 'categorized') {
+
+        }
+      },
+      get: function(name) {
+        return this.filters && this.filters[name];
       }
+
     };
 
   });

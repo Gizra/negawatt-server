@@ -91,7 +91,7 @@ angular.module('negawattClientApp')
      *   The Category ID.
      */
     function setSelectedCategory(id) {
-      MeterFilter.filters.category = id;
+      MeterFilter.set('category', id);
     }
 
     if ($stateParams.categoryId) {

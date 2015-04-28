@@ -145,7 +145,9 @@ angular
         reloadOnSearch: false,
         resolve: {
           meters: function(Meter, $stateParams, account, MeterFilter) {
-            MeterFilter.filters.category = +$stateParams.categoryId;
+            // Set Meter filter.
+            MeterFilter.set('category', +$stateParams.categoryId);
+
             return Meter.get(account.id, $stateParams.categoryId);
           },
           categories: function(Category, account, categories) {
@@ -203,8 +205,8 @@ angular
         reloadOnSearch: false,
         resolve: {
           meters: function(Meter, $stateParams, account, MeterFilter) {
-            MeterFilter.filters.category = +$stateParams.categoryId || undefined;
-            MeterFilter.filters.meter = +$stateParams.markerId;
+            MeterFilter.set('category', +$stateParams.categoryId || undefined);
+            MeterFilter.set('meter', +$stateParams.markerId);
             // Necessary to resolve again to apply the filter, of category id.
             return Meter.get(account.id, $stateParams.categoryId);
           },

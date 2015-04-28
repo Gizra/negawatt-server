@@ -107,7 +107,7 @@ angular.module('negawattClientApp')
       $timeout(function() {
         cache.data = undefined;
       }, 60000);
-      $rootScope.$broadcast(broadcastUpdateEventName);
+      $rootScope.$broadcast(broadcastUpdateEventName, cache.data);
     }
 
 
