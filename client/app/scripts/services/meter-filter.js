@@ -2,6 +2,10 @@
 
 angular.module('negawattClientApp')
   .factory('MeterFilter', function ($filter, $stateParams, $rootScope, Utils) {
+    function test(value) {
+      return value;
+    }
+
 
     return {
       filters: {},
@@ -40,7 +44,7 @@ angular.module('negawattClientApp')
       set: function(name, value) {
         this.filters[name] = value;
         if (name === 'categorized') {
-
+          test(value);
         }
       },
       get: function(name) {
@@ -48,5 +52,4 @@ angular.module('negawattClientApp')
       }
 
     };
-
   });

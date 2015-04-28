@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Category', function ($q, $http, $timeout, $state, $rootScope, $filter, Config, Utils, Meter) {
+  .service('Category', function ($q, $http, $timeout, $state, $rootScope, $filter, Config, Utils, Meter, MeterFilter) {
     var self = this;
 
     // A private cache key.
@@ -98,6 +98,10 @@ angular.module('negawattClientApp')
      *    Collection resulted from the request.
      */
     function setCache(data) {
+      // Add category mapping object to handle into meter filters factory.
+      if (angular.isUndefined(cache.data)) {
+        MeterFilter.set('categorized', data);
+      }
       // Cache categories data.
       cache = {
         data: data,
