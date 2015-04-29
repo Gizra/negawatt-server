@@ -40,13 +40,33 @@ angular.module('negawattClientApp')
     function getCategoriesWithMeters(categories) {
       categories = $filter('filter')(categories, {meters: "!0"});
 
-      // Get subcategories with meters.
-      angular.forEach(categories, function(category) {
+      angular.forEach(categories, function(category, index) {
+        // Get subcategories with meters.
         category.children = category.children && getCategoriesWithMeters(category.children);
+
+        // Redefine the category filter object.
+        categories[index] = refineToCategoryFilter(category);
       });
 
       return categories;
     }
+
+    /**
+     * Retunr an object with the necesary properties to keep the value.
+     *
+     * @param category
+     * @returns {{id: *, label: *, children: *}}
+     */
+    function refineToCategoryFilter(category) {
+      return {
+        id: category.id,
+        label: category.label,
+        children: category.children,
+        meters: category.meters,
+        checked: true
+      };
+    }
+
 
     return {
       filters: {},
