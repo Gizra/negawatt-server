@@ -3,15 +3,43 @@
 angular.module('negawattClientApp')
   .factory('MeterFilter', function ($filter, $stateParams, $rootScope, Utils) {
     /**
-     *
+     * Set the states of the filter checkoxes control.
      *
      * @param value
      * @returns {*}
      */
     function setCategorized(name, value) {
+      // Get categories object.
+      value = getCategories(value);
+
+      // Clear categories without meters.
+      value = getCategoriesWithMeters(value);
+
+      console.log(name, value);
       this.filters[name] = value;
     }
 
+    /**
+     * Return collection of categories.
+     *
+     * @param value
+     *  Thae category object.
+     */
+    function getCategories(value) {
+      return value[tree] || value;
+    }
+
+    /**
+     * Return the categories with meters asocied.
+     *
+     * @param categories
+     *  The category collection.
+     * @returns {*}
+     *  The categories where the property meters is different
+     */
+    function getCategoriesWithMeters(categories) {
+      return $filter('filter')(categories, {meters: "!0"})
+    }
 
     return {
       filters: {},
@@ -50,7 +78,7 @@ angular.module('negawattClientApp')
       set: function(name, value) {
         // Extra task if is the filter categorized
         if (name === 'categorized') {
-          setCataegorized(name, value);
+          setCategorized.bind(this, name, value)();
           return;
         }
 
