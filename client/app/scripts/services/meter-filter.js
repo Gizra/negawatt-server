@@ -61,8 +61,8 @@ angular.module('negawattClientApp')
       // Get categories object.
       value = getCategories(value);
 
-      // Clear categories without meters.
-      value = (angular.isDefined(value['tree'])) ? getCategoriesWithMeters(value) : updateCategory(value);
+      // Define the initial object or update a specific category.
+      value = (angular.isArray(value)) ? getCategoriesWithMeters(value) : getCategoriesWithCategoryUpdate.bind(this, value)();
 
       console.log(name, value);
       this.filters[name] = value;
@@ -116,19 +116,22 @@ angular.module('negawattClientApp')
       };
     }
 
-    function updateCategory(value, categories) {
+    function getCategoriesWithCategoryUpdate(value, categories) {
       if (angular.isUndefined(categories)) {
-        categories = this.filters.categories
+        categories = this.get('categorized');
       }
 
-      angular.forEach()
-      /**
-       * Check i
-       * @param value
-       */
-      function checkId(value) {
-        return Object.keys(value).pop()
-      }
+      angular.forEach(categories, function(category) {
+        if (category.id === +Object.keys(value).toString()) {
+          category.checked = value[category.id];
+        }
+
+        if (category.children) {
+          category.children = getCategoriesWithCategoryUpdate(value, categories);
+        }
+      });
+
+      return categories;
     }
 
   });
