@@ -62,7 +62,7 @@ angular.module('negawattClientApp')
       value = getCategories(value);
 
       // Clear categories without meters.
-      value = getCategoriesWithMeters(value);
+      value = (angular.isDefined(value['tree'])) ? getCategoriesWithMeters(value) : updateCategory(value);
 
       console.log(name, value);
       this.filters[name] = value;
@@ -114,6 +114,21 @@ angular.module('negawattClientApp')
         meters: category.meters,
         checked: true
       };
+    }
+
+    function updateCategory(value, categories) {
+      if (angular.isUndefined(categories)) {
+        categories = this.filters.categories
+      }
+
+      angular.forEach()
+      /**
+       * Check i
+       * @param value
+       */
+      function checkId(value) {
+        return Object.keys(value).pop()
+      }
     }
 
   });
