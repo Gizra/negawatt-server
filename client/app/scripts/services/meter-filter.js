@@ -2,8 +2,14 @@
 
 angular.module('negawattClientApp')
   .factory('MeterFilter', function ($filter, $stateParams, $rootScope, Utils) {
-    function test(value) {
-      return value;
+    /**
+     *
+     *
+     * @param value
+     * @returns {*}
+     */
+    function setCategorized(name, value) {
+      this.filters[name] = value;
     }
 
 
@@ -42,10 +48,13 @@ angular.module('negawattClientApp')
         this.filters.meter = undefined;
       },
       set: function(name, value) {
-        this.filters[name] = value;
+        // Extra task if is the filter categorized
         if (name === 'categorized') {
-          test(value);
+          setCataegorized(name, value);
+          return;
         }
+
+        this.filters[name] = value;
       },
       get: function(name) {
         return this.filters && this.filters[name];
