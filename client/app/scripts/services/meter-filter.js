@@ -2,6 +2,55 @@
 
 angular.module('negawattClientApp')
   .factory('MeterFilter', function ($filter, $stateParams, $rootScope, Utils) {
+    return {
+      filters: {},
+      byCategory: function(meters) {
+        meters = Utils.toArray(meters.listAll);
+
+        return Utils.indexById($filter('filter')(meters, function filterByCategory(meter) {
+          // Return meters.
+          if (!this.filters.category || meter.meter_categories && meter.meter_categories[this.filters.category]) {
+            return meter;
+          }
+        }.bind(this), true));
+      },
+      clear: function() {
+        this.clearMeterSelection();
+        $stateParams.chartNextPeriod = undefined;
+        $stateParams.chartPreviousPeriod = undefined;
+
+        this.filters = {};
+      },
+      getMeterSelected: function() {
+        return this.filters.meterSelected || undefined;
+      },
+      setMeterSelected: function(meter) {
+        this.filters.meterSelected = meter;
+      },
+      clearMeterSelection: function() {
+        if (angular.isDefined(this.filters.meterSelected)) {
+          this.filters.meterSelected.unselect();
+        }
+
+        //Clear filters.
+        this.filters.meterSelected = undefined;
+        this.filters.meter = undefined;
+      },
+      set: function(name, value) {
+        // Extra task if is the filter categorized
+        if (name === 'categorized') {
+          setCategorized.bind(this, name, value)();
+          return;
+        }
+
+        this.filters[name] = value;
+      },
+      get: function(name) {
+        return this.filters && this.filters[name];
+      }
+
+    };
+
     /**
      * Set the states of the filter checkoxes control.
      *
@@ -52,7 +101,7 @@ angular.module('negawattClientApp')
     }
 
     /**
-     * Retunr an object with the necesary properties to keep the value.
+     * Return an object with the necesary properties to keep the value.
      *
      * @param category
      * @returns {{id: *, label: *, children: *}}
@@ -67,53 +116,4 @@ angular.module('negawattClientApp')
       };
     }
 
-
-    return {
-      filters: {},
-      byCategory: function(meters) {
-        meters = Utils.toArray(meters.listAll);
-
-        return Utils.indexById($filter('filter')(meters, function filterByCategory(meter) {
-          // Return meters.
-          if (!this.filters.category || meter.meter_categories && meter.meter_categories[this.filters.category]) {
-            return meter;
-          }
-        }.bind(this), true));
-      },
-      clear: function() {
-        this.clearMeterSelection();
-        $stateParams.chartNextPeriod = undefined;
-        $stateParams.chartPreviousPeriod = undefined;
-
-        this.filters = {};
-      },
-      getMeterSelected: function() {
-        return this.filters.meterSelected || undefined;
-      },
-      setMeterSelected: function(meter) {
-        this.filters.meterSelected = meter;
-      },
-      clearMeterSelection: function() {
-        if (angular.isDefined(this.filters.meterSelected)) {
-          this.filters.meterSelected.unselect();
-        }
-
-        //Clear filters.
-        this.filters.meterSelected = undefined;
-        this.filters.meter = undefined;
-      },
-      set: function(name, value) {
-        // Extra task if is the filter categorized
-        if (name === 'categorized') {
-          setCategorized.bind(this, name, value)();
-          return;
-        }
-
-        this.filters[name] = value;
-      },
-      get: function(name) {
-        return this.filters && this.filters[name];
-      }
-
-    };
   });
