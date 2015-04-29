@@ -26,7 +26,7 @@ angular.module('negawattClientApp')
      *  Thae category object.
      */
     function getCategories(value) {
-      return value[tree] || value;
+      return value['tree'] || value;
     }
 
     /**
@@ -38,7 +38,14 @@ angular.module('negawattClientApp')
      *  The categories where the property meters is different
      */
     function getCategoriesWithMeters(categories) {
-      return $filter('filter')(categories, {meters: "!0"})
+      categories = $filter('filter')(categories, {meters: "!0"});
+
+      // Get subcategories with meters.
+      angular.forEach(categories, function(category) {
+        category.children = category.children && getCategoriesWithMeters(category.children);
+      });
+
+      return categories;
     }
 
     return {
