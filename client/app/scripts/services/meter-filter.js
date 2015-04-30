@@ -127,7 +127,7 @@ angular.module('negawattClientApp')
         }
 
         if (category.children) {
-          category.children = getCategoriesWithCategoryUpdate(value, categories);
+          category.children = getCategoriesWithCategoryUpdate(value, category.children);
         }
       });
 
