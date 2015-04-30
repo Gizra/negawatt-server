@@ -1,16 +1,16 @@
 account_id,id,name,parent,weight,description,field_icon_categories,field_match_strings
 account1,public_1,מבנה ציבור,,,מבנים ציבוריים כגון משרדים,public_building
 account1,office_1,מבנה משרדים,מבנה ציבור,,מבנה משרדים,public_building
-account1,municipality_1,משרדי העירייה,מבנה ציבור,,משרדי העירייה,public_building,עירייה|משרד|עיריה|עיריית
+account1,municipality_1,משרדי העירייה,מבנה ציבור,,משרדי העירייה,public_building,עירייה|משרד|עיריה|עיריית|אגף
 account1,library_1,ספריה,מבנה ציבור,,ספריה,public_building,ספריה
 account1,edu_1,מבנה חינוך,,,מבנה חינוך,education
 account1,kindergarten_1,גן ילדים,מבנה חינוך,,גני ילדים,education,גן|פעוטון
 account1,school_1,בית ספר,מבנה חינוך,,בתי ספר,education,בית ספר|בית הספר|בי"ס|ביה"ס|ביהס|בה"ס
-account1,pais_1,אשכול פיס,מבנה חינוך,,אשכול פיס,education,אשכול פיס
+account1,pais_1,אשכול פיס,מבנה חינוך,,אשכול פיס,education,אשכול פיס|אשכולות פיס
 account1,youth_1,מרכז נוער,מבנה חינוך,,מרכז נוער,education
 account1,pedago_1,מרכז פדגוגי,מבנה חינוך,,מרכז פדגוגי,education,פדגוגי
 account1,outdoor_1,תאורת חוץ,,,תאורת חוץ,lighting
-account1,street_1,תאורת רחובות,תאורת חוץ,,תאורת רחובות,lighting,תאורת|מאור|מרכזיה|מ.רחובות|פארק|תאורה
+account1,street_1,תאורת רחובות,תאורת חוץ,,תאורת רחובות,lighting,תאורת|מאור|מרכזיה|מ.רחובות|פארק|תאורה|מרכזית
 account1,traffic_1,רמזור,תאורת חוץ,,רמזור,traffic_light,רמזור
 account1,security_1,בטחון,,,בטחון,security
 account1,shelter_1,מקלט,בטחון,,מקלט,security,מקלט
@@ -29,7 +29,7 @@ account1,relcouncil_1,מועצה דתית,שרותי דת,,מועצה דתית,r
 account1,mikve_1,מקווה,שרותי דת,,מקווה,religion,מקווה
 account1,health_1,בריאות,,,בריאות,health
 account1,mental_1,בריאות הנפש,בריאות,,בריאות הנפש,health
-account1,paishealth_1,פיס לבריאות,בריאות,,פיס לבריאות,health
+account1,paishealth_1,פיס לבריאות,בריאות,,פיס לבריאות,health,פיס לבריאות|פייס לבריאות
 account1,water_1,מתקן מים,,,מתקן מים,water,מתקן מים|חימצון|בריכת אגירה
 account1,welfare_1,רווחה,,,רווחה,welfare,רווחה
 account1,apartment_1,דירת רווחה,רווחה,,דירת רווחה,welfare
@@ -50,16 +50,16 @@ account2,other_2,אחר,,,אחר,other
 account3,other_3,אחר,,,אחר,other
 account4,public_4,מבנה ציבור,,,מבנים ציבוריים כגון משרדים,public_building
 account4,office_4,מבנה משרדים,מבנה ציבור,,מבנה משרדים,public_building
-account4,municipality_4,משרדי העירייה,מבנה ציבור,,משרדי העירייה,public_building,עירייה|משרד|עיריה|עיריית
+account4,municipality_4,משרדי העירייה,מבנה ציבור,,משרדי העירייה,public_building,עירייה|משרד|עיריה|עיריית|אגף
 account4,library_4,ספריה,מבנה ציבור,,ספריה,public_building,ספריה
 account4,edu_4,מבנה חינוך,,,מבנה חינוך,education
 account4,kindergarten_4,גן ילדים,מבנה חינוך,,גני ילדים,education,גן|פעוטון
 account4,school_4,בית ספר,מבנה חינוך,,בתי ספר,education,בית ספר|בית הספר|בי"ס|ביה"ס|ביהס|בה"ס
-account4,pais_4,אשכול פיס,מבנה חינוך,,אשכול פיס,education,אשכול פיס
+account4,pais_4,אשכול פיס,מבנה חינוך,,אשכול פיס,education,אשכול פיס|אשכולות פיס
 account4,youth_4,מרכז נוער,מבנה חינוך,,מרכז נוער,education
 account4,pedago_4,מרכז פדגוגי,מבנה חינוך,,מרכז פדגוגי,education,פדגוגי
 account4,outdoor_4,תאורת חוץ,,,תאורת חוץ,lighting
-account4,street_4,תאורת רחובות,תאורת חוץ,,תאורת רחובות,lighting,תאורת|מאור|מרכזיה|מ.רחובות|פארק|תאורה
+account4,street_4,תאורת רחובות,תאורת חוץ,,תאורת רחובות,lighting,תאורת|מאור|מרכזיה|מ.רחובות|פארק|תאורה|מרכזית
 account4,traffic_4,רמזור,תאורת חוץ,,רמזור,traffic_light,רמזור
 account4,security_4,בטחון,,,בטחון,security
 account4,shelter_4,מקלט,בטחון,,מקלט,security,מקלט
@@ -78,7 +78,7 @@ account4,relcouncil_4,מועצה דתית,שרותי דת,,מועצה דתית,r
 account4,mikve_4,מקווה,שרותי דת,,מקווה,religion,מקווה
 account4,health_4,בריאות,,,בריאות,health
 account4,mental_4,בריאות הנפש,בריאות,,בריאות הנפש,health
-account4,paishealth_4,פיס לבריאות,בריאות,,פיס לבריאות,health
+account4,paishealth_4,פיס לבריאות,בריאות,,פיס לבריאות,health,פיס לבריאות|פייס לבריאות
 account4,water_4,מתקן מים,,,מתקן מים,water,מתקן מים|חימצון|בריכת אגירה
 account4,welfare_4,רווחה,,,רווחה,welfare,רווחה
 account4,apartment_4,דירת רווחה,רווחה,,דירת רווחה,welfare
@@ -94,7 +94,7 @@ account6,kindergarten_6,גן ילדים,מבנה חינוך,,גני ילדים,e
 account6,school_6,בית ספר,מבנה חינוך,,בתי ספר,education,בית ספר|בית הספר|בי"ס|ביה"ס|ביהס|בה"ס
 account6,pais_6,אשכול פיס,מבנה חינוך,,אשכול פיס,education
 account6,outdoor_6,תאורת חוץ,,,תאורת חוץ,lighting
-account6,street_6,תאורת רחובות,תאורת חוץ,,תאורת רחובות,lighting,תאורת|מאור|מרכזיה|מ.רחובות|פארק|תאורה
+account6,street_6,תאורת רחובות,תאורת חוץ,,תאורת רחובות,lighting,תאורת|מאור|מרכזיה|מ.רחובות|פארק|תאורה|מרכזית
 account6,traffic_6,רמזור,תאורת חוץ,,רמזור,traffic_light,רמזור
 account6,water_6,מתקן מים,,,מתקן מים,water,מתקן מים|חימצון|בריכת אגירה
 account6,other_6,אחר,,,אחר,other
