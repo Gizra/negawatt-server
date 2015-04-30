@@ -44,13 +44,13 @@ angular.module('negawattClientApp')
      */
     $scope.toggleMetersByCategory = function(id) {
       var filter = {};
-      filter[id] = $scope.categoriesChecked[id];
+      filter[id] = $scope.categoriesChecked[id].checked;
       MeterFilter.set('categorized', filter);
       // Update meters on the map.
       $scope.$parent.$broadcast('nwMetersChanged', {
         list: $filter('filterMeterByCategories')(meters.list, getCategoriesChecked())
       });
-    }
+    };
 
     /**
      * Select a category forcing reload of the state, used after query search without reloading.
@@ -60,7 +60,7 @@ angular.module('negawattClientApp')
     $scope.select = function(categoryId) {
       MeterFilter.clearMeterSelection();
       $state.forceGo('dashboard.withAccount.categories', {categoryId: categoryId, chartNextPeriod: undefined, chartPreviousPeriod: undefined});
-    }
+    };
 
     // Reload the categories when added new meters to the map.
     $scope.$on('nwMetersChanged', function(event, meters) {
@@ -72,7 +72,7 @@ angular.module('negawattClientApp')
     });
 
     /**
-     * Return an array of the category ids, checeked.
+     * Return an array of the category ids, checked.
      *
      * @returns {Array}
      */
@@ -80,8 +80,8 @@ angular.module('negawattClientApp')
       var filter = [];
 
       // Return filter object.
-      angular.forEach($scope.categoriesChecked, function(categoryChecked, index) {
-        if (!categoryChecked) {
+      angular.forEach($scope.categoriesChecked, function(category, index) {
+        if (!category.checked) {
           this.push(index);
         }
       }, filter);
