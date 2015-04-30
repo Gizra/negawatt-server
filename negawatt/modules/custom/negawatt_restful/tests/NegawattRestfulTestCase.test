@@ -22,85 +22,92 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
   }
 
   /**
+   * Prepare accounts, OG-vocabularies, and taxonomy-terms.
+   *
+   * @throws OgVocabException
+   */
+  function setUpCategories() {
+    // Create two OG account nodes.
+    $settings = array(
+      'type' => 'account',
+      OG_GROUP_FIELD => array('und' => array('0' => array('value' => 1))),
+    );
+    $account_node1 = $this->drupalCreateNode($settings);
+
+    $settings[OG_GROUP_FIELD] = array('und' => array('0' => array('value' => 2)));
+    $account_node2 = $this->drupalCreateNode($settings);
+
+    // Create vocabularies and OG_Vocabs
+    // Create a new vocabulary
+    $vocabulary1 = (object) array(
+      'name' => 'Meter categories for account 1',
+      'machine_name' => 'meter_category_account1',
+    );
+    taxonomy_vocabulary_save($vocabulary1);
+
+    // Create an OG-vocab and relate new vocabulary with OG.
+    $og_vocab_settings = array(
+      'cardinality' => 1,
+      'required' => FALSE,
+    );
+    // Create og-vocabulary for meter types.
+    $og_vocab = og_vocab_create_og_vocab($vocabulary1->vid, 'node', 'iec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
+    $og_vocab->save();
+    $og_vocab = og_vocab_create_og_vocab($vocabulary1->vid, 'node', 'satec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
+    $og_vocab->save();
+
+    og_vocab_relation_save($vocabulary1->vid, 'node', 1/*account id*/);
+
+    // Create second vocabulary
+    $vocabulary2 = (object) array(
+      'name' => 'Meter categories for account 2',
+      'machine_name' => 'meter_category_account2',
+    );
+    taxonomy_vocabulary_save($vocabulary2);
+
+    // Create og-vocabulary for meter types.
+    $og_vocab = og_vocab_create_og_vocab($vocabulary2->vid, 'node', 'iec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
+    $og_vocab->save();
+    $og_vocab = og_vocab_create_og_vocab($vocabulary2->vid, 'node', 'satec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
+    $og_vocab->save();
+
+    og_vocab_relation_save($vocabulary2->vid, 'node', 2/*account id*/);
+
+    // Attach taxonomy-term fields to the bundles.
+    negawatt_meter_field_attach_create_bundle('taxonomy_term', 'meter_category_account1');
+    negawatt_meter_field_attach_create_bundle('taxonomy_term', 'meter_category_account2');
+
+    // Create several meter-categories.
+    $values = array(
+      'vid' => $vocabulary1->vid,
+      'name' => 'account1 school',
+      'vocabulary_machine_name' => $vocabulary1->machine_name,
+    );
+    $term = entity_create('taxonomy_term', $values);
+    $wrapper = entity_metadata_wrapper('taxonomy_term', $term);
+    $wrapper->field_match_strings->set('בית ספר|בי"ס');
+    $wrapper->save();
+
+    $values['name'] = 'אחר';
+    $term = entity_create('taxonomy_term', $values);
+    entity_save('taxonomy_term', $term);
+
+    $values['vid'] = $vocabulary2->vid;
+    $term = entity_create('taxonomy_term', $values);
+    entity_save('taxonomy_term', $term);
+
+    $this->account_node1 = $account_node1;
+    $this->account_node2 = $account_node2;
+  }
+
+  /**
    * Setup test environment.
    * Prepare meter nodes and raw data entities.
    */
   function setUp() {
     parent::setUp('negawatt_restful');
 
-    global $user;
-
-    // Create two OG account nodes.
-//    $migration = Migration::getInstance('NegawattAccountMigrate');
-//    $result = $migration->processImport();
-//    $migration = Migration::getInstance('NegawattMeterCategoryTermsMigrate');
-//    $result = $migration->processImport();
-    $account_node_info = new stdClass();
-
-    $account_node_info->type     = "group";
-    $account_node_info->uid      = $user->uid;
-    $account_node_info->title    = t("Meter Account 1");
-    $account_node_info->body     = t("OG for Meter Account 1");
-    $account_node_info->status   = 1;
-    $account_node_info->promote  = 0;
-    $account_node_info->comment  = 0;
-
-    $account_node_info->og_description   = t("Meter Account");
-    $account_node_info->og_register  = 0;
-    $account_node_info->og_directory = 0;
-    $account_node_info->og_private   = 1;
-    $account_node_info->og_selective = 3;
-
-    $account_node1 = node_submit($account_node_info);
-    node_save($account_node1);
-
-    $account_node_info->title    = t("Meter Account 2");
-    $account_node_info->body     = t("OG for Meter Account 2");
-
-    $account_node2 = node_submit($account_node_info);
-    node_save($account_node2);
-
-    // Create vocabularies and OG_Vocabs
-    // Create a new vocabulary
-    $vocabulary = (object) array(
-        'name' => 'Meter categories for account 1',
-        'description' => 'Meter categories for account 1',
-        'machine_name' => 'taxonomy_account1',
-    );
-    taxonomy_vocabulary_save($vocabulary);
-
-    // Create an OG-vocab and relate new vocabulary with OG.
-    $og_vocab_settings = array(
-        'cardinality' => 1,
-        'required' => FALSE,
-    );
-    // Create og-vocabulary for meter types.
-    $og_vocab = og_vocab_create_og_vocab($vocabulary->vid, 'node', 'iec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
-    $og_vocab->save();
-    $og_vocab = og_vocab_create_og_vocab($vocabulary->vid, 'node', 'satec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
-    $og_vocab->save();
-
-    og_vocab_relation_save($vocabulary->vid, 'node', 1/*account id*/);
-
-    $vocabulary = (object) array(
-        'name' => 'Meter categories for account 2',
-        'description' => 'Meter categories for account 2',
-        'machine_name' => 'taxonomy_account2',
-    );
-    taxonomy_vocabulary_save($vocabulary);
-
-    // Create og-vocabulary for meter types.
-    $og_vocab = og_vocab_create_og_vocab($vocabulary->vid, 'node', 'iec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
-    $og_vocab->save();
-    $og_vocab = og_vocab_create_og_vocab($vocabulary->vid, 'node', 'satec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
-    $og_vocab->save();
-
-    og_vocab_relation_save($vocabulary->vid, 'node', 2/*account id*/);
-
-
-    // Add the OG_VOCAB field to meter nodes.
-//    og_create_field(OG_VOCAB_FIELD, 'node', 'satec_meter');
-//    og_create_field(OG_VOCAB_FIELD, 'node', 'iec_meter');
+    $this->setUpCategories();
 
     // Create satec meter nodes.
     $settings = array(
@@ -108,42 +115,30 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
       'field_max_frequency' => array('und' => array('0' => array('value' => \NegaWattNormalizerTimeManagerInterface::MINUTE))),
       'field_meter_id' => array('und' => array('0' => array('value' => 1))),
       'field_place_address' => array('und' => array('0' => array('value' => 'לכיש 25'))),
+      'field_place_description' => array('und' => array('0' => array('value' => 'בי"ס ויצמן'))),
       'field_place_locality' => array('und' => array('0' => array('value' => 'קרית גת'))),
       OG_AUDIENCE_FIELD => array('und' => array('0' => array('target_id' => 1))),
     );
 
     $meter_node1 = $this->drupalCreateNode($settings);
-    $wrapper = entity_metadata_wrapper('node', $meter_node1);
-    $wrapper->{OG_VOCAB_FIELD}->set(array(7));
-    // Add node to account-1
-    og_group($account_node1->nid, array('entity type' => 'node', 'entity' => $meter_node1,'state' => OG_STATE_ACTIVE));
-
-
     $meter_node2 = $this->drupalCreateNode($settings);
-    $wrapper = entity_metadata_wrapper('node', $meter_node2);
-    $wrapper->{OG_VOCAB_FIELD}->set(array(6));
-    // Add node to account-1
-    og_group($account_node1->nid, array('entity type' => 'node', 'entity' => $meter_node2,'state' => OG_STATE_ACTIVE));
 
     // Create IEC meter nodes.
     $settings = array(
       'type' => 'iec_meter',
       'field_max_frequency' => array('und' => array('0' => array('value' => \NegaWattNormalizerTimeManagerInterface::MONTH))),
       'field_place_address' => array('und' => array('0' => array('value' => 'לכיש 25'))),
+      'field_place_description' => array('und' => array('0' => array('value' => 'בי"ס ויצמן'))),
       'field_place_locality' => array('und' => array('0' => array('value' => 'קרית גת'))),
       OG_AUDIENCE_FIELD => array('und' => array('0' => array('target_id' => 1))),
     );
 
     $meter_node3 = $this->drupalCreateNode($settings);
+
+    $settings['field_place_description'] = array('und' => array('0' => array('value' => 'תיאור לא ברור')));
     $meter_node4 = $this->drupalCreateNode($settings);
-    // Add nodes to account-2
-    og_group($account_node2->nid, array('entity type' => 'node', 'entity' => $meter_node3,'state' => OG_STATE_ACTIVE));
-    og_group($account_node2->nid, array('entity type' => 'node', 'entity' => $meter_node4,'state' => OG_STATE_ACTIVE));
 
     // Save nodes for later.
-    $this->accountNode1 = $account_node1;
-    $this->accountNode2 = $account_node2;
-
     $this->meterNode1 = $meter_node1;
     $this->meterNode2 = $meter_node2;
     $this->meterNode3 = $meter_node3;
@@ -245,7 +240,16 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     $this->assertEqual($meter['type'], 'satec_meter', 'Meter type is correct.');
     $this->assertEqual($meter['max_frequency'], 5, 'Max-frequency field is correct.');
     $this->assertEqual($meter['meter_id'], 1, 'Meter ID field is correct.');
-    // @todo: Test meter_category.
+
+    $handler = restful_get_restful_handler('iec_meters');
+    $response = $handler->get();
+    $this->assertTrue(is_array($response) && count($response) == 2, 'Two IEC meters were found.');
+
+    // Test meter category.
+    $meter = $response[0];
+    $this->assertEqual($meter['meter_categories'][1]['id'], 1, 'Meter 3 category field is correct.');
+    $meter = $response[1];
+    $this->assertEqual($meter['meter_categories'][2]['id'], 2, 'Meter 4 category field (other) is correct.');
 
     // Test POST request
 
