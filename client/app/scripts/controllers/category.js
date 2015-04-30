@@ -43,9 +43,12 @@ angular.module('negawattClientApp')
      *  The category id of the element selected.
      */
     $scope.toggleMetersByCategory = function(id) {
+      // Set category filters.
       var filter = {};
       filter[id] = $scope.categoriesChecked[id].checked;
       MeterFilter.set('categorized', filter);
+      // Refresh categories tre object.
+      $scope.categories.tree = MeterFilter.refreshCategoriesFilters($scope.categories.tree);
       // Update meters on the map.
       $scope.$parent.$broadcast('nwMetersChanged', {
         list: $filter('filterMeterByCategories')(meters.list, getCategoriesChecked())

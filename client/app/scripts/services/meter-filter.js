@@ -36,6 +36,27 @@ angular.module('negawattClientApp')
         this.filters.meterSelected = undefined;
         this.filters.meter = undefined;
       },
+      /**
+       * Extend the categories with the category filters.
+       *
+       * @param categories
+       *  The category tree object, used by the menu.
+       *
+       * @returns {*}
+       *  The category tre object with category filters updated.
+       */
+      refreshCategoriesFilters: function(categories) {
+        var categorized = this.get('categorized');
+
+        // Extend object categories.
+        categories.$$extendWithFilter = $$extendWithFilter;
+
+        angular.forEach(categorized, function(category) {
+          categories.$$extendWithFilter(category);
+        });
+
+        return categories;
+      },
       set: function(name, value) {
         // Extra task if is the filter categorized
         if (name === 'categorized') {
@@ -112,10 +133,20 @@ angular.module('negawattClientApp')
         label: category.label,
         children: category.children,
         meters: category.meters,
-        checked: true
+        checked: true,
+        indeterminate: false
       };
     }
 
+    /**
+     *
+     * @param value {id: boolean}
+     *  Object indicate what item of categories have tu update the property
+     *  checked.
+     * @param categories
+     *  Categories
+     * @returns {*}
+     */
     function getCategoriesWithCategoryUpdate(value, categories) {
       if (angular.isUndefined(categories)) {
         categories = this.get('categorized');
@@ -132,6 +163,76 @@ angular.module('negawattClientApp')
       });
 
       return categories;
+    }
+
+    /**
+     * Returns a boolen, true to indicate that subcategories have property
+     * checked  in diferent states each one 'true' or 'false'. otherwise
+     * return false.
+     *
+     * @param categoryId
+     *  The category id.
+     */
+    function isInderminate(categoryId) {
+      var children = getCategoryChildren.bind(this, categoryId)();
+
+      return (angular.isUndefined(children)) ? false : categoriesWithMultiplesStates(children);
+    };
+
+    /**
+     * Returns the children of a specific category.
+     *
+     * @param categoryId
+     * @returns {Array|children|Function|*|{}}
+     */
+    function getCategoryChildren(categoryId, categories) {
+      var children;
+      categories = categories || this.get('categorized');
+
+      angular.forEach(categories, function(category) {
+        if (category.id === categoryId) {
+          children = category.children;
+        }
+
+        if (category.children) {
+          children = children || getCategoryChildren(categoryId, category.children);
+        }
+      });
+
+      return children;
+    }
+
+    /**
+     * Returns a boolen, true to indicate that subcategories have property
+     * checked  in diferent states each one 'true' or 'false'. otherwise
+     * return false.
+     *
+     * @param categories
+     *  The category list, could be only a subset of the category object.
+     */
+    function categoriesWithMultiplesStates(categories) {
+      var stateChanges=0;
+      var lastState;
+
+      angular.forEach(categories, function(category) {
+        if (category.checked !== lastState) {
+          lastState = category.checked;
+          stateChanges++;
+        }
+      });
+
+      return (stateChanges === 1) ? true : false;
+    }
+
+    /**
+     * Method that extend the category tree object, to extend it with their
+     * filters.
+     *
+     * @param category
+     *  The category filters.
+     */
+    function $$extendWithFilter(category) {
+      console.log(this);
     }
 
   });
