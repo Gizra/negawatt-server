@@ -83,7 +83,6 @@ angular.module('negawattClientApp')
       // Define the initial object or update a specific category.
       value = (angular.isArray(value)) ? getCategoriesWithMeters(value) : getCategoriesWithCategoryUpdate.bind(this, value)();
 
-      console.log(name, value);
       this.filters[name] = value;
 
       // Add extra methods to the object
@@ -193,7 +192,7 @@ angular.module('negawattClientApp')
     function isInderminate(categoryId) {
       var children = getCategoryChildren.bind($injector.get('MeterFilter'), categoryId)();
 
-      return (angular.isUndefined(children)) ? false : categoriesWithMultiplesStates(children);
+      return (!children) ? false : categoriesWithMultiplesStates(children);
     };
 
     /**
@@ -238,7 +237,7 @@ angular.module('negawattClientApp')
         }
       });
 
-      return (stateChanges === 1 && categories.length > 1) ? true : false;
+      return (stateChanges !== 1 && categories.length > 1) ? true : false;
     }
 
     /**
