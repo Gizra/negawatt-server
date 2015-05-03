@@ -15,6 +15,12 @@ angular.module('negawattClientApp')
           }
         }.bind(this), true));
       },
+      byCategoryFilters: function(meters) {
+        meters = Utils.toArray(meters.list);
+
+        meters = $filter('filterMeterByCategories')(meters, getCategoriesChecked.bind(this)());
+        return Utils.indexById(meters);
+      },
       clear: function() {
         this.clearMeterSelection();
         $stateParams.chartNextPeriod = undefined;
@@ -264,6 +270,30 @@ angular.module('negawattClientApp')
       });
 
       return categoryFilter;
+    }
+
+    /**
+     * Return an array of the category ids, checked.
+     *
+     * @returns {Array}
+     */
+    function getCategoriesChecked(categories) {
+      var filter = [];
+      var categories = categories || this.get('categorized');
+      // Return filter object.
+      angular.forEach(categories, function(category) {
+
+        if (!category.checked) {
+          filter.push(category.id);
+        }
+
+        if (category.children) {
+          filter = filter.concat(live(category.children));
+          console.log(filter);
+        }
+      });
+
+      return filter;
     }
 
     /**

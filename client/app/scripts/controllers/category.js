@@ -51,7 +51,7 @@ angular.module('negawattClientApp')
       $scope.categories.tree = MeterFilter.refreshCategoriesFilters($scope.categories.tree);
       // Update meters on the map.
       $scope.$parent.$broadcast('nwMetersChanged', {
-        list: $filter('filterMeterByCategories')(meters.list, getCategoriesChecked())
+        list: MeterFilter.byCategoryFilters(meters.list)
       });
     };
 
@@ -83,7 +83,7 @@ angular.module('negawattClientApp')
       var filter = [];
 
       // Return filter object.
-      angular.forEach($scope.categoriesChecked, function(category, index) {
+      angular.forEach($scope.categories, function(category, index) {
         if (!category.checked) {
           this.push(index);
         }
