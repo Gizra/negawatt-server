@@ -238,7 +238,7 @@ angular.module('negawattClientApp')
         }
       });
 
-      return (stateChanges === 1) ? true : false;
+      return (stateChanges === 1 && categories.length > 1) ? true : false;
     }
 
     /**
@@ -285,6 +285,8 @@ angular.module('negawattClientApp')
           categories[index].indeterminate = isInderminate(category.id);
         }
       });
+
+      return categories;
     }
 
   });

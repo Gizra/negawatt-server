@@ -8,7 +8,7 @@
             <img ng-src="images/categories/{{category.icon}}.png" alt="icon-{{category.icon}}"/>
             <span>{{category.label}}</span> ({{category.meters}})
           </a>
-          <input ng-change="toggleMetersByCategory(category.id)" ng-init="categoriesChecked[category.id].checked=true" ng-model="categoriesChecked[category.id].checked" ng-show="filterMeters" ui-indeterminate="categoriesChecked[category.id].indeterminate" class="hide-meters-category" type="checkbox" name="{{category.label}}"/>
+          <input ng-change="toggleMetersByCategory(category.id)" ng-init="categoriesChecked[category.id].checked=true" ng-model="categoriesChecked[category.id].checked" ng-show="filterMeters" ui-indeterminate="category.indeterminate" class="hide-meters-category" type="checkbox" name="{{category.label}}"/>
         </div>
         <ol ui-tree-nodes="" ng-model="category.children" >
           <li ng-repeat="subCategory in category.children" ui-tree-node ng-show="hasMeters(subCategory)">
