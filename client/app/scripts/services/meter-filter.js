@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .factory('MeterFilter', function ($filter, $stateParams, $rootScope, Utils) {
+  .factory('MeterFilter', function ($filter, $stateParams, $rootScope, $injector, Utils) {
+
     return {
       filters: {},
       byCategory: function(meters) {
@@ -86,7 +87,22 @@ angular.module('negawattClientApp')
       this.filters[name] = value;
 
       // Add extra methods to the object
-      this.filters[name].getCategoryFilter = getCategoryFilter;
+      addMethodsCategorized(this.filters[name]);
+    }
+
+    /**
+     * Add extra method to handle the array of filter of categories.
+     *
+     * @param categories
+     *  The filters category collection.
+     */
+    function addMethodsCategorized(categories) {
+      categories.getCategoryFilter = getCategoryFilter;
+      angular.forEach(categories, function(category) {
+        if (category.children) {
+          addMethodsCategorized(category.children);
+        }
+      });
     }
 
     /**
@@ -175,7 +191,7 @@ angular.module('negawattClientApp')
      *  The category id.
      */
     function isInderminate(categoryId) {
-      var children = getCategoryChildren.bind(this, categoryId)();
+      var children = getCategoryChildren.bind($injector.get('MeterFilter'), categoryId)();
 
       return (angular.isUndefined(children)) ? false : categoriesWithMultiplesStates(children);
     };
@@ -241,6 +257,11 @@ angular.module('negawattClientApp')
         if (category.id === id) {
           categoryFilter = category;
         }
+
+        if (category.children && angular.isUndefined(categoryFilter)) {
+          categoryFilter = category.children.getCategoryFilter(id)
+        }
+
       });
 
       return categoryFilter;
@@ -253,13 +274,16 @@ angular.module('negawattClientApp')
      * @param category
      *  The category filters.
      */
-    function $$extendWithFilter(categoriesFilters) {
-      var categories = categories || this;
+    function $$extendWithFilter(categoriesFilters, categories) {
+      categories = categories || this;
 
-      angular.forEach(categories, function(category) {
+      angular.forEach(categories, function(category, index) {
+        var categoryFilter = categoriesFilters.getCategoryFilter(category.id);
         // hasCategoryFilters
-        debugger;
-
+        if (angular.isDefined(categoryFilter)) {
+          angular.extend(categories[index], categoryFilter);
+          categories[index].indeterminate = isInderminate(category.id);
+        }
       });
     }
 
