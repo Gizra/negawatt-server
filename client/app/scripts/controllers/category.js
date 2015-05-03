@@ -69,6 +69,7 @@ angular.module('negawattClientApp')
     $scope.$on('nwMetersChanged', function(event, meters) {
       Category.get($stateParams.accountId)
         .then(function(categories) {
+          // Update 'categories' object resolved by ui-router.
           $state.setGlobal('categories', categories);
           $scope.categories = categories;
         });

@@ -115,7 +115,7 @@ angular.module('negawattClientApp')
     }
 
     /**
-     * Return the categories with meters asocied.
+     * Return the categories with meters associed.
      *
      * @param categories
      *  The category collection.
