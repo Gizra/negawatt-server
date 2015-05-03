@@ -46,16 +46,13 @@ angular.module('negawattClientApp')
        *  The category tre object with category filters updated.
        */
       refreshCategoriesFilters: function(categories) {
+        // Get category filters.
         var categorized = this.get('categorized');
 
         // Extend object categories.
         categories.$$extendWithFilter = $$extendWithFilter;
 
-        angular.forEach(categorized, function(category) {
-          categories.$$extendWithFilter(category);
-        });
-
-        return categories;
+        return categories.$$extendWithFilter(categorized);
       },
       set: function(name, value) {
         // Extra task if is the filter categorized
@@ -87,6 +84,9 @@ angular.module('negawattClientApp')
 
       console.log(name, value);
       this.filters[name] = value;
+
+      // Add extra methods to the object
+      this.filters[name].getCategoryFilter = getCategoryFilter;
     }
 
     /**
@@ -139,9 +139,10 @@ angular.module('negawattClientApp')
     }
 
     /**
+     * Return Categories with the checked property udpated.
      *
      * @param value {id: boolean}
-     *  Object indicate what item of categories have tu update the property
+     *  Object indicate what item of categories have to update the property
      *  checked.
      * @param categories
      *  Categories
@@ -225,23 +226,40 @@ angular.module('negawattClientApp')
     }
 
     /**
+     * Return from category filters a category with the id indicated.
+     * otherwise, undefined.
+     *
+     * @param id
+     *  The category id
+     * @returns {*}
+     *  The category filter information.
+     */
+    function getCategoryFilter(id) {
+      var categoryFilter;
+
+      angular.forEach(this, function(category) {
+        if (category.id === id) {
+          categoryFilter = category;
+        }
+      });
+
+      return categoryFilter;
+    }
+
+    /**
      * Method that extend the category tree object, to extend it with their
      * filters.
      *
      * @param category
      *  The category filters.
      */
-    function $$extendWithFilter(categoryFilter, categories) {
-      categories = categories || this;
+    function $$extendWithFilter(categoriesFilters) {
+      var categories = categories || this;
 
-      angular.forEach(categories, function(category, index) {
-        if (categoryFilter.id === category.id) {
+      angular.forEach(categories, function(category) {
+        // hasCategoryFilters
+        debugger;
 
-        }
-
-        if (category.children) {
-          categories.$$extendWithFilter(categoryFilters, category.children);
-        }
       });
     }
 
