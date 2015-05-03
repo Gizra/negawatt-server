@@ -231,8 +231,18 @@ angular.module('negawattClientApp')
      * @param category
      *  The category filters.
      */
-    function $$extendWithFilter(category) {
-      console.log(this);
+    function $$extendWithFilter(categoryFilter, categories) {
+      categories = categories || this;
+
+      angular.forEach(categories, function(category, index) {
+        if (categoryFilter.id === category.id) {
+
+        }
+
+        if (category.children) {
+          categories.$$extendWithFilter(categoryFilters, category.children);
+        }
+      });
     }
 
   });
