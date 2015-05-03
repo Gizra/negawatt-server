@@ -173,7 +173,7 @@ angular.module('negawattClientApp')
           category.checked = value[category.id];
 
           // Repeat action to the children.
-          category.children = getUpdatedCategoryChildren(category, value[category.id]);
+          // category.children = getUpdatedCategoryChildren(category, value[category.id]);
         }
 
         if (category.children) {

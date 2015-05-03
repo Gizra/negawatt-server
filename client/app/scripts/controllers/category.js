@@ -42,10 +42,10 @@ angular.module('negawattClientApp')
      * @param id
      *  The category id of the element selected.
      */
-    $scope.toggleMetersByCategory = function(id) {
+    $scope.toggleMetersByCategory = function(category) {
       // Set category filters.
       var filter = {};
-      filter[id] = $scope.categoriesChecked[id].checked;
+      filter[category.id] = category.checked;
       MeterFilter.set('categorized', filter);
       // Refresh categories tre object.
       $scope.categories.tree = MeterFilter.refreshCategoriesFilters($scope.categories.tree);
