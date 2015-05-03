@@ -171,6 +171,9 @@ angular.module('negawattClientApp')
       angular.forEach(categories, function(category) {
         if (category.id === +Object.keys(value).toString()) {
           category.checked = value[category.id];
+
+          // Repeat action to the children.
+          category.children = getUpdatedCategoryChildren(category, value[category.id]);
         }
 
         if (category.children) {
@@ -179,6 +182,22 @@ angular.module('negawattClientApp')
       });
 
       return categories;
+    }
+
+    /**
+     * Update property checked of the children with the value of the parent.
+     *
+     * @param value
+     *  Value set in the cheked property of the parent. boolean
+     */
+    function getUpdatedCategoryChildren(category, value) {
+      var children = getCategoryChildren.bind($injector.get('MeterFilter'), category.id);
+
+      angular.forEach(children, function(category) {
+        category.checked = value;
+      });
+
+      return children;
     }
 
     /**

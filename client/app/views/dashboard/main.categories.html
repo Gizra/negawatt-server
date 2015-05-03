@@ -17,7 +17,7 @@
                 <i class="glyphicon glyphicon-chevron-left"></i>
                 <span>{{subCategory.label}}</span> ({{subCategory.meters}})
               </a>
-              <input ng-change="toggleMetersByCategory(subCategory.id)" ng-init="categoriesChecked[subCategory.id].checked=true" ng-model="categoriesChecked[subCategory.id].checked" ng-show="filterMeters" ui-indeterminate="categoriesChecked[subCategory.id].indeterminate" class="hide-meters-category" type="checkbox" name="{{subCategory.label}}"/>
+              <input ng-change="toggleMetersByCategory(subCategory.id)" ng-init="categoriesChecked[subCategory.id].checked=true" ng-model="categoriesChecked[subCategory.id].checked" ng-show="filterMeters" ui-indeterminate="subCategory.indeterminate" class="hide-meters-category" type="checkbox" name="{{subCategory.label}}"/>
             </div>
             <ol ui-tree-nodes="" ng-model="subCategory.children">
               <li ng-repeat="subCategory2 in subCategory.children" ui-tree-node ng-show="hasMeters(subCategory2)">
