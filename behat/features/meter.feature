@@ -34,11 +34,11 @@ Feature: Meter
     Then I should see "3" markers
     And I uncheck the box "מבנה חינוך"
     And the "מבנה חינוך" checkbox should not be checked
-    And I should see "1" markers
+    And I should see "2" markers
     And I check the box "מבנה חינוך"
     And I uncheck the box "בטחון"
     And the "בטחון" checkbox should not be checked
-    And I should see "2" markers
+    And I should see "1" markers
 
   @javascript
   Scenario: Show meter selected when click it.
