@@ -46,6 +46,13 @@ angular.module('negawattClientApp')
     };
 
     /**
+     * Reset the category filters.
+     */
+    this.reset = function() {
+      MeterFilter.set('categorized', cache.data);
+    };
+
+    /**
      * Return categories array from the server.
      *
      * @returns {$q.promise}

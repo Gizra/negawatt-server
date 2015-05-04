@@ -15,11 +15,19 @@ angular.module('negawattClientApp')
           }
         }.bind(this), true));
       },
+      byCategoryFilters: function(meters) {
+        meters = Utils.toArray(meters.listAll);
+
+        meters = $filter('filterMeterByCategories')(meters, getCategoriesChecked.bind(this)(), true);
+
+        return meters;
+      },
       clear: function() {
         this.clearMeterSelection();
         $stateParams.chartNextPeriod = undefined;
         $stateParams.chartPreviousPeriod = undefined;
 
+        // Clear al the filters.
         this.filters = {};
       },
       getMeterSelected: function() {
@@ -54,6 +62,21 @@ angular.module('negawattClientApp')
         categories.$$extendWithFilter = $$extendWithFilter;
 
         return categories.$$extendWithFilter(categorized);
+      },
+      /**
+       * Return if is defined a filter.
+       *
+       * @param name {string}
+       *   The name of the filter.
+       */
+      isDefine: function(name) {
+        var isDefined = !!this.filters[name];
+
+        if (angular.isArray(this.filters[name])) {
+          isDefined = !!this.filters[name].length;
+        }
+
+        return isDefined;
       },
       set: function(name, value) {
         // Extra task if is the filter categorized
@@ -264,6 +287,29 @@ angular.module('negawattClientApp')
       });
 
       return categoryFilter;
+    }
+
+    /**
+     * Return an array of the category ids, checked.
+     *
+     * @returns {Array}
+     */
+    function getCategoriesChecked(categories) {
+      var filter = [];
+      var categories = categories || this.get('categorized');
+      // Return filter object.
+      angular.forEach(categories, function(category) {
+
+        if (!category.checked) {
+          filter.push(category.id);
+        }
+
+        if (category.children) {
+          filter = filter.concat(getCategoriesChecked(category.children));
+        }
+      });
+
+      return filter;
     }
 
     /**
