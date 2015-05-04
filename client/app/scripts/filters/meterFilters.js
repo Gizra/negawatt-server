@@ -37,14 +37,18 @@ angular.module('negawattClientApp')
           }
         });
 
-        meters = filter = Utils.indexById(filter);
+        filter = Utils.indexById(filter);
 
         // Remove meter with category not included and categories includes.
         if (reverse) {
           reverseFilter = Utils.indexById(reverseFilter);
           meters = removeMixCategories(filter, reverseFilter);
         }
+      }
 
+      // Return a collection of meters indexed by id.
+      if (angular.isArray(meters)) {
+        meters = Utils.indexById(meters);
       }
 
       return meters;

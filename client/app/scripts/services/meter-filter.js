@@ -16,12 +16,12 @@ angular.module('negawattClientApp')
         }.bind(this), true));
       },
       byCategoryFilters: function(meters) {
-        meters = Utils.toArray(meters.list);
+        if (!angular.isArray(meters)) {
+          meters = Utils.toArray(meters);
+        }
 
         meters = $filter('filterMeterByCategories')(meters, getCategoriesChecked.bind(this)(), true);
-        if (angular.isArray(meters) && meters.length) {
-          meters = Utils.indexById(meters);
-        }
+
         return meters;
       },
       clear: function() {
