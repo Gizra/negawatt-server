@@ -205,6 +205,7 @@ angular.module('negawattClientApp')
 
         // Filter by categories filters unchecked (checkboxes).
         cache.data.list = MeterFilter.byCategoryFilters(cache.data);
+
         // Filter by a category is active.
         if (MeterFilter.isDefine('category')) {
           cache.data.list = MeterFilter.byCategory(cache.data);

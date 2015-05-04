@@ -27,6 +27,7 @@ angular.module('negawattClientApp')
         $stateParams.chartNextPeriod = undefined;
         $stateParams.chartPreviousPeriod = undefined;
 
+        // Clear al the filters.
         this.filters = {};
       },
       getMeterSelected: function() {
