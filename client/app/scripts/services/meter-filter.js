@@ -16,9 +16,7 @@ angular.module('negawattClientApp')
         }.bind(this), true));
       },
       byCategoryFilters: function(meters) {
-        if (!angular.isArray(meters)) {
-          meters = Utils.toArray(meters);
-        }
+        meters = Utils.toArray(meters.listAll);
 
         meters = $filter('filterMeterByCategories')(meters, getCategoriesChecked.bind(this)(), true);
 
@@ -63,6 +61,21 @@ angular.module('negawattClientApp')
         categories.$$extendWithFilter = $$extendWithFilter;
 
         return categories.$$extendWithFilter(categorized);
+      },
+      /**
+       * Return if is defined a filter.
+       *
+       * @param name {string}
+       *   The name of the filter.
+       */
+      isDefine: function(name) {
+        var isDefined = !!this.filters[name];
+
+        if (angular.isArray(this.filters[name])) {
+          isDefined = !!this.filters[name].length;
+        }
+
+        return isDefined;
       },
       set: function(name, value) {
         // Extra task if is the filter categorized
