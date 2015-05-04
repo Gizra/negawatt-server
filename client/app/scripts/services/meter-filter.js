@@ -18,7 +18,7 @@ angular.module('negawattClientApp')
       byCategoryFilters: function(meters) {
         meters = Utils.toArray(meters.list);
 
-        meters = $filter('filterMeterByCategories')(meters, getCategoriesChecked.bind(this)());
+        meters = $filter('filterMeterByCategories')(meters, getCategoriesChecked.bind(this)(), true);
         return Utils.indexById(meters);
       },
       clear: function() {
@@ -288,8 +288,7 @@ angular.module('negawattClientApp')
         }
 
         if (category.children) {
-          filter = filter.concat(live(category.children));
-          console.log(filter);
+          filter = filter.concat(getCategoriesChecked(category.children));
         }
       });
 
