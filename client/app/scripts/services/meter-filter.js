@@ -19,7 +19,10 @@ angular.module('negawattClientApp')
         meters = Utils.toArray(meters.list);
 
         meters = $filter('filterMeterByCategories')(meters, getCategoriesChecked.bind(this)(), true);
-        return Utils.indexById(meters);
+        if (angular.isArray(meters) && meters.length) {
+          meters = Utils.indexById(meters);
+        }
+        return meters;
       },
       clear: function() {
         this.clearMeterSelection();

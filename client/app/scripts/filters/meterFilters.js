@@ -15,9 +15,9 @@ angular.module('negawattClientApp')
     return function (meters, categories, reverse){
       var filter = [];
       var reverseFilter = [];
-      if (categories.length) {
+      if (categories.length && meters.length) {
         // Assert the filter recive a meters array.
-        if (angular.isObject(meters)) {
+        if (!angular.isArray(meters)) {
           meters = Utils.toArray(meters);
         }
 
@@ -37,12 +37,14 @@ angular.module('negawattClientApp')
           }
         });
 
+        meters = filter = Utils.indexById(filter);
+
         // Remove meter with category not included and categories includes.
         if (reverse) {
-          filter = removeMixCategories(filter, reverseFilter);
+          reverseFilter = Utils.indexById(reverseFilter);
+          meters = removeMixCategories(filter, reverseFilter);
         }
 
-        meters = Utils.indexById(filter);
       }
 
       return meters;
@@ -60,6 +62,7 @@ angular.module('negawattClientApp')
      *
      */
     function removeMixCategories(filter, reverseFilter) {
+
       var keys = Object.keys(filter);
 
       angular.forEach(keys, function(id) {
