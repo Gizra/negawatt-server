@@ -14,12 +14,12 @@ angular.module('negawattClientApp')
       // Clear filters.
       MeterFilter.clear();
 
-      // Reset Categories and refresh home.
-      Category.get().then(function(categories) {
-        MeterFilter.set('categorized', categories);
-        $location.url($state.href('dashboard.withAccount').slice(2));
-        Meter.refresh();
-      });
+      // Reset categories filters.
+      Category.reset();
+
+      // Refresh home and meter's map.
+      $location.url($state.href('dashboard.withAccount').slice(2));
+      Meter.refresh();
     };
 
   });
