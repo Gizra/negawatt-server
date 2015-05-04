@@ -299,22 +299,22 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     $this->assertTrue(is_array($response) && count($response) == 6, '<b>Testing electricity API</b><br>6 entities were found.');
     $entity = $response[0];
     $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::DAY, 'Entity 0 is of type DAY.');
-    $this->assertEqual($entity['meter'], 1, 'Entity is for meter 1.');
+    $this->assertEqual($entity['meter'], $this->meterNode1->nid, 'Entity is for meter 1.');
     $this->assertEqual($entity['timestamp'], strtotime('2014-6-12'), 'Entity timestamp is correct.');
     $this->assertEqual($entity['kwh'], 2000, 'Entity kWh is correct.');
     $entity = $response[1];
     $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::HOUR, 'Entity 1 is of type HOUR.');
-    $this->assertEqual($entity['meter'], 1, 'Entity is for meter 1.');
+    $this->assertEqual($entity['meter'], $this->meterNode1->nid, 'Entity is for meter 1.');
     $this->assertEqual($entity['timestamp'], strtotime('2014-6-12 15:00'), 'Entity timestamp is correct.');
     $entity = $response[2];
     $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::MINUTE, 'Entity 2 is of type MINUTE.');
-    $this->assertEqual($entity['meter'], 1, 'Entity is for meter 1.');
+    $this->assertEqual($entity['meter'], $this->meterNode1->nid, 'Entity is for meter 1.');
     $this->assertEqual($entity['timestamp'], strtotime('2014-6-12 15:00'), 'Entity timestamp is correct.');
     $this->assertEqual($entity['kwh'], 2880, 'Entity kWh is correct.');
     $this->assertEqual($entity['avg_power'], 3, 'Entity avg-power is correct.');
     $entity = $response[4];
     $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::HOUR, 'Entity 4 is of type HOUR.');
-    $this->assertEqual($entity['meter'], 1, 'Entity is for meter 1.');
+    $this->assertEqual($entity['meter'], $this->meterNode1->nid, 'Entity is for meter 1.');
     $this->assertEqual($entity['timestamp'], strtotime('2014-6-12 16:00'), 'Entity timestamp is correct.');
 
     // @todo: Add test for summation of kWh of different meters. For that we
@@ -326,11 +326,11 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     $this->assertTrue(is_array($response) && count($response) == 2, '<b>Testing electricity with filter for type=MONTH</b><br>2 entities were found.');
     $entity = $response[0];
     $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::HOUR, 'Entity 0 is of type HOUR.');
-    $this->assertEqual($entity['meter'], 1, 'Entity is for meter 1.');
+    $this->assertEqual($entity['meter'], $this->meterNode1->nid, 'Entity is for meter 1.');
     $this->assertEqual($entity['timestamp'], strtotime('2014-6-12 15:00'), 'Entity timestamp is correct.');
     $entity = $response[1];
     $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::HOUR, 'Entity 1 is of type HOUR.');
-    $this->assertEqual($entity['meter'], 1, 'Entity is for meter 1.');
+    $this->assertEqual($entity['meter'], $this->meterNode1->nid, 'Entity is for meter 1.');
     $this->assertEqual($entity['timestamp'], strtotime('2014-6-12 16:00'), 'Entity timestamp is correct.');
 
     // @todo: Add tests for filter by category.
