@@ -184,7 +184,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
 
 
   /**
-   * @Then I should see the monthly kws chart a meter
+   * @Then I should see the monthly kws chart of a meter
    */
   public function iShouldSeeTheMonthlyKwsChartAMeter() {
     // Testing the height of the first and last column, with the default chart size and data of the migration.
