@@ -501,7 +501,7 @@ angular.module('negawattClientApp')
         },
         'options': {
           'isStacked': 'true',
-          bar: { groupWidth: '75%' },
+          'bar': { groupWidth: '75%' },
           'fill': 20,
           'displayExactValues': true,
           'vAxis': {

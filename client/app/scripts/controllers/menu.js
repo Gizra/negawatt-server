@@ -11,7 +11,6 @@ angular.module('negawattClientApp')
      * Reset category selection and back to the home.
      */
     $scope.reloadDashboard = function() {
-      Category.clearSelectedCategory();
       MeterFilter.clear();
       $location.url($state.href('dashboard.withAccount').slice(2));
       Meter.refresh();

@@ -66,7 +66,6 @@ angular.module('negawattClientApp')
         getIcon(this.getCategory(), 'select').then(function(icon) {
           self.icon = icon;
         });
-        Map.centerMapByMarker(this);
       },
       /**
        * Return geoposition object {lag: 35.00, lng: 56.56}. Generally used to center the map by the marker.

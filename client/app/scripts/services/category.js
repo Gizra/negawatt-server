@@ -14,34 +14,6 @@ angular.module('negawattClientApp')
     var broadcastUpdateEventName = 'nwCategoriesChanged';
 
     /**
-     * Returns the selected category ID.
-     *
-     * @returns {*}
-     */
-    this.getSelectedCategory = function() {
-      return cache.selected;
-    };
-
-    /**
-     * Save the selected category ID, if categoryId ID is empty save undefined.
-     *
-     * @param categoryId
-     *  The category ID.
-     */
-    this.setSelectedCategory = function(categoryId) {
-      cache.selected = categoryId;
-    };
-
-    /**
-     * Delete selected category ID.
-     *
-     * @returns {*}
-     */
-    this.clearSelectedCategory = function() {
-      cache.selected = undefined;
-    };
-
-    /**
      * Return the promise with the category list, from cache or the server.
      *
      * @param accountId - int
