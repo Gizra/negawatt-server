@@ -14,6 +14,12 @@ include_once 'iec.features.inc';
  *  Wrapper for the new node.
  */
 function set_meter_category($wrapper) {
+  // If meter category is already defined(e.g. during migration), end here.
+  $category = $wrapper->{OG_VOCAB_FIELD}->value();
+  if (!empty($category)) {
+    return;
+  }
+
   // Get vocabulary according to meter account (organic-group).
   $account = $wrapper->{OG_AUDIENCE_FIELD}->value();
   $group_id = $account->nid;
