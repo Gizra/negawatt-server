@@ -12,7 +12,6 @@ angular.module('negawattClientApp')
 
     // Define property in the parent scope, permit to be accesable
     // by scope methods of the controller.
-    $scope.categoriesChecked = {};
 
     $scope.categories = categories;
     $scope.accountId = $stateParams.accountId;
@@ -42,10 +41,10 @@ angular.module('negawattClientApp')
      * @param id
      *  The category id of the element selected.
      */
-    $scope.toggleMetersByCategory = function(id) {
+    $scope.toggleMetersByCategory = function(category) {
       // Set category filters.
       var filter = {};
-      filter[id] = $scope.categoriesChecked[id].checked;
+      filter[category.id] = category.checked;
       MeterFilter.set('categorized', filter);
 
       // Update meters on the map, this also update the number of meters on the Category menu.
@@ -75,24 +74,6 @@ angular.module('negawattClientApp')
           $scope.categories = categories;
         });
     });
-
-    /**
-     * Return an array of the category ids, checked.
-     *
-     * @returns {Array}
-     */
-    function getCategoriesChecked() {
-      var filter = [];
-
-      // Return filter object.
-      angular.forEach($scope.categories, function(category, index) {
-        if (!category.checked) {
-          this.push(index);
-        }
-      }, filter);
-
-      return filter;
-    }
 
     /**
      * Set the selected category, to keep in other states.
