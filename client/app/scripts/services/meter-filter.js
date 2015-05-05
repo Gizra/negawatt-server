@@ -147,7 +147,7 @@ angular.module('negawattClientApp')
      *  The categories where the property meters is different
      */
     function getCategoriesWithMeters(categories) {
-      categories = $filter('filter')(categories, {meters: "!0"});
+      //categories = $filter('filter')(categories, {meters: "!0"});
 
       angular.forEach(categories, function(category, index) {
         // Get subcategories with meters.
@@ -327,8 +327,11 @@ angular.module('negawattClientApp')
         var categoryFilter = categoriesFilters.getCategoryFilter(category.id);
         // hasCategoryFilters
         if (angular.isDefined(categoryFilter)) {
+          // Keep meters (in this category), and children from the original
+          // category object. Important for the lazyload data.
           angular.extend(categories[index], categoryFilter, {
-            meters: category.meters
+            meters: category.meters,
+            children: category.children
           });
           categories[index].indeterminate = isInderminate(category.id);
         }
