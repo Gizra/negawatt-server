@@ -129,7 +129,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
         // Get an array of string <img src="...">, filled with the value of the src attribute of the marker icon image and check id selected (if have ) '-red.png'.
         $marker_selected = $context->getSession()->evaluateScript('angular.element(".leaflet-marker-icon").map(function(index, element){ return angular.element(element).attr("src").indexOf("' . $selected_src_image . '") }).toArray();');
         // Reduce the array to empty or the position of the selected marker.
-        $result = max($marker_selected);
+        $result = (!empty($marker_selected)) ? max($marker_selected): 0;
 
         if ($result > 0) {
           return TRUE;
