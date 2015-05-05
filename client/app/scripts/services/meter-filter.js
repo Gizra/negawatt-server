@@ -185,8 +185,7 @@ angular.module('negawattClientApp')
      *  The categories where the property meters is different
      */
     function getCategoriesWithMeters(categories) {
-      //categories = $filter('filter')(categories, {meters: "!0"});
-
+      
       angular.forEach(categories, function(category, index) {
         // Get subcategories with meters.
         category.children = category.children && getCategoriesWithMeters(category.children);
@@ -209,7 +208,6 @@ angular.module('negawattClientApp')
         id: category.id,
         label: category.label,
         children: category.children,
-        meters: category.meters,
         checked: true,
         indeterminate: false
       };
