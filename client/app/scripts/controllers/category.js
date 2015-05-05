@@ -68,10 +68,6 @@ angular.module('negawattClientApp')
     // Reload the categories when added new meters to the map.
     $scope.$on('nwMetersChanged', function(event, meters) {
       // Update categories tree with number of meters.
-      // Add category mapping object to handle into meter filters factory.
-      MeterFilter.set('categorized', data);
-
-
 
       Category.get($stateParams.accountId)
         .then(function(categories) {

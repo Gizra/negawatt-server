@@ -79,9 +79,10 @@ angular.module('negawattClientApp')
         return isDefined;
       },
       set: function(name, value) {
-        // Extra task if is the filter categorized
+        // Extra task if is the filter categorized.
         if (name === 'categorized') {
-          setCategorized.bind(this, name, value)();
+          // Use angular copy to decopling from the category cache.
+          setCategorized.bind(this, name, angular.copy(value))();
           return;
         }
 

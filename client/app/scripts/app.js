@@ -97,6 +97,7 @@ angular
             return meters.total.electricity_time_interval;
           },
           filters: function(MeterFilter, categories) {
+            // Define categories filters. Used for the UI Checknboxes.
             MeterFilter.set('categorized', categories);
           }
         },
