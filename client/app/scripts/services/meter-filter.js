@@ -61,7 +61,7 @@ angular.module('negawattClientApp')
         // Extend object categories.
         categories.$$extendWithFilter = $$extendWithFilter;
 
-        return categories.$$extendWithFilter(categorized);
+        return categorized && categories.$$extendWithFilter(categorized) || categories;
       },
       /**
        * Return if is defined a filter.
