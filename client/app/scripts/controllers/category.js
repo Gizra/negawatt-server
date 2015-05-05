@@ -40,8 +40,8 @@ angular.module('negawattClientApp')
      */
     $scope.toggleMetersByCategory = function() {
       // Update meters on the map.
-      $scope.$parent.$broadcast('nwMetersChanged', {
-        list: $filter('filterMeterByCategories')(meters.list, getCategoriesChecked())
+      $scope.$root.$broadcast('nwMetersChanged', {
+        list: $filter('filterMeterByCategories')(meters.list, $scope.categoriesChecked, $scope.categories)
       });
     }
 
@@ -63,24 +63,6 @@ angular.module('negawattClientApp')
           $scope.categories = categories;
         });
     });
-
-    /**
-     * Return an array of the category ids, checeked.
-     *
-     * @returns {Array}
-     */
-    function getCategoriesChecked() {
-      var filter = [];
-
-      // Return filter object.
-      angular.forEach($scope.categoriesChecked, function(categoryChecked, index) {
-        if (!categoryChecked) {
-          this.push(index);
-        }
-      }, filter);
-
-      return filter;
-    }
 
     /**
      * Set the selected category, to keep in other states.
