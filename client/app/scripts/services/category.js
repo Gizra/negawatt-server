@@ -105,10 +105,6 @@ angular.module('negawattClientApp')
      *    Collection resulted from the request.
      */
     function setCache(data) {
-      // Add category mapping object to handle into meter filters factory.
-      if (angular.isUndefined(cache.data)) {
-        MeterFilter.set('categorized', data);
-      }
       // Cache categories data.
       cache = {
         data: data,
