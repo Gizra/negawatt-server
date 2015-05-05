@@ -99,7 +99,7 @@ angular.module('negawattClientApp')
         // Extend object categories.
         categories.$$extendWithFilter = $$extendWithFilter;
 
-        return categories.$$extendWithFilter(categorized);
+        return categorized && categories.$$extendWithFilter(categorized) || categories;
       },
       /**
        * Return if is defined a filter.
@@ -117,9 +117,10 @@ angular.module('negawattClientApp')
         return isDefined;
       },
       set: function(name, value) {
-        // Extra task if is the filter categorized
+        // Extra task if is the filter categorized.
         if (name === 'categorized') {
-          setCategorized.bind(this, name, value)();
+          // Use angular copy to decopling from the category cache.
+          setCategorized.bind(this, name, angular.copy(value))();
           return;
         }
 
@@ -184,7 +185,7 @@ angular.module('negawattClientApp')
      *  The categories where the property meters is different
      */
     function getCategoriesWithMeters(categories) {
-      categories = $filter('filter')(categories, {meters: "!0"});
+      //categories = $filter('filter')(categories, {meters: "!0"});
 
       angular.forEach(categories, function(category, index) {
         // Get subcategories with meters.
@@ -364,8 +365,17 @@ angular.module('negawattClientApp')
         var categoryFilter = categoriesFilters.getCategoryFilter(category.id);
         // hasCategoryFilters
         if (angular.isDefined(categoryFilter)) {
-          angular.extend(categories[index], categoryFilter);
+          // Keep meters (in this category), and children from the original
+          // category object. Important for the lazyload data.
+          angular.extend(categories[index], categoryFilter, {
+            meters: category.meters,
+            children: category.children
+          });
           categories[index].indeterminate = isInderminate(category.id);
+        }
+
+        if (category.children) {
+          categories[index].children = $$extendWithFilter(categoriesFilters, category.children);
         }
       });
 

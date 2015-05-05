@@ -12,7 +12,6 @@ angular.module('negawattClientApp')
 
     // Define property in the parent scope, permit to be accesable
     // by scope methods of the controller.
-    $scope.categoriesChecked = {};
 
     $scope.categories = categories;
     $scope.accountId = $stateParams.accountId;
@@ -40,14 +39,13 @@ angular.module('negawattClientApp')
      * @param id
      *  The category id of the element selected.
      */
-    $scope.toggleMetersByCategory = function(id) {
+    $scope.toggleMetersByCategory = function(category) {
       // Set category filters.
       var filter = {};
-      filter[id] = $scope.categoriesChecked[id].checked;
+      filter[category.id] = category.checked;
       MeterFilter.set('categorized', filter);
-      // Refresh categories tre object.
-      $scope.categories.tree = MeterFilter.refreshCategoriesFilters($scope.categories.tree);
-      // Update meters on the map.
+
+      // Update meters on the map, this also update the number of meters on the Category menu.
       $scope.$parent.$broadcast('nwMetersChanged', {
         list: MeterFilter.byCategoryFilters(meters)
       });
@@ -65,6 +63,8 @@ angular.module('negawattClientApp')
 
     // Reload the categories when added new meters to the map.
     $scope.$on('nwMetersChanged', function(event, meters) {
+      // Update categories tree with number of meters.
+
       Category.get($stateParams.accountId)
         .then(function(categories) {
           // Update 'categories' object resolved by ui-router.

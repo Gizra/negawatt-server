@@ -25,7 +25,7 @@ angular.module('negawattClientApp')
      */
     this.get = function(accountId, categoryId) {
 
-      getCategories = $q.when(getCategories || cache.data || getCategoriesFromServer(accountId));
+      getCategories = $q.when(getCategories || categoriesFiltered() || getCategoriesFromServer(accountId));
 
       // Prepare the categories object.
       getCategories = prepareCategories(getCategories, accountId);
@@ -49,7 +49,7 @@ angular.module('negawattClientApp')
      * Reset the category filters.
      */
     this.reset = function() {
-      MeterFilter.set('categorized', cache.data);
+      MeterFilter.set('categorized', categoriesFiltered());
     };
 
     /**
@@ -105,10 +105,6 @@ angular.module('negawattClientApp')
      *    Collection resulted from the request.
      */
     function setCache(data) {
-      // Add category mapping object to handle into meter filters factory.
-      if (angular.isUndefined(cache.data)) {
-        MeterFilter.set('categorized', data);
-      }
       // Cache categories data.
       cache = {
         data: data,
@@ -146,7 +142,7 @@ angular.module('negawattClientApp')
           .then(prepareData)
           .then(function prepareCategoriesResolve(categories) {
             setCache(categories);
-            deferred.resolve(cache.data);
+            deferred.resolve(categoriesFiltered());
           });
       });
 
@@ -306,6 +302,21 @@ angular.module('negawattClientApp')
 
       return (angular.isDefined(parent)) ? parent.id : undefined;
     }
+
+    /**
+     * Return the category cache filter.
+     */
+    function categoriesFiltered() {
+
+      if (angular.isDefined(cache.data)) {
+        // Refresh categories tree with the filter values.
+        cache.data.tree = MeterFilter.refreshCategoriesFilters(cache.data.tree);
+      }
+
+      return cache.data;
+    }
+
+
 
     $rootScope.$on('nwClearCache', function() {
       cache = {};
