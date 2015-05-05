@@ -11,7 +11,13 @@ angular.module('negawattClientApp')
      * Reset category selection and back to the home.
      */
     $scope.reloadDashboard = function() {
+      // Clear filters.
       MeterFilter.clear();
+
+      // Reset categories filters.
+      Category.reset();
+
+      // Refresh home and meter's map.
       $location.url($state.href('dashboard.withAccount').slice(2));
       Meter.refresh();
     };

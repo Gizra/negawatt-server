@@ -69,9 +69,194 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
   }
 
   /**
+   * Prepare data for summary section.
+   *
+   * Prepare a list of sub-categories and their total electricity (kWh)
+   * consumption. The summary will be used by the formatter to add a 'summary'
+   * section at the end of the RESTFUL reply.
+   *
+   * @throws RestfulBadRequestException
+   *  If an unknown filter field was supplied.
+   */
+  protected function prepareSummary() {
+    $request = $this->getRequest();
+    $filter = !empty($request['filter']) ? $request['filter'] : array();
+    $meter_account = $filter['meter_account'];
+
+    $query = db_select('negawatt_electricity_normalized', 'e');
+
+    // Handle 'account' filter (if exists)
+    if (!empty($filter['meter_account'])) {
+      // Bother add account filtering only if no 'meter' filter exists.
+      // If meter filter exists, it'll also filter for the account.
+      if (empty($filter['meter'])) {
+        // Add condition - the OG membership of the meter-node is equal to the
+        // account id in the request.
+        $query->join('node', 'n', 'n.nid = e.meter_nid');
+        $query->join('og_membership', 'og', 'og.etid = n.nid');
+        $query->condition('og.entity_type', 'node');
+        $query->condition('og.gid', $filter['meter_account']);
+      }
+      unset($filter['meter_account']);
+    }
+
+    // Handle 'type' filter
+    if (!empty($filter['type'])) {
+      $query->condition('e.type', $filter['type']);
+      unset($filter['type']);
+    }
+
+    // Handle 'timestamp' filter
+    // Make sure it's a 'BETWEEN' filter
+    if (!empty($filter['timestamp']) && !empty($filter['timestamp']['operator']) && $filter['timestamp']['operator'] == 'BETWEEN') {
+      $query->condition('e.timestamp', $filter['timestamp']['value'][0], '>=');
+      $query->condition('e.timestamp', $filter['timestamp']['value'][1], '<');
+      unset($filter['timestamp']);
+    }
+
+    // Handle meter categories.
+
+    // Bother handling category filtering only if no 'meter' filter exists.
+    // If meter filter exists, it'll also filter for the category.
+    $result_type = '';
+    if (empty($filter['meter'])) {
+      // If none given, take 0 (root) as default.
+      $parent_category = !empty($filter['meter_category']) ? $filter['meter_category'] : 0;
+      // Figure out vocab id from group id (the reverse of og_vocab_relation_get() function.
+      $vocabulary_id = db_select('og_vocab_relation', 'ogr')
+        ->fields('ogr', array('vid'))
+        ->condition('gid', $meter_account)
+        ->execute()
+        ->fetchField();
+
+      // Get list of child taxonomy terms.
+      $taxonomy_array = taxonomy_get_tree($vocabulary_id, $parent_category);
+      if (empty($taxonomy_array)) {
+        // No sub categories were found. Show division by meters.
+        $result_type = 'meter';
+
+        // Find all meters attached to the category.
+        $meters = taxonomy_select_nodes($parent_category, FALSE);
+
+        // Check that there are meters in this category.
+        if (empty($meters)) {
+          // Return empty total section.
+          $summary['type'] = $result_type;
+          $summary['values'] = new stdClass();
+
+          // Pass info to the formatter
+          $this->valueMetadata[$_SERVER['REQUEST_TIME_FLOAT']]['summary'] = $summary;
+          return;
+        }
+
+        // Sum electricity according to meters in category.
+        $query->condition('e.meter_nid', $meters, 'IN');
+        $query->fields('e', array('meter_nid'));
+        $query->groupBy('e.meter_nid');
+      }
+      else {
+        // Sub categories were found, show division by sub categories.
+        $result_type = 'category';
+
+        // Build an mapping array: cat_id => array(all child cat ids);
+        $child_cat_mapping = array();
+        foreach ($taxonomy_array as $term) {
+          if ($term->depth == 0) {
+            // Direct child, add new row to child-cat-mapping.
+            $child_cat_mapping[$term->tid] = array($term->tid);
+          }
+          else {
+            // Deep level child, add to the proper row.
+            foreach ($child_cat_mapping as $key => $map) {
+              // @fixme: is it possible that a term will have more than one parent?
+              $parent = $term->parents[0];
+              if (in_array($parent, $map)) {
+                // Add the parent to the list under key.
+                $child_cat_mapping[$key][] = $term->tid;
+                break;
+              }
+            }
+          }
+        }
+        // Extract only tid from the taxonomy terms.
+        $child_categories = array_map(function ($term) {
+          return $term->tid;
+        }, $taxonomy_array);
+        $query->join('field_data_og_vocabulary', 'cat', 'cat.entity_id = e.meter_nid');
+        $query->condition('cat.og_vocabulary_target_id', $child_categories, 'IN');
+        $query->join('taxonomy_term_data', 'tax', 'tax.tid = cat.og_vocabulary_target_id');
+        $query->fields('tax', array('tid', 'name'));
+        $query->groupBy('cat.og_vocabulary_target_id');
+      }
+    }
+    unset($filter['meter_category']);
+
+    // Handle 'meter' filter (if exists)
+    if (!empty($filter['meter'])) {
+      $result_type = 'meter';
+      $query->condition('e.meter_nid', $filter['meter']);
+      $query->fields('e', array('meter_nid'));
+      $query->groupBy('e.meter_nid');
+      unset($filter['meter']);
+    }
+
+    // Make sure we handled all the filter fields.
+    if (!empty($filter)) {
+      throw new \RestfulBadRequestException(format_string('Unknown fields in filter: @filters', array('@filters' => implode(', ', array_keys($filter)))));
+    }
+
+    // Add expressions for electricity total.
+    $query->addExpression('SUM(e.sum_kwh)', 'sum');
+
+    $result = $query->execute();
+
+    $total = array();
+    if ($result_type == 'meter') {
+      // Collect meters' totals.
+      $total = $result->fetchAllKeyed();
+    }
+    else {
+      // Sum all child categories' totals into the parent category.
+      foreach ($result as $row) {
+        // Look for the parent category, under which to sum the kWhs
+        foreach ($child_cat_mapping as $parent => $children_map) {
+          if (in_array($row->tid, $children_map)) {
+            // Add the parent to the list under key.
+            $total[$parent] += $row->sum;
+            break;
+          }
+        }
+      }
+    }
+
+    // Prepare total section to output by the formatter.
+    $summary['type'] = $result_type;
+    $summary['values'] = $total;
+
+    // Pass info to the formatter
+    $this->valueMetadata[$_SERVER['REQUEST_TIME_FLOAT']]['summary'] = $summary;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function getQuery() {
+    // Handle summary section
+    // Pass to the formatter a summary of all categories and their total kWh consumption.
+
+    // Prepare summary data for the formatter.
+    $this->prepareSummary();
+
+    // Prepare a sum query.
+    $request = $this->getRequest();
+    $filter = !empty($request['filter']) ? $request['filter'] : array();
+    $meter_account = !empty($filter['meter_account']) ? $filter['meter_account'] : NULL;
+
+    // Make sure there is 'meter_account' filter.
+    if (!$meter_account) {
+      throw new \RestfulBadRequestException('Please supply filter[meter_account].');
+    }
+
     $query = parent::getQuery();
 
     // Add a query for meter_category.

@@ -1,10 +1,19 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .factory('MeterFilter', function ($filter, $stateParams, $rootScope, $injector, Utils) {
+  .factory('MeterFilter', function ($filter, $state, $stateParams, $rootScope, $injector, Utils) {
 
     return {
       filters: {},
+      /**
+       * Filter meters by category.
+       *
+       * @param meters
+       *  The meters colection.
+       *
+       * @returns {*}
+       *  The meters collection filteref by category.
+       */
       byCategory: function(meters) {
         meters = Utils.toArray(meters.listAll);
 
@@ -15,19 +24,56 @@ angular.module('negawattClientApp')
           }
         }.bind(this), true));
       },
+      byCategoryFilters: function(meters) {
+        meters = Utils.toArray(meters.listAll);
+
+        meters = $filter('filterMeterByCategories')(meters, getCategoriesChecked.bind(this)(), true);
+
+        return meters;
+      },
+      /**
+       * Return if need it, to show checkboxes to filter meter by categories.
+       *
+       * @returns {boolean}
+       */
+      showCategoryFilters: function() {
+        var showControls = false;
+        if ($state.is('dashboard.withAccount') || $state.is('dashboard.withAccount.markers')) {
+          showControls = true;
+        }
+        return showControls;
+      },
+      /**
+       * Clear the all the filters for the meters and also
+       */
       clear: function() {
         this.clearMeterSelection();
         $stateParams.chartNextPeriod = undefined;
         $stateParams.chartPreviousPeriod = undefined;
 
+        // Clear al the filters.
         this.filters = {};
       },
+      /**
+       * Return meter saved in the meter filters service.
+       *
+       * @returns {*|undefined}
+       */
       getMeterSelected: function() {
         return this.filters.meterSelected || undefined;
       },
+      /**
+       * Save in the meter filters service, the meter selected.
+       *
+       * @param meter
+       *  The meter object.
+       */
       setMeterSelected: function(meter) {
         this.filters.meterSelected = meter;
       },
+      /**
+       * Clear the meter selection saved.
+       */
       clearMeterSelection: function() {
         if (angular.isDefined(this.filters.meterSelected)) {
           this.filters.meterSelected.unselect();
@@ -53,12 +99,28 @@ angular.module('negawattClientApp')
         // Extend object categories.
         categories.$$extendWithFilter = $$extendWithFilter;
 
-        return categories.$$extendWithFilter(categorized);
+        return categorized && categories.$$extendWithFilter(categorized) || categories;
+      },
+      /**
+       * Return if is defined a filter.
+       *
+       * @param name {string}
+       *   The name of the filter.
+       */
+      isDefine: function(name) {
+        var isDefined = !!this.filters[name];
+
+        if (angular.isArray(this.filters[name])) {
+          isDefined = !!this.filters[name].length;
+        }
+
+        return isDefined;
       },
       set: function(name, value) {
-        // Extra task if is the filter categorized
+        // Extra task if is the filter categorized.
         if (name === 'categorized') {
-          setCategorized.bind(this, name, value)();
+          // Use angular copy to decopling from the category cache.
+          setCategorized.bind(this, name, angular.copy(value))();
           return;
         }
 
@@ -115,7 +177,7 @@ angular.module('negawattClientApp')
     }
 
     /**
-     * Return the categories with meters asocied.
+     * Return the categories with meters associed.
      *
      * @param categories
      *  The category collection.
@@ -123,8 +185,7 @@ angular.module('negawattClientApp')
      *  The categories where the property meters is different
      */
     function getCategoriesWithMeters(categories) {
-      categories = $filter('filter')(categories, {meters: "!0"});
-
+      
       angular.forEach(categories, function(category, index) {
         // Get subcategories with meters.
         category.children = category.children && getCategoriesWithMeters(category.children);
@@ -147,7 +208,6 @@ angular.module('negawattClientApp')
         id: category.id,
         label: category.label,
         children: category.children,
-        meters: category.meters,
         checked: true,
         indeterminate: false
       };
@@ -286,6 +346,29 @@ angular.module('negawattClientApp')
     }
 
     /**
+     * Return an array of the category ids, checked.
+     *
+     * @returns {Array}
+     */
+    function getCategoriesChecked(categories) {
+      var filter = [];
+      var categories = categories || this.get('categorized');
+      // Return filter object.
+      angular.forEach(categories, function(category) {
+
+        if (!category.checked) {
+          filter.push(category.id);
+        }
+
+        if (category.children) {
+          filter = filter.concat(getCategoriesChecked(category.children));
+        }
+      });
+
+      return filter;
+    }
+
+    /**
      * Method that extend the category tree object, to extend it with their
      * filters.
      *
@@ -299,8 +382,17 @@ angular.module('negawattClientApp')
         var categoryFilter = categoriesFilters.getCategoryFilter(category.id);
         // hasCategoryFilters
         if (angular.isDefined(categoryFilter)) {
-          angular.extend(categories[index], categoryFilter);
+          // Keep meters (in this category), and children from the original
+          // category object. Important for the lazyload data.
+          angular.extend(categories[index], categoryFilter, {
+            meters: category.meters,
+            children: category.children
+          });
           categories[index].indeterminate = isInderminate(category.id);
+        }
+
+        if (category.children) {
+          categories[index].children = $$extendWithFilter(categoriesFilters, category.children);
         }
       });
 

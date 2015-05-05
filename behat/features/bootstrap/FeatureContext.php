@@ -129,7 +129,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
         // Get an array of string <img src="...">, filled with the value of the src attribute of the marker icon image and check id selected (if have ) '-red.png'.
         $marker_selected = $context->getSession()->evaluateScript('angular.element(".leaflet-marker-icon").map(function(index, element){ return angular.element(element).attr("src").indexOf("' . $selected_src_image . '") }).toArray();');
         // Reduce the array to empty or the position of the selected marker.
-        $result = max($marker_selected);
+        $result = (!empty($marker_selected)) ? max($marker_selected): 0;
 
         if ($result > 0) {
           return TRUE;
@@ -184,7 +184,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
 
 
   /**
-   * @Then I should see the monthly kws chart a meter
+   * @Then I should see the monthly kws chart of a meter
    */
   public function iShouldSeeTheMonthlyKwsChartAMeter() {
     // Testing the height of the first and last column, with the default chart size and data of the migration.
@@ -373,22 +373,6 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     $today = $this->getSession()->evaluateScript("moment().locale('he').format('YYYY MMMM DD');");
 
     $this->waitForTextNgElement($csspath, $today);
-  }
-
-  /**
-   * @Then I should see the clock increase every minute
-   */
-  public function iShouldSeeTheClockIncreaseEveryMinute()  {
-    $csspath = '.menu-timedate-time';
-    // Get today date direct from momentjs object in tha same format.
-    $now = $this->getSession()->evaluateScript("moment().format('HH:mm');");
-    $next_minute = $this->getSession()->evaluateScript("moment().add(1, 'minutes').format('HH:mm')");
-
-    // Check actual time.
-    $this->waitForTextNgElement($csspath, $now);
-    // Check change of the clock for one minute.
-    $this->waitForTextNgElement($csspath, $next_minute, 1200000);
-
   }
 
   /**

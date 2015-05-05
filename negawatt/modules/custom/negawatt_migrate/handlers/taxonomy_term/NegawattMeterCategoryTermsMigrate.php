@@ -22,6 +22,7 @@ class NegawattMeterCategoryTermsMigrate extends Migration {
     array('weight', 'weight'),
     array('description', 'description'),
     array('field_icon_categories', 'field_icon_categories'),
+    array('field_match_strings', 'field_match_strings'),
   );
 
   public $dependencies = array(
@@ -41,6 +42,7 @@ class NegawattMeterCategoryTermsMigrate extends Migration {
       'weight',
       'description',
       'field_icon_categories',
+      'field_match_strings',
     );
 
     $this->addSimpleMappings($field_names);

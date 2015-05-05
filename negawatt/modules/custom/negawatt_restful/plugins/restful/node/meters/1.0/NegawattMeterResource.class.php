@@ -60,4 +60,19 @@ class NegawattMeterResource extends \RestfulEntityBaseMultipleBundles {
 
     return $public_fields;
   }
+
+  /**
+   * {@inheritdoc}
+   *
+   * Prepare summary section for the formatter.
+   */
+  public function getQueryForList() {
+    // Handle summary section
+    // Pass to the formatter a summary of min and max electricity_time_interval.
+
+    // Prepare summary data for the formatter.
+    \NegawattEntityMeterBase::prepareSummary($this);
+
+    return parent::getQueryForList();
+  }
 }

@@ -94,7 +94,11 @@ angular
           },
           // We inject meters to be sure the cache in Meter object was filled.
           limits: function(meters) {
-            return meters.total.electricity_time_interval;
+            return meters.summary.electricity_time_interval;
+          },
+          filters: function(MeterFilter, categories) {
+            // Define categories filters. Used for the UI Checknboxes.
+            MeterFilter.set('categorized', categories);
           }
         },
         views: {
