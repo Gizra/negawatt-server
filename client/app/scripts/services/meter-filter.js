@@ -185,7 +185,7 @@ angular.module('negawattClientApp')
      *  The categories where the property meters is different
      */
     function getCategoriesWithMeters(categories) {
-      
+
       angular.forEach(categories, function(category, index) {
         // Get subcategories with meters.
         category.children = category.children && getCategoriesWithMeters(category.children);
@@ -232,8 +232,10 @@ angular.module('negawattClientApp')
         if (category.id === +Object.keys(value).toString()) {
           category.checked = value[category.id];
 
-          // Repeat action to the children.
-          // category.children = getUpdatedCategoryChildren(category, value[category.id]);
+          if (category.children) {
+            // Set the unchecked|checked also the category children.
+            setCategoryChildren(category.children, value[category.id]);
+          }
         }
 
         if (category.children) {
@@ -242,6 +244,24 @@ angular.module('negawattClientApp')
       });
 
       return categories;
+    }
+
+    /**
+     * Set the property 'checked' true|false
+     *
+     * @param categories
+     *  Collection of categories.
+     * @param value
+     *  Boolean value indicate when is checked.
+     */
+    function setCategoryChildren(categories, value) {
+      angular.forEach(categories, function(category, index) {
+        category.checked = value;
+
+        if (category.children) {
+          setCategoryChildren(category.children, value);
+        }
+      });
     }
 
     /**
