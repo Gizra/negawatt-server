@@ -327,8 +327,14 @@ angular.module('negawattClientApp')
         var categoryFilter = categoriesFilters.getCategoryFilter(category.id);
         // hasCategoryFilters
         if (angular.isDefined(categoryFilter)) {
-          angular.extend(categories[index], categoryFilter);
+          angular.extend(categories[index], categoryFilter, {
+            meters: category.meters
+          });
           categories[index].indeterminate = isInderminate(category.id);
+        }
+
+        if (category.children) {
+          categories[index].children = $$extendWithFilter(categoriesFilters, category.children);
         }
       });
 
