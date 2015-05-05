@@ -13,7 +13,7 @@ include_once 'iec.features.inc';
  * @param $wrapper
  *  Wrapper for the new node.
  */
-function set_meter_category($wrapper) {
+function iec_set_meter_category($wrapper) {
   // If meter category is already defined(e.g. during migration), end here.
   $category = $wrapper->{OG_VOCAB_FIELD}->value();
   if (!empty($category)) {
@@ -28,7 +28,7 @@ function set_meter_category($wrapper) {
   $vocabulary = taxonomy_vocabulary_load($vocabulary_id);
 
   // Try match meter description with any of the categories' match-strings
-  $category = variable_get('default_iec_meter_category', 'אחר');
+  $category = variable_get('iec_default_meter_category', 'אחר');
   $taxonomy_tree = taxonomy_get_tree($vocabulary_id);
   $search_string = $wrapper->field_place_address->value() . ' ' . $wrapper->field_place_description->value();
   // Loop for all categories and try to find a match.
@@ -79,7 +79,7 @@ function iec_node_presave($node) {
 
   // Set meter category by trying to match description with categories'
   // match-strings.
-  set_meter_category($wrapper);
+  iec_set_meter_category($wrapper);
 
   if ($wrapper->field_parent_contract->value()) {
     // Parent is already populated.
