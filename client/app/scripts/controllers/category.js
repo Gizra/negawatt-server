@@ -19,9 +19,7 @@ angular.module('negawattClientApp')
     $scope.chartFreq = $stateParams.chartFreq;
 
     // Activate filter of meters only if we are in the principal state.
-    if ($state.is('dashboard.withAccount')) {
-      $scope.filterMeters = true;
-    }
+    $scope.filterMeters = MeterFilter.showCategoryFilters();
 
      /**
      * Determine if a category has meters.
@@ -74,24 +72,6 @@ angular.module('negawattClientApp')
           $scope.categories = categories;
         });
     });
-
-    /**
-     * Return an array of the category ids, checked.
-     *
-     * @returns {Array}
-     */
-    function getCategoriesChecked() {
-      var filter = [];
-
-      // Return filter object.
-      angular.forEach($scope.categories, function(category, index) {
-        if (!category.checked) {
-          this.push(index);
-        }
-      }, filter);
-
-      return filter;
-    }
 
     /**
      * Set the selected category, to keep in other states.
