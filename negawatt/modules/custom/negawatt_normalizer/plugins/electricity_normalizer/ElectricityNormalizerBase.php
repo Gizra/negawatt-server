@@ -502,13 +502,13 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
     // Make sure there are entities in the required range
     $count = $data_provider->countEntitiesInNormalizedTable();
 
-    // Output debug message.
-    self::debugMessage(format_string("in calcNormalizedValues. required frequency: @frequency, entities: $count", array('@frequency' => \NegaWattNormalizerTimeManagerBase::frequencyToStr($required_frequency))), 3);
-
     if (!$count) {
       // Nothing to do.
       return array();
     }
+
+    // Output debug message.
+    self::debugMessage(format_string("in calcNormalizedValues. required frequency: @frequency, entities: $count", array('@frequency' => \NegaWattNormalizerTimeManagerBase::frequencyToStr($required_frequency))), 3);
 
     // Get data from normalized table.
     $result = $data_provider->getDataFromNormalizedTable();

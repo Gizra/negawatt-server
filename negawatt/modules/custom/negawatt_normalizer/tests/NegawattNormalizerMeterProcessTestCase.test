@@ -21,6 +21,51 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     );
   }
 
+  function setUpAccount() {
+    // Create OG account node.
+    $settings = array(
+      'type' => 'account',
+      OG_GROUP_FIELD => array('und' => array('0' => array('value' => 1))),
+    );
+    $account_node1 = $this->drupalCreateNode($settings);
+
+    // Create vocabularies and OG_Vocabs
+    // Create a new vocabulary
+    $vocabulary1 = (object) array(
+      'name' => 'Meter categories for account 1',
+      'machine_name' => 'meter_category_account1',
+    );
+    taxonomy_vocabulary_save($vocabulary1);
+
+    // Create an OG-vocab and relate new vocabulary with OG.
+    $og_vocab_settings = array(
+      'cardinality' => 1,
+      'required' => FALSE,
+    );
+    // Create og-vocabulary for meter types.
+    $og_vocab = og_vocab_create_og_vocab($vocabulary1->vid, 'node', 'iec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
+    $og_vocab->save();
+    $og_vocab = og_vocab_create_og_vocab($vocabulary1->vid, 'node', 'satec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
+    $og_vocab->save();
+
+    // Relate vocabulary to account 1.
+    og_vocab_relation_save($vocabulary1->vid, 'node', $account_node1->nid);
+
+    // Attach taxonomy-term fields to the bundles.
+    negawatt_meter_field_attach_create_bundle('taxonomy_term', 'meter_category_account1');
+
+    // Add 'other' to account 1.
+    $values = array(
+      'vid' => $vocabulary1->vid,
+      'name' => 'אחר',
+      'vocabulary_machine_name' => $vocabulary1->machine_name,
+    );
+    $term = entity_create('taxonomy_term', $values);
+    entity_save('taxonomy_term', $term);
+
+    return $account_node1->nid;
+  }
+
   /**
    * Setup test environment.
    * Prepare meter nodes and raw data entities.
@@ -39,12 +84,16 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     $meter_node1 = $this->drupalCreateNode($settings);
     $meter_node2 = $this->drupalCreateNode($settings);
 
+    // Before creating iec-meter, create account and og-vocab.
+    $account_id = $this->setUpAccount();
+
     // Create IEC meter nodes.
     $settings = array(
       'type' => 'iec_meter',
       'field_max_frequency' => array('und' => array('0' => array('value' => \NegaWattNormalizerTimeManagerInterface::MONTH))),
       'field_place_address' => array('und' => array('0' => array('value' => 'some unknown address'))),
       'field_place_locality' => array('und' => array('0' => array('value' => 'קרית גת'))),
+      OG_AUDIENCE_FIELD => array('und' => array('0' => array('target_id' => $account_id))),
     );
 
     $meter_node3 = $this->drupalCreateNode($settings);

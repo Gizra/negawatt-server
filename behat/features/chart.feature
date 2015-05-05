@@ -12,12 +12,12 @@ Feature: Chart
   @javascript
   Scenario: Show chart usage monthly of a selected meter.
     Given I login with user "carlos"
-    When I visit "/#/dashboard/1/marker/8?chartFreq=2"
+    When I visit "/#/dashboard/1/marker/9?chartFreq=2"
     Then I should see a marker selected
-    Then I should see the monthly kws chart a meter
+    Then I should see the monthly kws chart of a meter
 
   @javascript
-  Scenario: Show chart monthly electricity data from diferent periods.
+  Scenario: Show chart monthly electricity data from different periods.
     Given I login with user "carlos"
     When I visit "/#/dashboard/1"
     And I press the "previous" button on the charts
@@ -34,7 +34,7 @@ Feature: Chart
   @javascript @wip
   Scenario: Show chart usage monthly for multiple meters.
     Given I login with user "carlos"
-    When I visit "/#/dashboard/1/marker/7,8"
+    When I visit "/#/dashboard/1/marker/8,9"
     Then I should see the monthly kws chart for multiple markers
 
   @javascript @wip
