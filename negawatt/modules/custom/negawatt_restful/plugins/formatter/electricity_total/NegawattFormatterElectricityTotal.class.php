@@ -35,7 +35,7 @@ class NegawattFormatterElectricityTotal extends \RestfulFormatterJson {
     $output = parent::prepare($data);
 
     // Get data from resource
-    $output['summary'] = $this->handler->getValueMetadata($_SERVER['REQUEST_TIME_FLOAT'], 'summary');
+    $output['summary'] = $this->handler->getValueMetadata('electricity', 'summary');
 
     return $output;
   }

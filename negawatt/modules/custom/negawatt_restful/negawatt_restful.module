@@ -14,3 +14,4 @@ function negawatt_restful_ctools_plugin_directory($module, $plugin) {
     return 'plugins/' . $plugin;
   }
 }
+

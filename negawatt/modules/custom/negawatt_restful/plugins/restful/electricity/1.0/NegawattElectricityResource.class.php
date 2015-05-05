@@ -39,6 +39,7 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
 
     $public_fields['meter'] = array(
       'property' => 'meter_nid',
+      'access_callbacks' => array(array($this, 'meterFieldAccess')),
       'resource' => array(
         'satec_meter' => array(
           'name' => 'meters',
@@ -69,6 +70,198 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
   }
 
   /**
+   * An access callback that returns TRUE if having filter for meter. Otherwise FALSE.
+   *
+   * @param string $op
+   *   The operation that access should be checked for. Can be "view" or "edit".
+   *   Defaults to "edit".
+   * @param string $public_field_name
+   *   The name of the public field.
+   * @param EntityMetadataWrapper $property_wrapper
+   *   The wrapped property.
+   * @param EntityMetadataWrapper $wrapper
+   *   The wrapped entity.
+   *
+   * @return string
+   *   "Allow" or "Deny" if user has access to the property.
+   */
+  public static function meterFieldAccess($op, $public_field_name, \EntityMetadataWrapper $property_wrapper, \EntityMetadataWrapper $wrapper) {
+    // Get query filter.
+    $request = $wrapper->request->value();
+    $filter = !empty($request['filter']) ? $request['filter'] : array();
+
+    return array_key_exists('meter', $filter) ? \RestfulInterface::ACCESS_ALLOW : \RestfulInterface::ACCESS_DENY;
+  }
+
+  /**
+   * If $filter contains filter for 'meter_category', modify $query accordingly
+   *
+   * @param $query
+   * @param $filter
+   * @return array
+   */
+  protected function handleMeterCategoryFilter($query, &$filter) {
+    // Handle meter categories.
+
+    // Bother handling category filtering only if no 'meter' filter exists.
+    // If meter filter exists, it'll also filter for the category.
+    $result_type = 'meter';
+    if (!empty($filter['meter'])) {
+      // Just set group by meter-nid
+      $query->groupBy('meter_nid');
+
+      return array('result_type' => $result_type);
+    }
+
+    $meter_account = $filter['meter_account'];
+    // If no category filter was given, take 0 (root) as default.
+    $parent_category = !empty($filter['meter_category']) ? $filter['meter_category'] : 0;
+    // Figure out vocab id from group id (the reverse of og_vocab_relation_get() function).
+    $vocabulary_id = negawatt_meter_vocab_id_from_group_id($meter_account);
+
+    // Get list of child taxonomy terms.
+    $taxonomy_array = taxonomy_get_tree($vocabulary_id, $parent_category);
+    if (empty($taxonomy_array)) {
+      // No sub categories were found. Show division by meters.
+      $result_type = 'meter';
+
+      // Find all meters attached to the category.
+      $meters = taxonomy_select_nodes($parent_category, FALSE);
+
+      // Check that there are meters in this category.
+      if (empty($meters)) {
+        // Return empty total section.
+        $summary['type'] = $result_type;
+        $summary['values'] = new stdClass();
+        return array('summary' => $summary);
+      }
+
+      // Modify the query to sum electricity according to the meters in the category.
+      $query->condition('negawatt_electricity_normalized.meter_nid', $meters, 'IN');
+      $query->fields('negawatt_electricity_normalized', array('meter_nid'));
+      $query->groupBy('negawatt_electricity_normalized.meter_nid');
+    }
+    else {
+      // Sub categories were found, show division by sub categories.
+      $result_type = 'category';
+
+      // Build an mapping array: cat_id => array(all child cat ids);
+      $child_cat_mapping = array();
+      foreach ($taxonomy_array as $term) {
+        if ($term->depth == 0) {
+          // Direct child, add new row to child-cat-mapping.
+          $child_cat_mapping[$term->tid] = array($term->tid);
+        }
+        else {
+          // Deep level child, add to the proper row.
+          foreach ($child_cat_mapping as $key => $map) {
+            // @fixme: is it possible that a term will have more than one parent?
+            $parent = $term->parents[0];
+            // Look for the parent in each map row.
+            if (in_array($parent, $map)) {
+              // Add the term to the list under key.
+              $child_cat_mapping[$key][] = $term->tid;
+              break;
+            }
+          }
+        }
+      }
+      // Extract only tid from the taxonomy terms.
+      $child_categories = array_map(function ($term) {
+        return $term->tid;
+      }, $taxonomy_array);
+      // Modify the query to sum electricity in each of the sub categories.
+      $query->join('field_data_og_vocabulary', 'cat', 'cat.entity_id = negawatt_electricity_normalized.meter_nid');
+      $query->condition('cat.og_vocabulary_target_id', $child_categories, 'IN');
+      $query->join('taxonomy_term_data', 'tax', 'tax.tid = cat.og_vocabulary_target_id');
+      $query->fields('tax', array('tid', 'name'));
+      $query->groupBy('cat.og_vocabulary_target_id');
+    }
+
+    unset($filter['meter_category']);
+
+    return array(
+      'result_type' => $result_type,
+      'child_cat_mapping' => $child_cat_mapping
+    );
+  }
+
+  /**
+   * Finish preparing the query and execute it.
+   *
+   * @param $query
+   * @return mixed
+   */
+  protected function queryForSummary($query) {
+    // Add expressions for electricity total.
+    $query->addExpression('SUM(negawatt_electricity_normalized.sum_kwh)', 'sum');
+
+    return $query->execute();
+
+  }
+
+  /**
+   * Return the total section of the summary, for 'meters' result type.
+   *
+   * @param $result
+   * @return mixed
+   */
+  protected function prepareTotalForMeters($result) {
+    // Collect meters' totals as an array(meter_nid => sum).
+    $total = array();
+    foreach ($result as $row) {
+      $total[$row->meter_nid] = $row->sum;
+    }
+    return $total;
+  }
+
+  /**
+   * Return the total section of the summary, for 'categories' result type.
+   *
+   * @param $result
+   * @param $child_cat_mapping
+   * @return mixed
+   */
+  protected function prepareTotalForCategories($result, $child_cat_mapping) {
+    // Sum all child categories' totals into the parent category, so only
+    // direct child categories will be listed in the total section.
+    $total = array();
+    foreach ($result as $row) {
+      // Look for the parent category, under which to sum the kWhs
+      foreach ($child_cat_mapping as $parent => $children_map) {
+        if (in_array($row->tid, $children_map)) {
+          // Add the parent to the list under key.
+          $total[$parent] += $row->sum;
+          break;
+        }
+      }
+    }
+    return $total;
+  }
+
+  /**
+   * Prepare data for summary section.
+   *
+   * Prepare a list of sub-categories and their total electricity (kWh)
+   * consumption. The summary will be used by the formatter to add a 'summary'
+   * section at the end of the RESTFUL reply.
+   *
+   * @param $query
+   */
+  protected function addQueryForCategoryAndAccount($query) {
+    // Add a query for meter_category.
+    $field = field_info_field(OG_VOCAB_FIELD);
+    $table_name = _field_sql_storage_tablename($field);
+    $query->leftJoin($table_name, 'cat', 'cat.entity_id=meter_nid');
+    $query->addField('cat', 'og_vocabulary_target_id', 'meter_category');
+
+    // Add a query for meter_account.
+    $table_name = 'og_membership';
+    $query->leftJoin($table_name, 'acc', 'acc.etid=meter_nid');
+    $query->addField('acc', 'gid', 'meter_account');
+  }
+
+  /**
    * Prepare data for summary section.
    *
    * Prepare a list of sub-categories and their total electricity (kWh)
@@ -81,160 +274,46 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
   protected function prepareSummary() {
     $request = $this->getRequest();
     $filter = !empty($request['filter']) ? $request['filter'] : array();
-    $meter_account = $filter['meter_account'];
 
-    $query = db_select('negawatt_electricity_normalized', 'e');
+    // Load query and apply filter options.
+    $query = parent::getQuery();
+    $this->queryForListFilter($query);
 
-    // Handle 'account' filter (if exists)
-    if (!empty($filter['meter_account'])) {
-      // Bother add account filtering only if no 'meter' filter exists.
-      // If meter filter exists, it'll also filter for the account.
-      if (empty($filter['meter'])) {
-        // Add condition - the OG membership of the meter-node is equal to the
-        // account id in the request.
-        $query->join('node', 'n', 'n.nid = e.meter_nid');
-        $query->join('og_membership', 'og', 'og.etid = n.nid');
-        $query->condition('og.entity_type', 'node');
-        $query->condition('og.gid', $filter['meter_account']);
-      }
-      unset($filter['meter_account']);
+    // Add a query for meter_category and meter_account.
+    $this->addQueryForCategoryAndAccount($query);
+
+    // Handle meter categories: for last level categories prepare for summary
+    // of all meters in the category, for higher level categories prepare for
+    // summary of all sub-categories.
+    $cat_result = $this->handleMeterCategoryFilter($query, $filter);
+
+    if (!empty($cat_result['summary'])) {
+      // If summery was given, pass it to the formatter and quit.
+      $this->valueMetadata['electricity']['summary'] = $cat_result['summary'];
+      return;
     }
 
-    // Handle 'type' filter
-    if (!empty($filter['type'])) {
-      $query->condition('e.type', $filter['type']);
-      unset($filter['type']);
-    }
+    $result_type = $cat_result['result_type'];
+    $child_cat_mapping = $cat_result['child_cat_mapping'];
 
-    // Handle 'timestamp' filter
-    // Make sure it's a 'BETWEEN' filter
-    if (!empty($filter['timestamp']) && !empty($filter['timestamp']['operator']) && $filter['timestamp']['operator'] == 'BETWEEN') {
-      $query->condition('e.timestamp', $filter['timestamp']['value'][0], '>=');
-      $query->condition('e.timestamp', $filter['timestamp']['value'][1], '<');
-      unset($filter['timestamp']);
-    }
+    // Finish query and get result.
+    $result = $this->queryForSummary($query);
 
-    // Handle meter categories.
-
-    // Bother handling category filtering only if no 'meter' filter exists.
-    // If meter filter exists, it'll also filter for the category.
-    $result_type = '';
-    if (empty($filter['meter'])) {
-      // If none given, take 0 (root) as default.
-      $parent_category = !empty($filter['meter_category']) ? $filter['meter_category'] : 0;
-      // Figure out vocab id from group id (the reverse of og_vocab_relation_get() function.
-      $vocabulary_id = db_select('og_vocab_relation', 'ogr')
-        ->fields('ogr', array('vid'))
-        ->condition('gid', $meter_account)
-        ->execute()
-        ->fetchField();
-
-      // Get list of child taxonomy terms.
-      $taxonomy_array = taxonomy_get_tree($vocabulary_id, $parent_category);
-      if (empty($taxonomy_array)) {
-        // No sub categories were found. Show division by meters.
-        $result_type = 'meter';
-
-        // Find all meters attached to the category.
-        $meters = taxonomy_select_nodes($parent_category, FALSE);
-
-        // Check that there are meters in this category.
-        if (empty($meters)) {
-          // Return empty total section.
-          $summary['type'] = $result_type;
-          $summary['values'] = new stdClass();
-
-          // Pass info to the formatter
-          $this->valueMetadata[$_SERVER['REQUEST_TIME_FLOAT']]['summary'] = $summary;
-          return;
-        }
-
-        // Sum electricity according to meters in category.
-        $query->condition('e.meter_nid', $meters, 'IN');
-        $query->fields('e', array('meter_nid'));
-        $query->groupBy('e.meter_nid');
-      }
-      else {
-        // Sub categories were found, show division by sub categories.
-        $result_type = 'category';
-
-        // Build an mapping array: cat_id => array(all child cat ids);
-        $child_cat_mapping = array();
-        foreach ($taxonomy_array as $term) {
-          if ($term->depth == 0) {
-            // Direct child, add new row to child-cat-mapping.
-            $child_cat_mapping[$term->tid] = array($term->tid);
-          }
-          else {
-            // Deep level child, add to the proper row.
-            foreach ($child_cat_mapping as $key => $map) {
-              // @fixme: is it possible that a term will have more than one parent?
-              $parent = $term->parents[0];
-              if (in_array($parent, $map)) {
-                // Add the parent to the list under key.
-                $child_cat_mapping[$key][] = $term->tid;
-                break;
-              }
-            }
-          }
-        }
-        // Extract only tid from the taxonomy terms.
-        $child_categories = array_map(function ($term) {
-          return $term->tid;
-        }, $taxonomy_array);
-        $query->join('field_data_og_vocabulary', 'cat', 'cat.entity_id = e.meter_nid');
-        $query->condition('cat.og_vocabulary_target_id', $child_categories, 'IN');
-        $query->join('taxonomy_term_data', 'tax', 'tax.tid = cat.og_vocabulary_target_id');
-        $query->fields('tax', array('tid', 'name'));
-        $query->groupBy('cat.og_vocabulary_target_id');
-      }
-    }
-    unset($filter['meter_category']);
-
-    // Handle 'meter' filter (if exists)
-    if (!empty($filter['meter'])) {
-      $result_type = 'meter';
-      $query->condition('e.meter_nid', $filter['meter']);
-      $query->fields('e', array('meter_nid'));
-      $query->groupBy('e.meter_nid');
-      unset($filter['meter']);
-    }
-
-    // Make sure we handled all the filter fields.
-    if (!empty($filter)) {
-      throw new \RestfulBadRequestException(format_string('Unknown fields in filter: @filters', array('@filters' => implode(', ', array_keys($filter)))));
-    }
-
-    // Add expressions for electricity total.
-    $query->addExpression('SUM(e.sum_kwh)', 'sum');
-
-    $result = $query->execute();
-
-    $total = array();
     if ($result_type == 'meter') {
-      // Collect meters' totals.
-      $total = $result->fetchAllKeyed();
+      // Prepare the total section of the summary, for 'meters' result type.
+      $total = $this->prepareTotalForMeters($result);
     }
     else {
-      // Sum all child categories' totals into the parent category.
-      foreach ($result as $row) {
-        // Look for the parent category, under which to sum the kWhs
-        foreach ($child_cat_mapping as $parent => $children_map) {
-          if (in_array($row->tid, $children_map)) {
-            // Add the parent to the list under key.
-            $total[$parent] += $row->sum;
-            break;
-          }
-        }
-      }
+      // Prepare the total section of the summary, for 'categories' result type.
+      $total = $this->prepareTotalForCategories($result, $child_cat_mapping);
     }
 
-    // Prepare total section to output by the formatter.
+    // Fill the total section to be output by the formatter.
     $summary['type'] = $result_type;
     $summary['values'] = $total;
 
     // Pass info to the formatter
-    $this->valueMetadata[$_SERVER['REQUEST_TIME_FLOAT']]['summary'] = $summary;
+    $this->valueMetadata['electricity']['summary'] = $summary;
   }
 
   /**
@@ -243,9 +322,6 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
   public function getQuery() {
     // Handle summary section
     // Pass to the formatter a summary of all categories and their total kWh consumption.
-
-    // Prepare summary data for the formatter.
-    $this->prepareSummary();
 
     // Prepare a sum query.
     $request = $this->getRequest();
@@ -257,18 +333,13 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
       throw new \RestfulBadRequestException('Please supply filter[meter_account].');
     }
 
+    // Prepare summary data for the formatter.
+    $this->prepareSummary();
+
     $query = parent::getQuery();
 
-    // Add a query for meter_category.
-    $field = field_info_field(OG_VOCAB_FIELD);
-    $table_name = _field_sql_storage_tablename($field);
-    $query->leftJoin($table_name, 'cat', 'cat.entity_id=meter_nid');
-    $query->addField('cat', 'og_vocabulary_target_id', 'meter_category');
-
-    // Add a query for meter_account.
-    $table_name = 'og_membership';
-    $query->leftJoin($table_name, 'acc', 'acc.etid=meter_nid');
-    $query->addField('acc', 'gid', 'meter_account');
+    // Add a query for meter_category and meter_account.
+    $this->addQueryForCategoryAndAccount($query);
 
     // Add human readable date-time field
     $query->addExpression('from_unixtime(timestamp) ', 'datetime');

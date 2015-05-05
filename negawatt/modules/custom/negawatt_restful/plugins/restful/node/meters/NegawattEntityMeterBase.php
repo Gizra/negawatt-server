@@ -141,19 +141,22 @@ class NegawattEntityMeterBase extends \NegawattEntityBaseNode {
    * @throws RestfulBadRequestException
    *  If an unknown filter field was supplied.
    */
-  static function prepareSummary(\RestfulEntityInterface $restful_entity) {
+  protected function prepareSummary() {
     // Prepare a min/max query.
-    $request = $restful_entity->getRequest();
+    $request = $this->getRequest();
     $filter = empty($request['filter']) ? array() : $request['filter'];
     unset($filter['has_electricity']);
 
     $query = db_select('negawatt_electricity_normalized', 'e');
 
+    // Make sure we count only nodes of the current bundle.
+    $query->join('node', 'n', 'n.nid = e.meter_nid');
+    $query->condition('n.type', $this->bundle);
+
     // Handle 'account' filter (if exists)
     if (!empty($filter['account'])) {
       // Add condition - the OG membership of the meter-node is equal to the
       // account id in the request.
-      $query->join('node', 'n', 'n.nid = e.meter_nid');
       $query->join('og_membership', 'og', 'og.etid = n.nid');
       $query->condition('og.entity_type', 'node');
       $query->condition('og.gid', $filter['account']);
@@ -183,7 +186,7 @@ class NegawattEntityMeterBase extends \NegawattEntityBaseNode {
 
     // Make sure we handled all the filter fields.
     if (!empty($filter)) {
-      throw new \RestfulBadRequestException(format_string('Unknown fields in filter: @filters', array('@filters' => implode(', ', array_keys($filter)))));
+      throw new \RestfulBadRequestException(format_string('Unknown fields in filter: @fields', array('@fields' => implode(', ', array_keys($filter)))));
     }
 
     // Add expressions for electricity min and max timestamps.
@@ -197,7 +200,7 @@ class NegawattEntityMeterBase extends \NegawattEntityBaseNode {
     $summary['electricity_time_interval']['max'] = $result->max;
 
     // Pass info to formatter
-    $restful_entity->valueMetadata[$_SERVER['REQUEST_TIME_FLOAT']]['summary'] = $summary;
+    $this->valueMetadata['meter']['summary'] = $summary;
   }
 
     /**
@@ -210,7 +213,7 @@ class NegawattEntityMeterBase extends \NegawattEntityBaseNode {
     // Pass to the formatter a summary of min and max electricity_time_interval.
 
     // Prepare summary data for the formatter.
-    \NegawattEntityMeterBase::prepareSummary($this);
+    $this->prepareSummary($this);
 
     return parent::getQueryForList();
   }

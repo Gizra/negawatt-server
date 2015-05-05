@@ -277,3 +277,20 @@ function negawatt_meter_field_attach_create_bundle($entity_type, $bundle) {
     field_create_instance($instance);
   }
 }
+
+/**
+ * Figure out vocab id from group id.
+ *
+ * The reverse of og_vocab_relation_get() function.
+ *
+ * @param (int) $group_id
+ * @return (int) vocabulary_id
+ */
+function negawatt_meter_vocab_id_from_group_id($group_id) {
+  $vocabulary_id = db_select('og_vocab_relation', 'ogr')
+    ->fields('ogr', array('vid'))
+    ->condition('gid', $group_id)
+    ->execute()
+    ->fetchField();
+  return $vocabulary_id;
+}
