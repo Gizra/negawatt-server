@@ -22,15 +22,113 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
   }
 
   /**
+   * Prepare accounts, OG-vocabularies, and taxonomy-terms.
+   *
+   * @throws OgVocabException
+   */
+  function setUpCategories() {
+    // Create two OG account nodes.
+    $settings = array(
+      'type' => 'account',
+      OG_GROUP_FIELD => array('und' => array('0' => array('value' => 1))),
+    );
+    $account_node1 = $this->drupalCreateNode($settings);
+
+    $settings[OG_GROUP_FIELD] = array('und' => array('0' => array('value' => 2)));
+    $account_node2 = $this->drupalCreateNode($settings);
+
+    // Create vocabularies and OG_Vocabs
+    // Create a new vocabulary
+    $vocabulary1 = (object) array(
+      'name' => 'Meter categories for account 1',
+      'machine_name' => 'meter_category_account1',
+    );
+    taxonomy_vocabulary_save($vocabulary1);
+
+    // Create an OG-vocab and relate new vocabulary with OG.
+    $og_vocab_settings = array(
+      'cardinality' => 1,
+      'required' => FALSE,
+    );
+    // Create og-vocabulary for meter types.
+    $og_vocab = og_vocab_create_og_vocab($vocabulary1->vid, 'node', 'iec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
+    $og_vocab->save();
+    $og_vocab = og_vocab_create_og_vocab($vocabulary1->vid, 'node', 'satec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
+    $og_vocab->save();
+
+    // Relate vocabulary to account 1.
+    og_vocab_relation_save($vocabulary1->vid, 'node', $account_node1->nid);
+
+    // Create second vocabulary
+    $vocabulary2 = (object) array(
+      'name' => 'Meter categories for account 2',
+      'machine_name' => 'meter_category_account2',
+    );
+    taxonomy_vocabulary_save($vocabulary2);
+
+    // Create og-vocabulary for meter types.
+    $og_vocab = og_vocab_create_og_vocab($vocabulary2->vid, 'node', 'iec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
+    $og_vocab->save();
+    $og_vocab = og_vocab_create_og_vocab($vocabulary2->vid, 'node', 'satec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
+    $og_vocab->save();
+
+    // Relate vocabulary to account 2.
+    og_vocab_relation_save($vocabulary2->vid, 'node', $account_node2->nid);
+
+    // Attach taxonomy-term fields to the bundles.
+    negawatt_meter_field_attach_create_bundle('taxonomy_term', 'meter_category_account1');
+    negawatt_meter_field_attach_create_bundle('taxonomy_term', 'meter_category_account2');
+
+    // Create several meter-categories.
+    // Add school to account 1.
+    $values = array(
+      'vid' => $vocabulary1->vid,
+      'name' => 'account1 school',
+      'vocabulary_machine_name' => $vocabulary1->machine_name,
+    );
+    $term = entity_create('taxonomy_term', $values);
+    $wrapper = entity_metadata_wrapper('taxonomy_term', $term);
+    $wrapper->field_match_strings->set('בית ספר|בי"ס');
+    $wrapper->save();
+    // Save term id for late use.
+    $this->taxonomy_term_ids['account 1 school'] = $term->tid;
+
+    // Add 'other' to account 1.
+    $values['name'] = 'אחר';
+    $term = entity_create('taxonomy_term', $values);
+    entity_save('taxonomy_term', $term);
+    // Save term id for late use.
+    $this->taxonomy_term_ids['account 1 other'] = $term->tid;
+
+    // Add 'other' to account 2.
+    $values['vid'] = $vocabulary2->vid;
+    $values['vocabulary_machine_name'] = $vocabulary2->machine_name;
+    $term = entity_create('taxonomy_term', $values);
+    entity_save('taxonomy_term', $term);
+    // Save term id for late use.
+    $this->taxonomy_term_ids['account 2 other'] = $term->tid;
+
+    // Add 'street light' to account 2.
+    $values['name'] = 'account2 street light';
+    $term = entity_create('taxonomy_term', $values);
+    $wrapper = entity_metadata_wrapper('taxonomy_term', $term);
+    $wrapper->field_match_strings->set('תאורת|מאור');
+    $wrapper->save();
+    // Save term id for late use.
+    $this->taxonomy_term_ids['account 2 street light'] = $term->tid;
+
+    $this->account_node1 = $account_node1;
+    $this->account_node2 = $account_node2;
+  }
+
+  /**
    * Setup test environment.
    * Prepare meter nodes and raw data entities.
    */
   function setUp() {
     parent::setUp('negawatt_restful');
 
-    // Add the OG_VOCAB field to meter nodes.
-    og_create_field(OG_VOCAB_FIELD, 'node', 'satec_meter');
-    og_create_field(OG_VOCAB_FIELD, 'node', 'iec_meter');
+    $this->setUpCategories();
 
     // Create satec meter nodes.
     $settings = array(
@@ -38,33 +136,48 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
       'field_max_frequency' => array('und' => array('0' => array('value' => \NegaWattNormalizerTimeManagerInterface::MINUTE))),
       'field_meter_id' => array('und' => array('0' => array('value' => 1))),
       'field_place_address' => array('und' => array('0' => array('value' => 'לכיש 25'))),
+      'field_place_description' => array('und' => array('0' => array('value' => 'בי"ס ויצמן'))),
       'field_place_locality' => array('und' => array('0' => array('value' => 'קרית גת'))),
+      OG_AUDIENCE_FIELD => array('und' => array('0' => array('target_id' => 1))),
     );
 
     $meter_node1 = $this->drupalCreateNode($settings);
-    $wrapper = entity_metadata_wrapper('node', $meter_node1);
-    $wrapper->{OG_VOCAB_FIELD}->set(array(7));
-
     $meter_node2 = $this->drupalCreateNode($settings);
-    $wrapper = entity_metadata_wrapper('node', $meter_node2);
-    $wrapper->{OG_VOCAB_FIELD}->set(array(6));
 
     // Create IEC meter nodes.
+    // Meter 1 should be assigned automatically to category 'school'
     $settings = array(
       'type' => 'iec_meter',
       'field_max_frequency' => array('und' => array('0' => array('value' => \NegaWattNormalizerTimeManagerInterface::MONTH))),
       'field_place_address' => array('und' => array('0' => array('value' => 'לכיש 25'))),
+      'field_place_description' => array('und' => array('0' => array('value' => 'בי"ס ויצמן'))),
       'field_place_locality' => array('und' => array('0' => array('value' => 'קרית גת'))),
+      OG_AUDIENCE_FIELD => array('und' => array('0' => array('target_id' => 1))),
     );
 
     $meter_node3 = $this->drupalCreateNode($settings);
+
+    // Meter 4 should be assigned to category 'other'.
+    $settings['field_place_description'] = array('und' => array('0' => array('value' => 'תיאור לא ברור')));
     $meter_node4 = $this->drupalCreateNode($settings);
+
+    // Meter 5 should be assigned to category 'other' too, since ther's no
+    // street lighting category in account 1.
+    $settings['field_place_description'] = array('und' => array('0' => array('value' => 'מאור רחובות')));
+    $meter_node5 = $this->drupalCreateNode($settings);
+
+    // Meter 6 should be assigned to category 'street light' since in account 2
+    // there is such a category.
+    $settings[OG_AUDIENCE_FIELD] = array('und' => array('0' => array('target_id' => 2)));
+    $meter_node6 = $this->drupalCreateNode($settings);
 
     // Save nodes for later.
     $this->meterNode1 = $meter_node1;
     $this->meterNode2 = $meter_node2;
     $this->meterNode3 = $meter_node3;
     $this->meterNode4 = $meter_node4;
+    $this->meterNode5 = $meter_node5;
+    $this->meterNode6 = $meter_node6;
 
     // Create the raw data.
     $values_info = array(
@@ -162,7 +275,24 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     $this->assertEqual($meter['type'], 'satec_meter', 'Meter type is correct.');
     $this->assertEqual($meter['max_frequency'], 5, 'Max-frequency field is correct.');
     $this->assertEqual($meter['meter_id'], 1, 'Meter ID field is correct.');
-    // @todo: Test meter_category.
+
+    $handler = restful_get_restful_handler('iec_meters');
+    $response = $handler->get();
+    $this->assertTrue(is_array($response) && count($response) == 4, '4 IEC meters were found.');
+
+    // Test meter category.
+    $meter = $response[0];
+    $tax_id = $this->taxonomy_term_ids['account 1 school'];
+    $this->assertEqual($meter['meter_categories'][$tax_id]['id'], $tax_id, 'Meter 3 category field (school) is correct.');
+    $meter = $response[1];
+    $tax_id = $this->taxonomy_term_ids['account 1 other'];
+    $this->assertEqual($meter['meter_categories'][$tax_id]['id'], $tax_id, 'Meter 4 category field (other) is correct.');
+    $meter = $response[2];
+    $tax_id = $this->taxonomy_term_ids['account 1 other'];
+    $this->assertEqual($meter['meter_categories'][$tax_id]['id'], $tax_id, 'Meter 5 category field (other) is correct.');
+    $meter = $response[3];
+    $tax_id = $this->taxonomy_term_ids['account 2 street light'];
+    $this->assertEqual($meter['meter_categories'][$tax_id]['id'], $tax_id, 'Meter 6 category field (street light) is correct.');
 
     // Test POST request
 
@@ -206,44 +336,44 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
   function testElectricityApi() {
 
     $handler = restful_get_restful_handler('electricity');
-    $response = $handler->get();
+    $response = $handler->get('', array('filter' => array('meter_account' => 1)));
 
     // There should be 6 entities (due to sum over meters).
     $this->assertTrue(is_array($response) && count($response) == 6, '<b>Testing electricity API</b><br>6 entities were found.');
     $entity = $response[0];
     $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::DAY, 'Entity 0 is of type DAY.');
-    $this->assertEqual($entity['meter'], 1, 'Entity is for meter 1.');
+    $this->assertEqual($entity['meter'], $this->meterNode1->nid, 'Entity is for meter 1.');
     $this->assertEqual($entity['timestamp'], strtotime('2014-6-12'), 'Entity timestamp is correct.');
     $this->assertEqual($entity['kwh'], 2000, 'Entity kWh is correct.');
     $entity = $response[1];
     $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::HOUR, 'Entity 1 is of type HOUR.');
-    $this->assertEqual($entity['meter'], 1, 'Entity is for meter 1.');
+    $this->assertEqual($entity['meter'], $this->meterNode1->nid, 'Entity is for meter 1.');
     $this->assertEqual($entity['timestamp'], strtotime('2014-6-12 15:00'), 'Entity timestamp is correct.');
     $entity = $response[2];
     $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::MINUTE, 'Entity 2 is of type MINUTE.');
-    $this->assertEqual($entity['meter'], 1, 'Entity is for meter 1.');
+    $this->assertEqual($entity['meter'], $this->meterNode1->nid, 'Entity is for meter 1.');
     $this->assertEqual($entity['timestamp'], strtotime('2014-6-12 15:00'), 'Entity timestamp is correct.');
     $this->assertEqual($entity['kwh'], 2880, 'Entity kWh is correct.');
     $this->assertEqual($entity['avg_power'], 3, 'Entity avg-power is correct.');
     $entity = $response[4];
     $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::HOUR, 'Entity 4 is of type HOUR.');
-    $this->assertEqual($entity['meter'], 1, 'Entity is for meter 1.');
+    $this->assertEqual($entity['meter'], $this->meterNode1->nid, 'Entity is for meter 1.');
     $this->assertEqual($entity['timestamp'], strtotime('2014-6-12 16:00'), 'Entity timestamp is correct.');
 
     // @todo: Add test for summation of kWh of different meters. For that we
     // need to get the data from a database.
 
     // Test filter on type=2 (MONTH)
-    $response = $handler->get('', array('filter' => array('type' => 4)));
+    $response = $handler->get('', array('filter' => array('meter_account' => 1, 'type' => 4)));
     // There should be 2 entities.
     $this->assertTrue(is_array($response) && count($response) == 2, '<b>Testing electricity with filter for type=MONTH</b><br>2 entities were found.');
     $entity = $response[0];
     $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::HOUR, 'Entity 0 is of type HOUR.');
-    $this->assertEqual($entity['meter'], 1, 'Entity is for meter 1.');
+    $this->assertEqual($entity['meter'], $this->meterNode1->nid, 'Entity is for meter 1.');
     $this->assertEqual($entity['timestamp'], strtotime('2014-6-12 15:00'), 'Entity timestamp is correct.');
     $entity = $response[1];
     $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::HOUR, 'Entity 1 is of type HOUR.');
-    $this->assertEqual($entity['meter'], 1, 'Entity is for meter 1.');
+    $this->assertEqual($entity['meter'], $this->meterNode1->nid, 'Entity is for meter 1.');
     $this->assertEqual($entity['timestamp'], strtotime('2014-6-12 16:00'), 'Entity timestamp is correct.');
 
     // @todo: Add tests for filter by category.

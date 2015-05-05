@@ -12,7 +12,7 @@ Feature: Category
   @javascript
   Scenario: Show highlight the active category with a meter selected
     Given I login with user "carlos"
-    When I visit "/#/dashboard/1/marker/8?categoryId=14"
+    When I visit "/#/dashboard/1/marker/9?categoryId=14"
     Then I should see the category active
 
   @javascript

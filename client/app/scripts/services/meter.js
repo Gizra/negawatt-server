@@ -111,14 +111,14 @@ angular.module('negawattClientApp')
           // Keep the actual collection filtered, used to show into the map.
           list: {},
           // Interval information for electricity chart.
-          total: {}
+          summary: {}
         };
       }
 
       // Extend meters properties explicit because we don have deep copy.
       // TODO: from angular v1.4 use angular.merge().
       angular.extend(cache.data.listAll, data && data.list);
-      angular.extend(cache.data.total, data && data.total);
+      angular.extend(cache.data.summary, data && data.summary);
       cache.timestamp = new Date();
 
       // Broadcast and event to update the markers in the map.
@@ -189,8 +189,8 @@ angular.module('negawattClientApp')
         meters.data.list[item.id].unselect();
       });
 
-      // Add total property inside the meter data object, as private property.
-      meters.data.total = response.total;
+      // Add summary property inside the meter data object, as private property.
+      meters.data.summary = response.summary;
 
       return meters;
     }
