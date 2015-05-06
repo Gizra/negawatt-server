@@ -229,6 +229,7 @@ angular.module('negawattClientApp')
       }
 
       angular.forEach(categories, function(category) {
+        var childrenCheckedState;
         if (category.id === +Object.keys(value).toString()) {
           category.checked = value[category.id];
 
@@ -238,12 +239,45 @@ angular.module('negawattClientApp')
           }
         }
 
+        // Look up into the category children.
         if (category.children) {
           category.children = getCategoriesWithCategoryUpdate(value, category.children);
+
+          // Check if children with meters have the seme state.
+          childrenCheckedState = getChildrenCheckedState(category.children);
+          console.log(childrenState);
+          if (childrenCheckedState !== 'indeterminate' && category.checked !== childrenCheckedState) {
+            category.checked = childrenCheckedState;
+            console.log(category);
+            category.indeterminate = false;
+          }
         }
+
       });
 
       return categories;
+    }
+
+    /**
+     * Return the state of checked property of all children, true, false
+     * or indeterminate.
+     *
+     * @param categories
+     *  Collection of categories.
+     *
+     * @returns {*}
+     *  The checked
+     */
+    function getChildrenCheckedState(categories) {
+      var state;
+
+      categories = $filter('filter')(categories, {meters: "!0"}, true);
+
+      angular.forEach(categories, function(category) {
+        state = (state !== category.checked && angular.isDefined(state) || state === 'indeterminate') ? 'indeterminate' : category.checked;
+      });
+
+      return state;
     }
 
     /**
