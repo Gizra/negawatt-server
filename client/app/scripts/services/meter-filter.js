@@ -229,7 +229,6 @@ angular.module('negawattClientApp')
       }
 
       angular.forEach(categories, function(category, index) {
-        var childrenCheckedState;
         if (category.id === +Object.keys(value)) {
           category.checked = value[category.id];
 
@@ -242,15 +241,6 @@ angular.module('negawattClientApp')
         // Look up into the category children.
         if (category.children) {
           categories[index].children = getCategoriesWithCategoryUpdate(value, category.children);
-
-          // Check if children with meters have the seme state.
-          //childrenCheckedState = getChildrenCheckedState(category.children);
-          //console.log(childrenCheckedState);
-          //if (childrenCheckedState !== 'indeterminate') {
-          //  category.checked = childrenCheckedState;
-          //  console.log(category);
-          //  category.indeterminate = false;
-          //}
         }
 
       }, categories);
@@ -270,8 +260,6 @@ angular.module('negawattClientApp')
      */
     function getChildrenCheckedState(categories) {
       var state;
-
-      //categories = $filter('filter')(angular.copy(categories), {meters: "!0"}, true);
 
       angular.forEach(categories, function(category) {
         state = (state !== category.checked && angular.isDefined(state) || state === 'indeterminate') ? 'indeterminate' : category.checked;
@@ -430,8 +418,21 @@ angular.module('negawattClientApp')
      *  The category filters.
      */
     function $$extendWithFilter(categoriesFilters, categories) {
+      var childrenCheckedState;
       categories = categories || this;
 
+      // categories = $filter('filter')(categories, {meters: "!0"}, true);
+
+      // Check if children with meters have the seme state.
+      // childrenCheckedState = getChildrenCheckedState(category.children);
+      //console.log(childrenCheckedState);
+      //if (childrenCheckedState !== 'indeterminate') {
+      //  category.checked = childrenCheckedState;
+      //  console.log(category);
+      //  category.indeterminate = false;
+      //}
+
+      // Refresh only categories with meters.
       angular.forEach(categories, function(category, index) {
         var categoryFilter = categoriesFilters.getCategoryFilter(category.id);
         // hasCategoryFilters
