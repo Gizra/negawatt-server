@@ -2,7 +2,7 @@
 <form name="categoryMenuForm">
   <ul ui-tree data-drag-enabled="false" data-empty-place-holder-enabled="false" class="tree">
     <ol ui-tree-nodes="">
-      <li ng-repeat="category in ::categories.tree" ui-tree-node ng-show="hasMeters(category)">
+      <li ng-repeat="category in categories.tree" ui-tree-node ng-show="hasMeters(category)">
         <div ui-tree-handle class="tree-level-top">
           <a ng-click="select(category.id)" ng-class="{'active-category':  ('categoryId' | includedByParams:category.id) }" href="">
             <img ng-src="images/categories/{{category.icon}}.png" alt="icon-{{category.icon}}"/>
@@ -11,7 +11,7 @@
           <input ng-change="toggleMetersByCategory(category)" ng-model="category.checked" ng-show="filterMeters" ui-indeterminate="category.indeterminate" class="hide-meters-category" type="checkbox" name="{{category.label}}"/>
         </div>
         <ol ui-tree-nodes="" ng-model="category.children" >
-          <li ng-repeat="subCategory in category.children" ui-tree-node ng-show="hasMeters(subCategory)">
+          <li ng-repeat="subCategory in category.children" ui-tree-node ng-show="true">
             <div ui-tree-handle class="tree-level-middle">
               <a ng-click="select(subCategory.id)" ng-class="{'active-category':  ('categoryId' | includedByParams:subCategory.id) }" href="">
                 <i class="glyphicon glyphicon-chevron-left"></i>

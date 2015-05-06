@@ -228,9 +228,9 @@ angular.module('negawattClientApp')
         categories = this.get('categorized');
       }
 
-      angular.forEach(categories, function(category) {
+      angular.forEach(categories, function(category, index) {
         var childrenCheckedState;
-        if (category.id === +Object.keys(value).toString()) {
+        if (category.id === +Object.keys(value)) {
           category.checked = value[category.id];
 
           if (category.children) {
@@ -241,19 +241,19 @@ angular.module('negawattClientApp')
 
         // Look up into the category children.
         if (category.children) {
-          category.children = getCategoriesWithCategoryUpdate(value, category.children);
+          categories[index].children = getCategoriesWithCategoryUpdate(value, category.children);
 
           // Check if children with meters have the seme state.
-          childrenCheckedState = getChildrenCheckedState(category.children);
-          console.log(childrenState);
-          if (childrenCheckedState !== 'indeterminate' && category.checked !== childrenCheckedState) {
-            category.checked = childrenCheckedState;
-            console.log(category);
-            category.indeterminate = false;
-          }
+          //childrenCheckedState = getChildrenCheckedState(category.children);
+          //console.log(childrenCheckedState);
+          //if (childrenCheckedState !== 'indeterminate') {
+          //  category.checked = childrenCheckedState;
+          //  console.log(category);
+          //  category.indeterminate = false;
+          //}
         }
 
-      });
+      }, categories);
 
       return categories;
     }
@@ -271,7 +271,7 @@ angular.module('negawattClientApp')
     function getChildrenCheckedState(categories) {
       var state;
 
-      categories = $filter('filter')(categories, {meters: "!0"}, true);
+      //categories = $filter('filter')(angular.copy(categories), {meters: "!0"}, true);
 
       angular.forEach(categories, function(category) {
         state = (state !== category.checked && angular.isDefined(state) || state === 'indeterminate') ? 'indeterminate' : category.checked;
