@@ -261,6 +261,8 @@ angular.module('negawattClientApp')
     function getChildrenCheckedState(categories) {
       var state;
 
+      categories = $filter('filter')(categories, {meters: "!0"});
+
       angular.forEach(categories, function(category) {
         state = (state !== category.checked && angular.isDefined(state) || state === 'indeterminate') ? 'indeterminate' : category.checked;
       });
@@ -421,19 +423,9 @@ angular.module('negawattClientApp')
       var childrenCheckedState;
       categories = categories || this;
 
-      // categories = $filter('filter')(categories, {meters: "!0"}, true);
-
-      // Check if children with meters have the seme state.
-      // childrenCheckedState = getChildrenCheckedState(category.children);
-      //console.log(childrenCheckedState);
-      //if (childrenCheckedState !== 'indeterminate') {
-      //  category.checked = childrenCheckedState;
-      //  console.log(category);
-      //  category.indeterminate = false;
-      //}
-
       // Refresh only categories with meters.
       angular.forEach(categories, function(category, index) {
+        var childrenCheckedState;
         var categoryFilter = categoriesFilters.getCategoryFilter(category.id);
         // hasCategoryFilters
         if (angular.isDefined(categoryFilter)) {
@@ -444,6 +436,15 @@ angular.module('negawattClientApp')
             children: category.children
           });
           categories[index].indeterminate = isInderminate(category.id);
+
+          // Check if the children have tha same 'checked' value.
+          if (category.children) {
+            childrenCheckedState = getChildrenCheckedState(category.children);
+            if (childrenCheckedState !== 'indeterminate') {
+              categories[index].checked = childrenCheckedState;
+              categories[index].indeterminate = false;
+            }
+          }
         }
 
         if (category.children) {
