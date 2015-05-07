@@ -109,10 +109,10 @@ angular.module('negawattClientApp')
         },
         timestamp: new Date()
       };
-      // Clear cache in 60 seconds.
+      // Clear cache in 60 minutes.
       $timeout(function() {
         cache.data = undefined;
-      }, 60000);
+      }, 3600000);
       $rootScope.$broadcast(broadcastUpdateEventName);
     }
 

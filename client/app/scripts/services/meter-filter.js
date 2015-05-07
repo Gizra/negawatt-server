@@ -268,8 +268,19 @@ angular.module('negawattClientApp')
     function getChildrenCheckedState(categories) {
       var state;
 
-      categories = $filter('filter')(categories, {meters: "!0"});
+      // Clone categories to avoid side effect.
+      categories = angular.copy(categories);
 
+      // Cast the meters ammount to string, need it to the $filter service.
+      if (angular.isNumber(categories[0].meters)) {
+        categories = categories.map(function(category) {
+          category.meters = category.meters.toString();
+          return category;
+        });
+      }
+      categories = $filter('filter')(categories, {meters: "!0"}, true);
+
+      // Determine the 'checked' state.
       angular.forEach(categories, function(category) {
         state = (state !== category.checked && angular.isDefined(state) || state === 'indeterminate') ? 'indeterminate' : category.checked;
       });
