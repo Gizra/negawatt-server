@@ -243,6 +243,11 @@ angular.module('negawattClientApp')
         // Look up into the category children.
         if (category.children) {
           categories[index].children = getCategoriesWithCategoryUpdate(value, category.children);
+
+          // Remove parent selection if is children have indeterminate state.
+          if (getChildrenCheckedState(category.children) === 'indeterminate') {
+            categories[index].checked = false;
+          }
         }
 
       }, categories);
@@ -422,7 +427,6 @@ angular.module('negawattClientApp')
      *  The category filters.
      */
     function $$extendWithFilter(categoriesFilters, categories) {
-      var childrenCheckedState;
       categories = categories || this;
 
       // Refresh only categories with meters.
