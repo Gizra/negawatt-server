@@ -402,7 +402,7 @@ angular.module('negawattClientApp')
       // Return filter object.
       angular.forEach(categories, function(category) {
 
-        if (!category.checked) {
+        if (category.checked) {
           filter.push(category.id);
         }
 
