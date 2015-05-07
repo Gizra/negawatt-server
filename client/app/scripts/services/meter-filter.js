@@ -135,17 +135,19 @@ angular.module('negawattClientApp')
     /**
      * Set the states of the filter checkoxes control.
      *
-     * @param value
-     * @returns {*}
+     * @param name
+     *  The name of the filter.
+     * @param value {Array[{*}]|{*}}
+     *  The categories collection or the object with the value update.
      */
     function setCategorized(name, value) {
       // Get categories object.
-      value = getCategories(value);
+      var categories = getCategories(value);
 
       // Define the initial object or update a specific category.
-      value = (angular.isArray(value)) ? getCategoriesWithMeters(value) : getCategoriesWithCategoryUpdate.bind(this, value)();
+      categories = (angular.isArray(categories)) ? getCategoriesWithMeters(categories) : getCategoriesWithCategoryUpdate.bind(this, value)();
 
-      this.filters[name] = value;
+      this.filters[name] = categories;
 
       // Add extra methods to the object
       addMethodsCategorized(this.filters[name]);
