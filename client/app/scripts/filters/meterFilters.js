@@ -36,9 +36,6 @@ angular.module('negawattClientApp')
         }
 
         // Realize the filter.
-        debugger;
-
-
         angular.forEach(categories, function(category) {
           // Get meters with the category.
           filtered = filtered.concat($filter('filter')(meters, {meter_categories: {$: {id: category}}}, true));
