@@ -27,7 +27,7 @@ angular.module('negawattClientApp')
       byCategoryFilters: function(meters) {
         meters = Utils.toArray(meters.listAll);
 
-        meters = $filter('filterMeterByCategories')(meters, getCategoriesChecked.bind(this)(), true);
+        meters = $filter('filterMeterByCategories')(meters, getCategoriesChecked.bind(this)(), this.isDefine('categorized'));
 
         return meters;
       },
