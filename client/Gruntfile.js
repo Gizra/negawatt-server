@@ -439,8 +439,8 @@ module.exports = function (grunt) {
       },
       live: {
         options: {
-          remote: 'git@github.com:ceoaliongroo/negawatt-client.git',
-          branch: 'live-pages',
+          remote: 'git@github.com:Gizra/negawatt-client.git',
+          branch: 'gh-pages',
           commit: true,
           push: true,
           force: true
@@ -448,7 +448,6 @@ module.exports = function (grunt) {
       }
     }
   });
-
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
     if (target === 'dist') {
