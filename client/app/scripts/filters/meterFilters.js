@@ -1,6 +1,7 @@
 angular.module('negawattClientApp')
 
-  .filter('filterMeterByCategories', function (Utils, $filter) {
+  .filter('filterMeterByCategories', function (Utils, MeterFilter, $filter) {
+
     /**
      * From a collection of meters filter meter with categories in the list of categories ids.
      *
@@ -8,14 +9,21 @@ angular.module('negawattClientApp')
      *  The meters collection to filter.
      * @param categories
      *  An array categories ids.
+     * @param hasFilter
+     *  The categories filter 'categorized' is defined.
      *
      * @returns {*}
      *  The meters collection filtered.
      */
-    return function (meters, categories, reverse){
-      var filter = [];
+    return function (meters, categories, hasFilter){
+      var filtered = [];
       var reverseFilter = [];
-      if (categories.length && meters.length) {
+
+      if (!categories.length && hasFilter) {
+        meters = filtered;
+      }
+
+      if (meters.length && categories.length) {
         // Assert the filter recive a meters array.
         if (!angular.isArray(meters)) {
           meters = Utils.toArray(meters);
@@ -31,19 +39,10 @@ angular.module('negawattClientApp')
         // Realize the filter.
         angular.forEach(categories, function(category) {
           // Get meters with the category.
-          filter = filter.concat($filter('filter')(meters, {meter_categories: {$: {id: category}}}, true));
-          if (reverse) {
-            reverseFilter = reverseFilter.concat($filter('filter')(meters, {meter_categories: {$: {id: "!" + category}}}, true))
-          }
+          filtered = filtered.concat($filter('filter')(meters, {meter_categories: {$: {id: category}}}, true));
         });
 
-        filter = Utils.indexById(filter);
-
-        // Remove meter with category not included and categories includes.
-        if (reverse) {
-          reverseFilter = Utils.indexById(reverseFilter);
-          meters = removeMixCategories(filter, reverseFilter);
-        }
+        meters = filtered;
       }
 
       // Return a collection of meters indexed by id.
@@ -52,27 +51,5 @@ angular.module('negawattClientApp')
       }
 
       return meters;
-    }
-
-    /**
-     * Remove the elements categorized from the collection of the elements
-     * not categorized.
-     *
-     * @param filter
-     *  Collection of the meters categorized by the categories filtered.
-     * @param reverseFilter
-     *  Colection of the meters not categorized with the categories, but
-     *  categorized with the rest of the categories, not filtered.
-     *
-     */
-    function removeMixCategories(filter, reverseFilter) {
-
-      var keys = Object.keys(filter);
-
-      angular.forEach(keys, function(id) {
-        delete reverseFilter[id];
-      });
-
-      return reverseFilter;
     }
   });

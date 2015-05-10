@@ -27,7 +27,7 @@ angular.module('negawattClientApp')
       byCategoryFilters: function(meters) {
         meters = Utils.toArray(meters.listAll);
 
-        meters = $filter('filterMeterByCategories')(meters, getCategoriesChecked.bind(this)(), true);
+        meters = $filter('filterMeterByCategories')(meters, getCategoriesChecked.bind(this)(), this.isDefine('categorized'));
 
         return meters;
       },
@@ -51,7 +51,7 @@ angular.module('negawattClientApp')
         $stateParams.chartNextPeriod = undefined;
         $stateParams.chartPreviousPeriod = undefined;
 
-        // Clear al the filters.
+        // Clear all the filters.
         this.filters = {};
       },
       /**
@@ -129,23 +129,24 @@ angular.module('negawattClientApp')
       get: function(name) {
         return this.filters && this.filters[name];
       }
-
     };
 
     /**
      * Set the states of the filter checkoxes control.
      *
-     * @param value
-     * @returns {*}
+     * @param name
+     *  The name of the filter.
+     * @param value {Array[{*}]|{*}}
+     *  The categories collection or the object with the value update.
      */
     function setCategorized(name, value) {
       // Get categories object.
-      value = getCategories(value);
+      var categories = getCategories(value);
 
       // Define the initial object or update a specific category.
-      value = (angular.isArray(value)) ? getCategoriesWithMeters(value) : getCategoriesWithCategoryUpdate.bind(this, value)();
+      categories = (angular.isArray(categories)) ? getCategoriesWithMeters(categories) : getCategoriesWithCategoryUpdate.bind(this, value)();
 
-      this.filters[name] = value;
+      this.filters[name] = categories;
 
       // Add extra methods to the object
       addMethodsCategorized(this.filters[name]);
@@ -185,7 +186,7 @@ angular.module('negawattClientApp')
      *  The categories where the property meters is different
      */
     function getCategoriesWithMeters(categories) {
-      
+
       angular.forEach(categories, function(category, index) {
         // Get subcategories with meters.
         category.children = category.children && getCategoriesWithMeters(category.children);
@@ -228,17 +229,96 @@ angular.module('negawattClientApp')
         categories = this.get('categorized');
       }
 
-      angular.forEach(categories, function(category) {
-        if (category.id === +Object.keys(value).toString()) {
+      angular.forEach(categories, function(category, index) {
+        if (category.id === +Object.keys(value)) {
           category.checked = value[category.id];
+
+          if (category.children) {
+            // Set the unchecked|checked also the category children.
+            setCategoryChildren(category.children, value[category.id]);
+          }
         }
 
+        // Look up into the category children.
         if (category.children) {
-          category.children = getCategoriesWithCategoryUpdate(value, category.children);
+          categories[index].children = getCategoriesWithCategoryUpdate(value, category.children);
+
+          // Remove parent selection if is children have indeterminate state.
+          if (getChildrenCheckedState(category.children) === 'indeterminate') {
+            categories[index].checked = false;
+          }
         }
-      });
+
+      }, categories);
 
       return categories;
+    }
+
+    /**
+     * Return the state of checked property of all children, true, false
+     * or indeterminate.
+     *
+     * @param categories
+     *  Collection of categories.
+     *
+     * @returns {*}
+     *  The checked
+     */
+    function getChildrenCheckedState(categories) {
+      var state;
+
+      // Clone categories to avoid side effect.
+      categories = angular.copy(categories);
+
+      // Cast the meters ammount to string, need it to the $filter service.
+      if (angular.isNumber(categories[0].meters)) {
+        categories = categories.map(function(category) {
+          category.meters = category.meters.toString();
+          return category;
+        });
+      }
+      categories = $filter('filter')(categories, {meters: "!0"}, true);
+
+      // Determine the 'checked' state.
+      angular.forEach(categories, function(category) {
+        state = (state !== category.checked && angular.isDefined(state) || state === 'indeterminate') ? 'indeterminate' : category.checked;
+      });
+
+      return state;
+    }
+
+    /**
+     * Set the property 'checked' true|false
+     *
+     * @param categories
+     *  Collection of categories.
+     * @param value
+     *  Boolean value indicate when is checked.
+     */
+    function setCategoryChildren(categories, value) {
+      angular.forEach(categories, function(category, index) {
+        category.checked = value;
+
+        if (category.children) {
+          setCategoryChildren(category.children, value);
+        }
+      });
+    }
+
+    /**
+     * Update property checked of the children with the value of the parent.
+     *
+     * @param value
+     *  Value set in the cheked property of the parent. boolean
+     */
+    function getUpdatedCategoryChildren(category, value) {
+      var children = getCategoryChildren.bind($injector.get('MeterFilter'), category.id);
+
+      angular.forEach(children, function(category) {
+        category.checked = value;
+      });
+
+      return children;
     }
 
     /**
@@ -337,7 +417,7 @@ angular.module('negawattClientApp')
       // Return filter object.
       angular.forEach(categories, function(category) {
 
-        if (!category.checked) {
+        if (category.checked) {
           filter.push(category.id);
         }
 
@@ -359,7 +439,9 @@ angular.module('negawattClientApp')
     function $$extendWithFilter(categoriesFilters, categories) {
       categories = categories || this;
 
+      // Refresh only categories with meters.
       angular.forEach(categories, function(category, index) {
+        var childrenCheckedState;
         var categoryFilter = categoriesFilters.getCategoryFilter(category.id);
         // hasCategoryFilters
         if (angular.isDefined(categoryFilter)) {
@@ -370,6 +452,15 @@ angular.module('negawattClientApp')
             children: category.children
           });
           categories[index].indeterminate = isInderminate(category.id);
+
+          // Check if the children have tha same 'checked' value.
+          if (category.children) {
+            childrenCheckedState = getChildrenCheckedState(category.children);
+            if (childrenCheckedState !== 'indeterminate') {
+              categories[index].checked = childrenCheckedState;
+              categories[index].indeterminate = false;
+            }
+          }
         }
 
         if (category.children) {

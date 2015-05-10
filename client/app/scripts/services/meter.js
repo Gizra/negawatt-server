@@ -136,10 +136,10 @@ angular.module('negawattClientApp')
         return;
       }
 
-      // Clear cache in 10 minutes.
+      // Clear cache in 60 minutes.
       $timeout(function timeoutResetCache() {
         cache.data = undefined;
-      }, 600000);
+      }, 3600000);
     }
 
     /**
