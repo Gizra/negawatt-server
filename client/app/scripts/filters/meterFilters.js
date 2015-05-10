@@ -1,26 +1,6 @@
 angular.module('negawattClientApp')
 
   .filter('filterMeterByCategories', function (Utils, $filter) {
-
-    /**
-     * Return an array of the category ids, of not checeked.
-     *
-     * @returns {Array}
-     */
-    function getCategoriesUnchecked(categories) {
-      var filter = [];
-
-      // Filter the collection object.
-      angular.forEach(categories, function(categoryChecked, index) {
-        if (!categoryChecked) {
-          this.push(index);
-        }
-      }, filter);
-
-      return filter;
-    }
-
-
     /**
      * From a collection of meters filter meter with categories in the list of categories ids.
      *
@@ -32,49 +12,67 @@ angular.module('negawattClientApp')
      * @returns {*}
      *  The meters collection filtered.
      */
-    return function (meters, selection, categories){
-      var filtered;
-      var metersFiltered = {};
-      var metersCollection;
-
-      // Get unselected checkboxes from categories menu (list).
-      unchecked = getCategoriesUnchecked(selection);
-      if (unchecked.length) {
+    return function (meters, categories, reverse){
+      var filter = [];
+      var reverseFilter = [];
+      if (categories.length && meters.length) {
         // Assert the filter recive a meters array.
-        if (angular.isObject(meters)) {
-          metersCollection = Utils.toArray(meters);
-        }
-
-        // Filter meter colection.
-        angular.forEach(unchecked, function(category) {
-          filtered = filterMetersUnchecked(metersCollection, category);
-          metersCollection = (Object.keys(filtered).length) ? metersFiltered = filtered : metersFiltered = {};
-        });
-
-        // Update output value
-        meters = metersFiltered;
-      }
-
-      /**
-       * Function to filter meters not categorized with an category.
-       *
-       * @param meters
-       *  The meters filtered
-       * @param category
-       *  The category to search in the meter_categories property
-       * @returns {*}
-       */
-      function filterMetersUnchecked(meters, category) {
-        if (angular.isObject(meters)) {
+        if (!angular.isArray(meters)) {
           meters = Utils.toArray(meters);
         }
 
-        return Utils.indexById($filter('filter')(meters, function(meter){
-          return !meter.meter_categories[category] && meter;
-        }));
+        // Validate that the categories id's are strings.
+        if (angular.isNumber(categories[0])) {
+          categories = categories.map(function(id) {
+            return id.toString()
+          });
+        }
+
+        // Realize the filter.
+        angular.forEach(categories, function(category) {
+          // Get meters with the category.
+          filter = filter.concat($filter('filter')(meters, {meter_categories: {$: {id: category}}}, true));
+          if (reverse) {
+            reverseFilter = reverseFilter.concat($filter('filter')(meters, {meter_categories: {$: {id: "!" + category}}}, true))
+          }
+        });
+
+        filter = Utils.indexById(filter);
+
+        // Remove meter with category not included and categories includes.
+        if (reverse) {
+          reverseFilter = Utils.indexById(reverseFilter);
+          meters = removeMixCategories(filter, reverseFilter);
+        }
       }
 
+      // Return a collection of meters indexed by id.
+      if (angular.isArray(meters)) {
+        meters = Utils.indexById(meters);
+      }
 
       return meters;
+    }
+
+    /**
+     * Remove the elements categorized from the collection of the elements
+     * not categorized.
+     *
+     * @param filter
+     *  Collection of the meters categorized by the categories filtered.
+     * @param reverseFilter
+     *  Colection of the meters not categorized with the categories, but
+     *  categorized with the rest of the categories, not filtered.
+     *
+     */
+    function removeMixCategories(filter, reverseFilter) {
+
+      var keys = Object.keys(filter);
+
+      angular.forEach(keys, function(id) {
+        delete reverseFilter[id];
+      });
+
+      return reverseFilter;
     }
   });

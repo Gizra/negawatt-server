@@ -12,7 +12,6 @@ angular.module('negawattClientApp')
 
     // Define property in the parent scope, permit to be accesable
     // by scope methods of the controller.
-    $scope.categoriesChecked = {};
 
     $scope.categories = categories;
     $scope.accountId = $stateParams.accountId;
@@ -37,13 +36,20 @@ angular.module('negawattClientApp')
     /**
      * Check/Unckeck category to filter meters over the map.
      *
+     * @param id
+     *  The category id of the element selected.
      */
-    $scope.toggleMetersByCategory = function() {
-      // Update meters on the map.
-      $scope.$root.$broadcast('nwMetersChanged', {
-        list: $filter('filterMeterByCategories')(meters.list, $scope.categoriesChecked, $scope.categories)
+    $scope.toggleMetersByCategory = function(category) {
+      // Set category filters.
+      var filter = {};
+      filter[category.id] = category.checked;
+      MeterFilter.set('categorized', filter);
+
+      // Update meters on the map, this also update the number of meters on the Category menu.
+      $scope.$parent.$broadcast('nwMetersChanged', {
+        list: MeterFilter.byCategoryFilters(meters)
       });
-    }
+    };
 
     /**
      * Select a category forcing reload of the state, used after query search without reloading.
@@ -53,12 +59,15 @@ angular.module('negawattClientApp')
     $scope.select = function(categoryId) {
       MeterFilter.clearMeterSelection();
       $state.forceGo('dashboard.withAccount.categories', {categoryId: categoryId, chartNextPeriod: undefined, chartPreviousPeriod: undefined});
-    }
+    };
 
     // Reload the categories when added new meters to the map.
     $scope.$on('nwMetersChanged', function(event, meters) {
+      // Update categories tree with number of meters.
+
       Category.get($stateParams.accountId)
         .then(function(categories) {
+          // Update 'categories' object resolved by ui-router.
           $state.setGlobal('categories', categories);
           $scope.categories = categories;
         });
@@ -71,7 +80,7 @@ angular.module('negawattClientApp')
      *   The Category ID.
      */
     function setSelectedCategory(id) {
-      MeterFilter.filters.category = id;
+      MeterFilter.set('category', id);
     }
 
     if ($stateParams.categoryId) {

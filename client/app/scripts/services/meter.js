@@ -33,7 +33,7 @@ angular.module('negawattClientApp')
 
       // Filtering in the case we have categoryId defined.
       if (angular.isDefined(categoryId)) {
-        MeterFilter.filters.category = categoryId;
+        MeterFilter.set('category', categoryId);
       }
 
       // Clear the promise cached, after resolve or reject the promise. Permit access to the cache data, when
@@ -202,7 +202,15 @@ angular.module('negawattClientApp')
      */
     function metersFiltered() {
       if (angular.isDefined(cache.data)) {
-        cache.data.list = MeterFilter.byCategory(cache.data);
+
+        // Filter by categories filters unchecked (checkboxes).
+        cache.data.list = MeterFilter.byCategoryFilters(cache.data);
+
+        // Filter by a category is active.
+        if (MeterFilter.isDefine('category')) {
+          cache.data.list = MeterFilter.byCategory(cache.data);
+        }
+
       }
       return cache.data;
     }

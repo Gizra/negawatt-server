@@ -8,7 +8,7 @@
             <img ng-src="images/categories/{{category.icon}}.png" alt="icon-{{category.icon}}"/>
             <span>{{category.label}}</span> ({{category.meters}})
           </a>
-          <input ng-change="toggleMetersByCategory()" ng-init="categoriesChecked[category.id]=true" ng-model="categoriesChecked[category.id]" ng-show="filterMeters" class="hide-meters-category" type="checkbox" name="{{category.label}}"/>
+          <input ng-change="toggleMetersByCategory(category)" ng-model="category.checked" ng-show="filterMeters" ui-indeterminate="category.indeterminate" class="hide-meters-category" type="checkbox" name="{{category.label}}"/>
         </div>
         <ol ui-tree-nodes="" ng-model="category.children" >
           <li ng-repeat="subCategory in category.children" ui-tree-node ng-show="hasMeters(subCategory)">
@@ -17,7 +17,7 @@
                 <i class="glyphicon glyphicon-chevron-left"></i>
                 <span>{{subCategory.label}}</span> ({{subCategory.meters}})
               </a>
-              <input ng-change="toggleMetersByCategory()" ng-init="categoriesChecked[subCategory.id]=true" ng-model="categoriesChecked[subCategory.id]" ng-show="filterMeters" class="hide-meters-category" type="checkbox" name="{{subCategory.label}}"/>
+              <input ng-change="toggleMetersByCategory(subCategory)" ng-model="subCategory.checked" ng-show="filterMeters" ui-indeterminate="subCategory.indeterminate" class="hide-meters-category" type="checkbox" name="{{subCategory.label}}"/>
             </div>
             <ol ui-tree-nodes="" ng-model="subCategory.children">
               <li ng-repeat="subCategory2 in subCategory.children" ui-tree-node ng-show="hasMeters(subCategory2)">
@@ -26,7 +26,7 @@
                     <i class="glyphicon glyphicon-plus"></i>
                     <span>{{subCategory2.label}}</span> ({{subCategory2.meters}})
                   </a>
-                  <input ng-change="toggleMetersByCategory()" ng-init="categoriesChecked[subCategory2.id]=true"  ng-model="categoriesChecked[subCategory2.id]" ng-show="filterMeters" class="hide-meters-category" type="checkbox" name="{{subCategory2.label}}"/>
+                  <input ng-change="toggleMetersByCategory(subCategory2)" ng-model="subCategory2.checked" ng-show="filterMeters" class="hide-meters-category" type="checkbox" name="{{subCategory2.label}}"/>
                 </div>
               </li>
             </ol>

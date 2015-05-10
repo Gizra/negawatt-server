@@ -32,10 +32,10 @@ Feature: Meter
     Given I login with user "carlos"
     When I visit "/#/dashboard/1"
     Then I should see "3" markers
-    And I uncheck the box "בית ספר"
-    And the "בית ספר" checkbox should not be checked
+    And I uncheck the box "מבנה חינוך"
+    And the "מבנה חינוך" checkbox should not be checked
     And I should see "2" markers
-    And I check the box "בית ספר"
+    And I check the box "מבנה חינוך"
     And I uncheck the box "בטחון"
     And the "בטחון" checkbox should not be checked
     And I should see "1" markers

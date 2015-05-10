@@ -27,7 +27,8 @@ angular
     'ui.bootstrap.tabs',
     'template/tabs/tab.html',
     'template/tabs/tabset.html',
-    'angularMoment'
+    'angularMoment',
+    'ui.indeterminate'
   ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
     // Handle state 'dashboard' activation via browser url '/'
@@ -94,6 +95,10 @@ angular
           // We inject meters to be sure the cache in Meter object was filled.
           limits: function(meters) {
             return meters.summary.electricity_time_interval;
+          },
+          filters: function(MeterFilter, categories) {
+            // Define categories filters. Used for the UI Checknboxes.
+            MeterFilter.set('categorized', categories);
           }
         },
         views: {
@@ -144,7 +149,9 @@ angular
         reloadOnSearch: false,
         resolve: {
           meters: function(Meter, $stateParams, account, MeterFilter) {
-            MeterFilter.filters.category = +$stateParams.categoryId;
+            // Set Meter filter.
+            MeterFilter.set('category', +$stateParams.categoryId);
+
             return Meter.get(account.id, $stateParams.categoryId);
           },
           categories: function(Category, account, categories) {
@@ -202,8 +209,8 @@ angular
         reloadOnSearch: false,
         resolve: {
           meters: function(Meter, $stateParams, account, MeterFilter) {
-            MeterFilter.filters.category = +$stateParams.categoryId || undefined;
-            MeterFilter.filters.meter = +$stateParams.markerId;
+            MeterFilter.set('category', +$stateParams.categoryId || undefined);
+            MeterFilter.set('meter', +$stateParams.markerId);
             // Necessary to resolve again to apply the filter, of category id.
             return Meter.get(account.id, $stateParams.categoryId);
           },
