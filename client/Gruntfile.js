@@ -514,7 +514,7 @@ module.exports = function (grunt) {
     var dest = target === 'live' && ':live' || ':dist';
     var tasks = [
       'build' + dest,
-      'buildcontrol:prod'
+      'buildcontrol:prod',
       'buildcontrol' + dest
     ];
 
