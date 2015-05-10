@@ -439,18 +439,18 @@ module.exports = function (grunt) {
       },
       live: {
         options: {
-          remote: 'git@github.com:Gizra/negawatt-client.git',
+          remote: 'git@github.com:ceoaliongroo/negawatt-live.git',
           branch: 'gh-pages',
-          commit: true,
+          commit: false,
           push: true
         }
       },
       prod: {
         options: {
-          remote: 'git@github.com:Gizra/negawatt-client.git',
+          remote: 'git@github.com:ceoaliongroo/negawatt-live.git',
           remoteBranch: 'master',
           branch: 'gh-pages',
-          commit: true,
+          commit: false,
           push: true
         }
       }
