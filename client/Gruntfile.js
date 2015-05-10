@@ -165,7 +165,7 @@ module.exports = function (grunt) {
     wiredep: {
       app: {
         src: ['<%= yeoman.app %>/index.html'],
-        ignorePath:  /\.\.\//
+        ignorePath: /\.\.\//
       },
       sass: {
         src: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
@@ -238,7 +238,7 @@ module.exports = function (grunt) {
       html: ['<%= yeoman.dist %>/{,*/}*.html'],
       css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
       options: {
-        assetsDirs: ['<%= yeoman.dist %>','<%= yeoman.dist %>/images']
+        assetsDirs: ['<%= yeoman.dist %>', '<%= yeoman.dist %>/images']
       }
     },
 
@@ -355,12 +355,12 @@ module.exports = function (grunt) {
           src: 'bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*',
           dest: '<%= yeoman.dist %>'
         },
-        {
-          expand: true,
-          cwd: '<%= yeoman.app %>',
-          src: 'CNAME',
-          dest: '<%= yeoman.dist %>'
-        }]
+          {
+            expand: true,
+            cwd: '<%= yeoman.app %>',
+            src: 'CNAME',
+            dest: '<%= yeoman.dist %>'
+          }]
       },
       styles: {
         expand: true,
@@ -444,6 +444,15 @@ module.exports = function (grunt) {
           commit: true,
           push: true
         }
+      },
+      prod: {
+        options: {
+          remote: 'git@github.com:Gizra/negawatt-client.git',
+          remoteBranch: 'master',
+          branch: 'gh-pages',
+          commit: true,
+          push: true
+        }
       }
     }
   });
@@ -505,6 +514,7 @@ module.exports = function (grunt) {
     var dest = target === 'live' && ':live' || ':dist';
     var tasks = [
       'build' + dest,
+      'buildcontrol:prod'
       'buildcontrol' + dest
     ];
 
