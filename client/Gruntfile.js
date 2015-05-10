@@ -439,19 +439,11 @@ module.exports = function (grunt) {
       },
       live: {
         options: {
-          remote: 'git@github.com:ceoaliongroo/negawatt-live.git',
-          branch: 'gh-pages',
-          commit: false,
-          push: true
-        }
-      },
-      prod: {
-        options: {
-          remote: 'git@github.com:ceoaliongroo/negawatt-live.git',
-          remoteBranch: 'master',
-          branch: 'gh-pages',
-          commit: false,
-          push: true
+          remote: 'git@github.com:ceoaliongroo/negawatt-client.git',
+          branch: 'live-pages',
+          commit: true,
+          push: true,
+          force: true
         }
       }
     }
@@ -514,7 +506,6 @@ module.exports = function (grunt) {
     var dest = target === 'live' && ':live' || ':dist';
     var tasks = [
       'build' + dest,
-      'buildcontrol:prod',
       'buildcontrol' + dest
     ];
 
