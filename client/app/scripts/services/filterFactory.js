@@ -1,7 +1,6 @@
 'use strict';
 
 angular.module('negawattClientApp')
-
   .factory('FilterFactory', function ($filter, $state, $stateParams, $rootScope, $injector, Utils) {
     return {
       filters: {},

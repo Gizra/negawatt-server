@@ -15,7 +15,7 @@ angular.module('negawattClientApp')
 
     $scope.categories = categories;
     $scope.accountId = $stateParams.accountId;
-    $scope.chartFreq = $stateParams.chartFreq;
+    FilterFactory.set('chartFreq', $stateParams.chartFreq);
 
     // Activate filter of meters only if we are in the principal state.
     $scope.filterMeters = FilterFactory.showCategoryFilters();
@@ -24,7 +24,7 @@ angular.module('negawattClientApp')
      * Determine if a category has meters.
      *
      * @param category
-     *  The category.
+     *  The category object.
      *
      * @returns {boolean}
      *  It's true if the category has meters.

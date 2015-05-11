@@ -96,7 +96,7 @@ angular
           limits: function(meters) {
             return meters.summary.electricity_time_interval;
           },
-          filters: function(FilterFactory, categories) {
+          filters: function(FilterFactory, categories, $stateParams) {
             // Define categories filters. Used for the UI Checknboxes.
             FilterFactory.set('categorized', categories);
           }
