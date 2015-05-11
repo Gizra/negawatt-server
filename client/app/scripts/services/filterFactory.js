@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .factory('MeterFilter', function ($filter, $state, $stateParams, $rootScope, $injector, Utils) {
 
+  .factory('FilterFactory', function ($filter, $state, $stateParams, $rootScope, $injector, Utils) {
     return {
       filters: {},
       /**
@@ -312,7 +312,7 @@ angular.module('negawattClientApp')
      *  Value set in the cheked property of the parent. boolean
      */
     function getUpdatedCategoryChildren(category, value) {
-      var children = getCategoryChildren.bind($injector.get('MeterFilter'), category.id);
+      var children = getCategoryChildren.bind($injector.get('FilterFactory'), category.id);
 
       angular.forEach(children, function(category) {
         category.checked = value;
@@ -330,7 +330,7 @@ angular.module('negawattClientApp')
      *  The category id.
      */
     function isInderminate(categoryId) {
-      var children = getCategoryChildren.bind($injector.get('MeterFilter'), categoryId)();
+      var children = getCategoryChildren.bind($injector.get('FilterFactory'), categoryId)();
 
       return (!children) ? false : categoriesWithMultiplesStates(children);
     };

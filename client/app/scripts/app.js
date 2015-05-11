@@ -82,7 +82,7 @@ angular
           account: function($stateParams, Profile, profile) {
             return Profile.selectAccount($stateParams.accountId, profile);
           },
-          meters: function(Meter, account, $stateParams, Category, MeterFilter) {
+          meters: function(Meter, account, $stateParams, Category, FilterFactory) {
             // Get first records.
             return Meter.get(account.id);
           },
@@ -96,9 +96,9 @@ angular
           limits: function(meters) {
             return meters.summary.electricity_time_interval;
           },
-          filters: function(MeterFilter, categories) {
+          filters: function(FilterFactory, categories) {
             // Define categories filters. Used for the UI Checknboxes.
-            MeterFilter.set('categorized', categories);
+            FilterFactory.set('categorized', categories);
           }
         },
         views: {
@@ -148,9 +148,9 @@ angular
         url: '/category/{categoryId:int}',
         reloadOnSearch: false,
         resolve: {
-          meters: function(Meter, $stateParams, account, MeterFilter) {
+          meters: function(Meter, $stateParams, account, FilterFactory) {
             // Set Meter filter.
-            MeterFilter.set('category', +$stateParams.categoryId);
+            FilterFactory.set('category', +$stateParams.categoryId);
 
             return Meter.get(account.id, $stateParams.categoryId);
           },
@@ -208,9 +208,9 @@ angular
         url: '/marker/:markerId?categoryId',
         reloadOnSearch: false,
         resolve: {
-          meters: function(Meter, $stateParams, account, MeterFilter) {
-            MeterFilter.set('category', +$stateParams.categoryId || undefined);
-            MeterFilter.set('meter', +$stateParams.markerId);
+          meters: function(Meter, $stateParams, account, FilterFactory) {
+            FilterFactory.set('category', +$stateParams.categoryId || undefined);
+            FilterFactory.set('meter', +$stateParams.markerId);
             // Necessary to resolve again to apply the filter, of category id.
             return Meter.get(account.id, $stateParams.categoryId);
           },

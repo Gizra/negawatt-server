@@ -1,6 +1,6 @@
 angular.module('negawattClientApp')
 
-  .filter('filterMeterByCategories', function (Utils, MeterFilter, $filter) {
+  .filter('filterMeterByCategories', function (Utils, FilterFactory, $filter) {
 
     /**
      * From a collection of meters filter meter with categories in the list of categories ids.

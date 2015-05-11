@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Category', function ($q, $http, $timeout, $state, $rootScope, $filter, Config, Utils, Meter, MeterFilter) {
+  .service('Category', function ($q, $http, $timeout, $state, $rootScope, $filter, Config, Utils, Meter, FilterFactory) {
     var self = this;
 
     // A private cache key.
@@ -49,7 +49,7 @@ angular.module('negawattClientApp')
      * Reset the category filters.
      */
     this.reset = function() {
-      MeterFilter.set('categorized', categoriesFiltered());
+      FilterFactory.set('categorized', categoriesFiltered());
     };
 
     /**
@@ -310,7 +310,7 @@ angular.module('negawattClientApp')
 
       if (angular.isDefined(cache.data)) {
         // Refresh categories tree with the filter values.
-        cache.data.tree = MeterFilter.refreshCategoriesFilters(cache.data.tree);
+        cache.data.tree = FilterFactory.refreshCategoriesFilters(cache.data.tree);
       }
 
       return cache.data;

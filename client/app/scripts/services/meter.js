@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Meter', function ($q, $http, $timeout, $rootScope, Config, Marker, Utils, MeterFilter) {
+  .service('Meter', function ($q, $http, $timeout, $rootScope, Config, Marker, Utils, FilterFactory) {
     var self = this;
 
     // A private cache key.
@@ -33,7 +33,7 @@ angular.module('negawattClientApp')
 
       // Filtering in the case we have categoryId defined.
       if (angular.isDefined(categoryId)) {
-        MeterFilter.set('category', categoryId);
+        FilterFactory.set('category', categoryId);
       }
 
       // Clear the promise cached, after resolve or reject the promise. Permit access to the cache data, when
@@ -204,11 +204,11 @@ angular.module('negawattClientApp')
       if (angular.isDefined(cache.data)) {
 
         // Filter by categories filters unchecked (checkboxes).
-        cache.data.list = MeterFilter.byCategoryFilters(cache.data);
+        cache.data.list = FilterFactory.byCategoryFilters(cache.data);
 
         // Filter by a category is active.
-        if (MeterFilter.isDefine('category')) {
-          cache.data.list = MeterFilter.byCategory(cache.data);
+        if (FilterFactory.isDefine('category')) {
+          cache.data.list = FilterFactory.byCategory(cache.data);
         }
 
       }
