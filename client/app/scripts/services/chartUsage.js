@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('ChartUsage', function ($q, Electricity, UsagePeriod, Chart, moment) {
+  .service('ChartUsage', function ($q, Electricity, UsagePeriod, Utils, Chart, moment) {
     var ChartUsage = this;
 
     // Chart parameters that will be passed to google chart.
@@ -118,7 +118,9 @@ angular.module('negawattClientApp')
       var filters = this.filtersFromSelector(accountId, chartFreq, selectorType, selectorId, period);
 
       // Save filters-hash code and map to frequency for later use.
-      var filtersHash = Electricity.hashFromFilters(filters);
+      // @param filters
+      //   Array of filter parameters in GET params format.
+      var filtersHash = Utils.objToHash(filters);
       this.activeRequestHash = filtersHash;
       this.filtersHashToFreq[filtersHash] = chartFreq;
 

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Utils', function () {
+  .service('Utils', function (md5) {
     var Utils = this;
     /**
      * Base64 encode / decode
@@ -95,5 +95,18 @@ angular.module('negawattClientApp')
 
       return result;
     };
+
+    /**
+     * Convert a object to a hash code.
+     *
+     * @param object
+     *   JSON Format object.
+     *
+     * @returns {string}
+     *   Hash code
+     */
+    this.objToHash = function(obj) {
+      return md5.createHash(JSON.stringify(obj));
+    }
 
   });

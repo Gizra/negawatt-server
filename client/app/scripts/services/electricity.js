@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Electricity', function ($q, $http, $timeout, $rootScope, Config, md5, Utils) {
+  .service('Electricity', function ($q, $http, $timeout, $rootScope, Config, Utils) {
 
     // A private cache key.
     var cache = {};
@@ -13,19 +13,6 @@ angular.module('negawattClientApp')
 
     // Update event broadcast name.
     var broadcastUpdateEventName = 'nwElectricityChanged';
-
-    /**
-     * Convert a filters object to a hash code.
-     *
-     * @param filters
-     *   Array of filter parameters in GET params format.
-     *
-     * @returns {string}
-     *   Hash code
-     */
-    this.hashFromFilters = function(filters) {
-      return md5.createHash(JSON.stringify(filters));
-    };
 
     /**
      * Get electricity data.
@@ -59,7 +46,7 @@ angular.module('negawattClientApp')
      */
     this.get = function(filters) {
       // Create a hash from the filters object for indexing the cache
-      var filtersHash = this.hashFromFilters(filters);
+      var filtersHash = Utils.objToHash(filters);
 
       // Preparation of the promise and cache for Electricity request.
       getElectricity[filtersHash] = $q.when(getElectricity[filtersHash] || cache[filtersHash] && angular.copy(cache[filtersHash].data) || getDataFromBackend(filters, filtersHash, 1, false));
