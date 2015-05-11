@@ -95,14 +95,17 @@ angular.module('negawattClientApp')
 
     /**
      * Get electricity data in the new chart frequency.
+     *
+     * @param type {number}
+     *  The type of frequency according the period of time selected.
      */
-    $scope.changeFrequency = function() {
+    $scope.changeFrequency = function(type) {
       var params = {};
 
       // Change of frequency, request the new electricity data on the selected frequency and prepare
       // the query string to be updated..
-      if ( this.frequencies && ($stateParams.chartFreq !== this.frequencies[this.$index].type) ) {
-        $stateParams.chartFreq = this.frequencies[this.$index].type;
+      if ($stateParams.chartFreq !== type) {
+        $stateParams.chartFreq = type;
         // Delete properties in the case we change the frecuency (day, month, year).
         if (chartUpdated) {
           delete $stateParams['chartNextPeriod'];
