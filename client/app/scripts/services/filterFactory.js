@@ -9,10 +9,10 @@ angular.module('negawattClientApp')
        * Filter meters by category.
        *
        * @param meters
-       *  The meters colection.
+       *  The meters collection.
        *
        * @returns {*}
-       *  The meters collection filteref by category.
+       *  The meters collection filter by category.
        */
       byCategory: function(meters) {
         meters = Utils.toArray(meters.listAll);
@@ -24,6 +24,16 @@ angular.module('negawattClientApp')
           }
         }.bind(this), true));
       },
+      /**
+       * Filter meters by categories checked on the category menu
+       * (categories filters).
+       *
+       * @param meters
+       *   The meters collection.
+       *
+       * @returns {*}
+       *  The meters collection filter by a collection of categories.
+       */
       byCategoryFilters: function(meters) {
         meters = Utils.toArray(meters.listAll);
 
