@@ -4,36 +4,6 @@ angular.module('negawattClientApp')
   .service('ChartUsage', function ($q, Electricity, UsagePeriod, Chart, moment) {
     var ChartUsage = this;
 
-    // Frequencies information.
-    var frequencies = [
-      {
-        frequency: 'year',
-        label: 'שנה',
-        type: '1'
-      },
-      {
-        frequency: 'month',
-        label: 'חודש',
-        type: '2'
-      },
-      {
-        frequency: 'day',
-        label: 'יום',
-        type: '3'
-      },
-      {
-        frequency: 'hour',
-        label: 'שעה',
-        type: '4'
-      },
-      {
-        frequency: 'minute',
-        label: 'דקות',
-        type: '5'
-      }
-
-    ];
-
     // Chart parameters that will be passed to google chart.
     this.usageGoogleChartParams = {};
 
@@ -520,15 +490,5 @@ angular.module('negawattClientApp')
 
       return chartData;
     };
-
-    /**
-     * Return the frequencies collection.
-     *
-     * @returns {{frequency: string, label: string, type: string}[]}
-     *  The frequencies colleciton.
-     */
-    this.getFrequencies = function() {
-      return frequencies;
-    }
 
   });

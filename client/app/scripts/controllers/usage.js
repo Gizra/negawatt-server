@@ -8,13 +8,13 @@
  * Controller of the negawattClientApp
  */
 angular.module('negawattClientApp')
-  .controller('UsageCtrl', function ($scope, $q, $location, $state, $stateParams, $urlRouter, ChartUsage, UsagePeriod, limits, account, usage, meters) {
+  .controller('UsageCtrl', function ($scope, $q, $location, $state, $stateParams, $urlRouter, ChartUsage, UsagePeriod, limits, account, usage, meters, Chart) {
     var chartUpdated;
     // The initialization in a empty object is need it to avoid an error in the initial rendering.
     $scope.usageChartData = {};
 
     // Get chart frequencies.
-    $scope.frequencies = ChartUsage.getFrequencies();
+    $scope.frequencies = Chart.getFrequencies();
 
     // Set period limits, according the state.
     UsagePeriod.setLimits(limits);
@@ -29,8 +29,10 @@ angular.module('negawattClientApp')
 
     // Get the parameters chart frecuency.
     if (angular.isDefined($stateParams.chartFreq)) {
-      setActiveFrequencyTab($scope.frequencies[$stateParams.chartFreq-1]);
+      Chart.setActiveFrequency($stateParams.chartFreq);
     }
+
+
 
     // Get from parameters information of the selected marker.
     if (angular.isDefined($stateParams.markerId)) {
@@ -39,12 +41,6 @@ angular.module('negawattClientApp')
 
       // Chart usage information of the selected marker.
       ChartUsage.meterSelected(meters.list[$stateParams.markerId]);
-    }
-
-
-    // Active the seleced chart frequency.
-    function setActiveFrequencyTab(frequency) {
-      frequency.active = true;
     }
 
     /**
