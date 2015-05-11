@@ -18,66 +18,6 @@ angular.module('negawattClientApp')
       frequency: 2
     };
 
-    // Frequencies information.
-    this.frequencyParams = {
-      1: {
-        frequency: 'year',
-        label: 'שנה',
-        type: '1',
-        unit_num_seconds: 365 * 24 * 60 * 60,
-        chart_default_time_frame: 10,
-        chart_type: 'ColumnChart',
-        axis_v_title: 'קוט"ש בחודש',
-        axis_h_format: 'YYYY',
-        axis_h_title: 'שנה'
-      },
-      2: {
-        frequency: 'month',
-        label: 'חודש',
-        type: '2',
-        unit_num_seconds: 31 * 24 * 60 * 60,
-        chart_default_time_frame: 24,
-        chart_type: 'ColumnChart',
-        axis_v_title: 'קוט"ש בשנה',
-        axis_h_format: 'MM-YYYY',
-        axis_h_title: 'חודש'
-      },
-      3: {
-        frequency: 'day',
-        label: 'יום',
-        type: '3',
-        unit_num_seconds: 24 * 60 * 60,
-        chart_default_time_frame: 14,
-        chart_type: 'ColumnChart',
-        axis_v_title: 'קוט"ש ביום',
-        axis_h_format: 'DD-MM',
-        axis_h_title: 'תאריך'
-      },
-      4: {
-        frequency: 'hour',
-        label: 'שעה',
-        type: '4',
-        unit_num_seconds: 60 * 60,
-        // One week.
-        chart_default_time_frame: 168,
-        chart_type: 'LineChart',
-        axis_v_title: 'KW',
-        axis_h_format: 'HH',
-        axis_h_title: 'שעה'
-      },
-      5: {
-        frequency: 'minute',
-        label: 'דקות',
-        type: '5',
-        unit_num_seconds: 60,
-        // 48 hours.
-        chart_default_time_frame: 1440,
-        chart_type: 'LineChart',
-        axis_v_title: 'KW',
-        axis_h_format: 'HH',
-        axis_h_title: 'שעה'
-      }
-    };
 
     // Store the filters-hash code of the active request.
     // Used to prevent updating the chart when there are several active
@@ -165,7 +105,7 @@ angular.module('negawattClientApp')
       var deferred = $q.defer();
 
       var chartFreq = stateParams.chartFreq;
-      var chart = this.frequencyParams[chartFreq];
+      var chart = Chart.getFrequency(chartFreq);
 
       // Save meters data.
       this.meters = meters;
@@ -248,7 +188,7 @@ angular.module('negawattClientApp')
     this.electricityToChartData = function(chartFreq, electricity) {
       // Get frequency-info record.
       var chartFrequency = chartFreq || this.usageChartParams.frequency;
-      var chartFrequencyInfo = this.frequencyParams[chartFrequency];
+      var chartFrequencyInfo = Chart.getFrequency(chartFreq);
 
       // Translate electricity data to google charts format.
       angular.extend(ChartUsage.usageGoogleChartParams, ChartUsage.transformDataToDatasets(electricity, chartFrequencyInfo));
@@ -319,7 +259,7 @@ angular.module('negawattClientApp')
      * @param {data} data
      *    Source object in electricity format.
      * @param {Object} chartFrequencyInfo
-     *    Chart frequency info, as defined in this.frequencyParams.
+     *    Chart frequency info, as defined in Chart.getFrequency(chartFreq).
      *
      * @returns {Object}
      *    Target data in google charts' datasets format.

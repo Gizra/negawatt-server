@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .controller('MapCtrl', function ($scope, $state, $stateParams, $location, Category, ChartUsage, Map, leafletData, $timeout, account, meters, FilterFactory) {
+  .controller('MapCtrl', function ($scope, $state, $stateParams, $location, Category, Map, leafletData, $timeout, account, meters, FilterFactory) {
     var isMeterSelected = false;
 
     // Config map.

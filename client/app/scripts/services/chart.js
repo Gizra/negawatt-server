@@ -17,10 +17,23 @@ angular.module('negawattClientApp')
       },
       /**
        * Return object of the frequencies
+       *
        * @returns {*}
+       *   The collection of frequencies.
        */
       getFrequencies: function() {
         return chart.frequencies;
+      },
+      /**
+       * Return an specific frequency.
+       *
+       * @param type
+       *  The type of the frecuency.
+       * @returns {*}
+       *  The frecuency object.
+       */
+      getFrequency: function(type) {
+        return chart.frequencies[type];
       },
       /**
        * Set the frequency active.
