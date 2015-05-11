@@ -14,8 +14,7 @@ angular.module('negawattClientApp')
     $scope.usageChartData = {};
 
     // Get chart frequencies.
-    $scope.frequencies = Chart.getFrequencies();
-
+    $scope.frequencies = Chart.get('frequencies');
     // Set period limits, according the state.
     UsagePeriod.setLimits(limits);
 

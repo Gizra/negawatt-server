@@ -4,7 +4,8 @@ angular.module('negawattClientApp')
   .factory('Chart', function chartFactory() {
     // The private on
     var chart = {
-      frequencies: setFrequencies()
+      frequencies: setFrequencies(),
+      multipleGraphs: false
     };
 
     // Common object for the charts.
@@ -16,15 +17,6 @@ angular.module('negawattClientApp')
         empty: 'אין מספיק נתונים כדי להציג את התרשים.'
       },
       /**
-       * Return object of the frequencies
-       *
-       * @returns {*}
-       *   The collection of frequencies.
-       */
-      getFrequencies: function() {
-        return chart.frequencies;
-      },
-      /**
        * Return an specific frequency.
        *
        * @param type
@@ -33,7 +25,7 @@ angular.module('negawattClientApp')
        *  The frecuency object.
        */
       getFrequency: function(type) {
-        return chart.frequencies[type];
+        return this.get('frequencies')[type] || undefined;
       },
       /**
        * Set the frequency active.
@@ -45,6 +37,41 @@ angular.module('negawattClientApp')
         resetFrequencies();
          // Chart frequency test.
         chart.frequencies[chartFreq].active = true;
+      },
+      /**
+       * Return a config parameter of the Chart object.
+       *
+       * @param name
+       *  Name of the property to get.
+       *
+       * @returns {*}
+       *  Value of the property.
+       */
+      get: function(name) {
+        return chart[name];
+      },
+      /**
+       * Set the new value for a specific property.
+       *
+       * @param name
+       *  The name of the property.
+       * @param value
+       *  The value of the property.
+       */
+      set: function(name, value) {
+        chart[name] = value;
+      },
+      /**
+       * Return a config parameter of the Chart object.
+       *
+       * @param name
+       *  Name of the property to get.
+       *
+       * @returns {*}
+       *  Value of the property.
+       */
+      get: function(name) {
+        return chart[name] || undefined;
       }
     };
 

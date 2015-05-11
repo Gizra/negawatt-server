@@ -7,18 +7,6 @@ angular.module('negawattClientApp')
     // Chart parameters that will be passed to google chart.
     this.usageGoogleChartParams = {};
 
-    // List of used meters.
-    this.meters;
-
-    // Whether to draw multiple graphs or only one summary.
-    this.multipleGraphs;
-
-    // Chart parameters.
-    this.usageChartParams = {
-      frequency: 2
-    };
-
-
     // Store the filters-hash code of the active request.
     // Used to prevent updating the chart when there are several active
     // requests in parallel.
@@ -59,14 +47,14 @@ angular.module('negawattClientApp')
       // Prepare filters for data request.
       var filters = {
         'filter[meter_account]': accountId,
-        'filter[type]': chartFreq || this.usageChartParams.frequency,
+        'filter[type]': chartFreq,
         'filter[timestamp][operator]': 'BETWEEN',
         'filter[timestamp][value][0]': period.previous, // chartBeginTimestamp,
         'filter[timestamp][value][1]': period.next // chartEndTimestamp
       };
 
       if (selectorType) {
-        if (this.multipleGraphs) {
+        if (Chart.multipleGraphs) {
           // If multiple IDs are given, output in the format:
           // filter[selector][operator] = IN
           // filter[selector][value][0] = val-1
@@ -93,8 +81,8 @@ angular.module('negawattClientApp')
      *
      * @param accountId
      *   User account ID.
-     * @param stateParams
-     *   State parameters, including frequency, marker-id, etc.
+     * @param type
+     *   chartFreq state parameters, including frequency, marker-id, etc.
      * @param period
      *   Period of time to use in the electricity request.
      *
@@ -107,20 +95,17 @@ angular.module('negawattClientApp')
       var chartFreq = stateParams.chartFreq;
       var chart = Chart.getFrequency(chartFreq);
 
-      // Save meters data.
-      this.meters = meters;
-
       // Decipher selector type and id out of stateParams.
       var selectorType, selectorId;
       if (stateParams.markerId) {
         selectorType = 'meter';
         selectorId = stateParams.markerId.split(',');
-        this.multipleGraphs = (selectorId.length > 1);
+        Chart.multipleGraphs = (selectorId.length > 1);
       }
       else if (stateParams.categoryId) {
         selectorType = 'meter_category';
         selectorId = stateParams.categoryId;
-        this.multipleGraphs = false;
+        Chart.multipleGraphs = false;
       }
 
       // Caculate period object.
@@ -187,7 +172,7 @@ angular.module('negawattClientApp')
      */
     this.electricityToChartData = function(chartFreq, electricity) {
       // Get frequency-info record.
-      var chartFrequency = chartFreq || this.usageChartParams.frequency;
+      var chartFrequency = chartFreq;
       var chartFrequencyInfo = Chart.getFrequency(chartFreq);
 
       // Translate electricity data to google charts format.
@@ -270,7 +255,7 @@ angular.module('negawattClientApp')
       // Will hold a temp array like { time: [v1, v2, v3,...], time: [..], ..}.
       var values = {};
 
-      if (this.multipleGraphs) {
+      if (Chart.multipleGraphs) {
         // Prepare data for multiple graphs.
         // ----------------------------------
 
