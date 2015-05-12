@@ -127,10 +127,12 @@ angular.module('negawattClientApp')
         return isDefined;
       },
       set: function(name, value) {
+        // Use angular copy to decopling from the source value,
+        // example: category cache.
+        value = angular.copy(value);
         // Extra task if is the filter categorized.
         if (name === 'categorized') {
-          // Use angular copy to decopling from the category cache.
-          setCategorized.bind(this, name, angular.copy(value))();
+          setCategorized.bind(this, name, value)();
           return;
         }
 
