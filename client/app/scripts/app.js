@@ -90,9 +90,9 @@ angular
             return Category.get(account.id);
           },
           // Get electricity data and transform it into chart format.
-          usage: function(ChartUsage, $state, $stateParams, account) {
+          usage: function(ChartUsage, FilterFactory, $state, $stateParams, account) {
             // Set filter for electricity usage request.
-            //FilterFactory.set('electricity', $stateParams);
+            FilterFactory.set('electricity', $stateParams);
 
             // Perform the GET only if we're in the proper (parent) state.
             if ($state.current.name == 'dashboard.withAccount') {
