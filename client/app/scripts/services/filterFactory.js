@@ -131,16 +131,110 @@ angular.module('negawattClientApp')
         // example: category cache.
         value = angular.copy(value);
         // Extra task if is the filter categorized.
-        if (name === 'categorized') {
-          setCategorized.bind(this, name, value)();
-          return;
+        switch (name) {
+          case 'categorized':
+            setCategorized.bind(this, name, value)();
+            break;
+          case 'electricity':
+            setElectricity.bind(this, name, value)();
+            break;
+          default:
+            this.filters[name] = value;
         }
 
-        this.filters[name] = value;
       },
       get: function(name) {
         return this.filters && this.filters[name];
       }
+    };
+
+    /**
+     *
+     *
+     * @param name
+     * @param value
+     */
+    function setElectricity(name, params) {
+      var filter;
+      var getFromMeter = {
+        selectorType: 'meter',
+        selectorId: value.markerId.split(','),
+        multipleGraphs: isMultiGraphs
+      };
+      var getFromCategory = {
+        selectorType: 'meter_category',
+        selectorId: value.categoryId,
+        multipleGraphs: isMultiGraphs
+      };
+      // Complete params object to request electricity.
+      angular.extend(params, (params.markerId) ? getFromMeter : getFromCategory);
+
+      filter = filtersFromSelector(params);
+      params.activeRequestHash = Utils.objToHash(filter);
+      params.filters[params.activeRequestHash] = filter;
+
+      this.filters[name][params.activeRequestHash] = params;
+    }
+
+    /**
+     *
+     *
+     * @returns {*}
+     */
+    function isMultiGraphs() {
+      return angular.isArray(this.selectorId);
+    };
+
+
+    /**
+     * Translate selector type and ID to filters.
+     *
+     * @param accountId
+     *   User account ID.
+     * @param chartFreq
+     *   Required frequency, e.g. 2 for MONTH.
+     * @param selectorType
+     *   Type of filter, e.g. 'meter' or 'meter_category'.
+     * @param selectorId
+     *   ID of the selector, e.g. meter ID or category ID.
+     * @param period
+     *   Object with the period selected.
+     *
+     * @returns {Object}
+     *   Filters array in the form required by get().
+     */
+    function filtersFromSelector(params) {
+
+      // Prepare filters for data request.
+      var filters = {
+        'filter[meter_account]': params.accountId,
+        'filter[type]': params.chartFreq,
+        'filter[timestamp][operator]': 'BETWEEN',
+        'filter[timestamp][value][0]': params.period.previous, // chartBeginTimestamp,
+        'filter[timestamp][value][1]': params.period.next // chartEndTimestamp
+      };
+
+      if (params.selectorType) {
+        if (params.multipleGraphs) {
+          // If multiple IDs are given, output in the format:
+          // filter[selector][operator] = IN
+          // filter[selector][value][0] = val-1
+          // filter[selector][value][1] = val-2
+          // ... etc.
+          filters['filter[' + params.selectorType + '][operator]'] = 'IN';
+          var i = 0;
+          angular.forEach(params.selectorId, function (id) {
+            filters['filter[' + params.selectorType + '][value][' + i++ +']'] = id;
+          });
+        }
+        else {
+          // A single ID was given, Output in the format:
+          // filter[selector] = val
+          filters['filter[' + params.selectorType + ']'] = params.selectorId;
+        }
+      }
+
+      return filters;
     };
 
     /**
