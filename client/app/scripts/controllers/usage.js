@@ -8,29 +8,30 @@
  * Controller of the negawattClientApp
  */
 angular.module('negawattClientApp')
-  .controller('UsageCtrl', function ($scope, $q, $location, $state, $stateParams, $urlRouter, ChartUsage, UsagePeriod, limits, account, usage, meters, Chart) {
+  .controller('UsageCtrl', function ($scope, $q, $location, $state, $stateParams, $urlRouter, ChartUsage, UsagePeriod, Chart, limits, account, usage, meters) {
     var chartUpdated;
-    // The initialization in a empty object is need it to avoid an error in the initial rendering.
+    // The initialization in a empty object is need it to avoid an error in the initial rendering. (Chart kws usage data)
     $scope.usageChartData = {};
-
-    // Get chart frequencies.
+    // Get chart frequencies. (Tabs the period of time)
     $scope.frequencies = Chart.get('frequencies');
-    // Set period limits, according the state.
-    UsagePeriod.setLimits(limits);
 
-    // Get data from the cache, since 'usage' might not be up to date
-    // after lazy-load.
-    var chart = ChartUsage.get(account.id, $stateParams, meters.list, UsagePeriod.getPeriod());
-    chart.then(function(response) {
-      $scope.usageChartData = $scope.usageChartData || response;
-      chart = undefined;
-    });
+
+    // Set period limits, according the state. (Handle ui arrows to change the periods)
+    UsagePeriod.setLimits(limits);
 
     // Get the parameters chart frecuency.
     if (angular.isDefined($stateParams.chartFreq)) {
       Chart.setActiveFrequency($stateParams.chartFreq);
     }
 
+    //
+    //// Get data from the cache, since 'usage' might not be up to date
+    //// after lazy-load.
+    //var chart = ChartUsage.get(account.id, $stateParams, UsagePeriod.getPeriod());
+    //chart.then(function(response) {
+    //  $scope.usageChartData = $scope.usageChartData || response;
+    //  chart = undefined;
+    //});
 
 
     // Get from parameters information of the selected marker.
@@ -84,7 +85,7 @@ angular.module('negawattClientApp')
         period = angular.extend(period || {}, meters.list[$stateParams.markerId] && meters.list[$stateParams.markerId].electricity_time_interval);
       }
 
-      ChartUsage.get(account.id, $stateParams, meters.list, period).then(function(response) {
+      ChartUsage.get(account.id, $stateParams, period).then(function(response) {
         $scope.usageChartData = response;
         $scope.isLoading = false;
       });
@@ -144,7 +145,6 @@ angular.module('negawattClientApp')
     // Handle lazy-load of electricity data.
     // When cache expands, update the chart.
     $scope.$on("nwElectricityChanged", function(event, filtersHash) {
-
       // Don't update usageChartData if we're not in the active request.
       if (filtersHash != ChartUsage.getActiveRequestHash()) {
         return;

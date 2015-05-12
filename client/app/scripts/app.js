@@ -90,10 +90,13 @@ angular
             return Category.get(account.id);
           },
           // Get electricity data and transform it into chart format.
-          usage: function(ChartUsage, $state, $stateParams, account, meters) {
+          usage: function(ChartUsage, $state, $stateParams, account) {
+            // Set filter for electricity usage request.
+            //FilterFactory.set('electricity', $stateParams);
+
             // Perform the GET only if we're in the proper (parent) state.
             if ($state.current.name == 'dashboard.withAccount') {
-              return ChartUsage.get(account.id, $stateParams, meters.list);
+              return ChartUsage.get(account.id, $stateParams);
             } else {
               return {};
             }
@@ -188,11 +191,11 @@ angular
                 }
               },
               // Get electricity data and transform it into chart format.
-              usage: function(ChartUsage, $stateParams, account, meters, UsagePeriod, limits) {
+              usage: function(ChartUsage, $stateParams, account, UsagePeriod, limits) {
                 // Set period limits, according the state.
                 UsagePeriod.setLimits(limits);
 
-                return ChartUsage.get(account.id, $stateParams, meters.list, UsagePeriod.getPeriod());
+                return ChartUsage.get(account.id, $stateParams, UsagePeriod.getPeriod());
               }
             },
             controller: 'UsageCtrl'
@@ -262,11 +265,11 @@ angular
                 };
               },
               // Get electricity data and transform it into chart format.
-              usage: function(ChartUsage, $stateParams, account, meters, UsagePeriod, limits) {
+              usage: function(ChartUsage, $stateParams, account, UsagePeriod, limits) {
                 // Set period limits, according the state.
                 UsagePeriod.setLimits(limits);
 
-                return ChartUsage.get(account.id, $stateParams, meters.list, UsagePeriod.getPeriod());
+                return ChartUsage.get(account.id, $stateParams, UsagePeriod.getPeriod());
               }
             },
             controller: 'UsageCtrl'

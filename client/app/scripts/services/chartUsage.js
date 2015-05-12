@@ -89,7 +89,7 @@ angular.module('negawattClientApp')
      * @returns {*}
      *   Promise for data in google-chart format.
      */
-    this.get = function(accountId, stateParams, meters, period) {
+    this.get = function(accountId, stateParams, period) {
       var deferred = $q.defer();
 
       var chartFreq = stateParams.chartFreq;
