@@ -14,6 +14,10 @@ angular.module('negawattClientApp')
       previous: null,
       frequency: 0,
       config: null,
+      /**
+       *
+       * @param chart
+       */
       setConfig: function(chart) {
         // Save chart configuration.
         this.frequency = chart && +chart.type;

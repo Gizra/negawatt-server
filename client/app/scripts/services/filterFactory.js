@@ -236,8 +236,8 @@ angular.module('negawattClientApp')
         'filter[meter_account]': params.accountId,
         'filter[type]': params.chartFreq,
         'filter[timestamp][operator]': 'BETWEEN',
-        'filter[timestamp][value][0]': params.period && params.period.previous || '', // chartBeginTimestamp,
-        'filter[timestamp][value][1]': params.period && params.period.next || ''// chartEndTimestamp
+        'filter[timestamp][value][0]': params.chartNextPeriod || '', // chartBeginTimestamp,
+        'filter[timestamp][value][1]': params.chartPreviousPeriod || ''// chartEndTimestamp
       };
 
       if (params.selectorType) {
@@ -256,7 +256,7 @@ angular.module('negawattClientApp')
         else {
           // A single ID was given, Output in the format:
           // filter[selector] = val
-          filters['filter[' + params.selectorType + ']'] = params.selectorId || '';
+          filters['filter[' + params.selectorType + ']'] = params.selectorId;
         }
       }
 
