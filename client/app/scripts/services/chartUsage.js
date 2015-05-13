@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('ChartUsage', function ($q, Electricity, UsagePeriod, FilterFactory, Utils, Chart, moment) {
+  .service('ChartUsage', function ($q, UsagePeriod, FilterFactory, Utils, Chart, moment) {
     var ChartUsage = this;
 
     // Chart parameters that will be passed to google chart.
@@ -39,7 +39,7 @@ angular.module('negawattClientApp')
      * @returns {*}
      *   Promise for data in google-chart format.
      */
-    this.get = function(accountId, stateParams, period) {
+    this.render = function(accountId, stateParams, period) {
       var deferred = $q.defer();
       // Keep compatibility with the actual architecture.
       var params = FilterFactory.get('electricity')
@@ -55,12 +55,13 @@ angular.module('negawattClientApp')
       period = UsagePeriod.getPeriod();
 
       // Get electricity data.
-      Electricity.get(params.filters).then(function(electricity) {
-        // Add periods.
-        angular.extend(ChartUsage.usageGoogleChartParams, UsagePeriod)
-        // Translate electricity data to google charts format.
-        deferred.resolve(ChartUsage.electricityToChartData(params.chartFreq, electricity));
-      });
+      //Electricity.get(params.filters).then(function(electricity) {
+      //  // Add periods.
+      //  angular.extend(ChartUsage.usageGoogleChartParams, UsagePeriod)
+      //  // Translate electricity data to google charts format.
+      //  deferred.resolve(ChartUsage.electricityToChartData(params.chartFreq, electricity));
+      //});
+      deferred.resolve();
 
       return deferred.promise;
     };
@@ -85,10 +86,11 @@ angular.module('negawattClientApp')
 
       // Get electricity data.
       /// @TODO: Move to resolve
-      Electricity.getByFiltersHash(filtersHash).then(function(electricity) {
-        // Translate electricity data to google charts format.
-        deferred.resolve(ChartUsage.electricityToChartData(chartFreq, electricity));
-      });
+      //Electricity.getByFiltersHash(filtersHash).then(function(electricity) {
+      //  // Translate electricity data to google charts format.
+      //  deferred.resolve(ChartUsage.electricityToChartData(chartFreq, electricity));
+      //});
+      deferred.resolve();
 
       return deferred.promise;
     };

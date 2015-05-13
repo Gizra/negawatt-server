@@ -85,10 +85,11 @@ angular.module('negawattClientApp')
         period = angular.extend(period || {}, meters.list[$stateParams.markerId] && meters.list[$stateParams.markerId].electricity_time_interval);
       }
 
-      ChartUsage.get(account.id, $stateParams, period).then(function(response) {
-        $scope.usageChartData = response;
-        $scope.isLoading = false;
-      });
+      // @TODO: Implement ChartUsage.render();
+      //ChartUsage.get(account.id, $stateParams, period).then(function(response) {
+      //  $scope.usageChartData = response;
+      //  $scope.isLoading = false;
+      //});
 
       syncUrl(params);
     }
@@ -150,10 +151,10 @@ angular.module('negawattClientApp')
         return;
       }
 
-      // Update data in the chart.
-      ChartUsage.getByFiltersHash(filtersHash).then(function(response) {
-        $scope.usageChartData = response;
-      });
+      // @TODO: Redraw Update data in the chart.
+      //ChartUsage.render()
+      //$scope.usageChartData = response;
+
     });
 
 

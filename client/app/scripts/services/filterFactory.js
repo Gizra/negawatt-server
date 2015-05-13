@@ -158,12 +158,12 @@ angular.module('negawattClientApp')
       var filter;
       var getFromMeter = {
         selectorType: 'meter',
-        selectorId: value.markerId.split(','),
+        selectorId: params.markerId && params.markerId.split(','),
         multipleGraphs: isMultiGraphs
       };
       var getFromCategory = {
         selectorType: 'meter_category',
-        selectorId: value.categoryId,
+        selectorId: params.categoryId,
         multipleGraphs: isMultiGraphs
       };
       // Complete params object to request electricity.
@@ -171,8 +171,9 @@ angular.module('negawattClientApp')
 
       filter = filtersFromSelector(params);
       params.activeRequestHash = Utils.objToHash(filter);
-      params.filters[params.activeRequestHash] = filter;
+      params.filter = filter;
 
+      this.filters[name] = {};
       this.filters[name][params.activeRequestHash] = params;
     }
 
@@ -210,8 +211,8 @@ angular.module('negawattClientApp')
         'filter[meter_account]': params.accountId,
         'filter[type]': params.chartFreq,
         'filter[timestamp][operator]': 'BETWEEN',
-        'filter[timestamp][value][0]': params.period.previous, // chartBeginTimestamp,
-        'filter[timestamp][value][1]': params.period.next // chartEndTimestamp
+        'filter[timestamp][value][0]': params.period && params.period.previous, // chartBeginTimestamp,
+        'filter[timestamp][value][1]': params.period && params.period.next // chartEndTimestamp
       };
 
       if (params.selectorType) {

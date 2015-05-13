@@ -16,7 +16,7 @@ angular.module('negawattClientApp')
       config: null,
       setConfig: function(chart) {
         // Save chart configuration.
-        this.frequency = +chart.type;
+        this.frequency = chart && +chart.type;
         this.config = chart;
 
         // Set the next tiemstamp by default in 'now' of maximum limit.
@@ -38,19 +38,19 @@ angular.module('negawattClientApp')
         }
       },
       getPrevious: function() {
-        return moment.unix(this.next).subtract(this.config.chart_default_time_frame, this.config.frequency).unix();
+        return moment.unix(this.next).subtract(this.config && this.config.chart_default_time_frame, this.config && this.config.frequency).unix();
       },
       isLast: function() {
-        return ( moment.unix(this.next).isAfter(moment.unix(this.max), this.config.frequency) || moment.unix(this.next).isSame(moment.unix(this.max), this.config.frequency) )
+        return ( moment.unix(this.next).isAfter(moment.unix(this.max), this.config && this.config.frequency) || moment.unix(this.next).isSame(moment.unix(this.max), this.config && this.config.frequency) )
       },
       isFirst: function() {
-        return ( moment.unix(this.previous).isBefore(moment.unix(this.min), this.config.frequency) || moment.unix(this.previous).isSame(moment.unix(this.min), this.config.frequency) );
+        return ( moment.unix(this.previous).isBefore(moment.unix(this.min), this.config && this.config.frequency) || moment.unix(this.previous).isSame(moment.unix(this.min), this.config && this.config.frequency) );
       },
       add: function(time) {
-        return moment.unix(time).add(this.config.chart_default_time_frame, this.config.frequency);
+        return moment.unix(time).add(this.config && this.config.chart_default_time_frame, this.config && this.config.frequency);
       },
       subtract: function(time) {
-        return moment.unix(time).subtract(this.config.chart_default_time_frame, this.config.frequency);
+        return moment.unix(time).subtract(this.config && this.config.chart_default_time_frame, this.config && this.config.frequency);
       }
     };
 

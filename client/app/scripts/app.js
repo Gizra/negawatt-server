@@ -90,16 +90,11 @@ angular
             return Category.get(account.id);
           },
           // Get electricity data and transform it into chart format.
-          usage: function(ChartUsage, FilterFactory, $state, $stateParams, account) {
+          usage: function(FilterFactory, $stateParams) {
             // Set filter for electricity usage request.
             FilterFactory.set('electricity', $stateParams);
 
-            // Perform the GET only if we're in the proper (parent) state.
-            if ($state.current.name == 'dashboard.withAccount') {
-              return ChartUsage.get(account.id, $stateParams);
-            } else {
-              return {};
-            }
+            return {};
           },
           messages: function(Message) {
             return Message.get();
@@ -195,7 +190,7 @@ angular
                 // Set period limits, according the state.
                 UsagePeriod.setLimits(limits);
 
-                return ChartUsage.get(account.id, $stateParams, UsagePeriod.getPeriod());
+                return ChartUsage.render();
               }
             },
             controller: 'UsageCtrl'
@@ -269,7 +264,7 @@ angular
                 // Set period limits, according the state.
                 UsagePeriod.setLimits(limits);
 
-                return ChartUsage.get(account.id, $stateParams, UsagePeriod.getPeriod());
+                return ChartUsage.render();
               }
             },
             controller: 'UsageCtrl'

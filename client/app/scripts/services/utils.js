@@ -106,7 +106,7 @@ angular.module('negawattClientApp')
      *   Hash code
      */
     this.objToHash = function(obj) {
-      return md5.createHash(JSON.stringify(obj));
+      return obj && md5.createHash(JSON.stringify(obj));
     }
 
   });
