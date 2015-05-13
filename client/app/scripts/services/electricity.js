@@ -31,7 +31,7 @@ angular.module('negawattClientApp')
       }
 
       // Preparation of the promise and cache for Electricity request.
-      getElectricity[hash] = $q.when(getElectricity[hash] || cache[hash] && angular.copy(cache[hash].data) || getDataFromBackend(filters, hash, 1, false));
+      getElectricity[hash] = $q.when(getElectricity[hash] || cache[hash] && angular.copy(cache[hash].data) || getDataFromBackend(hash, 1, false));
 
       // Clear the promise cached, after resolve or reject the
       // promise. Permit access to the cache data, when
@@ -57,7 +57,7 @@ angular.module('negawattClientApp')
       var url = Config.backend + '/api/electricity';
       // Create a copy of filters, since params might add page option. Filters must
       // stay clean of page parameters since it also serves as key to the cache.
-      var params = FilterFactory(hash);
+      var params = FilterFactory.getElectricity(hash);
 
       // If page-number is given, add it to the params.
       // Don't modify 'filters' since it should reflect the general params,

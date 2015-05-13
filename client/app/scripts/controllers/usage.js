@@ -8,7 +8,7 @@
  * Controller of the negawattClientApp
  */
 angular.module('negawattClientApp')
-  .controller('UsageCtrl', function ($scope, $q, $location, $state, $stateParams, $urlRouter, ChartUsage, UsagePeriod, Chart, limits, account, usage, meters) {
+  .controller('UsageCtrl', function ($scope, $q, $location, $state, $stateParams, $urlRouter, ChartUsage, UsagePeriod, Chart, account, usage, meters) {
     var chartUpdated;
     // The initialization in a empty object is need it to avoid an error in the initial rendering. (Chart kws usage data)
     $scope.usageChartData = {};
@@ -16,8 +16,7 @@ angular.module('negawattClientApp')
     $scope.frequencies = Chart.get('frequencies');
 
 
-    // Set period limits, according the state. (Handle ui arrows to change the periods)
-    UsagePeriod.setLimits(limits);
+
 
     // Get the parameters chart frecuency.
     if (angular.isDefined($stateParams.chartFreq)) {

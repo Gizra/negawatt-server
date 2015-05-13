@@ -112,6 +112,18 @@ angular.module('negawattClientApp')
         return categorized && categories.$$extendWithFilter(categorized) || categories;
       },
       /**
+       * Return the electricity filters according a hash.
+       *
+       * @param name
+       *  The hash.
+       *
+       * @returns {*}
+       *  The electricity filters.
+       */
+      getElectricity: function(name) {
+        return this.filters['electricity'] && this.filters['electricity'][name];
+      },
+      /**
        * Return if is defined a filter.
        *
        * @param name {string}
@@ -161,10 +173,10 @@ angular.module('negawattClientApp')
       var filter = getElectricityFilter(params);
       // Create and save hash.
       var hash = Utils.objToHash(filter);
-      this.set('activeSearchHash', hash);
+      this.set('activeElectricityHash', hash);
 
       this.filters[name] = {};
-      this.filters[name][params.activeRequestHash] = filter;
+      this.filters[name][this.get('activeElectricityHash')] = filter;
     }
 
     /**
@@ -224,12 +236,12 @@ angular.module('negawattClientApp')
         'filter[meter_account]': params.accountId,
         'filter[type]': params.chartFreq,
         'filter[timestamp][operator]': 'BETWEEN',
-        'filter[timestamp][value][0]': params.period && params.period.previous, // chartBeginTimestamp,
-        'filter[timestamp][value][1]': params.period && params.period.next // chartEndTimestamp
+        'filter[timestamp][value][0]': params.period && params.period.previous || '', // chartBeginTimestamp,
+        'filter[timestamp][value][1]': params.period && params.period.next || ''// chartEndTimestamp
       };
 
       if (params.selectorType) {
-        if (params.multipleGraphs) {
+        if (params.multipleGraphs()) {
           // If multiple IDs are given, output in the format:
           // filter[selector][operator] = IN
           // filter[selector][value][0] = val-1
@@ -244,7 +256,7 @@ angular.module('negawattClientApp')
         else {
           // A single ID was given, Output in the format:
           // filter[selector] = val
-          filters['filter[' + params.selectorType + ']'] = params.selectorId;
+          filters['filter[' + params.selectorType + ']'] = params.selectorId || '';
         }
       }
 
