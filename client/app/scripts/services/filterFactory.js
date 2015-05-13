@@ -149,13 +149,32 @@ angular.module('negawattClientApp')
     };
 
     /**
-     *
+     * Save of the electricity filters, index by unique hash string.
      *
      * @param name
+     *  Nombre del filtro. By default 'electricity;
      * @param value
+     *  Parameter object regulary comming from the query string.
      */
     function setElectricity(name, params) {
-      var filter;
+      // Prepare electricity filter in querystring format.
+      var filter = getElectricityFilter(params);
+      // Create and save hash.
+      var hash = Utils.objToHash(filter);
+      this.set('activeSearchHash', hash);
+
+      this.filters[name] = {};
+      this.filters[name][params.activeRequestHash] = filter;
+    }
+
+    /**
+     * Return querysting of the paramenter, representing the electricity filter.
+     *
+     * @param params
+     *
+     * @returns {Object}
+     */
+    function getElectricityFilter(params) {
       var getFromMeter = {
         selectorType: 'meter',
         selectorId: params.markerId && params.markerId.split(','),
@@ -169,23 +188,17 @@ angular.module('negawattClientApp')
       // Complete params object to request electricity.
       angular.extend(params, (params.markerId) ? getFromMeter : getFromCategory);
 
-      filter = filtersFromSelector(params);
-      params.activeRequestHash = Utils.objToHash(filter);
-      params.filter = filter;
-
-      this.filters[name] = {};
-      this.filters[name][params.activeRequestHash] = params;
+      return filtersFromSelector(params);
     }
 
     /**
+     * Return a boolean value if will show multiple charts.
      *
-     *
-     * @returns {*}
+     * @returns {boolean}
      */
     function isMultiGraphs() {
       return angular.isArray(this.selectorId);
     };
-
 
     /**
      * Translate selector type and ID to filters.

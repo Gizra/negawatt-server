@@ -89,16 +89,6 @@ angular
           categories: function(Category, account) {
             return Category.get(account.id);
           },
-          // Get electricity data and transform it into chart format.
-          usage: function(FilterFactory, $stateParams) {
-            // Set filter for electricity usage request.
-            FilterFactory.set('electricity', $stateParams);
-
-            return {};
-          },
-          messages: function(Message) {
-            return Message.get();
-          },
           // We inject meters to be sure the cache in Meter object was filled.
           limits: function(meters) {
             return meters.summary.electricity_time_interval;
@@ -106,6 +96,16 @@ angular
           filters: function(FilterFactory, categories) {
             // Define categories filters. Used for the UI Checknboxes.
             FilterFactory.set('categorized', categories);
+          },
+          // Get electricity data and transform it into chart format.
+          usage: function(FilterFactory, $stateParams) {
+            // Set filter for electricity usage request.
+            FilterFactory.set('electricity', $stateParams);
+
+            return Electricity.get(FilterFactory.get('activeElectricityHash'));
+          },
+          messages: function(Message) {
+            return Message.get();
           }
         },
         views: {
