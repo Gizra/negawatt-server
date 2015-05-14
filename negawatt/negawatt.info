@@ -56,6 +56,6 @@ dependencies[] = negawatt_migrate
 dependencies[] = negawatt_normalizer
 dependencies[] = negawatt_restful
 dependencies[] = iec
-dependencies[] = modubs
+dependencies[] = modbus
 dependencies[] = negawatt_meter
 
