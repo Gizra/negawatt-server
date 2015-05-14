@@ -20,7 +20,7 @@ function negawatt_electricity_schema() {
         'not null' => TRUE,
       ),
       'meter_type' => array(
-        'description' => 'The type of this data, Modbus/IEC/Other.',
+        'description' => 'The type of this data, modbus/iec/Other.',
         'type' => 'varchar',
         'length' => 32,
         'not null' => TRUE,

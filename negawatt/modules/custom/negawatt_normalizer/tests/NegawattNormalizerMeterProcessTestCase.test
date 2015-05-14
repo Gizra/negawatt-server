@@ -109,103 +109,115 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     $values_info = array(
       array(
         // Two Modbus entries for hour 15:00.
-        'type' => 'modbus',
+        'meter_type' => 'modbus',
         'timestamp' => strtotime('2014-6-12 15:00'),
         'rate_type' => 'flat',
+        'frequency' => 5,
         'meter_nid' => $meter_node1->nid,
         'kwh' => 10,
         'power_factor' => 0.90,
       ),
       array(
-        'type' => 'modbus',
+        'meter_type' => 'modbus',
         'timestamp' => strtotime('2014-6-12 15:15'),
         'rate_type' => 'flat',
+        'frequency' => 5,
         'meter_nid' => $meter_node1->nid,
         'kwh' => 10+20,
         'power_factor' => 0.96,
       ),
       // One entry at 16:00, should not be read when processing 15:00-16:00
       array(
-        'type' => 'modbus',
+        'meter_type' => 'modbus',
         'timestamp' => strtotime('2014-6-12 16:00'),
         'rate_type' => 'flat',
+        'frequency' => 5,
         'meter_nid' => $meter_node1->nid,
         'kwh' => 30+30,
         'power_factor' => 0.96,
       ),
       // One entry for meter 2, should not be read.
       array(
-        'type' => 'modbus',
+        'meter_type' => 'modbus',
         'timestamp' => strtotime('2014-6-12 15:01'),
         'rate_type' => 'flat',
+        'frequency' => 5,
         'meter_nid' => $meter_node2->nid,
         'kwh' => 40,
         'power_factor' => 0.96,
       ),
       // IEC 4 rate-type entries for 2/2014.
       array(
-        'type' => 'IEC',
+        'meter_type' => 'iec',
         'timestamp' => strtotime('2014-2-1 00:00'),
         'rate_type' => 'flat',
+        'frequency' => 2,
         'meter_nid' => $meter_node3->nid,
         'kwh' => 1*24*31,
         'power_factor' => 0.96,
       ),
       array(
-        'type' => 'IEC',
+        'meter_type' => 'iec',
         'timestamp' => strtotime('2014-2-1 00:00'),
         'rate_type' => 'low',
+        'frequency' => 2,
         'meter_nid' => $meter_node3->nid,
         'kwh' => 2*24*31,
         'power_factor' => 0.97,
       ),
       array(
-        'type' => 'IEC',
+        'meter_type' => 'iec',
         'timestamp' => strtotime('2014-2-1 00:00'),
         'rate_type' => 'mid',
+        'frequency' => 2,
         'meter_nid' => $meter_node3->nid,
         'kwh' => 3*24*31,
         'power_factor' => 0.98,
       ),
       array(
-        'type' => 'IEC',
+        'meter_type' => 'iec',
         'timestamp' => strtotime('2014-2-1 00:00'),
         'rate_type' => 'peak',
+        'frequency' => 2,
         'meter_nid' => $meter_node3->nid,
         'kwh' => 4*24*31,
         'power_factor' => 0.99,
       ),
       // Only two rate-types in the 3/2014
       array(
-        'type' => 'IEC',
+        'meter_type' => 'iec',
         'timestamp' => strtotime('2014-3-1 00:00'),
         'rate_type' => 'mid',
+        'frequency' => 2,
         'meter_nid' => $meter_node3->nid,
         'kwh' => 1*24*28,
         'power_factor' => 0.91,
       ),
       array(
-        'type' => 'IEC',
+        'meter_type' => 'iec',
         'timestamp' => strtotime('2014-3-1 00:00'),
         'rate_type' => 'peak',
+        'frequency' => 2,
         'meter_nid' => $meter_node3->nid,
         'kwh' => 2*24*28,
         'power_factor' => 0.92,
       ),
       // Just to make sure, additional value that will not be read in the test
       array(
-        'type' => 'IEC',
+        'meter_type' => 'iec',
         'timestamp' => strtotime('2014-4-1 00:00'),
         'rate_type' => 'flat',
+        'frequency' => 2,
         'meter_nid' => $meter_node3->nid,
         'kwh' => 5*24*31,
         'power_factor' => 0.93,
       ),
       // And another value for meter 4
       array(
-        'type' => 'IEC',
+        'meter_type' => 'iec',
         'timestamp' => strtotime('2014-2-2 13:56'),
         'rate_type' => 'flat',
+        'frequency' => 2,
         'meter_nid' => $meter_node4->nid,
         'kwh' => 7896,
         'power_factor' => 0.92,
@@ -347,9 +359,10 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
 
     // Add new entity to electricity raw table.
     $values = array(
-      'type' => 'modbus',
+      'meter_type' => 'modbus',
       'timestamp' => strtotime('2014-6-12 15:30'),
       'rate_type' => 'flat',
+      'frequency' => 5,
       'meter_nid' => $this->meterNode1->nid,
       'kwh' => 30+10,
       // Supply a new minimal power factor of 0.89 (previous value was 0.90).
@@ -663,9 +676,10 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     $message = 'Electricity-raw entity can have a negative kWh';
     try {
       $values = array(
-        'type' => 'IEC',
+        'meter_type' => 'iec',
         'timestamp' => strtotime('2014-3-1 00:00'),
         'rate_type' => 'flat',
+        'frequency' => 2,
         'meter_nid' => $this->meterNode4->nid,
         'kwh' => -123,
         'power_factor' => 0.92,
