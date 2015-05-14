@@ -12,7 +12,7 @@ class NegawattElectricityMigrate extends Migration {
 
   public $csvColumns = array(
     array('id', 'Unique ID'),
-    array('type', 'type'),
+    array('frequency', 'frequency'),
     array('timestamp', 'timestamp'),
     array('rate_type', 'rate_type'),
     array('meter_nid', 'meter_nid'),
@@ -32,7 +32,7 @@ class NegawattElectricityMigrate extends Migration {
     // Map fields that don't need extra definitions.
     $field_names = array(
       'id',
-      'type',
+      'frequency',
       'timestamp',
       'rate_type',
       'meter_nid',
