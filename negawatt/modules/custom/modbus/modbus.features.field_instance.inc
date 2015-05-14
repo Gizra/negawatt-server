@@ -35,7 +35,7 @@ function modbus_field_default_field_instances() {
           'use_widget_handlers' => 1,
         ),
         'type' => 'addressfield_default',
-        'weight' => 7,
+        'weight' => 9,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -88,7 +88,7 @@ function modbus_field_default_field_instances() {
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
-        'weight' => 15,
+        'weight' => 16,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -131,7 +131,7 @@ function modbus_field_default_field_instances() {
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
-        'weight' => 16,
+        'weight' => 17,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -175,7 +175,7 @@ function modbus_field_default_field_instances() {
           'multiple_to' => '',
         ),
         'type' => 'date_default',
-        'weight' => 9,
+        'weight' => 11,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -223,7 +223,7 @@ function modbus_field_default_field_instances() {
         'module' => 'geolocation',
         'settings' => array(),
         'type' => 'geolocation_text',
-        'weight' => 8,
+        'weight' => 10,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -264,7 +264,7 @@ function modbus_field_default_field_instances() {
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
-        'weight' => 14,
+        'weight' => 15,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -343,7 +343,7 @@ function modbus_field_default_field_instances() {
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
-        'weight' => 12,
+        'weight' => 13,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -385,7 +385,7 @@ function modbus_field_default_field_instances() {
           'thousand_separator' => ' ',
         ),
         'type' => 'number_integer',
-        'weight' => 6,
+        'weight' => 8,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -426,7 +426,7 @@ function modbus_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 4,
+        'weight' => 5,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -471,7 +471,7 @@ function modbus_field_default_field_instances() {
           'thousand_separator' => ' ',
         ),
         'type' => 'number_integer',
-        'weight' => 5,
+        'weight' => 6,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -516,7 +516,7 @@ function modbus_field_default_field_instances() {
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
-        'weight' => 11,
+        'weight' => 12,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -548,14 +548,14 @@ function modbus_field_default_field_instances() {
     'bundle' => 'modbus_meter',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Type of Modbus meter, e.g. satec, elnet, etc.',
+    'description' => 'Type of Modbus meter, e.g. satec, elnet, etc',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'text',
+        'module' => 'list',
         'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 17,
+        'type' => 'list_default',
+        'weight' => 4,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -569,16 +569,13 @@ function modbus_field_default_field_instances() {
     'label' => 'Meter type',
     'required' => 1,
     'settings' => array(
-      'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'text',
-      'settings' => array(
-        'size' => 60,
-      ),
-      'type' => 'text_textfield',
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
       'weight' => 9,
     ),
   );
@@ -635,7 +632,7 @@ function modbus_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 6,
+        'weight' => 7,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -768,7 +765,7 @@ function modbus_field_default_field_instances() {
           'concatenate' => FALSE,
         ),
         'type' => 'og_vocab',
-        'weight' => 13,
+        'weight' => 14,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -816,7 +813,7 @@ function modbus_field_default_field_instances() {
   t('Place Address');
   t('Place Description');
   t('Place Locality');
-  t('Type of Modbus meter, e.g. satec, elnet, etc.');
+  t('Type of Modbus meter, e.g. satec, elnet, etc');
 
   return $field_instances;
 }
