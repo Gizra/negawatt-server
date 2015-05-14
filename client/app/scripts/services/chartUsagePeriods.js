@@ -9,6 +9,8 @@ angular.module('negawattClientApp')
       // Set the default configuration of the period based on the type of Chart
       // and set his limits.
       config: config,
+      // Change the new limits of the chart, according the state and the filters.
+      setLimits: setLimits,
       // Return boolean to indicate if show or no the next/previous period control.
       showControl: showControl,
       // Calculate the next and previous version.
@@ -22,7 +24,7 @@ angular.module('negawattClientApp')
      * Configure the period acording the chart object.
      *
      * @param limits
-     *  string
+     *
      * @param chart
      *
      */

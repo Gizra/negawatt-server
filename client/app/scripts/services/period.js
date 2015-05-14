@@ -23,20 +23,20 @@ angular.module('negawattClientApp')
 
         // Set the next tiemstamp by default in 'now' of maximum limit.
         this.next = (moment().isAfter(moment.unix(this.max))) ? this.max : moment().unix();
-        this.previous = period.getPrevious();
+        this.previous = this.getPrevious();
       },
       setPeriod: function(newPeriod) {
         // Check the chart limits, with the information obtained from the server. (example meters).
         if (angular.isDefined(newPeriod.max) && angular.isDefined(newPeriod.min)) {
-          period.next = (moment.unix(period.next).isAfter(moment.unix(newPeriod.max))) ? period.next : newPeriod.max;
-          period.previous = (moment.unix(period.previous).isAfter(moment.unix(newPeriod.min))) ? period.previous : newPeriod.min;
+          this.next = (moment.unix(this.next).isAfter(moment.unix(newPeriod.max))) ? this.next : newPeriod.max;
+          this.previous = (moment.unix(this.previous).isAfter(moment.unix(newPeriod.min))) ? this.previous : newPeriod.min;
         }
 
         // Set according current newPeriod.
         if (angular.isDefined(newPeriod.next) && angular.isDefined(newPeriod.previous)) {
           // Comming from the calculation.
-          period.next = newPeriod.next;
-          period.previous = newPeriod.previous;
+          this.next = newPeriod.next;
+          this.previous = newPeriod.previous;
         }
       },
       getPrevious: function() {
