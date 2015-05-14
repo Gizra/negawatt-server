@@ -40,7 +40,7 @@ class NegawattMessageAnomalousConsumption extends \RestfulEntityBase {
     $public_fields['meter'] = array(
       'property' => 'field_meter',
       'resource' => array(
-        'satec_meter' => array(
+        'modbus_meter' => array(
           'name' => 'meters',
           'full_view' => FALSE,
         ),

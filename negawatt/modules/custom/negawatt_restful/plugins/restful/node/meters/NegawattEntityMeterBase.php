@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains NegawattSatecMeterResource.
+ * Contains NegawattModbusMeterResource.
  */
 class NegawattEntityMeterBase extends \NegawattEntityBaseNode {
   /**

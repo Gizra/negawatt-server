@@ -1,13 +1,13 @@
 <?php
 
 $plugin = array(
-  'label' => t('Satec Meters'),
-  'description' => t('List of Satec (or otherwise equal) meters.'),
-  'resource' => 'satec_meters',
-  'class' => 'NegawattSatecMeterResource',
-  'name' => 'satec_meter__1_0',
+  'label' => t('Modbus Meters'),
+  'description' => t('List of Modbus (or otherwise equal) meters.'),
+  'resource' => 'modbus_meters',
+  'class' => 'NegawattModbusMeterResource',
+  'name' => 'modbus_meter__1_0',
   'entity_type' => 'node',
-  'bundle' => 'satec_meter',
+  'bundle' => 'modbus_meter',
   'authentication_types' => TRUE,
   // Add totals to output.
   'formatter' => 'meters_total',

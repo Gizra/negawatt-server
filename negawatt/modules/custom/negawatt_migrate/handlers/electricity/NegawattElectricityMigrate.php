@@ -23,7 +23,7 @@ class NegawattElectricityMigrate extends Migration {
 
   public $dependencies = array(
     'NegawattIecMeterMigrate',
-    'NegawattSatecMeterMigrate',
+    'NegawattModbusMeterMigrate',
   );
 
   public function __construct() {
@@ -44,7 +44,7 @@ class NegawattElectricityMigrate extends Migration {
 
     $this
       ->addFieldMapping('meter_nid', 'meter_nid')
-      ->sourceMigration(array('NegawattIecMeterMigrate','NegawattSatecMeterMigrate'));
+      ->sourceMigration(array('NegawattIecMeterMigrate','NegawattModbusMeterMigrate'));
 
     $this->description = t('Import @type - from CSV file.', array('@type' => $this->entityType));
 

@@ -17,9 +17,9 @@ $plugin = array(
 /**
  * Render callback.
  */
-function satec_chart_table_report_content_type_render($subtype, $conf, $args, $context) {
+function modbus_chart_table_report_content_type_render($subtype, $conf, $args, $context) {
   global $user;
-  $module = 'satec';
+  $module = 'modbus';
   // Default user is currently logged in one.
   // Only admins can see everybody's data.
   $output = '';
@@ -33,7 +33,7 @@ function satec_chart_table_report_content_type_render($subtype, $conf, $args, $c
 
   $height = 190;
   $width = 960;
-  $output .= satec_chart_table_report_daily_graph($width, $height, $account);
+  $output .= modbus_chart_table_report_daily_graph($width, $height, $account);
 
   $block = new stdClass();
   //$block->title = t('Welcome !');
@@ -46,7 +46,7 @@ function satec_chart_table_report_content_type_render($subtype, $conf, $args, $c
 /**
  * Init a chart array.
  */
-function _satec_chart_table_report_init_chart($title, $width, $height, $type = CHART_TYPE_LINE) {
+function _modbus_chart_table_report_init_chart($title, $width, $height, $type = CHART_TYPE_LINE) {
   return array(
     '#chart_id' => $title,
     '#title' => chart_title($title, 'cc0000', 15),
@@ -55,7 +55,7 @@ function _satec_chart_table_report_init_chart($title, $width, $height, $type = C
   );
 }
 
-function satec_chart_table_report_daily_graph($width, $height, $account) {
+function modbus_chart_table_report_daily_graph($width, $height, $account) {
   $dates = array(
     time(),
     time() - 60 * 60 * 24,
@@ -68,7 +68,7 @@ function satec_chart_table_report_daily_graph($width, $height, $account) {
   $data = array();
   $max = 0;
   foreach ($dates as $date) {
-    $data[$date] = _satec_get_from_data(satec_daily_consumptions($date, $account->uid), 'current');
+    $data[$date] = _modbus_get_from_data(modbus_daily_consumptions($date, $account->uid), 'current');
     $max = $max < count($data[$date]) ? count($data[$date]) : $max;
   }
   
@@ -117,12 +117,12 @@ function satec_chart_table_report_daily_graph($width, $height, $account) {
 /**
  * Form callback.
  */
-function satec_chart_table_report_content_type_edit_form($form, &$form_state) {
+function modbus_chart_table_report_content_type_edit_form($form, &$form_state) {
   // provide a blank form so we have a place to have context setting.
   return $form;
 }
 
-function satec_chart_table_report_content_type_edit_form_submit($form, &$form_state) {
+function modbus_chart_table_report_content_type_edit_form_submit($form, &$form_state) {
   // Copy everything from our defaults.
   foreach (array_keys($form_state['plugin']['defaults']) as $key) {
     $form_state['conf'][$key] = $form_state['values'][$key];
@@ -132,7 +132,7 @@ function satec_chart_table_report_content_type_edit_form_submit($form, &$form_st
 /**
  * Include mozozoom files
  */
-function satec_chart_table_report_excanvas_library_include() {
+function modbus_chart_table_report_excanvas_library_include() {
   $excanvas_path = libraries_get_path('excanvas');
 
   if (!empty($excanvas_path)) {

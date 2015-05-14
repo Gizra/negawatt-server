@@ -2,13 +2,13 @@
 
 /**
  * @file
- * Contains \NegawattSatecMeterMigrate.
+ * Contains \NegawattModbusMeterMigrate.
  */
 
-class NegawattSatecMeterMigrate extends NegawattMigration {
+class NegawattModbusMeterMigrate extends NegawattMigration {
 
   public $entityType = 'node';
-  public $bundle = 'satec_meter';
+  public $bundle = 'modbus_meter';
 
   public $csvColumns = array(
     array('account', 'Account ref'),

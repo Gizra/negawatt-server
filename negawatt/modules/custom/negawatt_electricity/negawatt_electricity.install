@@ -20,14 +20,14 @@ function negawatt_electricity_schema() {
         'not null' => TRUE,
       ),
       'type' => array(
-        'description' => 'The type of this data, Satec/IEC/Other.',
+        'description' => 'The type of this data, Modbus/IEC/Other.',
         'type' => 'varchar',
         'length' => 32,
         'not null' => TRUE,
         'default' => '',
       ),
       'timestamp' => array(
-        'description' => 'timestamp of recording (for a meter, e.g. satec) or beginning of period (for period consumption, e.g. iec meter).',
+        'description' => 'timestamp of recording (for a meter, e.g. modbus) or beginning of period (for period consumption, e.g. iec meter).',
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
@@ -41,7 +41,7 @@ function negawatt_electricity_schema() {
         'default' => '',
       ),
       'meter_nid' => array(
-        'description' => 'The electric meter NID, or Satec NID.',
+        'description' => 'The electric meter NID, or Modbus NID.',
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
@@ -127,7 +127,7 @@ function negawatt_electricity_schema() {
         'default' => '',
       ),
       'meter_nid' => array(
-        'description' => 'The electric meter NID, or Satec NID.',
+        'description' => 'The electric meter NID, or Modbus NID.',
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,

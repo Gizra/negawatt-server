@@ -332,7 +332,7 @@ function negawatt_meter_views_default_views() {
   $handler->display->display_options['filters']['type']['field'] = 'type';
   $handler->display->display_options['filters']['type']['value'] = array(
     'iec_meter' => 'iec_meter',
-    'satec_meter' => 'satec_meter',
+    'modbus_meter' => 'modbus_meter',
   );
   $handler->display->display_options['filters']['type']['group'] = 1;
   /* Filter criterion: Content: Place Description (field_place_description) */
@@ -358,7 +358,7 @@ function negawatt_meter_views_default_views() {
   $handler->display->display_options['filters']['type_1']['field'] = 'type';
   $handler->display->display_options['filters']['type_1']['value'] = array(
     'iec_meter' => 'iec_meter',
-    'satec_meter' => 'satec_meter',
+    'modbus_meter' => 'modbus_meter',
   );
   $handler->display->display_options['filters']['type_1']['group'] = 1;
   $handler->display->display_options['filters']['type_1']['exposed'] = TRUE;
@@ -385,14 +385,14 @@ function negawatt_meter_views_default_views() {
         'iec_meter' => 'iec_meter',
         'all' => 0,
         'account' => 0,
-        'satec_meter' => 0,
+        'modbus_meter' => 0,
       ),
     ),
     2 => array(
       'title' => 'SATEC Meter',
       'operator' => 'in',
       'value' => array(
-        'satec_meter' => 'satec_meter',
+        'modbus_meter' => 'modbus_meter',
         'all' => 0,
         'account' => 0,
         'iec_meter' => 0,

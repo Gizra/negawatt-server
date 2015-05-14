@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * satec.features.inc
+ * modbus.features.inc
  */
 
 /**
  * Implements hook_ctools_plugin_api().
  */
-function satec_ctools_plugin_api($module = NULL, $api = NULL) {
+function modbus_ctools_plugin_api($module = NULL, $api = NULL) {
   if ($module == "strongarm" && $api == "strongarm") {
     return array("version" => "1");
   }
@@ -16,10 +16,10 @@ function satec_ctools_plugin_api($module = NULL, $api = NULL) {
 /**
  * Implements hook_node_info().
  */
-function satec_node_info() {
+function modbus_node_info() {
   $items = array(
-    'satec_meter' => array(
-      'name' => t('Satec meter'),
+    'modbus_meter' => array(
+      'name' => t('Modbus meter'),
       'base' => 'node_content',
       'description' => '',
       'has_title' => '1',

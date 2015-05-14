@@ -8,9 +8,9 @@
 /**
  * Implement hook_drush_help().
  */
-function satec_drush_help($section) {
+function modbus_drush_help($section) {
   switch ($section) {
-    case 'drush:satec_read_registers':
+    case 'drush:modbus_read_registers':
       return dt('Read electricity values and save in raw-electricity table.');
   }
 }
@@ -18,11 +18,11 @@ function satec_drush_help($section) {
 /**
  * Implement hook_drush_command().
  */
-function satec_drush_command() {
+function modbus_drush_command() {
   $items = array();
 
-  $items['satec_read_meter'] = array(
-    'callback' => 'satec_read_meter',
+  $items['modbus_read_meter'] = array(
+    'callback' => 'modbus_read_meter',
     'drupal dependencies' => array(),
     'description' => 'Read electricity values and save to DB.',
     'options' => array(
@@ -30,10 +30,10 @@ function satec_drush_command() {
       'debug' => 'Get dpm info with dd',
     ),
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_CONFIGURATION,
-    'aliases' => array('satec'),
+    'aliases' => array('modbus'),
     'examples' => array(
-      'drush satec_read_meter --meter_id=123' =>' Read data from meter 123.',
-      'drush satec_read_meter' =>' Read data from all satec meters.',
+      'drush modbus_read_meter --meter_id=123' =>' Read data from meter 123.',
+      'drush modbus_read_meter' =>' Read data from all modbus meters.',
     ),
   );
 
@@ -43,35 +43,35 @@ function satec_drush_command() {
 /**
  * Callback function for reading meter command.
  */
-function satec_read_meter() {
+function modbus_read_meter() {
   $debug = drush_get_option('debug', FALSE);
   $meter_id = drush_get_option('meter_id', FALSE);
 
   if ($meter_id) {
-    satec_read_one_meter($meter_id);
+    modbus_read_one_meter($meter_id);
     return;
   }
 
-  // Meter-ID was not given, loop for all satec meter nodes
+  // Meter-ID was not given, loop for all modbus meter nodes
   $query = new EntityFieldQuery();
   $result = $query->entityCondition('entity_type', 'node')
-    ->entityCondition('bundle', array('satec_meter'), 'IN')
+    ->entityCondition('bundle', array('modbus_meter'), 'IN')
     ->propertyCondition('status', NODE_PUBLISHED)
     ->execute();
 
   if (empty($result['node'])) {
-    drush_log('Meters of type satec were not found.', 'error');
+    drush_log('Meters of type modbus were not found.', 'error');
     return FALSE;
   }
 
   $meter_ids = array_keys($result['node']);
   foreach ($meter_ids as $meter_id) {
-    satec_read_one_meter($meter_id);
+    modbus_read_one_meter($meter_id);
   }
 }
 
 /**
- * Read data from one Satec meter and store it in raw-electricity table.
+ * Read data from one Modbus meter and store it in raw-electricity table.
  *
  * @param $meter_id
  *    Node ID of the meter.
@@ -79,7 +79,7 @@ function satec_read_meter() {
  * @return bool
  *    True if everything went fine.
  */
-function satec_read_one_meter($meter_id) {
+function modbus_read_one_meter($meter_id) {
   // Look for meter node.
   $node = node_load($meter_id);
   if (!$node) {
@@ -119,13 +119,13 @@ function satec_read_one_meter($meter_id) {
   $timestamp = time();
   $data = array();
   foreach ($requests as $request) {
-    $data[] = satec_read_modbus_32bit_registers($request, $address, $modbus_id, $meter_port);
+    $data[] = modbus_read_modbus_32bit_registers($request, $address, $modbus_id, $meter_port);
   }
 
   if (!$data[0]) {
     // Send notification on error.
     drush_log('Nothing was read from the meter.', 'error');
-    drupal_mail('satec', 'error-connection', 'brice@gizra.com', 'en');
+    drupal_mail('modbus', 'error-connection', 'brice@gizra.com', 'en');
     drush_print($data);
     return FALSE;
   }
@@ -133,7 +133,7 @@ function satec_read_one_meter($meter_id) {
   drush_log('Data received.', 'ok');
 
   // Save data onto db.
-  if (!satec_write_data_to_db($meter_id, $data, $timestamp)) {
+  if (!modbus_write_data_to_db($meter_id, $data, $timestamp)) {
     $msg = 'Error writing to db';
     drush_log($msg, 'error');
   }
@@ -156,10 +156,10 @@ function satec_read_one_meter($meter_id) {
  * @return bool
  *    True if everything went fine.
  */
-function satec_write_data_to_db($meter_id, $data, $timestamp, $debug = FALSE) {
+function modbus_write_data_to_db($meter_id, $data, $timestamp, $debug = FALSE) {
   // Create a new raw-electricity entity.
   $values = array(
-    'type' => 'satec',
+    'type' => 'modbus',
     'meter_nid' => $meter_id,
     'timestamp' => $timestamp,
     'rate_type' => 'unknown',
@@ -208,7 +208,7 @@ function satec_write_data_to_db($meter_id, $data, $timestamp, $debug = FALSE) {
  * @return bool|int|number
  *    The value, if call succeeded, or FALSE if an error occurred.
  */
-function satec_read_modbus_32bit_registers($request, $address, $modbus_id = 1, $port = 502, $debug = FALSE) {
+function modbus_read_modbus_32bit_registers($request, $address, $modbus_id = 1, $port = 502, $debug = FALSE) {
   // Extract request parameters.
   $reference = $request['reference'];
   $quantity = $request['quantity'];
@@ -218,7 +218,7 @@ function satec_read_modbus_32bit_registers($request, $address, $modbus_id = 1, $
   $modbus_id = $modbus_id ? $modbus_id : 1;
   $port = $port ? $port : 502;
 
-  require_once(drupal_get_path('module', 'satec') . '/Phpmodbus/Phpmodbus/ModbusMasterTcp.php');
+  require_once(drupal_get_path('module', 'modbus') . '/Phpmodbus/Phpmodbus/ModbusMasterTcp.php');
   $modbus = new ModbusMasterTcp($address, $port);
 
   try {

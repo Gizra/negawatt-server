@@ -45,7 +45,7 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     // Create og-vocabulary for meter types.
     $og_vocab = og_vocab_create_og_vocab($vocabulary1->vid, 'node', 'iec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
     $og_vocab->save();
-    $og_vocab = og_vocab_create_og_vocab($vocabulary1->vid, 'node', 'satec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
+    $og_vocab = og_vocab_create_og_vocab($vocabulary1->vid, 'node', 'modbus_meter', OG_VOCAB_FIELD, $og_vocab_settings);
     $og_vocab->save();
 
     // Relate vocabulary to account 1.
@@ -71,11 +71,11 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
    * Prepare meter nodes and raw data entities.
    */
   function setUp() {
-    parent::setUp('negawatt_normalizer', 'negawatt_account', 'satec', 'iec');
+    parent::setUp('negawatt_normalizer', 'negawatt_account', 'modbus', 'iec');
 
-    // Create satec meter nodes.
+    // Create modbus meter nodes.
     $settings = array(
-      'type' => 'satec_meter',
+      'type' => 'modbus_meter',
       'field_max_frequency' => array('und' => array('0' => array('value' => \NegaWattNormalizerTimeManagerInterface::MINUTE))),
       'field_place_address' => array('und' => array('0' => array('value' => 'לכיש 25'))),
       'field_place_locality' => array('und' => array('0' => array('value' => 'קרית גת'))),
@@ -238,9 +238,9 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
    * - Test that the using same timestamp, nid returns an existing entity.
    * - Test that adding raw data and calling process again returns proper values.
    */
-  function testProcessSatecMeter() {
+  function testProcessModbusMeter() {
 
-    $handler = negawatt_normalizer_get_electricity_normalizer_handler('satec');
+    $handler = negawatt_normalizer_get_electricity_normalizer_handler('modbus');
 
     // Test TOUse functionality
 

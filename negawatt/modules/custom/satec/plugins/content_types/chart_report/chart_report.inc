@@ -16,8 +16,8 @@ $plugin = array(
 /**
  * Render callback, Render the default electric meter on HP..
  */
-function satec_chart_report_content_type_render($subtype, $conf, $args, $context) {
-  $module = 'satec';
+function modbus_chart_report_content_type_render($subtype, $conf, $args, $context) {
+  $module = 'modbus';
 
   // Add media files.
   drupal_add_css(drupal_get_path('module', $module) . '/plugins/content_types/' . $subtype . '/' . $subtype . '.css.less');
@@ -33,11 +33,11 @@ function satec_chart_report_content_type_render($subtype, $conf, $args, $context
     $uid = 1;
   }
 
-  $last_consumption = _satec_get_data_from_position('last', satec_daily_consumptions(time(), $uid));
+  $last_consumption = _modbus_get_data_from_position('last', modbus_daily_consumptions(time(), $uid));
   // If no result use default uid 1.
   if (!$last_consumption) {
     $uid = 1;
-    $last_consumption = _satec_get_data_from_position('last', satec_daily_consumptions(time(), $uid));
+    $last_consumption = _modbus_get_data_from_position('last', modbus_daily_consumptions(time(), $uid));
   }
 
   if (!isset($last_consumption[1])) {
@@ -91,12 +91,12 @@ function satec_chart_report_content_type_render($subtype, $conf, $args, $context
 /**
  * Form callback.
  */
-function satec_chart_report_content_type_edit_form($form, &$form_state) {
+function modbus_chart_report_content_type_edit_form($form, &$form_state) {
   // provide a blank form so we have a place to have context setting.
   return $form;
 }
 
-function satec_chart_report_content_type_edit_form_submit($form, &$form_state) {
+function modbus_chart_report_content_type_edit_form_submit($form, &$form_state) {
   // Copy everything from our defaults.
   foreach (array_keys($form_state['plugin']['defaults']) as $key) {
     $form_state['conf'][$key] = $form_state['values'][$key];
@@ -106,7 +106,7 @@ function satec_chart_report_content_type_edit_form_submit($form, &$form_state) {
 /**
  * Include mozozoom files
  */
-function satec_chart_report_excanvas_library_include() {
+function modbus_chart_report_excanvas_library_include() {
   $excanvas_path = libraries_get_path('excanvas');
 
   if (!empty($excanvas_path)) {

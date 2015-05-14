@@ -2,17 +2,17 @@
 
 /**
  * @file
- * Contains ElectricityNormalizerSatec.
+ * Contains ElectricityNormalizerModbus.
  */
 
-class ElectricityNormalizerSatec extends \ElectricityNormalizerBase {
+class ElectricityNormalizerModbus extends \ElectricityNormalizerBase {
 
   /**
    * {@inheritdoc}
    */
   public function access() {
     $node = $this->getMeterNode();
-    return $node->type == 'satec_meter';
+    return $node->type == 'modbus_meter';
   }
 
   /**

@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * satec.features.field_base.inc
+ * modbus.features.field_base.inc
  */
 
 /**
  * Implements hook_field_default_field_bases().
  */
-function satec_field_default_field_bases() {
+function modbus_field_default_field_bases() {
   $field_bases = array();
 
   // Exported field_base: 'field_mac_address'

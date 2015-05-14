@@ -41,7 +41,7 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
       'property' => 'meter_nid',
       'access_callbacks' => array(array($this, 'meterFieldAccess')),
       'resource' => array(
-        'satec_meter' => array(
+        'modbus_meter' => array(
           'name' => 'meters',
           'full_view' => FALSE,
         ),

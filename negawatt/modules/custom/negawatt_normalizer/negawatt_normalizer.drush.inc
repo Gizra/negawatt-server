@@ -43,7 +43,7 @@ function drush_negawatt_normalizer_clear_normalized_electricity() {
 function drush_negawatt_normalizer_reset_last_processed() {
   $bundles = array(
     'iec_meter',
-    'satec_meter',
+    'modbus_meter',
   );
 
   $query = new EntityFieldQuery();
@@ -130,7 +130,7 @@ function negawatt_normalizer_process_meters($meter_start_id, $options = array())
 
   $bundles = array(
     'iec_meter',
-    'satec_meter',
+    'modbus_meter',
   );
 
   // Prepare basic query that will be used later

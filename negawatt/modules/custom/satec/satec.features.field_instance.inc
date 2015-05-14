@@ -1,21 +1,21 @@
 <?php
 /**
  * @file
- * satec.features.field_instance.inc
+ * modbus.features.field_instance.inc
  */
 
 /**
  * Implements hook_field_default_field_instances().
  */
-function satec_field_default_field_instances() {
+function modbus_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-satec_meter-field_address'
-  $field_instances['node-satec_meter-field_address'] = array(
-    'bundle' => 'satec_meter',
+  // Exported field_instance: 'node-modbus_meter-field_address'
+  $field_instances['node-modbus_meter-field_address'] = array(
+    'bundle' => 'modbus_meter',
     'default_value' => array(
       0 => array(
-        'element_key' => 'node|satec_meter|field_address|und|0',
+        'element_key' => 'node|modbus_meter|field_address|und|0',
         'thoroughfare' => '',
         'premise' => '',
         'locality' => '',
@@ -72,9 +72,9 @@ function satec_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-satec_meter-field_category_valid'
-  $field_instances['node-satec_meter-field_category_valid'] = array(
-    'bundle' => 'satec_meter',
+  // Exported field_instance: 'node-modbus_meter-field_category_valid'
+  $field_instances['node-modbus_meter-field_category_valid'] = array(
+    'bundle' => 'modbus_meter',
     'default_value' => array(
       0 => array(
         'value' => 0,
@@ -115,9 +115,9 @@ function satec_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-satec_meter-field_has_electricity'
-  $field_instances['node-satec_meter-field_has_electricity'] = array(
-    'bundle' => 'satec_meter',
+  // Exported field_instance: 'node-modbus_meter-field_has_electricity'
+  $field_instances['node-modbus_meter-field_has_electricity'] = array(
+    'bundle' => 'modbus_meter',
     'default_value' => array(
       0 => array(
         'value' => 0,
@@ -158,9 +158,9 @@ function satec_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-satec_meter-field_last_processed'
-  $field_instances['node-satec_meter-field_last_processed'] = array(
-    'bundle' => 'satec_meter',
+  // Exported field_instance: 'node-modbus_meter-field_last_processed'
+  $field_instances['node-modbus_meter-field_last_processed'] = array(
+    'bundle' => 'modbus_meter',
     'deleted' => 0,
     'description' => '',
     'display' => array(
@@ -211,9 +211,9 @@ function satec_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-satec_meter-field_location'
-  $field_instances['node-satec_meter-field_location'] = array(
-    'bundle' => 'satec_meter',
+  // Exported field_instance: 'node-modbus_meter-field_location'
+  $field_instances['node-modbus_meter-field_location'] = array(
+    'bundle' => 'modbus_meter',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -248,9 +248,9 @@ function satec_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-satec_meter-field_location_valid'
-  $field_instances['node-satec_meter-field_location_valid'] = array(
-    'bundle' => 'satec_meter',
+  // Exported field_instance: 'node-modbus_meter-field_location_valid'
+  $field_instances['node-modbus_meter-field_location_valid'] = array(
+    'bundle' => 'modbus_meter',
     'default_value' => array(
       0 => array(
         'value' => 0,
@@ -291,9 +291,9 @@ function satec_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-satec_meter-field_mac_address'
-  $field_instances['node-satec_meter-field_mac_address'] = array(
-    'bundle' => 'satec_meter',
+  // Exported field_instance: 'node-modbus_meter-field_mac_address'
+  $field_instances['node-modbus_meter-field_mac_address'] = array(
+    'bundle' => 'modbus_meter',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -331,9 +331,9 @@ function satec_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-satec_meter-field_max_frequency'
-  $field_instances['node-satec_meter-field_max_frequency'] = array(
-    'bundle' => 'satec_meter',
+  // Exported field_instance: 'node-modbus_meter-field_max_frequency'
+  $field_instances['node-modbus_meter-field_max_frequency'] = array(
+    'bundle' => 'modbus_meter',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => 'Maximal sampling frequency for the meter.',
@@ -368,9 +368,9 @@ function satec_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-satec_meter-field_meter_id'
-  $field_instances['node-satec_meter-field_meter_id'] = array(
-    'bundle' => 'satec_meter',
+  // Exported field_instance: 'node-modbus_meter-field_meter_id'
+  $field_instances['node-modbus_meter-field_meter_id'] = array(
+    'bundle' => 'modbus_meter',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -414,9 +414,9 @@ function satec_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-satec_meter-field_meter_ip_address'
-  $field_instances['node-satec_meter-field_meter_ip_address'] = array(
-    'bundle' => 'satec_meter',
+  // Exported field_instance: 'node-modbus_meter-field_meter_ip_address'
+  $field_instances['node-modbus_meter-field_meter_ip_address'] = array(
+    'bundle' => 'modbus_meter',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -454,9 +454,9 @@ function satec_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-satec_meter-field_meter_port'
-  $field_instances['node-satec_meter-field_meter_port'] = array(
-    'bundle' => 'satec_meter',
+  // Exported field_instance: 'node-modbus_meter-field_meter_port'
+  $field_instances['node-modbus_meter-field_meter_port'] = array(
+    'bundle' => 'modbus_meter',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -500,9 +500,9 @@ function satec_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-satec_meter-field_meter_processed'
-  $field_instances['node-satec_meter-field_meter_processed'] = array(
-    'bundle' => 'satec_meter',
+  // Exported field_instance: 'node-modbus_meter-field_meter_processed'
+  $field_instances['node-modbus_meter-field_meter_processed'] = array(
+    'bundle' => 'modbus_meter',
     'default_value' => array(
       0 => array(
         'value' => 0,
@@ -543,9 +543,9 @@ function satec_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-satec_meter-field_place_address'
-  $field_instances['node-satec_meter-field_place_address'] = array(
-    'bundle' => 'satec_meter',
+  // Exported field_instance: 'node-modbus_meter-field_place_address'
+  $field_instances['node-modbus_meter-field_place_address'] = array(
+    'bundle' => 'modbus_meter',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -583,9 +583,9 @@ function satec_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-satec_meter-field_place_description'
-  $field_instances['node-satec_meter-field_place_description'] = array(
-    'bundle' => 'satec_meter',
+  // Exported field_instance: 'node-modbus_meter-field_place_description'
+  $field_instances['node-modbus_meter-field_place_description'] = array(
+    'bundle' => 'modbus_meter',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -623,9 +623,9 @@ function satec_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-satec_meter-field_place_locality'
-  $field_instances['node-satec_meter-field_place_locality'] = array(
-    'bundle' => 'satec_meter',
+  // Exported field_instance: 'node-modbus_meter-field_place_locality'
+  $field_instances['node-modbus_meter-field_place_locality'] = array(
+    'bundle' => 'modbus_meter',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -663,9 +663,9 @@ function satec_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-satec_meter-og_group_ref'
-  $field_instances['node-satec_meter-og_group_ref'] = array(
-    'bundle' => 'satec_meter',
+  // Exported field_instance: 'node-modbus_meter-og_group_ref'
+  $field_instances['node-modbus_meter-og_group_ref'] = array(
+    'bundle' => 'modbus_meter',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -714,9 +714,9 @@ function satec_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-satec_meter-og_vocabulary'
-  $field_instances['node-satec_meter-og_vocabulary'] = array(
-    'bundle' => 'satec_meter',
+  // Exported field_instance: 'node-modbus_meter-og_vocabulary'
+  $field_instances['node-modbus_meter-og_vocabulary'] = array(
+    'bundle' => 'modbus_meter',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',

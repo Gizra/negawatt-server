@@ -53,7 +53,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     // Create og-vocabulary for meter types.
     $og_vocab = og_vocab_create_og_vocab($vocabulary1->vid, 'node', 'iec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
     $og_vocab->save();
-    $og_vocab = og_vocab_create_og_vocab($vocabulary1->vid, 'node', 'satec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
+    $og_vocab = og_vocab_create_og_vocab($vocabulary1->vid, 'node', 'modbus_meter', OG_VOCAB_FIELD, $og_vocab_settings);
     $og_vocab->save();
 
     // Relate vocabulary to account 1.
@@ -69,7 +69,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     // Create og-vocabulary for meter types.
     $og_vocab = og_vocab_create_og_vocab($vocabulary2->vid, 'node', 'iec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
     $og_vocab->save();
-    $og_vocab = og_vocab_create_og_vocab($vocabulary2->vid, 'node', 'satec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
+    $og_vocab = og_vocab_create_og_vocab($vocabulary2->vid, 'node', 'modbus_meter', OG_VOCAB_FIELD, $og_vocab_settings);
     $og_vocab->save();
 
     // Relate vocabulary to account 2.
@@ -130,9 +130,9 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
 
     $this->setUpCategories();
 
-    // Create satec meter nodes.
+    // Create modbus meter nodes.
     $settings = array(
-      'type' => 'satec_meter',
+      'type' => 'modbus_meter',
       'field_max_frequency' => array('und' => array('0' => array('value' => \NegaWattNormalizerTimeManagerInterface::MINUTE))),
       'field_meter_id' => array('und' => array('0' => array('value' => 1))),
       'field_place_address' => array('und' => array('0' => array('value' => 'לכיש 25'))),
@@ -259,20 +259,20 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
 
   /**
    * Test 'meters' API.
-   * - Should give both satec and iec meters.
+   * - Should give both modbus and iec meters.
    * - Max-frequency field should show.
    * - Meter-category field should list the entire category hierarchy.
-   * - Particular satec and iec meters' fields will appear.
+   * - Particular modbus and iec meters' fields will appear.
    */
   function testMetersApi() {
 
-    $handler = restful_get_restful_handler('satec_meters');
+    $handler = restful_get_restful_handler('modbus_meters');
     $response = $handler->get();
 
     // There should be 2 meters
     $this->assertTrue(is_array($response) && count($response) == 2, 'Two SATEC meters were found.');
     $meter = $response[0];
-    $this->assertEqual($meter['type'], 'satec_meter', 'Meter type is correct.');
+    $this->assertEqual($meter['type'], 'modbus_meter', 'Meter type is correct.');
     $this->assertEqual($meter['max_frequency'], 5, 'Max-frequency field is correct.');
     $this->assertEqual($meter['meter_id'], 1, 'Meter ID field is correct.');
 
@@ -322,7 +322,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     $this->assertEqual($result[0]['max_frequency'], 5, 'Meter max_frequency was updated.');
 
     // @todo: Test 'meters' API call
-    // @todo: Test that both satec and iec meters are returned.
+    // @todo: Test that both modbus and iec meters are returned.
   }
 
   /**
