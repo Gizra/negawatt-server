@@ -91,6 +91,7 @@ function modbus_read_one_meter($meter_id) {
 
   // Get meter properties from node
   $wrapper = entity_metadata_wrapper('node', $meter_id);
+  $meter_type = $wrapper->field_meter_type->value();
   $address = $wrapper->field_meter_ip_address->value();
   $modbus_id = $wrapper->field_meter_id->value();
   $meter_port = $wrapper->field_meter_port->value();
@@ -99,26 +100,28 @@ function modbus_read_one_meter($meter_id) {
 
   // Prepare set of registers to read.
   $requests = array(
-    // 1 Second total KW.
-    array('reference' => 14336 + 00, 'quantity' => 2, 'signed' => TRUE),
-    // 1 Second total PF.
-    array('reference' => 14336 + 06, 'quantity' => 2, 'signed' => TRUE),
-    // Total sum kWh.
-    array('reference' => 14720 + 00, 'quantity' => 2, 'signed' => FALSE),
-    // Phase sum kWh.
-    array('reference' => 14848 + 00, 'quantity' => 2, 'signed' => FALSE),
-    array('reference' => 14848 + 02, 'quantity' => 2, 'signed' => FALSE),
-    array('reference' => 14848 + 04, 'quantity' => 2, 'signed' => FALSE),
-    // 1 Second phase PF.
-    array('reference' => 13952 + 30, 'quantity' => 2, 'signed' => TRUE),
-    array('reference' => 13952 + 32, 'quantity' => 2, 'signed' => TRUE),
-    array('reference' => 13952 + 34, 'quantity' => 2, 'signed' => TRUE),
+    'satec' => array(
+      // 1 Second total KW.
+      array('reference' => 14336 + 00, 'quantity' => 2, 'signed' => TRUE),
+      // 1 Second total PF.
+      array('reference' => 14336 + 06, 'quantity' => 2, 'signed' => TRUE),
+      // Total sum kWh.
+      array('reference' => 14720 + 00, 'quantity' => 2, 'signed' => FALSE),
+      // Phase sum kWh.
+      array('reference' => 14848 + 00, 'quantity' => 2, 'signed' => FALSE),
+      array('reference' => 14848 + 02, 'quantity' => 2, 'signed' => FALSE),
+      array('reference' => 14848 + 04, 'quantity' => 2, 'signed' => FALSE),
+      // 1 Second phase PF.
+      array('reference' => 13952 + 30, 'quantity' => 2, 'signed' => TRUE),
+      array('reference' => 13952 + 32, 'quantity' => 2, 'signed' => TRUE),
+      array('reference' => 13952 + 34, 'quantity' => 2, 'signed' => TRUE),
+    ),
   );
 
   // Read registers.
   $timestamp = time();
   $data = array();
-  foreach ($requests as $request) {
+  foreach ($requests[$meter_type] as $request) {
     $data[] = modbus_read_modbus_32bit_registers($request, $address, $modbus_id, $meter_port);
   }
 
