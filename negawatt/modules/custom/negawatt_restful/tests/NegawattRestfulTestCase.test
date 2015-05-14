@@ -182,7 +182,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     // Create the raw data.
     $values_info = array(
       array(
-        // Two SATEC entries for hour 15:00.
+        // Two Modbus entries for hour 15:00.
         'type' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
         'timestamp' => strtotime('2014-6-12 15:00'),
         'rate_type' => 'flat',
@@ -270,7 +270,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     $response = $handler->get();
 
     // There should be 2 meters
-    $this->assertTrue(is_array($response) && count($response) == 2, 'Two SATEC meters were found.');
+    $this->assertTrue(is_array($response) && count($response) == 2, 'Two Modbus meters were found.');
     $meter = $response[0];
     $this->assertEqual($meter['type'], 'modbus_meter', 'Meter type is correct.');
     $this->assertEqual($meter['max_frequency'], 5, 'Max-frequency field is correct.');

@@ -389,7 +389,7 @@ function negawatt_meter_views_default_views() {
       ),
     ),
     2 => array(
-      'title' => 'SATEC Meter',
+      'title' => 'Modbus Meter',
       'operator' => 'in',
       'value' => array(
         'modbus_meter' => 'modbus_meter',

@@ -42,7 +42,7 @@ echo 'Migrating data...'
 DATA_DIR="../../negawatt-data/sql-migrate-unified"
 drush vset negawatt_migrate_sql 0
 `drush sql-connect` < $DATA_DIR/_negawatt_account_migrate.sql
-`drush sql-connect` < $DATA_DIR/_negawatt_satec_meter_migrate.sql
+`drush sql-connect` < $DATA_DIR/_negawatt_modbus_meter_migrate.sql
 `drush sql-connect` < $DATA_DIR/_negawatt_iec_meter_migrate.sql
 `drush sql-connect` < $DATA_DIR/_negawatt_electricity_migrate.sql
 `drush sql-connect` < $DATA_DIR/_negawatt_electricity_normalized_migrate.sql
