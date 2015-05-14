@@ -32,7 +32,6 @@ class ElectricityMetadataController extends EntityDefaultMetadataController {
     $properties['avg_power']['type'] = 'decimal';
     $properties['sum_kwh']['type'] = 'decimal';
     $properties['min_power_factor']['type'] = 'decimal';
-
     $properties['meter_nid']['type'] = 'node';
 
     return $info;
