@@ -183,7 +183,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     $values_info = array(
       array(
         // Two Modbus entries for hour 15:00.
-        'type' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
         'timestamp' => strtotime('2014-6-12 15:00'),
         'rate_type' => 'flat',
         'meter_nid' => $meter_node1->nid,
@@ -192,7 +192,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
         'min_power_factor' => 0.90,
       ),
       array(
-        'type' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
         'timestamp' => strtotime('2014-6-12 15:15'),
         'rate_type' => 'flat',
         'meter_nid' => $meter_node1->nid,
@@ -202,7 +202,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
       ),
       // One entry at 16:00, should not be read when processing 15:00-16:00
       array(
-        'type' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
         'timestamp' => strtotime('2014-6-12 16:00'),
         'rate_type' => 'flat',
         'meter_nid' => $meter_node1->nid,
@@ -212,7 +212,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
       ),
       // Hourly entries
       array(
-        'type' => \NegaWattNormalizerTimeManagerInterface::HOUR,
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::HOUR,
         'timestamp' => strtotime('2014-6-12 15:00'),
         'rate_type' => 'flat',
         'meter_nid' => $meter_node1->nid,
@@ -221,7 +221,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
         'min_power_factor' => 0.96,
       ),
       array(
-        'type' => \NegaWattNormalizerTimeManagerInterface::HOUR,
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::HOUR,
         'timestamp' => strtotime('2014-6-12 16:00'),
         'rate_type' => 'flat',
         'meter_nid' => $meter_node1->nid,
@@ -231,7 +231,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
       ),
       // Daily entries
       array(
-        'type' => \NegaWattNormalizerTimeManagerInterface::DAY,
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::DAY,
         'timestamp' => strtotime('2014-6-12 00:00'),
         'rate_type' => 'flat',
         'meter_nid' => $meter_node1->nid,
@@ -241,7 +241,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
       ),
       // One entry for meter 2, should not be read.
       array(
-        'type' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
         'timestamp' => strtotime('2014-6-12 15:00'),
         'rate_type' => 'flat',
         'meter_nid' => $meter_node2->nid,
