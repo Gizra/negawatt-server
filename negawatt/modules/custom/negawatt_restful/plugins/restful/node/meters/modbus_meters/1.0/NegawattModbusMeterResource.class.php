@@ -12,6 +12,10 @@ class NegawattModbusMeterResource extends \NegawattEntityMeterBase {
   public function publicFieldsInfo() {
     $public_fields = parent::publicFieldsInfo();
 
+    $public_fields['meter_type'] = array(
+      'property' => 'field_meter_type',
+    );
+
     $public_fields['ip_address'] = array(
       'property' => 'field_meter_ip_address',
     );
