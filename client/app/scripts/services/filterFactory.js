@@ -236,8 +236,8 @@ angular.module('negawattClientApp')
         'filter[meter_account]': params.accountId,
         'filter[type]': params.chartFreq,
         'filter[timestamp][operator]': 'BETWEEN',
-        'filter[timestamp][value][0]': params.chartNextPeriod || '', // chartBeginTimestamp,
-        'filter[timestamp][value][1]': params.chartPreviousPeriod || ''// chartEndTimestamp
+        'filter[timestamp][value][0]': params.chartPreviousPeriod || '', // chartBeginTimestamp,
+        'filter[timestamp][value][1]': params.chartNextPeriod || ''// chartEndTimestamp
       };
 
       if (params.selectorType) {

@@ -90,10 +90,11 @@ angular
             return Category.get(account.id);
           },
           filters: function(FilterFactory, UsagePeriod, Chart, categories, $stateParams, meters) {
+            var period;
             // Set period limits, according the state. (Handle ui arrows to change the periods)
             UsagePeriod.setLimits(meters.summary.electricity_time_interval);
             UsagePeriod.setPeriod(Chart.getFrequency($stateParams.chartFreq));
-            var period = UsagePeriod.period();
+            period = UsagePeriod.getPeriod();
             // Define categories filters. Used for the UI Checknboxes.
             FilterFactory.set('categorized', categories);
             FilterFactory.set('electricity', angular.extend($stateParams, {
