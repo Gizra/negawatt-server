@@ -18,6 +18,7 @@ class ElectricityMetadataController extends EntityDefaultMetadataController {
     ) + $properties['timestamp'];
 
     $field_names = array(
+      'frequency',
       'rate_type',
       'meter_nid',
       'avg_power',
