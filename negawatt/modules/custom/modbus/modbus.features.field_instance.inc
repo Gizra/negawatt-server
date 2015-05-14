@@ -543,6 +543,46 @@ function modbus_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-modbus_meter-field_meter_type'
+  $field_instances['node-modbus_meter-field_meter_type'] = array(
+    'bundle' => 'modbus_meter',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Type of Modbus meter, e.g. satec, elnet, etc.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 17,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_meter_type',
+    'label' => 'Meter type',
+    'required' => 1,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 9,
+    ),
+  );
+
   // Exported field_instance: 'node-modbus_meter-field_place_address'
   $field_instances['node-modbus_meter-field_place_address'] = array(
     'bundle' => 'modbus_meter',
@@ -771,10 +811,12 @@ function modbus_field_default_field_instances() {
   t('Meter id');
   t('Meter port');
   t('Meter processed');
+  t('Meter type');
   t('OG vocabulary');
   t('Place Address');
   t('Place Description');
   t('Place Locality');
+  t('Type of Modbus meter, e.g. satec, elnet, etc.');
 
   return $field_instances;
 }
