@@ -58,8 +58,8 @@ function negawatt_meter_views_default_views() {
         'views_aggregator_first' => 'views_aggregator_first',
       ),
       'aggr_par' => '',
-      'has_aggr_column' => 0,
-      'aggr_column' => 'views_aggregator_average',
+      'has_aggr_column' => 1,
+      'aggr_column' => 'views_aggregator_count',
       'aggr_par_column' => '',
     ),
     'type' => array(
