@@ -19,7 +19,7 @@ function negawatt_electricity_schema() {
         'unsigned' => TRUE,
         'not null' => TRUE,
       ),
-      'type' => array(
+      'meter_type' => array(
         'description' => 'The type of this data, Modbus/IEC/Other.',
         'type' => 'varchar',
         'length' => 32,
@@ -39,6 +39,12 @@ function negawatt_electricity_schema() {
         'length' => 8,
         'not null' => TRUE,
         'default' => '',
+      ),
+      'frequency' => array(
+        'description' => 'The time-interval for the measurement: 1:year, 2:month, 3:day, 4:hour, 5:minute.',
+        'type' => 'int',
+        'unsigned' => FALSE,
+        'not null' => TRUE,
       ),
       'meter_nid' => array(
         'description' => 'The electric meter NID, or Modbus NID.',
@@ -106,8 +112,8 @@ function negawatt_electricity_schema() {
         'unsigned' => TRUE,
         'not null' => TRUE,
       ),
-      'type' => array(
-        'description' => 'The type of this data, day/month/week/year.',
+      'frequency' => array(
+        'description' => 'The time-interval of this data: 1:year, 2:month, 3:day, 4:hour, 5:minute.',
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
