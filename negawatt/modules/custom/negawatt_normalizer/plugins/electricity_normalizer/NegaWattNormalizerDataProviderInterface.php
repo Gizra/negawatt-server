@@ -30,11 +30,13 @@ interface NegaWattNormalizerDataProviderInterface {
    *
    * @param $node
    *    The reference meter node.
+   * @param $frequency
+   *    The target frequency.
    *
-   * @return int
-   *    The timestamp of oldest raw-electricity entity for the meter.
+   * @return int The timestamp of oldest raw-electricity entity for the meter.
+   * The timestamp of oldest raw-electricity entity for the meter.
    */
-  public static function getOldestRawElectricityEntity($node);
+  public static function getOldestRawElectricityEntity($node, $frequency);
 
   /**
    * The raw entity before a given time.
@@ -71,7 +73,7 @@ interface NegaWattNormalizerDataProviderInterface {
    * @return SelectQuery
    *    The Query object.
    */
-  public function getQueryForNormalizedValues($table_name = 'negawatt_electricity');
+  public function getQueryForRawValues($table_name = 'negawatt_electricity');
 
   /**
    * Creates and executes a query to fetch entities from raw-electricity table.

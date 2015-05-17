@@ -94,11 +94,12 @@ class NegaWattNormalizerDataProviderBase implements \NegaWattNormalizerDataProvi
   /**
    * {@inheritdoc}
    */
-  public static function getOldestRawElectricityEntity($node) {
+  public static function getOldestRawElectricityEntity($node, $frequency) {
     $query = new EntityFieldQuery();
     $result = $query
       ->entityCondition('entity_type', 'electricity_raw')
       ->propertyCondition('meter_nid', $node->nid)
+      ->propertyCondition('frequency', $frequency)
       ->propertyOrderBy('timestamp')
       ->range(0, 1)
       ->execute();
@@ -120,6 +121,7 @@ class NegaWattNormalizerDataProviderBase implements \NegaWattNormalizerDataProvi
     $query = db_select('negawatt_electricity', 'ne')
       ->fields('ne')
       ->condition('timestamp', $this->getTimestampFrom(), '<')
+      ->condition('frequency', $this->getFrequency())
       ->condition('meter_nid', $this->getMeterNode()->nid)
       ->range(0, 1)
       ->orderBy('timestamp', 'DESC');
@@ -163,10 +165,11 @@ class NegaWattNormalizerDataProviderBase implements \NegaWattNormalizerDataProvi
   /**
    * {@inheritdoc}
    */
-  public function getQueryForNormalizedValues($table_name = 'negawatt_electricity') {
+  public function getQueryForRawValues($table_name = 'negawatt_electricity') {
     $query = db_select($table_name, 'ne')
       ->condition('timestamp', $this->getTimestampFrom(), '>=')
       ->condition('timestamp', $this->getTimestampTo(), '<')
+      ->condition('frequency', $this->getFrequency())
       ->condition('meter_nid', $this->getMeterNode()->nid)
       ->orderBy('timestamp');
     return $query;
@@ -176,7 +179,7 @@ class NegaWattNormalizerDataProviderBase implements \NegaWattNormalizerDataProvi
    * {@inheritdoc}
    */
   public function getDataFromRawTable() {
-    $query = self::getQueryForNormalizedValues();
+    $query = self::getQueryForRawValues();
     $query->fields('ne', array('timestamp', 'rate_type', 'kwh', 'power_factor'));
     return $query->execute();
   }
@@ -185,8 +188,7 @@ class NegaWattNormalizerDataProviderBase implements \NegaWattNormalizerDataProvi
    * {@inheritdoc}
    */
   public function countEntitiesInNormalizedTable() {
-    return self::getQueryForNormalizedValues('negawatt_electricity_normalized')
-      ->condition('frequency', $this->getFrequency())
+    return self::getQueryForRawValues('negawatt_electricity_normalized')
       ->countQuery()
       ->execute()
       ->fetchField();
@@ -196,9 +198,8 @@ class NegaWattNormalizerDataProviderBase implements \NegaWattNormalizerDataProvi
    * {@inheritdoc}
    */
   public function getDataFromNormalizedTable() {
-    $query = self::getQueryForNormalizedValues('negawatt_electricity_normalized');
+    $query = self::getQueryForRawValues('negawatt_electricity_normalized');
     $query->fields('ne', array('rate_type'));
-    $query->condition('frequency', $this->getFrequency());
     $query->addExpression('SUM(sum_kwh)', 'sum_kwh');
     $query->addExpression('AVG(avg_power)', 'avg_power');
     $query->addExpression('MIN(min_power_factor)', 'min_power_factor');

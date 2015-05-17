@@ -316,12 +316,14 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
     }
     else {
       // No last-processed value. Take the date-time of the oldest entity.
-      $last_processed = \NegaWattNormalizerDataProviderBase::getOldestRawElectricityEntity($this->getMeterNode());
+      $last_processed = \NegaWattNormalizerDataProviderBase::getOldestRawElectricityEntity($this->getMeterNode(), $frequency);
       self::debugMessage("last processed set from oldest raw: $last_processed (@time_from)", 1, $last_processed);
     }
 
     list($from_timestamp, $to_timestamp) = $this->getTimeManager()->getTimePeriod($from_timestamp, $to_timestamp, $last_processed);
 
+    // @fixme: handle the case where we have a small time-span of high frequency
+    // raw date (e.g. minutes), but a long time-span of lower frequency (e.g. months).
     if ($frequency == $this->getMeterMaxFrequency()) {
       // Processing max frequency, analyze data from raw data.
       return self::processRawEntities($from_timestamp, $to_timestamp, $frequency);
