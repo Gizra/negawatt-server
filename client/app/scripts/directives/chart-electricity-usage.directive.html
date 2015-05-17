@@ -1,1 +1,4 @@
-<div>{{ctrlChart.title}}</div>
+<!-- Frequency time tabs -->
+<tabset class="box-chart-usage" vertical="true">
+  <tab ng-repeat="frequency in ctrlChart.frequencies" heading="{{frequency.label}}" active="frequency.active" disabled="frequency.disabled" select="ctrlChart.changeFrequency(frequency.type)"></tab>
+</tabset>

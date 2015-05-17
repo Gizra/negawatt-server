@@ -1,10 +1,6 @@
 
 <span><i class="icon-options"></i></span>
 
-<tabset class="box-chart-usage" vertical="true">
-  <tab ng-repeat="frequency in frequencies" heading="{{frequency.label}}" active="frequency.active" disabled="frequency.disabled" select="changeFrequency(frequency.type)"></tab>
-</tabset>
-
 <chart-electricity-usage></chart-electricity-usage>
 
 <div ng-if="!usageChartData.data.rows.length" class="row chart-empty">

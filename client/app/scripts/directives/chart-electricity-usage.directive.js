@@ -5,10 +5,20 @@ angular.module('negawattDirectives', [])
     return {
       restrict: 'EA',
       templateUrl: 'scripts/directives/chart-electricity-usage.directive.html',
-      controller: function() {
-        var chart = this;
+      controller: function(Chart) {
+        var chartCtrl = this;
+        
+        // Get chart frequencies. (Tabs the period of time)
+        chartCtrl.frequencies = Chart.get('frequencies');
 
-        chart.title = 'Chart Electricity Usage';
+        /**
+         * Change frequency of the chart.
+         *
+         * @param type
+         */
+        chartCtrl.changeFrequency = function(type) {
+
+        }
       },
       controllerAs: 'ctrlChart',
       bindToController: true,

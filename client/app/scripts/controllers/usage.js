@@ -12,10 +12,6 @@ angular.module('negawattClientApp')
     var chartUpdated;
     // The initialization in a empty object is need it to avoid an error in the initial rendering. (Chart kws usage data)
     $scope.usageChartData = {};
-    // Get chart frequencies. (Tabs the period of time)
-    $scope.frequencies = Chart.get('frequencies');
-
-
 
 
     // Get the parameters chart frecuency.
