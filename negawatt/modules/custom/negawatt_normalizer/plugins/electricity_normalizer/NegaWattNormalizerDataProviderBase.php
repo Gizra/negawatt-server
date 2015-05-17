@@ -136,7 +136,7 @@ class NegaWattNormalizerDataProviderBase implements \NegaWattNormalizerDataProvi
     $query = new EntityFieldQuery();
     $result = $query
       ->entityCondition('entity_type', 'electricity')
-      ->propertyCondition('type', $frequency)
+      ->propertyCondition('frequency', $frequency)
       ->propertyCondition('meter_nid', $this->getMeterNode()->nid)
       ->propertyCondition('timestamp', $from_timestamp)
       ->propertyCondition('rate_type', $rate_type)
@@ -150,7 +150,7 @@ class NegaWattNormalizerDataProviderBase implements \NegaWattNormalizerDataProvi
 
     // Entity doesn't exist yet, create a new one.
     $values = array(
-      'type' => $frequency,
+      'frequency' => $frequency,
       'meter_nid' => $this->getMeterNode()->nid,
       'timestamp' => $from_timestamp,
       'rate_type' => $rate_type,
@@ -186,7 +186,7 @@ class NegaWattNormalizerDataProviderBase implements \NegaWattNormalizerDataProvi
    */
   public function countEntitiesInNormalizedTable() {
     return self::getQueryForNormalizedValues('negawatt_electricity_normalized')
-      ->condition('type', $this->getFrequency())
+      ->condition('frequency', $this->getFrequency())
       ->countQuery()
       ->execute()
       ->fetchField();
@@ -198,7 +198,7 @@ class NegaWattNormalizerDataProviderBase implements \NegaWattNormalizerDataProvi
   public function getDataFromNormalizedTable() {
     $query = self::getQueryForNormalizedValues('negawatt_electricity_normalized');
     $query->fields('ne', array('rate_type'));
-    $query->condition('type', $this->getFrequency());
+    $query->condition('frequency', $this->getFrequency());
     $query->addExpression('SUM(sum_kwh)', 'sum_kwh');
     $query->addExpression('AVG(avg_power)', 'avg_power');
     $query->addExpression('MIN(min_power_factor)', 'min_power_factor');
@@ -245,7 +245,7 @@ class NegaWattNormalizerDataProviderBase implements \NegaWattNormalizerDataProvi
     $result = db_select('negawatt_electricity', 'ne')
       ->condition('timestamp', $this->getTimestampFrom())
       ->condition('meter_nid', $this->getMeterNode()->nid)
-      ->condition('type', $this->getFrequency())
+      ->condition('frequency', $this->getFrequency())
       ->fields('ne')
       ->execute();
 
