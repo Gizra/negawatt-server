@@ -5,6 +5,8 @@
   <tab ng-repeat="frequency in frequencies" heading="{{frequency.label}}" active="frequency.active" disabled="frequency.disabled" select="changeFrequency(frequency.type)"></tab>
 </tabset>
 
+<chart-electricity-usage></chart-electricity-usage>
+
 <div ng-if="!usageChartData.data.rows.length" class="row chart-empty">
   <!-- No Chart -->
   <div class="title col-md-6 col-centered text-center chart-message">{{usageChartData.messages.empty}}</div>

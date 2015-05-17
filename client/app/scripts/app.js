@@ -28,7 +28,8 @@ angular
     'template/tabs/tab.html',
     'template/tabs/tabset.html',
     'angularMoment',
-    'ui.indeterminate'
+    'ui.indeterminate',
+    'negawattDirectives'
   ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
     // Handle state 'dashboard' activation via browser url '/'
