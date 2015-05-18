@@ -21,3 +21,26 @@
     text-align:center;
   }
 }
+
+.box-chart-usage {
+  ul.nav.nav-tabs.nav-stacked {
+    width: 43px;
+    bottom: 12px;
+
+    li {
+      background-color: #93928E;
+      height: 42px;
+      float: right;
+      width: inherit;
+      margin-bottom: 0;
+
+      a {
+        width: inherit;
+        height: 100%;
+        font-size: 12px;
+        text-align: center;
+        padding: 13px 0;
+      }
+    }
+  }
+}
