@@ -367,6 +367,10 @@ function negawatt_electricity_views_default_views() {
   $handler->display->display_options['fields']['rate_type']['id'] = 'rate_type';
   $handler->display->display_options['fields']['rate_type']['table'] = 'negawatt_electricity';
   $handler->display->display_options['fields']['rate_type']['field'] = 'rate_type';
+  /* Field: Electricity raw data: Frequency */
+  $handler->display->display_options['fields']['frequency']['id'] = 'frequency';
+  $handler->display->display_options['fields']['frequency']['table'] = 'negawatt_electricity';
+  $handler->display->display_options['fields']['frequency']['field'] = 'frequency';
   /* Field: Electricity raw data: Meter_nid */
   $handler->display->display_options['fields']['meter_nid']['id'] = 'meter_nid';
   $handler->display->display_options['fields']['meter_nid']['table'] = 'negawatt_electricity';
