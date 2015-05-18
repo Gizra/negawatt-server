@@ -151,7 +151,8 @@ angular
               //  }
               //}
             },
-            controller: 'UsageCtrl'
+            controller: 'UsageCtrl',
+            controllerAs: 'chart'
           }
         }
       })
