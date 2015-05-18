@@ -23,7 +23,7 @@ class NegawattElectricityRawValidator extends EntityValidateBase {
    */
   public function validateElectricityRawExist($field_name, $value, EntityMetadataWrapper $wrapper, EntityMetadataWrapper $property_wrapper) {
     $timestamp = $wrapper->timestamp->value();
-    $type = $wrapper->type->value();
+    $meter_type = $wrapper->meter_type->value();
     $rate_type = $wrapper->rate_type->value();
 
     $query = new EntityFieldQuery();
@@ -31,7 +31,7 @@ class NegawattElectricityRawValidator extends EntityValidateBase {
       ->entityCondition('entity_type', 'electricity_raw')
       ->propertyCondition('meter_nid', $value)
       ->propertyCondition('timestamp', $timestamp)
-      ->propertyCondition('type', $type)
+      ->propertyCondition('meter_type', $meter_type)
       ->propertyCondition('rate_type', $rate_type)
       ->range(0, 1)
       ->count()

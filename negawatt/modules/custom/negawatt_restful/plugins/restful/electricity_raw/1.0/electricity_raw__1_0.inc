@@ -2,7 +2,7 @@
 
 $plugin = array(
   'label' => t('Electricity Raw Data'),
-  'description' => t('Electricity Raw consumption data from the contract or metters.'),
+  'description' => t('Electricity Raw consumption data from the contract or meters.'),
   'resource' => 'electricity_raw',
   'bundle' => 'electricity_raw',
   'class' => 'NegawattElectricityRawResource',

@@ -24,8 +24,8 @@ class NegawattElectricityRawResource extends RestfulEntityBase {
       'property' => 'rate_type'
     );
 
-    $public_fields['type'] = array(
-      'property' => 'type'
+    $public_fields['meter_type'] = array(
+      'property' => 'meter_type'
     );
 
     $public_fields['power_factor'] = array(
@@ -38,6 +38,10 @@ class NegawattElectricityRawResource extends RestfulEntityBase {
 
     $public_fields['meter'] = array(
       'property' => 'meter_nid',
+    );
+
+    $public_fields['frequency'] = array(
+      'property' => 'frequency',
     );
 
     return $public_fields;
