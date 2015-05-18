@@ -14,8 +14,6 @@ angular.module('negawattClientApp')
     // Popuate the electricity data.
     vm.electricity = usage;
 
-    console.log('usage', usage);
-
     // The initialization in a empty object is need it to avoid an error in the initial rendering. (Chart kws usage data)
     $scope.usageChartData = {};
 
