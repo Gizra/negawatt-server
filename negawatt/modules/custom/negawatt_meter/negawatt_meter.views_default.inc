@@ -42,6 +42,7 @@ function negawatt_meter_views_default_views() {
     'field_last_processed' => 'field_last_processed',
     'field_category_valid' => 'field_category_valid',
     'field_location_valid' => 'field_location_valid',
+    'field_has_electricity' => 'field_has_electricity',
     'delete_node' => 'delete_node',
     'edit_node' => 'edit_node',
   );
@@ -182,6 +183,21 @@ function negawatt_meter_views_default_views() {
       'aggr_column' => 'views_aggregator_count',
       'aggr_par_column' => '1',
     ),
+    'field_has_electricity' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+      'has_aggr' => 0,
+      'aggr' => array(
+        'views_aggregator_first' => 'views_aggregator_first',
+      ),
+      'aggr_par' => '',
+      'has_aggr_column' => 1,
+      'aggr_column' => 'views_aggregator_count',
+      'aggr_par_column' => '1',
+    ),
     'delete_node' => array(
       'sortable' => 0,
       'default_sort_order' => 'asc',
@@ -223,12 +239,14 @@ function negawatt_meter_views_default_views() {
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
   $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = 'Title (contract-meter)';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
   /* Field: Content: Type */
   $handler->display->display_options['fields']['type']['id'] = 'type';
   $handler->display->display_options['fields']['type']['table'] = 'node';
   $handler->display->display_options['fields']['type']['field'] = 'type';
+  $handler->display->display_options['fields']['type']['label'] = 'Meter Type';
   /* Field: Content: Place Address */
   $handler->display->display_options['fields']['field_place_address']['id'] = 'field_place_address';
   $handler->display->display_options['fields']['field_place_address']['table'] = 'field_data_field_place_address';
@@ -271,6 +289,10 @@ function negawatt_meter_views_default_views() {
   $handler->display->display_options['fields']['field_location_valid']['id'] = 'field_location_valid';
   $handler->display->display_options['fields']['field_location_valid']['table'] = 'field_data_field_location_valid';
   $handler->display->display_options['fields']['field_location_valid']['field'] = 'field_location_valid';
+  /* Field: Content: Has electricity */
+  $handler->display->display_options['fields']['field_has_electricity']['id'] = 'field_has_electricity';
+  $handler->display->display_options['fields']['field_has_electricity']['table'] = 'field_data_field_has_electricity';
+  $handler->display->display_options['fields']['field_has_electricity']['field'] = 'field_has_electricity';
   /* Field: Content: Delete link */
   $handler->display->display_options['fields']['delete_node']['id'] = 'delete_node';
   $handler->display->display_options['fields']['delete_node']['table'] = 'views_entity_node';
