@@ -152,7 +152,9 @@ class NegaWattNormalizerTimeManagerBase implements \NegaWattNormalizerTimeManage
         '@begin' => date('Y-m-d H:i', $from_timestamp),
         '@end' => date('Y-m-d H:i', $to_timestamp),
       );
-      throw new \Exception(format_string('Time period ends before it starts: beginning = @begin, end = @end.', $params));
+//      throw new \Exception(format_string('Time period ends before it starts: beginning = @begin, end = @end.', $params));
+      // Don't allow to_timestamp to remain lower than from_timestamp.
+      $to_timestamp = $from_timestamp;
     }
 
     return array($from_timestamp, $to_timestamp);

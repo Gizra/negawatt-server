@@ -94,7 +94,8 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
   }
 
   /**
-   * If $filter contains filter for 'meter_category', modify $query accordingly
+   * If $filter contains filter for 'meter_category', modify $query to catch the
+   * given category, and all its parent categories.
    *
    * @param $query
    * @param $filter
