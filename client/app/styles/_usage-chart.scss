@@ -1,8 +1,12 @@
-// Necesary to apply the dynamic css.
+// Chart with data
 .usageChart {
   border: 1px solid white;
-  width: 510px;
+  width: 530px;
   height: 220px;
+
+  text {
+    font-family: Alef;
+  }
 }
 
 .col-centered{
@@ -10,6 +14,7 @@
   margin: 0 auto;
 }
 
+// Chart with data
 .chart-empty {
   display: table;
   table-layout: fixed;
@@ -22,6 +27,7 @@
   }
 }
 
+// Tabs
 .box-chart-usage {
   ul.nav.nav-tabs.nav-stacked {
     width: 43px;

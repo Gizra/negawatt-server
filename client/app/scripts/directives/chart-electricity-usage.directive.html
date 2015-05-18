@@ -11,7 +11,7 @@
 <!-- Chart with electricity data -->
 <div ng-if="ctrlChart.hasData()">
   <!-- Chart subcomponent -->
-  <div google-chart chart="data" ng-hide="isLoading" id="chart-usage" class="usageChart"></div>
+  <div google-chart chart="ctrlChart.data" ng-hide="isLoading" id="chart-usage" class="usageChart"></div>
   <!-- Period selction subcomponent -->
   <span>
     <button type="button" id="chart-usage-btn-arrow-left" class="btn btn-transparent btn-arrow btn-arrow-left" ng-show="usageChartData.showControl('previous')" ng-click="changePeriod(usageChartData.period('previous'))" >
@@ -25,6 +25,7 @@
 
 <pre class="debug">
   <span><b>hasData:</b> {{ctrlChart.hasData()}}</span>
+  <span><b>data:</b> {{ctrlChart.data | json}}</span>
   <span><b>ctrlChart:</b> {{ctrlChart.electricity | json}}</span>
 </pre>
 

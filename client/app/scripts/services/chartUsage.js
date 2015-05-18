@@ -2,19 +2,20 @@
 
 angular.module('negawattClientApp')
   .service('ChartUsage', function ($q, UsagePeriod, FilterFactory, Utils, Chart, moment) {
-    var ChartUsage = this;
+    var ChartUsage = angular.extend(this, Chart);
+
 
     // Chart parameters that will be passed to google chart.
-    this.usageGoogleChartParams = {};
+    //this.usageGoogleChartParams = {};
 
     // Store the filters-hash code of the active request.
     // Used to prevent updating the chart when there are several active
     // requests in parallel.
-    this.activeRequestHash;
-
-    // A map from filters-hash code to chart-frequency.
-    this.filtersHashToFreq = {};
-
+    //this.activeRequestHash;
+    //
+    //// A map from filters-hash code to chart-frequency.
+    //this.filtersHashToFreq = {};
+    //
     /**
      * Returns the filters-hash code of the active GET request.
      *
@@ -77,7 +78,7 @@ angular.module('negawattClientApp')
      * @returns {*}
      *   Promise for data in google-chart format.
      */
-    this.getByFiltersHash = function(filtersHash) {
+    this.f = function(filtersHash) {
       /// @TODO: Move to directive remove extra promise event.
       var deferred = $q.defer();
 
@@ -347,9 +348,9 @@ angular.module('negawattClientApp')
         }
       };
 
-      angular.extend(chartData, Chart);
 
       return chartData;
     };
+
 
   });

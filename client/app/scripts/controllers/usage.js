@@ -8,7 +8,7 @@
  * Controller of the negawattClientApp
  */
 angular.module('negawattClientApp')
-  .controller('UsageCtrl', function ($scope, $q, $location, $state, $stateParams, $urlRouter, ChartUsage, UsagePeriod, Chart, account, usage, meters) {
+  .controller('UsageCtrl', function ($scope, $state, $stateParams, ChartUsage, usage, meters) {
     var vm = this;
 
     // Popuate the electricity data.
@@ -16,7 +16,7 @@ angular.module('negawattClientApp')
 
     // Get the parameters chart frecuency.
     if (angular.isDefined($stateParams.chartFreq)) {
-      Chart.setActiveFrequency($stateParams.chartFreq);
+      ChartUsage.setActiveFrequency($stateParams.chartFreq);
     }
 
     // Get from parameters information of the selected marker.
