@@ -14,15 +14,10 @@ angular.module('negawattClientApp')
     // Popuate the electricity data.
     vm.electricity = usage;
 
-    // The initialization in a empty object is need it to avoid an error in the initial rendering. (Chart kws usage data)
-    $scope.usageChartData = {};
-
-
     // Get the parameters chart frecuency.
     if (angular.isDefined($stateParams.chartFreq)) {
       Chart.setActiveFrequency($stateParams.chartFreq);
     }
-
 
     // Get from parameters information of the selected marker.
     if (angular.isDefined($stateParams.markerId)) {
@@ -32,7 +27,6 @@ angular.module('negawattClientApp')
       // Chart usage information of the selected marker.
       ChartUsage.meterSelected(meters.list[$stateParams.markerId]);
     }
-
 
     // Handle lazy-load of electricity data.
     // When cache expands, update the chart.

@@ -5,13 +5,13 @@
 
 <!-- Message to the User no Chart - No data -->
 <div ng-if="!ctrlChart.hasData()" class="row chart-empty">
-  <div class="title col-md-6 col-centered text-center chart-message">{{usageChartData.messages.empty}}</div>
+  <div class="title col-md-6 col-centered text-center chart-message">{{ctrlChart.messages.empty}}</div>
 </div>
 
 <!-- Chart with electricity data -->
 <div ng-if="ctrlChart.hasData()">
   <!-- Chart subcomponent -->
-  <div google-chart chart="usageChartData"  ng-hide="isLoading" id="chart-usage" class="usageChart"></div>
+  <div google-chart chart="data" ng-hide="isLoading" id="chart-usage" class="usageChart"></div>
   <!-- Period selction subcomponent -->
   <span>
     <button type="button" id="chart-usage-btn-arrow-left" class="btn btn-transparent btn-arrow btn-arrow-left" ng-show="usageChartData.showControl('previous')" ng-click="changePeriod(usageChartData.period('previous'))" >

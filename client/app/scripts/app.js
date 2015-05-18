@@ -140,17 +140,6 @@ angular
           },
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
-            resolve: {
-              //// Get electricity data and transform it into chart format.
-              //usage: function(ChartUsage, $state, $stateParams, account, meters) {
-              //  // Perform the GET only if we're in the proper (parent) state.
-              //  if ($state.current.name == 'dashboard.withAccount') {
-              //    return ChartUsage.get(account.id, $stateParams, meters.list);
-              //  } else {
-              //    return {};
-              //  }
-              //}
-            },
             controller: 'UsageCtrl',
             controllerAs: 'chart'
           }

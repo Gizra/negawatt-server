@@ -6,11 +6,14 @@ angular.module('negawattDirectives', [])
       restrict: 'EA',
       templateUrl: 'scripts/directives/chart-electricity-usage.directive.html',
       controller: function(Chart, FilterFactory, $state, $stateParams, $timeout, $urlRouter, $location) {
-        var chartCtrl = this;
+        var ctrlChart = this;
+
+        // Define default chart data.
+        ctrlChart.data = {};
 
         // Update data object
         // Get chart frequencies. (Tabs the period of time)
-        chartCtrl.frequencies = Chart.get('frequencies');
+        ctrlChart.frequencies = Chart.get('frequencies');
 
         /**
          * Change frequency of the chart.
@@ -18,7 +21,7 @@ angular.module('negawattDirectives', [])
          * @param type
          *  The type of frequency according the period of time selected.
          */
-        chartCtrl.changeFrequency = function(type) {
+        ctrlChart.changeFrequency = function(type) {
           // Update url with params updated.
           $state.refreshUrlWith({chartFreq: +type});
           return type;
@@ -44,9 +47,18 @@ angular.module('negawattDirectives', [])
          * Return true if we have data to show the request chart on the period
          * parameter, otherwise false.
          */
-        chartCtrl.hasData = function hasData() {
-          return !!chartCtrl.electricity.length;
+        ctrlChart.hasData = function hasData() {
+          return !!ctrlChart.electricity.length;
         }
+
+        /**
+         * Messages to show when there is no data.
+         *
+         * @type {{empty: string}}
+         */
+        ctrlChart.messages = {
+          empty: Chart.messages.empty
+        };
 
         /**
          * Search the data with the new chart frequency.
