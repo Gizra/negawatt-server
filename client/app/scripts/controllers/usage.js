@@ -11,14 +11,11 @@ angular.module('negawattClientApp')
   .controller('UsageCtrl', function ($scope, $q, $location, $state, $stateParams, $urlRouter, ChartUsage, UsagePeriod, Chart, account, usage, meters) {
     var vm = this;
 
-    /**
-     * Return
-     */
-    vm.hasData = function hasData() {
-      return false;
-    }
+    // Popuate the electricity data.
+    vm.electricity = usage;
 
-    var chartUpdated;
+    console.log('usage', usage);
+
     // The initialization in a empty object is need it to avoid an error in the initial rendering. (Chart kws usage data)
     $scope.usageChartData = {};
 
