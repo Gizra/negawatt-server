@@ -10,7 +10,8 @@
 
 angular.module('negawattClientApp')
   .config(function ($provide) {
-    $provide.decorator('$state', function($delegate) {
+    $provide.decorator('$state', function($delegate, $urlRouter, $location, $stateParams) {
+      var copy = angular.copy;
       var extend = angular.extend;
       var isDefined = angular.isDefined;
       var isUndefined = angular.isUndefined;
@@ -72,7 +73,20 @@ angular.module('negawattClientApp')
           // Update property.
           local[name] = obj;
         })
+      };
 
+      /**
+       * Update update params values with reloadOnSearch:false.
+       *
+       * @param params
+       *  Object of the change for the $stateParams.
+       */
+      $delegate.refreshUrlWith = function refreshUrlWith(params) {
+        $location.search(extend(copy($stateParams),
+          $location.search(),
+          params
+        ));
+        $urlRouter.update(true);
       };
 
       return $delegate;
