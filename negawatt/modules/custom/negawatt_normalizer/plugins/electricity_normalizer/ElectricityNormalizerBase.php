@@ -322,13 +322,13 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
 
     list($from_timestamp, $to_timestamp) = $this->getTimeManager()->getTimePeriod($from_timestamp, $to_timestamp, $last_processed);
 
-    if ($to_timestamp == $from_timestamp) {
-      // Probably now() is lower than last processed. Skip processing.
-      return array(
-        'entities' => array(),
-        'last_processed' => $last_processed,
-      );
-    }
+//    if ($to_timestamp == $from_timestamp) {
+//      // Probably now() is lower than last processed. Skip processing.
+//      return array(
+//        'entities' => array(),
+//        'last_processed' => $last_processed,
+//      );
+//    }
 
     // @fixme: handle the case where we have a small time-span of high frequency
     // raw date (e.g. minutes), but a long time-span of lower frequency (e.g. months).

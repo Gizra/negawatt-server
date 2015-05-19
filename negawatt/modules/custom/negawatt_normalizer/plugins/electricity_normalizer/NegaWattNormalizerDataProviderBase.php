@@ -106,7 +106,7 @@ class NegaWattNormalizerDataProviderBase implements \NegaWattNormalizerDataProvi
 
     // No entity was found, take current time.
     if (empty($result['electricity_raw'])) {
-      return time();
+      return NULL;//time();
     }
 
     $id = key($result['electricity_raw']);
