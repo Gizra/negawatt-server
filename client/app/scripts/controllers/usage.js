@@ -11,7 +11,7 @@ angular.module('negawattClientApp')
   .controller('UsageCtrl', function ($scope, $state, $stateParams, ChartUsage, usage, meters) {
     var vm = this;
 
-    // Popuate the electricity data.
+    // Popuate the electricity data into the UI.
     vm.electricity = usage;
 
     // Get the parameters chart frecuency.
