@@ -1,5 +1,6 @@
 angular.module('negawattClientApp')
-  .filter('toChartDataset', function (Chart) {
+  .filter('toChartDataset', function (Chart, moment) {
+    var chartFrequencyActive = Chart.getActiveFrequency();
 
     /**
      * From a collection object create a Google Chart data ser object
@@ -45,20 +46,19 @@ angular.module('negawattClientApp')
      * Return the options of the selected chart.
      */
     function getOptions() {
-      var chart = Chart.getActiveFrequency();
       return {
         'isStacked': 'true',
         'bar': { groupWidth: '75%' },
         'fill': 20,
         'displayExactValues': true,
         'vAxis': {
-          'title': chart.axis_v_title,
+          'title': chartFrequencyActive.axis_v_title,
           'gridlines': {
-            'count': 7
+            'count': 6
           }
         },
         'hAxis': {
-          'title': chart.axis_h_title 
+          'title': chartFrequencyActive.axis_h_title
         }
       }
     }
@@ -72,7 +72,7 @@ angular.module('negawattClientApp')
     function getDataset(collection) {
       var dataset = {
         // Add columns.
-        "cols": [
+        cols: [
           {
             'id': 'month',
             'label': 'Month',
@@ -98,12 +98,73 @@ angular.module('negawattClientApp')
             'label': 'שפל',
             'type': 'number',
           }
-        ]
+        ],
+        // Add rows.
+        row: getRows(collection, 'single')
       };
 
-      // Add rows.
-
       return dataset;
+    };
+
+    /**
+     * Return the collection data in the type of the two chart type indicated.
+     *
+     * @param collection
+     *  The collection to filter.
+     * @param type
+     *  The type of the rows will request.
+     *
+     * @returns {Array}
+     *  An array of the data ordering as the type requested.
+     */
+    function getRows(collection, type) {
+      var values = {};
+      var rows = [];
+      var prevRateType;
+      var isLineChart;
+
+
+      if (type === 'single') {
+        // Prepare data for a single graph
+        // ----------------------------------
+
+        // Create a temp array like { time: {low: 1, mid:4, peak:5}, time: {..}, ..}.
+        isLineChart = chartFrequencyActive.chart_type === 'LineChart';
+
+        angular.forEach(collection, function(item) {
+          if (!(item.timestamp in values)) {
+            // Never encountered this timestamp, create an empty object
+            values[item.timestamp] = {};
+          }
+          // Save the kWhs.
+          values[item.timestamp][item.rate_type] = +item.kwh;
+
+          // Handle problem with line chart:
+          // If having TOUse data, the lines should be elongated one data point forward
+          // when changing rate-type in order to 'connect' the lines of the different
+          // charts.
+          if (isLineChart && prevRateType && prevRateType != item.rate_type) {
+            values[item.timestamp][prevRateType] = +item.kwh;
+          }
+
+          prevRateType = item.rate_type;
+        });
+
+        // Build rows
+        angular.forEach(values, function(item, timestamp) {
+          var label = moment.unix(timestamp).format(chartFrequencyActive.axis_h_format);
+          var col = [
+            { 'v': label },
+            { 'v': item.flat },
+            { 'v': item.peak },
+            { 'v': item.mid  },
+            { 'v': item.low  }
+          ];
+          rows.push({ 'c': col });
+        });
+      }
+
+      return rows;
     }
 
   });
