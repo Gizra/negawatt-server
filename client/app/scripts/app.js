@@ -94,8 +94,6 @@ angular
             var period;
             // Set period limits, according the state. (Handle ui arrows to change the periods)
             UsagePeriod.config(meters.summary.electricity_time_interval, Chart.getFrequencies($stateParams.chartFreq));
-            //UsagePeriod.setLimits(meters.summary.electricity_time_interval);
-            //UsagePeriod.setPeriod(Chart.getFrequency($stateParams.chartFreq));
             period = UsagePeriod.getPeriod();
             // Define categories filters. Used for the UI Checknboxes.
             FilterFactory.set('categorized', categories);
@@ -103,10 +101,6 @@ angular
               chartNextPeriod: period.next,
               chartPreviousPeriod: period.previous
             }));
-          },
-          // Get electricity data and transform it into chart format.
-          usage: function(FilterFactory, Electricity, filters) {
-            return Electricity.get(FilterFactory.get('activeElectricityHash'));
           },
           messages: function(Message) {
             return Message.get();
