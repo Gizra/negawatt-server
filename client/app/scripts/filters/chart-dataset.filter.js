@@ -14,14 +14,39 @@ angular.module('negawattClientApp')
      *  The dataset collection filtered.
      */
     return function (collection, chartType){
+      if (!validate(chartType)) {
+        return;
+      }
+
+      // Contruc
+      collection = {
+        type: chartType,
+        data: getDataset(collection)
+      }
       console.log(collection, data);
       return collection;
     }
 
+    /**
+     * Validate the chart type pass to the filter.
+     *
+     * @param chartType
+     *  Indicate the type of chart, exmaple: 'LineChart'.
+     */
+    function validate(chartType) {
+      var values = ['Linechart', 'PieChart'];
 
-    var data = {
-      "type": "LineChart",
-      "data": {
+      return values.indexOf(chartType) !== -1;
+    }
+
+    /**
+     * Return the object with the dataset based on the collection object.
+     *
+     * @param collection
+     *  The collection to format.
+     */
+    function getDataset(collection) {
+      var dataset = {
         "cols": [
           {
             'id': 'month',
@@ -49,120 +74,9 @@ angular.module('negawattClientApp')
             'type': 'number',
           }
         ]
-      }
+      };
 
-      //"displayed": true,
-      //"data": {
-      //  "cols": [
-      //    {
-      //      "id": "month",
-      //      "label": "Month",
-      //      "type": "string",
-      //      "p": {}
-      //    },
-      //    {
-      //      "id": "laptop-id",
-      //      "label": "Laptop",
-      //      "type": "number",
-      //      "p": {}
-      //    },
-      //    {
-      //      "id": "desktop-id",
-      //      "label": "Desktop",
-      //      "type": "number",
-      //      "p": {}
-      //    },
-      //    {
-      //      "id": "server-id",
-      //      "label": "Server",
-      //      "type": "number",
-      //      "p": {}
-      //    },
-      //    {
-      //      "id": "cost-id",
-      //      "label": "Shipping",
-      //      "type": "number"
-      //    }
-      //  ],
-      //  "rows": [
-      //    {
-      //      "c": [
-      //        {
-      //          "v": "January"
-      //        },
-      //        {
-      //          "v": 19,
-      //          "f": "42 items"
-      //        },
-      //        {
-      //          "v": 12,
-      //          "f": "Ony 12 items"
-      //        },
-      //        {
-      //          "v": 7,
-      //          "f": "7 servers"
-      //        },
-      //        {
-      //          "v": 4
-      //        }
-      //      ]
-      //    },
-      //    {
-      //      "c": [
-      //        {
-      //          "v": "February"
-      //        },
-      //        {
-      //          "v": 13
-      //        },
-      //        {
-      //          "v": 1,
-      //          "f": "1 unit (Out of stock this month)"
-      //        },
-      //        {
-      //          "v": 12
-      //        },
-      //        {
-      //          "v": 2
-      //        }
-      //      ]
-      //    },
-      //    {
-      //      "c": [
-      //        {
-      //          "v": "March"
-      //        },
-      //        {
-      //          "v": 24
-      //        },
-      //        {
-      //          "v": 5
-      //        },
-      //        {
-      //          "v": 11
-      //        },
-      //        {
-      //          "v": 6
-      //        }
-      //      ]
-      //    }
-      //  ]
-      //},
-      //"options": {
-      //  "title": "Sales per month",
-      //  "isStacked": "true",
-      //  "fill": 20,
-      //  "displayExactValues": true,
-      //  "vAxis": {
-      //    "title": "Sales unit",
-      //    "gridlines": {
-      //      "count": 10
-      //    }
-      //  },
-      //  "hAxis": {
-      //    "title": "Date"
-      //  }
-      //},
-      //"formatters": {}
-    };
+      return dataset;
+    }
+
   });

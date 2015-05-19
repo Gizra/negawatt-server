@@ -35,8 +35,6 @@ angular.module('negawattClientApp')
       if (filtersHash != ChartUsage.getActiveRequestHash()) {
         return;
       }
-
     });
-
 
   });

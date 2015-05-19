@@ -11,7 +11,6 @@ angular.module('negawattDirectives', [])
         // Define default chart data.
         ctrlChart.data = $filter('toChartDataset')(ctrlChart.electricity, 'LineChart');
 
-
         // Update data object
         // Get chart frequencies. (Tabs the period of time)
         ctrlChart.frequencies = ChartUsage.get('frequencies');
