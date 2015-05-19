@@ -1,6 +1,6 @@
 angular.module('negawattClientApp')
   .filter('toChartDataset', function (Chart, moment) {
-    var chartFrequencyActive = Chart.getActiveFrequency();
+    var chartFrequencyActive = Chart.getActiveFrequency()[0];
 
     /**
      * From a collection object create a Google Chart data ser object
@@ -8,38 +8,19 @@ angular.module('negawattClientApp')
      *
      * @param collection
      *  The collection to format.
-     * @param chartType {String}
-     *  Indicate the type of chart, exmaple: 'LineChart'.
      *
      * @returns {*}
      *  The dataset collection filtered.
      */
-    return function (collection, chartType, options){
-      if (!validate(chartType)) {
-        return;
-      }
-
+    return function (collection){
       // Recreate collection object.
       collection = {
-        type: chartType,
+        type: chartFrequencyActive.chart_type,
         data: getDataset(collection),
         options: getOptions()
       }
       console.log(collection);
       return collection;
-    }
-
-    /**
-     * Validate the chart type pass to the filter.
-     *
-     * @param chartType
-     *  Indicate the type of chart, exmaple: 'LineChart'.
-     */
-    function validate(chartType) {
-      // Valid type of chart.
-      var values = ['LineChart', 'PieChart'];
-
-      return values.indexOf(chartType) !== -1;
     }
 
     /**
@@ -100,7 +81,7 @@ angular.module('negawattClientApp')
           }
         ],
         // Add rows.
-        row: getRows(collection, 'single')
+        rows: getRows(collection, 'single')
       };
 
       return dataset;

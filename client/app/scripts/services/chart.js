@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .factory('Chart', function chartFactory($filter) {
+  .factory('Chart', function chartFactory($filter, Utils) {
     var isDefined = angular.isDefined;
     // The private chart object, configuration.
     var chart = {
@@ -47,7 +47,7 @@ angular.module('negawattClientApp')
        */
       getActiveFrequency: function() {
         // Chart frequency test.
-        return $filter('filter')(chart.frequencies, {active: true}, true);
+        return $filter('filter')(Utils.toArray(chart.frequencies), isActive, true);
       }
     };
 
@@ -153,5 +153,17 @@ angular.module('negawattClientApp')
     function get(name) {
       return chart[name] || undefined;
     };
+
+    /**
+     * Returns the item of the collection if have a property `active: true`
+     *
+     * @param item
+     *  Item from the collection.
+     * @returns {*}
+     *  Return items active.
+     */
+    function isActive(item) {
+      return item.active && item;
+    }
 
   });
