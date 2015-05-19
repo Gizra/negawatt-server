@@ -94,6 +94,19 @@ class NegaWattNormalizerDataProviderBase implements \NegaWattNormalizerDataProvi
   /**
    * {@inheritdoc}
    */
+  public static function getNumberOfRawElectricityEntities($node, $frequency) {
+    $query = new EntityFieldQuery();
+    return $query
+      ->entityCondition('entity_type', 'electricity_raw')
+      ->propertyCondition('meter_nid', $node->nid)
+      ->propertyCondition('frequency', $frequency)
+      ->count()
+      ->execute();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public static function getOldestRawElectricityEntity($node, $frequency) {
     $query = new EntityFieldQuery();
     $result = $query
@@ -101,6 +114,29 @@ class NegaWattNormalizerDataProviderBase implements \NegaWattNormalizerDataProvi
       ->propertyCondition('meter_nid', $node->nid)
       ->propertyCondition('frequency', $frequency)
       ->propertyOrderBy('timestamp')
+      ->range(0, 1)
+      ->execute();
+
+    // No entity was found, take current time.
+    if (empty($result['electricity_raw'])) {
+      return NULL;//time();
+    }
+
+    $id = key($result['electricity_raw']);
+    $entity = entity_load_single('electricity_raw', $id);
+    return $entity->timestamp;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getLatestRawElectricityEntity($node, $frequency) {
+    $query = new EntityFieldQuery();
+    $result = $query
+      ->entityCondition('entity_type', 'electricity_raw')
+      ->propertyCondition('meter_nid', $node->nid)
+      ->propertyCondition('frequency', $frequency)
+      ->propertyOrderBy('timestamp', 'DESC')
       ->range(0, 1)
       ->execute();
 

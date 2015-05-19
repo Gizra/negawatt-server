@@ -307,6 +307,14 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
     // Get last processed timestamp of the meter node.
     $last_processed = $this->getMeterLastProcessed();
 
+    // Get number of raw entities.
+    $num_entities = \NegaWattNormalizerDataProviderBase::getNumberOfRawElectricityEntities($this->getMeterNode(), $frequency);
+    if ($num_entities == 0 && $frequency != $this->getMeterMaxFrequency()) {
+      // No entities for this frequency, take time interval from higher frequency.
+      $from_timestamp = \NegaWattNormalizerDataProviderBase::getOldestRawElectricityEntity($this->getMeterNode(), $frequency);
+      $to_timestamp = \NegaWattNormalizerDataProviderBase::getLatestRawElectricityEntity($this->getMeterNode(), $frequency);
+    }
+
     // If last processed is NULL, take oldest timestamp from electricity raw entities related to meter-node.
     if ($last_processed) {
       // If last-processed field was found, advance one second forward, so as
