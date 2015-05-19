@@ -8,7 +8,7 @@
  * Controller of the negawattClientApp
  */
 angular.module('negawattClientApp')
-  .controller('UsageCtrl', function ($scope, $state, $stateParams, ChartUsage, usage, meters) {
+  .controller('UsageCtrl', function ($scope, $state, $stateParams, Chart, usage, meters) {
     var vm = this;
 
     // Popuate the electricity data into the UI.
@@ -16,7 +16,7 @@ angular.module('negawattClientApp')
 
     // Get the parameters chart frecuency.
     if (angular.isDefined($stateParams.chartFreq)) {
-      ChartUsage.setActiveFrequency($stateParams.chartFreq);
+      Chart.setActiveFrequency($stateParams.chartFreq);
     }
 
     // Get from parameters information of the selected marker.
@@ -24,17 +24,18 @@ angular.module('negawattClientApp')
       // Share meter selected.
       $scope.meterSelected = meters.list[$stateParams.markerId];
 
-      // Chart usage information of the selected marker.
-      ChartUsage.meterSelected(meters.list[$stateParams.markerId]);
+      // @TODO: Fix Chart usage information of the selected marker. (Mutiple charts)
+      // ChartUsage.meterSelected(meters.list[$stateParams.markerId]);
     }
 
     // Handle lazy-load of electricity data.
     // When cache expands, update the chart.
+    // @TODO:
     $scope.$on("nwElectricityChanged", function(event, filtersHash) {
       // Don't update usageChartData if we're not in the active request.
-      if (filtersHash != ChartUsage.getActiveRequestHash()) {
-        return;
-      }
+      //if (filtersHash != ChartUsage.getActiveRequestHash()) {
+      //  return;
+      //}
     });
 
   });

@@ -1,5 +1,5 @@
 angular.module('negawattClientApp')
-  .filter('toChartDataset', function () {
+  .filter('toChartDataset', function (Chart) {
 
     /**
      * From a collection object create a Google Chart data ser object
@@ -13,17 +13,18 @@ angular.module('negawattClientApp')
      * @returns {*}
      *  The dataset collection filtered.
      */
-    return function (collection, chartType){
+    return function (collection, chartType, options){
       if (!validate(chartType)) {
         return;
       }
 
-      // Contruc
+      // Recreate collection object.
       collection = {
         type: chartType,
-        data: getDataset(collection)
+        data: getDataset(collection),
+        options: getOptions()
       }
-      console.log(collection, data);
+      console.log(collection);
       return collection;
     }
 
@@ -34,9 +35,32 @@ angular.module('negawattClientApp')
      *  Indicate the type of chart, exmaple: 'LineChart'.
      */
     function validate(chartType) {
-      var values = ['Linechart', 'PieChart'];
+      // Valid type of chart.
+      var values = ['LineChart', 'PieChart'];
 
       return values.indexOf(chartType) !== -1;
+    }
+
+    /**
+     * Return the options of the selected chart.
+     */
+    function getOptions() {
+      var chart = Chart.getActiveFrequency();
+      return {
+        'isStacked': 'true',
+        'bar': { groupWidth: '75%' },
+        'fill': 20,
+        'displayExactValues': true,
+        'vAxis': {
+          'title': chart.axis_v_title,
+          'gridlines': {
+            'count': 7
+          }
+        },
+        'hAxis': {
+          'title': chart.axis_h_title 
+        }
+      }
     }
 
     /**
@@ -47,6 +71,7 @@ angular.module('negawattClientApp')
      */
     function getDataset(collection) {
       var dataset = {
+        // Add columns.
         "cols": [
           {
             'id': 'month',
@@ -75,6 +100,8 @@ angular.module('negawattClientApp')
           }
         ]
       };
+
+      // Add rows.
 
       return dataset;
     }

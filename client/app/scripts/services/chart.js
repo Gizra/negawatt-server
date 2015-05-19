@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .factory('Chart', function chartFactory() {
-    // The private on
+  .factory('Chart', function chartFactory($filter) {
+    var isDefined = angular.isDefined;
+    // The private chart object, configuration.
     var chart = {
       frequencies: setFrequencies(),
       multipleGraphs: false
@@ -17,15 +18,15 @@ angular.module('negawattClientApp')
         empty: 'אין מספיק נתונים כדי להציג את התרשים.'
       },
       /**
-       * Return an specific frequency.
+       * Return a collection of frequencies or a specific frequency.
        *
-       * @param type
+       * @param type {Number}
        *  The type of the frecuency.
        * @returns {*}
-       *  The frecuency object.
+       *  The frecuency object or collection .
        */
-      getFrequency: function(type) {
-        return this.get('frequencies')[type] || undefined;
+      getFrequencies: function(type) {
+        return isDefined(type) ? get('frequencies')[type] : get('frequencies');
       },
       /**
        * Set the frequency active.
@@ -39,39 +40,14 @@ angular.module('negawattClientApp')
         chart.frequencies[chartFreq].active = true;
       },
       /**
-       * Return a config parameter of the Chart object.
+       * Return the frequency object active.
        *
-       * @param name
-       *  Name of the property to get.
-       *
-       * @returns {*}
-       *  Value of the property.
+       * @param chartFreq - {number}
+       *  Tyep of the frequency object.
        */
-      get: function(name) {
-        return chart[name];
-      },
-      /**
-       * Set the new value for a specific property.
-       *
-       * @param name
-       *  The name of the property.
-       * @param value
-       *  The value of the property.
-       */
-      set: function(name, value) {
-        chart[name] = value;
-      },
-      /**
-       * Return a config parameter of the Chart object.
-       *
-       * @param name
-       *  Name of the property to get.
-       *
-       * @returns {*}
-       *  Value of the property.
-       */
-      get: function(name) {
-        return chart[name] || undefined;
+      getActiveFrequency: function() {
+        // Chart frequency test.
+        return $filter('filter')(chart.frequencies, {active: true}, true);
       }
     };
 
@@ -150,6 +126,32 @@ angular.module('negawattClientApp')
       angular.forEach(chart.frequencies, function(frequency) {
         frequency.active = false;
       });
-    }
+    };
+
+    /**
+     * Set the new value for a specific property.
+     *
+     * @param name
+     *  The name of the property.
+     * @param value
+     *  The value of the property.
+     */
+    function set(name, value) {
+      chart[name] = value;
+    };
+
+
+    /**
+     * Return a config parameter of the Chart object.
+     *
+     * @param name
+     *  Name of the property to get.
+     *
+     * @returns {*}
+     *  Value of the property.
+     */
+    function get(name) {
+      return chart[name] || undefined;
+    };
 
   });

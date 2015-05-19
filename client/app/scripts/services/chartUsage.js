@@ -44,7 +44,7 @@ angular.module('negawattClientApp')
       var deferred = $q.defer();
       // Keep compatibility with the actual architecture.
       var params = FilterFactory.get('electricity')
-      var chart = Chart.getFrequency(params.chartFreq);
+      var chart = Chart.getFrequencies(params.chartFreq);
 
       // Set the chart graph as multi graph
       Chart.multipleGraphs = angular.isArray(params.selectorId) || false;
@@ -110,7 +110,7 @@ angular.module('negawattClientApp')
     this.electricityToChartData = function(chartFreq, electricity) {
       // Get frequency-info record.
       var chartFrequency = chartFreq;
-      var chartFrequencyInfo = Chart.getFrequency(chartFreq);
+      var chartFrequencyInfo = Chart.getFrequencies(chartFreq);
 
       // Translate electricity data to google charts format.
       angular.extend(ChartUsage.usageGoogleChartParams, ChartUsage.transformDataToDatasets(electricity, chartFrequencyInfo));
@@ -181,7 +181,7 @@ angular.module('negawattClientApp')
      * @param {data} data
      *    Source object in electricity format.
      * @param {Object} chartFrequencyInfo
-     *    Chart frequency info, as defined in Chart.getFrequency(chartFreq).
+     *    Chart frequency info, as defined in Chart.getFrequencies(chartFreq).
      *
      * @returns {Object}
      *    Target data in google charts' datasets format.
