@@ -164,7 +164,7 @@ angular.module('negawattClientApp')
      * Save of the electricity filters, index by unique hash string.
      *
      * @param name
-     *  Nombre del filtro. By default 'electricity;
+     *  Filter name. By default 'electricity;
      * @param value
      *  Parameter object regulary comming from the query string.
      */

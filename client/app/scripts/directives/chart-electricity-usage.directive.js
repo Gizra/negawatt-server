@@ -5,10 +5,11 @@ angular.module('negawattDirectives', [])
     return {
       restrict: 'EA',
       templateUrl: 'scripts/directives/chart-electricity-usage.directive.html',
-      controller: function(Chart, FilterFactory, $state, $stateParams, $timeout, $urlRouter, $location, $filter, $scope) {
+      controller: function(Chart, FilterFactory, Electricity, $state, $stateParams, $timeout, $urlRouter, $location, $filter, $scope) {
         var ctrlChart = this;
 
         $scope.$watch('ctrlChart.electricity', function(current) {
+          console.log('ctrlChart.electricity wached');
           // Define default chart data.
           ctrlChart.data = $filter('toChartDataset')(ctrlChart.electricity);
         });
@@ -24,8 +25,17 @@ angular.module('negawattDirectives', [])
          *  The type of frequency according the period of time selected.
          */
         ctrlChart.changeFrequency = function(type) {
+          // Clear actual chart data.
+          ctrlChart.electricity = {};
+
           // Update url with params updated.
           $state.refreshUrlWith({chartFreq: +type});
+
+          // Refresh the electricity filters, and generate new hash.
+          FilterFactory.set('electricity', angular.extend(FilterFactory.get('electricity'), {chartFreq: +type}));
+
+          // Refresh electricity data
+          Electricity.refresh(FilterFactory.get('activeElectricityHash'));
           return type;
 
           //var params = {};

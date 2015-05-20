@@ -46,7 +46,6 @@ angular.module('negawattClientApp')
       vm.electricity = angular.isDefined(electricity) && electricity;
       event.preventDefault();
 
-      console.log(electricity);
       //Don't update usageChartData if we're not in the active request.
       //if (filtersHash != ChartUsage.getActiveRequestHash()) {
       //  return;
@@ -58,7 +57,7 @@ angular.module('negawattClientApp')
      */
     if (filters.loadElectricity) {
       // Realize the first load electricity data after ui-roter resolutions.
-      Electricity.forceResolve(filters.activeElectricityHash);
+      Electricity.refresh(filters.activeElectricityHash);
     }
 
   });

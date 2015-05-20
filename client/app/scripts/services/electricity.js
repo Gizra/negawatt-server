@@ -51,8 +51,11 @@ angular.module('negawattClientApp')
      *  Hash string for the data to be updated.
      */
     this.refresh = function(hash) {
+      console.log('refresh:', hash);
+      // Initial electricity data force.
+      angular.isUndefined(cache[hash]) && self.get(hash);
       // Broadcast an update event.
-      $rootScope.$broadcast(broadcastUpdateEventName, electricityRecords(hash));
+      angular.isDefined(cache[hash]) && $rootScope.$broadcast(broadcastUpdateEventName, electricityRecords(hash));
     };
 
     /**
