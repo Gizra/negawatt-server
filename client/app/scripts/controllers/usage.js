@@ -38,19 +38,27 @@ angular.module('negawattClientApp')
     //  }
     //},
 
-    if (filters.loadElectricity) {
-      Electricity.refresh();
-    }
-
     // Handle lazy-load of electricity data.
     // When cache expands, update the chart.
     // @TODO:
-    $scope.$on("nwElectricityChanged", function(event, filtersHash) {
-      console.log(event, filtersHash);
+    $scope.$on("nwElectricityChanged", function(event, electricity) {
+      // Update electricity object
+      vm.electricity = angular.isDefined(electricity) && electricity;
+      event.preventDefault();
+
+      console.log(electricity);
       //Don't update usageChartData if we're not in the active request.
       //if (filtersHash != ChartUsage.getActiveRequestHash()) {
       //  return;
       //}
     });
+
+    /**
+     * Force load of the electricity data.
+     */
+    if (filters.loadElectricity) {
+      // Realize the first load electricity data after ui-roter resolutions.
+      Electricity.forceResolve(filters.activeElectricityHash);
+    }
 
   });

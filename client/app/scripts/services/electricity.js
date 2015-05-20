@@ -2,6 +2,7 @@
 
 angular.module('negawattClientApp')
   .service('Electricity', function ($q, $http, $timeout, $rootScope, Config, Utils, FilterFactory) {
+    var self = this;
 
     // A private cache key.
     var cache = {};
@@ -31,7 +32,7 @@ angular.module('negawattClientApp')
       }
 
       // Preparation of the promise and cache for Electricity request.
-      getElectricity[hash] = $q.when(getElectricity[hash] || cache[hash] && angular.copy(cache[hash].data) || getDataFromBackend(hash, 1, false));
+      getElectricity[hash] = $q.when(getElectricity[hash] || electricityRecords(hash) || getDataFromBackend(hash, 1, false));
 
       // Clear the promise cached, after resolve or reject the
       // promise. Permit access to the cache data, when
@@ -44,11 +45,24 @@ angular.module('negawattClientApp')
     };
 
     /**
-     * Refresh the electricity object.
+     * Brodcast event to rfresh the electricity object in the $scope.
+     *
+     * @param hash
+     *  Hash string for the data to be updated.
      */
-    this.refresh = function(params) {
+    this.refresh = function(hash) {
       // Broadcast an update event.
-      $rootScope.$broadcast(broadcastUpdateEventName, params);
+      $rootScope.$broadcast(broadcastUpdateEventName, electricityRecords(hash));
+    };
+
+    /**
+     * Force the lazyload of the electricity data.
+     *
+     * @param hash
+     */
+    this.forceResolve = function(hash) {
+      // Initial electricity data force.
+      angular.isUndefined(cache[hash]) && self.get(hash);
     }
 
     /**
@@ -90,7 +104,7 @@ angular.module('negawattClientApp')
       }).success(function(electricity) {
         setCache(electricity.data, hash, skipResetCache);
 
-        deferred.resolve(cache[hash].data);
+        deferred.resolve(electricityRecords(hash));
 
         // If there are more pages, read them.
         var hasNextPage = electricity.next != undefined;
@@ -122,7 +136,7 @@ angular.module('negawattClientApp')
       };
 
       // Broadcast an update event.
-      $rootScope.$broadcast(broadcastUpdateEventName, key);
+      $rootScope.$broadcast(broadcastUpdateEventName, electricityRecords(key));
 
       // If asked to skip cache timer reset, return now.
       // Will happen when reading multiple page data - when reading pages
@@ -152,5 +166,16 @@ angular.module('negawattClientApp')
       // Destroy pile of timeouts.
       timeouts = [];
     });
+
+    /**
+     * Return a object of electricity record.
+     *
+     * @param hash
+     *  Hash string that reprsente the filters and the result of the query
+     * @returns {*}
+     */
+    function electricityRecords(hash) {
+      return cache[hash] && cache[hash].data;
+    }
   });
 
