@@ -19,7 +19,6 @@ angular.module('negawattClientApp')
         data: getDataset(collection),
         options: getOptions()
       }
-      console.log(collection);
       return collection;
     }
 

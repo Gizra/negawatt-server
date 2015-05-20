@@ -44,6 +44,14 @@ angular.module('negawattClientApp')
     };
 
     /**
+     * Refresh the electricity object.
+     */
+    this.refresh = function(params) {
+      // Broadcast an update event.
+      $rootScope.$broadcast(broadcastUpdateEventName, params);
+    }
+
+    /**
      * Return electricity data array from the server.
      *
      * @param hash

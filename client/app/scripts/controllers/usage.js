@@ -8,7 +8,7 @@
  * Controller of the negawattClientApp
  */
 angular.module('negawattClientApp')
-  .controller('UsageCtrl', function ($scope, $state, $stateParams, Chart, meters) {
+  .controller('UsageCtrl', function ($scope, $state, $stateParams, Electricity, Chart, meters, filters) {
     var vm = this;
 
     // Popuate the electricity data into the UI.
@@ -38,14 +38,19 @@ angular.module('negawattClientApp')
     //  }
     //},
 
+    if (filters.loadElectricity) {
+      Electricity.refresh();
+    }
+
     // Handle lazy-load of electricity data.
     // When cache expands, update the chart.
     // @TODO:
-    //$scope.$on("nwElectricityChanged", function(event, filtersHash) {
-      // Don't update usageChartData if we're not in the active request.
+    $scope.$on("nwElectricityChanged", function(event, filtersHash) {
+      console.log(event, filtersHash);
+      //Don't update usageChartData if we're not in the active request.
       //if (filtersHash != ChartUsage.getActiveRequestHash()) {
       //  return;
       //}
-    //});
+    });
 
   });

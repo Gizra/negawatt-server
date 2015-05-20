@@ -101,6 +101,10 @@ angular
               chartNextPeriod: period.next,
               chartPreviousPeriod: period.previous
             }));
+
+            return {
+              loadElectricity: true
+            };
           },
           messages: function(Message) {
             return Message.get();
