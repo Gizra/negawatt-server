@@ -125,6 +125,9 @@ function negawatt_normalizer_process_meters($meter_start_id, $options = array())
     'time_to' => REQUEST_TIME,
   );
 
+  // Set timezone
+  // @fixme: allow each account have its own timezone.
+  date_default_timezone_set('Asia/Jerusalem');
 
   drush_log('time options: '.date('Y-m-d H:i', $options['time_from']) . '-' . date('Y-m-d H:i', $options['time_to']));
 
@@ -263,7 +266,7 @@ function negawatt_normalizer_process_meters_once($meter_ids = array(), $from_tim
               '@delta' => $entities_delta
             )));
 
-            drush_log(format_string('    type: @type', array('@type' => $entity->type)));
+            drush_log(format_string('    type: @frequency', array('@frequency' => $entity->frequency)));
             drush_log(format_string('    timestamp: @timestamp', array('@timestamp' => date('Y-m-d H:i', $entity->timestamp))));
             drush_log(format_string('    rate_type: @type', array('@type' => $entity->rate_type)));
             drush_log(format_string('    sum_kwh: @sum', array('@sum' => $entity->sum_kwh)));

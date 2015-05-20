@@ -92,22 +92,64 @@ class NegaWattNormalizerDataProviderBase implements \NegaWattNormalizerDataProvi
   }
 
 
-    /**
-     * Prepare the base query for raw electricity entities
-     */
-    public static function getRawElectricityEntitiesQuery($node, $frequency) {
-        $query = new EntityFieldQuery();
-        return $query
-            ->entityCondition('entity_type', 'electricity_raw')
-            ->propertyCondition('meter_nid', $node->nid)
-            ->propertyCondition('frequency', $frequency);
+  /**
+   * Prepare the base query for raw electricity entities.
+   *
+   * @param $node
+   *    Meter node.
+   * @param $frequency
+   *    Required frequency.
+   * @param string $entity_type
+   *    Entity type.
+   *
+   * @return EntityFieldQuery
+   *    A new base query.
+   */
+  public static function getElectricityEntitiesQuery($node, $frequency, $entity_type = 'electricity_raw') {
+    $query = new EntityFieldQuery();
+    return $query
+      ->entityCondition('entity_type', $entity_type)
+      ->propertyCondition('meter_nid', $node->nid)
+      ->propertyCondition('frequency', $frequency);
+  }
+
+  /**
+   * Get the timestamp of first entity in result.
+   *
+   * @param $result
+   *    A EntityFieldQuery result.
+   * @param string $entity_type
+   *    Entity type.
+   *
+   * @return EntityFieldQuery
+   *    The entity timestamp, if one exists, otherwise NULL.
+   */
+  public static function timestampFromQueryResult($result, $entity_type = 'electricity_raw') {
+    // No entity was found, return NULL.
+    if (empty($result[$entity_type])) {
+      return NULL;
     }
+
+    $id = key($result[$entity_type]);
+    $entity = entity_load_single($entity_type, $id);
+    return $entity->timestamp;
+  }
 
   /**
    * {@inheritdoc}
    */
   public static function getNumberOfRawElectricityEntities($node, $frequency) {
-    $query = new getRawElectricityEntitiesQuery($node, $frequency);
+    $query = self::getElectricityEntitiesQuery($node, $frequency);
+    return $query
+      ->count()
+      ->execute();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getNumberOfNormalizedElectricityEntities($node, $frequency) {
+    $query = self::getElectricityEntitiesQuery($node, $frequency, 'electricity');
     return $query
       ->count()
       ->execute();
@@ -117,40 +159,39 @@ class NegaWattNormalizerDataProviderBase implements \NegaWattNormalizerDataProvi
    * {@inheritdoc}
    */
   public static function getOldestRawElectricityEntity($node, $frequency) {
-      $query = new getRawElectricityEntitiesQuery($node, $frequency);
+    $query = self::getElectricityEntitiesQuery($node, $frequency);
     $result = $query
       ->propertyOrderBy('timestamp')
       ->range(0, 1)
       ->execute();
 
-    // No entity was found, take current time.
-    if (empty($result['electricity_raw'])) {
-      return NULL;//time();
-    }
-
-    $id = key($result['electricity_raw']);
-    $entity = entity_load_single('electricity_raw', $id);
-    return $entity->timestamp;
+    return self::timestampFromQueryResult($result);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function getLatestRawElectricityEntity($node, $frequency) {
-      $query = new getRawElectricityEntitiesQuery($node, $frequency);
+  public static function getOldestNormalizedElectricityEntity($node, $frequency) {
+    $query = self::getElectricityEntitiesQuery($node, $frequency, 'electricity');
+    $result = $query
+      ->propertyOrderBy('timestamp')
+      ->range(0, 1)
+      ->execute();
+
+    return self::timestampFromQueryResult($result, 'electricity');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getLatestNormalizedElectricityEntity($node, $frequency) {
+    $query = self::getElectricityEntitiesQuery($node, $frequency, 'electricity');
     $result = $query
       ->propertyOrderBy('timestamp', 'DESC')
       ->range(0, 1)
       ->execute();
 
-    // No entity was found, take current time.
-    if (empty($result['electricity_raw'])) {
-      return NULL;//time();
-    }
-
-    $id = key($result['electricity_raw']);
-    $entity = entity_load_single('electricity_raw', $id);
-    return $entity->timestamp;
+    return self::timestampFromQueryResult($result, 'electricity');
   }
 
   /**

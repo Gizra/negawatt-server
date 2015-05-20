@@ -55,6 +55,15 @@ class NegaWattNormalizerTimeManagerBase implements \NegaWattNormalizerTimeManage
           ($date_info['mon'] - 1) : $date_info['mon'];
         $date_time->setDate($date_info['year'], $month, 1);
         $date_time->setTime(0, 0, 0);
+        if ($date_time->getTimestamp() == $timestamp) {
+          // If daylight saving time was changed at the 1st fo the month, getdate()
+          // will return hour 01:00 for hour 00:00, so setDate and setTime will
+          // return us to the same timestamp as we began. In order to overcome
+          // the problem, decrease the month and call setDate and setTime again.
+          $month--;
+          $date_time->setDate($date_info['year'], $month, 1);
+          $date_time->setTime(0, 0, 0);
+        }
         break;
       }
       case \NegaWattNormalizerTimeManagerInterface::YEAR: {
@@ -79,7 +88,6 @@ class NegaWattNormalizerTimeManagerBase implements \NegaWattNormalizerTimeManage
    */
   public static function getNextTimeSlice($frequency, $from_timestamp, $to_timestamp) {
     switch ($frequency) {
-
       case \NegaWattNormalizerTimeManagerInterface::MINUTE: {
         // 'hard' retrace to minute boundary to avoid problems with daylight saving time change.
         // Retrace the number of seconds until previous minute boundary.
