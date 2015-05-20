@@ -307,14 +307,6 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
     // Get last processed timestamp of the meter node.
     $last_processed = $this->getMeterLastProcessed();
 
-    // Get number of raw entities.
-    $num_entities = \NegaWattNormalizerDataProviderBase::getNumberOfRawElectricityEntities($this->getMeterNode(), $frequency);
-    if ($num_entities == 0 && $frequency != $this->getMeterMaxFrequency()) {
-      // No entities for this frequency, take time interval from higher frequency.
-      $from_timestamp = \NegaWattNormalizerDataProviderBase::getOldestRawElectricityEntity($this->getMeterNode(), $frequency);
-      $to_timestamp = \NegaWattNormalizerDataProviderBase::getLatestRawElectricityEntity($this->getMeterNode(), $frequency);
-    }
-
     // If last processed is NULL, take oldest timestamp from electricity raw entities related to meter-node.
     if ($last_processed) {
       // If last-processed field was found, advance one second forward, so as
@@ -328,7 +320,15 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
       self::debugMessage("last processed set from oldest raw: $last_processed (@time_from)", 1, $last_processed);
     }
 
-    list($from_timestamp, $to_timestamp) = $this->getTimeManager()->getTimePeriod($from_timestamp, $to_timestamp, $last_processed);
+      // Get number of raw entities.
+      $num_entities = \NegaWattNormalizerDataProviderBase::getNumberOfRawElectricityEntities($this->getMeterNode(), $frequency);
+      if ($num_entities == 0 && $frequency != $this->getMeterMaxFrequency()) {
+          // No entities for this frequency, take time interval from higher frequency.
+          $from_timestamp = $last_processed ? $last_processed : \NegaWattNormalizerDataProviderBase::getOldestRawElectricityEntity($this->getMeterNode(), $frequency + 1);
+          $to_timestamp = \NegaWattNormalizerDataProviderBase::getLatestRawElectricityEntity($this->getMeterNode(), $frequency + 1);
+      }
+
+      list($from_timestamp, $to_timestamp) = $this->getTimeManager()->getTimePeriod($from_timestamp, $to_timestamp, $last_processed);
 
 //    if ($to_timestamp == $from_timestamp) {
 //      // Probably now() is lower than last processed. Skip processing.

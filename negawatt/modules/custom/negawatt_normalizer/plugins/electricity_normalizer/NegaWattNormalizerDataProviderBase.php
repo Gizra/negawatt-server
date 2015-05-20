@@ -91,15 +91,24 @@ class NegaWattNormalizerDataProviderBase implements \NegaWattNormalizerDataProvi
     }
   }
 
+
+    /**
+     * Prepare the base query for raw electricity entities
+     */
+    public static function getRawElectricityEntitiesQuery($node, $frequency) {
+        $query = new EntityFieldQuery();
+        return $query
+            ->entityCondition('entity_type', 'electricity_raw')
+            ->propertyCondition('meter_nid', $node->nid)
+            ->propertyCondition('frequency', $frequency);
+    }
+
   /**
    * {@inheritdoc}
    */
   public static function getNumberOfRawElectricityEntities($node, $frequency) {
-    $query = new EntityFieldQuery();
+    $query = new getRawElectricityEntitiesQuery($node, $frequency);
     return $query
-      ->entityCondition('entity_type', 'electricity_raw')
-      ->propertyCondition('meter_nid', $node->nid)
-      ->propertyCondition('frequency', $frequency)
       ->count()
       ->execute();
   }
@@ -108,11 +117,8 @@ class NegaWattNormalizerDataProviderBase implements \NegaWattNormalizerDataProvi
    * {@inheritdoc}
    */
   public static function getOldestRawElectricityEntity($node, $frequency) {
-    $query = new EntityFieldQuery();
+      $query = new getRawElectricityEntitiesQuery($node, $frequency);
     $result = $query
-      ->entityCondition('entity_type', 'electricity_raw')
-      ->propertyCondition('meter_nid', $node->nid)
-      ->propertyCondition('frequency', $frequency)
       ->propertyOrderBy('timestamp')
       ->range(0, 1)
       ->execute();
@@ -131,11 +137,8 @@ class NegaWattNormalizerDataProviderBase implements \NegaWattNormalizerDataProvi
    * {@inheritdoc}
    */
   public static function getLatestRawElectricityEntity($node, $frequency) {
-    $query = new EntityFieldQuery();
+      $query = new getRawElectricityEntitiesQuery($node, $frequency);
     $result = $query
-      ->entityCondition('entity_type', 'electricity_raw')
-      ->propertyCondition('meter_nid', $node->nid)
-      ->propertyCondition('frequency', $frequency)
       ->propertyOrderBy('timestamp', 'DESC')
       ->range(0, 1)
       ->execute();
