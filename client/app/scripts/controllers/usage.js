@@ -8,7 +8,7 @@
  * Controller of the negawattClientApp
  */
 angular.module('negawattClientApp')
-  .controller('UsageCtrl', function ($scope, $state, $stateParams, Electricity, Chart, meters, filters) {
+  .controller('UsageCtrl', function UsageCtrl($scope, $state, $stateParams, Electricity, Chart, meters, filters) {
     var vm = this;
 
     // Popuate the electricity data into the UI.

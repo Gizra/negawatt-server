@@ -1,11 +1,12 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Electricity', function ($q, $http, $timeout, $rootScope, Config, Utils, FilterFactory) {
+  .service('Electricity', function Electricity($q, $http, $timeout, $rootScope, Config, Utils, FilterFactory) {
     var self = this;
 
     // A private cache key.
     var cache = {};
+    this.__cache = cache;
 
     // Array of $timeout promises to clear the cache.
     var timeouts = [];
@@ -45,13 +46,13 @@ angular.module('negawattClientApp')
     };
 
     /**
-     * Brodcast event to rfresh the electricity object in the $scope.
+     * Brodcast event to refresh the electricity object in the $scope.
      *
      * @param hash
      *  Hash string for the data to be updated.
      */
     this.refresh = function(hash) {
-      console.log('refresh:', hash);
+      console.log('refresh:', hash, FilterFactory.get('electricity')[hash]);
       // Initial electricity data force.
       angular.isUndefined(cache[hash]) && self.get(hash);
       // Broadcast an update event.

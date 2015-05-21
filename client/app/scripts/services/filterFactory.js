@@ -173,6 +173,7 @@ angular.module('negawattClientApp')
       var filter = getElectricityFilter(params);
       // Create and save hash.
       var hash = Utils.objToHash(filter);
+      debugger;
       this.set('activeElectricityHash', hash);
 
       this.filters[name] = {};
