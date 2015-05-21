@@ -52,7 +52,6 @@ angular.module('negawattClientApp')
      *  Hash string for the data to be updated.
      */
     this.refresh = function(hash) {
-      console.log('refresh:', hash, FilterFactory.get('electricity')[hash]);
       // Initial electricity data force.
       angular.isUndefined(cache[hash]) && self.get(hash);
       // Broadcast an update event.
@@ -131,7 +130,7 @@ angular.module('negawattClientApp')
       };
 
       // Broadcast an update event.
-      $rootScope.$broadcast(broadcastUpdateEventName, electricityRecords(key));
+      $rootScope.$broadcast(broadcastUpdateEventName, electricityRecords());
 
       // If asked to skip cache timer reset, return now.
       // Will happen when reading multiple page data - when reading pages
@@ -141,12 +140,12 @@ angular.module('negawattClientApp')
         return;
       }
 
-      // Clear cache in 60 seconds.
+      // Clear cache in 30 minutes.
       timeouts.push($timeout(function() {
         if (angular.isDefined(cache[key])) {
           cache[key] = undefined;
         }
-      }, 60000));
+      }, 1800000));
     }
 
     // Event handler for cache clear.
@@ -170,7 +169,7 @@ angular.module('negawattClientApp')
      * @returns {*}
      */
     function electricityRecords(hash) {
-      return cache[hash] && cache[hash].data;
+      return (angular.isUndefined(hash)) ? cache : cache[hash] && cache[hash].data;
     }
   });
 

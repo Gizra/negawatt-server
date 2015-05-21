@@ -5,18 +5,30 @@ angular.module('negawattDirectives', [])
     return {
       restrict: 'EA',
       templateUrl: 'scripts/directives/chart-electricity-usage.directive.html',
-      controller: function(Chart, FilterFactory, Electricity, $state, $stateParams, $timeout, $urlRouter, $location, $filter, $scope) {
+      controller: function chartElectricityUsageCtrl(Chart, FilterFactory, Electricity, $state, $stateParams, $timeout, $urlRouter, $location, $filter, $scope) {
         var ctrlChart = this;
 
+        // Update the electricity data.
         $scope.$watch('ctrlChart.electricity', function(current) {
-          console.log('ctrlChart.electricity wached');
-          // Define default chart data.
-          ctrlChart.data = $filter('toChartDataset')(ctrlChart.electricity);
+          console.log('electricity changed WATCH', ($filter('toChartDataset')($filter('activeElectricityFilters')(current))).data, FilterFactory.get('activeElectricityHash') );
+          ctrlChart.data = $filter('toChartDataset')($filter('activeElectricityFilters')(current));
         });
 
         // Update data object
         // Get chart frequencies. (Tabs the period of time)
         ctrlChart.frequencies = Chart.getFrequencies();
+
+        /**
+         * Refresh chart with electricity filters selected.
+         *
+         * @returns {*}
+         */
+        ctrlChart.refreshData = function() {
+          var selected = $filter('activeElectricityFilters')(ctrlChart.electricity);
+
+          // Define default chart data.
+          return $filter('toChartDataset')(selected);
+        }
 
         /**
          * Change frequency of the chart.
@@ -25,18 +37,21 @@ angular.module('negawattDirectives', [])
          *  The type of frequency according the period of time selected.
          */
         ctrlChart.changeFrequency = function(type) {
-          // Clear actual chart data.
-          ctrlChart.electricity = {};
+          // Update the electricity filters.
+          updateElectricityFilters(type)
 
-          // Update url with params updated.
-          $state.refreshUrlWith(angular.extend($stateParams, {chartFreq: +type}));
 
-          // Refresh the electricity filters, and generate new hash.
-          FilterFactory.set('electricity', $stateParams);
-          debugger;
-          // Refresh electricity data
-          //Electricity.refresh(FilterFactory.get('activeElectricityHash'));
-          return type;
+          console.log('electricity changed TAB', ($filter('toChartDataset')($filter('activeElectricityFilters')(ctrlChart.electricity))).data, FilterFactory.get('activeElectricityHash') );
+          ctrlChart.data = $filter('toChartDataset')($filter('activeElectricityFilters')(ctrlChart.electricity));
+
+          // Update with the actual data.
+          // ctrlChart.data = ctrlChart.refreshData();
+          //console.log('ctrlChart.data', ctrlChart.data.rows);
+
+
+
+          // Refresh electricity data.
+          Electricity.refresh(FilterFactory.get('activeElectricityHash'));
 
           //var params = {};
           //
@@ -71,6 +86,20 @@ angular.module('negawattDirectives', [])
         ctrlChart.messages = {
           empty: Chart.messages.empty
         };
+
+        /**
+         * Update the electricity filters in UI-Router and FilterFactory
+         *
+         * @param type
+         *  The chart requency selected
+         */
+        function updateElectricityFilters(type) {
+          // Update url with params updated.
+          angular.extend($stateParams, {chartFreq: +type});
+          $state.refreshUrlWith($stateParams);
+          // Refresh the electricity filters as active, and generate new hash.
+          FilterFactory.set('electricity', $stateParams);
+        }
 
         /**
          * Search the data with the new chart frequency.
