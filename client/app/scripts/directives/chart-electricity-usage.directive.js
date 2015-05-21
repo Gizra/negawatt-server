@@ -38,7 +38,7 @@ angular.module('negawattDirectives', [])
          */
         ctrlChart.changeFrequency = function(type) {
           // Update the electricity filters.
-          updateElectricityFilters(type)
+          updateElectricityFilters(type);
 
 
           console.log('electricity changed TAB', ($filter('toChartDataset')($filter('activeElectricityFilters')(ctrlChart.electricity))).data, FilterFactory.get('activeElectricityHash') );
@@ -75,7 +75,7 @@ angular.module('negawattDirectives', [])
          * parameter, otherwise false.
          */
         ctrlChart.hasData = function hasData() {
-          return !!ctrlChart.electricity.length;
+          return !!$filter('activeElectricityFilters')(ctrlChart.electricity).length;
         }
 
         /**

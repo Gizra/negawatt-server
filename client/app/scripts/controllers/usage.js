@@ -12,7 +12,6 @@ angular.module('negawattClientApp')
     var vm = this;
 
     // Popuate the electricity data into the UI.
-    //vm.electricity = usage;
     vm.electricity = {};
 
     // Get the parameters chart frecuency.
@@ -29,27 +28,12 @@ angular.module('negawattClientApp')
       // ChartUsage.meterSelected(meters.list[$stateParams.markerId]);
     }
 
-    //Electricity.get(FilterFactory.get('activeElectricityHash'))
-
-    //resolve: {
-    //  // Get electricity data and transform it into chart format.
-    //  usage: function(FilterFactory, Electricity, filters) {
-    //    return Electricity.get(FilterFactory.get('activeElectricityHash'));
-    //  }
-    //},
-
     // Handle lazy-load of electricity data.
     // When cache expands, update the chart.
-    // @TODO:
     $scope.$on("nwElectricityChanged", function(event, electricity) {
       // Update electricity object
       vm.electricity = angular.isDefined(electricity) && electricity;
       event.preventDefault();
-
-      //Don't update usageChartData if we're not in the active request.
-      //if (filtersHash != ChartUsage.getActiveRequestHash()) {
-      //  return;
-      //}
     });
 
     /**

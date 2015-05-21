@@ -55,7 +55,7 @@ angular.module('negawattClientApp')
       // Initial electricity data force.
       angular.isUndefined(cache[hash]) && self.get(hash);
       // Broadcast an update event.
-      angular.isDefined(cache[hash]) && $rootScope.$broadcast(broadcastUpdateEventName, electricityRecords(hash));
+      angular.isDefined(cache[hash]) && $rootScope.$broadcast(broadcastUpdateEventName, electricityRecords());
     };
 
     /**
