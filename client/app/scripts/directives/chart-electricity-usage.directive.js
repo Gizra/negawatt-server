@@ -10,12 +10,8 @@ angular.module('negawattDirectives', [])
 
         // Update the electricity data.
         $scope.$watch('ctrlChart.electricity', function(current) {
-          console.log(
-            ($filter('toChartDataset')($filter('activeElectricityFilters')(current))).data.rows,
-            ($filter('toChartDataset')($filter('activeElectricityFilters')(ctrlChart.electricity))).data.rows
-          );
           ctrlChart.data = $filter('toChartDataset')($filter('activeElectricityFilters')(ctrlChart.electricity));
-        });
+        }, true);
 
         // Update data object
         // Get chart frequencies. (Tabs the period of time)
