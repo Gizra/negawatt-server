@@ -109,4 +109,22 @@ angular.module('negawattClientApp')
       return obj && md5.createHash(JSON.stringify(obj));
     }
 
+    /**
+     * Clean undefined properties from the obj.
+     *
+     * @param obj
+     *  The object wit properties undefined.
+     *
+     * @returns {*}
+     *  The object cleaned.
+     */
+    this.cleanProperties = function(obj) {
+      angular.forEach(obj, function(item, key) {
+        if (angular.isUndefined(item)) {
+          delete obj[key];
+        }
+      });
+
+      return obj;
+    }
   });

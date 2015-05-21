@@ -32,10 +32,10 @@ angular.module('negawattDirectives', [])
           $state.refreshUrlWith({chartFreq: +type});
 
           // Refresh the electricity filters, and generate new hash.
-          FilterFactory.set('electricity', angular.extend(FilterFactory.get('electricity'), {chartFreq: +type}));
+          FilterFactory.set('electricity', $stateParams);
 
           // Refresh electricity data
-          Electricity.refresh(FilterFactory.get('activeElectricityHash'));
+          //Electricity.refresh(FilterFactory.get('activeElectricityHash'));
           return type;
 
           //var params = {};

@@ -83,16 +83,7 @@ angular.module('negawattClientApp')
       var url = Config.backend + '/api/electricity';
       // Create a copy of filters, since params might add page option. Filters must
       // stay clean of page parameters since it also serves as key to the cache.
-      //debugger;
-      //var params = FilterFactory.getElectricity(hash);
-      var params = {
-        "filter[meter_account]": 1,
-        "filter[type]": 2,
-        "filter[timestamp][operator]": "BETWEEN",
-        "filter[timestamp][value][0]": 1368973989,
-        "filter[timestamp][value][1]": 1432045989
-      };
-
+      var params = FilterFactory.getElectricity(hash);
 
       // If page-number is given, add it to the params.
       // Don't modify 'filters' since it should reflect the general params,

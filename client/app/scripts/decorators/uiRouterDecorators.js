@@ -82,10 +82,10 @@ angular.module('negawattClientApp')
        *  Object of the change for the $stateParams.
        */
       $delegate.refreshUrlWith = function refreshUrlWith(params) {
-        $location.search(extend(copy($stateParams),
+        $location.search(extend($stateParams),
           $location.search(),
           params
-        ));
+        );
         $urlRouter.update(true);
       };
 
