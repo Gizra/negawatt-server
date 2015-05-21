@@ -10,7 +10,6 @@ angular.module('negawattDirectives', [])
 
         // Update the electricity data.
         $scope.$watch('ctrlChart.electricity', function(current) {
-          console.log('electricity changed WATCH', ($filter('toChartDataset')($filter('activeElectricityFilters')(current))).data, FilterFactory.get('activeElectricityHash') );
           ctrlChart.data = $filter('toChartDataset')($filter('activeElectricityFilters')(current));
         });
 
@@ -40,15 +39,8 @@ angular.module('negawattDirectives', [])
           // Update the electricity filters.
           updateElectricityFilters(type);
 
-
-          console.log('electricity changed TAB', ($filter('toChartDataset')($filter('activeElectricityFilters')(ctrlChart.electricity))).data, FilterFactory.get('activeElectricityHash') );
-          ctrlChart.data = $filter('toChartDataset')($filter('activeElectricityFilters')(ctrlChart.electricity));
-
           // Update with the actual data.
-          // ctrlChart.data = ctrlChart.refreshData();
-          //console.log('ctrlChart.data', ctrlChart.data.rows);
-
-
+          ctrlChart.data = $filter('toChartDataset')($filter('activeElectricityFilters')(ctrlChart.electricity));
 
           // Refresh electricity data.
           Electricity.refresh(FilterFactory.get('activeElectricityHash'));
