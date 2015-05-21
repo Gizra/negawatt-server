@@ -178,7 +178,8 @@ angular.module('negawattClientApp')
       // Clean Properties.
       filter = Utils.cleanProperties(filter);
 
-      this.filters[name] = {};
+      // Set property with the filters.
+      this.filters[name] = angular.isUndefined(this.filters[name]) ? {} : this.filters[name];
       this.filters[name][this.get('activeElectricityHash')] = filter;
     }
 

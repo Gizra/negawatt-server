@@ -29,11 +29,11 @@ angular.module('negawattDirectives', [])
           ctrlChart.electricity = {};
 
           // Update url with params updated.
-          $state.refreshUrlWith({chartFreq: +type});
+          $state.refreshUrlWith(angular.extend($stateParams, {chartFreq: +type}));
 
           // Refresh the electricity filters, and generate new hash.
           FilterFactory.set('electricity', $stateParams);
-
+          debugger;
           // Refresh electricity data
           //Electricity.refresh(FilterFactory.get('activeElectricityHash'));
           return type;
