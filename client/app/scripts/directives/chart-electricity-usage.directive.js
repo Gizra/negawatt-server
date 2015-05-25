@@ -27,8 +27,8 @@ angular.module('negawattDirectives', [])
          */
         ctrlChart.changeFrequency = function(type) {
           // Update the electricity filters.
-          updateElectricityFilters({chartFreq: +type});
-
+          updateElectricityFilters(angular.extend({chartFreq: +type}, getPeriodParams()));
+          debugger;
           refreshChart();
         }
 
@@ -88,6 +88,26 @@ angular.module('negawattDirectives', [])
 
           // Refresh electricity data.
           Electricity.refresh(FilterFactory.get('activeElectricityHash'));
+        }
+
+        /**
+         * Get the actual period, in a params format.
+         *
+         * @returns {*}
+         */
+        function getPeriodParams() {
+          var period;
+          // Define default period.
+          if (angular.isUndefined($stateParams.chartNextPeriod) || angular.isUndefined($stateParams.chartPreviousPeriod)) {
+            ChartUsagePeriod.setPeriod();
+          }
+
+          period = ChartUsagePeriod.getPeriod();
+
+          return {
+            chartNextPeriod: period.next,
+            chartPreviousPeriod: period.previous
+          };
         }
 
       },

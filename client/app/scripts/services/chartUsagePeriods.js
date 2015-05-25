@@ -2,13 +2,13 @@
 
 angular.module('negawattClientApp')
   .service('ChartUsagePeriod', function (Period, Chart, moment, $injector) {
+    // Extend Period Factory.
     var extend = angular.extend;
     extend(this, Chart);
 
     var copy = angular.copy;
-
+    // Extend Period Factory.
     var period = angular.extend({}, Period);
-    var chart;
 
     /**
      * Return the actual Period
@@ -45,7 +45,7 @@ angular.module('negawattClientApp')
      */
     this.setPeriod = function(newPeriod) {
       // Set frequency from selected chart configuration.
-      period.setConfig(chart);
+      period.setConfig(this.getActiveFrequency());
 
       // If newPeriod is defined update limit of the chart.
       if (angular.isDefined(newPeriod)) {
@@ -105,11 +105,11 @@ angular.module('negawattClientApp')
       var actual = $injector.get('ChartUsagePeriod');
       // Validate if next is equal o greater than the last limit.
       if (type === 'next') {
-        return !actual.newPeriod(type).isLast();
+        return !actual.getNewPeriod(type).isLast();
       }
 
       if (type === 'previous') {
-        return !actual.newPeriod(type).isFirst();
+        return !actual.getNewPeriod(type).isFirst();
       }
     };
 

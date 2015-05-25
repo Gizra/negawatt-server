@@ -47,7 +47,7 @@ angular.module('negawattClientApp')
        */
       getActiveFrequency: function() {
         // Chart frequency test.
-        return $filter('filter')(Utils.toArray(chart.frequencies), isActive, true);
+        return ($filter('filter')(Utils.toArray(chart.frequencies), isActive, true))[0];
       }
     };
 
