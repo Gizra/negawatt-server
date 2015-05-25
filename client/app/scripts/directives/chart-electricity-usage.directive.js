@@ -5,7 +5,7 @@ angular.module('negawattDirectives', [])
     return {
       restrict: 'EA',
       templateUrl: 'scripts/directives/chart-electricity-usage.directive.html',
-      controller: function chartElectricityUsageCtrl(Chart, FilterFactory, Electricity, $state, $stateParams, $timeout, $urlRouter, $location, $filter, $scope) {
+      controller: function chartElectricityUsageCtrl(Chart, UsagePeriod, FilterFactory, Electricity, $state, $stateParams, $timeout, $urlRouter, $location, $filter, $scope) {
         var ctrlChart = this;
 
         // Update the electricity data.
@@ -13,9 +13,13 @@ angular.module('negawattDirectives', [])
           ctrlChart.data = $filter('toChartDataset')($filter('activeElectricityFilters')(ctrlChart.electricity));
         }, true);
 
+
+
         // Update data object
         // Get chart frequencies. (Tabs the period of time)
         ctrlChart.frequencies = Chart.getFrequencies();
+        // Check if next/previous period have data.
+        ctrlChart.showNavigation = UsagePeriod.hasPeriod;
 
         /**
          * Change frequency of the chart.
@@ -48,6 +52,11 @@ angular.module('negawattDirectives', [])
           //
           //// Udpate chart.
           //updateUsageChart(params);
+        }
+
+
+        ctrlChart.changePeriod = function(type) {
+          debugger;
         }
 
         /**

@@ -49,38 +49,34 @@
       }
     }
   }
+}
 
-  //  Directive
-  div.chart-navigation {
-    z-index: 20;
-    background-color: seagreen;
-    opacity: 50%;
-    height: 100px;
-    width: 500px;
-    position: fixed;
 
-    .btn-arrow {
-      width: 30px;
-      height: 30px;
-      position: absolute;
-      top: 0px;
-      z-index: 25;
+//  Directive
+.chart-navigation {
 
-      .glyphicon {
-        left: 5px;
-      }
 
-      &.btn-transparent {
-        border-radius: 50%;
-      }
+  .btn-arrow {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 0px;
+    z-index: 25;
 
-      &.btn-arrow-left {
-        left: 50px;
-      }
+    .glyphicon {
+      left: 5px;
+    }
 
-      &.btn-arrow-right {
-        right: 65px;
-      }
-  }
+    &.btn-transparent {
+      border-radius: 50%;
+    }
+
+    &.btn-arrow-left {
+      left: 50px;
+    }
+
+    &.btn-arrow-right {
+      right: 65px;
+    }
   }
 }

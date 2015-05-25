@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .factory('UsagePeriod', function (Period, moment) {
+  .factory('UsagePeriod', function (Period, moment, $injector) {
     var extend = angular.extend;
+    var copy = angular.copy;
     var period = {};
 
     return {
@@ -12,9 +13,9 @@ angular.module('negawattClientApp')
       // Change the new limits of the chart, according the state and the filters.
       setLimits: setLimits,
       // Return boolean to indicate if show or no the next/previous period control.
-      showControl: showControl,
+      hasPeriod: hasPeriod,
       // Calculate the next and previous version.
-      newPeriod: calculateNextsPeriods,
+      newPeriod: getNewPeriod,
       getPeriod: function() {
         return period;
       }
@@ -77,12 +78,12 @@ angular.module('negawattClientApp')
      *
      * @returns {{next: null, previous: null}|*}
      */
-    function calculateNextsPeriods(type) {
-      var periods;
+    function getNewPeriod(type) {
+      var newPeriod;
 
 
       // By default we keep that same
-      periods = {
+      newPeriod = {
         next: period.next,
         previous: period.previous
       }
@@ -90,19 +91,22 @@ angular.module('negawattClientApp')
       // Calculate the new period od period.
       if (type === 'next' && !period.isLast()) {
         var nextTime = period.add(period.next).unix();
-        periods = {
+        newPeriod = {
           next: (moment.unix(nextTime).isAfter(moment.unix(period.max), period.config.frequency)) ? null : nextTime,
           previous: period.add(period.previous).unix()
         }
       }
       // This calculate the previous period.
       else {
-        periods = {
+        newPeriod = {
           next: period.subtract(period.next).unix(),
           previous: period.subtract(period.previous).unix()
         }
       }
-      return periods;
+
+      // Extend the Period factory methods.
+      newPeriod = extend(copy(period), newPeriod);
+      return newPeriod;
     }
 
     /**
@@ -114,14 +118,15 @@ angular.module('negawattClientApp')
      *
      * @returns boolean
      */
-    function showControl(type) {
+    function hasPeriod(type) {
+      var actual = $injector.get('UsagePeriod');
       // Validate if next is equal o greater than the last limit.
       if (type === 'next') {
-        return !period.isLast();
+        return !actual.newPeriod(type).isLast();
       }
 
       if (type === 'previous') {
-        return !period.isFirst();
+        return !actual.newPeriod(type).isFirst();
       }
     }
 
