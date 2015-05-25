@@ -8,11 +8,10 @@ angular.module('negawattDirectives', [])
       controller: function chartElectricityUsageCtrl(Chart, UsagePeriod, FilterFactory, Electricity, $state, $stateParams, $timeout, $urlRouter, $location, $filter, $scope) {
         var ctrlChart = this;
 
-        // Update the electricity data.
+        // Update the Chart data every time the electricity data.
         $scope.$watch('ctrlChart.electricity', function(current) {
           ctrlChart.data = $filter('toChartDataset')($filter('activeElectricityFilters')(ctrlChart.electricity));
         }, true);
-
 
 
         // Update data object

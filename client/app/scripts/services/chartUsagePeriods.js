@@ -1,40 +1,27 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .factory('UsagePeriod', function (Period, moment, $injector) {
+  .factory('UsagePeriod', function (Period, Chart, moment, $injector) {
     var extend = angular.extend;
     var copy = angular.copy;
-    var period = {};
+    var period = angular.extend({}, Period);
+    var chart;
 
     return {
       // Set the default configuration of the period based on the type of Chart
+      //setChart: setChart,
       // and set his limits.
-      config: config,
+      setPeriod: setPeriod,
       // Change the new limits of the chart, according the state and the filters.
       setLimits: setLimits,
       // Return boolean to indicate if show or no the next/previous period control.
       hasPeriod: hasPeriod,
-      // Calculate the next and previous version.
+      // Return the next or previous period.
       newPeriod: getNewPeriod,
       getPeriod: function() {
         return period;
       }
     };
-
-    /**
-     * Configure the period acording the chart object.
-     *
-     * @param limits
-     *
-     * @param chart
-     *
-     */
-    function config(limits, chart) {
-      // Extend period with default data at first config.
-      !Object.keys(period).length && angular.extend(period, Period);
-      setLimits(limits);
-      setPeriod(chart);
-    }
 
     /**
      * Set the limits (maximum and minimum) values for the period of the chart,
@@ -60,7 +47,7 @@ angular.module('negawattClientApp')
      * @param newPeriod
      *  New values of period object.
      */
-    function setPeriod(chart, newPeriod) {
+    function setPeriod(newPeriod) {
       // Set frequency from selected chart configuration.
       period.setConfig(chart);
 

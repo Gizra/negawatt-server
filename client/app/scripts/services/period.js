@@ -47,7 +47,8 @@ angular.module('negawattClientApp')
         return !this.next;
       },
       isFirst: function() {
-        return ( moment.unix(this.previous).isBefore(moment.unix(this.min), this.config && this.config.frequency) || moment.unix(this.previous).isSame(moment.unix(this.min), this.config && this.config.frequency) );
+        //return ( moment.unix(this.previous).isBefore(moment.unix(this.min), this.config && this.config.frequency) || moment.unix(this.previous).isSame(moment.unix(this.min), this.config && this.config.frequency) );
+        return !this.previous;
       },
       add: function(time) {
         return moment.unix(time).add(this.config && this.config.chart_default_time_frame, this.config && this.config.frequency);

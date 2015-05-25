@@ -90,16 +90,20 @@ angular
           categories: function(Category, account) {
             return Category.get(account.id);
           },
-          filters: function(FilterFactory, UsagePeriod, Chart, categories, $stateParams, meters, account) {
+          filters: function(FilterFactory, UsagePeriod, categories, $stateParams, meters, account) {
             // Set period limits, according the state. (Handle ui arrows to change the periods)
-            UsagePeriod.config(meters.summary.electricity_time_interval, Chart.getFrequencies($stateParams.chartFreq));
+            //UsagePeriod.config(meters.summary.electricity_time_interval, Chart.getFrequencies($stateParams.chartFreq) );
+            UsagePeriod.setLimits(meters.summary.electricity_time_interval);
+            // Set Period
+            UsagePeriod.set
+
             // Define categories filters. Used for the UI Checknboxes.
             FilterFactory.set('categorized', categories);
             // Define electricity parameters
-            FilterFactory.set('electricity', angular.extend($stateParams, {
+            FilterFactory.set('electricity', angular.extend({
               chartNextPeriod: UsagePeriod.getPeriod().next,
               chartPreviousPeriod: UsagePeriod.getPeriod().previous
-            }));
+            }, $stateParams));
 
             return {
               loadElectricity: true,
@@ -177,13 +181,14 @@ angular
                   min: interval && interval.min || {}
                 }
               },
+              usage: angular.noop
               // Get electricity data and transform it into chart format.
-              usage: function(ChartUsage, $stateParams, account, UsagePeriod, limits) {
-                // Set period limits, according the state.
-                UsagePeriod.setLimits(limits);
-
-                return ChartUsage.render();
-              }
+              //usage: function(ChartUsage, $stateParams, account, UsagePeriod, limits) {
+              //  // Set period limits, according the state.
+              //  UsagePeriod.setLimits(limits);
+              //
+              //  return ChartUsage.render();
+              //}
             },
             controller: 'UsageCtrl'
           },
@@ -251,13 +256,14 @@ angular
                   min: interval && interval.min || {}
                 };
               },
+              usage: angular.noop
               // Get electricity data and transform it into chart format.
-              usage: function(ChartUsage, $stateParams, account, UsagePeriod, limits) {
-                // Set period limits, according the state.
-                UsagePeriod.setLimits(limits);
-
-                return ChartUsage.render();
-              }
+              //usage: function(ChartUsage, $stateParams, account, UsagePeriod, limits) {
+              //  // Set period limits, according the state.
+              //  UsagePeriod.setLimits(limits);
+              //
+              //  return ChartUsage.render();
+              //}
             },
             controller: 'UsageCtrl'
           }
