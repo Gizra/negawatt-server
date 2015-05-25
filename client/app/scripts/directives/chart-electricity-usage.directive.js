@@ -5,7 +5,7 @@ angular.module('negawattDirectives', [])
     return {
       restrict: 'EA',
       templateUrl: 'scripts/directives/chart-electricity-usage.directive.html',
-      controller: function chartElectricityUsageCtrl(Chart, ChartUsagePeriod, FilterFactory, Electricity, $state, $stateParams, $timeout, $urlRouter, $location, $filter, $scope) {
+      controller: function chartElectricityUsageCtrl(ChartUsagePeriod, FilterFactory, Electricity, $state, $stateParams, $timeout, $urlRouter, $location, $filter, $scope) {
         var ctrlChart = this;
 
         // Update the Chart data every time the electricity data.
@@ -13,10 +13,9 @@ angular.module('negawattDirectives', [])
           ctrlChart.data = $filter('toChartDataset')($filter('activeElectricityFilters')(ctrlChart.electricity));
         }, true);
 
-
         // Update data object
         // Get chart frequencies. (Tabs the period of time)
-        ctrlChart.frequencies = Chart.getFrequencies();
+        ctrlChart.frequencies = ChartUsagePeriod.getFrequencies();
         // Check if next/previous period have data.
         ctrlChart.showNavigation = ChartUsagePeriod.hasPeriod;
 
@@ -33,7 +32,12 @@ angular.module('negawattDirectives', [])
           refreshChart();
         }
 
-
+        /**
+         * Change the actual period to next or previous.
+         *
+         * @param type
+         *  String indicate the direction of the new period next or previous.
+         */
         ctrlChart.changePeriod = function(type) {
           var newPeriod = ChartUsagePeriod.newPeriod(type);
 
@@ -57,7 +61,7 @@ angular.module('negawattDirectives', [])
          * @type {{empty: string}}
          */
         ctrlChart.messages = {
-          empty: Chart.messages.empty
+          empty: ChartUsagePeriod.messages.empty
         };
 
         /**

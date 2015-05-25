@@ -1,26 +1,22 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .factory('ChartUsagePeriod', function (Period, Chart, moment, $injector) {
+  .service('ChartUsagePeriod', function (Period, Chart, moment, $injector) {
     var extend = angular.extend;
+    extend(this, Chart);
+
     var copy = angular.copy;
+
     var period = angular.extend({}, Period);
     var chart;
 
-    return {
-      // Set the default configuration of the period based on the type of Chart
-      //setChart: setChart,
-      // and set his limits.
-      setPeriod: setPeriod,
-      // Change the new limits of the chart, according the state and the filters.
-      setLimits: setLimits,
-      // Return boolean to indicate if show or no the next/previous period control.
-      hasPeriod: hasPeriod,
-      // Return the next or previous period.
-      newPeriod: getNewPeriod,
-      getPeriod: function() {
-        return period;
-      }
+    /**
+     * Return the actual Period
+     *
+     * @returns {Object}
+     */
+    this.getPeriod = function() {
+      return period;
     };
 
     /**
@@ -34,10 +30,10 @@ angular.module('negawattClientApp')
      *    min: timestamp
      *  }
      */
-    function setLimits(limits) {
+    this.setLimits = function(limits) {
       period.max = limits && +limits.max;
       period.min = limits && +limits.min;
-    }
+    };
 
     /**
      * Extend the time stamp object with the actual period selection.
@@ -47,7 +43,7 @@ angular.module('negawattClientApp')
      * @param newPeriod
      *  New values of period object.
      */
-    function setPeriod(newPeriod) {
+    this.setPeriod = function(newPeriod) {
       // Set frequency from selected chart configuration.
       period.setConfig(chart);
 
@@ -55,7 +51,7 @@ angular.module('negawattClientApp')
       if (angular.isDefined(newPeriod)) {
         period.setPeriod(newPeriod);
       }
-    }
+    };
 
     /**
      * Calculate the next and previous periods in unix format time.
@@ -65,7 +61,7 @@ angular.module('negawattClientApp')
      *
      * @returns {{next: null, previous: null}|*}
      */
-    function getNewPeriod(type) {
+    this.getNewPeriod = function(type) {
       var newPeriod;
 
 
@@ -94,7 +90,7 @@ angular.module('negawattClientApp')
       // Extend the Period factory methods.
       newPeriod = extend(copy(period), newPeriod);
       return newPeriod;
-    }
+    };
 
     /**
      * Return a boolean to indicate if the ui button of the next or previous period
@@ -105,7 +101,7 @@ angular.module('negawattClientApp')
      *
      * @returns boolean
      */
-    function hasPeriod(type) {
+    this.hasPeriod = function(type) {
       var actual = $injector.get('ChartUsagePeriod');
       // Validate if next is equal o greater than the last limit.
       if (type === 'next') {
@@ -115,6 +111,6 @@ angular.module('negawattClientApp')
       if (type === 'previous') {
         return !actual.newPeriod(type).isFirst();
       }
-    }
+    };
 
   });
