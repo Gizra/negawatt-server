@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .factory('UsagePeriod', function (Period, Chart, moment, $injector) {
+  .factory('ChartUsagePeriod', function (Period, Chart, moment, $injector) {
     var extend = angular.extend;
     var copy = angular.copy;
     var period = angular.extend({}, Period);
@@ -106,7 +106,7 @@ angular.module('negawattClientApp')
      * @returns boolean
      */
     function hasPeriod(type) {
-      var actual = $injector.get('UsagePeriod');
+      var actual = $injector.get('ChartUsagePeriod');
       // Validate if next is equal o greater than the last limit.
       if (type === 'next') {
         return !actual.newPeriod(type).isLast();
