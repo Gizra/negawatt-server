@@ -13,14 +13,16 @@
   <!-- Chart subcomponent -->
   <div google-chart chart="ctrlChart.data" ng-hide="isLoading" id="chart-usage" class="usageChart"></div>
   <!-- Period selction subcomponent -->
-  <span>
-    <button type="button" id="chart-usage-btn-arrow-left" class="btn btn-transparent btn-arrow btn-arrow-left" ng-show="usageChartData.showControl('previous')" ng-click="changePeriod(usageChartData.period('previous'))" >
+  <div class="chart-navigation">
+    <!--<button type="button" id="chart-usage-btn-arrow-left" class="btn btn-transparent btn-arrow btn-arrow-left" ng-show="usageChartData.showControl('previous')" ng-click="changePeriod(usageChartData.period('previous'))" >-->
+    <button type="button" id="chart-usage-btn-arrow-left" class="btn btn-transparent btn-arrow btn-arrow-left" ng-show="true" ng-click="changePeriod(usageChartData.period('previous'))" >
       <span class="glyphicon glyphicon-chevron-left"></span>
     </button>
-    <button type="button" id="chart-usage-btn-arrow-right" class="btn btn-transparent btn-arrow btn-arrow-right" ng-show="usageChartData.showControl('next')" ng-click="changePeriod(usageChartData.period('next'))">
+    <!--<button type="button" id="chart-usage-btn-arrow-right" class="btn btn-transparent btn-arrow btn-arrow-right" ng-show="usageChartData.showControl('next')" ng-click="changePeriod(usageChartData.period('next'))">-->
+    <button type="button" id="chart-usage-btn-arrow-right" class="btn btn-transparent btn-arrow btn-arrow-right" ng-show="true" ng-click="changePeriod(usageChartData.period('next'))">
       <span class="glyphicon glyphicon-chevron-right"></span>
     </button>
-  </span>
+  </div>
 </div>
 
 <pre class="debug">
