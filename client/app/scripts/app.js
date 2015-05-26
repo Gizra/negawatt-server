@@ -98,10 +98,7 @@ angular
             // Define categories filters. Used for the UI Checknboxes.
             FilterFactory.set('categorized', categories);
             // Define electricity parameters
-            FilterFactory.set('electricity', angular.extend({
-              chartNextPeriod: ChartUsagePeriod.getPeriod().next,
-              chartPreviousPeriod: ChartUsagePeriod.getPeriod().previous
-            }, $stateParams));
+            FilterFactory.set('electricity', $stateParams);
 
             return {
               loadElectricity: true,

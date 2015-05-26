@@ -102,13 +102,12 @@ angular.module('negawattDirectives', [])
           // Define default period.
           if (angular.isUndefined($stateParams.chartNextPeriod) || angular.isUndefined($stateParams.chartPreviousPeriod)) {
             ChartUsagePeriod.setPeriod();
+            period = ChartUsagePeriod.getPeriod();
           }
 
-          period = ChartUsagePeriod.getPeriod();
-
           return {
-            chartNextPeriod: period.next,
-            chartPreviousPeriod: period.previous
+            chartNextPeriod: $stateParams.chartNextPeriod || period.next,
+            chartPreviousPeriod: $stateParams.chartPreviousPeriod || period.previous
           };
         }
 
