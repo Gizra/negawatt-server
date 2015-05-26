@@ -41,7 +41,7 @@ angular.module('negawattDirectives', [])
          *  String indicate the direction of the new period next or previous.
          */
         ctrlChart.changePeriod = function(type) {
-          var newPeriod = ChartUsagePeriod.getNewPeriod(type);
+          var newPeriod = ChartUsagePeriod.changePeriod(type);
 
           // Update Electricity Filter.
           updateElectricityFilters({chartNextPeriod: newPeriod.next, chartPreviousPeriod: newPeriod.previous});
