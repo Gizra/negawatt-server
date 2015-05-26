@@ -33,7 +33,7 @@ angular.module('negawattClientApp')
         }
 
         // Set according current newPeriod.
-        if (angular.isDefined(newPeriod.next) && angular.isDefined(newPeriod.previous)) {
+        if (newPeriod.next && newPeriod.previous) {
           // Comming from the calculation.
           this.next = newPeriod.next;
           this.previous = newPeriod.previous;
