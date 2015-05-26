@@ -63,29 +63,25 @@ angular.module('negawattClientApp')
      * @returns {{next: null, previous: null}|*}
      */
     this.getNewPeriod = function(type) {
-      var newPeriod;
-
-
-      // By default we keep that same
-      newPeriod = {
+      // Define new period.
+      var newPeriod = {
         next: period.next,
         previous: period.previous
-      }
+      };
 
       // Calculate the new period od period.
       if (type === 'next' && !period.isLast()) {
-        var nextTime = period.add(period.next).unix();
         newPeriod = {
-          next: (moment.unix(nextTime).isAfter(moment.unix(period.max), period.config.frequency)) ? null : nextTime,
+          next: (moment.unix(period.next).isAfter(moment.unix(period.max), period.config.frequency)) ? null : period.add(period.next).unix(),
           previous: period.add(period.previous).unix()
-        }
+        };
       }
       // This calculate the previous period.
-      else {
+      if (type === 'previous'){
         newPeriod = {
           next: period.subtract(period.next).unix(),
-          previous: period.subtract(period.previous).unix()
-        }
+          previous: (moment.unix(period.previous).isBefore(moment.unix(period.min), period.config.frequency)) ? null : period.subtract(period.previous).unix()
+        };
       }
 
       // Extend the Period factory methods.
