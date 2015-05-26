@@ -10,7 +10,7 @@ angular.module('negawattDirectives', [])
 
         // Update the Chart data every time the electricity data.
         $scope.$watch('ctrlChart.electricity', function(current) {
-          console.log('watch', current);
+          ctrlChart.isLoading = false;
           ctrlChart.data = $filter('toChartDataset')($filter('activeElectricityFilters')(ctrlChart.electricity));
         }, true);
 
@@ -85,6 +85,7 @@ angular.module('negawattDirectives', [])
          * electricity. Generally update data deom
          */
         function refreshChart() {
+          ctrlChart.isLoading = true;
           // Update with the actual data.
           ctrlChart.data = $filter('toChartDataset')($filter('activeElectricityFilters')(ctrlChart.electricity));
 
