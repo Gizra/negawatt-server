@@ -2,6 +2,7 @@
 
 angular.module('negawattClientApp')
   .service('ChartUsagePeriod', function (Period, Chart, moment, $injector) {
+
     // Extend Period Factory.
     var extend = angular.extend;
     extend(this, Chart);
@@ -91,6 +92,23 @@ angular.module('negawattClientApp')
       newPeriod = extend(copy(period), newPeriod);
       return newPeriod;
     };
+
+    /**
+     * Return the new (next or previous) period, set as actual period.
+     *
+     * @param type
+     *  String indicate the type of ui button (next or previous)
+     *
+     * @returns {Object}
+     *  Return the actual period values.
+     */
+    this.changePeriod = function(type) {
+      var actual = $injector.get('ChartUsagePeriod');
+      // Ser the new period.
+      actual.setPeriod(actual.getNewPeriod(type));
+
+      return actual.getPeriod();
+    }
 
     /**
      * Return a boolean to indicate if the ui button of the next or previous period
