@@ -169,7 +169,6 @@ function negawatt_normalizer_process_meters($meter_start_id, $options = array())
   // Get meter IDs that need to be processed.
   $query = clone $base_query;
   $valid_meters_count = $query
-    ->range(0, $options['range'])
     ->count()
     ->execute();
 
@@ -186,7 +185,7 @@ function negawatt_normalizer_process_meters($meter_start_id, $options = array())
     // Get meter IDs that need to be processed.
     $query = clone $base_query;
     $result = $query
-      ->range(0, $options['range'])
+      ->range($count, $options['range'])
       ->execute();
 
     drush_log(format_string('Query returned @count meters.', array('@count' => count($result['node']))));
