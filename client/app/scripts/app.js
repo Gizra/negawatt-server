@@ -274,15 +274,15 @@ angular
         'request': function (config) {
           if (!config.withoutToken && !config.url.match(/.html/)) {
             angular.extend(config.headers, {
-              'access-token': localStorageService.get('access_token')
+              'access_token': localStorageService.get('access_token')
             });
           }
           return config;
         },
 
         'response': function(result) {
-          if (result.data.access_token) {
-            localStorageService.set('access_token', result.data.access_token);
+          if (result.data && result.data.data && result.data.data['X-CSRF-Token']) {
+            localStorageService.set('access_token', result.data.data['X-CSRF-Token']);
           }
           return result;
         },

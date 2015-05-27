@@ -14,7 +14,7 @@ angular.module('negawattClientApp')
       // Service 'Auth' can't depend on '$http', hence injecting it manually
       return $injector.get('$http')({
         method: 'GET',
-        url: Config.backend + '/api/login-token',
+        url: Config.backend + '/api/login',
         headers: {
           'Authorization': 'Basic ' + Utils.Base64.encode(user.username + ':' + user.password)
         },
