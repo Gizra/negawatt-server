@@ -116,6 +116,23 @@ function modbus_read_one_meter($meter_id) {
       array('reference' => 13952 + 32, 'quantity' => 2, 'signed' => TRUE),
       array('reference' => 13952 + 34, 'quantity' => 2, 'signed' => TRUE),
     ),
+    // @fixme: put correct values for elnet meter here.
+    'elnet' => array(
+      // 1 Second total W.
+      array('reference' => 25, 'quantity' => 2, 'signed' => TRUE),
+      // 1 Second total PF.
+      array('reference' => 49, 'quantity' => 2, 'signed' => TRUE),
+      // Total sum Wh.
+      array('reference' => 1385, 'quantity' => 2, 'signed' => FALSE),
+      // Phase sum Wh.
+      array('reference' => 1319, 'quantity' => 2, 'signed' => FALSE),
+      array('reference' => 1321, 'quantity' => 2, 'signed' => FALSE),
+      array('reference' => 1323, 'quantity' => 2, 'signed' => FALSE),
+      // 1 Second phase PF.
+      array('reference' => 43, 'quantity' => 2, 'signed' => TRUE),
+      array('reference' => 45, 'quantity' => 2, 'signed' => TRUE),
+      array('reference' => 47, 'quantity' => 2, 'signed' => TRUE),
+    ),
   );
 
   // Read registers.
@@ -244,7 +261,7 @@ function modbus_read_modbus_32bit_registers($request, $address, $modbus_id = 1, 
     return $value;
   }
   catch (Exception $e) {
-    drush_log('Cannot read registers.');
+    drush_log('Cannot read registers. Error returned: ' . $e.message);
     return FALSE;
   }
 }
