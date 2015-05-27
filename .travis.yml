@@ -73,10 +73,6 @@ script:
 
   # Run behat tests.
   - cd ../behat
-  - pwd
-  - ls -al
-  - ls -al ../
-  - ls -al ../../
   - ./bin/behat --tags=~@wip
 
   # Print log ~/phantomjs.log
