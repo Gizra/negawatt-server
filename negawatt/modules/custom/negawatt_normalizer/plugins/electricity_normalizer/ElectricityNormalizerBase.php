@@ -322,8 +322,6 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
 
     // Get number of raw entities.
     $num_raw_entities = \NegaWattNormalizerDataProviderBase::getNumberOfRawElectricityEntities($this->getMeterNode(), $frequency);
-    if (!$num_raw_entities) {
-    }
     if ($num_raw_entities == 0) {
       if ($frequency == $this->getMeterMaxFrequency()) {
         // No raw entities for this frequency, and we're at the highest frequency.
@@ -331,7 +329,7 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
         $num_normalized_entities = \NegaWattNormalizerDataProviderBase::getNumberOfNormalizedElectricityEntities($this->getMeterNode(), $frequency);
         // No normalized entities neither, nothing to do here.
         if (!$num_normalized_entities) {
-          self::debugMessage("Now raw nor normalized entities to process, leaving processByFrequency.", 1);
+          self::debugMessage("No raw nor normalized entities to process, leaving processByFrequency.", 1);
           return array(
             'entities' => array(),
             'last_processed' => NULL,
@@ -343,6 +341,10 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
         // take time interval from higher frequency.
         $from_timestamp = $last_processed ? $last_processed : \NegaWattNormalizerDataProviderBase::getOldestNormalizedElectricityEntity($this->getMeterNode(), $frequency + 1);
         $to_timestamp = \NegaWattNormalizerDataProviderBase::getLatestNormalizedElectricityEntity($this->getMeterNode(), $frequency + 1);
+        // Increase end-timestamp so the last entity will be calculated
+        // (the loop in processNormalizedEntities() is for timestamps that are
+        // *smaller* then the end-timestamp)
+        $to_timestamp++;
       }
     }
 
