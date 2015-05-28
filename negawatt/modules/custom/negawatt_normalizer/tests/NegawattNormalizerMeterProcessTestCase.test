@@ -113,7 +113,7 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     // -------+-------------+------+------+-------+-----+------+
     // modbus |12/6/14 15:00| flat | min. |   1   |  10 | 0.90 |
     // modbus |12/6/14 15:15| flat | min. |   1   |  30 | 0.96 |
-    // modbus |12/6/14 15:00| flat | hour |   1   |  60 | 0.90 |
+    // modbus |12/6/14 15:00| flat | month|   1   |  60 | 0.90 |
     // modbus |12/6/14 16:00| flat | min. |   1   |  60 | 0.96 |
     // modbus |12/6/14 15:01| flat | min. |   2   |  40 | 0.90 |
     // -------+-------------+------+------+-------+-----+------+
@@ -147,13 +147,13 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
         'kwh' => 10+20,
         'power_factor' => 0.96,
       ),
-      // One HOURLY entry for hour 15:00, should not be taken into account when
+      // One MONTHLY entry for hour 15:00, should not be taken into account when
       // normalizing minute data.
       array(
         'meter_type' => 'modbus',
         'timestamp' => strtotime('2014-6-12 15:00'),
         'rate_type' => 'flat',
-        'frequency' => \NegaWattNormalizerTimeManagerInterface::HOUR,
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MONTH,
         'meter_nid' => $meter_node1->nid,
         'kwh' => 60,
         'power_factor' => 0.90,
@@ -354,13 +354,13 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
       strtotime('2014-6-12 15:00'), strtotime('2014-6-12 16:00'));
     $result_entities = self::flatten($result_entities);
 
-    $this->assertTrue(is_array($result_entities) && count($result_entities) == 2, 'process() returns an array with two object.');
+    $this->assertTrue(is_array($result_entities) && count($result_entities) == 2, '<b>Testing Modbus normalizer</b><br>process() returns an array with two object.');
     $result_entity = $result_entities[1];
 
     // Save entity ID to verify that later the same entity will be used
     $id = $result_entity->id;
 
-    $this->assertEqual($result_entity->frequency, \NegaWattNormalizerTimeManagerInterface::MINUTE, '<b>Testing Modbus normalizer</b><br>Entity type is correct.');
+    $this->assertEqual($result_entity->frequency, \NegaWattNormalizerTimeManagerInterface::MINUTE, 'Entity type is correct.');
     $this->assertEqual($result_entity->timestamp, strtotime('2014-6-12 15:15'), 'Processed timestamp is correct.');
     $this->assertEqual($result_entity->meter_nid, $this->meterNode1->nid, 'Meter nid is correct.');
     $this->assertEqual($result_entity->avg_power, 80, 'Average power calculation was correct.');
@@ -463,17 +463,21 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
 
     $result_entity = $result_entities[5];
     $this->assertEqual($result_entity->frequency, \NegaWattNormalizerTimeManagerInterface::MONTH, 'MONTH entity type is correct.');
-    $this->assertEqual($result_entity->timestamp, strtotime('2014-6-1 00:00'), 'Processed timestamp is correct.');
+    // Note that month entity begins at 6-12 15:00 since the raw entity begins at that time - there's no rounding to month boundary.
+    $this->assertEqual($result_entity->timestamp, strtotime('2014-6-12 15:00'), 'Processed timestamp is correct.');
     $this->assertEqual($result_entity->meter_nid, $this->meterNode1->nid, 'Meter nid is correct.');
-    $this->assertTrue(abs($result_entity->avg_power - 40) < 0.0001, 'Average power calculation was correct.');
-    $this->assertTrue(abs($result_entity->min_power_factor - 0.89) < 0.0001, 'Min power-factor calculation was correct.');
+    // Can't compute average power with only one raw entity.
+    $this->assertNull($result_entity->avg_power, 'Average power calculation was correct.');
+    // For modbus meter, which has cumulative kwh count, can't compute sum-kwh with only one raw record.
+    $this->assertEqual($result_entity->sum_kwh, 0, 'Sum-kwh is correct.');
+    $this->assertTrue(abs($result_entity->min_power_factor - 0.90) < 0.0001, 'Min power-factor calculation was correct.');
 
     $result_entity = $result_entities[6];
     $this->assertEqual($result_entity->frequency, \NegaWattNormalizerTimeManagerInterface::YEAR, 'YEAR entity type is correct.');
     $this->assertEqual($result_entity->timestamp, strtotime('2014-1-1 00:00'), 'Processed timestamp is correct.');
     $this->assertEqual($result_entity->meter_nid, $this->meterNode1->nid, 'Meter nid is correct.');
-    $this->assertTrue(abs($result_entity->avg_power - 40) < 0.0001, 'Average power calculation was correct.');
-    $this->assertTrue(abs($result_entity->min_power_factor - 0.89) < 0.0001, 'Min power-factor calculation was correct.');
+    $this->assertEqual($result_entity->avg_power, 0, 'Average power calculation was correct.');
+    $this->assertTrue(abs($result_entity->min_power_factor - 0.90) < 0.0001, 'Min power-factor calculation was correct.');
 
     // Check that when reading the next hour, time length of the raw entity is calculated correctly
     // process() should read the previous raw entity and calc a 30min time length.
