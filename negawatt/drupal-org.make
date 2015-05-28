@@ -91,11 +91,8 @@ projects[og_vocab][version] = "1.2"
 projects[purl][subdir] = "contrib"
 projects[purl][version] = "1.x-dev"
 
-projects[restful][download][type] = "git"
-projects[restful][download][url] = "https://github.com/Gizra/restful.git"
-projects[restful][download][branch] = 7.x-1.x
 projects[restful][subdir] = "contrib"
-projects[restful][type] = "module"
+projects[restful][version] = "7.x-1.x"
 
 projects[search_api][subdir] = "contrib"
 projects[search_api][version] = "1.12"
