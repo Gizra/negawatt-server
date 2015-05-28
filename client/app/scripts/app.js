@@ -28,7 +28,8 @@ angular
     'template/tabs/tab.html',
     'template/tabs/tabset.html',
     'angularMoment',
-    'ui.indeterminate'
+    'ui.indeterminate',
+    'negawattDirectives'
   ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
     // Handle state 'dashboard' activation via browser url '/'
@@ -82,23 +83,27 @@ angular
           account: function($stateParams, Profile, profile) {
             return Profile.selectAccount($stateParams.accountId, profile);
           },
-          meters: function(Meter, account, $stateParams, Category, MeterFilter) {
+          meters: function(Meter, account, $stateParams, Category, FilterFactory) {
             // Get first records.
             return Meter.get(account.id);
           },
           categories: function(Category, account) {
             return Category.get(account.id);
           },
+          filters: function(FilterFactory, categories, $stateParams, meters, account) {
+            // Define categories filters. Used for the UI Checknboxes.
+            FilterFactory.set('categorized', categories);
+            // Define electricity parameters
+            FilterFactory.set('electricity', $stateParams);
+
+            return {
+              loadElectricity: true,
+              limits: meters.summary.electricity_time_interval,
+              activeElectricityHash: FilterFactory.get('activeElectricityHash')
+            };
+          },
           messages: function(Message) {
             return Message.get();
-          },
-          // We inject meters to be sure the cache in Meter object was filled.
-          limits: function(meters) {
-            return meters.summary.electricity_time_interval;
-          },
-          filters: function(MeterFilter, categories) {
-            // Define categories filters. Used for the UI Checknboxes.
-            MeterFilter.set('categorized', categories);
           }
         },
         views: {
@@ -129,18 +134,8 @@ angular
           },
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
-            resolve: {
-              // Get electricity data and transform it into chart format.
-              usage: function(ChartUsage, $state, $stateParams, account, meters) {
-                // Perform the GET only if we're in the proper (parent) state.
-                if ($state.current.name == 'dashboard.withAccount') {
-                  return ChartUsage.get(account.id, $stateParams, meters.list);
-                } else {
-                  return {};
-                }
-              }
-            },
-            controller: 'UsageCtrl'
+            controller: 'UsageCtrl',
+            controllerAs: 'chart'
           }
         }
       })
@@ -148,9 +143,9 @@ angular
         url: '/category/{categoryId:int}',
         reloadOnSearch: false,
         resolve: {
-          meters: function(Meter, $stateParams, account, MeterFilter) {
+          meters: function(Meter, $stateParams, account, FilterFactory) {
             // Set Meter filter.
-            MeterFilter.set('category', +$stateParams.categoryId);
+            FilterFactory.set('category', +$stateParams.categoryId);
 
             return Meter.get(account.id, $stateParams.categoryId);
           },
@@ -170,20 +165,12 @@ angular
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
               // Insert the limits to the chart.
-              limits: function(categories, $stateParams) {
-                var interval = categories.collection[$stateParams.categoryId].electricity_time_interval;
-
+              filters: function(categories, $stateParams) {
                 return {
-                  max: interval && interval.max || {},
-                  min: interval && interval.min || {}
-                }
-              },
-              // Get electricity data and transform it into chart format.
-              usage: function(ChartUsage, $stateParams, account, meters, UsagePeriod, limits) {
-                // Set period limits, according the state.
-                UsagePeriod.setLimits(limits);
-
-                return ChartUsage.get(account.id, $stateParams, meters.list, UsagePeriod.getPeriod());
+                  loadElectricity: true,
+                  limits: categories.collection[$stateParams.categoryId].electricity_time_interval,
+                  activeElectricityHash: FilterFactory.get('activeElectricityHash')
+                };
               }
             },
             controller: 'UsageCtrl'
@@ -208,9 +195,9 @@ angular
         url: '/marker/:markerId?categoryId',
         reloadOnSearch: false,
         resolve: {
-          meters: function(Meter, $stateParams, account, MeterFilter) {
-            MeterFilter.set('category', +$stateParams.categoryId || undefined);
-            MeterFilter.set('meter', +$stateParams.markerId);
+          meters: function(Meter, $stateParams, account, FilterFactory) {
+            FilterFactory.set('category', +$stateParams.categoryId || undefined);
+            FilterFactory.set('meter', +$stateParams.markerId);
             // Necessary to resolve again to apply the filter, of category id.
             return Meter.get(account.id, $stateParams.categoryId);
           },
@@ -244,20 +231,12 @@ angular
             templateUrl: 'views/dashboard/main.usage.html',
             resolve: {
               // Insert the limits to the chart.
-              limits: function(meters, $stateParams) {
-                var interval = meters.list[$stateParams.markerId] && meters.list[$stateParams.markerId].electricity_time_interval;
-
+              filters: function(meters, $stateParams) {
                 return {
-                  max: interval && interval.max || {},
-                  min: interval && interval.min || {}
+                  loadElectricity: true,
+                  limits: meters.list[$stateParams.markerId] && meters.list[$stateParams.markerId].electricity_time_interval || {},
+                  activeElectricityHash: FilterFactory.get('activeElectricityHash')
                 };
-              },
-              // Get electricity data and transform it into chart format.
-              usage: function(ChartUsage, $stateParams, account, meters, UsagePeriod, limits) {
-                // Set period limits, according the state.
-                UsagePeriod.setLimits(limits);
-
-                return ChartUsage.get(account.id, $stateParams, meters.list, UsagePeriod.getPeriod());
               }
             },
             controller: 'UsageCtrl'

@@ -48,7 +48,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
 
     if ($check_success) {
       // Wait for the dashboard's menu to load, with the user accout information.
-      $this->iWaitForCssElement('.menu-account', 'appear');
+      $this->iWaitForCssElement('#dashboard-controls > ui-view > div.menu-account', 'appear');
     }
   }
 

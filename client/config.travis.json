@@ -1,10 +1,29 @@
 {
   "development": {
-    "backend": "http://127.0.0.1:8080",
+    "backend": "http://localhost/negawatt-server/www",
+    "cname": "",
     "debugUiRouter": false,
     "openweather": {
       "endpoint": null,
-      "apikey": "9a67a4889f54dd2a86858f692bfbe62e"
+      "apikey": "5znrzehcfsa35jarjywbsy9dymvnmxzq"
+    }
+  },
+  "production": {
+    "backend": "http://dev-negawatt.pantheon.io",
+    "cname": "negawatt-dev.gizra.com",
+    "debugUiRouter": false,
+    "openweather": {
+      "endpoint": null,
+      "apikey": "5znrzehcfsa35jarjywbsy9dymvnmxzq"
+    }
+  },
+  "live": {
+    "backend": "http://live-negawatt.pantheon.io",
+    "cname": "negawatt.gizra.com",
+    "debugUiRouter": false,
+    "openweather": {
+      "endpoint": null,
+      "apikey": "5znrzehcfsa35jarjywbsy9dymvnmxzq"
     }
   }
 }

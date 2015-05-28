@@ -1,57 +1,23 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .factory('UsagePeriod', function (moment) {
+  .service('ChartUsagePeriod', function (Period, Chart, moment, $injector) {
+
+    // Extend Period Factory.
     var extend = angular.extend;
+    extend(this, Chart);
 
-    var timestamp;
+    var copy = angular.copy;
+    // Extend Period Factory.
+    var period = angular.extend({}, Period);
 
-    // Period factory.
-    timestamp = {
-      max: null,
-      min: null,
-      next: null,
-      previous: null,
-      frequency: 0,
-      config: null,
-      setConfig: function(chart) {
-        // Save chart configuration.
-        this.frequency = +chart.type;
-        this.config = chart;
-
-        // Set the next tiemstamp by default in 'now' of maximum limit.
-        this.next = (moment().isAfter(moment.unix(this.max))) ? this.max : moment().unix();
-        this.previous = timestamp.getPrevious();
-      },
-      setPeriod: function(period) {
-        // Check the chart limits, with the information obtained from the server. (example meters).
-        if (angular.isDefined(period.max) && angular.isDefined(period.min)) {
-          timestamp.next = (moment.unix(timestamp.next).isAfter(moment.unix(period.max))) ? timestamp.next : period.max;
-          timestamp.previous = (moment.unix(timestamp.previous).isAfter(moment.unix(period.min))) ? timestamp.previous : period.min;
-        }
-
-        // Set according current period.
-        if (angular.isDefined(period.next) && angular.isDefined(period.previous)) {
-          // Comming from the calculation.
-          timestamp.next = period.next;
-          timestamp.previous = period.previous;
-        }
-      },
-      getPrevious: function() {
-        return moment.unix(this.next).subtract(this.config.chart_default_time_frame, this.config.frequency).unix();
-      },
-      isLast: function() {
-        return ( moment.unix(this.next).isAfter(moment.unix(this.max), this.config.frequency) || moment.unix(this.next).isSame(moment.unix(this.max), this.config.frequency) )
-      },
-      isFirst: function() {
-        return ( moment.unix(this.previous).isBefore(moment.unix(this.min), this.config.frequency) || moment.unix(this.previous).isSame(moment.unix(this.min), this.config.frequency) );
-      },
-      add: function(time) {
-        return moment.unix(time).add(this.config.chart_default_time_frame, this.config.frequency);
-      },
-      subtract: function(time) {
-        return moment.unix(time).subtract(this.config.chart_default_time_frame, this.config.frequency);
-      }
+    /**
+     * Return the actual Period
+     *
+     * @returns {Object}
+     */
+    this.getPeriod = function() {
+      return period;
     };
 
     /**
@@ -65,28 +31,28 @@ angular.module('negawattClientApp')
      *    min: timestamp
      *  }
      */
-    function setLimits(limits) {
-      timestamp.max = limits && +limits.max;
-      timestamp.min = limits && +limits.min;
-    }
+    this.setLimits = function(limits) {
+      period.max = limits && +limits.max;
+      period.min = limits && +limits.min;
+    };
 
     /**
-     * Extend the time stamp object with the actual peiod selection.
+     * Extend the time stamp object with the actual period selection.
      *
      * @param chart
      *  Chart default configuration.
-     * @param period
+     * @param newPeriod
      *  New values of period object.
      */
-    function setPeriod(chart, period) {
+    this.setPeriod = function(newPeriod) {
       // Set frequency from selected chart configuration.
-      timestamp.setConfig(chart);
+      period.setConfig(this.getActiveFrequency());
 
-      // If period is defined update limit of the chart.
-      if (angular.isDefined(period)) {
-        timestamp.setPeriod(period);
+      // If newPeriod is defined update limit of the chart.
+      if (angular.isDefined(newPeriod)) {
+        period.setPeriod(newPeriod);
       }
-    }
+    };
 
     /**
      * Calculate the next and previous periods in unix format time.
@@ -96,32 +62,48 @@ angular.module('negawattClientApp')
      *
      * @returns {{next: null, previous: null}|*}
      */
-    function calculateNextsPeriods(type) {
-      var periods;
+    this.getNewPeriod = function(type) {
+      // Define new period.
+      var newPeriod = {
+        next: period.next,
+        previous: period.previous
+      };
 
-
-      // By default we keep that same
-      periods = {
-        next: timestamp.next,
-        previous: timestamp.previous
-      }
-
-      // Calculate the new period od timestamp.
-      if (type === 'next' && !timestamp.isLast()) {
-        var nextTime = timestamp.add(timestamp.next).unix();
-        periods = {
-          next: (moment.unix(nextTime).isAfter(moment.unix(timestamp.max), timestamp.config.frequency)) ? null : nextTime,
-          previous: timestamp.add(timestamp.previous).unix()
-        }
+      // Calculate the new period od period.
+      if (type === 'next' && !period.isLast()) {
+        newPeriod = {
+          next: (moment.unix(period.next).isAfter(moment.unix(period.max), period.config.frequency)) ? null : period.add(period.next).unix(),
+          previous: period.add(period.previous).unix()
+        };
       }
       // This calculate the previous period.
-      else {
-        periods = {
-          next: timestamp.subtract(timestamp.next).unix(),
-          previous: timestamp.subtract(timestamp.previous).unix()
-        }
+      if (type === 'previous'){
+        newPeriod = {
+          next: period.subtract(period.next).unix(),
+          previous: (moment.unix(period.previous).isBefore(moment.unix(period.min), period.config.frequency)) ? null : period.subtract(period.previous).unix()
+        };
       }
-      return periods;
+
+      // Extend the Period factory methods.
+      newPeriod = extend(copy(period), newPeriod);
+      return newPeriod;
+    };
+
+    /**
+     * Return the new (next or previous) period, set as actual period.
+     *
+     * @param type
+     *  String indicate the type of ui button (next or previous)
+     *
+     * @returns {Object}
+     *  Return the actual period values.
+     */
+    this.changePeriod = function(type) {
+      var actual = $injector.get('ChartUsagePeriod');
+      // Ser the new period.
+      actual.setPeriod(actual.getNewPeriod(type));
+
+      return actual.getPeriod();
     }
 
     /**
@@ -133,28 +115,16 @@ angular.module('negawattClientApp')
      *
      * @returns boolean
      */
-    function showControl(type) {
-      // Validate if next is equal o greater than the last limit timestamp.
+    this.hasPeriod = function(type) {
+      var actual = $injector.get('ChartUsagePeriod');
+      // Validate if next is equal o greater than the last limit.
       if (type === 'next') {
-        return !timestamp.isLast();
+        return !actual.getNewPeriod(type).isLast();
       }
 
       if (type === 'previous') {
-        return !timestamp.isFirst();
-      }
-    }
-
-    return {
-      // Set the limit maximum and minumum of the period to show.
-      setLimits: setLimits,
-      // Get initial period configuration.
-      setPeriod: setPeriod,
-      // Return boolean to indicate if show or no the next/previous period control.
-      showControl: showControl,
-      // Calculate the next and previous version.
-      period: calculateNextsPeriods,
-      getPeriod: function() {
-        return timestamp;
+        return !actual.getNewPeriod(type).isFirst();
       }
     };
+
   });

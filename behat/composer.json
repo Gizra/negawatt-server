@@ -1,8 +1,11 @@
 {
+  "name":"negawatt/behat",
+  "description":"negawatt behat test",
   "require": {
     "drupal/drupal-extension": "~3.0"
   },
   "config": {
     "bin-dir": "bin/"
-  }
+  },
+  "license":"MIT"
 }

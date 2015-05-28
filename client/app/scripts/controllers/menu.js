@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .controller('MenuCtrl', function($scope, $state, $stateParams, $location, $window, amMoment, Timedate, Category, account, profile, MeterFilter, Meter) {
+  .controller('MenuCtrl', function($scope, $state, $stateParams, $location, $window, amMoment, Timedate, Category, account, profile, FilterFactory, Meter) {
     $scope.account = account;
     $scope.user = profile.user;
     $scope.timedate = Timedate;
@@ -12,7 +12,7 @@ angular.module('negawattClientApp')
      */
     $scope.reloadDashboard = function() {
       // Clear filters.
-      MeterFilter.clear();
+      FilterFactory.clear();
 
       // Reset categories filters.
       Category.reset();

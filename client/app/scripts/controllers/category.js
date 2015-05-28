@@ -8,7 +8,7 @@
  * Controller of the negawattClientApp
  */
 angular.module('negawattClientApp')
-  .controller('CategoryCtrl', function ($scope, $state, $stateParams, $filter, Category, Meter, MeterFilter, categories, meters) {
+  .controller('CategoryCtrl', function ($scope, $state, $stateParams, $filter, Category, Meter, FilterFactory, categories, meters) {
 
     // Define property in the parent scope, permit to be accesable
     // by scope methods of the controller.
@@ -18,7 +18,7 @@ angular.module('negawattClientApp')
     $scope.chartFreq = $stateParams.chartFreq;
 
     // Activate filter of meters only if we are in the principal state.
-    $scope.filterMeters = MeterFilter.showCategoryFilters();
+    $scope.filterMeters = FilterFactory.showCategoryFilters();
 
      /**
      * Determine if a category has meters.
@@ -43,11 +43,11 @@ angular.module('negawattClientApp')
       // Set category filters.
       var filter = {};
       filter[category.id] = category.checked;
-      MeterFilter.set('categorized', filter);
+      FilterFactory.set('categorized', filter);
 
       // Update meters on the map, this also update the number of meters on the Category menu.
       $scope.$parent.$broadcast('nwMetersChanged', {
-        list: MeterFilter.byCategoryFilters(meters)
+        list: FilterFactory.byCategoryFilters(meters)
       });
     };
 
@@ -57,7 +57,7 @@ angular.module('negawattClientApp')
      * @param categoryId
      */
     $scope.select = function(categoryId) {
-      MeterFilter.clearMeterSelection();
+      FilterFactory.clearMeterSelection();
       $state.forceGo('dashboard.withAccount.categories', {categoryId: categoryId, chartNextPeriod: undefined, chartPreviousPeriod: undefined});
     };
 
@@ -80,7 +80,7 @@ angular.module('negawattClientApp')
      *   The Category ID.
      */
     function setSelectedCategory(id) {
-      MeterFilter.set('category', id);
+      FilterFactory.set('category', id);
     }
 
     if ($stateParams.categoryId) {

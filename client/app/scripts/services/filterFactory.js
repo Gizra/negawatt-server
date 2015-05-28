@@ -1,18 +1,18 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .factory('MeterFilter', function ($filter, $state, $stateParams, $rootScope, $injector, Utils) {
 
+  .factory('FilterFactory', function ($filter, $state, $stateParams, $rootScope, $injector, Utils) {
     return {
       filters: {},
       /**
        * Filter meters by category.
        *
        * @param meters
-       *  The meters colection.
+       *  The meters collection.
        *
        * @returns {*}
-       *  The meters collection filteref by category.
+       *  The meters collection filter by category.
        */
       byCategory: function(meters) {
         meters = Utils.toArray(meters.listAll);
@@ -24,6 +24,16 @@ angular.module('negawattClientApp')
           }
         }.bind(this), true));
       },
+      /**
+       * Filter meters by categories checked on the category menu
+       * (categories filters).
+       *
+       * @param meters
+       *   The meters collection.
+       *
+       * @returns {*}
+       *  The meters collection filter by a collection of categories.
+       */
       byCategoryFilters: function(meters) {
         meters = Utils.toArray(meters.listAll);
 
@@ -102,6 +112,18 @@ angular.module('negawattClientApp')
         return categorized && categories.$$extendWithFilter(categorized) || categories;
       },
       /**
+       * Return the electricity filters according a hash.
+       *
+       * @param name
+       *  The hash.
+       *
+       * @returns {*}
+       *  The electricity filters.
+       */
+      getElectricity: function(name) {
+        return this.filters['electricity'] && this.filters['electricity'][name];
+      },
+      /**
        * Return if is defined a filter.
        *
        * @param name {string}
@@ -117,18 +139,132 @@ angular.module('negawattClientApp')
         return isDefined;
       },
       set: function(name, value) {
+        // Use angular copy to decopling from the source value,
+        // example: category cache.
+        value = angular.copy(value);
         // Extra task if is the filter categorized.
-        if (name === 'categorized') {
-          // Use angular copy to decopling from the category cache.
-          setCategorized.bind(this, name, angular.copy(value))();
-          return;
+        switch (name) {
+          case 'categorized':
+            setCategorized.bind(this, name, value)();
+            break;
+          case 'electricity':
+            setElectricity.bind(this, name, value)();
+            break;
+          default:
+            this.filters[name] = value;
         }
 
-        this.filters[name] = value;
       },
       get: function(name) {
         return this.filters && this.filters[name];
       }
+    };
+
+    /**
+     * Save of the electricity filters, index by unique hash string.
+     *
+     * @param name
+     *  Filter name. By default 'electricity;
+     * @param value
+     *  Parameter object regulary comming from the query string.
+     */
+    function setElectricity(name, params) {
+      // Prepare electricity filter in querystring format.
+      var filter = getElectricityFilter(params);
+      // Create and save hash.
+      var hash = Utils.objToHash(filter);
+      this.set('activeElectricityHash', hash);
+
+      // Clean Properties.
+      filter = Utils.cleanProperties(filter);
+
+      // Set property with the filters.
+      this.filters[name] = angular.isUndefined(this.filters[name]) ? {} : this.filters[name];
+      this.filters[name][this.get('activeElectricityHash')] = filter;
+    }
+
+    /**
+     * Return querysting of the paramenter, representing the electricity filter.
+     *
+     * @param params
+     *
+     * @returns {Object}
+     */
+    function getElectricityFilter(params) {
+      var getFromMeter = {
+        selectorType: 'meter',
+        selectorId: params.markerId && params.markerId.split(','),
+        multipleGraphs: isMultiGraphs
+      };
+      var getFromCategory = {
+        selectorType: 'meter_category',
+        selectorId: params.categoryId,
+        multipleGraphs: isMultiGraphs
+      };
+      // Complete params object to request electricity.
+      angular.extend(params, (params.markerId) ? getFromMeter : getFromCategory);
+
+      return filtersFromSelector(params);
+    }
+
+    /**
+     * Return a boolean value if will show multiple charts.
+     *
+     * @returns {boolean}
+     */
+    function isMultiGraphs() {
+      return angular.isArray(this.selectorId);
+    };
+
+    /**
+     * Translate selector type and ID to filters.
+     *
+     * @param accountId
+     *   User account ID.
+     * @param chartFreq
+     *   Required frequency, e.g. 2 for MONTH.
+     * @param selectorType
+     *   Type of filter, e.g. 'meter' or 'meter_category'.
+     * @param selectorId
+     *   ID of the selector, e.g. meter ID or category ID.
+     * @param period
+     *   Object with the period selected.
+     *
+     * @returns {Object}
+     *   Filters array in the form required by get().
+     */
+    function filtersFromSelector(params) {
+
+      // Prepare filters for data request.
+      var filters = {
+        'filter[meter_account]': params.accountId,
+        'filter[frequency]': params.chartFreq,
+        'filter[timestamp][operator]': 'BETWEEN',
+        'filter[timestamp][value][0]': params.chartPreviousPeriod || '', // chartBeginTimestamp,
+        'filter[timestamp][value][1]': params.chartNextPeriod || ''// chartEndTimestamp
+      };
+
+      if (params.selectorType) {
+        if (params.multipleGraphs()) {
+          // If multiple IDs are given, output in the format:
+          // filter[selector][operator] = IN
+          // filter[selector][value][0] = val-1
+          // filter[selector][value][1] = val-2
+          // ... etc.
+          filters['filter[' + params.selectorType + '][operator]'] = 'IN';
+          var i = 0;
+          angular.forEach(params.selectorId, function (id) {
+            filters['filter[' + params.selectorType + '][value][' + i++ +']'] = id;
+          });
+        }
+        else {
+          // A single ID was given, Output in the format:
+          // filter[selector] = val
+          filters['filter[' + params.selectorType + ']'] = params.selectorId;
+        }
+      }
+
+      return filters;
     };
 
     /**
@@ -312,7 +448,7 @@ angular.module('negawattClientApp')
      *  Value set in the cheked property of the parent. boolean
      */
     function getUpdatedCategoryChildren(category, value) {
-      var children = getCategoryChildren.bind($injector.get('MeterFilter'), category.id);
+      var children = getCategoryChildren.bind($injector.get('FilterFactory'), category.id);
 
       angular.forEach(children, function(category) {
         category.checked = value;
@@ -330,7 +466,7 @@ angular.module('negawattClientApp')
      *  The category id.
      */
     function isInderminate(categoryId) {
-      var children = getCategoryChildren.bind($injector.get('MeterFilter'), categoryId)();
+      var children = getCategoryChildren.bind($injector.get('FilterFactory'), categoryId)();
 
       return (!children) ? false : categoriesWithMultiplesStates(children);
     };
