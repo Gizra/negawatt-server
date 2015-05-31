@@ -90,18 +90,18 @@ angular
           categories: function(Category, account) {
             return Category.get(account.id);
           },
-          //filters: function(FilterFactory, categories, $stateParams, meters, account) {
-          //  // Define categories filters. Used for the UI Checknboxes.
-          //  FilterFactory.set('categorized', categories);
-          //  // Define electricity parameters
-          //  FilterFactory.set('electricity', $stateParams);
-          //
-          //  return {
-          //    loadElectricity: true,
-          //    limits: meters.summary.electricity_time_interval,
-          //    activeElectricityHash: FilterFactory.get('activeElectricityHash')
-          //  };
-          //},
+          filters: function(FilterFactory, categories, $stateParams, meters, account) {
+            // Define categories filters. Used for the UI Checknboxes.
+            FilterFactory.set('categorized', categories);
+            // Define electricity parameters
+            FilterFactory.set('electricity', $stateParams);
+
+            return {
+              loadElectricity: true,
+              limits: meters.summary.electricity_time_interval,
+              activeElectricityHash: FilterFactory.get('activeElectricityHash')
+            };
+          },
           messages: function(Message) {
             return Message.get();
           }
@@ -132,11 +132,11 @@ angular
             },
             controller: 'DetailsCtrl'
           },
-          //'usage@dashboard': {
-          //  templateUrl: 'views/dashboard/main.usage.html',
-          //  controller: 'UsageCtrl',
-          //  controllerAs: 'chart'
-          //}
+          'usage@dashboard': {
+            templateUrl: 'views/dashboard/main.usage.html',
+            controller: 'UsageCtrl',
+            controllerAs: 'chart'
+          }
         }
       })
       .state('dashboard.withAccount.categories', {
@@ -227,20 +227,20 @@ angular
             controller: 'DetailsCtrl'
           },
           // Update electricity-usage chart in 'usage' sub view.
-          'usage@dashboard': {
-            templateUrl: 'views/dashboard/main.usage.html',
-            resolve: {
-              // Insert the limits to the chart.
-              filters: function(meters, $stateParams) {
-                return {
-                  loadElectricity: true,
-                  limits: meters.list[$stateParams.markerId] && meters.list[$stateParams.markerId].electricity_time_interval || {},
-                  activeElectricityHash: FilterFactory.get('activeElectricityHash')
-                };
-              }
-            },
-            controller: 'UsageCtrl'
-          }
+          //'usage@dashboard': {
+          //  templateUrl: 'views/dashboard/main.usage.html',
+          //  resolve: {
+          //    // Insert the limits to the chart.
+          //    filters: function(meters, $stateParams) {
+          //      return {
+          //        loadElectricity: true,
+          //        limits: meters.list[$stateParams.markerId] && meters.list[$stateParams.markerId].electricity_time_interval || {},
+          //        activeElectricityHash: FilterFactory.get('activeElectricityHash')
+          //      };
+          //    }
+          //  },
+          //  controller: 'UsageCtrl'
+          //}
         }
       });
 
