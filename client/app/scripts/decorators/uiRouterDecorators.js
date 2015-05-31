@@ -91,6 +91,9 @@ angular.module('negawattClientApp')
 
         // Update $location with the search values.
         $location.url($urlRouter.href($delegate.$current.url, $stateParams).slice(1));
+
+        // Sync router.
+        $urlRouter.sync();
       };
 
       return $delegate;
