@@ -180,7 +180,8 @@ angular.module('negawattClientApp')
         }
 
         // Set meter tooltip
-        meters.data.list[item.id].message = item.place_description + '<br>' + item.place_address + '<br>' + item.place_locality;
+        meters.data.list[item.id].message = (item.image ? ('<img src="' + item.image.url + '"><br>') : '') +
+          item.place_description + '<br>' + item.place_address + '<br>' + item.place_locality;
 
         // Extend meter with marker properties and methods.
         angular.extend(meters.data.list[item.id], Marker);
