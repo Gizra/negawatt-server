@@ -51,9 +51,9 @@ function negawatt_exif_to_latlong($image)
 
 // Calculates the location in decimal form.
     $gps_int = array(
-        ($lat_s + $lat_m / 60.0 + $lat_v / 3600.0) * ($lat_ref == 'N' ? +1 : -1),
-        ($lon_s + $lon_m / 60.0 + $lon_v / 3600.0) * ($lon_ref == 'E' ? +1 : -1),
-        );
+      ($lat_s + $lat_m / 60.0 + $lat_v / 3600.0) * ($lat_ref == 'N' ? +1 : -1),
+      ($lon_s + $lon_m / 60.0 + $lon_v / 3600.0) * ($lon_ref == 'E' ? +1 : -1),
+    );
     return $gps_int;
   }
 }
@@ -82,37 +82,31 @@ function negawatt_meter_node_presave($node) {
   $wrapper = entity_metadata_wrapper('node', $node);
   // New node doesn't have 'original' field.
   $wrapper_original = $node->is_new ? NULL : entity_metadata_wrapper('node', $node->original);
+  $location_changed = FALSE;
 
   // Check if image field was changed.
   $image_exists = $wrapper->field_image->value();
-  $original_image_exists = $wrapper_original->field_image->value();
-  if (!empty($node->is_new) ||
-      $image_exists && !$original_image_exists ||
-      $image_exists && $original_image_exists &&
-        $wrapper->field_image[0]->file->fid->value() != $wrapper_original->field_image[0]->file->fid->value()) {
+  $original_image_exists = $node->is_new ? FALSE : !empty($wrapper_original->field_image) && $wrapper_original->field_image->value();
+  if (!empty($node->is_new) && $image_exists  ||
+    $image_exists && !$original_image_exists ||
+    $image_exists && $original_image_exists &&
+    $wrapper->field_image[0]->file->fid->value() != $wrapper_original->field_image[0]->file->fid->value()) {
     $fid = $wrapper->field_image[0]->file->fid->value();
     $file = file_load($fid);
     $path = drupal_realpath($file->uri);
     $location = negawatt_exif_to_latlong($path);
-    dpm($location);
+    if ($location) {
+      dpm($location);
 
-    // Set location field, THIS CODE IS DUPLICATED BELOW!
-    $lat = $location[0];
-    $lng = $location[1];
-    // hook_node_presave() is called after hook_field_presave(), so
-    // geolocation_field_presave() was already called and will not be called
-    // again. Has to call it explicitly to calc field-location's internal
-    // values after setting lat, long.
-    $field = field_info_field('field_location');
-    $entity = field_info_instance('node', 'field_location', 'iec_meter');
-    $langcode = LANGUAGE_NONE;
-    $items = array(array(
-        'lat' => $lat,
-        'lng' => $lng,
-    ));
-    geolocation_field_presave('node', $node, $field, $entity, $langcode, $items);
-    $wrapper->field_location->set($items[0]);
+      // Set location field, THIS CODE IS DUPLICATED BELOW!
+      $lat = $location[0];
+      $lng = $location[1];
+      // Mark to recalculate location field.
+      $location_changed = TRUE;
 
+      $thumb_url = image_style_url('thumbnail', $file->uri);
+      dpm($thumb_url);
+    }
   }
 
   // Check if address field was changed.
@@ -169,6 +163,17 @@ function negawatt_meter_node_presave($node) {
     // Set location field, only if geolocation succeeded.
     $lat = $geocode->getLatitude();
     $lng = $geocode->getLongitude();
+    // Mark to recalculate location field.
+    $location_changed = TRUE;
+
+    $wrapper->field_address->set(array(
+      'thoroughfare' => $street_addr,
+      'locality' => $city,
+      'country' => $geocode->getCountryCode(),
+    ));
+  }
+
+  if ($location_changed) {
     // hook_node_presave() is called after hook_field_presave(), so
     // geolocation_field_presave() was already called and will not be called
     // again. Has to call it explicitly to calc field-location's internal
@@ -182,12 +187,6 @@ function negawatt_meter_node_presave($node) {
     ));
     geolocation_field_presave('node', $node, $field, $entity, $langcode, $items);
     $wrapper->field_location->set($items[0]);
-
-    $wrapper->field_address->set(array(
-      'thoroughfare' => $street_addr,
-      'locality' => $city,
-      'country' => $geocode->getCountryCode(),
-    ));
   }
 }
 

@@ -35,6 +35,13 @@ class NegawattEntityMeterBase extends \NegawattEntityBaseNode {
       'property' => 'field_place_locality',
     );
 
+    $public_fields['image'] = array(
+      'property' => 'field_image',
+      'process_callbacks' => array(
+        array($this, 'meterImage'),
+      ),
+    );
+
     $public_fields['account'] = array(
       'property' => OG_AUDIENCE_FIELD,
       'resource' => array(
@@ -130,6 +137,28 @@ class NegawattEntityMeterBase extends \NegawattEntityBaseNode {
     }
 
     return $category_ids;
+  }
+
+  /**
+   * Process callback, That look all the parent of the categories Id of the
+   * meter.
+   *
+   * @param id $value
+   *   The meter ID.
+   *
+   * @return array
+   *   A categories id array.
+   */
+  protected function meterImage($value) {
+if (empty($value)) {
+  return NULL;
+}
+//    $fid = $wrapper->field_image[0]->file->fid->value();
+//    $file = file_load($fid);
+    $uri = $value->uri;
+    $thumb_url = image_style_url('thumbnail', $uri);
+
+    return array('url' => $thumb_url);
   }
 
   /**
