@@ -31,7 +31,7 @@ angular.module('negawattDirectives', [])
           // Update the electricity filters.
           updateElectricityFilters(angular.extend({chartFreq: +type}, getPeriodParams()));
 
-          refreshChart();
+          ctrlChart.hasData && refreshChart();
         }
 
         /**
@@ -46,7 +46,7 @@ angular.module('negawattDirectives', [])
           // Update Electricity Filter.
           updateElectricityFilters({chartNextPeriod: newPeriod.next, chartPreviousPeriod: newPeriod.previous});
 
-          refreshChart();
+          ctrlChart.hasData && refreshChart();
         }
 
         /**
@@ -85,9 +85,10 @@ angular.module('negawattDirectives', [])
          * electricity. Generally update data deom
          */
         function refreshChart() {
+          var dataset = $filter('activeElectricityFilters')(ctrlChart.electricity);
           ctrlChart.isLoading = true;
           // Update with the actual data.
-          ctrlChart.data = $filter('toChartDataset')($filter('activeElectricityFilters')(ctrlChart.electricity));
+          ctrlChart.data = $filter('toChartDataset')(dataset);
 
           // Refresh electricity data.
           Electricity.refresh(FilterFactory.get('activeElectricityHash'));
