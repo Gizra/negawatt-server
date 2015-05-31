@@ -28,7 +28,7 @@ angular.module('negawattDirectives', [])
          *  The type of frequency according the period of time selected.
          */
         ctrlChart.changeFrequency = function(type) {
-          // Update the electricity filters.
+          // Update the electricity filters, only if are in the period change.
           updateElectricityFilters(angular.extend({chartFreq: +type}, getPeriodParams()));
 
           ctrlChart.hasData && refreshChart();
@@ -73,6 +73,8 @@ angular.module('negawattDirectives', [])
          *  The new parameters to be updated on the filters.
          */
         function updateElectricityFilters(params) {
+          // Check if
+
           // Update url with params updated.
           angular.extend($stateParams, params);
           $state.refreshUrlWith($stateParams);
