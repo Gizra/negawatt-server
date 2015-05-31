@@ -140,22 +140,20 @@ class NegawattEntityMeterBase extends \NegawattEntityBaseNode {
   }
 
   /**
-   * Process callback, That look all the parent of the categories Id of the
-   * meter.
+   * Process callback, that returns thumbnail url for image.
    *
-   * @param id $value
-   *   The meter ID.
+   * @param $value
+   *   Image file info record.
    *
    * @return array
-   *   A categories id array.
+   *   Thumbnail url for the image.
    */
   protected function meterImage($value) {
-if (empty($value)) {
-  return NULL;
-}
-//    $fid = $wrapper->field_image[0]->file->fid->value();
-//    $file = file_load($fid);
-    $uri = $value->uri;
+    if (empty($value)) {
+      return NULL;
+    }
+
+    $uri = $value[0]['uri'];
     $thumb_url = image_style_url('thumbnail', $uri);
 
     return array('url' => $thumb_url);
@@ -232,7 +230,7 @@ if (empty($value)) {
     $this->valueMetadata['meter']['summary'] = $summary;
   }
 
-    /**
+  /**
    * {@inheritdoc}
    *
    * Prepare summary section for the formatter.
