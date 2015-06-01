@@ -16,5 +16,5 @@ files[] = handlers/electricity/NegawattElectricityMigrate.php
 files[] = handlers/electricity/NegawattElectricityRawMigrate.php
 files[] = handlers/node/NegawattAccountMigrate.php
 files[] = handlers/node/NegawattIecMeterMigrate.php
-files[] = handlers/node/NegawattSatecMeterMigrate.php
+files[] = handlers/node/NegawattModbusMeterMigrate.php
 files[] = handlers/taxonomy_term/NegawattMeterCategoryTermsMigrate.php

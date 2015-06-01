@@ -37,7 +37,7 @@ class NegawattIecMeterResource extends \NegawattEntityMeterBase {
     // Check if a meter with the same label exists.
     $query = new EntityFieldQuery();
     $result = $query->entityCondition('entity_type', 'node')
-      ->propertyCondition('type', array('iec_meter', 'satec_meter'), 'IN')
+      ->propertyCondition('type', array('iec_meter', 'modbus_meter'), 'IN')
       ->propertyCondition('title', $this->request['label'])
       ->range(0,1)
       ->execute();

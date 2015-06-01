@@ -53,7 +53,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     // Create og-vocabulary for meter types.
     $og_vocab = og_vocab_create_og_vocab($vocabulary1->vid, 'node', 'iec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
     $og_vocab->save();
-    $og_vocab = og_vocab_create_og_vocab($vocabulary1->vid, 'node', 'satec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
+    $og_vocab = og_vocab_create_og_vocab($vocabulary1->vid, 'node', 'modbus_meter', OG_VOCAB_FIELD, $og_vocab_settings);
     $og_vocab->save();
 
     // Relate vocabulary to account 1.
@@ -69,7 +69,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     // Create og-vocabulary for meter types.
     $og_vocab = og_vocab_create_og_vocab($vocabulary2->vid, 'node', 'iec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
     $og_vocab->save();
-    $og_vocab = og_vocab_create_og_vocab($vocabulary2->vid, 'node', 'satec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
+    $og_vocab = og_vocab_create_og_vocab($vocabulary2->vid, 'node', 'modbus_meter', OG_VOCAB_FIELD, $og_vocab_settings);
     $og_vocab->save();
 
     // Relate vocabulary to account 2.
@@ -130,9 +130,9 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
 
     $this->setUpCategories();
 
-    // Create satec meter nodes.
+    // Create modbus meter nodes.
     $settings = array(
-      'type' => 'satec_meter',
+      'type' => 'modbus_meter',
       'field_max_frequency' => array('und' => array('0' => array('value' => \NegaWattNormalizerTimeManagerInterface::MINUTE))),
       'field_meter_id' => array('und' => array('0' => array('value' => 1))),
       'field_place_address' => array('und' => array('0' => array('value' => 'לכיש 25'))),
@@ -182,8 +182,8 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     // Create the raw data.
     $values_info = array(
       array(
-        // Two SATEC entries for hour 15:00.
-        'type' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
+        // Two Modbus entries for hour 15:00.
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
         'timestamp' => strtotime('2014-6-12 15:00'),
         'rate_type' => 'flat',
         'meter_nid' => $meter_node1->nid,
@@ -192,7 +192,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
         'min_power_factor' => 0.90,
       ),
       array(
-        'type' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
         'timestamp' => strtotime('2014-6-12 15:15'),
         'rate_type' => 'flat',
         'meter_nid' => $meter_node1->nid,
@@ -202,7 +202,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
       ),
       // One entry at 16:00, should not be read when processing 15:00-16:00
       array(
-        'type' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
         'timestamp' => strtotime('2014-6-12 16:00'),
         'rate_type' => 'flat',
         'meter_nid' => $meter_node1->nid,
@@ -212,7 +212,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
       ),
       // Hourly entries
       array(
-        'type' => \NegaWattNormalizerTimeManagerInterface::HOUR,
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::HOUR,
         'timestamp' => strtotime('2014-6-12 15:00'),
         'rate_type' => 'flat',
         'meter_nid' => $meter_node1->nid,
@@ -221,7 +221,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
         'min_power_factor' => 0.96,
       ),
       array(
-        'type' => \NegaWattNormalizerTimeManagerInterface::HOUR,
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::HOUR,
         'timestamp' => strtotime('2014-6-12 16:00'),
         'rate_type' => 'flat',
         'meter_nid' => $meter_node1->nid,
@@ -231,7 +231,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
       ),
       // Daily entries
       array(
-        'type' => \NegaWattNormalizerTimeManagerInterface::DAY,
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::DAY,
         'timestamp' => strtotime('2014-6-12 00:00'),
         'rate_type' => 'flat',
         'meter_nid' => $meter_node1->nid,
@@ -241,7 +241,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
       ),
       // One entry for meter 2, should not be read.
       array(
-        'type' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
         'timestamp' => strtotime('2014-6-12 15:00'),
         'rate_type' => 'flat',
         'meter_nid' => $meter_node2->nid,
@@ -259,20 +259,20 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
 
   /**
    * Test 'meters' API.
-   * - Should give both satec and iec meters.
+   * - Should give both modbus and iec meters.
    * - Max-frequency field should show.
    * - Meter-category field should list the entire category hierarchy.
-   * - Particular satec and iec meters' fields will appear.
+   * - Particular modbus and iec meters' fields will appear.
    */
   function testMetersApi() {
 
-    $handler = restful_get_restful_handler('satec_meters');
+    $handler = restful_get_restful_handler('modbus_meters');
     $response = $handler->get();
 
     // There should be 2 meters
-    $this->assertTrue(is_array($response) && count($response) == 2, 'Two SATEC meters were found.');
+    $this->assertTrue(is_array($response) && count($response) == 2, 'Two Modbus meters were found.');
     $meter = $response[0];
-    $this->assertEqual($meter['type'], 'satec_meter', 'Meter type is correct.');
+    $this->assertEqual($meter['type'], 'modbus_meter', 'Meter type is correct.');
     $this->assertEqual($meter['max_frequency'], 5, 'Max-frequency field is correct.');
     $this->assertEqual($meter['meter_id'], 1, 'Meter ID field is correct.');
 
@@ -322,7 +322,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     $this->assertEqual($result[0]['max_frequency'], 5, 'Meter max_frequency was updated.');
 
     // @todo: Test 'meters' API call
-    // @todo: Test that both satec and iec meters are returned.
+    // @todo: Test that both modbus and iec meters are returned.
   }
 
   /**
@@ -341,22 +341,22 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     // There should be 6 entities (due to sum over meters).
     $this->assertTrue(is_array($response) && count($response) == 6, '<b>Testing electricity API</b><br>6 entities were found.');
     $entity = $response[0];
-    $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::DAY, 'Entity 0 is of type DAY.');
+    $this->assertEqual($entity['frequency'], NegaWattNormalizerTimeManagerInterface::DAY, 'Entity 0 is of type DAY.');
     $this->assertEqual($entity['meter'], $this->meterNode1->nid, 'Entity is for meter 1.');
     $this->assertEqual($entity['timestamp'], strtotime('2014-6-12'), 'Entity timestamp is correct.');
     $this->assertEqual($entity['kwh'], 2000, 'Entity kWh is correct.');
     $entity = $response[1];
-    $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::HOUR, 'Entity 1 is of type HOUR.');
+    $this->assertEqual($entity['frequency'], NegaWattNormalizerTimeManagerInterface::HOUR, 'Entity 1 is of type HOUR.');
     $this->assertEqual($entity['meter'], $this->meterNode1->nid, 'Entity is for meter 1.');
     $this->assertEqual($entity['timestamp'], strtotime('2014-6-12 15:00'), 'Entity timestamp is correct.');
     $entity = $response[2];
-    $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::MINUTE, 'Entity 2 is of type MINUTE.');
+    $this->assertEqual($entity['frequency'], NegaWattNormalizerTimeManagerInterface::MINUTE, 'Entity 2 is of type MINUTE.');
     $this->assertEqual($entity['meter'], $this->meterNode1->nid, 'Entity is for meter 1.');
     $this->assertEqual($entity['timestamp'], strtotime('2014-6-12 15:00'), 'Entity timestamp is correct.');
     $this->assertEqual($entity['kwh'], 2880, 'Entity kWh is correct.');
     $this->assertEqual($entity['avg_power'], 3, 'Entity avg-power is correct.');
     $entity = $response[4];
-    $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::HOUR, 'Entity 4 is of type HOUR.');
+    $this->assertEqual($entity['frequency'], NegaWattNormalizerTimeManagerInterface::HOUR, 'Entity 4 is of type HOUR.');
     $this->assertEqual($entity['meter'], $this->meterNode1->nid, 'Entity is for meter 1.');
     $this->assertEqual($entity['timestamp'], strtotime('2014-6-12 16:00'), 'Entity timestamp is correct.');
 
@@ -364,15 +364,15 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     // need to get the data from a database.
 
     // Test filter on type=2 (MONTH)
-    $response = $handler->get('', array('filter' => array('meter_account' => 1, 'type' => 4)));
+    $response = $handler->get('', array('filter' => array('meter_account' => 1, 'frequency' => 4)));
     // There should be 2 entities.
     $this->assertTrue(is_array($response) && count($response) == 2, '<b>Testing electricity with filter for type=MONTH</b><br>2 entities were found.');
     $entity = $response[0];
-    $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::HOUR, 'Entity 0 is of type HOUR.');
+    $this->assertEqual($entity['frequency'], NegaWattNormalizerTimeManagerInterface::HOUR, 'Entity 0 is of type HOUR.');
     $this->assertEqual($entity['meter'], $this->meterNode1->nid, 'Entity is for meter 1.');
     $this->assertEqual($entity['timestamp'], strtotime('2014-6-12 15:00'), 'Entity timestamp is correct.');
     $entity = $response[1];
-    $this->assertEqual($entity['type'], NegaWattNormalizerTimeManagerInterface::HOUR, 'Entity 1 is of type HOUR.');
+    $this->assertEqual($entity['frequency'], NegaWattNormalizerTimeManagerInterface::HOUR, 'Entity 1 is of type HOUR.');
     $this->assertEqual($entity['meter'], $this->meterNode1->nid, 'Entity is for meter 1.');
     $this->assertEqual($entity['timestamp'], strtotime('2014-6-12 16:00'), 'Entity timestamp is correct.');
 

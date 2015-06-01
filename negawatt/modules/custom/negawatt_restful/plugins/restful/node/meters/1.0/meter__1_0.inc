@@ -9,7 +9,7 @@ $plugin = array(
   'entity_type' => 'node',
   'bundles' => array(
     'iec_meter' => 'iec_meters',
-    'satec_meter' => 'satec_meters',
+    'modbus_meter' => 'modbus_meters',
   ),
   'authentication_types' => TRUE,
   // Add totals to output.

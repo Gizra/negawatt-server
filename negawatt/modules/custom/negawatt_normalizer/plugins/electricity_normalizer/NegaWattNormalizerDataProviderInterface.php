@@ -23,20 +23,78 @@ interface NegaWattNormalizerDataProviderInterface {
   public function __construct($from_timestamp, $to_timestamp, $frequency, $node);
 
   /**
-   * Return the timestamp of the oldest raw-electricity entity for the
-   * current meter node.
-   *
-   * If no entity exists, return "now".
+   * Return the number raw-electricity entity for the current meter node.
    *
    * @param $node
    *    The reference meter node.
+   * @param $frequency
+   *    The target frequency.
    *
-   * @return int
-   *    The timestamp of oldest raw-electricity entity for the meter.
+   * @return int The number of raw-electricity entity for the meter.
    */
-  public static function getOldestRawElectricityEntity($node);
+  public static function getNumberOfRawElectricityEntities($node, $frequency);
 
   /**
+   * Return the number normalized-electricity entity for the current meter node.
+   *
+   * @param $node
+   *    The reference meter node.
+   * @param $frequency
+   *    The target frequency.
+   *
+   * @return int The number of normalized-electricity entity for the meter.
+   */
+  public static function getNumberOfNormalizedElectricityEntities($node, $frequency);
+
+  /**
+   * Return the timestamp of the oldest raw-electricity entity for the
+   * current meter node.
+   *
+   * If no entity exists, return 0.
+   *
+   * @param $node
+   *    The reference meter node.
+   * @param $frequency
+   *    The target frequency.
+   *
+   * @return int The timestamp of oldest raw-electricity entity for the meter.
+   * The timestamp of oldest raw-electricity entity for the meter.
+   */
+  public static function getOldestRawElectricityEntity($node, $frequency);
+
+  /**
+   * Return the timestamp of the oldest raw-electricity entity for the
+   * current meter node.
+   *
+   * If no entity exists, return 0.
+   *
+   * @param $node
+   *    The reference meter node.
+   * @param $frequency
+   *    The target frequency.
+   *
+   * @return int The timestamp of oldest raw-electricity entity for the meter.
+   * The timestamp of oldest raw-electricity entity for the meter.
+   */
+  public static function getOldestNormalizedElectricityEntity($node, $frequency);
+
+  /**
+     * Return the timestamp of the most recent raw-electricity entity for the
+     * current meter node.
+     *
+     * If no entity exists, return 0.
+     *
+     * @param $node
+     *    The reference meter node.
+     * @param $frequency
+     *    The target frequency.
+     *
+     * @return int The timestamp of oldest raw-electricity entity for the meter.
+     * The timestamp of most recent raw-electricity entity for the meter.
+     */
+    public static function getLatestNormalizedElectricityEntity($node, $frequency);
+
+    /**
    * The raw entity before a given time.
    *
    * The function returns the raw-electricity entity for the current meter node,
@@ -71,7 +129,7 @@ interface NegaWattNormalizerDataProviderInterface {
    * @return SelectQuery
    *    The Query object.
    */
-  public function getQueryForNormalizedValues($table_name = 'negawatt_electricity');
+  public function getQueryForRawValues($table_name = 'negawatt_electricity');
 
   /**
    * Creates and executes a query to fetch entities from raw-electricity table.

@@ -16,7 +16,7 @@ include_once 'negawatt_meter.features.inc';
  *    True if the node-type is a meter-type.
  */
 function negawatt_meter_is_meter($node_type) {
-  return in_array($node_type, array('iec_meter', 'satec_meter'));
+  return in_array($node_type, array('iec_meter', 'modbus_meter'));
 }
 
 /**

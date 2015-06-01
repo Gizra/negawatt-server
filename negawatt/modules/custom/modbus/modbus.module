@@ -1,0 +1,250 @@
+<?php
+/**
+ * @file
+ * Code for the Modbus feature.
+ */
+
+include_once 'modbus.features.inc';
+
+define('TIME_SECONDS_PER_DAY', (24 * 60 * 60));
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function modbus_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'ctools' && !empty($plugin)) {
+    return "plugins/$plugin";
+  }
+}
+
+/**
+ * Implements hook_chart_post_build($chart_id, &$chart, &$data).
+ */
+function modbus_chart_post_build($chart_id, $chart, &$data) {
+  if ($chart['#scale']) {
+    $data['chds'] = implode(',', $chart['#scale']);
+  }
+}
+
+
+/**
+ * Function to connection with device.
+ */
+function ecocity_read_regs($type = 'accumulated_demands') {
+  require_once(drupal_get_path('module','modbus') . '/Phpmodbus/Phpmodbus/ModbusMasterTcp.php');
+  $address = '212.235.53.12';
+  $modbus = new ModbusMasterTcp($address);
+  $modbus->timeout_sec = 5;
+
+  // See page 31 of PDF attached to understand each address:
+  // 32-bit Analog Registers, Binary Registers and Meters.
+  switch ($type) {
+   case 'accumulated_demands':
+      $reference = 287;
+      $quantity = 2;
+      break;
+
+   case 'kw_l1':
+      $reference = 13318;
+      $quantity = 1;
+      break;
+
+  }
+
+  try {
+   $moduleId = 1;
+   $recData = $modbus->readMultipleRegisters($moduleId, $reference, $quantity);
+   dpm($recData);
+
+   }
+   catch (Exception $e) {
+       print $e;
+   }
+}
+
+
+/**
+ * Get storage dir for measurment file, create it if required.
+ */
+function modbus_get_storage_file_path($timestamp, $uid) {
+  $dir = drupal_realpath('public://kwdata/' . $uid);
+  if (!file_prepare_directory($dir, FILE_CREATE_DIRECTORY)) {
+    return FALSE;
+  }
+  $filename = $dir  . '/' . date('Y-m-d',$timestamp);
+  return $filename;
+}
+
+/**
+ *  Retrieve data from an array specific to the specified row.
+ *
+ *  Helper function to be used with modbus_daily_consumptions().
+ *  @param $position
+ *    Position to retrieve the data from. Available values:
+ *    - 'first' - Get the data from the first row.
+ *    - 'last' - Get the data from the last row.
+ *    - # (a number) - Get the data from row #.
+ *  @param $data
+ *    Data retrieved from a modbus_daily_consumptions() or similar
+ *    call.
+ *  @param $key
+ *    Key of the data in a row.
+ *
+ *  @return
+ *    Array (timestamp, data).
+ */
+function _modbus_get_data_from_position($position, $data, $key = 1) {
+  if (is_array($data)) {
+    switch($position) {
+      default:
+        $position = $position == 'first' ? 0 : $position;
+        return !empty($data[$position][$key]) ? array($data[$position][0], $data[$position][$key]) : '';
+      case 'last':
+        $row = array_pop($data);
+        return !empty($row[$key]) ? array($row[0], $row[$key]) : '';
+    }
+  }
+}
+
+
+/**
+ * Open a day report file and return an array()
+ */
+function modbus_daily_consumptions($timestamp, $uid) {
+  if (!$filename = modbus_get_storage_file_path($timestamp, $uid)) {
+    return FALSE;
+  }
+  if (!file_exists($filename)) {
+    return FALSE;
+  }
+
+  $handle = fopen($filename, 'r');
+  if (!$handle) {
+    drupal_set_message(t('Unable to open file: ' . $filename));
+    return FALSE;
+  }
+
+  $contents = fread($handle, filesize($filename));
+  fclose($handle);
+
+  // Parse data.
+  $data = explode("\n", $contents);
+  // Remove last place - always empty.
+  unset($data[count($data) - 1]);
+  foreach ($data as &$row) {
+    $row = explode("\t", $row);
+  }
+
+  return $data;
+}
+
+/**
+ *  Return current consumption data.
+ *
+ *  @param $data
+ *    Data array to retrieve the data from.
+ *  @param $key
+ *    Key # or string to retrive the data from. Options:
+ *    - A number - stays on that number.
+ *    - 'total' - total consumption = 1.
+ *    - 'current' - current consumption = 2. Also divides the answer by 10.
+ *
+ *  @return
+ *    Array of data requested.
+ */
+function _modbus_get_from_data($data, $key) {
+  $new_data = array();
+  switch ($key) {
+    case 'total':
+      $key = 1;
+      break;
+    case 'current':
+      $key = 2;
+      break;
+  }
+  foreach ($data as $value) {
+    if (!empty($value[0]) && !empty($value[$key])) {
+      $value[$key] = $key == 2 ?  $value[$key] / 10 : $value[$key];
+      $new_data[] = array($value[0], $value[$key]);
+    }
+  }
+  return $new_data;
+}
+
+/**
+ * Implements hook_chart_table_post_build().
+ *
+ * Adds the scale to the table.
+ */
+function modbus_chart_table_post_build($chart_id, $chart, &$data) {
+  if ($chart['#scale']) {
+    $data['chds'] = implode(',', $chart['#scale']);
+  }
+}
+
+/**
+ *  Find the first saved file for a specified month/year & user.
+ *
+ *  @param $uid
+ *    User ID directory to search in.
+ *  @param $month
+ *    Month (as a number) to search in.
+ *  @param $year
+ *    Year to search in.
+ *
+ *  @return
+ *    Timestamp of the first file found.
+ */
+function modbus_get_first_file_of_month($uid, $month = NULL, $year = NULL) {
+  // Check month, default to current month and add a leading zero if needed.
+  $month = $month ? date('m', time()) : is_numeric($month) && $month < 10 ? '0' . $month : $month;
+  // Check year, default to current year and add a leading '20' if needed.
+  $year = $year ? date('Y', time()) : (is_numeric($year) && $year < 100) ?  $year : $year;
+  // Build current timestamp.
+  $timestamp = strtotime("01-$month-$year");
+  for ($day = 1; $day <= 31; $day++) {
+    // Add a leading zero.
+    $day = is_numeric($day) && $day < 10 ? '0'. $day : $day;
+    $timestamp = strtotime("$day-$month-$year", $uid);
+    if (date('m', $timestamp) != $month) {
+      drupal_set_message('not found');
+      return;
+    }
+    $file_path = modbus_get_storage_file_path($timestamp, $uid);
+    if (file_exists($file_path)) {
+      return $timestamp;
+    }
+  }
+}
+
+/**
+ * Get differences between specified values in an array.
+ */
+function _modbus_chart_table_report_resolve_deltas($data) {
+  // Need at least two elements in order to work.
+  if (empty($data[1][1])) {
+    return;
+  }
+
+  $first_value = array_shift($data);
+  $new_data[] = array($first_value[0], $data[1][1] - $first_value[1]);
+  foreach ($data as $key => $value) {
+    if ($key != 0) {
+      $new_data[] = array($data[$key - 1][0], $value[1] - $data[$key - 1][1]);
+    }
+  }
+  return $new_data;
+}
+
+/**
+ * Implements hook_mail()
+ */
+function modbus_mail($key, &$message, $params) {
+
+  switch($key) {
+    case 'error-connection':
+      $message['subject'] = t('Cannot connect to ecocity electric device');
+      $message['body'][] = t("Automatic messge : please try to reset.");
+      break;
+   }
+}

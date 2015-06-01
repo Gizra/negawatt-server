@@ -23,10 +23,10 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
       'property' => 'rate_type'
     );
 
-    $public_fields['type'] = array(
-      'property' => 'type',
-      // To prevent conflict with og_membership 'type' field.
-      'column_for_query' => 'negawatt_electricity_normalized.type',
+    $public_fields['frequency'] = array(
+      'property' => 'frequency',
+      // To prevent conflict with og_membership 'frequency' field.
+      'column_for_query' => 'negawatt_electricity_normalized.frequency',
     );
 
     $public_fields['kwh'] = array(
@@ -41,7 +41,7 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
       'property' => 'meter_nid',
       'access_callbacks' => array(array($this, 'meterFieldAccess')),
       'resource' => array(
-        'satec_meter' => array(
+        'modbus_meter' => array(
           'name' => 'meters',
           'full_view' => FALSE,
         ),
@@ -94,7 +94,8 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
   }
 
   /**
-   * If $filter contains filter for 'meter_category', modify $query accordingly
+   * If $filter contains filter for 'meter_category', modify $query to catch the
+   * given category, and all its parent categories.
    *
    * @param $query
    * @param $filter
@@ -356,7 +357,7 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     }
     $query->groupBy('timestamp');
     $query->groupBy('rate_type');
-    $query->groupBy('negawatt_electricity_normalized.type');
+    $query->groupBy('negawatt_electricity_normalized.frequency');
 
     return $query;
   }
