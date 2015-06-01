@@ -29,7 +29,7 @@ angular.module('negawattDirectives', [])
          */
         ctrlChart.changeFrequency = function(type) {
           // Update the electricity filters, only if are in the period change.
-          updateElectricityFilters(angular.extend({chartFreq: +type}, getPeriodParams()));
+          updateElectricityFilters(angular.extend({chartFreq: +type}, getPeriodParams(type)));
 
           ctrlChart.hasData && refreshChart();
         }
@@ -100,9 +100,17 @@ angular.module('negawattDirectives', [])
          * Get the actual period, from URL or default Pariod values.
          * the object is returning in in a URL query string parameters format.
          *
-         * @returns {*}
+         *
+         * @param type
+         *  The size of the period thata we wnats to return.
+         *
+         * @returns {{chartNextPeriod: *, chartPreviousPeriod: *}}
          */
-        function getPeriodParams() {
+        function getPeriodParams(type) {
+
+          // Set frequency selected as active.
+          ChartUsagePeriod.setActiveFrequency(type);
+
           // Set URL Period ({previous: number, next: number}) using $stateParams period parameters.
           ChartUsagePeriod.setPeriod({
             next: $stateParams.chartNextPeriod,
