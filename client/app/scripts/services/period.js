@@ -8,7 +8,6 @@ angular.module('negawattClientApp')
       min: null,
       next: null,
       previous: null,
-      frequency: 0,
       chart: null,
       /**
        * Set the default configuration of the period based on the type of Chart
@@ -18,7 +17,6 @@ angular.module('negawattClientApp')
        */
       setConfig: function(chart) {
         // Save chart configuration.
-        this.frequency = chart && +chart.type;
         this.chart = chart;
 
         // Set the next timestamp by default in 'now' of maximum limit.

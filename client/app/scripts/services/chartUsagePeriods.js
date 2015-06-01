@@ -21,40 +21,6 @@ angular.module('negawattClientApp')
     };
 
     /**
-     * Set the limits (maximum and minimum) values for the period of the chart,
-     * expresed in timestamp unix format.
-     *
-     * @param max
-     *  The maximun and minimum dates.
-     *  {
-     *    max: timestamp,
-     *    min: timestamp
-     *  }
-     */
-    this.setLimits = function(limits) {
-      period.max = limits && +limits.max;
-      period.min = limits && +limits.min;
-    };
-
-    /**
-     * Extend the time stamp object with the actual period selection.
-     *
-     * @param chart
-     *  Chart default configuration.
-     * @param newPeriod
-     *  New values of period object.
-     */
-    this.setPeriod = function(newPeriod) {
-      // Set frequency from selected chart configuration.
-      period.setConfig(this.getActiveFrequency());
-
-      // If newPeriod is defined update limit of the chart.
-      if (angular.isDefined(newPeriod)) {
-        period.setPeriod(newPeriod);
-      }
-    };
-
-    /**
      * Calculate the next and previous periods in unix format time.
      *
      * @param type
@@ -87,6 +53,40 @@ angular.module('negawattClientApp')
       // Extend the Period factory methods.
       newPeriod = extend(copy(period), newPeriod);
       return newPeriod;
+    };
+
+    /**
+     * Set the limits (maximum and minimum) values for the period of the chart,
+     * expresed in timestamp unix format.
+     *
+     * @param max
+     *  The maximun and minimum dates.
+     *  {
+     *    max: timestamp,
+     *    min: timestamp
+     *  }
+     */
+    this.setLimits = function(limits) {
+      period.max = limits && +limits.max;
+      period.min = limits && +limits.min;
+    };
+
+    /**
+     * Extend the time stamp object with the actual period selection.
+     *
+     * @param chart
+     *  Chart default configuration.
+     * @param newPeriod
+     *  New values of period object.
+     */
+    this.setPeriod = function(newPeriod) {
+      // Set frequency from selected chart configuration.
+      period.setConfig(this.getActiveFrequency());
+
+      // If newPeriod is defined update limit of the chart.
+      if (angular.isDefined(newPeriod)) {
+        period.setPeriod(newPeriod);
+      }
     };
 
     /**
