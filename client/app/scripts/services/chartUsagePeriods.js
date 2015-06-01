@@ -72,7 +72,7 @@ angular.module('negawattClientApp')
       // Calculate the new period od period.
       if (type === 'next') {
         newPeriod = {
-          next: (moment.unix(period.next).isAfter(moment.unix(period.max), period.config.frequency) || moment.unix(period.next).isSame(moment.unix(period.max), period.config.frequency)) ? null : period.add(period.next).unix(),
+          next: (moment.unix(period.next).isAfter(moment.unix(period.max), period.chart.frequency) || moment.unix(period.next).isSame(moment.unix(period.max), period.chart.frequency)) ? null : period.add(period.next).unix(),
           previous: period.add(period.previous).unix()
         };
       }
@@ -80,7 +80,7 @@ angular.module('negawattClientApp')
       if (type === 'previous'){
         newPeriod = {
           next: period.subtract(period.next).unix(),
-          previous: (moment.unix(period.previous).isBefore(moment.unix(period.min), period.config.frequency) || moment.unix(period.previous).isSame(moment.unix(period.min), period.config.frequency)) ? null : period.subtract(period.previous).unix()
+          previous: (moment.unix(period.previous).isBefore(moment.unix(period.min), period.chart.frequency) || moment.unix(period.previous).isSame(moment.unix(period.min), period.chart.frequency)) ? null : period.subtract(period.previous).unix()
         };
       }
 

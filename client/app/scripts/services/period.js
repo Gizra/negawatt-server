@@ -9,7 +9,7 @@ angular.module('negawattClientApp')
       next: null,
       previous: null,
       frequency: 0,
-      config: null,
+      chart: null,
       /**
        * Set the default configuration of the period based on the type of Chart
        * and set his limits.
@@ -19,7 +19,7 @@ angular.module('negawattClientApp')
       setConfig: function(chart) {
         // Save chart configuration.
         this.frequency = chart && +chart.type;
-        this.config = chart;
+        this.chart = chart;
 
         // Set the next timestamp by default in 'now' of maximum limit.
         this.next = (moment().isAfter(moment.unix(this.max))) ? this.max : moment().unix();
@@ -48,14 +48,14 @@ angular.module('negawattClientApp')
         }
       },
       getPrevious: function() {
-        return moment.unix(this.next).subtract(this.config && this.config.chart_default_time_frame, this.config && this.config.frequency).unix();
+        return moment.unix(this.next).subtract(this.chart && this.chart.chart_default_time_frame, this.chart && this.chart.frequency).unix();
       },
       isLast: function() {
-        //return ( moment.unix(this.next).isAfter(moment.unix(this.max), this.config && this.config.frequency) || moment.unix(this.next).isSame(moment.unix(this.max), this.config && this.config.frequency) )
+        //return ( moment.unix(this.next).isAfter(moment.unix(this.max), this.chart && this.chart.frequency) || moment.unix(this.next).isSame(moment.unix(this.max), this.chart && this.chart.frequency) )
         return !this.next;
       },
       isFirst: function() {
-        //return ( moment.unix(this.previous).isBefore(moment.unix(this.min), this.config && this.config.frequency) || moment.unix(this.previous).isSame(moment.unix(this.min), this.config && this.config.frequency) );
+        //return ( moment.unix(this.previous).isBefore(moment.unix(this.min), this.chart && this.chart.frequency) || moment.unix(this.previous).isSame(moment.unix(this.min), this.chart && this.chart.frequency) );
         return !this.previous;
       },
       /**
@@ -86,10 +86,10 @@ angular.module('negawattClientApp')
         return outOfRange;
       },
       add: function(time) {
-        return moment.unix(time).add(this.config && this.config.chart_default_time_frame, this.config && this.config.frequency);
+        return moment.unix(time).add(this.chart && this.chart.chart_default_time_frame, this.chart && this.chart.frequency);
       },
       subtract: function(time) {
-        return moment.unix(time).subtract(this.config && this.config.chart_default_time_frame, this.config && this.config.frequency);
+        return moment.unix(time).subtract(this.chart && this.chart.chart_default_time_frame, this.chart && this.chart.frequency);
       }
     }
   });
