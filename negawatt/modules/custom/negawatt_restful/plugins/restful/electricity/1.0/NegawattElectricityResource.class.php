@@ -313,6 +313,31 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     $summary['type'] = $result_type;
     $summary['values'] = $total;
 
+    // MOCK DATA: Frecuency intervals
+    $frecuency_intervals = array(
+      "1" => array(
+        "max" => 1425159900,
+        "min" => 1325368800
+      ),
+      "2" => array(
+        "max" => 1425159900,
+        "min" => 1325368800
+      ),
+      "3" => array(
+        "max" => 1425159900,
+        "min" => 1422481500
+      ),
+      "4" => array(
+        "max" => 1425159900,
+        "min" => 1422740700
+      ),
+      "5" => array(
+        "max" => 1425159900,
+        "min" => 1422740700
+      ),
+    );
+    $summary['electricity_interval'] = $frecuency_intervals[$request['filter']['frequency']];
+
     // Pass info to the formatter
     $this->valueMetadata['electricity']['summary'] = $summary;
   }
