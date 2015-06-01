@@ -103,16 +103,16 @@ angular.module('negawattDirectives', [])
          * @returns {*}
          */
         function getPeriodParams() {
-          var period = {
-            next: $stateParams.chartNextPeriod || ChartUsagePeriod.getPeriod().next,
-            previous: $stateParams.chartPreviousPeriod || ChartUsagePeriod.getPeriod().previous
-          };
+          // Set URL Period ({previous: number, next: number}) using $stateParams period parameters.
+          ChartUsagePeriod.setPeriod({
+            next: $stateParams.chartNextPeriod,
+            previous: $stateParams.chartPreviousPeriod
+          });
 
-          // Save actual the period
-          ChartUsagePeriod.setPeriod(period);
+          // Return a new paramenter from a Period previuos defined and saved.
           return {
-            chartNextPeriod: period.next,
-            chartPreviousPeriod: period.previous
+            chartNextPeriod: ChartUsagePeriod.getPeriod().next,
+            chartPreviousPeriod: ChartUsagePeriod.getPeriod().previous
           };
         }
 
