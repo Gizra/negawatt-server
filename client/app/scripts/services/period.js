@@ -26,24 +26,25 @@ angular.module('negawattClientApp')
       },
       setPeriod: function(newPeriod) {
         // Check the chart limits, with the information obtained from the server. (example meters).
-        if (angular.isDefined(newPeriod.max) && angular.isDefined(newPeriod.min) && !this.isOutOfRange(newPeriod) ) {
-          this.next = (moment.unix(this.next).isAfter(moment.unix(newPeriod.max))) ? this.next : newPeriod.max;
-          this.previous = (moment.unix(this.previous).isAfter(moment.unix(newPeriod.min))) ? this.previous : newPeriod.min;
-        }
+        //if (angular.isDefined(newPeriod.max) && angular.isDefined(newPeriod.min) && !this.isOutOfRange(newPeriod) ) {
+        //  this.next = (moment.unix(this.next).isAfter(moment.unix(newPeriod.max))) ? this.next : newPeriod.max;
+        //  this.previous = (moment.unix(this.previous).isAfter(moment.unix(newPeriod.min))) ? this.previous : newPeriod.min;
+        //}
 
         // Set default if is oout of range.
         if (this.isOutOfRange(newPeriod)) {
           // Set the next timestamp by default in 'now' of maximum limit.
           this.next = this.max;
-          this.previous = this.getPrevious();
+          //this.previous = this.getPrevious();
         }
 
         // Set according current newPeriod.
         if (newPeriod.next && newPeriod.previous && !this.isOutOfRange(newPeriod) ) {
           // Comming from the calculation.
           this.next = newPeriod.next;
-          this.previous = newPeriod.previous;
+          //this.previous = newPeriod.previous;
         }
+        this.previous = this.getPrevious();
       },
       getPrevious: function() {
         return moment.unix(this.next).subtract(this.chart && this.chart.chart_default_time_frame, this.chart && this.chart.frequency).unix();

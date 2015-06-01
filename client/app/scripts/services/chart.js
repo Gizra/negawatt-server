@@ -86,7 +86,7 @@ angular.module('negawattClientApp')
           label: 'יום',
           type: '3',
           unit_num_seconds: 24 * 60 * 60,
-          chart_default_time_frame: 14,
+          chart_default_time_frame: 31,
           chart_type: 'ColumnChart',
           axis_v_title: 'קוט"ש ביום',
           axis_h_format: 'DD-MM',
