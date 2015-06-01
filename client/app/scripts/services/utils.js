@@ -127,4 +127,17 @@ angular.module('negawattClientApp')
 
       return obj;
     }
+
+    /**
+     * Check if an object or array is empty.
+     *
+     * @param obj
+     *  The Object ot Array
+     *
+     * @returns {boolean|*}
+     *  Return true is Object|Array is empty, otherwise false.
+     */
+    this.isEmpty = function(obj) {
+      return angular.isUndefined(obj) || obj === null || angular.isObject(obj) && !Object.keys(obj).length;
+    }
   });

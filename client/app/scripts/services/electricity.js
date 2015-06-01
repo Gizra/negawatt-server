@@ -96,7 +96,7 @@ angular.module('negawattClientApp')
         url: url,
         params: params
       }).success(function(electricity) {
-        setCache(electricity.data, hash, skipResetCache);
+        setCache(electricity, hash, skipResetCache);
 
         deferred.resolve(electricityRecords(hash));
 
@@ -113,19 +113,18 @@ angular.module('negawattClientApp')
     /**
      * Save data in cache, and broadcast an event to inform that the electricity data changed.
      *
-     * @param data
+     * @param electricity
      *   The data to cache.
-     * @param filters
-     *   The filters used to get the data.
      * @param key
      *   A key for the cached data - the hash code of the filters.
      * @param skipResetCache
      *   If false, a timer will be set to clear the cache in 60 sec.
      */
-    function setCache(data, key, skipResetCache) {
+    function setCache(electricity, key, skipResetCache) {
       // Cache messages data.
       cache[key] = {
-        data: (cache[key] ? cache[key].data : []).concat(data),
+        data: (cache[key] ? cache[key].data : []).concat(electricity.data),
+        limits: electricity.summary.electricity_interval,
         timestamp: new Date()
       };
 
