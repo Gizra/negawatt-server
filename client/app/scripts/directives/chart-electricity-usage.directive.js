@@ -21,6 +21,10 @@ angular.module('negawattDirectives', [])
           ctrlChart.data = $filter('toChartDataset')($filter('activeElectricityFilters')(ctrlChart.electricity));
         }, true);
 
+        $scope.$watch('ctrlChart.data.type', function(current) {
+          ctrlChart.data.type = current;
+        });
+
         ctrlChart.__period = ChartUsagePeriod.getPeriod;
         // Update data object.
         // Get chart frequencies. (Tabs the period of time)
@@ -37,6 +41,8 @@ angular.module('negawattDirectives', [])
         ctrlChart.changeFrequency = function(type) {
           // Update the electricity filters, only if are in the period change.
           updateElectricityFilters(angular.extend({chartFreq: +type}, getPeriodParams(type)));
+
+          // Refresh chart type;
 
           ctrlChart.hasData && refreshChart();
         }
@@ -94,13 +100,13 @@ angular.module('negawattDirectives', [])
          * electricity. Generally update data deom
          */
         function refreshChart() {
-          var dataset = $filter('activeElectricityFilters')(ctrlChart.electricity);
+          //var dataset = $filter('activeElectricityFilters')(ctrlChart.electricity);
           ctrlChart.isLoading = true;
+          Electricity.refresh(FilterFactory.get('activeElectricityHash'));
           // Update with the actual data.
-          ctrlChart.data = $filter('toChartDataset')(dataset);
+          //ctrlChart.data = $filter('toChartDataset')(dataset);
 
           // Refresh electricity data.
-          Electricity.refresh(FilterFactory.get('activeElectricityHash'));
         }
 
         /**

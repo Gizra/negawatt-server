@@ -1,5 +1,5 @@
 angular.module('negawattClientApp')
-  .filter('toChartDataset', function (Chart, moment) {
+  .filter('toChartDataset', function (Chart, ChartOptions, moment) {
     var chartFrequencyActive = Chart.getActiveFrequency();
 
     /**
@@ -17,7 +17,7 @@ angular.module('negawattClientApp')
       collection = {
         type: chartFrequencyActive.chart_type,
         data: getDataset(collection),
-        options: getOptions()
+        options: getOptions(chartFrequencyActive.chart_type)
       }
       return collection;
     }
@@ -25,22 +25,8 @@ angular.module('negawattClientApp')
     /**
      * Return the options of the selected chart.
      */
-    function getOptions() {
-      return {
-        'isStacked': 'true',
-        'bar': { groupWidth: '75%' },
-        'fill': 20,
-        'displayExactValues': true,
-        'vAxis': {
-          'title': chartFrequencyActive.axis_v_title,
-          'gridlines': {
-            'count': 6
-          }
-        },
-        'hAxis': {
-          'title': chartFrequencyActive.axis_h_title
-        }
-      }
+    function getOptions(type) {
+      return ChartOptions[type];
     }
 
     /**
