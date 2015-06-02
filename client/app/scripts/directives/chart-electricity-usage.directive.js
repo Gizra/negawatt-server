@@ -14,11 +14,11 @@ angular.module('negawattDirectives', [])
             return;
           }
 
-          ctrlChart.isLoading = false;
+          // Render the chart with the active selected data.
+          render();
 
-          // Set limits and data to charts, wuth the active electricity request.
-          ChartUsagePeriod.setLimits($filter('activeElectricityFilters')(ctrlChart.electricity, 'limits'));
-          ctrlChart.data = $filter('toChartDataset')($filter('activeElectricityFilters')(ctrlChart.electricity));
+          // Clear the spinner.
+          ctrlChart.isLoading = false;
         }, true);
 
         ctrlChart.__period = ChartUsagePeriod.getPeriod;
@@ -35,6 +35,8 @@ angular.module('negawattDirectives', [])
          *  The type of frequency according the period of time selected.
          */
         ctrlChart.changeFrequency = function(type) {
+          // Change active frequency.
+
           // Update the electricity filters, only if are in the period change.
           updateElectricityFilters(angular.extend({chartFreq: +type}, getPeriodParams(type)));
 
@@ -95,13 +97,13 @@ angular.module('negawattDirectives', [])
          * electricity. Generally update data deom
          */
         function refreshChart() {
-          //var dataset = $filter('activeElectricityFilters')(ctrlChart.electricity);
           ctrlChart.isLoading = true;
-          Electricity.refresh(FilterFactory.get('activeElectricityHash'));
           // Update with the actual data.
-          //ctrlChart.data = $filter('toChartDataset')(dataset);
 
           // Refresh electricity data.
+          Electricity.refresh(FilterFactory.get('activeElectricityHash'));
+          // Redraw the chart.
+          render();
         }
 
         /**
@@ -130,6 +132,17 @@ angular.module('negawattDirectives', [])
             chartNextPeriod: ChartUsagePeriod.getPeriod().next,
             chartPreviousPeriod: ChartUsagePeriod.getPeriod().previous
           };
+        }
+
+        /**
+         * Redender the chart with the frequency and period selected.
+         */
+        function render() {
+          // Set limits and data to charts, wuth the active electricity request.
+          ctrlChart.data = $filter('toChartDataset')($filter('activeElectricityFilters')(ctrlChart.electricity));
+          ChartUsagePeriod.setLimits($filter('activeElectricityFilters')(ctrlChart.electricity, 'limits'));
+
+
         }
 
       },
