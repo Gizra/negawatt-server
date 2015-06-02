@@ -15,14 +15,14 @@ angular.module('negawattDirectives', [])
           }
 
           ctrlChart.isLoading = false;
-          
+
           // Set limits and data to charts, wuth the active electricity request.
           ChartUsagePeriod.setLimits($filter('activeElectricityFilters')(ctrlChart.electricity, 'limits'));
           ctrlChart.data = $filter('toChartDataset')($filter('activeElectricityFilters')(ctrlChart.electricity));
         }, true);
 
         ctrlChart.__period = ChartUsagePeriod.getPeriod;
-        // Update data object
+        // Update data object.
         // Get chart frequencies. (Tabs the period of time)
         ctrlChart.frequencies = ChartUsagePeriod.getFrequencies();
         // Check if next/previous period have data.
