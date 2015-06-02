@@ -151,6 +151,13 @@ angular
           },
           categories: function(Category, account, categories) {
             return Category.get(account.id);
+          },
+          filters: function(categories, $stateParams, FilterFactory) {
+            return {
+              loadElectricity: true,
+              limits: categories.collection[$stateParams.categoryId].electricity_time_interval,
+              activeElectricityHash: FilterFactory.get('activeElectricityHash')
+            };
           }
         },
         views: {
@@ -160,21 +167,12 @@ angular
             templateUrl: 'views/dashboard/main.map.html',
             controller: 'MapCtrl'
           },
-          //// Update usage-chart to show category summary.
-          //'usage@dashboard': {
-          //  templateUrl: 'views/dashboard/main.usage.html',
-          //  resolve: {
-          //    // Insert the limits to the chart.
-          //    filters: function(categories, $stateParams) {
-          //      return {
-          //        loadElectricity: true,
-          //        limits: categories.collection[$stateParams.categoryId].electricity_time_interval,
-          //        activeElectricityHash: FilterFactory.get('activeElectricityHash')
-          //      };
-          //    }
-          //  },
-          //  controller: 'UsageCtrl'
-          //},
+          // Update usage-chart to show category summary.
+          'usage@dashboard': {
+            templateUrl: 'views/dashboard/main.usage.html',
+            controller: 'UsageCtrl',
+            controllerAs: 'chart'
+          },
           'categories@dashboard': {
             templateUrl: 'views/dashboard/main.categories.html',
             controller: 'CategoryCtrl'
@@ -203,6 +201,13 @@ angular
           },
           categories: function(Category, account, categories) {
             return Category.get(account.id);
+          },
+          filters: function(meters, $stateParams, FilterFactory) {
+            return {
+              loadElectricity: true,
+              limits: meters.list[$stateParams.markerId] && meters.list[$stateParams.markerId].electricity_time_interval || {},
+              activeElectricityHash: FilterFactory.get('activeElectricityHash')
+            };
           }
         },
         views: {
@@ -226,21 +231,11 @@ angular
             },
             controller: 'DetailsCtrl'
           },
-          // Update electricity-usage chart in 'usage' sub view.
-          //'usage@dashboard': {
-          //  templateUrl: 'views/dashboard/main.usage.html',
-          //  resolve: {
-          //    // Insert the limits to the chart.
-          //    filters: function(meters, $stateParams) {
-          //      return {
-          //        loadElectricity: true,
-          //        limits: meters.list[$stateParams.markerId] && meters.list[$stateParams.markerId].electricity_time_interval || {},
-          //        activeElectricityHash: FilterFactory.get('activeElectricityHash')
-          //      };
-          //    }
-          //  },
-          //  controller: 'UsageCtrl'
-          //}
+          'usage@dashboard': {
+            templateUrl: 'views/dashboard/main.usage.html',
+            controller: 'UsageCtrl',
+            controllerAs: 'chart'
+          }
         }
       });
 
