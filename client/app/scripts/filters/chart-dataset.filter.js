@@ -1,6 +1,6 @@
 angular.module('negawattClientApp')
   .filter('toChartDataset', function (Chart, ChartOptions, moment) {
-    var chartFrequencyActive = Chart.getActiveFrequency();
+    var chartFrequencyActive;
 
     /**
      * From a collection object create a Google Chart data ser object
@@ -13,6 +13,7 @@ angular.module('negawattClientApp')
      *  The dataset collection filtered.
      */
     return function (collection){
+      chartFrequencyActive = Chart.getActiveFrequency();
       // Recreate collection object.
       collection = {
         type: chartFrequencyActive.chart_type,
