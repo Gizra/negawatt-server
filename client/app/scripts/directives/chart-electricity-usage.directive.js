@@ -38,8 +38,7 @@ angular.module('negawattDirectives', [])
           // Update the electricity filters, only if are in the period change.
           updateElectricityFilters(angular.extend({chartFreq: +type}, getPeriodParams(type)));
 
-          // Refresh chart type;
-
+          // Refresh chart type
           ctrlChart.hasData && refreshChart();
         }
 
