@@ -123,8 +123,8 @@ angular.module('negawattDirectives', [])
 
           // Set URL Period ({previous: number, next: number}) using $stateParams period parameters.
           ChartUsagePeriod.setPeriod({
-            next: $stateParams.chartNextPeriod,
-            previous: $stateParams.chartPreviousPeriod
+            next: $stateParams.chartNextPeriod || null,
+            previous: $stateParams.chartPreviousPeriod || null
           });
 
           // Return a new paramenter from a Period previuos defined and saved.
