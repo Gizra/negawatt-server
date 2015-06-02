@@ -325,7 +325,7 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
       ),
       "3" => array(
         "max" => 1425159900,
-        "min" => 1422481500
+        "min" => 1422740700
       ),
       "4" => array(
         "max" => 1425159900,
