@@ -69,5 +69,3 @@ client/dist/
 .tmp
 .sass-cache
 client/app/scripts/config.js
-
-client/config.travis.json

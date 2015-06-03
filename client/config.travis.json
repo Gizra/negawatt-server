@@ -1,0 +1,29 @@
+{
+  "development": {
+    "backend": "http://localhost/negawatt-server/www",
+    "cname": "",
+    "debugUiRouter": false,
+    "openweather": {
+      "endpoint": null,
+      "apikey": "5znrzehcfsa35jarjywbsy9dymvnmxzq"
+    }
+  },
+  "production": {
+    "backend": "http://server.com/api",
+    "cname": "",
+    "debugUiRouter": false,
+    "openweather": {
+      "endpoint": null,
+      "apikey": "5znrzehcfsa35jarjywbsy9dymvnmxzq"
+    }
+  },
+  "live": {
+    "backend": "http://server.com/api",
+    "cname": "",
+    "debugUiRouter": false,
+    "openweather": {
+      "endpoint": null,
+      "apikey": "5znrzehcfsa35jarjywbsy9dymvnmxzq"
+    }
+  }
+}
