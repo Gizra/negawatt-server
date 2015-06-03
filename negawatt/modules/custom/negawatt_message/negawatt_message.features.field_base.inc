@@ -38,7 +38,7 @@ function negawatt_message_field_default_field_bases() {
         ),
         'target_bundles' => array(
           'iec_meter' => 'iec_meter',
-          'satec_meter' => 'satec_meter',
+          'modbus_meter' => 'modbus_meter',
         ),
       ),
       'target_type' => 'node',

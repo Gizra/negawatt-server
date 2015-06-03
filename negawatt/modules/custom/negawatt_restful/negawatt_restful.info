@@ -2,7 +2,6 @@ name = Negawatt RESTFul
 core = 7.x
 package = Negawatt
 dependencies[] = restful
-dependencies[] = entity_validator
 
 files[] = plugins/restful/node/NegawattEntityBaseNode.php
 files[] = plugins/restful/node/meters/NegawattEntityMeterBase.php

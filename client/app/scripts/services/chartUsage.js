@@ -149,7 +149,7 @@ angular.module('negawattClientApp')
       // Prepare filters for data request.
       var filters = {
         'filter[meter_account]': accountId,
-        'filter[type]': chartFreq || this.usageChartParams.frequency,
+        'filter[frequency]': chartFreq || this.usageChartParams.frequency,
         'filter[timestamp][operator]': 'BETWEEN',
         'filter[timestamp][value][0]': period.previous, // chartBeginTimestamp,
         'filter[timestamp][value][1]': period.next // chartEndTimestamp

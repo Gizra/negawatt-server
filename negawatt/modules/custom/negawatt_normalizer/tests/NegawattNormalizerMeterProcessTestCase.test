@@ -45,7 +45,7 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     // Create og-vocabulary for meter types.
     $og_vocab = og_vocab_create_og_vocab($vocabulary1->vid, 'node', 'iec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
     $og_vocab->save();
-    $og_vocab = og_vocab_create_og_vocab($vocabulary1->vid, 'node', 'satec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
+    $og_vocab = og_vocab_create_og_vocab($vocabulary1->vid, 'node', 'modbus_meter', OG_VOCAB_FIELD, $og_vocab_settings);
     $og_vocab->save();
 
     // Relate vocabulary to account 1.
@@ -71,11 +71,11 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
    * Prepare meter nodes and raw data entities.
    */
   function setUp() {
-    parent::setUp('negawatt_normalizer', 'negawatt_account', 'satec', 'iec');
+    parent::setUp('negawatt_normalizer', 'negawatt_account', 'modbus', 'iec');
 
-    // Create satec meter nodes.
+    // Create modbus meter nodes.
     $settings = array(
-      'type' => 'satec_meter',
+      'type' => 'modbus_meter',
       'field_max_frequency' => array('und' => array('0' => array('value' => \NegaWattNormalizerTimeManagerInterface::MINUTE))),
       'field_place_address' => array('und' => array('0' => array('value' => 'לכיש 25'))),
       'field_place_locality' => array('und' => array('0' => array('value' => 'קרית גת'))),
@@ -106,106 +106,150 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     $this->meterNode4 = $meter_node4;
 
     // Create the raw data.
+    //
+    // -------+-------------+------+------+-------+-----+------+
+    // meter  | timestamp   | rate | freq | meter | kwh |  pf  |
+    // type   |             | type |      |       |     |      |
+    // -------+-------------+------+------+-------+-----+------+
+    // modbus |12/6/14 15:00| flat | min. |   1   |  10 | 0.90 |
+    // modbus |12/6/14 15:15| flat | min. |   1   |  30 | 0.96 |
+    // modbus |12/6/14 15:00| flat | month|   1   |  60 | 0.90 |
+    // modbus |12/6/14 16:00| flat | min. |   1   |  60 | 0.96 |
+    // modbus |12/6/14 15:01| flat | min. |   2   |  40 | 0.90 |
+    // -------+-------------+------+------+-------+-----+------+
+    // iec    | 1/2/14 00:00| flat | month|   3   |  ~1 | 0.96 |
+    // iec    | 1/2/14 00:00| low  | month|   3   |  ~2 | 0.97 |
+    // iec    | 1/2/14 00:00| mid  | month|   3   |  ~3 | 0.98 |
+    // iec    | 1/2/14 00:00| peak | month|   3   |  ~4 | 0.99 |
+    // iec    | 1/3/14 00:00| mid  | month|   3   |  ~1 | 0.91 |
+    // iec    | 1/3/14 00:00| peak | month|   3   |  ~2 | 0.92 |
+    // iec    | 1/4/14 00:00| flat | month|   3   |  ~5 | 0.93 |
+    // iec    | 2/2/14 00:00| flat | month|   4   | ~10 | 0.92 |
+    // -------+-------------+------+------+-------+-----+------+
+
     $values_info = array(
       array(
-        // Two SATEC entries for hour 15:00.
-        'type' => 'SATEC',
+        // Two Modbus entries for hour 15:00.
+        'meter_type' => 'modbus',
         'timestamp' => strtotime('2014-6-12 15:00'),
         'rate_type' => 'flat',
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
         'meter_nid' => $meter_node1->nid,
         'kwh' => 10,
         'power_factor' => 0.90,
       ),
       array(
-        'type' => 'SATEC',
+        'meter_type' => 'modbus',
         'timestamp' => strtotime('2014-6-12 15:15'),
         'rate_type' => 'flat',
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
         'meter_nid' => $meter_node1->nid,
         'kwh' => 10+20,
         'power_factor' => 0.96,
       ),
+      // One MONTHLY entry for hour 15:00, should not be taken into account when
+      // normalizing minute data.
+      array(
+        'meter_type' => 'modbus',
+        'timestamp' => strtotime('2014-6-12 15:00'),
+        'rate_type' => 'flat',
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MONTH,
+        'meter_nid' => $meter_node1->nid,
+        'kwh' => 60,
+        'power_factor' => 0.90,
+      ),
       // One entry at 16:00, should not be read when processing 15:00-16:00
       array(
-        'type' => 'SATEC',
+        'meter_type' => 'modbus',
         'timestamp' => strtotime('2014-6-12 16:00'),
         'rate_type' => 'flat',
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
         'meter_nid' => $meter_node1->nid,
         'kwh' => 30+30,
         'power_factor' => 0.96,
       ),
       // One entry for meter 2, should not be read.
       array(
-        'type' => 'SATEC',
+        'meter_type' => 'modbus',
         'timestamp' => strtotime('2014-6-12 15:01'),
         'rate_type' => 'flat',
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
         'meter_nid' => $meter_node2->nid,
         'kwh' => 40,
         'power_factor' => 0.96,
       ),
       // IEC 4 rate-type entries for 2/2014.
       array(
-        'type' => 'IEC',
+        'meter_type' => 'iec',
         'timestamp' => strtotime('2014-2-1 00:00'),
         'rate_type' => 'flat',
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MONTH,
         'meter_nid' => $meter_node3->nid,
         'kwh' => 1*24*31,
         'power_factor' => 0.96,
       ),
       array(
-        'type' => 'IEC',
+        'meter_type' => 'iec',
         'timestamp' => strtotime('2014-2-1 00:00'),
         'rate_type' => 'low',
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MONTH,
         'meter_nid' => $meter_node3->nid,
         'kwh' => 2*24*31,
         'power_factor' => 0.97,
       ),
       array(
-        'type' => 'IEC',
+        'meter_type' => 'iec',
         'timestamp' => strtotime('2014-2-1 00:00'),
         'rate_type' => 'mid',
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MONTH,
         'meter_nid' => $meter_node3->nid,
         'kwh' => 3*24*31,
         'power_factor' => 0.98,
       ),
       array(
-        'type' => 'IEC',
+        'meter_type' => 'iec',
         'timestamp' => strtotime('2014-2-1 00:00'),
         'rate_type' => 'peak',
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MONTH,
         'meter_nid' => $meter_node3->nid,
         'kwh' => 4*24*31,
         'power_factor' => 0.99,
       ),
       // Only two rate-types in the 3/2014
       array(
-        'type' => 'IEC',
+        'meter_type' => 'iec',
         'timestamp' => strtotime('2014-3-1 00:00'),
         'rate_type' => 'mid',
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MONTH,
         'meter_nid' => $meter_node3->nid,
         'kwh' => 1*24*28,
         'power_factor' => 0.91,
       ),
       array(
-        'type' => 'IEC',
+        'meter_type' => 'iec',
         'timestamp' => strtotime('2014-3-1 00:00'),
         'rate_type' => 'peak',
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MONTH,
         'meter_nid' => $meter_node3->nid,
         'kwh' => 2*24*28,
         'power_factor' => 0.92,
       ),
       // Just to make sure, additional value that will not be read in the test
       array(
-        'type' => 'IEC',
+        'meter_type' => 'iec',
         'timestamp' => strtotime('2014-4-1 00:00'),
         'rate_type' => 'flat',
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MONTH,
         'meter_nid' => $meter_node3->nid,
         'kwh' => 5*24*31,
         'power_factor' => 0.93,
       ),
       // And another value for meter 4
       array(
-        'type' => 'IEC',
+        'meter_type' => 'iec',
         'timestamp' => strtotime('2014-2-2 13:56'),
         'rate_type' => 'flat',
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MONTH,
         'meter_nid' => $meter_node4->nid,
         'kwh' => 7896,
         'power_factor' => 0.92,
@@ -231,16 +275,16 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
   }
 
   /**
-   * Test processing a SATEC meter.
+   * Test processing a Modbus meter.
    * - @todo: Test meter with wrong frequency
    * - Test meter with empty data
    * - Test meter with valid data.
    * - Test that the using same timestamp, nid returns an existing entity.
    * - Test that adding raw data and calling process again returns proper values.
    */
-  function testProcessSatecMeter() {
+  function testProcessModbusMeter() {
 
-    $handler = negawatt_normalizer_get_electricity_normalizer_handler('satec');
+    $handler = negawatt_normalizer_get_electricity_normalizer_handler('modbus');
 
     // Test TOUse functionality
 
@@ -310,13 +354,13 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
       strtotime('2014-6-12 15:00'), strtotime('2014-6-12 16:00'));
     $result_entities = self::flatten($result_entities);
 
-    $this->assertTrue(is_array($result_entities) && count($result_entities) == 2, 'process() returns an array with two object.');
+    $this->assertTrue(is_array($result_entities) && count($result_entities) == 2, '<b>Testing Modbus normalizer</b><br>process() returns an array with two object.');
     $result_entity = $result_entities[1];
 
     // Save entity ID to verify that later the same entity will be used
     $id = $result_entity->id;
 
-    $this->assertEqual($result_entity->type, \NegaWattNormalizerTimeManagerInterface::MINUTE, '<b>Testing SATEC normalizer</b><br>Entity type is correct.');
+    $this->assertEqual($result_entity->frequency, \NegaWattNormalizerTimeManagerInterface::MINUTE, 'Entity type is correct.');
     $this->assertEqual($result_entity->timestamp, strtotime('2014-6-12 15:15'), 'Processed timestamp is correct.');
     $this->assertEqual($result_entity->meter_nid, $this->meterNode1->nid, 'Meter nid is correct.');
     $this->assertEqual($result_entity->avg_power, 80, 'Average power calculation was correct.');
@@ -338,7 +382,7 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     $this->assertTrue(is_array($result_entities) && count($result_entities) == 1, 'process() returns an array with one object.');
     $result_entity = $result_entities[0];
 
-    $this->assertEqual($result_entity->type, \NegaWattNormalizerTimeManagerInterface::HOUR, '<b>Testing SATEC normalizer</b><br>Entity type is correct.');
+    $this->assertEqual($result_entity->frequency, \NegaWattNormalizerTimeManagerInterface::HOUR, '<b>Testing Modbus normalizer</b><br>Entity type is correct.');
     $this->assertEqual($result_entity->timestamp, strtotime('2014-6-12 15:00'), 'Processed timestamp is correct.');
     $this->assertEqual($result_entity->meter_nid, $this->meterNode1->nid, 'Meter nid is correct.');
     $this->assertTrue(abs($result_entity->avg_power - 40) < 0.0001, 'Average power calculation was correct.');
@@ -347,9 +391,10 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
 
     // Add new entity to electricity raw table.
     $values = array(
-      'type' => 'SATEC',
+      'meter_type' => 'modbus',
       'timestamp' => strtotime('2014-6-12 15:30'),
       'rate_type' => 'flat',
+      'frequency' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
       'meter_nid' => $this->meterNode1->nid,
       'kwh' => 30+10,
       // Supply a new minimal power factor of 0.89 (previous value was 0.90).
@@ -372,7 +417,7 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
 
     // Check that new entity value is correct.
     $result_entity = $result_entities[2];
-    $this->assertEqual($result_entity->type, \NegaWattNormalizerTimeManagerInterface::MINUTE, 'New entity type is correct.');
+    $this->assertEqual($result_entity->frequency, \NegaWattNormalizerTimeManagerInterface::MINUTE, 'New entity type is correct.');
     $this->assertEqual($result_entity->timestamp, strtotime('2014-6-12 15:30'), 'Processed timestamp is correct.');
     $this->assertEqual($result_entity->meter_nid, $this->meterNode1->nid, 'Meter nid is correct.');
     $this->assertEqual($result_entity->sum_kwh, 10, 'Sum kWh calculation was correct.');
@@ -381,7 +426,7 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
 
     // Check that the values were updated for HOUR entity after new entry.
     $result_entity = $result_entities[3];
-    $this->assertEqual($result_entity->type, \NegaWattNormalizerTimeManagerInterface::HOUR, 'HOUR entity type is correct.');
+    $this->assertEqual($result_entity->frequency, \NegaWattNormalizerTimeManagerInterface::HOUR, 'HOUR entity type is correct.');
     $this->assertEqual($result_entity->timestamp, strtotime('2014-6-12 15:00'), 'Processed timestamp is correct.');
     $this->assertEqual($result_entity->meter_nid, $this->meterNode1->nid, 'Meter nid is correct.');
     $this->assertTrue(abs($result_entity->avg_power - 40) < 0.0001, 'Average power calculation was correct.');
@@ -396,39 +441,43 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
 
     // Check that new entity value is correct.
     $result_entity = $result_entities[2];
-    $this->assertEqual($result_entity->type, \NegaWattNormalizerTimeManagerInterface::MINUTE, 'MINUTE entity type is correct.');
+    $this->assertEqual($result_entity->frequency, \NegaWattNormalizerTimeManagerInterface::MINUTE, 'MINUTE entity type is correct.');
     $this->assertEqual($result_entity->timestamp, strtotime('2014-6-12 15:30'), 'Processed timestamp is correct.');
     $this->assertEqual($result_entity->meter_nid, $this->meterNode1->nid, 'Meter nid is correct.');
     $this->assertEqual($result_entity->avg_power, 40, 'Average power calculation was correct.');
     $this->assertTrue(abs($result_entity->min_power_factor - 0.89) < 0.0001, 'Min power-factor calculation was correct.');
 
     $result_entity = $result_entities[3];
-    $this->assertEqual($result_entity->type, \NegaWattNormalizerTimeManagerInterface::HOUR, 'HOUR entity type is correct.');
+    $this->assertEqual($result_entity->frequency, \NegaWattNormalizerTimeManagerInterface::HOUR, 'HOUR entity type is correct.');
     $this->assertEqual($result_entity->timestamp, strtotime('2014-6-12 15:00'), 'Processed timestamp is correct.');
     $this->assertEqual($result_entity->meter_nid, $this->meterNode1->nid, 'Meter nid is correct.');
     $this->assertTrue(abs($result_entity->avg_power - 40) < 0.0001, 'Average power calculation was correct.');
     $this->assertTrue(abs($result_entity->min_power_factor - 0.89) < 0.0001, 'Min power-factor calculation was correct.');
 
     $result_entity = $result_entities[4];
-    $this->assertEqual($result_entity->type, \NegaWattNormalizerTimeManagerInterface::DAY, 'DAY entity type is correct.');
+    $this->assertEqual($result_entity->frequency, \NegaWattNormalizerTimeManagerInterface::DAY, 'DAY entity type is correct.');
     $this->assertEqual($result_entity->timestamp, strtotime('2014-6-12 00:00'), 'Processed timestamp is correct.');
     $this->assertEqual($result_entity->meter_nid, $this->meterNode1->nid, 'Meter nid is correct.');
     $this->assertTrue(abs($result_entity->avg_power - 40) < 0.0001, 'Average power calculation was correct.');
     $this->assertTrue(abs($result_entity->min_power_factor - 0.89) < 0.0001, 'Min power-factor calculation was correct.');
 
     $result_entity = $result_entities[5];
-    $this->assertEqual($result_entity->type, \NegaWattNormalizerTimeManagerInterface::MONTH, 'MONTH entity type is correct.');
-    $this->assertEqual($result_entity->timestamp, strtotime('2014-6-1 00:00'), 'Processed timestamp is correct.');
+    $this->assertEqual($result_entity->frequency, \NegaWattNormalizerTimeManagerInterface::MONTH, 'MONTH entity type is correct.');
+    // Note that month entity begins at 6-12 15:00 since the raw entity begins at that time - there's no rounding to month boundary.
+    $this->assertEqual($result_entity->timestamp, strtotime('2014-6-12 15:00'), 'Processed timestamp is correct.');
     $this->assertEqual($result_entity->meter_nid, $this->meterNode1->nid, 'Meter nid is correct.');
-    $this->assertTrue(abs($result_entity->avg_power - 40) < 0.0001, 'Average power calculation was correct.');
-    $this->assertTrue(abs($result_entity->min_power_factor - 0.89) < 0.0001, 'Min power-factor calculation was correct.');
+    // Can't compute average power with only one raw entity.
+    $this->assertNull($result_entity->avg_power, 'Average power calculation was correct.');
+    // For modbus meter, which has cumulative kwh count, can't compute sum-kwh with only one raw record.
+    $this->assertEqual($result_entity->sum_kwh, 0, 'Sum-kwh is correct.');
+    $this->assertTrue(abs($result_entity->min_power_factor - 0.90) < 0.0001, 'Min power-factor calculation was correct.');
 
     $result_entity = $result_entities[6];
-    $this->assertEqual($result_entity->type, \NegaWattNormalizerTimeManagerInterface::YEAR, 'YEAR entity type is correct.');
+    $this->assertEqual($result_entity->frequency, \NegaWattNormalizerTimeManagerInterface::YEAR, 'YEAR entity type is correct.');
     $this->assertEqual($result_entity->timestamp, strtotime('2014-1-1 00:00'), 'Processed timestamp is correct.');
     $this->assertEqual($result_entity->meter_nid, $this->meterNode1->nid, 'Meter nid is correct.');
-    $this->assertTrue(abs($result_entity->avg_power - 40) < 0.0001, 'Average power calculation was correct.');
-    $this->assertTrue(abs($result_entity->min_power_factor - 0.89) < 0.0001, 'Min power-factor calculation was correct.');
+    $this->assertEqual($result_entity->avg_power, 0, 'Average power calculation was correct.');
+    $this->assertTrue(abs($result_entity->min_power_factor - 0.90) < 0.0001, 'Min power-factor calculation was correct.');
 
     // Check that when reading the next hour, time length of the raw entity is calculated correctly
     // process() should read the previous raw entity and calc a 30min time length.
@@ -440,7 +489,7 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
 
     // Check that new entity value is correct.
     $result_entity = $result_entities[0];
-    $this->assertEqual($result_entity->type, \NegaWattNormalizerTimeManagerInterface::MINUTE, 'New entity type is correct.');
+    $this->assertEqual($result_entity->frequency, \NegaWattNormalizerTimeManagerInterface::MINUTE, 'New entity type is correct.');
     $this->assertEqual($result_entity->timestamp, strtotime('2014-6-12 16:00'), 'Processed timestamp is correct.');
     $this->assertEqual($result_entity->meter_nid, $this->meterNode1->nid, 'Meter nid is correct.');
     $this->assertEqual($result_entity->sum_kwh, 20, 'Sum kWh calculation was correct.');
@@ -497,7 +546,7 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
 
     $id = $result_entity->id;
 
-    $this->assertEqual($result_entity->type, \NegaWattNormalizerTimeManagerInterface::MONTH, 'Entity type is correct.');
+    $this->assertEqual($result_entity->frequency, \NegaWattNormalizerTimeManagerInterface::MONTH, 'Entity type is correct.');
     $this->assertEqual($result_entity->rate_type, \ElectricityNormalizerInterface::FLAT, 'Rate type is correct.');
     $this->assertEqual($result_entity->timestamp, strtotime('2014-2-1 00:00'), 'Processed timestamp is correct.');
     $this->assertEqual($result_entity->meter_nid, $this->meterNode3->nid, 'Meter nid is correct.');
@@ -511,8 +560,8 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     $this->assertEqual($wrapper->field_last_processed->value(), strtotime('2014-2-1 00:00'), 'Node last-processed field is correct.');
 
     // Modify an entity in electricity raw table.
-    $entity = entity_load('electricity_raw', array(5));
-    $entity = $entity[5];
+    $entity = entity_load('electricity_raw', array(6));
+    $entity = $entity[6];
     $entity->kwh = 3360;
     $entity->power_factor = 0.90;
     $entity->save();
@@ -528,7 +577,7 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     $this->assertEqual($result_entity->id, $id, '<b>Second call to process().</b><br>The existing electricity entity is used.');
 
     // Check that the values were updated after new entry.
-    $this->assertEqual($result_entity->type, \NegaWattNormalizerTimeManagerInterface::MONTH, 'Entity type is correct.');
+    $this->assertEqual($result_entity->frequency, \NegaWattNormalizerTimeManagerInterface::MONTH, 'Entity type is correct.');
     $this->assertEqual($result_entity->timestamp, strtotime('2014-2-1 00:00'), 'Processed timestamp is correct.');
     $this->assertEqual($result_entity->meter_nid, $this->meterNode3->nid, 'Meter nid is correct.');
     $this->assertTrue($result_entity->avg_power < 0.0001, 'Average power calculation was correct.');
@@ -541,7 +590,7 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
 
     // Check that the values for the 3rd entity are correct.
     $result_entity = $result_entities[2];
-    $this->assertEqual($result_entity->type, \NegaWattNormalizerTimeManagerInterface::MONTH, 'Entity type is correct.');
+    $this->assertEqual($result_entity->frequency, \NegaWattNormalizerTimeManagerInterface::MONTH, 'Entity type is correct.');
     $this->assertEqual($result_entity->rate_type, \ElectricityNormalizerInterface::MID, 'The 3rd array element has rate type "low".');
     $this->assertEqual($result_entity->timestamp, strtotime('2014-2-1 00:00'), 'Processed timestamp is correct.');
     $this->assertEqual($result_entity->meter_nid, $this->meterNode3->nid, 'Meter nid is correct.');
@@ -562,7 +611,7 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     // Check that the values for the 3rd entity are correct.
     $result_entity = $result_entities[0];
     $this->assertTrue($result_entity instanceof \Electricity, 'Item 0 class is Electricity.');
-    $this->assertEqual($result_entity->type, \NegaWattNormalizerTimeManagerInterface::MONTH, 'Entity type is correct.');
+    $this->assertEqual($result_entity->frequency, \NegaWattNormalizerTimeManagerInterface::MONTH, 'Entity type is correct.');
     $this->assertEqual($result_entity->timestamp, strtotime('2014-3-1 00:00'), 'Processed timestamp is correct.');
     $this->assertEqual($result_entity->meter_nid, $this->meterNode3->nid, 'Meter nid is correct.');
     $this->assertEqual($result_entity->rate_type, \ElectricityNormalizerInterface::MID, 'Rate-type is correct.');
@@ -573,7 +622,7 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     // Check that the values for the 3rd entity are correct.
     $result_entity = $result_entities[1];
     $this->assertTrue($result_entity instanceof \Electricity, 'Item 1 class is Electricity.');
-    $this->assertEqual($result_entity->type, \NegaWattNormalizerTimeManagerInterface::MONTH, 'Entity type is correct.');
+    $this->assertEqual($result_entity->frequency, \NegaWattNormalizerTimeManagerInterface::MONTH, 'Entity type is correct.');
     $this->assertEqual($result_entity->timestamp, strtotime('2014-3-1 00:00'), 'Processed timestamp is correct.');
     $this->assertEqual($result_entity->meter_nid, $this->meterNode3->nid, 'Meter nid is correct.');
     $this->assertEqual($result_entity->rate_type, \ElectricityNormalizerInterface::PEAK, 'Rate-type is correct.');
@@ -593,7 +642,7 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
       '<b>Testing process with no rate-type nor frequency, while time period is not on time-slice boundaries, 6 entities should be returned.</b><br>Process() returned an array with 4 items.');
     $result_entity = $result_entities[0];
     $this->assertTrue($result_entity instanceof \Electricity , 'Entity 0 is an objects of class Electricity.');
-    $this->assertEqual($result_entity->type, \NegaWattNormalizerTimeManagerInterface::MONTH, 'Entity 0 type is correct.');
+    $this->assertEqual($result_entity->frequency, \NegaWattNormalizerTimeManagerInterface::MONTH, 'Entity 0 type is correct.');
     $this->assertEqual($result_entity->timestamp, strtotime('2014-3-1 00:00'), 'Entity 0 timestamp is correct.');
     $this->assertEqual($result_entity->rate_type, ElectricityNormalizerInterface::MID, 'Entity 0 rate_type is correct.');
     $this->assertEqual($result_entity->meter_nid, $this->meterNode3->nid, 'Meter nid is correct.');
@@ -602,7 +651,7 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
 
     $result_entity = $result_entities[1];
     $this->assertTrue($result_entity instanceof \Electricity , 'Entity 1 is an objects of class Electricity.');
-    $this->assertEqual($result_entity->type, \NegaWattNormalizerTimeManagerInterface::MONTH, 'Entity 1 type is correct.');
+    $this->assertEqual($result_entity->frequency, \NegaWattNormalizerTimeManagerInterface::MONTH, 'Entity 1 type is correct.');
     $this->assertEqual($result_entity->timestamp, strtotime('2014-3-1 00:00'), 'Entity 1 timestamp is correct.');
     $this->assertEqual($result_entity->rate_type, ElectricityNormalizerInterface::PEAK, 'Entity 1 rate_type is correct.');
     $this->assertTrue(abs($result_entity->avg_power - 2) < 0.01, 'Average power calculation was correct.');
@@ -614,7 +663,7 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
         (($result_entities[4]->rate_type == ElectricityNormalizerInterface::PEAK) ? 4 : 5));
 
     $result_entity = $result_entities[$peak_entity];
-    $this->assertEqual($result_entity->type, \NegaWattNormalizerTimeManagerInterface::YEAR, 'Peak entity type is correct.');
+    $this->assertEqual($result_entity->frequency, \NegaWattNormalizerTimeManagerInterface::YEAR, 'Peak entity type is correct.');
     $this->assertEqual($result_entity->timestamp, strtotime('2014-1-1 00:00'), 'Entity timestamp is correct.');
     $this->assertEqual($result_entity->rate_type, ElectricityNormalizerInterface::PEAK, 'Entity rate_type is correct.');
     $this->assertEqual($result_entity->meter_nid, $this->meterNode3->nid, 'Meter nid is correct.');
@@ -633,12 +682,12 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     $this->assertTrue(is_array($result_entities) && count($result_entities) == 2,
       '<b>Testing process with node that doesn\'t have last processed field.</b><br>Process() returned 2 items.');
     $result_entity = $result_entities[0];
-    $this->assertEqual($result_entity->type, \NegaWattNormalizerTimeManagerInterface::MONTH, 'Entity 0 type is correct.');
+    $this->assertEqual($result_entity->frequency, \NegaWattNormalizerTimeManagerInterface::MONTH, 'Entity 0 type is correct.');
     $this->assertEqual($result_entity->timestamp, strtotime('2014-2-2 13:56'), 'Entity timestamp is correct.');
     $this->assertEqual($result_entity->rate_type, ElectricityNormalizerInterface::FLAT, 'Entity 0 rate_type is correct.');
 
     $result_entity = $result_entities[1];
-    $this->assertEqual($result_entity->type, \NegaWattNormalizerTimeManagerInterface::YEAR, 'Entity 1 type is correct.');
+    $this->assertEqual($result_entity->frequency, \NegaWattNormalizerTimeManagerInterface::YEAR, 'Entity 1 type is correct.');
     $this->assertEqual($result_entity->timestamp, strtotime('2014-1-1 00:00'), 'Entity timestamp is correct.');
 
     // Make sure node's last processed field is correct
@@ -663,9 +712,10 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     $message = 'Electricity-raw entity can have a negative kWh';
     try {
       $values = array(
-        'type' => 'IEC',
+        'meter_type' => 'iec',
         'timestamp' => strtotime('2014-3-1 00:00'),
         'rate_type' => 'flat',
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MONTH,
         'meter_nid' => $this->meterNode4->nid,
         'kwh' => -123,
         'power_factor' => 0.92,

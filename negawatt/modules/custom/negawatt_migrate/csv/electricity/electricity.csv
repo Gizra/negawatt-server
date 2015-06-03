@@ -1,4 +1,4 @@
-id,type,date_time,rate_type,meter_nid,sum_kwh,avg_power,min_power_factor
+id,frequency,date_time,rate_type,meter_nid,sum_kwh,avg_power,min_power_factor
 1,2,2013-01-01 00:00,flat,meter1,1629,2.2625,0
 2,2,2013-02-01 00:00,flat,meter1,8749,12.1513888889,0
 3,2,2013-03-01 00:00,flat,meter1,7540,10.4722222222,0

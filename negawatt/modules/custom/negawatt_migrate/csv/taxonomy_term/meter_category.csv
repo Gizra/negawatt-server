@@ -98,3 +98,43 @@ account6,street_6,תאורת רחובות,תאורת חוץ,,תאורת רחוב
 account6,traffic_6,רמזור,תאורת חוץ,,רמזור,traffic_light,רמזור
 account6,water_6,מתקן מים,,,מתקן מים,water,מתקן מים|חימצון|בריכת אגירה
 account6,other_6,אחר,,,אחר,other
+account7,public_7,מבנה ציבור,,,מבנים ציבוריים כגון משרדים,public_building
+account7,office_7,מבנה משרדים,מבנה ציבור,,מבנה משרדים,public_building
+account7,municipality_7,משרדי העירייה,מבנה ציבור,,משרדי העירייה,public_building,עירייה|משרד|עיריה|עיריית|אגף
+account7,library_7,ספריה,מבנה ציבור,,ספריה,public_building,ספריה
+account7,edu_7,מבנה חינוך,,,מבנה חינוך,education
+account7,kindergarten_7,גן ילדים,מבנה חינוך,,גני ילדים,education,גן|פעוטון
+account7,school_7,בית ספר,מבנה חינוך,,בתי ספר,education,בית ספר|בית הספר|בי"ס|ביה"ס|ביהס|בה"ס
+account7,pais_7,אשכול פיס,מבנה חינוך,,אשכול פיס,education,אשכול פיס|אשכולות פיס
+account7,youth_7,מרכז נוער,מבנה חינוך,,מרכז נוער,education
+account7,pedago_7,מרכז פדגוגי,מבנה חינוך,,מרכז פדגוגי,education,פדגוגי
+account7,outdoor_7,תאורת חוץ,,,תאורת חוץ,lighting
+account7,street_7,תאורת רחובות,תאורת חוץ,,תאורת רחובות,lighting,תאורת|מאור|מרכזיה|מ.רחובות|פארק|תאורה|מרכזית
+account7,traffic_7,רמזור,תאורת חוץ,,רמזור,traffic_light,רמזור
+account7,security_7,בטחון,,,בטחון,security
+account7,shelter_7,מקלט,בטחון,,מקלט,security,מקלט
+account7,storeroom_7,מחסן חרום,בטחון,,מחסן חרום,security,מחסן
+account7,police_7,שיטור קהילתי,בטחון,,שיטור קהילתי,security,שיטור|משמר
+account7,sport_7,מתקן ספורט,,,מתקן ספורט,sports
+account7,pool_7,בריכת שחייה,מתקן ספורט,,בריכת שחייה,sports,שחייה|שחיה
+account7,field_7,מגרש ספורט,מתקן ספורט,,מגרש ספורט,sports,מגרש
+account7,hall_7,אולם ספורט,מתקן ספורט,,אולם ספורט,sports,אולם
+account7,religion_7,שרותי דת,,,שרותי דת,religion
+account7,prayer_7,בית תפילה,שרותי דת,,בית תפילה,religion
+account7,synagogue_7,בית כנסת,בית תפילה,,בית כנסת,religion,כנסת
+account7,church_7,כנסיה,בית תפילה,,כנסיה,religion,כנסיה
+account7,mosque_7,מסגד,בית תפילה,,מסגד,religion,מסגד
+account7,relcouncil_7,מועצה דתית,שרותי דת,,מועצה דתית,religion
+account7,mikve_7,מקווה,שרותי דת,,מקווה,religion,מקווה
+account7,health_7,בריאות,,,בריאות,health
+account7,mental_7,בריאות הנפש,בריאות,,בריאות הנפש,health
+account7,paishealth_7,פיס לבריאות,בריאות,,פיס לבריאות,health,פיס לבריאות|פייס לבריאות
+account7,water_7,מתקן מים,,,מתקן מים,water,מתקן מים|חימצון|בריכת אגירה
+account7,welfare_7,רווחה,,,רווחה,welfare,רווחה
+account7,apartment_7,דירת רווחה,רווחה,,דירת רווחה,welfare
+account7,psyco_7,השירות הפסיכולוגי,רווחה,,השירות הפסיכולוגי,welfare,פסיכולוגי
+account7,club_7,מועדון,רווחה,,מועדון,welfare,מועדון|מועדונית
+account7,elderly_7,מרכז יום לקשיש,רווחה,,מרכז יום לקשיש,welfare,קשישים|לקשיש
+account7,community_7,מרכז קהילתי,רווחה,,מרכז קהילתי,welfare
+account7,culture_7,תרבות,,,תרבות,culture
+account7,other_7,אחר,,,אחר,other

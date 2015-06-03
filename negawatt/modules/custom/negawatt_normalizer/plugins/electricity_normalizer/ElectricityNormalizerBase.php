@@ -316,14 +316,45 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
     }
     else {
       // No last-processed value. Take the date-time of the oldest entity.
-      $last_processed = \NegaWattNormalizerDataProviderBase::getOldestRawElectricityEntity($this->getMeterNode());
+      $last_processed = \NegaWattNormalizerDataProviderBase::getOldestRawElectricityEntity($this->getMeterNode(), $frequency);
       self::debugMessage("last processed set from oldest raw: $last_processed (@time_from)", 1, $last_processed);
+    }
+
+    // Get number of raw entities.
+    $num_raw_entities = \NegaWattNormalizerDataProviderBase::getNumberOfRawElectricityEntities($this->getMeterNode(), $frequency);
+    if ($num_raw_entities == 0) {
+      if ($frequency == $this->getMeterMaxFrequency()) {
+        // No raw entities for this frequency, and we're at the highest frequency.
+        // If there are no normalized entities as well, there's nothing to calc.
+        $num_normalized_entities = \NegaWattNormalizerDataProviderBase::getNumberOfNormalizedElectricityEntities($this->getMeterNode(), $frequency);
+        // No normalized entities neither, nothing to do here.
+        if (!$num_normalized_entities) {
+          self::debugMessage("No raw nor normalized entities to process, leaving processByFrequency.", 1);
+          return array(
+            'entities' => array(),
+            'last_processed' => NULL,
+          );
+        }
+      }
+      else {
+        // No entities for this frequency, but we're NOT at the highest frequency,
+        // take time interval from higher frequency.
+        $from_timestamp = $last_processed ? $last_processed : \NegaWattNormalizerDataProviderBase::getOldestNormalizedElectricityEntity($this->getMeterNode(), $frequency + 1);
+        $to_timestamp = \NegaWattNormalizerDataProviderBase::getLatestNormalizedElectricityEntity($this->getMeterNode(), $frequency + 1);
+        // Increase end-timestamp so the last entity will be calculated
+        // (the loop in processNormalizedEntities() is for timestamps that are
+        // *smaller* then the end-timestamp)
+        $to_timestamp++;
+      }
     }
 
     list($from_timestamp, $to_timestamp) = $this->getTimeManager()->getTimePeriod($from_timestamp, $to_timestamp, $last_processed);
 
-    if ($frequency == $this->getMeterMaxFrequency()) {
-      // Processing max frequency, analyze data from raw data.
+    // @fixme: handle the case where we have a small time-span of high frequency
+    // raw date (e.g. minutes), but a long time-span of lower frequency (e.g. months).
+    if ($num_raw_entities) {
+      // Has raw entities (probably processing max frequency),
+      // analyze data from raw entities.
       return self::processRawEntities($from_timestamp, $to_timestamp, $frequency);
     }
 
