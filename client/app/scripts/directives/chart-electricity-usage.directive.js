@@ -83,8 +83,6 @@ angular.module('negawattDirectives', [])
          *  The new parameters to be updated on the filters.
          */
         function updateElectricityFilters(params) {
-          // Check if
-
           // Update url with params updated.
           angular.extend($stateParams, params);
           $state.refreshUrlWith($stateParams);

@@ -125,7 +125,7 @@ angular.module('negawattClientApp')
       // Cache messages data.
       cache[key] = {
         data: (cache[key] ? cache[key].data : []).concat(electricity.data),
-        limits: electricity.summary.electricity_interval,
+        limits: electricity.summary.timestamp,
         timestamp: new Date()
       };
 

@@ -38,7 +38,7 @@ angular.module('negawattClientApp')
 
 
     // Set the limits of the Chart Usage.
-    ChartUsagePeriod.setLimits(filters.limits);
+    // ChartUsagePeriod.setLimits(filters.limits);
 
     /**
      * Force load of the electricity data.
