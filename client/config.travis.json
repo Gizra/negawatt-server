@@ -1,6 +1,6 @@
 {
   "development": {
-    "backend": "http://localhost/negawatt-server/www",
+    "backend": "http://127.0.0.1:8080",
     "cname": "",
     "debugUiRouter": false,
     "openweather": {
