@@ -1,0 +1,11 @@
+name = Image
+core = 7.x
+package = Negawatt
+dependencies[] = ctools
+dependencies[] = image
+dependencies[] = strongarm
+features[ctools][] = strongarm:strongarm:1
+features[features_api][] = api:2
+features[image][] = thumbnail_rotate
+features[variable][] = image_toolkit
+features[variable][] = imagemagick_convert

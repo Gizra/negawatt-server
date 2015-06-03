@@ -318,11 +318,11 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     $this->assertTrue($location['lat'] == 31.6087049 && $location['lng'] == 34.7735353 && $location['lat_sin'] != 0, 'Lat/Long OK.');
     $this->assertTrue($address['thoroughfare'] == 'לכיש 25' && $address['locality'] == 'קרית גת' && $address['country'] == 'IL', 'Address field OK.');
 
-    // Node 3 got wrong address
+    // Node 3 got bad address
     $wrapper = entity_metadata_wrapper('node', $this->meterNode3);
     $location = $wrapper->field_location->value();
     $address = $wrapper->field_address->value();
-    $this->assertTrue(!$wrapper->field_location_valid->value(), 'Geocoding with wrong address failed.');
+    $this->assertTrue(!$wrapper->field_location_valid->value(), 'Geocoding with bad address failed.');
     $this->assertTrue($location['lat'] == 31.611148 && $location['lng'] == 34.768459 && $location['lat_sin'] != 0, 'Lat/Long OK.');
     $this->assertTrue($address['thoroughfare'] == '' && $address['locality'] == 'קרית גת' && $address['country'] == 'IL', 'Address field OK.');
 

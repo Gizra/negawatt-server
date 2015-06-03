@@ -359,6 +359,8 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     $this->assertEqual($entity['frequency'], NegaWattNormalizerTimeManagerInterface::HOUR, 'Entity 4 is of type HOUR.');
     $this->assertEqual($entity['meter'], $this->meterNode1->nid, 'Entity is for meter 1.');
     $this->assertEqual($entity['timestamp'], strtotime('2014-6-12 16:00'), 'Entity timestamp is correct.');
+    $summary = $handler->valueMetadata['electricity']['summary'];
+    $this->assertEqual($summary['type'], 'category', 'Summary type is correct.');
 
     // @todo: Add test for summation of kWh of different meters. For that we
     // need to get the data from a database.
