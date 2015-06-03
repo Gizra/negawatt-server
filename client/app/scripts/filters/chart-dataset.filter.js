@@ -18,16 +18,29 @@ angular.module('negawattClientApp')
       collection = {
         type: chartFrequencyActive.chart_type,
         data: getDataset(collection),
-        options: getOptions(chartFrequencyActive.chart_type)
+        options: getOptions(chartFrequencyActive)
       }
       return collection;
     }
 
     /**
      * Return the options of the selected chart.
+     *
+     * @param chartFrequencyActive
+     *  The specific chart options of the seleted frequency.
+     * @returns {*}
+     *  Chart options object.
      */
-    function getOptions(type) {
-      return ChartOptions[type];
+    function getOptions(chartFrequencyActive) {
+      return angular.extend(ChartOptions[chartFrequencyActive.type],
+        {
+          vAxis: {
+            title: chartFrequencyActive.axis_v_title,
+          },
+          hAxis: {
+            title: chartFrequencyActive.axis_h_title
+          }
+        });
     }
 
     /**
