@@ -35,6 +35,13 @@ class NegawattEntityMeterBase extends \NegawattEntityBaseNode {
       'property' => 'field_place_locality',
     );
 
+    $public_fields['image'] = array(
+      'property' => 'field_image',
+      'process_callbacks' => array(
+        array($this, 'meterImage'),
+      ),
+    );
+
     $public_fields['account'] = array(
       'property' => OG_AUDIENCE_FIELD,
       'resource' => array(
@@ -133,6 +140,26 @@ class NegawattEntityMeterBase extends \NegawattEntityBaseNode {
   }
 
   /**
+   * Process callback, that returns thumbnail url for image.
+   *
+   * @param $value
+   *   Image file info record.
+   *
+   * @return array
+   *   Thumbnail url for the image.
+   */
+  protected function meterImage($value) {
+    if (empty($value)) {
+      return NULL;
+    }
+
+    $uri = $value[0]['uri'];
+    $thumb_url = image_style_url('thumbnail_rotate', $uri);
+
+    return array('url' => $thumb_url);
+  }
+
+  /**
    * Prepare data for summary section.
    *
    * Prepare a min and max electricity_time_interval. The summary will be used
@@ -203,7 +230,7 @@ class NegawattEntityMeterBase extends \NegawattEntityBaseNode {
     $this->valueMetadata['meter']['summary'] = $summary;
   }
 
-    /**
+  /**
    * {@inheritdoc}
    *
    * Prepare summary section for the formatter.

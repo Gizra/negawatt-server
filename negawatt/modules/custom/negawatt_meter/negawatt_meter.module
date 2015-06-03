@@ -20,6 +20,55 @@ function negawatt_meter_is_meter($node_type) {
 }
 
 /**
+ * Read image EFIX record and extract GPS location, if exists.
+ *
+ * @param $image
+ *    Path to image file.
+ *
+ * @return array|bool
+ *    array(LAT, LONG), if GPS data was found.
+ *    FALSE, if GPS data wasn't found in image.
+ */
+function negawatt_exif_to_latlong($image)
+{
+  //Read EXIF data
+  $exif=exif_read_data($image, 0, true);
+  if(!$exif || empty($exif['GPS']['GPSLatitude']))
+  {
+    // No Geocode data found
+    return false;
+  }
+  else
+  {
+    // Parse Lat/Long data and convert to decimal degrees
+    $lat_ref = $exif['GPS']['GPSLatitudeRef'];
+    $lat = $exif['GPS']['GPSLatitude'];
+    list($num, $dec) = explode('/', $lat[0]);
+    $lat_s = $num / $dec;
+    list($num, $dec) = explode('/', $lat[1]);
+    $lat_m = $num / $dec;
+    list($num, $dec) = explode('/', $lat[2]);
+    $lat_v = $num / $dec;
+
+    $lon_ref = $exif['GPS']['GPSLongitudeRef'];
+    $lon = $exif['GPS']['GPSLongitude'];
+    list($num, $dec) = explode('/', $lon[0]);
+    $lon_s = $num / $dec;
+    list($num, $dec) = explode('/', $lon[1]);
+    $lon_m = $num / $dec;
+    list($num, $dec) = explode('/', $lon[2]);
+    $lon_v = $num / $dec;
+
+    // Calculates the location in decimal form.
+    $gps_int = array(
+      ($lat_s + $lat_m / 60.0 + $lat_v / 3600.0) * ($lat_ref == 'N' ? +1 : -1),
+      ($lon_s + $lon_m / 60.0 + $lon_v / 3600.0) * ($lon_ref == 'E' ? +1 : -1),
+    );
+    return $gps_int;
+  }
+}
+
+/**
  * Implements hook_node_presave() - Check and update Geocode, if needed.
  *
  * For iec_meter, if place-address and/or place-locality were changed, resolve
@@ -31,21 +80,49 @@ function negawatt_meter_is_meter($node_type) {
  */
 function negawatt_meter_node_presave($node) {
 
-  require_once libraries_get_path('geocoder') . '/src/autoload.php';
-
   // Make sure we're dealing with a meter.
   if (!negawatt_meter_is_meter($node->type)) {
     return;
   }
 
+  require_once libraries_get_path('geocoder') . '/src/autoload.php';
+
   $wrapper = entity_metadata_wrapper('node', $node);
   // New node doesn't have 'original' field.
   $wrapper_original = $node->is_new ? NULL : entity_metadata_wrapper('node', $node->original);
+  $location_changed = FALSE;
 
+  // Check if image field was changed.
+  $image_exists = $wrapper->field_image->value();
+  $original_image_exists = $node->is_new ? FALSE : !empty($wrapper_original->field_image) && $wrapper_original->field_image->value();
+  $image_was_changed = $image_exists && !empty($node->is_new) ||
+    $image_exists && !$original_image_exists ||
+    $image_exists && $original_image_exists &&
+    $wrapper->field_image[0]->file->fid->value() != $wrapper_original->field_image[0]->file->fid->value();
+
+  if ($image_was_changed) {
+    // Try getting GPS data from EXIF record of the new image.
+    $fid = $wrapper->field_image[0]->file->fid->value();
+    $file = file_load($fid);
+    $path = drupal_realpath($file->uri);
+    $location = negawatt_exif_to_latlong($path);
+    if ($location) {
+      // Set location field.
+      $lat = $location[0];
+      $lng = $location[1];
+      // Mark to recalculate location field.
+      $location_changed = TRUE;
+    }
+  }
+
+  // If address field was changed, try geocoding by the address. However, don't
+  // try to geocode if location was already set by image EXIF above.
+  
   // Check if address field was changed.
-  if (!empty($node->is_new) ||
+  if ((!empty($node->is_new) ||
     $wrapper->field_place_address->value() != $wrapper_original->field_place_address->value() ||
-    $wrapper->field_place_locality->value() != $wrapper_original->field_place_locality->value()) {
+    $wrapper->field_place_locality->value() != $wrapper_original->field_place_locality->value())
+    && !$location_changed) {
 
     // Prepare geocoder as static.
     $adapter  = &drupal_static(__FUNCTION__ . '_adapter', NULL);
@@ -59,7 +136,7 @@ function negawatt_meter_node_presave($node) {
     $street_addr = $wrapper->field_place_address->value();
     $city = $wrapper->field_place_locality->value();
     $full_address = $street_addr . ', ' . $city;
-    $success = TRUE;
+    $geocode_succeeded = TRUE;
     try {
       $geocode = $geocoder->geocode($full_address);
       // Test that indeed geocode managed to decipher street address
@@ -72,30 +149,39 @@ function negawatt_meter_node_presave($node) {
     catch (Exception $e) {
       watchdog('iec geocode', 'Couldn`t geocode the address "@address"', array('@address' => $full_address), WATCHDOG_WARNING);
       $wrapper->field_location_valid->set(FALSE);
-      $success = FALSE;
+      $geocode_succeeded = FALSE;
     }
 
-    if (!$success) {
+    if (!$geocode_succeeded) {
       // Geocoding on full address failed, try locating on city name only.
       try {
         $street_addr = '';
         $geocode = $geocoder->geocode($city);
-        $success = TRUE;
+        $geocode_succeeded = TRUE;
       }
       catch (Exception $e) {
         // Geocoding failed.
         watchdog('iec geocode', 'Couldn`t geocode the city "@address"', array('@address' => $city), WATCHDOG_WARNING);
-        $success = FALSE;
       }
     }
 
-    if (!$success) {
-      return;
-    }
+    // Set location field, if geocoding was successful.
+    if ($geocode_succeeded) {
+      $lat = $geocode->getLatitude();
+      $lng = $geocode->getLongitude();
+      // Mark to recalculate location field.
+      $location_changed = TRUE;
 
-    // Set location field, only if geolocation succeeded.
-    $lat = $geocode->getLatitude();
-    $lng = $geocode->getLongitude();
+      $wrapper->field_address->set(array(
+        'thoroughfare' => $street_addr,
+        'locality' => $city,
+        'country' => $geocode->getCountryCode(),
+      ));
+    }
+  }
+
+  // Update location field.
+  if ($location_changed) {
     // hook_node_presave() is called after hook_field_presave(), so
     // geolocation_field_presave() was already called and will not be called
     // again. Has to call it explicitly to calc field-location's internal
@@ -109,12 +195,6 @@ function negawatt_meter_node_presave($node) {
     ));
     geolocation_field_presave('node', $node, $field, $entity, $langcode, $items);
     $wrapper->field_location->set($items[0]);
-
-    $wrapper->field_address->set(array(
-      'thoroughfare' => $street_addr,
-      'locality' => $city,
-      'country' => $geocode->getCountryCode(),
-    ));
   }
 }
 

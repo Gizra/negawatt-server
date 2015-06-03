@@ -71,7 +71,7 @@ angular.module('negawattClientApp')
       // Define endpoint with filters.
       // Get only meters that has electricity data.
       url = Config.backend + '/api/meters?'
-        + 'filter[has_electricity]=1'
+//        + 'filter[has_electricity]=1'
         + '&filter[account]=' + accountId
         + '&page=' + pageNumber;
 
@@ -180,7 +180,8 @@ angular.module('negawattClientApp')
         }
 
         // Set meter tooltip
-        meters.data.list[item.id].message = item.place_description + '<br>' + item.place_address + '<br>' + item.place_locality;
+        meters.data.list[item.id].message = (item.image ? ('<img src="' + item.image.url + '"><br>') : '') +
+          item.place_description + '<br>' + item.place_address + '<br>' + item.place_locality;
 
         // Extend meter with marker properties and methods.
         angular.extend(meters.data.list[item.id], Marker);

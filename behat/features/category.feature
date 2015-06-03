@@ -12,7 +12,7 @@ Feature: Category
   @javascript
   Scenario: Show highlight the active category with a meter selected
     Given I login with user "carlos"
-    When I visit "/#/dashboard/1/marker/9?categoryId=14"
+    When I visit "/#/dashboard/1/marker/10?categoryId=14"
     Then I should see the category active
 
   @javascript
@@ -38,7 +38,7 @@ Feature: Category
   @javascript
   Scenario: Show filter meters checkboxs when select a meter.
     Given I login with user "carlos"
-    When I reload "/#/dashboard/1/marker/8"
+    When I reload "/#/dashboard/1/marker/9"
     And I should see a marker selected
     Then the "מבנה חינוך" checkbox should be checked
     And the "בטחון" checkbox should be checked

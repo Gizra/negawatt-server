@@ -101,7 +101,7 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
    * @param $filter
    * @return array
    */
-  protected function handleMeterCategoryFilter($query, &$filter) {
+  protected function handleMeterCategoryFilter($query, &$filter, $addGrouping = TRUE) {
     // Handle meter categories.
 
     // Bother handling category filtering only if no 'meter' filter exists.
@@ -109,8 +109,9 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     $result_type = 'meter';
     if (!empty($filter['meter'])) {
       // Just set group by meter-nid
-      $query->groupBy('meter_nid');
-
+      if ($addGrouping) {
+        $query->groupBy('meter_nid');
+      }
       return array('result_type' => $result_type);
     }
 
@@ -140,13 +141,15 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
       // Modify the query to sum electricity according to the meters in the category.
       $query->condition('negawatt_electricity_normalized.meter_nid', $meters, 'IN');
       $query->fields('negawatt_electricity_normalized', array('meter_nid'));
-      $query->groupBy('negawatt_electricity_normalized.meter_nid');
+      if ($addGrouping) {
+        $query->groupBy('negawatt_electricity_normalized.meter_nid');
+      }
     }
     else {
       // Sub categories were found, show division by sub categories.
       $result_type = 'category';
 
-      // Build an mapping array: cat_id => array(all child cat ids);
+      // Build a mapping array: cat_id => array(all child cat ids);
       $child_cat_mapping = array();
       foreach ($taxonomy_array as $term) {
         if ($term->depth == 0) {
@@ -172,11 +175,16 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
         return $term->tid;
       }, $taxonomy_array);
       // Modify the query to sum electricity in each of the sub categories.
-      $query->join('field_data_og_vocabulary', 'cat', 'cat.entity_id = negawatt_electricity_normalized.meter_nid');
-      $query->condition('cat.og_vocabulary_target_id', $child_categories, 'IN');
+      // If parent category is 0 (that is, root category), there's no need to
+      // add 'IN' condition for categories - just grab all of them.
+      if ($parent_category != 0) {
+        $query->condition('cat.og_vocabulary_target_id', $child_categories, 'IN');
+      }
       $query->join('taxonomy_term_data', 'tax', 'tax.tid = cat.og_vocabulary_target_id');
       $query->fields('tax', array('tid', 'name'));
-      $query->groupBy('cat.og_vocabulary_target_id');
+      if ($addGrouping) {
+        $query->groupBy('cat.og_vocabulary_target_id');
+      }
     }
 
     unset($filter['meter_category']);
@@ -198,7 +206,83 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     $query->addExpression('SUM(negawatt_electricity_normalized.sum_kwh)', 'sum');
 
     return $query->execute();
+  }
 
+  /**
+   * A modified copy of RestfulDataProviderDbQuery::queryForListFilter()
+   *
+   * Add filters from http request to the query. However, skip filter for
+   * timestamp, since we don't want to limit the time range of the query.
+   *
+   * @param $query
+   *    The query to modify.
+   */
+  protected function queryForListFilterNoTimestamp($query) {
+    $public_fields = $this->getPublicFields();
+    foreach ($this->parseRequestForListFilter() as $filter) {
+      // Skip timestamp filter
+      if ($this->getPropertyColumnForQuery($public_fields[$filter['public_field']]) == 'timestamp') {
+        continue;
+      }
+      if (in_array(strtoupper($filter['operator'][0]), array('IN', 'BETWEEN'))) {
+        $column_name = $this->getPropertyColumnForQuery($public_fields[$filter['public_field']]);
+        $query->condition($column_name, $filter['value'], $filter['operator'][0]);
+        continue;
+      }
+      $condition = db_condition($filter['conjunction']);
+      for ($index = 0; $index < count($filter['value']); $index++) {
+        $column_name = $this->getPropertyColumnForQuery($public_fields[$filter['public_field']]);
+        $condition->condition($column_name, $filter['value'][$index], $filter['operator'][$index]);
+      }
+      $query->condition($condition);
+    }
+  }
+
+  /**
+   * Calculate min and max timestamp for electricity query.
+   *
+   * Build a query with all the filters and joins, like in prepareSummary().
+   * Add calculation of the min and max timestamp of electricity data for the
+   * account and frequency.
+   *
+   * @return array
+   *  min and max timestamps for electricity.
+   */
+  protected function calcMinMaxTimestamp() {
+    // Load query and apply filter options.
+    $query = parent::getQuery();
+    // Add request filters to query, but not timestamp filter.
+    $this->queryForListFilterNoTimestamp($query);
+
+    $request = $this->getRequest();
+    $filter = !empty($request['filter']) ? $request['filter'] : array();
+
+    // Add a query for meter_category and meter_account.
+    $this->addQueryForCategoryAndAccount($query);
+
+    // Handle meter categories: for last level categories prepare for summary
+    // of all meters in the category, for higher level categories prepare for
+    // summary of all sub-categories.
+    $cat_result = $this->handleMeterCategoryFilter($query, $filter, FALSE /*addGrouping*/);
+
+    if (!empty($cat_result['summary'])) {
+      // If summery was given, pass it to the formatter and quit.
+      $this->valueMetadata['electricity']['summary'] = $cat_result['summary'];
+      return;
+    }
+
+    // Add min/max timestamp expressions.
+    $query->addExpression('MIN(timestamp)', 'min_ts');
+    $query->addExpression('MAX(timestamp)', 'max_ts');
+
+    // Finish query and get result.
+    $result = $query->execute()->fetchAll();
+
+    // Return info to be passed to the formatter.
+    return array(
+      'min' => $result[0]->min_ts,
+      'max' => $result[0]->max_ts,
+    );
   }
 
   /**
@@ -262,6 +346,8 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     $query->addField('acc', 'gid', 'meter_account');
   }
 
+
+
   /**
    * Prepare data for summary section.
    *
@@ -312,6 +398,8 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     // Fill the total section to be output by the formatter.
     $summary['type'] = $result_type;
     $summary['values'] = $total;
+    // Add min and max timestamps for the account and frequency given.
+    $summary['timestamp'] = $this->calcMinMaxTimestamp();
 
     // MOCK DATA: Frecuency intervals
     $frecuency_intervals = array(
