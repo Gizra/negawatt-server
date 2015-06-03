@@ -32,7 +32,7 @@ angular.module('negawattClientApp')
      *  Chart options object.
      */
     function getOptions(chartFrequencyActive) {
-      return angular.extend(ChartOptions[chartFrequencyActive.type],
+      return angular.extend(ChartOptions[chartFrequencyActive.chart_type],
         {
           vAxis: {
             title: chartFrequencyActive.axis_v_title,
