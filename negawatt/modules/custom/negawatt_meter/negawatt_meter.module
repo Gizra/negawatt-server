@@ -163,12 +163,12 @@ function negawatt_meter_node_presave($node) {
         // Geocoding failed.
         watchdog('iec geocode', 'Couldn`t geocode the city "@address"', array('@address' => $city), WATCHDOG_WARNING);
       }
-    }
 
-    $lat = $geocode->getLatitude();
-    $lng = $geocode->getLongitude();
-    // Mark to recalculate location field.
-    $location_changed = TRUE;
+      $lat = $geocode->getLatitude();
+      $lng = $geocode->getLongitude();
+      // Mark to recalculate location field.
+      $location_changed = TRUE;
+    }
 
     // Set location field, if geocoding was successful.
     if ($geocode_succeeded) {
