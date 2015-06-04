@@ -1,0 +1,47 @@
+<!-- Frequency time tabs -->
+<tabset class="box-chart-usage" vertical="true">
+  <tab ng-repeat="frequency in ctrlChart.frequencies" heading="{{frequency.label}}" active="frequency.active" disabled="frequency.disabled" select="ctrlChart.changeFrequency(frequency.type)"></tab>
+</tabset>
+
+<!-- Message to the User no Chart - No data -->
+<div ng-if="!ctrlChart.hasData() && !ctrlChart.isLoading" class="row chart-empty">
+  <div class="title col-md-6 col-centered text-center chart-message">{{ctrlChart.messages.empty}}</div>
+</div>
+
+<!-- Spniner - With no data -->
+<div ng-if="!ctrlChart.hasData() && ctrlChart.isLoading" class="row chart-empty">
+  <div class="title col-md-12 col-centered text-center chart-message"><i class="fa fa-circle-o-notch fa-spin fa-3x nw-icon-loading nw-icon"></i></div>
+</div>
+
+<!-- Chart with electricity data -->
+<div ng-if="ctrlChart.hasData()">
+  <!-- Chart subcomponent -->
+  <div google-chart chart="ctrlChart.data" ng-hide="isLoading" id="chart-usage" class="usageChart"></div>
+  <!-- Period selction subcomponent -->
+  <div class="chart-navigation">
+    <button type="button" id="chart-usage-btn-arrow-left" class="btn btn-transparent btn-arrow btn-arrow-left" ng-show="ctrlChart.showNavigation('previous')" ng-click="ctrlChart.changePeriod('previous')" >
+      <span class="glyphicon glyphicon-chevron-left"></span>
+    </button>
+    <button type="button" id="chart-usage-btn-arrow-right" class="btn btn-transparent btn-arrow btn-arrow-right" ng-show="ctrlChart.showNavigation('next')" ng-click="ctrlChart.changePeriod('next')">
+      <span class="glyphicon glyphicon-chevron-right"></span>
+    </button>
+  </div>
+</div>
+
+
+<style>
+  pre.debug {
+    font-size: 9px;
+    position: fixed;
+    top: 130px;
+    left: 40px;
+    overflow-y: scroll;
+    direction: ltr;
+    max-height: 80%;
+  };
+</style>
+<pre class="debug">
+  <span><b>period:</b> {{ctrlChart.__period() | json}}</span>
+  <span><b>hasData():</b> {{ctrlChart.hasData() | json}}</span>
+  <span><b>isLoading:</b> {{ctrlChart.isLoading | json}}</span>
+</pre>
