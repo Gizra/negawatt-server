@@ -165,7 +165,7 @@ module.exports = function (grunt) {
     wiredep: {
       app: {
         src: ['<%= yeoman.app %>/index.html'],
-        ignorePath:  /\.\.\//
+        ignorePath: /\.\.\//
       },
       sass: {
         src: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
@@ -238,7 +238,7 @@ module.exports = function (grunt) {
       html: ['<%= yeoman.dist %>/{,*/}*.html'],
       css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
       options: {
-        assetsDirs: ['<%= yeoman.dist %>','<%= yeoman.dist %>/images']
+        assetsDirs: ['<%= yeoman.dist %>', '<%= yeoman.dist %>/images']
       }
     },
 
@@ -355,12 +355,12 @@ module.exports = function (grunt) {
           src: 'bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*',
           dest: '<%= yeoman.dist %>'
         },
-        {
-          expand: true,
-          cwd: '<%= yeoman.app %>',
-          src: 'CNAME',
-          dest: '<%= yeoman.dist %>'
-        }]
+          {
+            expand: true,
+            cwd: '<%= yeoman.app %>',
+            src: 'CNAME',
+            dest: '<%= yeoman.dist %>'
+          }]
       },
       styles: {
         expand: true,
@@ -409,9 +409,17 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.app %>/scripts/config.js'
         }
       },
-      build: {
+      dist: {
         constants: {
           Config: grunt.file.readJSON('config.json').production
+        },
+        options: {
+          dest: '<%= yeoman.dist %>/scripts/config.js'
+        }
+      },
+      live: {
+        constants: {
+          Config: grunt.file.readJSON('config.json').live
         },
         options: {
           dest: '<%= yeoman.dist %>/scripts/config.js'
@@ -428,10 +436,44 @@ module.exports = function (grunt) {
           commit: true,
           push: true
         }
+      },
+      live: {
+        options: {
+          remote: 'git@github.com:Gizra/negawatt-live.git',
+          branch: 'gh-pages',
+          commit: true,
+          push: true,
+          force: true
+        }
+      }
+    },
+    replace: {
+      server: {
+        src: ['<%= yeoman.dist %>/CNAME'],
+        overwrite: true,
+        replacements: [{
+          from: 'cname',
+          to: grunt.file.readJSON('config.json').development.cname
+        }]
+      },
+      dist: {
+        src: ['<%= yeoman.dist %>/CNAME'],
+        overwrite: true,
+        replacements: [{
+          from: 'cname',
+          to: grunt.file.readJSON('config.json').production.cname
+        }]
+      },
+      live: {
+        src: ['<%= yeoman.dist %>/CNAME'],
+        overwrite: true,
+        replacements: [{
+          from: 'cname',
+          to: grunt.file.readJSON('config.json').live.cname
+        }]
       }
     }
   });
-
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
     if (target === 'dist') {
@@ -444,6 +486,7 @@ module.exports = function (grunt) {
       'wiredep',
       'concurrent:server',
       'autoprefixer',
+      'replace:server',
       'connect:livereload',
       'watch'
     ]);
@@ -462,28 +505,39 @@ module.exports = function (grunt) {
     'karma'
   ]);
 
-  grunt.registerTask('build', [
-    'clean:dist',
-    'ngconstant:build',
-    'wiredep',
-    'useminPrepare',
-    'concurrent:dist',
-    'autoprefixer',
-    'concat',
-    'ngAnnotate',
-    'copy:dist',
-    'cdnify',
-    'cssmin',
-    'uglify',
-    //'filerev',
-    'usemin',
-    'htmlmin',
-  ]);
+  grunt.registerTask('build', function(target) {
+    var dest = target === 'live' && ':live' || ':dist';
+    var tasks = [
+      'clean:dist',
+      'ngconstant' + dest,
+      'wiredep',
+      'useminPrepare',
+      'concurrent:dist',
+      'autoprefixer',
+      'concat',
+      'ngAnnotate',
+      'copy:dist',
+      'cdnify',
+      'cssmin',
+      'uglify',
+      //'filerev',
+      'usemin',
+      'htmlmin',
+      'replace' + dest
+    ]
 
-  grunt.registerTask('deploy', [
-    'build',
-    'buildcontrol'
-  ]);
+    return grunt.task.run(tasks);
+  });
+
+  grunt.registerTask('deploy', function(target) {
+    var dest = target === 'live' && ':live' || ':dist';
+    var tasks = [
+      'build' + dest,
+      'buildcontrol' + dest
+    ];
+
+    return  grunt.task.run(tasks);
+  });
 
   grunt.registerTask('default', [
     'newer:jshint',
