@@ -48,7 +48,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
 
     if ($check_success) {
       // Wait for the dashboard's menu to load, with the user accout information.
-      $this->iWaitForCssElement('.menu-account', 'appear');
+      $this->iWaitForCssElement('#dashboard-controls > ui-view > div.menu-account', 'appear');
     }
   }
 
@@ -167,8 +167,8 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   public function iShouldSeeTheMonthlyKwsChartOfAllMeters() {
     // Testing the height of the first and last column, with the default chart size and data of the migration.
     $start_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(1) > td:nth-child(2)';
-    $end_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(24) > td:nth-child(2)';
-    $this->waitForTextNgElement($start_chart, '7836');
+    $end_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(6) > td:nth-child(2)';
+    $this->waitForTextNgElement($start_chart, '11131');
     $this->waitForTextNgElement($end_chart, '12318');
   }
 

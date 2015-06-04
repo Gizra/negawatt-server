@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .controller('MapCtrl', function ($scope, $state, $stateParams, $location, Category, ChartUsage, Map, leafletData, $timeout, account, meters, MeterFilter) {
+  .controller('MapCtrl', function ($scope, $state, $stateParams, $location, Category, Map, leafletData, $timeout, account, meters, FilterFactory) {
     var isMeterSelected = false;
 
     // Config map.
@@ -46,14 +46,14 @@ angular.module('negawattClientApp')
     // Reload the current $state when meters added more.
     $scope.$on('nwMetersChanged', function(event, meters) {
       $scope.meters = meters.list;
-      if (MeterFilter.get('meter') && $scope.meters[MeterFilter.get('meter')] && !isMeterSelected) {
-        setSelectedMarker(MeterFilter.get('meter'));
+      if (FilterFactory.get('meter') && $scope.meters[FilterFactory.get('meter')] && !isMeterSelected) {
+        setSelectedMarker(FilterFactory.get('meter'));
       }
     });
 
     // Select marker in the Map.
     $scope.$on('leafletDirectiveMarker.click', function(event, args) {
-      $state.forceGo('dashboard.withAccount.markers', {markerId: args.modelName, categoryId: MeterFilter.get('category'), chartNextPeriod: undefined, chartPreviousPeriod: undefined} );
+      $state.forceGo('dashboard.withAccount.markers', {markerId: args.modelName, categoryId: FilterFactory.get('category'), chartNextPeriod: undefined, chartPreviousPeriod: undefined} );
     });
 
     /**

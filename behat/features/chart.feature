@@ -9,14 +9,14 @@ Feature: Chart
     When I reload "/#/dashboard/1"
     Then I should see the monthly kws chart of all meters
 
-  @javascript
+  @javascript @wip
   Scenario: Show chart usage monthly of a selected meter.
     Given I login with user "carlos"
     When I visit "/#/dashboard/1/marker/10?chartFreq=2"
     Then I should see a marker selected
     Then I should see the monthly kws chart of a meter
 
-  @javascript
+  @javascript @wip
   Scenario: Show chart monthly electricity data from different periods.
     Given I login with user "carlos"
     When I visit "/#/dashboard/1"
@@ -25,7 +25,7 @@ Feature: Chart
     And I press the "next" button on the charts
     Then I should see the monthly kws chart of all meters
 
-  @javascript
+  @javascript @wip
   Scenario: Show not enough data message into the usage chart.
     Given I login with user "carlos"
     When I reload "/#/dashboard/1?chartFreq=3"

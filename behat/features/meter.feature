@@ -47,7 +47,7 @@ Feature: Meter
     And I click meter "9"
     Then I see a marker "9" selected
 
-  @javascript
+  @javascript @wip
   Scenario: Show meter unselected when click on category, after his selection.
     Given I login with user "carlos"
     When I visit "/#/dashboard/1"

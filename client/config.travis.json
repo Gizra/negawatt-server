@@ -9,8 +9,8 @@
     }
   },
   "production": {
-    "backend": "http://dev-negawatt.pantheon.io",
-    "cname": "negawatt-dev.gizra.com",
+    "backend": "http://server.com/api",
+    "cname": "",
     "debugUiRouter": false,
     "openweather": {
       "endpoint": null,
@@ -18,8 +18,8 @@
     }
   },
   "live": {
-    "backend": "http://live-negawatt.pantheon.io",
-    "cname": "negawatt.gizra.com",
+    "backend": "http://server.com/api",
+    "cname": "",
     "debugUiRouter": false,
     "openweather": {
       "endpoint": null,
