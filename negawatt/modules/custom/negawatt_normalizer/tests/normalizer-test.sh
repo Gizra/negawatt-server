@@ -1,21 +1,26 @@
 #!/bin/bash
 
+# Test if running under pantheon
+if [ "$1" = "pantheon" ]; then
+    DRUSH_PARAM=@negawatt --uri=http://127.0.0.1:8080
+fi
+
 # Load electricity data and test normalizer.
 cd www
 echo Resetting DB.
 DIR=profiles/negawatt/modules/custom/negawatt_normalizer/tests
 tar -zxf $DIR/reference-db.tar.gz -C $DIR/
-`drush sql-connect` < $DIR/reference-db.sql
+`drush $DRUSH_PARAM sql-connect` < $DIR/reference-db.sql
 rm $DIR/reference-db.sql
 
 # Run normalizer.
 echo Normalizing electricity.
-drush process-meter --verbose --user=1 2>&1
+drush $DRUSH_PARAM process-meter --verbose --user=1 2>&1
 
 # Compare to reference dump.
 echo Comparing results.
 tar -zxf $DIR/reference-normalized.tar.gz -C $DIR/
-drush sql-dump --tables-list=negawatt_electricity_normalized > $DIR/dump-normalized.sql
+drush $DRUSH_PARAM sql-dump --tables-list=negawatt_electricity_normalized > $DIR/dump-normalized.sql
 # Remove completion timestamp so files will be equal.
 sed -i '/Dump completed on/d' $DIR/dump-normalized.sql
 cmp --silent $DIR/dump-normalized.sql $DIR/reference-normalized.sql

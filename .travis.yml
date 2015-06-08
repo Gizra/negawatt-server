@@ -82,3 +82,7 @@ script:
 
   # SimpleTest
   - drush @negawatt test-run "Negawatt" --uri=http://127.0.0.1:8080
+
+  # Additional tests (bash scripts)
+  - cd ..
+  - sh -e negawatt/more-tests.sh pantheon
