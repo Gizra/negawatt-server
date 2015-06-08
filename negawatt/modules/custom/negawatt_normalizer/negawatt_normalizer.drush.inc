@@ -254,7 +254,7 @@ function negawatt_normalizer_process_meters_once($meter_ids = array(), $from_tim
             '@timestamp' => date('Y-m-d H:i', $timestamp),
             '@count' => $timestamps_count,
             '@delta' => $timestamps_delta
-          )), 'ok');
+          )));
 
           $entities_count = count($electricity_array);
           $total_entities_count += $entities_count;
