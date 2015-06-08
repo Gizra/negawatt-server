@@ -16,7 +16,7 @@ rm $DIR/reference-db.sql
 
 # Run normalizer.
 echo Normalizing electricity.
-drush $DRUSH_PARAM process-meter --verbose --user=1 2>&1
+drush $DRUSH_PARAM process-meter --user=1 2>&1
 
 # Compare to reference dump.
 echo Comparing results.
