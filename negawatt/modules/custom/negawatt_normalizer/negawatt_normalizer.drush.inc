@@ -183,6 +183,9 @@ function negawatt_normalizer_process_meters($meter_start_id, $options = array())
   );
   drush_log(format_string('Looping for meters. meters-count=@valid_count out of @count, range=@delta, time-frame=@time.', $params), 'ok');
 
+  // Save memory limit.
+  $memory_limit = drush_get_option('memory_limit', 500);
+
   for ($count = 0; $count < $valid_meters_count; $count += $options['range']) {
     // Loop with 'range' sized groups and call negawatt_normalizer_process_meters_once()
     // Get meter IDs that need to be processed.
@@ -196,6 +199,12 @@ function negawatt_normalizer_process_meters($meter_start_id, $options = array())
     // Process a batch of meters.
     $meter_ids = array_keys($result['node']);
     negawatt_normalizer_process_meters_once($meter_ids, $options['time_from'], $options['time_to']);
+
+    // Check memory status.
+    drush_log(format_string('* Memory usage @mem_use/@mem_limit.', array(
+      '@mem_use' => round(memory_get_usage()/1048576),
+      '@mem_limit' => memory_get_usage(TRUE)/1048576,
+      )), 'ok');
   }
 }
 
