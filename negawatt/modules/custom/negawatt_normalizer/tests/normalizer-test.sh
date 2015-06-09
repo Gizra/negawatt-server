@@ -32,6 +32,8 @@ sed -i -e '/-- Dump completed on/d' \
         -e 's/[)],[(]/),\
 (/g' \
         $DIR/dump-normalized.sql
+# Display first 2500 bytes of file.
+head -c 2500 $DIR/dump-normalized.sql
 cmp --silent $DIR/dump-normalized.sql $DIR/reference-normalized.sql
 CMP_RESULT=$?
 
