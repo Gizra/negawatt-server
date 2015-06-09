@@ -78,6 +78,7 @@ function drush_negawatt_normalizer_process_meter() {
   $options['range']     = drush_get_option('range', 50);
   $options['time_from'] = drush_get_option('time_from') ? strtotime(drush_get_option('time_from')) : 0;
   $options['time_to']   = drush_get_option('time_to') ? strtotime(drush_get_option('time_to')) : REQUEST_TIME;
+  $options['analyze_entities'] = drush_get_option('analyze_entities', TRUE);
   negawatt_normalizer_process_meters($meter_start_id, $options);
 }
 
