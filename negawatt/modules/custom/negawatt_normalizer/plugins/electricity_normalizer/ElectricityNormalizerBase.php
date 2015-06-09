@@ -230,7 +230,7 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
     // Put proper message and mark node as processed.
     $this->markMeterNodeAsProcessed($frequencies, $from_timestamp, $to_timestamp, $last_processed, count($processed_entities));
 
-    return $processed_entities;
+    return;// $processed_entities;
   }
 
   /**
