@@ -26,9 +26,9 @@ drush $DRUSH_PARAM sql-dump --tables-list=negawatt_electricity_normalized > $DIR
 sed -i -e '/-- Dump completed on/d' \
         -e '/-- Host:/d' \
         -e '/-- Server version/d' \
-        -e '/-- MySql dump/d' \
+        -e '/-- MySQL dump/d' \
         -e 's/AUTO_INCREMENT=[0-9]*//' \
-        -e $'s/[)],[(]/),\\n(/g' \
+        -e $'s/[)],[(]/),\\\n(/g' \
         $DIR/dump-normalized.sql
 cmp --silent $DIR/dump-normalized.sql $DIR/reference-normalized.sql
 CMP_RESULT=$?
