@@ -201,10 +201,15 @@ function negawatt_normalizer_process_meters($meter_start_id, $options = array())
     negawatt_normalizer_process_meters_once($meter_ids, $options['time_from'], $options['time_to']);
 
     // Check memory status.
-    drush_log(format_string('* Memory usage @mem_use/@mem_limit.', array(
+    $memory_limit = drush_get_option('memory_limit', 500);
+    drush_log(format_string('* Memory usage @mem_use/@mem_limit MB.', array(
       '@mem_use' => round(memory_get_usage()/1048576),
-      '@mem_limit' => memory_get_usage(TRUE)/1048576,
+      '@mem_limit' => $memory_limit,//memory_get_usage(TRUE)/1048576,
       )), 'ok');
+
+    // Free up memory.
+    drupal_static_reset();
+    gc_collect_cycles();
   }
 }
 
@@ -243,56 +248,71 @@ function negawatt_normalizer_process_meters_once($meter_ids = array(), $from_tim
     try {
       $result = negawatt_normalizer_process_meter($meter_id, $from_timestamp, $to_timestamp);
 
-      // Log results.
-      drush_log('Back at negawatt_normalizer_process_meters_once.');
-      $frequencies_count = count($result);
-      $frequencies_delta = 0;
-      foreach ($result as $frequency => $timestamps_array) {
-        ++$frequencies_delta;
-        drush_log(format_string(' frequency @frequency, @delta/@count:', array(
-          '@frequency' => $frequency . '(' . negawatt_normalizer_frequency_to_string($frequency) . ')',
-          '@count' => $frequencies_count,
-          '@delta' => $frequencies_delta
-        )), 'ok');
+      if ($result) {
+        // Log results.
+        drush_log('Back at negawatt_normalizer_process_meters_once.');
+        $frequencies_count = count($result);
+        $frequencies_delta = 0;
+        foreach ($result as $frequency => $timestamps_array) {
+          ++$frequencies_delta;
+          drush_log(format_string(' frequency @frequency, @delta/@count:', array(
+            '@frequency' => $frequency . '(' . negawatt_normalizer_frequency_to_string($frequency) . ')',
+            '@count' => $frequencies_count,
+            '@delta' => $frequencies_delta
+          )), 'ok');
 
-        $timestamps_count = count($timestamps_array);
-        $timestamps_delta = 0;
-        foreach ($timestamps_array as $timestamp => $electricity_array) {
-          ++$timestamps_delta;
-          drush_log(format_string('  timestamp @timestamp, @delta/@count:', array(
-            '@timestamp' => date('Y-m-d H:i', $timestamp),
-            '@count' => $timestamps_count,
-            '@delta' => $timestamps_delta
-          )));
-
-          $entities_count = count($electricity_array);
-          $total_entities_count += $entities_count;
-          $entities_delta = 0;
-          foreach ($electricity_array as $entity) {
-            ++$entities_delta;
-            drush_log(format_string('   electricity-entity @delta/@count:', array(
-              '@count' => $entities_count,
-              '@delta' => $entities_delta
+          $timestamps_count = count($timestamps_array);
+          $timestamps_delta = 0;
+          foreach ($timestamps_array as $timestamp => $electricity_array) {
+            ++$timestamps_delta;
+            drush_log(format_string('  timestamp @timestamp, @delta/@count:', array(
+              '@timestamp' => date('Y-m-d H:i', $timestamp),
+              '@count' => $timestamps_count,
+              '@delta' => $timestamps_delta
             )));
 
-            drush_log(format_string('    type: @frequency', array('@frequency' => $entity->frequency)));
-            drush_log(format_string('    timestamp: @timestamp', array('@timestamp' => date('Y-m-d H:i', $entity->timestamp))));
-            drush_log(format_string('    rate_type: @type', array('@type' => $entity->rate_type)));
-            drush_log(format_string('    sum_kwh: @sum', array('@sum' => $entity->sum_kwh)));
-            drush_log(format_string('    avg_power: @avg', array('@avg' => $entity->avg_power)));
-            drush_log(format_string('    min_power_factor: @pf', array('@pf' => $entity->min_power_factor)));
+            $entities_count = count($electricity_array);
+            $total_entities_count += $entities_count;
+            $entities_delta = 0;
+            foreach ($electricity_array as $entity) {
+              ++$entities_delta;
+              drush_log(format_string('   electricity-entity @delta/@count:', array(
+                '@count' => $entities_count,
+                '@delta' => $entities_delta
+              )));
+
+              drush_log(format_string('    type: @frequency', array('@frequency' => $entity->frequency)));
+              drush_log(format_string('    timestamp: @timestamp', array('@timestamp' => date('Y-m-d H:i', $entity->timestamp))));
+              drush_log(format_string('    rate_type: @type', array('@type' => $entity->rate_type)));
+              drush_log(format_string('    sum_kwh: @sum', array('@sum' => $entity->sum_kwh)));
+              drush_log(format_string('    avg_power: @avg', array('@avg' => $entity->avg_power)));
+              drush_log(format_string('    min_power_factor: @pf', array('@pf' => $entity->min_power_factor)));
+            }
+            drush_log('');
           }
-          drush_log('');
+          drush_log(' -------');
         }
-        drush_log(' -------');
+        drush_log('-----');
       }
-      drush_log('-----');
     }
     catch (Exception $e) {
       drush_log('Processing failed: @msg.', array('@msg', $e->getMessage()), 'error');
     }
   }
   drush_log(format_string('Total electricity-entities returned: @count', array('@count'=> $total_entities_count)), 'ok');
+
+  // Get memory use of all variables.
+  $vars = get_defined_vars();
+  foreach ($vars as $var_name => $value) {
+//    gc_collect_cycles();
+    $start_memory = memory_get_usage();
+    $tmp = unserialize(serialize($value));
+    $mem_use = (memory_get_usage() - $start_memory) / 1024;
+    unset($tmp);
+    drush_log("   $var_name: $mem_use KB", 'ok');
+  }
+  unset($vars);
+  //drush_log(print_r($vars, true), 'ok');
 }
 
 /**
