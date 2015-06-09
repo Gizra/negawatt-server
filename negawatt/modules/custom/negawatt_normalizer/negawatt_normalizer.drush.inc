@@ -16,6 +16,7 @@ function negawatt_normalizer_drush_command() {
       'range'     => dt('The number of nodes to process in each batch.'),
       'time_from' => dt('Process entities with date-time higher than this value.'),
       'time_to'   => dt('Process entities with date-time lower than this value.'),
+      'analyze_entities' => dt('Set to false if there is no need in analyzing generated entities (reduces memory use).'),
     ),
   );
 
