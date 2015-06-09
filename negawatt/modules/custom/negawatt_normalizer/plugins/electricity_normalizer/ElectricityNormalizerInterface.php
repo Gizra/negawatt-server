@@ -57,11 +57,17 @@ interface ElectricityNormalizerInterface {
    *    Beginning of time period. If NULL, will be set to the last_processed time of the meter node
    * @param null|int $to_timestamp
    *    End of time period. If NULL, will be set to now.
-   * @return array
+   * @param bool $return_entities
+   *    If true, processed entities will be returned (takes more memory).
+   *
+   * @return array|null
    *    The processed entities in the form array[frequency][timestamp][rate-type] = entity,
-   *    or an empty array if there were no values to process.
+   *
+   * The processed entities in the form array[frequency][timestamp][rate-type] = entity,
+   * or an empty array if there were no values to process.
+   * If called with return-entities = false, nothing will be returned.
    */
-  public function process($frequencies = array(), $from_timestamp = NULL, $to_timestamp = NULL);
+  public function process($frequencies = array(), $from_timestamp = NULL, $to_timestamp = NULL, $return_entities = TRUE);
 
   /**
    * Allow modifying the raw-electricity entity record.

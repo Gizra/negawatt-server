@@ -189,7 +189,7 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
   /**
    * {@inheritdoc}
    */
-  public function process($frequencies = array(), $from_timestamp = NULL, $to_timestamp = NULL) {
+  public function process($frequencies = array(), $from_timestamp = NULL, $to_timestamp = NULL, $return_entities = TRUE) {
 
     // If frequencies was empty, set it to all allowed frequencies.
     $allowed_frequencies = $this->getTimeManager()->getAllowedFrequencies($this->getMeterMaxFrequency());
@@ -230,7 +230,9 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
     // Put proper message and mark node as processed.
     $this->markMeterNodeAsProcessed($frequencies, $from_timestamp, $to_timestamp, $last_processed, count($processed_entities));
 
-    return;// $processed_entities;
+    if ($return_entities) {
+      return $processed_entities;
+    }
   }
 
   /**

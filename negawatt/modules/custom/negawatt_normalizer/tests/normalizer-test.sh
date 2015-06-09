@@ -16,7 +16,8 @@ rm $DIR/reference-db.sql
 
 # Run normalizer.
 echo Normalizing electricity.
-drush $DRUSH_PARAM process-meter --user=1 2>&1
+# Don't analyze-entities to keep memory usage low on Travis.
+drush $DRUSH_PARAM process-meter --analyze_entities=0 --user=1 2>&1
 
 # Compare to reference dump.
 echo Comparing results.

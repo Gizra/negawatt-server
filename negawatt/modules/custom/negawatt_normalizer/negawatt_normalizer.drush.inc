@@ -116,6 +116,8 @@ function negawatt_server_query_electricity_last_processed_condition_alter(QueryA
  *   - range: How many nodes to include in each internal loop. Defaults to 50.
  *   - time_from, time_to: Include only meters that their last-processed field
  *     is between these values. Defaults to 1/1/1970-REQUEST_TIME.
+ *   - analyze_entities: Set to TRUE to display the entities processed (takes
+ *     more memory). Set to FALSE to keep memory consumption low.
  */
 function negawatt_normalizer_process_meters($meter_start_id, $options = array()) {
   // Set default options.
@@ -123,6 +125,7 @@ function negawatt_normalizer_process_meters($meter_start_id, $options = array())
     'range' => 50,
     'time_from' => 0,
     'time_to' => REQUEST_TIME,
+    'analyze_entities' => TRUE,
   );
 
   // Set timezone
@@ -195,7 +198,7 @@ function negawatt_normalizer_process_meters($meter_start_id, $options = array())
 
     // Process a batch of meters.
     $meter_ids = array_keys($result['node']);
-    negawatt_normalizer_process_meters_once($meter_ids, $options['time_from'], $options['time_to']);
+    negawatt_normalizer_process_meters_once($meter_ids, $options['time_from'], $options['time_to'], $options['analyze_entities']);
 
     // Check memory status.
     drush_log(format_string('* Memory usage @mem_use/@mem_limit MB.', array(
@@ -220,8 +223,10 @@ function negawatt_normalizer_process_meters($meter_start_id, $options = array())
  *    Beginning of time period. If NULL, will be set to the last_processed time of the meter node
  * @param null|int $to_timestamp
  *    End of time period. If NULL, will be set to now.
+ * @param bool $analyze_entities
+ *    If true, processed entities will be analyzed (takes more memory).
  */
-function negawatt_normalizer_process_meters_once($meter_ids = array(), $from_timestamp = NULL, $to_timestamp = NULL) {
+function negawatt_normalizer_process_meters_once($meter_ids = array(), $from_timestamp = NULL, $to_timestamp = NULL, $analyze_entities = TRUE) {
   drush_log('Entering negawatt_normalizer_process_meters_once().');
   $count = count($meter_ids);
   $delta = 0;
@@ -241,7 +246,7 @@ function negawatt_normalizer_process_meters_once($meter_ids = array(), $from_tim
     drush_log(format_string('Processing meter ID @id (@delta/@count) [@meter_type, @meter_name]', $params), 'ok');
 
     try {
-      $result = negawatt_normalizer_process_meter($meter_id, $from_timestamp, $to_timestamp);
+      $result = &negawatt_normalizer_process_meter($meter_id, $from_timestamp, $to_timestamp, $analyze_entities);
 
       if ($result) {
         // Log results.
@@ -289,6 +294,7 @@ function negawatt_normalizer_process_meters_once($meter_ids = array(), $from_tim
         }
         drush_log('-----');
       }
+      unset($result);
     }
     catch (Exception $e) {
       drush_log('Processing failed: @msg.', array('@msg', $e->getMessage()), 'error');

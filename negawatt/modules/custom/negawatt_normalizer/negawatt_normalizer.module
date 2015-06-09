@@ -108,15 +108,21 @@ function negawatt_normalizer_get_electricity_normalizer_handler($plugin_name) {
  *    Beginning of time period. If NULL, will be set to the last_processed time of the meter node
  * @param null|int $to_timestamp
  *    End of time period. If NULL, will be set to now.
- * @return array
- *    Array of processed entities.
+ * @param bool $return_entities
+ *    If true, processed entities will be returned (takes more memory).
+ *
+ * @return array Array of processed entities.
+ *    Array of processed entities, or nothing if return-entities was false.
+ *
+ * @throws EntityMetadataWrapperException
  * @throws Exception
  */
-function negawatt_normalizer_process_meter($node, $from_timestamp = NULL, $to_timestamp = NULL) {
+function negawatt_normalizer_process_meter($node, $from_timestamp = NULL, $to_timestamp = NULL, $return_entities = true) {
   $wrapper = entity_metadata_wrapper('node', $node);
   $plugin_name = str_replace('_meter', '', $wrapper->getBundle());
   $handler = negawatt_normalizer_get_electricity_normalizer_handler($plugin_name);
   $handler->setMeterNode($wrapper->value());
-  return $handler->process($frequencies = array(), $from_timestamp, $to_timestamp);
+  $processed_entities =  &$handler->process($frequencies = array(), $from_timestamp, $to_timestamp, $return_entities);
+  return $processed_entities;
 }
 
