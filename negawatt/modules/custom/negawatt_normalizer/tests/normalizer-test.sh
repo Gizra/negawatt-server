@@ -29,7 +29,8 @@ sed -i -e '/-- Dump completed on/d' \
         -e '/-- Server version/d' \
         -e '/-- MySQL dump/d' \
         -e 's/AUTO_INCREMENT=[0-9]*//' \
-        -e $'s/[)],[(]/),\\\n(/g' \
+        -e 's/[)],[(]/),\
+(/g' \
         $DIR/dump-normalized.sql
 cmp --silent $DIR/dump-normalized.sql $DIR/reference-normalized.sql
 CMP_RESULT=$?
