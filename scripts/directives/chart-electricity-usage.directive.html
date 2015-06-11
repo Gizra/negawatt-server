@@ -1,6 +1,6 @@
 <!-- Frequency time tabs -->
 <tabset class="box-chart-usage" vertical="true">
-  <tab ng-repeat="frequency in ctrlChart.frequencies" heading="{{frequency.label}}" active="frequency.active" disabled="frequency.disabled" select="ctrlChart.changeFrequency(frequency.type)"></tab>
+  <tab ng-repeat="frequency in ::ctrlChart.frequencies" heading="{{frequency.label}}" active="frequency.active" disabled="frequency.disabled" select="ctrlChart.changeFrequency(frequency.type)"></tab>
 </tabset>
 
 <!-- Message to the User no Chart - No data -->
@@ -27,16 +27,3 @@
     </button>
   </div>
 </div>
-
-
-<style>
-  pre.debug {
-    font-size: 9px;
-    position: fixed;
-    top: 130px;
-    left: 40px;
-    overflow-y: scroll;
-    direction: ltr;
-    max-height: 80%;
-  };
-</style>
