@@ -5,6 +5,61 @@
  * Contains NegawattMeterResource.
  */
 class NegawattMeterResource extends \RestfulEntityBaseMultipleBundles {
+
+  /**
+   * Overrides \RestfulBase::controllersInfo().
+   */
+  public static function controllersInfo() {
+    return array(
+      '' => array(
+        // GET returns a list of entities.
+        \RestfulInterface::GET => 'getList',
+      ),
+      '^.*$' => array(
+        \RestfulInterface::GET => 'viewEntities',
+        \RestfulInterface::HEAD => 'viewEntities',
+      ),
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   *
+   * Pipe the 'meters' entry point to the relevant meter handler.
+   */
+  public function viewEntities($ids_string) {
+    $ids = array_unique(array_filter(explode(',', $ids_string)));
+    $output = array();
+
+    $account = $this->getAccount();
+
+    foreach ($ids as $id) {
+      $node = node_load($id);
+
+      if ($node->type == 'iec_meter') {
+        $resource = 'iec_meters';
+      }
+      elseif ($node->type == 'modbus_meter') {
+        $resource = 'modbus_meters';
+      }
+
+      // The resource, by convention, is the plural form of the content-type
+      // (for 'modbus_meter', it'll be 'modbus_meters').
+      $resource = $node->type . 's';
+      $handler = restful_get_restful_handler($resource);
+      // Pipe the account.
+      $handler->setAccount($account);
+
+      // Get the meter.
+      $output[] = $handler->viewEntity($id);
+    }
+
+    // Prepare summary data for the formatter.
+    $this->prepareSummary($this);
+
+    return $output;
+  }
+
   // Will automatically redirect Modbus meters to NegawattModbusMeterResource.class.php
   // and IEC meters to NegawattIecMeterResource.class.php
 
