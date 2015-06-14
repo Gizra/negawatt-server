@@ -28,6 +28,7 @@ function negawatt_electricity_views_default_views() {
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['exposed_form']['options']['autosubmit'] = TRUE;
   $handler->display->display_options['pager']['type'] = 'full';
   $handler->display->display_options['pager']['options']['items_per_page'] = '25';
   $handler->display->display_options['style_plugin'] = 'table';
@@ -144,10 +145,10 @@ function negawatt_electricity_views_default_views() {
   $handler->display->display_options['filters']['meter_nid']['id'] = 'meter_nid';
   $handler->display->display_options['filters']['meter_nid']['table'] = 'negawatt_electricity_normalized';
   $handler->display->display_options['filters']['meter_nid']['field'] = 'meter_nid';
+  $handler->display->display_options['filters']['meter_nid']['group'] = 1;
   $handler->display->display_options['filters']['meter_nid']['exposed'] = TRUE;
   $handler->display->display_options['filters']['meter_nid']['expose']['operator_id'] = 'meter_nid_op';
   $handler->display->display_options['filters']['meter_nid']['expose']['label'] = 'Meter_nid';
-  $handler->display->display_options['filters']['meter_nid']['expose']['use_operator'] = TRUE;
   $handler->display->display_options['filters']['meter_nid']['expose']['operator'] = 'meter_nid_op';
   $handler->display->display_options['filters']['meter_nid']['expose']['identifier'] = 'meter_nid';
   $handler->display->display_options['filters']['meter_nid']['expose']['remember'] = TRUE;
@@ -157,26 +158,78 @@ function negawatt_electricity_views_default_views() {
     3 => 0,
     4 => 0,
   );
-  /* Filter criterion: Electricity data: Rate_type */
-  $handler->display->display_options['filters']['rate_type']['id'] = 'rate_type';
-  $handler->display->display_options['filters']['rate_type']['table'] = 'negawatt_electricity_normalized';
-  $handler->display->display_options['filters']['rate_type']['field'] = 'rate_type';
-  $handler->display->display_options['filters']['rate_type']['exposed'] = TRUE;
-  $handler->display->display_options['filters']['rate_type']['expose']['operator_id'] = 'rate_type_op';
-  $handler->display->display_options['filters']['rate_type']['expose']['label'] = 'Rate_type';
-  $handler->display->display_options['filters']['rate_type']['expose']['operator'] = 'rate_type_op';
-  $handler->display->display_options['filters']['rate_type']['expose']['identifier'] = 'rate_type';
-  $handler->display->display_options['filters']['rate_type']['expose']['remember'] = TRUE;
-  $handler->display->display_options['filters']['rate_type']['expose']['remember_roles'] = array(
+  /* Filter criterion: Electricity data: Frequency */
+  $handler->display->display_options['filters']['frequency']['id'] = 'frequency';
+  $handler->display->display_options['filters']['frequency']['table'] = 'negawatt_electricity_normalized';
+  $handler->display->display_options['filters']['frequency']['field'] = 'frequency';
+  $handler->display->display_options['filters']['frequency']['group'] = 1;
+  $handler->display->display_options['filters']['frequency']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['frequency']['expose']['operator_id'] = 'frequency_op';
+  $handler->display->display_options['filters']['frequency']['expose']['label'] = 'frequency';
+  $handler->display->display_options['filters']['frequency']['expose']['operator'] = 'frequency_op';
+  $handler->display->display_options['filters']['frequency']['expose']['identifier'] = 'frequency';
+  $handler->display->display_options['filters']['frequency']['expose']['remember'] = TRUE;
+  $handler->display->display_options['filters']['frequency']['expose']['remember_roles'] = array(
     2 => '2',
     1 => 0,
     3 => 0,
     4 => 0,
   );
+  $handler->display->display_options['filters']['frequency']['is_grouped'] = TRUE;
+  $handler->display->display_options['filters']['frequency']['group_info']['label'] = 'Frequency';
+  $handler->display->display_options['filters']['frequency']['group_info']['identifier'] = 'frequency';
+  $handler->display->display_options['filters']['frequency']['group_info']['group_items'] = array(
+    1 => array(
+      'title' => 'Year',
+      'operator' => '=',
+      'value' => array(
+        'value' => '1',
+        'min' => '',
+        'max' => '',
+      ),
+    ),
+    2 => array(
+      'title' => 'Month',
+      'operator' => '=',
+      'value' => array(
+        'value' => '2',
+        'min' => '',
+        'max' => '',
+      ),
+    ),
+    3 => array(
+      'title' => 'Day',
+      'operator' => '=',
+      'value' => array(
+        'value' => '3',
+        'min' => '',
+        'max' => '',
+      ),
+    ),
+    5 => array(
+      'title' => 'Hour',
+      'operator' => '=',
+      'value' => array(
+        'value' => '4',
+        'min' => '',
+        'max' => '',
+      ),
+    ),
+    6 => array(
+      'title' => 'Minute',
+      'operator' => '=',
+      'value' => array(
+        'value' => '5',
+        'min' => '',
+        'max' => '',
+      ),
+    ),
+  );
   /* Filter criterion: Electricity data: Timestamp */
   $handler->display->display_options['filters']['timestamp']['id'] = 'timestamp';
   $handler->display->display_options['filters']['timestamp']['table'] = 'negawatt_electricity_normalized';
   $handler->display->display_options['filters']['timestamp']['field'] = 'timestamp';
+  $handler->display->display_options['filters']['timestamp']['group'] = 1;
   $handler->display->display_options['filters']['timestamp']['exposed'] = TRUE;
   $handler->display->display_options['filters']['timestamp']['expose']['operator_id'] = 'timestamp_op';
   $handler->display->display_options['filters']['timestamp']['expose']['label'] = 'Timestamp';
@@ -190,22 +243,48 @@ function negawatt_electricity_views_default_views() {
     3 => 0,
     4 => 0,
   );
-  /* Filter criterion: Electricity data: Frequency */
-  $handler->display->display_options['filters']['frequency']['id'] = 'frequency';
-  $handler->display->display_options['filters']['frequency']['table'] = 'negawatt_electricity_normalized';
-  $handler->display->display_options['filters']['frequency']['field'] = 'frequency';
-  $handler->display->display_options['filters']['frequency']['exposed'] = TRUE;
-  $handler->display->display_options['filters']['frequency']['expose']['operator_id'] = 'frequency_op';
-  $handler->display->display_options['filters']['frequency']['expose']['label'] = 'frequency';
-  $handler->display->display_options['filters']['frequency']['expose']['use_operator'] = TRUE;
-  $handler->display->display_options['filters']['frequency']['expose']['operator'] = 'frequency_op';
-  $handler->display->display_options['filters']['frequency']['expose']['identifier'] = 'frequency';
-  $handler->display->display_options['filters']['frequency']['expose']['remember'] = TRUE;
-  $handler->display->display_options['filters']['frequency']['expose']['remember_roles'] = array(
+  /* Filter criterion: Electricity data: Rate_type */
+  $handler->display->display_options['filters']['rate_type']['id'] = 'rate_type';
+  $handler->display->display_options['filters']['rate_type']['table'] = 'negawatt_electricity_normalized';
+  $handler->display->display_options['filters']['rate_type']['field'] = 'rate_type';
+  $handler->display->display_options['filters']['rate_type']['group'] = 1;
+  $handler->display->display_options['filters']['rate_type']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['rate_type']['expose']['operator_id'] = 'rate_type_op';
+  $handler->display->display_options['filters']['rate_type']['expose']['label'] = 'Rate_type';
+  $handler->display->display_options['filters']['rate_type']['expose']['operator'] = 'rate_type_op';
+  $handler->display->display_options['filters']['rate_type']['expose']['identifier'] = 'rate_type';
+  $handler->display->display_options['filters']['rate_type']['expose']['remember'] = TRUE;
+  $handler->display->display_options['filters']['rate_type']['expose']['remember_roles'] = array(
     2 => '2',
     1 => 0,
     3 => 0,
     4 => 0,
+  );
+  $handler->display->display_options['filters']['rate_type']['is_grouped'] = TRUE;
+  $handler->display->display_options['filters']['rate_type']['group_info']['label'] = 'Rate_type';
+  $handler->display->display_options['filters']['rate_type']['group_info']['identifier'] = 'rate_type';
+  $handler->display->display_options['filters']['rate_type']['group_info']['remember'] = 1;
+  $handler->display->display_options['filters']['rate_type']['group_info']['group_items'] = array(
+    1 => array(
+      'title' => 'flat',
+      'operator' => '=',
+      'value' => 'flat',
+    ),
+    2 => array(
+      'title' => 'low',
+      'operator' => '=',
+      'value' => 'low',
+    ),
+    3 => array(
+      'title' => 'mid',
+      'operator' => '=',
+      'value' => 'mid',
+    ),
+    4 => array(
+      'title' => 'peak',
+      'operator' => '=',
+      'value' => 'peak',
+    ),
   );
 
   /* Display: Page */
@@ -237,6 +316,7 @@ function negawatt_electricity_views_default_views() {
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['exposed_form']['options']['autosubmit'] = TRUE;
   $handler->display->display_options['pager']['type'] = 'full';
   $handler->display->display_options['pager']['options']['items_per_page'] = '25';
   $handler->display->display_options['style_plugin'] = 'table';
@@ -245,6 +325,7 @@ function negawatt_electricity_views_default_views() {
     'meter_type' => 'meter_type',
     'timestamp' => 'timestamp',
     'rate_type' => 'rate_type',
+    'frequency' => 'frequency',
     'meter_nid' => 'meter_nid',
     'kwh' => 'kwh',
     'power_factor' => 'power_factor',
@@ -279,6 +360,13 @@ function negawatt_electricity_views_default_views() {
       'empty_column' => 0,
     ),
     'rate_type' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'frequency' => array(
       'sortable' => 1,
       'default_sort_order' => 'asc',
       'align' => '',
@@ -430,7 +518,6 @@ function negawatt_electricity_views_default_views() {
   $handler->display->display_options['filters']['meter_nid']['exposed'] = TRUE;
   $handler->display->display_options['filters']['meter_nid']['expose']['operator_id'] = 'meter_nid_op';
   $handler->display->display_options['filters']['meter_nid']['expose']['label'] = 'Meter_nid';
-  $handler->display->display_options['filters']['meter_nid']['expose']['use_operator'] = TRUE;
   $handler->display->display_options['filters']['meter_nid']['expose']['operator'] = 'meter_nid_op';
   $handler->display->display_options['filters']['meter_nid']['expose']['identifier'] = 'meter_nid';
   $handler->display->display_options['filters']['meter_nid']['expose']['remember'] = TRUE;
@@ -450,11 +537,38 @@ function negawatt_electricity_views_default_views() {
   $handler->display->display_options['filters']['rate_type']['expose']['operator'] = 'rate_type_op';
   $handler->display->display_options['filters']['rate_type']['expose']['identifier'] = 'rate_type';
   $handler->display->display_options['filters']['rate_type']['expose']['remember'] = TRUE;
+  $handler->display->display_options['filters']['rate_type']['expose']['multiple'] = TRUE;
   $handler->display->display_options['filters']['rate_type']['expose']['remember_roles'] = array(
     2 => '2',
     1 => 0,
     3 => 0,
     4 => 0,
+  );
+  $handler->display->display_options['filters']['rate_type']['is_grouped'] = TRUE;
+  $handler->display->display_options['filters']['rate_type']['group_info']['label'] = 'Rate_type';
+  $handler->display->display_options['filters']['rate_type']['group_info']['identifier'] = 'rate_type';
+  $handler->display->display_options['filters']['rate_type']['group_info']['remember'] = 1;
+  $handler->display->display_options['filters']['rate_type']['group_info']['group_items'] = array(
+    1 => array(
+      'title' => 'flat',
+      'operator' => '=',
+      'value' => 'flat',
+    ),
+    2 => array(
+      'title' => 'low',
+      'operator' => '=',
+      'value' => 'low',
+    ),
+    3 => array(
+      'title' => 'mid',
+      'operator' => '=',
+      'value' => 'mid',
+    ),
+    4 => array(
+      'title' => 'peak',
+      'operator' => '=',
+      'value' => 'peak',
+    ),
   );
   /* Filter criterion: Electricity raw data: Timestamp */
   $handler->display->display_options['filters']['timestamp']['id'] = 'timestamp';
@@ -480,7 +594,6 @@ function negawatt_electricity_views_default_views() {
   $handler->display->display_options['filters']['meter_type']['exposed'] = TRUE;
   $handler->display->display_options['filters']['meter_type']['expose']['operator_id'] = 'meter_type_op';
   $handler->display->display_options['filters']['meter_type']['expose']['label'] = 'meter_type';
-  $handler->display->display_options['filters']['meter_type']['expose']['use_operator'] = TRUE;
   $handler->display->display_options['filters']['meter_type']['expose']['operator'] = 'meter_type_op';
   $handler->display->display_options['filters']['meter_type']['expose']['identifier'] = 'meter_type';
   $handler->display->display_options['filters']['meter_type']['expose']['remember'] = TRUE;
@@ -489,6 +602,21 @@ function negawatt_electricity_views_default_views() {
     1 => 0,
     3 => 0,
     4 => 0,
+  );
+  $handler->display->display_options['filters']['meter_type']['is_grouped'] = TRUE;
+  $handler->display->display_options['filters']['meter_type']['group_info']['label'] = 'Meter_type';
+  $handler->display->display_options['filters']['meter_type']['group_info']['identifier'] = 'meter_type';
+  $handler->display->display_options['filters']['meter_type']['group_info']['group_items'] = array(
+    1 => array(
+      'title' => 'iec',
+      'operator' => '=',
+      'value' => 'iec',
+    ),
+    2 => array(
+      'title' => 'modbus',
+      'operator' => '=',
+      'value' => 'modbus',
+    ),
   );
 
   /* Display: Page */

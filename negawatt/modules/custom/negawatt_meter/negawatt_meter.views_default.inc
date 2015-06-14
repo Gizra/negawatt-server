@@ -34,6 +34,7 @@ function negawatt_meter_views_default_views() {
   $handler->display->display_options['style_plugin'] = 'views_aggregator';
   $handler->display->display_options['style_options']['columns'] = array(
     'title' => 'title',
+    'og_group_ref' => 'og_group_ref',
     'type' => 'type',
     'field_place_address' => 'field_place_address',
     'field_place_description' => 'field_place_description',
@@ -61,6 +62,21 @@ function negawatt_meter_views_default_views() {
       'aggr_par' => '',
       'has_aggr_column' => 1,
       'aggr_column' => 'views_aggregator_count',
+      'aggr_par_column' => '',
+    ),
+    'og_group_ref' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+      'has_aggr' => 0,
+      'aggr' => array(
+        'views_aggregator_first' => 'views_aggregator_first',
+      ),
+      'aggr_par' => '',
+      'has_aggr_column' => 0,
+      'aggr_column' => 'views_aggregator_sum',
       'aggr_par_column' => '',
     ),
     'type' => array(
@@ -242,6 +258,14 @@ function negawatt_meter_views_default_views() {
   $handler->display->display_options['fields']['title']['label'] = 'Title (contract-meter)';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  /* Field: Content: Groups audience */
+  $handler->display->display_options['fields']['og_group_ref']['id'] = 'og_group_ref';
+  $handler->display->display_options['fields']['og_group_ref']['table'] = 'og_membership';
+  $handler->display->display_options['fields']['og_group_ref']['field'] = 'og_group_ref';
+  $handler->display->display_options['fields']['og_group_ref']['label'] = 'Account';
+  $handler->display->display_options['fields']['og_group_ref']['settings'] = array(
+    'link' => 1,
+  );
   /* Field: Content: Type */
   $handler->display->display_options['fields']['type']['id'] = 'type';
   $handler->display->display_options['fields']['type']['table'] = 'node';
@@ -331,6 +355,91 @@ function negawatt_meter_views_default_views() {
   $handler->display->display_options['filters']['status']['value'] = 1;
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+  /* Filter criterion: Content: Groups audience (og_group_ref) */
+  $handler->display->display_options['filters']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
+  $handler->display->display_options['filters']['og_group_ref_target_id']['table'] = 'og_membership';
+  $handler->display->display_options['filters']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
+  $handler->display->display_options['filters']['og_group_ref_target_id']['group'] = 1;
+  $handler->display->display_options['filters']['og_group_ref_target_id']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['og_group_ref_target_id']['expose']['operator_id'] = 'og_group_ref_target_id_op';
+  $handler->display->display_options['filters']['og_group_ref_target_id']['expose']['label'] = 'Account';
+  $handler->display->display_options['filters']['og_group_ref_target_id']['expose']['operator'] = 'og_group_ref_target_id_op';
+  $handler->display->display_options['filters']['og_group_ref_target_id']['expose']['identifier'] = 'og_group_ref_target_id';
+  $handler->display->display_options['filters']['og_group_ref_target_id']['expose']['remember'] = TRUE;
+  $handler->display->display_options['filters']['og_group_ref_target_id']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    3 => 0,
+    4 => 0,
+  );
+  $handler->display->display_options['filters']['og_group_ref_target_id']['is_grouped'] = TRUE;
+  $handler->display->display_options['filters']['og_group_ref_target_id']['group_info']['label'] = 'Account';
+  $handler->display->display_options['filters']['og_group_ref_target_id']['group_info']['identifier'] = 'og_group_ref_target_id';
+  $handler->display->display_options['filters']['og_group_ref_target_id']['group_info']['group_items'] = array(
+    1 => array(
+      'title' => '1',
+      'operator' => '=',
+      'value' => array(
+        'value' => '1',
+        'min' => '',
+        'max' => '',
+      ),
+    ),
+    2 => array(
+      'title' => '2',
+      'operator' => '=',
+      'value' => array(
+        'value' => '2',
+        'min' => '',
+        'max' => '',
+      ),
+    ),
+    3 => array(
+      'title' => '3',
+      'operator' => '=',
+      'value' => array(
+        'value' => '3',
+        'min' => '',
+        'max' => '',
+      ),
+    ),
+    4 => array(
+      'title' => '4',
+      'operator' => '=',
+      'value' => array(
+        'value' => '4',
+        'min' => '',
+        'max' => '',
+      ),
+    ),
+    5 => array(
+      'title' => '5',
+      'operator' => '=',
+      'value' => array(
+        'value' => '5',
+        'min' => '',
+        'max' => '',
+      ),
+    ),
+    6 => array(
+      'title' => '6',
+      'operator' => '=',
+      'value' => array(
+        'value' => '6',
+        'min' => '',
+        'max' => '',
+      ),
+    ),
+    7 => array(
+      'title' => '7',
+      'operator' => '=',
+      'value' => array(
+        'value' => '7',
+        'min' => '',
+        'max' => '',
+      ),
+    ),
+  );
   /* Filter criterion: Content: Place Address (field_place_address) */
   $handler->display->display_options['filters']['field_place_address_value']['id'] = 'field_place_address_value';
   $handler->display->display_options['filters']['field_place_address_value']['table'] = 'field_data_field_place_address';
@@ -545,6 +654,40 @@ function negawatt_meter_views_default_views() {
       'value' => array(
         0 => '0',
       ),
+    ),
+  );
+  /* Filter criterion: Content: Has electricity (field_has_electricity) */
+  $handler->display->display_options['filters']['field_has_electricity_value']['id'] = 'field_has_electricity_value';
+  $handler->display->display_options['filters']['field_has_electricity_value']['table'] = 'field_data_field_has_electricity';
+  $handler->display->display_options['filters']['field_has_electricity_value']['field'] = 'field_has_electricity_value';
+  $handler->display->display_options['filters']['field_has_electricity_value']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_has_electricity_value']['expose']['operator_id'] = 'field_has_electricity_value_op';
+  $handler->display->display_options['filters']['field_has_electricity_value']['expose']['label'] = 'Has electricity (field_has_electricity)';
+  $handler->display->display_options['filters']['field_has_electricity_value']['expose']['operator'] = 'field_has_electricity_value_op';
+  $handler->display->display_options['filters']['field_has_electricity_value']['expose']['identifier'] = 'field_has_electricity_value';
+  $handler->display->display_options['filters']['field_has_electricity_value']['is_grouped'] = TRUE;
+  $handler->display->display_options['filters']['field_has_electricity_value']['group_info']['label'] = 'Has electricity';
+  $handler->display->display_options['filters']['field_has_electricity_value']['group_info']['identifier'] = 'field_has_electricity_value';
+  $handler->display->display_options['filters']['field_has_electricity_value']['group_info']['remember'] = 1;
+  $handler->display->display_options['filters']['field_has_electricity_value']['group_info']['group_items'] = array(
+    1 => array(
+      'title' => 'Yes',
+      'operator' => 'or',
+      'value' => array(
+        1 => '1',
+      ),
+    ),
+    2 => array(
+      'title' => 'No',
+      'operator' => 'or',
+      'value' => array(
+        0 => '0',
+      ),
+    ),
+    3 => array(
+      'title' => '',
+      'operator' => 'or',
+      'value' => array(),
     ),
   );
 
