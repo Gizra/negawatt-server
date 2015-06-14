@@ -100,14 +100,16 @@ angular.module('negawattClientApp')
         method: 'GET',
         url: url,
         params: params
-      }).success(function(electricity) {
-        setCache(electricity, hash, skipResetCache);
+      }).success(function(electricity, status, headers, config) {
+        var noData = angular.isDefined(config.params.nodata);
+        var hasNextPage = electricity.next != undefined;
+
+        setCache(electricity, hash, skipResetCache, noData);
 
         deferred.resolve(electricityRecords(hash));
 
         // If there are more pages, read them.
-        var hasNextPage = electricity.next != undefined;
-        if (hasNextPage) {
+        if (hasNextPage && !noData) {
           getDataFromBackend(hash, pageNumber + 1, true);
         }
       });
@@ -124,13 +126,16 @@ angular.module('negawattClientApp')
      *   A key for the cached data - the hash code of the filters.
      * @param skipResetCache
      *   If false, a timer will be set to clear the cache in 60 sec.
+     * @param noData
+     *   True if parameter noData is 1, otherwise is false.
      */
-    function setCache(electricity, key, skipResetCache) {
+    function setCache(electricity, key, skipResetCache, noData) {
       // Cache messages data.
       cache[key] = {
         data: (cache[key] ? cache[key].data : []).concat(electricity.data),
         limits: electricity.summary.timestamp,
-        timestamp: new Date()
+        timestamp: new Date(),
+        noData: noData
       };
 
       // Broadcast an update event.

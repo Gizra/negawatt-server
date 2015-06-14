@@ -234,6 +234,7 @@ angular.module('negawattClientApp')
      *   Filters array in the form required by get().
      */
     function filtersFromSelector(params) {
+      var FilterFactory = $injector.get('FilterFactory');
 
       // Prepare filters for data request.
       var filters = {
@@ -248,6 +249,15 @@ angular.module('negawattClientApp')
           'filter[timestamp][value][0]': params.chartPreviousPeriod || '', // chartBeginTimestamp,
           'filter[timestamp][value][1]': params.chartNextPeriod || ''// chartEndTimestamp
         });
+        // Set filter electtricity.nodata
+        FilterFactory.set('electricity-nodata', false);
+      }
+      // Avoid to make calculation on the server side, and get data not accurate.
+      else {
+        angular.extend(filters, {
+          'nodata':1,
+        });
+        FilterFactory.set('electricity-nodata', true);
       }
 
       if (params.selectorType) {

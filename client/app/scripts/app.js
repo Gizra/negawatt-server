@@ -98,7 +98,6 @@ angular
 
             return {
               loadElectricity: true,
-              limits: meters.summary.electricity_time_interval,
               activeElectricityHash: FilterFactory.get('activeElectricityHash')
             };
           },
@@ -155,7 +154,6 @@ angular
           filters: function(categories, $stateParams, FilterFactory) {
             return {
               loadElectricity: true,
-              limits: categories.collection[$stateParams.categoryId].electricity_time_interval,
               activeElectricityHash: FilterFactory.get('activeElectricityHash')
             };
           }
@@ -205,7 +203,6 @@ angular
           filters: function(meters, $stateParams, FilterFactory) {
             return {
               loadElectricity: true,
-              limits: meters.list[$stateParams.markerId] && meters.list[$stateParams.markerId].electricity_time_interval || {},
               activeElectricityHash: FilterFactory.get('activeElectricityHash')
             };
           }

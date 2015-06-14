@@ -10,18 +10,38 @@ angular.module('negawattDirectives', [])
 
         // Update the Chart data every time the electricity data.
         $scope.$watch('ctrlChart.electricity', function(current) {
+          var limits,
+            period;
+
           if (Utils.isEmpty(current)) {
             return;
           }
 
-          // Render the chart with the active selected data.
-          render();
+          // Directive configuration in case the Chart Period
+          if (!ChartUsagePeriod.getPeriod().isConfigured()) {
+            // Define the first period.
+            limits = $filter('activeElectricityFilters')(ctrlChart.electricity, 'limits');
+            ChartUsagePeriod.config(limits);
+            period = ChartUsagePeriod.getPeriod();
+          }
 
+          if (FilterFactory.get('electricity-nodata')) {
+            // Update parameters an refreshChart.
+            if (period) {
+              updateElectricityFilters({chartFreq: period.chart && +period.chart.type, chartNextPeriod: period.next, chartPreviousPeriod: period.previous});
+              refreshChart();
+            }
+          }
+          else {
+            // Render the chart with the active selected data.
+            render();
+
+          }
           // Clear the spinner.
           ctrlChart.isLoading = false;
+
         }, true);
 
-        ctrlChart.__period = ChartUsagePeriod.getPeriod;
         // Update data object.
         // Get chart frequencies. (Tabs the period of time)
         ctrlChart.frequencies = ChartUsagePeriod.getFrequencies();
@@ -35,24 +55,44 @@ angular.module('negawattDirectives', [])
          *  The type of frequency according the period of time selected.
          */
         ctrlChart.changeFrequency = function(type) {
-          // Clear period when Change active frequency.
-          ChartUsagePeriod.resetPeriods();
+          $scope.$on('activeMeter', function(meter) {
+            // Update the electricity filters, only if are in the period change.
+            updateElectricityFilters({chartFreq: +type, chartNextPeriod: null, chartPreviousPeriod: null}, true);
 
-          // Update the electricity filters, only if are in the period change.
-          updateElectricityFilters(angular.extend({chartFreq: +type}, getPeriodParams(type)));
+            // Redraw the chart.
+            render();
 
-          // Refresh chart type.
-          ctrlChart.hasData && refreshChart();
+            // Refresh chart type.
+            ctrlChart.hasData && refreshChart();
+          });
+
+          if (FilterFactory.get('meter')) {
+            return;
+          }
+          else
+          {
+
+            // Update the electricity filters, only if are in the period change.
+            updateElectricityFilters({chartFreq: +type, chartNextPeriod: null, chartPreviousPeriod: null}, true);
+
+            // Redraw the chart.
+            render();
+
+            // Refresh chart type.
+            ctrlChart.hasData && refreshChart();
+          }
+
+
         }
 
         /**
          * Change the actual period to next or previous.
          *
-         * @param type
+         * @param periodDirection
          *  String indicate the direction of the new period next or previous.
          */
-        ctrlChart.changePeriod = function(type) {
-          var newPeriod = ChartUsagePeriod.changePeriod(type);
+        ctrlChart.changePeriod = function(periodDirection) {
+          var newPeriod = ChartUsagePeriod.changePeriod(periodDirection);
 
           // Update Electricity Filter.
           updateElectricityFilters({chartNextPeriod: newPeriod.next, chartPreviousPeriod: newPeriod.previous});
@@ -65,7 +105,7 @@ angular.module('negawattDirectives', [])
          * parameter, otherwise false.
          */
         ctrlChart.hasData = function hasData() {
-          return !!$filter('activeElectricityFilters')(ctrlChart.electricity).length;
+          return !!$filter('activeElectricityFilters')(ctrlChart.electricity).length || false;
         }
 
         /**
@@ -82,8 +122,11 @@ angular.module('negawattDirectives', [])
          *
          * @param params
          *  The new parameters to be updated on the filters.
+         * @param reset
+         *  Reset first the previuos filters.
          */
-        function updateElectricityFilters(params) {
+        function updateElectricityFilters(params, reset) {
+          reset && ChartUsagePeriod.reset();
           // Update url with params updated.
           angular.extend($stateParams, params);
           $state.refreshUrlWith($stateParams);
@@ -106,40 +149,34 @@ angular.module('negawattDirectives', [])
         }
 
         /**
-         * Get the actual period, from URL or default Pariod values.
-         * the object is returning in in a URL query string parameters format.
-         *
-         *
-         * @param type
-         *  The size of the period thata we wnats to return.
-         *
-         * @returns {{chartNextPeriod: *, chartPreviousPeriod: *}}
-         */
-        function getPeriodParams(type) {
-
-          // Set frequency selected as active.
-          ChartUsagePeriod.setActiveFrequency(type);
-
-          // Set URL Period ({previous: number, next: number}) using $stateParams period parameters.
-          ChartUsagePeriod.setPeriod({
-            next: $stateParams.chartNextPeriod || null,
-            previous: $stateParams.chartPreviousPeriod || null
-          });
-
-          // Return a new paramenter from a Period previuos defined and saved.
-          return {
-            chartNextPeriod: ChartUsagePeriod.getPeriod().next,
-            chartPreviousPeriod: ChartUsagePeriod.getPeriod().previous
-          };
-        }
-
-        /**
          * Redender the chart with the frequency and period selected.
          */
         function render() {
-          // Set limits and data to charts, wuth the active electricity request.
-          ctrlChart.data = $filter('toChartDataset')($filter('activeElectricityFilters')(ctrlChart.electricity));
-          ChartUsagePeriod.setLimits($filter('activeElectricityFilters')(ctrlChart.electricity, 'limits'));
+          var period;
+          var electricity = ctrlChart.electricity[FilterFactory.get('activeElectricityHash')];
+
+          // Request no cached.
+          if (angular.isUndefined(electricity)) {
+            ctrlChart.data = $filter('toChartDataset')($filter('activeElectricityFilters')(ctrlChart.electricity));
+          }
+          else {
+
+            if (electricity.noData) {
+              // Get cache data.
+              ChartUsagePeriod.setActiveFrequency($stateParams.chartFreq);
+              ChartUsagePeriod.config(electricity.limits);
+              period = ChartUsagePeriod.getPeriod();
+              updateElectricityFilters({chartFreq: +period.chart.type, chartNextPeriod: period.next, chartPreviousPeriod: period.previous});
+
+              // Render new period data.
+              render();
+            }
+            else {
+
+              // Load cache data
+              ctrlChart.data = $filter('toChartDataset')(electricity.data);
+            }
+          }
 
 
         }

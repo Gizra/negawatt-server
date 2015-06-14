@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Meter', function ($q, $http, $timeout, $rootScope, Config, Marker, Utils, FilterFactory) {
+  .service('Meter', function ($q, $http, $timeout, $rootScope, $filter, Config, Marker, Utils, FilterFactory) {
     var self = this;
 
     // A private cache key.
@@ -104,6 +104,8 @@ angular.module('negawattClientApp')
      *    The meter list.
      */
     function setCache(data) {
+      var activeMeter;
+
       if (angular.isUndefined(cache.data)) {
         cache.data = {
           // Save all the meters during the cache are avalible.
@@ -123,6 +125,13 @@ angular.module('negawattClientApp')
 
       // Broadcast and event to update the markers in the map.
       $rootScope.$broadcast(broadcastUpdateEventName, metersFiltered());
+
+      // Broadcast event that we have a activeMeter
+      activeMeter = $filter('meterById')(cache.data.listAll, FilterFactory.get('meter'));
+      if  (!Utils.isEmpty(activeMeter) && activeMeter.has_electricity) {
+        // Broadcast and event to update the markers in the map.
+        $rootScope.$broadcast('activeMeter', activeMeter);
+      }
 
       // Active the reset after update the cache.
       skipResetCache = false;
