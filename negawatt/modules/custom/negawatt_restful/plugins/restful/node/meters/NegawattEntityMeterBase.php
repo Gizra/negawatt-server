@@ -52,6 +52,14 @@ class NegawattEntityMeterBase extends \NegawattEntityBaseNode {
       ),
     );
 
+    $public_fields['meter_processed'] = array(
+      'property' => 'field_meter_processed',
+    );
+
+    $public_fields['last_processed'] = array(
+      'property' => 'field_last_processed',
+    );
+
     $public_fields['max_frequency'] = array(
       'property' => 'field_max_frequency',
     );

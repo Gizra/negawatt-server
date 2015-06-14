@@ -363,7 +363,7 @@ class ModbusMaster {
     $buffer1 = "";
     // build body
     $buffer2 = "";
-    $buffer2 .= iecType::iecBYTE(3);             // FC 3 = 3(0x03)
+    $buffer2 .= iecType::iecBYTE(4/*3*/);             // FC 3 = 3(0x03)
     // build body - read section    
     $buffer2 .= iecType::iecINT($reference);  // refnumber = 12288      
     $buffer2 .= iecType::iecINT($quantity);       // quantity

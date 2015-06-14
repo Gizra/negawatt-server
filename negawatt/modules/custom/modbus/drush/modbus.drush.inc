@@ -87,51 +87,51 @@ function modbus_read_one_meter($meter_id) {
     return FALSE;
   }
 
-  drush_log(format_string('Node @meter_id loaded', array('@meter_id' => $meter_id)), 'ok');
-
   // Get meter properties from node
   $wrapper = entity_metadata_wrapper('node', $meter_id);
+  $meter_title = $wrapper->title->value();
   $meter_type = $wrapper->field_meter_type->value();
   $address = $wrapper->field_meter_ip_address->value();
   $modbus_id = $wrapper->field_meter_id->value();
   $meter_port = $wrapper->field_meter_port->value();
 
-  drush_log('Meter ip address = '.$address, 'ok');
+  drush_log(format_string('Node "@title" (id=@meter_id) loaded', array('@title' => $meter_title, '@meter_id' => $meter_id)), 'ok');
+  drush_log(format_string('Meter ip address = @address, port = @port, meter-id = @id', array('@address' => $address, '@port' => $meter_port, '@id' => $modbus_id)) , 'ok');
 
   // Prepare set of registers to read.
   $requests = array(
     'satec' => array(
       // 1 Second total KW.
-      array('reference' => 14336 + 00, 'quantity' => 2, 'signed' => TRUE),
+      array('reference' => 14336 + 00, 'quantity' => 2, 'type' => 'signed-int'),
       // 1 Second total PF.
-      array('reference' => 14336 + 06, 'quantity' => 2, 'signed' => TRUE),
+      array('reference' => 14336 + 06, 'quantity' => 2, 'type' => 'signed-int', 'divide-by' => 1000),
       // Total sum kWh.
-      array('reference' => 14720 + 00, 'quantity' => 2, 'signed' => FALSE),
+      array('reference' => 14720 + 00, 'quantity' => 2, 'type' => 'unsigned-int'),
       // Phase sum kWh.
-      array('reference' => 14848 + 00, 'quantity' => 2, 'signed' => FALSE),
-      array('reference' => 14848 + 02, 'quantity' => 2, 'signed' => FALSE),
-      array('reference' => 14848 + 04, 'quantity' => 2, 'signed' => FALSE),
+      array('reference' => 14848 + 00, 'quantity' => 2, 'type' => 'unsigned-int'),
+      array('reference' => 14848 + 02, 'quantity' => 2, 'type' => 'unsigned-int'),
+      array('reference' => 14848 + 04, 'quantity' => 2, 'type' => 'unsigned-int'),
       // 1 Second phase PF.
-      array('reference' => 13952 + 30, 'quantity' => 2, 'signed' => TRUE),
-      array('reference' => 13952 + 32, 'quantity' => 2, 'signed' => TRUE),
-      array('reference' => 13952 + 34, 'quantity' => 2, 'signed' => TRUE),
+      array('reference' => 13952 + 30, 'quantity' => 2, 'type' => 'signed-int', 'divide-by' => 1000),
+      array('reference' => 13952 + 32, 'quantity' => 2, 'type' => 'signed-int', 'divide-by' => 1000),
+      array('reference' => 13952 + 34, 'quantity' => 2, 'type' => 'signed-int', 'divide-by' => 1000),
     ),
     // @fixme: put correct values for elnet meter here.
     'elnet' => array(
-      // 1 Second total W.
-      array('reference' => 25, 'quantity' => 2, 'signed' => TRUE),
+      // 1 Second total W. Divide by 1,000 to get KW.
+      array('reference' => 25, 'quantity' => 2, 'type' => 'float-4', 'divide-by' => 1000),
       // 1 Second total PF.
-      array('reference' => 49, 'quantity' => 2, 'signed' => TRUE),
-      // Total sum Wh.
-      array('reference' => 1385, 'quantity' => 2, 'signed' => FALSE),
-      // Phase sum Wh.
-      array('reference' => 1319, 'quantity' => 2, 'signed' => FALSE),
-      array('reference' => 1321, 'quantity' => 2, 'signed' => FALSE),
-      array('reference' => 1323, 'quantity' => 2, 'signed' => FALSE),
+      array('reference' => 49, 'quantity' => 2, 'type' => 'float-4'),
+      // Total sum Wh. Divide by 1,000 to get KWh.
+      array('reference' => 79, 'quantity' => 2, 'type' => 'float-4', 'divide-by' => 1000),
+      // Phase sum Wh. Divide by 1,000 to get KWh.
+      array('reference' => 119, 'quantity' => 2, 'type' => 'float-4', 'divide-by' => 1000),
+      array('reference' => 121, 'quantity' => 2, 'type' => 'float-4', 'divide-by' => 1000),
+      array('reference' => 123, 'quantity' => 2, 'type' => 'float-4', 'divide-by' => 1000),
       // 1 Second phase PF.
-      array('reference' => 43, 'quantity' => 2, 'signed' => TRUE),
-      array('reference' => 45, 'quantity' => 2, 'signed' => TRUE),
-      array('reference' => 47, 'quantity' => 2, 'signed' => TRUE),
+      array('reference' => 43, 'quantity' => 2, 'type' => 'float-4'),
+      array('reference' => 45, 'quantity' => 2, 'type' => 'float-4'),
+      array('reference' => 47, 'quantity' => 2, 'type' => 'float-4'),
     ),
   );
 
@@ -183,14 +183,15 @@ function modbus_write_data_to_db($meter_id, $data, $timestamp, $debug = FALSE) {
     'meter_nid' => $meter_id,
     'timestamp' => $timestamp,
     'rate_type' => 'unknown',
+    'frequency' => 5,
     'kwh' => $data[2],
-    'power_factor' => $data[1] / 1000,
+    'power_factor' => $data[1],
     'kwh_l1' => $data[3],
     'kwh_l2' => $data[4],
     'kwh_l3' => $data[5],
-    'power_factor_l1' => $data[6] / 1000,
-    'power_factor_l2' => $data[7] / 1000,
-    'power_factor_l3' => $data[8] / 1000,
+    'power_factor_l1' => $data[6],
+    'power_factor_l2' => $data[7],
+    'power_factor_l3' => $data[8],
   );
 
   $entity = entity_create('electricity_raw', $values);
@@ -232,7 +233,8 @@ function modbus_read_modbus_32bit_registers($request, $address, $modbus_id = 1, 
   // Extract request parameters.
   $reference = $request['reference'];
   $quantity = $request['quantity'];
-  $signed = $request['signed'];
+  $type = $request['type'];
+  $divide_by = empty($request['divide-by']) ? 1 : $request['divide-by'];
 
   // Set default values.
   $modbus_id = $modbus_id ? $modbus_id : 1;
@@ -246,22 +248,83 @@ function modbus_read_modbus_32bit_registers($request, $address, $modbus_id = 1, 
     $recData = $modbus->readMultipleRegisters($modbus_id, $reference, $quantity);
 
     // Calc value from returned bytes.
-    $value = 0;
-    for ($i = 0; $i < count($recData); $i += 2) {
-      $value += ($recData[$i + 1] + $recData[$i] * 256) * pow(256, $i);
+    switch ($type) {
+      case 'float-4':
+        return four_bytes_to_float($recData) / $divide_by;
+      case 'unsigned-int':
+        return four_bytes_to_unsigned_int($recData) / $divide_by;
+      case 'signed-int':
+        return four_bytes_to_signed_int($recData) / $divide_by;
     }
-    // If value is signed, and is higher then half the full-range (256^n, where n is the number of bytes),
-    // then get the negative value by subtracting the full-range from the value.
-    if ($signed) {
-      $full_range = pow(256, count($recData));
-      if ($value >= $full_range / 2) {
-        $value -= $full_range;
-      }
-    }
-    return $value;
   }
   catch (Exception $e) {
     drush_log('Cannot read registers. Error returned: ' . $e.message);
-    return FALSE;
   }
+  return FALSE;
+}
+
+/**
+ * Convert an array of 2 or 4 bytes to an unsigned int.
+ *
+ * @param $data
+ *    Array of bytes.
+ *
+ * @return int
+ *    Unsigned int.
+ */
+function four_bytes_to_unsigned_int($data) {
+  $value = 0;
+  for ($i = 0; $i < count($data); $i += 2) {
+    $value += ($data[$i + 1] + $data[$i] * 256) * pow(256, $i);
+  }
+  return $value;
+}
+
+/**
+ * Convert an array of 2 or 4 bytes to a signed int.
+ *
+ * @param $data
+ *    Array of bytes.
+ *
+ * @return int|number
+ *    Signed int.
+ */
+function four_bytes_to_signed_int($data) {
+  $value = four_bytes_to_unsigned_int($data);
+  // If value is signed, and is higher then half the full-range (256^n, where n is the number of bytes),
+  // then get the negative value by subtracting the full-range from the value.
+  $full_range = pow(256, count($data));
+  if ($value >= $full_range / 2) {
+    $value -= $full_range;
+  }
+  return $value;
+}
+
+/**
+ * Convert an array of 4 bytes into a single precision float by IEEE-754-2008.
+ * See: https://en.wikipedia.org/wiki/Single-precision_floating-point_format
+ *
+ * @param $data
+ *    Array of 4 bytes.
+ *
+ * @return number
+ *    Single precision float.
+ */
+function four_bytes_to_float($data) {
+  $N = 0;
+  for ($i=0; $i<4; $i++) {
+    $N = $N * 256 + $data[$i];
+  }
+  drush_log("N: $N, " . base_convert($N, 10, 2));
+
+  $sign = pow(-1, $N >> 31);
+  $exp = ($N >> 23) & 0xFF;
+  $frac = 1 + ($N & 0x7FFFFF) / pow(2, 23);
+
+  $float = $sign * $frac * pow(2, $exp - 127);
+
+  drush_log(format_string('sign: @sign, exp: @exp, frac: @frac', array('@sign' => $sign, '@exp' => $exp, '@frac' => $frac)));
+  drush_log($float);
+
+  return $float;
 }
