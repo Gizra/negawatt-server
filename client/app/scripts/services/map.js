@@ -20,8 +20,9 @@ angular.module('negawattClientApp')
       return {
         tileLayer: 'https://{s}.tiles.mapbox.com/v3/examples.map-i87786ca/{z}/{x}/{y}.png',
         zoomControlPosition: 'bottomleft',
-        minZoom: 8,
-        maxZoom:16
+        minZoom: 13,
+        maxZoom:19,
+        maxNativeZoom: null
       };
     };
 
