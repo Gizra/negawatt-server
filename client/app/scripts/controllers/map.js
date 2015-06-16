@@ -8,7 +8,7 @@ angular.module('negawattClientApp')
     $scope.defaults = Map.getConfig();
     $scope.center = Map.getCenter(account);
     $scope.meters = meters.list;
-
+    
     // Hover above marker in the Map -  open tooltip.
     $scope.$on("leafletDirectiveMarker.mouseover", function(event, args) {
       var leafletId = args.markerName;

@@ -10,6 +10,17 @@ angular.module('negawattClientApp')
     // Update event broadcast name.
     var broadcastUpdateEventName = 'nwMapChanged';
 
+    var maxBounds = {};
+
+    /**
+     * Return value of the max bounds for the actual map.
+     *
+     * @returns {{}}
+     */
+    this.getMaxBounds = function() {
+      return maxBounds;
+    };
+
     /**
      * Return extra configuration for the maps.
      *
@@ -104,8 +115,41 @@ angular.module('negawattClientApp')
       return cache.markerSelected;
     };
 
+    /**
+     * Global Event to clear cache data.
+     */
     $rootScope.$on('nwClearCache', function() {
       cache = {};
     });
+
+    /**
+     * Map Event Load
+     *
+     * - Update max bound of the map, according the center value.
+     */
+    $rootScope.$on('leafletDirectiveMap.load', function(event, members) {
+      getActualBounds().then(function() {
+        members.model.maxbounds = self.getMaxBounds();
+      })
+      event.preventDefault();
+    });
+
+    /**
+     * Return promise with actual bounds of the map.
+     *
+     * When promise is resolved update a private  maxBound variable.
+     *
+     * @returns {*}
+     *  A Promise $q
+     */
+    function getActualBounds() {
+      return leafletData.getMap().then(function(map) {
+        var bounds = map.getBounds();
+        maxBounds = {
+          northEast: bounds._northEast,
+          southWest: bounds._southWest
+        };
+      })
+    }
 
   });
