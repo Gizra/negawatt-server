@@ -124,11 +124,6 @@ angular
           },
           'details@dashboard': {
             templateUrl: 'views/dashboard/main.details.html',
-            resolve: {
-              categoriesChart: function(ChartCategories, account, categories, $stateParams) {
-                return ChartCategories.get(account.id, $stateParams.categoryId, categories.collection);
-              }
-            },
             controller: 'DetailsCtrl'
           },
           'usage@dashboard': {

@@ -1,5 +1,5 @@
 <span><i class="icon-options"></i></span>
-<div ng-show="meterSelected" class="meter-details">
+<div ng-if="meterSelected" class="meter-details">
   <div><b>שם: </b>{{meterSelected.label}}</div>
   <div><b>מס׳ חוזה: </b>{{meterSelected.contract}}</div>
   <div><b>מקום: </b>{{meterSelected.place_description}}</div>
@@ -8,7 +8,7 @@
   <div><b>קוד מונה: </b>{{meterSelected.meter_code}}</div>
 </div>
 
-<div ng-if="categoriesChart.data">
+<div ng-if="categoriesChart.data && !meterSelected">
   <div google-chart chart="categoriesChart" on-select="onSelect(selectedItem, categoriesChart.data)" class="categoriesChart"></div>
 </div>
 

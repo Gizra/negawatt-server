@@ -11,7 +11,7 @@ angular.module('negawattClientApp')
      * @param categoryId
      *  The category ID.
      * @param collection
-     *  The categories as collection.
+     *  The electricity collection.
      *
      * @returns {$q.promise}
      */
