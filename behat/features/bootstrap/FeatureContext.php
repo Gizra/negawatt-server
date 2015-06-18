@@ -303,9 +303,11 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    */
   public function iPressTheButtonOnTheCharts($name) {
     if ($name === 'previous') {
+      $this->iWaitForCssElement('#chart-usage-btn-arrow-left', 'appear');
       $this->getSession()->getPage()->pressButton('chart-usage-btn-arrow-left');
     }
     else if ($name === 'next') {
+      $this->iWaitForCssElement('#chart-usage-btn-arrow-right', 'appear');
       $this->getSession()->getPage()->pressButton('chart-usage-btn-arrow-right');
     }
   }
