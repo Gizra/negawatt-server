@@ -15,17 +15,22 @@
 }
 
 // Chart with data
-.chart-empty {
-  display: table;
-  table-layout: fixed;
+.chart-container {
   height: 100%;
 
-  .chart-message {
-    display:table-cell;
-    vertical-align:middle;
-    text-align:center;
+  .chart-empty {
+    display: table;
+    table-layout: fixed;
+    height: inherit;
+
+    .chart-message {
+      display:table-cell;
+      vertical-align:middle;
+      text-align:center;
+    }
   }
 }
+
 
 // Tabs
 .box-chart-usage {

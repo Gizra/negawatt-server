@@ -196,6 +196,8 @@ angular
             return Category.get(account.id);
           },
           filters: function(meters, $stateParams, FilterFactory) {
+            FilterFactory.set('electricity', $stateParams);
+
             return {
               loadElectricity: true,
               activeElectricityHash: FilterFactory.get('activeElectricityHash')

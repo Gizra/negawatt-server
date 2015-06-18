@@ -8,11 +8,12 @@
  * Controller of the negawattClientApp
  */
 angular.module('negawattClientApp')
-  .controller('UsageCtrl', function UsageCtrl($scope, $state, $stateParams, Electricity, Chart, ChartUsagePeriod, meters, filters) {
+  .controller('UsageCtrl', function UsageCtrl($scope, $state, $stateParams, $filter, Electricity, Chart, ChartUsagePeriod, FilterFactory, meters, filters, ChartElectricityUsage) {
     var vm = this;
+    var getChartPeriod = ChartUsagePeriod.getChartPeriod;
 
-    // Popuate the electricity data into the UI.
-    vm.electricity = {};
+    // Populate the electricity data into the UI.
+    vm.electricity;
 
     // Get the parameters chart frecuency.
     if (angular.isDefined($stateParams.chartFreq)) {
@@ -28,17 +29,35 @@ angular.module('negawattClientApp')
       // ChartUsage.meterSelected(meters.list[$stateParams.markerId]);
     }
 
-    // Handle lazy-load of electricity data.
-    // When cache expands, update the chart.
+    /**
+     * Electricity Service Event: When electricity collection change update
+     * the active electricity (electricity data from a specific period) to
+     * usage chart directive.
+     */
     $scope.$on("nwElectricityChanged", function(event, electricity) {
-      // Update electricity object.
-      vm.electricity = angular.isDefined(electricity) && electricity;
-      event.preventDefault();
+      var missingPeriod;
+
+      if (angular.isUndefined(electricity)) {
+        return;
+      }
+
+      // Save if the period id missing on electricity request, otherwhise false.
+      missingPeriod = $filter('activeElectricityFilters')(electricity, 'noData');
+
+      if (!getChartPeriod().isConfigured()) {
+        // Configure the period for the chart frequency selected, and request
+        // specific electricity data.
+        ChartUsagePeriod.config($filter('activeElectricityFilters')(electricity, 'limits'));
+      }
+
+      if (missingPeriod && getChartPeriod().isConfigured()) {
+        ChartElectricityUsage.requestElectricity(ChartUsagePeriod.stateParams);
+        return;
+      }
+
+      // Update electricity property with active electricity (if the response has data).
+      vm.electricity = $filter('activeElectricityFilters')(electricity);
     });
-
-
-    // Set the limits of the Chart Usage.
-    // ChartUsagePeriod.setLimits(filters.limits);
 
     /**
      * Force load of the electricity data.

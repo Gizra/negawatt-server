@@ -10,12 +10,12 @@ angular.module('negawattClientApp')
       previous: null,
       chart: null,
       /**
-       * Return truthy is existe a chart object setted. other wise falsy.
+       * Return true if the limits are configured, otherwise return false.
        *
        * @returns {boolean}
        */
       isConfigured: function() {
-        return !!this.chart;
+        return !!this.max && !!this.min;
       },
       /**
        * Set the default configuration of the period based on the type of Chart

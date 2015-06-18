@@ -29,6 +29,7 @@ angular.module('negawattClientApp')
      */
     this.get = function(hash) {
       if (angular.isUndefined(hash)) {
+        // 'Negawatt.Electricity - Hash not defined on method get(hash)';
         return undefined;
       }
 
@@ -87,7 +88,7 @@ angular.module('negawattClientApp')
       var url = Config.backend + '/api/electricity';
       // Create a copy of filters, since params might add page option. Filters must
       // stay clean of page parameters since it also serves as key to the cache.
-      var params = FilterFactory.getElectricity(hash);
+      var params = FilterFactory.getElectricity(hash) || {};
 
       // If page-number is given, add it to the params.
       // Don't modify 'filters' since it should reflect the general params,

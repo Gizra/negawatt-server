@@ -9,7 +9,8 @@ angular.module('negawattClientApp')
      * @param collection
      *  The collection dataset of electricity indexed by hash.
      * @param property
-     *  Get value of specfic property data of the electricity object, instead the data.
+     *  Get value of specfic property data of the electricity object,
+     *  instead the data.
      *
      * @returns {*}
      *  The electricity object of the filters selected.
@@ -19,7 +20,7 @@ angular.module('negawattClientApp')
       var active = FilterFactory.get('activeElectricityHash');
 
       // Recreate collection object.
-      return collection[active] && getValue(collection[active], property) || {};
+      return angular.isDefined(collection[active]) ? getValue(collection[active], property) : undefined;
     }
 
     /**
@@ -34,7 +35,7 @@ angular.module('negawattClientApp')
      * @returns {*}
      */
     function getValue(electricity, property) {
-      return property && electricity[property] || electricity.data;
+      return angular.isUndefined(property) ? electricity.data : electricity[property];
     }
 
   });

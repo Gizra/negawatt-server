@@ -23,7 +23,6 @@ angular.module('negawattClientApp')
       }
     };
 
-
     /**
      * Electricity Service Event: When electricity change update Pie chart of
      * consumption, according the summary data.

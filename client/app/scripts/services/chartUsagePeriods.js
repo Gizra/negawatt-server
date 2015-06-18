@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('ChartUsagePeriod', function (Utils, Period, Chart, moment, $injector) {
+  .service('ChartUsagePeriod', function (Utils, Period, Chart, moment, $injector, $stateParams, $state) {
 
     // Extend Period Factory.
     var extend = angular.extend;
@@ -9,7 +9,19 @@ angular.module('negawattClientApp')
 
     var copy = angular.copy;
     // Extend Period Factory.
-    var period = angular.extend({}, Period);
+    var period = extend({}, Period);
+
+    /**
+     * Return the $stateParams
+     *
+     * This necesary if need the new $stateParams value and still $location
+     * do not trigger url refresh.
+     *
+     * @type {$stateParams|*}
+     */
+    this.stateParams = $stateParams;
+
+    this.reset = reset;
 
     /**
      * Configure the initial values of a period, according the filters and data set.
@@ -22,6 +34,8 @@ angular.module('negawattClientApp')
       period.setTimeFrame(this.getActiveFrequency());
       // Set initial period according the time frame.
       period.setPeriod();
+
+      updateStateParams();
     };
 
     /**
@@ -29,16 +43,10 @@ angular.module('negawattClientApp')
      *
      * @returns {Object}
      */
-    this.getPeriod = function() {
+    this.getChartPeriod = function() {
       return period;
     };
 
-    /**
-     * Clear the actual period and the theirs limits.
-     */
-    this.reset = function() {
-      angular.extend(period, {max: null, min: null, next: null, previous: null, chart: null});
-    };
 
     /**
      * Return the new (next or previous) period, set as actual period.
@@ -53,7 +61,18 @@ angular.module('negawattClientApp')
       // Set the new period.
       period.setPeriod(getNewPeriod(periodDirection));
 
-      return this.getPeriod();
+      updateStateParams();
+    }
+
+    /**
+     *
+     */
+    this.changeFrequency = function(frequency) {
+      reset();
+      this.setActiveFrequency(frequency);
+      period.setTimeFrame(this.getActiveFrequency());
+
+      updateStateParams();
     }
 
     /**
@@ -75,6 +94,23 @@ angular.module('negawattClientApp')
         return !getNewPeriod(periodDirection).isFirst();
       }
     };
+
+    /**
+     * Update $stateParams with the ChartUsagePeriod configuration.
+     */
+    function updateStateParams() {
+      var params = {
+        chartFreq: +period.chart.type,
+        chartNextPeriod: period.next || undefined,
+        chartPreviousPeriod: period.previous || undefined
+      };
+
+      // Update $stateParams factory, with new params.
+      extend($stateParams, params);
+
+      // Refresh $state with new params.
+      $state.refreshUrlWith($stateParams);
+    }
 
     /**
      * Calculate the next and previous periods in unix format time.
@@ -107,5 +143,13 @@ angular.module('negawattClientApp')
       newPeriod = extend(copy(period), newPeriod);
       return newPeriod;
     };
+
+    /**
+     * Clear the actual period and the theirs limits.
+     */
+    function reset() {
+      angular.extend(period, {max: null, min: null, next: null, previous: null, chart: null});
+    }
+
 
   });
