@@ -48,7 +48,7 @@ angular.module('negawattClientApp')
        */
       showCategoryFilters: function() {
         var showControls = false;
-        if ($state.is('dashboard.withAccount') || $state.is('dashboard.withAccount.markers')) {
+        if ($state.is('dashboard.withAccount')) {
           showControls = true;
         }
         return showControls;
