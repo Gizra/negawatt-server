@@ -103,3 +103,4 @@ id,frequency,date_time,rate_type,meter_nid,sum_kwh,avg_power,min_power_factor
 102,2,"2010-06-01 00:00",flat,meter1,1578,2.3666666667,0
 103,2,"2010-07-01 00:00",flat,meter1,3500,2.3666666667,0
 104,2,"2010-08-01 00:00",flat,meter1,2680,2.3666666667,0
+105,2,"2010-08-01 00:00",flat,meter4,65584,2.3666666667,0

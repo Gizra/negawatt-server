@@ -182,6 +182,19 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     $this->waitForTextNgElement($end_chart, '256');
   }
 
+  /**
+   * @Then I should see category :category with :total_kws Kws
+   */
+  public function iShouldSeeCategoryWithKws($category, $total_kws) {
+    $validations = array(
+      '//div[@id="dashboard-controls"]//td[.="' . $category . '"]',
+      '//div[@id="dashboard-controls"]//td[.="' . $total_kws . '"]',
+    );
+
+    foreach($validations as $validation) {
+      $this->waitForXpathNode($validation, TRUE, TRUE);
+    }
+  }
 
   /**
    * @Then I should see the monthly kws chart of a meter
@@ -473,11 +486,14 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    *
    * @throws Exception
    */
-  private function waitForXpathNode($xpath, $appear = TRUE) {
-    $this->waitFor(function($context) use ($xpath, $appear) {
+  private function waitForXpathNode($xpath, $appear = TRUE, $only_check_node_existence = FALSE) {
+    $this->waitFor(function($context) use ($xpath, $appear, $only_check_node_existence) {
       try {
         $nodes = $context->getSession()->getDriver()->find($xpath);
         if (count($nodes) > 0) {
+          if ($only_check_node_existence) {
+            return TRUE;
+          }
           $visible = $nodes[0]->isVisible();
           return $appear ? $visible : !$visible;
         }

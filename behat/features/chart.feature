@@ -9,6 +9,27 @@ Feature: Chart
     When I reload "/#/dashboard/1"
     Then I should see the monthly kws chart of all meters
 
+  @javascript
+  Scenario: Show pie chart with total kws of the categories.
+    Given I login with user "carlos"
+    When I reload "/#/dashboard/1"
+    Then I should see category "בטחון" with "98815" Kws
+    And I should see category "מבנה חינוך" with "96654" Kws
+
+  @javascript @wip
+  Scenario: Show pie chart total kws of the subcategory of security.
+    Given I login with user "carlos"
+    When I reload "/#/dashboard/1"
+    And When I click "בטחון"
+    Then I should see the contract "" with "" Kws
+
+  @javascript @wip
+  Scenario: Show pie chart total kws of the meters.
+    Given I login with user "carlos"
+    When I reload "/#/dashboard/1"
+    And When I click "מקלט"
+    Then I should see the contract "" with "" Kws
+
   @javascript @wip
   Scenario: Show chart usage monthly of a selected meter.
     Given I login with user "carlos"
