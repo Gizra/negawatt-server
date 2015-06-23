@@ -31,7 +31,7 @@ angular.module('negawattClientApp')
       return {
         tileLayer: 'https://{s}.tiles.mapbox.com/v3/examples.map-i87786ca/{z}/{x}/{y}.png',
         zoomControlPosition: 'bottomleft',
-        minZoom: 13,
+        minZoom: 12,
         maxZoom:19,
         maxNativeZoom: null
       };
@@ -128,6 +128,11 @@ angular.module('negawattClientApp')
      * - Update max bound of the map, according the center value.
      */
     $rootScope.$on('leafletDirectiveMap.load', function(event, members) {
+      if (angular.isDefined(members.model.maxbounds)) {
+        return;
+      }
+
+      // Set initial max boundaries.
       getActualBounds().then(function() {
         members.model.maxbounds = self.getMaxBounds();
       })
@@ -143,13 +148,18 @@ angular.module('negawattClientApp')
      *  A Promise $q
      */
     function getActualBounds() {
+
       return leafletData.getMap().then(function(map) {
-        var bounds = map.getBounds();
+        var bounds;
+        // Force create boundaries with less zoom.
+        bounds = map.getBounds().pad(1.2);
         maxBounds = {
           northEast: bounds._northEast,
           southWest: bounds._southWest
         };
+
       })
     }
+
 
   });
