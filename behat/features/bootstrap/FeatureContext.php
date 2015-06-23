@@ -82,9 +82,9 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
-   * @Then I should see the category active
+   * @Then I should see a category active
    */
-  public function iShouldSeeTheCategoryActive() {
+  public function iShouldSeeCategoryActive() {
     $this->iWaitForCssElement('.active-category', 'appear');
   }
 
@@ -186,14 +186,22 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @Then I should see category :category with :total_kws Kws
    */
   public function iShouldSeeCategoryWithKws($category, $total_kws) {
-    $validations = array(
-      '//div[@id="dashboard-controls"]//td[.="' . $category . '"]',
-      '//div[@id="dashboard-controls"]//td[.="' . $total_kws . '"]',
-    );
+    $this->checkValuesPieChart($category, $total_kws);
+  }
 
-    foreach($validations as $validation) {
-      $this->waitForXpathNode($validation, TRUE, TRUE);
-    }
+  /**
+   * @Then I should see the contract :contract with :total_kws Kws
+   */
+  public function iShouldSeeTheContractWithKws($contract, $total_kws) {
+    $this->checkValuesPieChart($contract, $total_kws);
+  }
+
+  /**
+   * @When I should see the category :category
+   */
+  public function iShouldSeeTheCategory($category) {
+    $xpath_category = '//ol//span[contains(., "' . $category . '")]';
+    $this->waitForXpathNode($xpath_category);
   }
 
   /**
@@ -590,5 +598,24 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
         throw $e;
       }
     });
+  }
+
+  /**
+   * Valudate the toolptip data of the pie chart, label and value.
+   *
+   * @param $element
+   *  The label, could be a category or a contract number.
+   * @param $total_kws
+   *  The value is a total electricity kws consumption.
+   */
+  private function checkValuesPieChart($element, $total_kws) {
+    $validations = array(
+      '//div[@id="dashboard-controls"]//td[.="' . $element . '"]',
+      '//div[@id="dashboard-controls"]//td[.="' . $total_kws . '"]',
+    );
+
+    foreach($validations as $validation) {
+      $this->waitForXpathNode($validation, TRUE, TRUE);
+    }
   }
 }

@@ -47,8 +47,8 @@ angular.module('negawattClientApp')
     function getDataset(collection, labels) {
       var dataset = {
         'cols': [
-          {id: 't', label: 'Categories', type: 'string'},
-          {id: 's', label: 'Slices', type: 'number'}
+          {id: 't', label: collection.type, type: 'string'},
+          {id: 's', label: 'Kws', type: 'number'}
         ],
         'rows': getRows(collection.values, collection.type, labels)
       };
@@ -78,7 +78,7 @@ angular.module('negawattClientApp')
             this.push({
               c: [
                 {v: !Utils.isEmpty(labels) && labels[key].label || 'category ' + key},
-                {v: value},
+                {v: +value},
                 {id: key}
               ]
             });
@@ -89,7 +89,7 @@ angular.module('negawattClientApp')
             this.push({
               c: [
                 {v: !Utils.isEmpty(labels) && labels[key].contract || 'meter ' + key},
-                {v: value},
+                {v: +value},
                 {id: key}
               ]
             });

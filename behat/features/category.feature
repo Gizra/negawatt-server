@@ -7,13 +7,13 @@ Feature: Category
   Scenario: Show category selected active
     Given I login with user "carlos"
     When I visit "/#/dashboard/1/category/5"
-    Then I should see the category active
+    Then I should see a category active
 
   @javascript
   Scenario: Show highlight the active category with a meter selected
     Given I login with user "carlos"
     When I visit "/#/dashboard/1/marker/10?categoryId=14"
-    Then I should see the category active
+    Then I should see a category active
 
   @javascript
   Scenario: Hide filter meters checkbox in a category selection
@@ -31,7 +31,7 @@ Feature: Category
   Scenario: Show all categories unselected
     Given I login with user "carlos"
     When I visit "/#/dashboard/1/category/5"
-    And I should see the category active
+    And I should see a category active
     And I click "menu-home-link"
     Then I should see all categories inactive
 
