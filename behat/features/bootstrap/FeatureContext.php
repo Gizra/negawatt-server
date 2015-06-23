@@ -48,7 +48,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
 
     if ($check_success) {
       // Wait for the dashboard's menu to load, with the user accout information.
-      $this->iWaitForCssElement('#dashboard-controls > ui-view > div.menu-account', 'appear');
+      $this->iWaitForCssElement('#dashboard-controls > ui-view > div > div.menu-account', 'appear');
     }
   }
 
@@ -355,7 +355,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @Then I should see a greeting as :greeting
    */
   public function iShouldSeeAsUsername($greeting) {
-    $css_path_greeting = '#dashboard-controls > ui-view > div.menu-account.ng-scope > span';
+    $css_path_greeting = '#dashboard-controls > ui-view > div > div.menu-account > span';
     $this->waitForTextNgElement($css_path_greeting, $greeting);
   }
 
@@ -373,7 +373,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @Then I should see default profile image
    */
   public function iShouldSeeDefaultProfileImage() {
-    $csspath = '#dashboard-controls > ui-view > div.menu-account.ng-scope > img.menu-account-photo';
+    $csspath = '#dashboard-controls > ui-view > div > div.menu-account.ng-scope > img.menu-account-photo';
     $img_filename = 'default_profile_white.png';
     $attr = 'src';
     $this->waitForAttrNgElement($csspath, $attr, $img_filename);
