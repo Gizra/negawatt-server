@@ -95,7 +95,13 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     $this->iWaitForCssElement('.active-category', 'disappear');
   }
 
-
+  /**
+   * @Then I should see an alert :alert
+   */
+  public function iShouldSeeAnAlert($alert)  {
+    $xpath = '//span[contains(., "' . $alert . '")]';
+    $this->waitForXpathNode($xpath);
+  }
   /**
    * @Then I should see :markers markers
    */

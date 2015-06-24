@@ -25,8 +25,10 @@ angular
     'angular-md5',
     'angular-loading-bar',
     'ui.bootstrap.tabs',
+    'ui.bootstrap.alert',
     'template/tabs/tab.html',
     'template/tabs/tabset.html',
+    'template/alert/alert.html',
     'angularMoment',
     'ui.indeterminate',
     'negawattDirectives'

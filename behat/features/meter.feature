@@ -16,6 +16,12 @@ Feature: Meter
     Then I should see a marker selected
 
   @javascript
+  Scenario: Show message of inexistent meter
+    Given I login with user "carlos"
+    When I visit "/#/dashboard/1/marker/9000"
+    Then I should see an alert "מונה לא קיים."
+
+  @javascript
   Scenario: Show only meters of a selected in a category
     Given I login with user "carlos"
     When I visit "/#/dashboard/1/marker/9?categoryId=5"

@@ -1,3 +1,6 @@
+<div class="alert-container">
+  <alert ng-repeat="alert in vm.alerts" type="{{alert.type}}" close="vm.alerts.close($index)">{{alert.msg}}</alert>
+</div>
 <ui-view name="map"></ui-view>
 <div id="dashboard-controls">
   <ui-view name="menu" class="dashboard-menu"></ui-view>

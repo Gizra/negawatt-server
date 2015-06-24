@@ -23,11 +23,32 @@ angular.module('negawattClientApp')
       }
     };
 
+    // Select the meter when is comming with the 'lazy load'
+    $scope.$on('nwMetersChanged', function(event, meters) {
+      $scope.meterSelected = meters.list[$stateParams.markerId];
+      $scope.metersLoaded = meters.loaded;
+    });
+
+    // Generate alert if the a meter is selected and is not defined in the UI.
+    $scope.$watch('metersLoaded', function(loaded) {
+      if (!meters.loaded && !loaded) {
+        return;
+      }
+
+      if (angular.isUndefined($scope.meterSelected) && $state.is('dashboard.withAccount.markers')) {
+        $scope.vm.alerts.new({type: 'default', msg: 'מונה לא קיים.'});
+      }
+    });
+
     /**
      * Electricity Service Event: When electricity change update Pie chart of
      * consumption, according the summary data.
      */
-    $scope.$on("nwElectricityChanged", function(event, electricity) {
+    $scope.$on('nwElectricityChanged', function(event, electricity) {
+      if (angular.isDefined($stateParams.markerId)) {
+        return;
+      }
+
       var labels;
       // Get summary data from electricity.
       summary = $filter('summary')(electricity[FilterFactory.get('activeElectricityHash')]);

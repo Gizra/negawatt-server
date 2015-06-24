@@ -80,7 +80,7 @@ angular.module('negawattClientApp')
         url: url,
         transformResponse: prepareMetersForLeafletMarkers
       }).success(function(meters) {
-        setCache(meters.data);
+        setCache(meters.data, meters.hasNextPage);
 
         // Resolve with the meters filtered from cache.data.
         deferred.resolve(metersFiltered());
@@ -101,9 +101,11 @@ angular.module('negawattClientApp')
      * Save meters in cache, and broadcast en event to inform that the meters data changed.
      *
      * @param data
-     *    The meter list.
+     *  The meter list.
+     * @param hasMore
+     *  Indicate if has more data to request.
      */
-    function setCache(data) {
+    function setCache(data, hasMore) {
       var activeMeter;
 
       if (angular.isUndefined(cache.data)) {
@@ -113,7 +115,8 @@ angular.module('negawattClientApp')
           // Keep the actual collection filtered, used to show into the map.
           list: {},
           // Interval information for electricity chart.
-          summary: {}
+          summary: {},
+          loaded: !hasMore
         };
       }
 
@@ -237,7 +240,9 @@ angular.module('negawattClientApp')
       return regex.exec(url).pop();
     }
 
+    // Clear meter cache.
     $rootScope.$on('nwClearCache', function() {
       cache = {};
     });
+
   });
