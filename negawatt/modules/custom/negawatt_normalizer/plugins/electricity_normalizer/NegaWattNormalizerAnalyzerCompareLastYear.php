@@ -40,7 +40,7 @@ class NegaWattNormalizerAnalyzerCompareLastYear implements \NegaWattNormalizerAn
    */
   public function applies($data) {
     // Currently accepts only data sets with monthly data.
-    return !empty($data['month']);
+    return !empty($data[\NegaWattNormalizerTimeManagerInterface::MONTH]);
   }
 
   /**
@@ -49,9 +49,9 @@ class NegaWattNormalizerAnalyzerCompareLastYear implements \NegaWattNormalizerAn
   public function process(array $data, $create_message = TRUE) {
     $meter_nid = 0;
     $return = array();
-    $entities_of_frequency = $data['month'];
+    $entities_of_frequency = $data[\NegaWattNormalizerTimeManagerInterface::MONTH];
     foreach ($entities_of_frequency as $timestamp => $entities_of_timeframe) {
-      // Calc sum of kwh
+      // Calc sum of kwh for the time-frame (i.e., sum over rate-types).
       $sum_kwh = 0;
       foreach ($entities_of_timeframe as $entity) {
         $sum_kwh += $entity->sum_kwh;
@@ -60,7 +60,7 @@ class NegaWattNormalizerAnalyzerCompareLastYear implements \NegaWattNormalizerAn
 
       // Look for an entity from a year ago
       $year_ago = strtotime('-1 year', $timestamp);
-      $data_provider = $this->getDataProviderManager()->createDataProvider($year_ago, $year_ago, 'month', $meter_nid);
+      $data_provider = $this->getDataProviderManager()->createDataProvider($year_ago, $year_ago, \NegaWattNormalizerTimeManagerInterface::MONTH, $meter_nid);
       // The data-provider will look first in data, if none were found, it'll look
       // in the normalized-electricity db.
       $prev_year_entities = $data_provider->fetchEntities($data);
@@ -76,9 +76,11 @@ class NegaWattNormalizerAnalyzerCompareLastYear implements \NegaWattNormalizerAn
         if ($kwh_diff < 0.90 || $kwh_diff > 1.10) {
           // Consumed kWh difference is suspicious, put an alert
           // Prepare message parameters.
+          $node_wrapper = entity_metadata_wrapper('node', $meter_nid);
           $return[] = array(
             'nid' => $meter_nid,
             'message_type' => 'anomalous_consumption',
+            'description' => $node_wrapper->field_place_description->value(),
             'arguments' => array(
               // @fixme: date format of 'Y-m' fits monthly data. Change according to frequency.
               '@date' => date('Y-m', $timestamp),
@@ -92,5 +94,4 @@ class NegaWattNormalizerAnalyzerCompareLastYear implements \NegaWattNormalizerAn
     }
     return $return;
   }
-
 }

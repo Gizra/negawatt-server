@@ -14,8 +14,8 @@ angular.module('negawattClientApp')
      *
      * @returns {*}
      */
-    this.get = function() {
-      return $q.when(cache.data || getDataFromBackend());
+    this.get = function(account) {
+      return $q.when(cache.data || getDataFromBackend(account));
     };
 
     /**
@@ -23,9 +23,10 @@ angular.module('negawattClientApp')
      *
      * @returns {$q.promise}
      */
-    function getDataFromBackend() {
+    function getDataFromBackend(account) {
+
       var deferred = $q.defer();
-      var url = Config.backend + '/api/anomalous_consumption';
+      var url = Config.backend + '/api/anomalous_consumption?sort=-timestamp&filter[meter_account]=' + account.id;
       $http({
         method: 'GET',
         url: url,
@@ -50,16 +51,16 @@ angular.module('negawattClientApp')
     function prepareMessages(response) {
       var messages = angular.fromJson(response).data;
 
-      // TODO: remove monkey patch after resolve issue:#210
       angular.forEach(messages, function(message) {
-        if (angular.isDefined(message['long-text'])) {
-          message['long-text'] = message['long-text'].replace('%23', '#');
-          message['long-text'] = message['long-text'].replace('90', '50');
-        }
+        // Build meter-url with meter description and a link to select the meter.
+        var meterUrl = '<a href="/#/dashboard/' + message['meter_account'] + '/marker/' + message['meter'] + '">' + message['place_description'] + '</a>';
 
+        // Replace '!meter_url' placeholder by the URL.
+        if (angular.isDefined(message['long-text'])) {
+          message['long-text'] = message['long-text'].replace('!meter_url', meterUrl);
+        }
         if (angular.isDefined(message['text'])) {
-          message['text'] = message['text'].replace('90', '50');
-          message['text'] = message['text'].replace('%23', '#');
+          message['text'] = message['text'].replace('!meter_url', meterUrl);
         }
       });
 

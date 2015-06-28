@@ -424,7 +424,7 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
    */
   public function processRawEntity($record, $prev_record) {
     // Set TOUse rate-type if necessary
-    if (empty($record->rate_type)) {
+    if (empty($record->rate_type) || $record->rate_type == 'unknown') {
       $record->rate_type = $this->calcTouseRateType($record->timestamp)->rate_type;
     }
 

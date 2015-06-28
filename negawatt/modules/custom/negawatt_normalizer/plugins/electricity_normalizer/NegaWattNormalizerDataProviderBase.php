@@ -87,7 +87,7 @@ class NegaWattNormalizerDataProviderBase implements \NegaWattNormalizerDataProvi
     $this->meterNode = $node;
     if (!is_object($node)) {
       // Node-ID was given. Load the node itself.
-      $this->meterNode = load_node($node);
+      $this->meterNode = node_load($node);
     }
   }
 

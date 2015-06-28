@@ -12,7 +12,11 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
    */
   public function publicFieldsInfo() {
     $public_fields['timestamp'] = array(
-      'property' => 'timestamp'
+      'property' => 'timestamp',
+    );
+
+    $public_fields['timestamp_rounded'] = array(
+      'property' => 'timestamp_rounded',
     );
 
     $public_fields['datatime'] = array(
@@ -316,6 +320,9 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
       foreach ($child_cat_mapping as $parent => $children_map) {
         if (in_array($row->tid, $children_map)) {
           // Add the parent to the list under key.
+          if (empty($total[$parent])) {
+            $total[$parent] = 0;
+          }
           $total[$parent] += $row->sum;
           break;
         }
@@ -430,6 +437,9 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     // Add a query for meter_category and meter_account.
     $this->addQueryForCategoryAndAccount($query);
 
+    // Round the timestmap to nearest 10 min
+    $query->addExpression('FLOOR(timestamp / 600) * 600', 'timestamp_rounded');
+
     // Add human readable date-time field
     $query->addExpression('from_unixtime(timestamp) ', 'datetime');
 
@@ -443,7 +453,7 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     if (!empty($this->request['filter']['meter']['operator']) && $this->request['filter']['meter']['operator'] == 'IN') {
       $query->groupBy('meter_nid');
     }
-    $query->groupBy('timestamp');
+    $query->groupBy('timestamp_rounded');
     $query->groupBy('rate_type');
     $query->groupBy('negawatt_electricity_normalized.frequency');
 

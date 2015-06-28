@@ -103,8 +103,8 @@ angular
               activeElectricityHash: FilterFactory.get('activeElectricityHash')
             };
           },
-          messages: function(Message) {
-            return Message.get();
+          messages: function(Message, account) {
+            return Message.get(account);
           }
         },
         views: {

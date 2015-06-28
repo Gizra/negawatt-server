@@ -56,7 +56,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     $og_vocab = og_vocab_create_og_vocab($vocabulary1->vid, 'node', 'modbus_meter', OG_VOCAB_FIELD, $og_vocab_settings);
     $og_vocab->save();
 
-    // Relate vocabulary to account 1.
+    // Relate vocabulary 1 to account 1.
     og_vocab_relation_save($vocabulary1->vid, 'node', $account_node1->nid);
 
     // Create second vocabulary
@@ -72,7 +72,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     $og_vocab = og_vocab_create_og_vocab($vocabulary2->vid, 'node', 'modbus_meter', OG_VOCAB_FIELD, $og_vocab_settings);
     $og_vocab->save();
 
-    // Relate vocabulary to account 2.
+    // Relate vocabulary 2 to account 2.
     og_vocab_relation_save($vocabulary2->vid, 'node', $account_node2->nid);
 
     // Attach taxonomy-term fields to the bundles.
@@ -141,6 +141,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
       OG_AUDIENCE_FIELD => array('und' => array('0' => array('target_id' => 1))),
     );
 
+    // 2 meters for account 1
     $meter_node1 = $this->drupalCreateNode($settings);
     $meter_node2 = $this->drupalCreateNode($settings);
 
@@ -155,6 +156,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
       OG_AUDIENCE_FIELD => array('und' => array('0' => array('target_id' => 1))),
     );
 
+    // More 3 meters for account 1
     $meter_node3 = $this->drupalCreateNode($settings);
 
     // Meter 4 should be assigned to category 'other'.
@@ -166,6 +168,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     $settings['field_place_description'] = array('und' => array('0' => array('value' => 'מאור רחובות')));
     $meter_node5 = $this->drupalCreateNode($settings);
 
+    // Meter 6 for account 2.
     // Meter 6 should be assigned to category 'street light' since in account 2
     // there is such a category.
     $settings[OG_AUDIENCE_FIELD] = array('und' => array('0' => array('target_id' => 2)));
@@ -178,6 +181,34 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     $this->meterNode4 = $meter_node4;
     $this->meterNode5 = $meter_node5;
     $this->meterNode6 = $meter_node6;
+
+    // Create some messages
+    $message = message_create('anomalous_consumption');
+    $wrapper = entity_metadata_wrapper('message', $message);
+    $wrapper->field_meter->set($meter_node1);
+    $wrapper->field_meter_account->set($this->account_node1);
+    $wrapper->field_message_place_description->set('first message');
+    $wrapper->save();
+
+    $message = message_create('anomalous_consumption');
+    $wrapper = entity_metadata_wrapper('message', $message);
+    $wrapper->field_meter->set($meter_node6);
+    $wrapper->field_meter_account->set($this->account_node2);
+    $wrapper->field_message_place_description->set('second message');
+    $wrapper->save();
+
+    // Create a user with access to account 2 only.
+    $user1 = $this->drupalCreateUser();
+    og_group('node', 2, array('entity' => $user1));
+    // Reload user to get group membership changes.
+    $user1 = user_load($user1->uid, TRUE);
+
+    // Create a user with access no account.
+    $user2 = $this->drupalCreateUser();
+
+    // Save new user.
+    $this->user1 = $user1;
+    $this->user2 = $user2;
 
     // Create the raw data.
     $values_info = array(
@@ -379,5 +410,58 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     $this->assertEqual($entity['timestamp'], strtotime('2014-6-12 16:00'), 'Entity timestamp is correct.');
 
     // @todo: Add tests for filter by category.
+  }
+
+  /**
+   * Test 'message' API.
+   * - Test that messages are bounded to user's account permissions.
+   */
+  function testMessageApi() {
+
+    $handler = restful_get_restful_handler('anomalous_consumption');
+
+    // Test account with access to both groups.
+    $response = $handler->get('');
+
+    // There should be 2 entities.
+    $this->assertTrue(is_array($response) && count($response) == 2, '<b>Testing messages API</b><br>2 entities were found.');
+    $entity = $response[0];
+    $this->assertEqual($entity['place_description'], 'first message', 'Entity 0 place-description is correct.');
+    $entity = $response[1];
+    $this->assertEqual($entity['place_description'], 'second message', 'Entity 1 place-description is correct.');
+
+    // Test account filter.
+    $response = $handler->get('', array('filter' => array('meter_account' => 2)));
+    // There should be 1 entity.
+    $this->assertTrue(is_array($response) && count($response) == 1, 'Testing filter by account, only one entity was found.');
+    $entity = $response[0];
+    $this->assertEqual($entity['place_description'], 'second message', 'Entity place-description is correct.');
+
+    // Change user to user1, with access to accounts 2 only.
+    $handler->setAccount($this->user1);
+
+    // Test that user has access only to second message
+    $response = $handler->get('');
+    // There should be 1 entity.
+    $this->assertTrue(is_array($response) && count($response) == 1, 'Testing user access, only one entity was found.');
+    $entity = $response[0];
+    $this->assertEqual($entity['place_description'], 'second message', 'Entity place-description is correct.');
+
+    // Test account filter with no access (user has access only to account 2).
+    $response = $handler->get('', array('filter' => array('meter_account' => 1)));
+    // There should be no entities now.
+    $this->assertTrue(is_array($response) && count($response) == 0, 'Testing filter by account with no permission, no entities were found.');
+
+    // Change to user2, no account membership.
+    $handler->setAccount($this->user2);
+
+    // Current user is not related to any account, exception will be issued.
+    try {
+      $response = $handler->get('');
+      $this->fail('<b>Testing messages API</b><br>Got exception for user w/o permissions.');
+    }
+    catch (Exception $e) {
+      $this->pass('<b>Testing messages API</b><br>Got exception for user w/o permissions.');
+    }
   }
 }

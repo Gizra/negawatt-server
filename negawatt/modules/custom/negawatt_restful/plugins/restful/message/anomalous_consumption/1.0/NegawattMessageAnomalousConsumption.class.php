@@ -51,10 +51,51 @@ class NegawattMessageAnomalousConsumption extends \RestfulEntityBase {
       ),
     );
 
+    $public_fields['meter_account'] = array(
+      'property' => 'field_meter_account',
+      'resource' => array(
+        'account' => array(
+          'name' => 'accounts',
+          'full_view' => FALSE,
+        ),
+      ),
+    );
+
+    $public_fields['place_description'] = array(
+      'property' => 'field_message_place_description',
+    );
+
     return $public_fields;
   }
 
   /**
+   * {@inheritdoc}
+   *
+   * Return the basic entity field query for messages, with additional filter
+   * that matches only messages accessible by the current user.
+   */
+  public function getEntityFieldQuery() {
+
+    $query = parent::getEntityFieldQuery();
+
+    // Add condition to match only messages accessible by the current user.
+    // Find the list of valid OGs for current user
+    $account = $this->getAccount();
+    $wrapper = entity_metadata_wrapper('user', $account);
+    $gids = $wrapper->og_user_node->value(array('identifier' => TRUE));
+
+    if (!$gids) {
+      // User is not a member in any group.
+      throw new \RestfulUnauthorizedException('Current user is not related to any account. No messages to show.');
+    }
+
+    // Filter to match only messages from these OGs
+    $query->fieldCondition('field_meter_account', 'target_id', $gids, 'IN');
+
+    return $query;
+  }
+
+    /**
    * Return message text of partial 0 (short text).
    *
    * @param $id

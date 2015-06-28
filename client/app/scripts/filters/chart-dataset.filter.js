@@ -116,7 +116,7 @@ angular.module('negawattClientApp')
             // Never encountered this timestamp, create an empty object
             values[item.timestamp] = {};
           }
-          // Save the kWhs.
+          // Save the average power.
           values[item.timestamp][item.rate_type] = +item.kwh;
 
           // Handle problem with line chart:

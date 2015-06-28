@@ -13,6 +13,7 @@ function negawatt_normalizer_drush_command() {
     'description' => dt('Process and normalize meter(s).'),
     'options' => array(
       'start_id'  => dt('Process meters with node ID higher than this value.'),
+      'id'        => dt('Process meters with given node ID.'),
       'range'     => dt('The number of nodes to process in each batch.'),
       'time_from' => dt('Process entities with date-time higher than this value.'),
       'time_to'   => dt('Process entities with date-time lower than this value.'),
@@ -72,12 +73,13 @@ function drush_negawatt_normalizer_reset_last_processed() {
  * meter to the current, and process.
  */
 function drush_negawatt_normalizer_process_meter() {
-  $meter_start_id = drush_get_option('start_id');
   $options = array();
+  $options['start_id']  = drush_get_option('start_id', NULL);
+  $options['id']        = drush_get_option('id', NULL);
   $options['range']     = drush_get_option('range', 50);
   $options['time_from'] = drush_get_option('time_from') ? strtotime(drush_get_option('time_from')) : 0;
   $options['time_to']   = drush_get_option('time_to') ? strtotime(drush_get_option('time_to')) : REQUEST_TIME;
-  negawatt_normalizer_process_meters($meter_start_id, $options);
+  negawatt_normalizer_process_meters($options);
 }
 
 
@@ -107,17 +109,16 @@ function negawatt_server_query_electricity_last_processed_condition_alter(QueryA
  * Calls negawatt_normalizer_process_meters_once() repeatedly to process
  * all meters.
  *
- * @param  $meter_start_id
- *   The lowest meter-id to process. If NULL, run over all the meters from
- *   least updated to the most recent.
  * @param array $options
  *   Extra options to add to the query when no meter IDs are provided. Optional
  *   keys are:
+ *   - start_id: meter id to start processing from.
+ *   - id: meter id to process.
  *   - range: How many nodes to include in each internal loop. Defaults to 50.
  *   - time_from, time_to: Include only meters that their last-processed field
  *     is between these values. Defaults to 1/1/1970-REQUEST_TIME.
  */
-function negawatt_normalizer_process_meters($meter_start_id, $options = array()) {
+function negawatt_normalizer_process_meters($options = array()) {
   // Set default options.
   $options += array(
     'range' => 50,
@@ -151,8 +152,11 @@ function negawatt_normalizer_process_meters($meter_start_id, $options = array())
   $base_query->negawatt_options_time_from = $options['time_from'];
   $base_query->negawatt_options_time_to = $options['time_to'];
 
-  if ($meter_start_id) {
-    $base_query->propertyCondition('nid', $meter_start_id, '>=');
+  if (!empty($options['start_id'])) {
+    $base_query->propertyCondition('nid', $options['start_id'], '>=');
+  }
+  if (!empty($options['id'])) {
+    $base_query->propertyCondition('nid', $options['id']);
   }
 
   // Count the meters.

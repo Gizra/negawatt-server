@@ -168,8 +168,8 @@ function modbus_field_default_field_instances() {
         'label' => 'above',
         'module' => 'image',
         'settings' => array(
-          'image_link' => '',
-          'image_style' => '',
+          'image_link' => 'content',
+          'image_style' => 'thumbnail_rotate',
         ),
         'type' => 'image',
         'weight' => 17,
@@ -270,9 +270,17 @@ function modbus_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'geolocation',
-        'settings' => array(),
-        'type' => 'geolocation_text',
+        'module' => 'geolocation_googlemaps',
+        'settings' => array(
+          'map_height' => '200px',
+          'map_imageformat' => 'png8',
+          'map_maptype' => 'roadmap',
+          'map_scrollwheel' => 1,
+          'map_width' => '300px',
+          'map_zoomlevel' => 17,
+          'marker_icon' => '',
+        ),
+        'type' => 'geolocation_googlemaps_dynamic',
         'weight' => 10,
       ),
       'teaser' => array(

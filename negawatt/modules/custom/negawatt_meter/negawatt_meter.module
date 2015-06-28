@@ -20,6 +20,59 @@ function negawatt_meter_is_meter($node_type) {
 }
 
 /**
+ * Set meter category by trying to match description with categories'
+ * match-strings.
+ *
+ * @param $wrapper
+ *  Wrapper for the new node.
+ */
+function negawatt_meter_set_meter_category($node) {
+  // If meter category is already defined (e.g. during migration), end here.
+  $wrapper = entity_metadata_wrapper('node', $node);
+  $category = $wrapper->{OG_VOCAB_FIELD}->value();
+  if (!empty($category)) {
+    return;
+  }
+
+  // Get vocabulary according to meter account (organic-group).
+  $account = $wrapper->{OG_AUDIENCE_FIELD}->value();
+  $group_id = $account->nid;
+  $arr_vocabularies = og_vocab_relation_get_by_group('node', $group_id);
+  $vocabulary_id = $arr_vocabularies[0]->vid;
+  $vocabulary = taxonomy_vocabulary_load($vocabulary_id);
+
+  // Try match meter description with any of the categories' match-strings
+  $category = variable_get('iec_default_meter_category', 'אחר');
+  $taxonomy_tree = taxonomy_get_tree($vocabulary_id);
+  $search_string = $wrapper->field_place_address->value() . ' ' . $wrapper->field_place_description->value();
+  // Loop for all categories and try to find a match.
+  foreach ($taxonomy_tree as $term) {
+    $tax_wrapper = entity_metadata_wrapper('taxonomy_term', $term->tid);
+    $match_strings = $tax_wrapper->field_match_strings->value();
+    if (!$match_strings) {
+      continue;
+    }
+    $match_strings = explode('|', $match_strings);
+    // Look for all match-strings for match.
+    foreach ($match_strings as $match_str) {
+      if (strpos($search_string, $match_str) !== FALSE) {
+        // Match found, set category.
+        $category = $tax_wrapper->name->value();
+        // Leave both loops.
+        break 2;
+      }
+    }
+  }
+
+  // Set meter-category.
+  $arr_terms = taxonomy_get_term_by_name($category, $vocabulary->machine_name);
+  $term_ids = array_keys($arr_terms);
+  $term_id = $term_ids[0];
+
+  $wrapper->{OG_VOCAB_FIELD}->set(array($term_id));
+}
+
+/**
  * Read image EFIX record and extract GPS location, if exists.
  *
  * @param $image
@@ -69,22 +122,16 @@ function negawatt_exif_to_latlong($image)
 }
 
 /**
- * Implements hook_node_presave() - Check and update Geocode, if needed.
+ * Check and update Geocode, if needed.
  *
  * For iec_meter, if place-address and/or place-locality were changed, resolve
- * geocode using Geocoder package. First try to resolve whole address (stree, city),
- * if fails, try resolving for city only.
+ * geocode using Geocoder package. First try to resolve whole address (street,
+ * city), if fails, try resolving for city only.
  *
- * @param $node
- *    The node to geocode.
+ * @param $wrapper
+ *  Wrapper for the new node.
  */
-function negawatt_meter_node_presave($node) {
-
-  // Make sure we're dealing with a meter.
-  if (!negawatt_meter_is_meter($node->type)) {
-    return;
-  }
-
+function negawatt_meter_set_meter_location($node) {
   require_once libraries_get_path('geocoder') . '/src/autoload.php';
 
   $wrapper = entity_metadata_wrapper('node', $node);
@@ -117,11 +164,11 @@ function negawatt_meter_node_presave($node) {
 
   // If address field was changed, try geocoding by the address. However, don't
   // try to geocode if location was already set by image EXIF above.
-  
+
   // Check if address field was changed.
   if ((!empty($node->is_new) ||
-    $wrapper->field_place_address->value() != $wrapper_original->field_place_address->value() ||
-    $wrapper->field_place_locality->value() != $wrapper_original->field_place_locality->value())
+      $wrapper->field_place_address->value() != $wrapper_original->field_place_address->value() ||
+      $wrapper->field_place_locality->value() != $wrapper_original->field_place_locality->value())
     && !$location_changed) {
 
     // Get googlemaps API key from variable.
@@ -199,6 +246,27 @@ function negawatt_meter_node_presave($node) {
     geolocation_field_presave('node', $node, $field, $entity, $langcode, $items);
     $wrapper->field_location->set($items[0]);
   }
+}
+
+/**
+ * Implements hook_node_presave() - update category, location if needed.
+ *
+ * @param $node
+ *    The node to update.
+ */
+function negawatt_meter_node_presave($node) {
+
+  // Make sure we're dealing with a meter.
+  if (!negawatt_meter_is_meter($node->type)) {
+    return;
+  }
+
+  // Set meter location by image EXIF record or address field.
+  negawatt_meter_set_meter_location($node);
+
+  // Set meter category by trying to match description with categories'
+  // match-strings.
+  negawatt_meter_set_meter_category($node);
 }
 
 

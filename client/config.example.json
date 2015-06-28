@@ -1,7 +1,7 @@
 {
   "development": {
     "backend": "http://localhost/negawatt-server/www",
-    "cname": "",
+    "cname": "  ",
     "debugUiRouter": false,
     "openweather": {
       "endpoint": null,
@@ -10,7 +10,7 @@
   },
   "production": {
     "backend": "http://server.com/api",
-    "cname": "",
+    "cname": "prod.front-end.url.here",
     "debugUiRouter": false,
     "openweather": {
       "endpoint": null,
@@ -19,7 +19,7 @@
   },
   "live": {
     "backend": "http://server.com/api",
-    "cname": "",
+    "cname": "live.front-end.url.here",
     "debugUiRouter": false,
     "openweather": {
       "endpoint": null,

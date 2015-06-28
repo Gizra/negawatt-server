@@ -68,9 +68,6 @@ class NegaWattNormalizerAnalyzerManager extends \ArrayObject {
         }
       }
     }
-
-
-
     return TRUE;
   }
 
@@ -88,12 +85,30 @@ class NegaWattNormalizerAnalyzerManager extends \ArrayObject {
   protected function createMessages($values) {
     foreach ($values as $value) {
       // Generate the message.
+      // Get the node and user account.
       $node = node_load($value['nid']);
       $user_account = user_load($node->uid);
+
+      // Get meter-account from meter-node
+      $wrapper = entity_metadata_wrapper('node', $node);
+      $meter_account = $wrapper->{OG_AUDIENCE_FIELD}->value();
+
+      // Create message and set fields.
       $message = message_create($value['message_type'], array('arguments' => $value['arguments']), $user_account);
       $wrapper = entity_metadata_wrapper('message', $message);
       $wrapper->field_meter->set($node);
+      $wrapper->field_meter_account->set($meter_account);
+      $wrapper->field_message_place_description->set($value['description']);
       $wrapper->save();
+
+      // Output message.
+      $message = "** Notification issued: \n" . print_r($values, TRUE);
+      if (drupal_is_cli()) {
+        drush_log($message);
+      }
+      else {
+        debug($message);
+      }
     }
   }
 }

@@ -29,7 +29,7 @@ cd www
 drush si -y negawatt --account-name=$ADMIN_USERNAME --account-pass=$ADMIN_PASSWORD --account-mail=$ADMIN_EMAIL --db-url=mysql://$MYSQL_USERNAME:$MYSQL_PASSWORD@$MYSQL_HOST/$MYSQL_DB_NAME --uri=$BASE_DOMAIN_URL
 
 # Development modules
-drush en devel diff views_ui field_ui migrate_ui mimemail -y
+drush en devel diff views_ui field_ui migrate_ui message_ui mimemail -y
 
 # These commands migrates dummy content and is used for development and testing.
 drush en negawatt_migrate -y
