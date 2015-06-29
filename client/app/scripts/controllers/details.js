@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .controller('DetailsCtrl', function ($scope, $state, $stateParams, FilterFactory, ChartCategories, meters, $filter, categories) {
+  .controller('DetailsCtrl', function ($scope, $state, $stateParams, FilterFactory, Chart, ChartCategories, meters, $filter, categories) {
+    var vm = this;
     // Category id selected from pie chart.
     var categoryId;
     // Summary property of electricity.
@@ -9,9 +10,11 @@ angular.module('negawattClientApp')
 
     $scope.categories = categories;
     $scope.meters = meters;
-    // The initialization in a empty object is need it to avoid an error in the initial rendering.
-    //$scope.categoriesChart = categoriesChart;
-    $scope.categoriesChart = {};
+
+    // Public controller API
+    vm.categoriesChart = {};
+    vm.message = Chart.messages.empty;
+    vm.hasData = hasData;
 
     // Go to the a new category selected form the pie chart.
     $scope.onSelect = function(selectedItem, chartData) {
@@ -61,7 +64,7 @@ angular.module('negawattClientApp')
       labels = (summary.type === 'category') ? $scope.categories.collection : $scope.meters.listAll;
 
       // Prepare the content as Google Chart Dataset object definition.
-      $scope.categoriesChart = $filter('toPieChartDataset')(summary, labels);
+      vm.categoriesChart = $filter('toPieChartDataset')(summary, labels);
     });
 
     /**
@@ -73,6 +76,16 @@ angular.module('negawattClientApp')
     function setSelectedMarker(id) {
       // Use in the widget 'Details'.
       $scope.meterSelected = meters.list[id];
+    }
+
+    /**
+     * Return true is there are electricity data to show the chart,
+     * otherwise false.
+     *
+     * @returns {boolean}
+     */
+    function hasData() {
+      return vm.categoriesChart.data && !!vm.categoriesChart.data.rows.length;
     }
 
     if ($stateParams.markerId) {

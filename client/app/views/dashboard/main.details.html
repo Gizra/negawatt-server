@@ -8,10 +8,13 @@
   <div><b>קוד מונה: </b>{{meterSelected.meter_code}}</div>
 </div>
 
-<div ng-if="categoriesChart.data && !meterSelected">
-  <div google-chart chart="categoriesChart" on-select="onSelect(selectedItem, categoriesChart.data)" class="categoriesChart"></div>
+<div class="chart-container">
+  <div ng-if="chart.hasData() && !meterSelected">
+    <div google-chart chart="chart.categoriesChart" on-select="onSelect(selectedItem, chart.categoriesChart.data)" class="categoriesChart"></div>
+  </div>
+
+  <div ng-if="!chart.hasData()" class="chart-empty">
+    <div class="title col-md-6 col-centered text-center chart-message">{{chart.message}}</div>
+  </div>
 </div>
 
-<div ng-if="!categoriesChart.data" class="chart-empty">
-  <div class="title col-md-6 col-centered text-center chart-message">{{categoriesChart.messages.empty}}</div>
-</div>

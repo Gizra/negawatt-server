@@ -126,7 +126,8 @@ angular
           },
           'details@dashboard': {
             templateUrl: 'views/dashboard/main.details.html',
-            controller: 'DetailsCtrl'
+            controller: 'DetailsCtrl',
+            controllerAs: 'chart'
           },
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
@@ -175,12 +176,8 @@ angular
           // Update details (pie) chart for categories.
           'details@dashboard': {
             templateUrl: 'views/dashboard/main.details.html',
-            resolve: {
-              categoriesChart: function(ChartCategories, $stateParams, account, categories) {
-                return ChartCategories.get(account.id, $stateParams.categoryId, categories.collection);
-              }
-            },
-            controller: 'DetailsCtrl'
+            controller: 'DetailsCtrl',
+            controllerAs: 'chart'
           }
         }
       })
@@ -220,12 +217,8 @@ angular
           // Update the meter detailed data.
           'details@dashboard': {
             templateUrl: 'views/dashboard/main.details.html',
-            resolve: {
-              // Keep angular.noop because need to resolve with an empty function 'function(){}',
-              // null or {} doesn't works.
-              categoriesChart: angular.noop
-            },
-            controller: 'DetailsCtrl'
+            controller: 'DetailsCtrl',
+            controllerAs: 'chart'
           },
           'usage@dashboard': {
             templateUrl: 'views/dashboard/main.usage.html',
