@@ -65,7 +65,8 @@ angular.module('negawattClientApp')
         method: 'GET',
         url: url,
         params: params,
-        cache: true
+        cache: true,
+        transformResponse: prepareSelector
       }).success(function(categories) {
         deferred.resolve(categories.data);
       });
@@ -316,7 +317,27 @@ angular.module('negawattClientApp')
       return cache.data;
     }
 
+    /**
+     * Add properties {} to each element on data, to be habdle for (check/uncheck)
+     * category selection.
+     *
+     * @param response
+     *  The response from the category request.
+     *
+     * @returns {*}
+     */
+    function prepareSelector(response) {
+      response = angular.fromJson(response);
+      var categories = response.data;
 
+      angular.forEach(categories, function(category, index) {
+        categories[index] = angular.extend(category, {checked: true, indeterminate: false});
+      });
+
+      response.data = categories;
+
+      return response;
+    }
 
     $rootScope.$on('nwClearCache', function() {
       cache = {};
