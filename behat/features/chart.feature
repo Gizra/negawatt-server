@@ -7,7 +7,7 @@ Feature: Chart
   Scenario: Show chart usage monthly of the total kws of the meters.
     Given I login with user "carlos"
     When I reload "/#/dashboard/1"
-    Then I should see the monthly kws chart of all meters
+    Then I should see a chart from "7836" KW to "12318" KW average power
 
   @javascript
   Scenario: Show pie chart with total kws of the categories.

@@ -168,15 +168,12 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
-   * @Then I should see the monthly kws chart of all meters
+   * @Then I should see a chart from :initial KW to :final KW average power
    */
-  public function iShouldSeeTheMonthlyKwsChartOfAllMeters() {
-    // Testing the height of the first and last column, with the default chart size and data of the migration.
-    $start_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(1) > td:nth-child(2)';
-    $end_chart = '#chart-usage > div > div:nth-child(1) > div > div > table > tbody > tr:nth-child(24) > td:nth-child(2)';
-    $this->waitForTextNgElement($start_chart, '7836');
-    $this->waitForTextNgElement($end_chart, '12318');
+  public function iShouldSeeAChartFromKwToKwAveragePower($initial, $final) {
+    $this->checkUsageChart($initial, $final);
   }
+
 
   /**
    * @Then I should see the previous monthly kws chart of all meters
@@ -607,7 +604,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
-   * Valudate the toolptip data of the pie chart, label and value.
+   * Validate the toolptip data of the pie chart, label and value.
    *
    * @param $element
    *  The label, could be a category or a contract number.
@@ -620,8 +617,41 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
       '//div[@id="dashboard-controls"]//td[.="' . $total_kws . '"]',
     );
 
+    $this->checkValidations($validations, TRUE, TRUE);
+  }
+
+  /**
+   * Validate the value of the initial and last colunms (from left to rigth).
+   *
+   * @param $initial
+   *  The number of kws average power of the first column.
+   * @param $final
+   *  The number of kws average power of the last column.
+   */
+  private function checkUsageChart($initial, $final) {
+    $validations = array(
+      '//div[@id="chart-usage"]//td[contains(., "' . $initial . '")]',
+      '//div[@id="chart-usage"]//td[contains(., "' . $final . '")]',
+    );
+
+    $this->checkValidations($validations, TRUE, TRUE);
+  }
+
+
+  /**
+   * Get an array of xpath to validate if exist.
+   *
+   * @param $validations
+   *  The array of xpath.
+   * @param $appear
+   *  Check if element appear in the view. is a boolean.
+   * @param $only_check_node_existence
+   *  Skeip the appear parameter and check only is defined in the DOM. is a boolean.
+   */
+  private function checkValidations($validations, $appear = TRUE, $only_check_node_existence = FALSE) {
     foreach($validations as $validation) {
-      $this->waitForXpathNode($validation, TRUE, TRUE);
+      $this->waitForXpathNode($validation, $appear, $only_check_node_existence);
     }
   }
+
 }

@@ -66,7 +66,7 @@ angular.module('negawattClientApp')
           unit_num_seconds: 365 * 24 * 60 * 60,
           chart_default_time_frame: 10,
           chart_type: 'ColumnChart',
-          axis_v_title: 'קוט"ש בחודש',
+          axis_v_title: 'קוט"ש בשנה',
           axis_h_format: 'YYYY',
           axis_h_title: 'שנה'
         },
@@ -77,7 +77,7 @@ angular.module('negawattClientApp')
           unit_num_seconds: 31 * 24 * 60 * 60,
           chart_default_time_frame: 24,
           chart_type: 'ColumnChart',
-          axis_v_title: 'קוט"ש בשנה',
+          axis_v_title: 'קוט"ש בחודש',
           axis_h_format: 'MM-YYYY',
           axis_h_title: 'חודש'
         },

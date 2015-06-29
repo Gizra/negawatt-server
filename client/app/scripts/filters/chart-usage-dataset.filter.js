@@ -1,6 +1,5 @@
 angular.module('negawattClientApp')
   .filter('toChartDataset', function (Chart, ChartOptions, moment) {
-    var chartFrequencyActive;
 
     /**
      * From a collection object create a Google Chart data ser object
@@ -13,11 +12,11 @@ angular.module('negawattClientApp')
      *  The dataset collection filtered.
      */
     return function (collection){
-      chartFrequencyActive = Chart.getActiveFrequency();
+      var chartFrequencyActive = Chart.getActiveFrequency();
       // Recreate collection object.
       collection = {
         type: chartFrequencyActive.chart_type,
-        data: getDataset(collection),
+        data: getDataset(collection, chartFrequencyActive),
         options: getOptions(chartFrequencyActive)
       }
       return collection;
@@ -48,8 +47,11 @@ angular.module('negawattClientApp')
      *
      * @param collection
      *  The collection to format.
+     * @param frequency
+     *  The active frequency.
+     * @returns {{cols: *[], rows: Array}}
      */
-    function getDataset(collection) {
+    function getDataset(collection, frequency) {
       var dataset = {
         // Add columns.
         cols: [
@@ -80,7 +82,7 @@ angular.module('negawattClientApp')
           }
         ],
         // Add rows.
-        rows: getRows(collection, 'single')
+        rows: getRows(collection, 'single', frequency)
       };
 
       return dataset;
@@ -93,23 +95,25 @@ angular.module('negawattClientApp')
      *  The collection to filter.
      * @param type
      *  The type of the rows will request.
+     * @param frequency
+     *  The active frequency.
      *
      * @returns {Array}
      *  An array of the data ordering as the type requested.
      */
-    function getRows(collection, type) {
+    function getRows(collection, type, frequency) {
       var values = {};
       var rows = [];
       var prevRateType;
       var isLineChart;
-
+      var powerValueProperty = getPowerValueProperty(frequency);
 
       if (type === 'single') {
         // Prepare data for a single graph
         // ----------------------------------
 
         // Create a temp array like { time: {low: 1, mid:4, peak:5}, time: {..}, ..}.
-        isLineChart = chartFrequencyActive.chart_type === 'LineChart';
+        isLineChart = frequency.chart_type === 'LineChart';
 
         angular.forEach(collection, function(item) {
           if (!(item.timestamp in values)) {
@@ -117,14 +121,14 @@ angular.module('negawattClientApp')
             values[item.timestamp] = {};
           }
           // Save the average power.
-          values[item.timestamp][item.rate_type] = +item.kwh;
+          values[item.timestamp][item.rate_type] = +item[powerValueProperty];
 
           // Handle problem with line chart:
           // If having TOUse data, the lines should be elongated one data point forward
           // when changing rate-type in order to 'connect' the lines of the different
           // charts.
           if (isLineChart && prevRateType && prevRateType != item.rate_type) {
-            values[item.timestamp][prevRateType] = +item.kwh;
+            values[item.timestamp][prevRateType] = +item[powerValueProperty];
           }
 
           prevRateType = item.rate_type;
@@ -132,7 +136,7 @@ angular.module('negawattClientApp')
 
         // Build rows
         angular.forEach(values, function(item, timestamp) {
-          var label = moment.unix(timestamp).format(chartFrequencyActive.axis_h_format);
+          var label = moment.unix(timestamp).format(frequency.axis_h_format);
           var col = [
             { 'v': label },
             { 'v': item.flat },
@@ -145,6 +149,26 @@ angular.module('negawattClientApp')
       }
 
       return rows;
+    }
+
+    /**
+     * Return power property name according the type, to get the value.
+     *
+     * @param frequency
+     *  The active frequency.
+     *
+     * @returns {string}
+     *  The rate type value.
+     */
+    function getPowerValueProperty(frequency) {
+      frequency = +frequency.type;
+      if([1,2,3].indexOf(frequency) !== -1) {
+        return 'kwh';
+      }
+
+      if([4,5].indexOf(frequency) !== -1) {
+        return 'avg_power';
+      }
     }
 
   });
