@@ -68,17 +68,17 @@ script:
   - sleep 5
 
   # Run phantomJs.
-  - phantomjs --webdriver=4444 > ~/phantomjs.log 2>&1 &
+  # - phantomjs --webdriver=4444 > ~/phantomjs.log 2>&1 &
 
   # Run behat tests.
   - cd ../behat
   - ./bin/behat --tags=~@wip
 
   # Print log ~/phantomjs.log
-  - cat ~/phantomjs.log
+  # - cat ~/phantomjs.log
 
   # Print log ~/selenium.log
-  # - cat ~/selenium.log
+  - cat ~/selenium.log
 
   # SimpleTest
   - drush @negawatt test-run "Negawatt" --uri=http://127.0.0.1:8080

@@ -26,12 +26,16 @@ angular
     'angular-loading-bar',
     'ui.bootstrap.tabs',
     'ui.bootstrap.alert',
+    'ui.bootstrap.accordion',
     'template/tabs/tab.html',
     'template/tabs/tabset.html',
     'template/alert/alert.html',
+    'template/accordion/accordion-group.html',
+    'template/accordion/accordion.html',
     'angularMoment',
     'ui.indeterminate',
-    'negawattDirectives'
+    'negawattDirectives',
+    'angular.filter'
   ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
     // Handle state 'dashboard' activation via browser url '/'
@@ -122,7 +126,8 @@ angular
           },
           'messages@dashboard': {
             templateUrl: 'views/dashboard/main.messages.html',
-            controller: 'MessageCtrl'
+            controller: 'MessageCtrl',
+            controllerAs: 'inbox'
           },
           'details@dashboard': {
             templateUrl: 'views/dashboard/main.details.html',
@@ -268,7 +273,7 @@ angular
     // It's very handy to add references to $state and $stateParams to the
     // $rootScope so that you can access them from any scope within your
     // applications.For example:
-    // <li ng-class="{ active: $state.includes('contacts.list') }"> will set the <li>
+    // <li ng-class='{ active: $state.includes('contacts.list') }'> will set the <li>
     // to active whenever 'contacts.list' or one of its decendents is active.
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;

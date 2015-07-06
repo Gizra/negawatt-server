@@ -1,7 +1,27 @@
 <span><i class="icon-options"></i></span>
 <span class="title">התראות</span>
 
-<div ng-repeat="message in messages">
-  <span ng-bind-html="message.text"></span>
+<div id="messages">
+  <accordion>
+    <accordion-group ng-repeat="messagesGrouped in ::messages track by $id(messagesGrouped)" is-disabled="messagesGrouped.length === 1" is-open="status.open" class="message-wrapper">
+      <accordion-heading>
+        <div class="message-body">
+          <div class="message-icon-caret">
+            <span><i class="fa fa-lg" ng-class="{'fa-caret-down': status.open, 'fa-caret-left': !status.open}" ng-if="messagesGrouped.length !== 1"></i></span>
+
+          </div>
+          <div class="message-text">
+            <span ng-bind-html="messagesGrouped[0].text"></span>
+
+          </div>
+          <div class="message-badge">
+            <span class="badge" ng-if="messagesGrouped.length !== 1">{{messagesGrouped.length}}</span>
+
+          </div>
+        </div>
+      </accordion-heading>
+      <span ng-bind-html="message.text" ng-repeat="message in ::messagesGrouped" ng-if="!$first" class="message-body"></span>
+    </accordion-group>
+  </accordion>
 </div>
 
