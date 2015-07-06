@@ -80,15 +80,16 @@ angular.module('negawattClientApp')
         url: url,
         transformResponse: prepareMetersForLeafletMarkers
       }).success(function(meters) {
-        setCache(meters.data, meters.hasNextPage);
+        var hasNextPage = !!meters.next;
+        setCache(meters.data, hasNextPage);
 
         // Resolve with the meters filtered from cache.data.
         deferred.resolve(metersFiltered());
 
         // Update with the rest of the markers.
-        if (meters.hasNextPage) {
+        if (hasNextPage) {
           skipResetCache = true;
-          getDataFromBackend(accountId, getPageNumber(meters.hasNextPage.href));
+          getDataFromBackend(accountId, getPageNumber(meters.next.href));
         }
 
         resetCache();
@@ -116,7 +117,7 @@ angular.module('negawattClientApp')
           list: {},
           // Interval information for electricity chart.
           summary: {},
-          loaded: !hasMore
+          loaded: null
         };
       }
 
@@ -124,6 +125,8 @@ angular.module('negawattClientApp')
       // TODO: from angular v1.4 use angular.merge().
       angular.extend(cache.data.listAll, data && data.list);
       angular.extend(cache.data.summary, data && data.summary);
+      // Save true if there is no more data to request, otherwise false.
+      cache.data.loaded = !hasMore;
       cache.timestamp = new Date();
 
       // Broadcast and event to update the markers in the map.
@@ -177,7 +180,7 @@ angular.module('negawattClientApp')
         data: {
           list: Utils.indexById(response.data)
         },
-        hasNextPage: response.next || false
+        next: response.next
       };
 
       angular.forEach(meters.data.list, function(item) {
