@@ -215,15 +215,10 @@ angular.module('negawattClientApp')
      */
     function metersFiltered() {
       if (angular.isDefined(cache.data)) {
-
         // Filter by categories filters unchecked (checkboxes).
-        cache.data.list = FilterFactory.byCategoryFilters(cache.data);
-
-        // Filter by a category is active.
-        if (FilterFactory.isDefine('category')) {
-          cache.data.list = FilterFactory.byCategory(cache.data);
-        }
-
+        cache.data.list = (!FilterFactory.isDefine('category') && !FilterFactory.isDefine('meter'))
+          ? FilterFactory.byCategoryFilters(cache.data)
+          : cache.data.listAll;
       }
       return cache.data;
     }

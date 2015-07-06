@@ -28,10 +28,12 @@ Feature: Meter
     Then I should see a marker selected
 
   @javascript
-  Scenario: Show only meters of the category selected
+  Scenario: Show meters with not selected category semitransparent
     Given I login with user "carlos"
     When I visit "/#/dashboard/1/category/14"
-    Then I should see "2" markers
+    And I should see "4" markers
+    And I should print page of "//div[@class='leaflet-marker-pane']"
+    Then I should see "2" markers with class "leaflet-marker-icon-transparent"
 
   @javascript
   Scenario: Show only meters not filter in the category menu.

@@ -102,6 +102,15 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     $xpath = '//span[contains(., "' . $alert . '")]';
     $this->waitForXpathNode($xpath);
   }
+
+  /**
+   * @Then I should see :markers markers with class :css_class
+   */
+  public function iShouldSeeMarkersWithClass($markers, $css_class) {
+    $xpath = '//div[@class="leaflet-marker-pane"]//img[contains(@class, "' . $css_class . '")]';
+    $this->waitToCountXpathNodes($xpath, $markers);
+  }
+
   /**
    * @Then I should see :markers markers
    */
@@ -165,6 +174,13 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   public function iShouldNotSeeTheFilters() {
     $csspath = "input.hide-meters-category";
     $this->iWaitForCssElement($csspath, FALSE);
+  }
+
+  /**
+   * @Then /^I should print page of "([^"]*)"$/
+   */
+  public function iShouldPrintPageOf($xpath) {
+    print_r($this->getSession()->getPage()->find('xpath', $xpath)->getHtml());
   }
 
   /**
@@ -513,6 +529,34 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
       catch (WebDriver\Exception $e) {
         if ($e->getCode() == WebDriver\Exception::NO_SUCH_ELEMENT) {
           return !$appear;
+        }
+        throw $e;
+      }
+    });
+  }
+
+  /**
+   * Wait to count a number of elements by its XPath.
+   *
+   * @param string $xpath
+   *   The XPath string.
+   * @param number $nodes_expected
+   *   Number of nodes expected.
+   *
+   * @throws Exception
+   */
+  private function waitToCountXpathNodes($xpath, $nodes_expected) {
+    $this->waitFor(function($context) use ($xpath, $nodes_expected) {
+      try {
+        $nodes = $context->getSession()->getDriver()->find($xpath);
+        if (count($nodes) > 0 && count($nodes) == (int)$nodes_expected) {
+          return TRUE;
+        }
+        return FALSE;
+      }
+      catch (WebDriver\Exception $e) {
+        if ($e->getCode() == WebDriver\Exception::NO_SUCH_ELEMENT) {
+          return FALSE;
         }
         throw $e;
       }

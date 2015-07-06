@@ -1,14 +1,18 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .controller('MapCtrl', function ($scope, $state, $stateParams, $location, Category, Map, leafletData, $timeout, account, meters, FilterFactory) {
+  .controller('MapCtrl', function ($scope, $state, $stateParams, $location, $filter, Category, Map, leafletData, $timeout, account, meters, FilterFactory) {
     var isMeterSelected = false;
 
     // Config map.
     $scope.defaults = Map.getConfig();
     $scope.center = Map.getCenter(account);
-    $scope.meters = meters.list;
-    
+    $scope.meters = getMetersWithOptions(meters.list);
+
+    if ($stateParams.markerId) {
+      isMeterSelected = setSelectedMarker($stateParams.markerId);
+    }
+
     // Hover above marker in the Map -  open tooltip.
     $scope.$on("leafletDirectiveMarker.mouseover", function(event, args) {
       var leafletId = args.markerName;
@@ -45,7 +49,8 @@ angular.module('negawattClientApp')
 
     // Reload the current $state when meters added more.
     $scope.$on('nwMetersChanged', function(event, meters) {
-      $scope.meters = meters.list;
+      $scope.meters = getMetersWithOptions(meters.list);
+
       if (FilterFactory.get('meter') && $scope.meters[FilterFactory.get('meter')] && !isMeterSelected) {
         setSelectedMarker(FilterFactory.get('meter'));
       }
@@ -80,9 +85,16 @@ angular.module('negawattClientApp')
       });
     }
 
-
-    if ($stateParams.markerId) {
-      isMeterSelected = setSelectedMarker($stateParams.markerId);
+    /**
+     * Apply style to the markers according the active filters.
+     *
+     * @param meters
+     *  Collection of meters.
+     *
+     * @returns {*}
+     */
+    function getMetersWithOptions(meters) {
+      return (FilterFactory.isDefine('category')) ? $filter('setMetersOptionsByActiveCategory')(angular.copy(meters), {transparent: true}, 'noActiveCategory') : meters;
     }
 
   });
