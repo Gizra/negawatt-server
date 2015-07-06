@@ -21,8 +21,8 @@ angular.module('negawattClientApp')
     $scope.filterMeters = FilterFactory.showCategoryFilters();
 
     // Select category if exist.
-    if (angular.isUndefined(categories.collection[$stateParams.categoryId])) {
-      $scope.vm.alerts.new({type: 'default', msg: 'קטגוריה לא קיים.'});
+    if (angular.isUndefined(categories.collection[$stateParams.categoryId]) && $state.is('dashboard.withAccount.categories')) {
+      $scope.vm.alerts.new({type: 'default', msg: 'קטגוריה לא קיימת.'});
     }
     else {
       setSelectedCategory($stateParams.categoryId);
