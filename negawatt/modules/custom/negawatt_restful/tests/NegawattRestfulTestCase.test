@@ -447,6 +447,13 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     $entity = $response[0];
     $this->assertEqual($entity['place_description'], 'second message', 'Entity place-description is correct.');
 
+    // Test actual JSON result.
+    $formatter_handler = \RestfulManager::outputFormat($handler);
+    $json_output = $formatter_handler->format($response);
+    $output = json_decode($json_output);
+    $this->assertEqual(count($output->data), 1, 'Output array count is correct.');
+    $this->assertEqual($output->count, 1, 'Output count is correct.');
+
     // Test account filter with no access (user has access only to account 2).
     $response = $handler->get('', array('filter' => array('meter_account' => 1)));
     // There should be no entities now.
