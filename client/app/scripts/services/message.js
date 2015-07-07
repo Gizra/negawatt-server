@@ -26,7 +26,7 @@ angular.module('negawattClientApp')
     function getDataFromBackend(account) {
 
       var deferred = $q.defer();
-      var url = Config.backend + '/api/anomalous_consumption?sort=-timestamp&filter[meter_account]=' + account.id;
+      var url = Config.backend + '/api/notifications?sort=-timestamp&filter[meter_account]=' + account.id;
       $http({
         method: 'GET',
         url: url,

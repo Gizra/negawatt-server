@@ -130,7 +130,7 @@ function negawatt_normalizer_process_meters($options = array()) {
   // @fixme: allow each account have its own timezone.
   date_default_timezone_set('Asia/Jerusalem');
 
-  drush_log('time options: '.date('Y-m-d H:i', $options['time_from']) . '-' . date('Y-m-d H:i', $options['time_to']));
+  drush_log('time options: '.date('Y-m-d H:i', $options['time_from']) . '-' . date('Y-m-d H:i', $options['time_to']), 'ok');
 
   $bundles = array(
     'iec_meter',
@@ -166,7 +166,7 @@ function negawatt_normalizer_process_meters($options = array()) {
     ->execute();
 
   if (!$meters_count) {
-    drush_log('No meters required for processing.');
+    drush_log('No meters required for processing.', 'ok');
     return;
   }
 
@@ -185,7 +185,7 @@ function negawatt_normalizer_process_meters($options = array()) {
     '@delta' => $options['range'],
     '@time' => date('Y-m-d H:i', $options['time_from']) . '-' . date('Y-m-d H:i', $options['time_to']),
   );
-  drush_log(format_string('Looping for meters. meters-count=@valid_count out of @count, range=@delta, time-frame=@time.', $params));
+  drush_log(format_string('Looping for meters. meters-count=@valid_count out of @count, range=@delta, time-frame=@time.', $params), 'ok');
 
   for ($count = 0; $count < $valid_meters_count; $count += $options['range']) {
     // Loop with 'range' sized groups and call negawatt_normalizer_process_meters_once()
@@ -195,7 +195,7 @@ function negawatt_normalizer_process_meters($options = array()) {
       ->range($count, $options['range'])
       ->execute();
 
-    drush_log(format_string('Query returned @count meters.', array('@count' => count($result['node']))));
+    drush_log(format_string('Query returned @count meters.', array('@count' => count($result['node']))), 'ok');
 
     // Process a batch of meters.
     $meter_ids = array_keys($result['node']);
@@ -233,7 +233,7 @@ function negawatt_normalizer_process_meters_once($meter_ids = array(), $from_tim
       '@meter_type' => $wrapper->getBundle(),
       '@meter_name' => $wrapper->label(),
     );
-    drush_log(format_string('Processing meter ID @id (@delta/@count) [@meter_type, @meter_name]', $params));
+    drush_log(format_string('Processing meter ID @id (@delta/@count) [@meter_type, @meter_name]', $params), 'ok');
 
     try {
       $result = negawatt_normalizer_process_meter($meter_id, $from_timestamp, $to_timestamp);
@@ -248,7 +248,7 @@ function negawatt_normalizer_process_meters_once($meter_ids = array(), $from_tim
           '@frequency' => $frequency . '(' . negawatt_normalizer_frequency_to_string($frequency) . ')',
           '@count' => $frequencies_count,
           '@delta' => $frequencies_delta
-        )));
+        )), 'ok');
 
         $timestamps_count = count($timestamps_array);
         $timestamps_delta = 0;
@@ -284,10 +284,10 @@ function negawatt_normalizer_process_meters_once($meter_ids = array(), $from_tim
       drush_log('-----');
     }
     catch (Exception $e) {
-      drush_log('Processing failed: @msg.', array('@msg', $e->getMessage()));
+      drush_log('Processing failed: @msg.', array('@msg', $e->getMessage()), 'error');
     }
   }
-  drush_log(format_string('Total electricity-entities returned: @count', array('@count'=> $total_entities_count)));
+  drush_log(format_string('Total electricity-entities returned: @count', array('@count'=> $total_entities_count)), 'ok');
 }
 
 /**

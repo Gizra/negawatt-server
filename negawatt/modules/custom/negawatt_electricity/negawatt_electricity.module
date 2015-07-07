@@ -45,9 +45,9 @@ function negawatt_electricity_entity_info() {
 }
 
 /**
- * Returns auction controller.
+ * Returns electricity controller.
  *
- * @return AuctionEntityController
+ * @return ElectricityEntityController
  */
 function negawatt_electricity_get_controller() {
   return entity_get_controller('electricity');

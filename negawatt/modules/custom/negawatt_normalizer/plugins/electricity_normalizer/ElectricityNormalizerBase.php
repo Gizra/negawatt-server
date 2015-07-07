@@ -31,7 +31,7 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
   /**
    * Entities analyzer.
    *
-   * @var NegaWattNormalizerAnalyzerManager
+   * @var NegaWattAnalyzerManager
    */
   protected $analyzerManager = NULL;
 
@@ -116,7 +116,7 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
   /**
    * Get the active entities analyzer.
    *
-   * @return NegaWattNormalizerAnalyzerManager
+   * @return NegaWattAnalyzerManager
    */
   public function getAnalyzerManager() {
     return $this->analyzerManager;
@@ -131,15 +131,16 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
   public function __construct(array $plugin,
                               NegaWattNormalizerTimeManagerInterface $time_manager = NULL,
                               NegaWattNormalizerDataProviderManagerInterface $data_provider_manager = NULL,
-                              NegaWattNormalizerAnalyzerInterface $analyzer_manager = NULL) {
+                              NegaWattAnalyzerInterface $analyzer_manager = NULL) {
     $this->plugin = $plugin;
 
     $this->timeManager         = $time_manager          ? $time_manager          : new \NegaWattNormalizerTimeManagerBase();
     $this->dataProviderManager = $data_provider_manager ? $data_provider_manager : new \NegaWattNormalizerDataProviderManagerBase();
-    $this->analyzerManager     = $analyzer_manager      ? $analyzer_manager      : new \NegaWattNormalizerAnalyzerManager();
+    $this->analyzerManager     = $analyzer_manager      ? $analyzer_manager      : new \NegaWattAnalyzerManager();
 
     // Prepare analyzers
-    $this->analyzerManager->addAnalyzer(new \NegaWattNormalizerAnalyzerCompareLastYear($this->dataProviderManager));
+    $this->analyzerManager->addAnalyzer(new \NegaWattAnalyzerCompareLastYear($this->dataProviderManager));
+    $this->analyzerManager->addAnalyzer(new \NegaWattAnalyzerPowerCap($this->dataProviderManager));
   }
 
   /**
@@ -325,22 +326,18 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
     if ($num_raw_entities == 0) {
       if ($frequency == $this->getMeterMaxFrequency()) {
         // No raw entities for this frequency, and we're at the highest frequency.
-        // If there are no normalized entities as well, there's nothing to calc.
-        $num_normalized_entities = \NegaWattNormalizerDataProviderBase::getNumberOfNormalizedElectricityEntities($this->getMeterNode(), $frequency);
-        // No normalized entities neither, nothing to do here.
-        if (!$num_normalized_entities) {
-          self::debugMessage("No raw nor normalized entities to process, leaving processByFrequency.", 1);
-          return array(
-            'entities' => array(),
-            'last_processed' => NULL,
-          );
-        }
+        // There's nothing to calc.
+        self::debugMessage("No raw entities to process, leaving processByFrequency.", 1);
+        return array(
+          'entities' => array(),
+          'last_processed' => NULL,
+        );
       }
       else {
-        // No entities for this frequency, but we're NOT at the highest frequency,
+        // No raw entities for this frequency, but we're NOT at the highest frequency,
         // take time interval from higher frequency.
-        $from_timestamp = $last_processed ? $last_processed : \NegaWattNormalizerDataProviderBase::getOldestNormalizedElectricityEntity($this->getMeterNode(), $frequency + 1);
-        $to_timestamp = \NegaWattNormalizerDataProviderBase::getLatestNormalizedElectricityEntity($this->getMeterNode(), $frequency + 1);
+        $from_timestamp = $from_timestamp ? $from_timestamp : ( $last_processed ? $last_processed : \NegaWattNormalizerDataProviderBase::getOldestNormalizedElectricityEntity($this->getMeterNode(), $frequency + 1));
+        $to_timestamp = $to_timestamp ? $to_timestamp : \NegaWattNormalizerDataProviderBase::getLatestNormalizedElectricityEntity($this->getMeterNode(), $frequency + 1);
         // Increase end-timestamp so the last entity will be calculated
         // (the loop in processNormalizedEntities() is for timestamps that are
         // *smaller* then the end-timestamp)
@@ -378,8 +375,16 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
    *
    * @return array
    *    The processed normalized entities in the form array[timestamp][rate-type] = entity.
+   * @throws Exception
+   *    ON $from_timestamp == NULL.
    */
   public function processNormalizedEntities($from_timestamp, $to_timestamp, $frequency) {
+    // Sanity check
+    if (!$from_timestamp) {
+      // Having $from_timestamp == NULL will cause an infinite while-loop below.
+      self::debugMessage('processNormalizedEntities received $from_timestamp == NULL, can`t proceed.', 2);
+      throw new \Exception('processNormalizedEntities received $from_timestamp == NULL, can`t proceed.');
+    }
     // Output debug message.
     self::debugMessage('in processNormalizedEntities.', 2);
     self::debugMessage(format_string('frequency: @frequency, time-frame: [@time_from,@time_to]', array('@frequency' => \NegaWattNormalizerTimeManagerBase::frequencyToStr($frequency))),

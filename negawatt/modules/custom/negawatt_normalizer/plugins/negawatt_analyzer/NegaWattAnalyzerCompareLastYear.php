@@ -6,7 +6,7 @@
  * Contains NegaWattNormalizerAnalyzerCompareLastYear.
  */
 
-class NegaWattNormalizerAnalyzerCompareLastYear implements \NegaWattNormalizerAnalyzerInterface {
+class NegaWattAnalyzerCompareLastYear implements \NegaWattAnalyzerInterface {
 
   protected $dataProviderManager;
 
@@ -79,7 +79,7 @@ class NegaWattNormalizerAnalyzerCompareLastYear implements \NegaWattNormalizerAn
           $node_wrapper = entity_metadata_wrapper('node', $meter_nid);
           $return[] = array(
             'nid' => $meter_nid,
-            'message_type' => 'anomalous_consumption',
+            'message_type' => 'demand_deviate',
             'description' => $node_wrapper->field_place_description->value(),
             'arguments' => array(
               // @fixme: date format of 'Y-m' fits monthly data. Change according to frequency.

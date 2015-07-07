@@ -2,18 +2,18 @@
 
 /**
  * @file
- * Contains NegaWattNormalizerAnalyzerManager.
+ * Contains NegaWattAnalyzerManager.
  */
 
-class NegaWattNormalizerAnalyzerManager extends \ArrayObject {
+class NegaWattAnalyzerManager extends \ArrayObject {
 
   /**
    * Adds an analyzer to the list.
    *
-   * @param \NegaWattNormalizerAnalyzerInterface $analyzer
+   * @param \NegaWattAnalyzerInterface $analyzer
    *   The analyzer plugin object.
    */
-  public function addAnalyzer(\NegaWattNormalizerAnalyzerInterface $analyzer) {
+  public function addAnalyzer(\NegaWattAnalyzerInterface $analyzer) {
     $this->offsetSet($analyzer->getName(), $analyzer);
   }
 
@@ -49,7 +49,6 @@ class NegaWattNormalizerAnalyzerManager extends \ArrayObject {
       if ($create_messages) {
         $this->createMessages($warnings);
       }
-
     }
     else {
       // Analyzer name was not given. Loop over all analyzers and let those
@@ -83,6 +82,20 @@ class NegaWattNormalizerAnalyzerManager extends \ArrayObject {
    *   - arguments: Array of message arguments.
    */
   protected function createMessages($values) {
+    if (empty($values)) {
+      // Nothing to do.
+      return;
+    }
+
+    // Output message.
+    $message = format_string('** Generating @n notifications', array('@n' => count($values)));
+    if (drupal_is_cli()) {
+      drush_log($message, 'ok');
+    }
+    else {
+      debug($message);
+    }
+
     foreach ($values as $value) {
       // Generate the message.
       // Get the node and user account.

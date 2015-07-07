@@ -7,11 +7,14 @@ dependencies[] = negawatt_electricity
 dependencies[] = negawatt_message
 
 ; Handlers
+files[] = includes/PowerCapAnalyzerInfo.php
+files[] = includes/PowerCapAnalyzerInfoMetadataController.php
+files[] = plugins/negawatt_analyzer/NegaWattAnalyzerCompareLastYear.php
+files[] = plugins/negawatt_analyzer/NegaWattAnalyzerInterface.php
+files[] = plugins/negawatt_analyzer/NegaWattAnalyzerManager.php
+files[] = plugins/negawatt_analyzer/NegaWattAnalyzerPowerCap.php
 files[] = plugins/electricity_normalizer/ElectricityNormalizerInterface.php
 files[] = plugins/electricity_normalizer/ElectricityNormalizerBase.php
-files[] = plugins/electricity_normalizer/NegaWattNormalizerAnalyzerInterface.php
-files[] = plugins/electricity_normalizer/NegaWattNormalizerAnalyzerCompareLastYear.php
-files[] = plugins/electricity_normalizer/NegaWattNormalizerAnalyzerManager.php
 files[] = plugins/electricity_normalizer/NegaWattNormalizerDataProviderInterface.php
 files[] = plugins/electricity_normalizer/NegaWattNormalizerDataProviderBase.php
 files[] = plugins/electricity_normalizer/NegaWattNormalizerDataProviderManagerInterface.php

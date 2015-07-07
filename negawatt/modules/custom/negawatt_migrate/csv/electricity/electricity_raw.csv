@@ -1,8 +1,8 @@
 id,meter_type,timestamp,rate_type,frequency,meter_nid,kwh,power_factor,kwh_L1,kwh_L2,kwh_L3,power_factor_L1,power_factor_L2,power_factor_L3
 1,modbus,2014-11-1 7:00,flat,5,satec1,100,0.95,,,,,,
-2,modbus,2014-11-1 7:01,flat,5,satec1,110,0.96,,,,,,
-3,modbus,2014-11-1 7:02,flat,5,satec1,105,0.92,,,,,,
-4,modbus,2014-11-1 7:03,flat,5,satec1,112,0.94,,,,,,
+2,modbus,"2014-11-1 7:05",flat,5,satec1,110,0.96,,,,,,
+3,modbus,"2014-11-1 7:10",flat,5,satec1,115,0.92,,,,,,
+4,modbus,"2014-11-1 8:03",flat,5,satec1,1120,0.94,,,,,,
 5,modbus,2014-11-2,flat,5,satec1,111,0.95,,,,,,
 6,modbus,2014-11-2,low,5,satec1,103,0.95,,,,,,
 7,modbus,2014-11-2,mid,5,satec1,105,0.92,,,,,,

@@ -5,6 +5,7 @@ dependencies[] = restful
 
 files[] = plugins/restful/node/NegawattEntityBaseNode.php
 files[] = plugins/restful/node/meters/NegawattEntityMeterBase.php
+files[] = plugins/restful/message/NegawattMessageNotificationBase.php
 
 ; Tests
 files[] = tests/NegawattRestfulTestCase.test

@@ -120,3 +120,25 @@ function negawatt_normalizer_process_meter($node, $from_timestamp = NULL, $to_ti
   return $handler->process($frequencies = array(), $from_timestamp, $to_timestamp);
 }
 
+/**
+ * Implements hook_entity_info() for power-cap analyzer parameters table.
+ */
+function negawatt_normalizer_entity_info() {
+  $return = array(
+    'power_cap_analyzer_info' => array(
+      'label' => t('Power-cap analyzer parameters'),
+      'base table' => 'negawatt_power_cap_analyzer_info',
+      'fieldable' => TRUE,
+      'entity keys' => array(
+        'id' => 'id',
+      ),
+      'entity class' => 'PowerCapAnalyzerInfo',
+      'controller class' => 'EntityAPIController',
+      'metadata controller class' => 'PowerCapAnalyzerInfoMetadataController',
+      'views controller class' => 'EntityDefaultViewsController',
+      'entity cache' => module_exists('entitycache'),
+    ),
+  );
+
+  return $return;
+}

@@ -3,14 +3,14 @@
 
 /**
  * @file
- * Contains NegaWattNormalizerAnalyzerInterface.
+ * Contains NegaWattAnalyzerInterface.
  */
 
-interface NegaWattNormalizerAnalyzerInterface {
+interface NegaWattAnalyzerInterface {
 
 
   /**
-   * Constructor for the NegaWattNormalizerAnalyzerInterface.
+   * Constructor for the NegaWattAnalyzerInterface.
    */
   public function __construct();
 

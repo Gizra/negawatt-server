@@ -183,14 +183,14 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     $this->meterNode6 = $meter_node6;
 
     // Create some messages
-    $message = message_create('anomalous_consumption');
+    $message = message_create('demand_exceeds_cap');
     $wrapper = entity_metadata_wrapper('message', $message);
     $wrapper->field_meter->set($meter_node1);
     $wrapper->field_meter_account->set($this->account_node1);
     $wrapper->field_message_place_description->set('first message');
     $wrapper->save();
 
-    $message = message_create('anomalous_consumption');
+    $message = message_create('demand_deviate');
     $wrapper = entity_metadata_wrapper('message', $message);
     $wrapper->field_meter->set($meter_node6);
     $wrapper->field_meter_account->set($this->account_node2);
@@ -418,7 +418,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
    */
   function testMessageApi() {
 
-    $handler = restful_get_restful_handler('anomalous_consumption');
+    $handler = restful_get_restful_handler('notifications');
 
     // Test account with access to both groups.
     $response = $handler->get('');
@@ -450,7 +450,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     // Test account filter with no access (user has access only to account 2).
     $response = $handler->get('', array('filter' => array('meter_account' => 1)));
     // There should be no entities now.
-    $this->assertTrue(is_array($response) && count($response) == 0, 'Testing filter by account with no permission, no entities were found.');
+    $this->assertTrue($response == NULL, 'Testing filter by account with no permission, no entities were found.');
 
     // Change to user2, no account membership.
     $handler->setAccount($this->user2);

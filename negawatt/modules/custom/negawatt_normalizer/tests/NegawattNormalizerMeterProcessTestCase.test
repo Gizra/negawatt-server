@@ -261,6 +261,17 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
       $entity = entity_create('electricity_raw', $values);
       $entity->save();
     }
+
+    // Create power-cap analyzer info
+    $values = array(
+      'weekday' => '5',
+      'hour_from' => '15',
+      'hour_to' => '16',
+      'cap' => 60.4,
+      'meter_nid' => $meter_node1->nid,
+    );
+    $entity = entity_create('power_cap_analyzer_info', $values);
+    $entity->save();
   }
 
   protected static function flatten($array) {
@@ -368,9 +379,9 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     // Problem with float representation prevent the exact value of 0.96
     $this->assertTrue(abs($result_entity->min_power_factor - 0.96) < 0.0001, 'Min power-factor calculation was correct.');
 
-    // Verify the calculation of the first normalized entity
+    // Verify the calculation of the first normalized entity - the avg_power should be null.
     $result_entity = $result_entities[0];
-    $this->assertTrue($result_entity->avg_power < 0.0001, 'Average power calculation for first entity was correct.');
+    $this->assertNull($result_entity->avg_power, 'Average power calculation for first entity was correct.');
 
     // Create a new normalized entity and check its validity.
     // Use HOUR frequency to aggregate normalized MINUTE entities into one HOUR entity.
@@ -730,5 +741,40 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     catch(Exception $e) {
       $this->fail($message);
     }
+  }
+
+  /**
+   * Test processing a Modbus meter.
+   * - @todo: Test meter with wrong frequency
+   * - Test meter with empty data
+   * - Test meter with valid data.
+   * - Test that the using same timestamp, nid returns an existing entity.
+   * - Test that adding raw data and calling process again returns proper values.
+   */
+  function testNotifications() {
+
+    // Run MODBUS normalizer to get notifications
+    $handler = negawatt_normalizer_get_electricity_normalizer_handler('modbus');
+
+    // Run the normalizer at MINUTE frequency so raw entities will be processed.
+    $handler->setMeterNode($this->meterNode1);
+    $result_entities = $handler->process(
+      array(\NegaWattNormalizerTimeManagerInterface::MINUTE),
+      strtotime('2014-6-12 15:00'), strtotime('2014-6-12 16:00'));
+
+    $query = new EntityFieldQuery();
+    $result = $query->entityCondition('entity_type', 'message')
+      ->execute();
+    $eids = array_keys($result['message']);
+    $last_eid = max($eids);
+    $last_entity = entity_load('message', array($last_eid));
+    $this->assertTrue(!empty($result['message']) && count($result['message']) == 2, '<b>Testing notifications</b><br>Two messages were generated.');
+
+    $mid = $result['message'][1]->mid;
+    $message = entity_load('message', array($mid));
+    $message = $message[$mid];
+    $this->assertEqual($message->arguments['@frequency'], 'minute', 'Message frequencies is correct.');
+    $this->assertEqual($message->arguments['@date'], '2014-06-12 15:15', 'Message date is correct.');
+    $this->assertEqual($message->arguments['@cap'], '60.4', 'Message cap is correct.');
   }
 }

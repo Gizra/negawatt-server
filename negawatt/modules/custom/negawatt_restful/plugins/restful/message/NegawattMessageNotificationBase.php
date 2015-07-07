@@ -2,13 +2,11 @@
 
 /**
  * @file
- * Contains \NegawattTaxonomyTermMeterCategory.
+ * Contains base class for negawatt-notification resources.
  */
-
-class NegawattMessageAnomalousConsumption extends \RestfulEntityBase {
-
+class NegawattMessageNotificationBase extends \RestfulEntityBase {
   /**
-   * {@inheritdoc}
+   * Overrides \RestfulEntityBase::publicFieldsInfo().
    */
   public function publicFieldsInfo() {
     $public_fields = parent::publicFieldsInfo();

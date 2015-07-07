@@ -42,7 +42,6 @@ class NegawattElectricityRawMigrate extends Migration {
       'timestamp',
       'rate_type',
       'frequency',
-      'meter_nid',
       'kwh',
       'power_factor',
     );
