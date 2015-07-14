@@ -41,19 +41,19 @@ account1,culture_1,תרבות,,,תרבות,culture
 account1,other_1,אחר,,,אחר,other
 account2,astral,"רשת מלונות אסטרל",,,מלון,astral
 account2,nirvana,נירוונה,"רשת מלונות אסטרל",,מלון,astral
-account2,nirvana-iec,"מונה ראשי",נירוונה,,מלון,astral,נירוונה
+account2,nirvana-iec,"מונה ראשי",נירוונה,,מלון,astral,אסטרל נירוונה
 account2,seaside,סיסייד,"רשת מלונות אסטרל",,מלון,astral
-account2,seaside-iec,"מונה ראשי",סיסייד,,מלון,astral,סיסייד
+account2,seaside-iec,"מונה ראשי",סיסייד,,מלון,astral,אסטרל סיסייד
 account2,coral,קורל,"רשת מלונות אסטרל",,מלון,astral
-account2,coral-iec,"מונה ראשי",קורל,,מלון,astral,קורל
+account2,coral-iec,"מונה ראשי",קורל,,מלון,astral,אסטרל קורל
 account2,marina,מרינה,"רשת מלונות אסטרל",,מלון,astral
 account2,marina-main,"מונה ראשי",מרינה,,מלון,astral,מרינה - ראשי
 account2,marina-kitchen,"מטבח",מרינה,,מלון,astral,מרינה - מטבח
 account2,marina-ac1,"מיזוג 1",מרינה,,מלון,astral,מרינה - מיזוג 1
 account2,marina-ac2,"מיזוג 2",מרינה,,מלון,astral,מרינה - מיזוג 2
-account2,marina-iec,"מונה ראשי חח\"י",מרינה,,מלון,astral,מרינה
+account2,marina-iec,"מונה ראשי חח\"י",מרינה,,מלון,astral,אסטרל מרינה
 account2,village,וילג',"רשת מלונות אסטרל",,מלון,astral
-account2,village-iec,"מונה ראשי",וילג',,מלון,astral,וילג'
+account2,village-iec,"מונה ראשי",וילג',,מלון,astral,אסטרל וילג'
 account2,other_2,אחר,,,אחר,other
 account3,other_3,אחר,,,אחר,other
 account4,public_4,מבנה ציבור,,,מבנים ציבוריים כגון משרדים,public_building

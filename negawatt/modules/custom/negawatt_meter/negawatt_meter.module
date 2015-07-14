@@ -29,7 +29,8 @@ function negawatt_meter_is_meter($node_type) {
 function negawatt_meter_set_meter_category($node) {
   // If meter category is already defined (e.g. during migration), end here.
   $wrapper = entity_metadata_wrapper('node', $node);
-  if (isset($wrapper->{OG_VOCAB_FIELD}) && $wrapper->{OG_VOCAB_FIELD}->value() != NULL) {
+  $category = $wrapper->{OG_VOCAB_FIELD}->value();
+  if (!empty($category)) {
     return;
   }
 
