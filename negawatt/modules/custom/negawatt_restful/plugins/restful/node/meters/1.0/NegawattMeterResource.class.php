@@ -6,6 +6,9 @@
  */
 class NegawattMeterResource extends \RestfulEntityBaseMultipleBundles {
 
+  // Allow reading 200 meters at a time
+  protected $range = 200;
+
   /**
    * Overrides \RestfulBase::controllersInfo().
    */
