@@ -39,21 +39,21 @@ account1,elderly_1,מרכז יום לקשיש,רווחה,,מרכז יום לקש
 account1,community_1,מרכז קהילתי,רווחה,,מרכז קהילתי,welfare
 account1,culture_1,תרבות,,,תרבות,culture
 account1,other_1,אחר,,,אחר,other
-account2,astral,"רשת מלונות אסטרל",,,מלון,astral
-account2,nirvana,נירוונה,"רשת מלונות אסטרל",,מלון,astral
-account2,nirvana-iec,"מונה ראש נירוונהי",נירוונה,,מלון,astral,אסטרל נירוונה
-account2,seaside,סיסייד,"רשת מלונות אסטרל",,מלון,astral
-account2,seaside-iec,"מונה ראשי סיסייד",סיסייד,,מלון,astral,אסטרל סיסייד
-account2,coral,קורל,"רשת מלונות אסטרל",,מלון,astral
-account2,coral-iec,"מונה ראשי קורל",קורל,,מלון,astral,אסטרל קורל
-account2,marina,מרינה,"רשת מלונות אסטרל",,מלון,astral
-account2,marina-main,"מונה ראשי מרינה",מרינה,,מלון,astral,מרינה - ראשי
-account2,marina-kitchen,"מטבח",מרינה,,מלון,astral,מרינה - מטבח
-account2,marina-ac1,"מיזוג 1",מרינה,,מלון,astral,מרינה - מיזוג 1
-account2,marina-ac2,"מיזוג 2",מרינה,,מלון,astral,מרינה - מיזוג 2
-account2,marina-iec,"מונה ראשי חח\"י",מרינה,,מלון,astral,אסטרל מרינה
-account2,village,וילג',"רשת מלונות אסטרל",,מלון,astral
-account2,village-iec,"מונה ראשי וילג'",וילג',,מלון,astral,אסטרל וילג'
+account2,astral,רשת מלונות אסטרל,,,מלון,astral
+account2,nirvana,נירוונה,רשת מלונות אסטרל,,מלון,astral
+account2,nirvana-iec,מונה ראש נירוונהי,נירוונה,,מלון,astral,אסטרל נירוונה
+account2,seaside,סיסייד,רשת מלונות אסטרל,,מלון,astral
+account2,seaside-iec,מונה ראשי סיסייד,סיסייד,,מלון,astral,אסטרל סיסייד
+account2,coral,קורל,רשת מלונות אסטרל,,מלון,astral
+account2,coral-iec,מונה ראשי קורל,קורל,,מלון,astral,אסטרל קורל
+account2,marina,מרינה,רשת מלונות אסטרל,,מלון,astral
+account2,marina-main,מונה ראשי מרינה,מרינה,,מלון,astral,מרינה - ראשי
+account2,marina-kitchen,מטבח,מרינה,,מלון,astral,מרינה - מטבח
+account2,marina-ac1,צ'ילר 1,מרינה,,מלון,astral,מרינה - צ'ילר 1
+account2,marina-ac2,צ'ילר 2,מרינה,,מלון,astral,מרינה - צ'ילר 2
+account2,marina-iec,מונה ראשי חח"י,מרינה,,מלון,astral,אסטרל מרינה
+account2,village,וילג',רשת מלונות אסטרל,,מלון,astral
+account2,village-iec,מונה ראשי וילג',וילג',,מלון,astral,אסטרל וילג'
 account2,other_2,אחר,,,אחר,other
 account3,other_3,אחר,,,אחר,other
 account4,public_4,מבנה ציבור,,,מבנים ציבוריים כגון משרדים,public_building
