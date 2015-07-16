@@ -28,6 +28,10 @@ function negawatt_normalizer_drush_command() {
     'description' => dt('Clear normalized electricity table in the database.'),
   );
 
+  $items['delete-messages'] = array(
+    'description' => dt('Delete all messages issued.'),
+  );
+
   return $items;
 }
 
@@ -64,6 +68,32 @@ function drush_negawatt_normalizer_reset_last_processed() {
     $wrapper->save();
   }
 }
+
+/**
+ * Delete all messages issued.
+ */
+function drush_negawatt_normalizer_delete_messages() {
+  // Count messages.
+  $query = new EntityFieldQuery();
+  $total = $query->entityCondition('entity_type', 'message')
+    ->count()
+    ->execute();
+
+  // Delete messages in groups of 50.
+  for ($i = 0; $i < $total; $i += 50) {
+    // Get message ids.
+    $query = new EntityFieldQuery();
+    $result = $query->entityCondition('entity_type', 'message')
+      ->range(0, 50)
+      ->execute();
+
+    $mids = array_keys($result['message']);
+
+    // Delete the messages.
+    message_delete_multiple($mids);
+  }
+}
+
 
 /**
  * Process meters' raw data.

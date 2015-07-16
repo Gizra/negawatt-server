@@ -426,16 +426,16 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     // There should be 2 entities.
     $this->assertTrue(is_array($response) && count($response) == 2, '<b>Testing messages API</b><br>2 entities were found.');
     $entity = $response[0];
-    $this->assertEqual($entity['place_description'], 'first message', 'Entity 0 place-description is correct.');
+    $this->assertEqual($entity['description'], 'first message', 'Entity 0 place-description is correct.');
     $entity = $response[1];
-    $this->assertEqual($entity['place_description'], 'second message', 'Entity 1 place-description is correct.');
+    $this->assertEqual($entity['description'], 'second message', 'Entity 1 place-description is correct.');
 
     // Test account filter.
     $response = $handler->get('', array('filter' => array('meter_account' => 2)));
     // There should be 1 entity.
     $this->assertTrue(is_array($response) && count($response) == 1, 'Testing filter by account, only one entity was found.');
     $entity = $response[0];
-    $this->assertEqual($entity['place_description'], 'second message', 'Entity place-description is correct.');
+    $this->assertEqual($entity['description'], 'second message', 'Entity place-description is correct.');
 
     // Change user to user1, with access to accounts 2 only.
     $handler->setAccount($this->user1);
@@ -445,7 +445,7 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     // There should be 1 entity.
     $this->assertTrue(is_array($response) && count($response) == 1, 'Testing user access, only one entity was found.');
     $entity = $response[0];
-    $this->assertEqual($entity['place_description'], 'second message', 'Entity place-description is correct.');
+    $this->assertEqual($entity['description'], 'second message', 'Entity place-description is correct.');
 
     // Test actual JSON result.
     $formatter_handler = \RestfulManager::outputFormat($handler);

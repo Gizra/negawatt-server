@@ -111,7 +111,9 @@ class NegaWattAnalyzerManager extends \ArrayObject {
       $wrapper = entity_metadata_wrapper('message', $message);
       $wrapper->field_meter->set($node);
       $wrapper->field_meter_account->set($meter_account);
+      $wrapper->field_message_meter_title->set($value['meter_title']);
       $wrapper->field_message_place_description->set($value['description']);
+      $wrapper->field_message_place_address->set($value['address']);
       $wrapper->save();
 
       // Output message.
