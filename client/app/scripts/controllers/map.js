@@ -19,14 +19,18 @@ angular.module('negawattClientApp')
         realworld: {
           name: "Cluster",
           type: "markercluster",
+          layerOptions: {
+            animateAddingMarkers: false,
+            spiderfyOnMaxZoom: true,
+            showCoverageOnHover: false,
+            zoomToBoundsOnClick: false
+          },
           visible: true
         }
       }
     };
 
     $scope.meters = getMetersWithOptions(meters.list);
-
-
 
     if ($stateParams.markerId) {
       isMeterSelected = setSelectedMarker($stateParams.markerId);
