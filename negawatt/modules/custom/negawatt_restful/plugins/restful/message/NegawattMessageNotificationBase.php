@@ -59,8 +59,16 @@ class NegawattMessageNotificationBase extends \RestfulEntityBase {
       ),
     );
 
-    $public_fields['place_description'] = array(
+    $public_fields['meter_title'] = array(
+      'property' => 'field_message_meter_title',
+    );
+
+    $public_fields['description'] = array(
       'property' => 'field_message_place_description',
+    );
+
+    $public_fields['address'] = array(
+      'property' => 'field_message_place_address',
     );
 
     return $public_fields;

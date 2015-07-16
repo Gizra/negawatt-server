@@ -52,8 +52,20 @@ angular.module('negawattClientApp')
       var messages = angular.fromJson(response).data;
 
       angular.forEach(messages, function(message) {
+        // Find a proper meter description
+        var description = message['description'];
+        if (!description) {
+          description = message['address'];
+        }
+        if (!description) {
+          description = message['meter_title'];
+        }
+        if (!description) {
+          description = 'אתר ללא שם';
+        }
+
         // Build meter-url with meter description and a link to select the meter.
-        var meterUrl = '<a href="/#/dashboard/' + message['meter_account'] + '/marker/' + message['meter'] + '">' + message['place_description'] + '</a>';
+        var meterUrl = '<a href="/#/dashboard/' + message['meter_account'] + '/marker/' + message['meter'] + '">' + description + '</a>';
 
         // Replace '!meter_url' placeholder by the URL.
         if (angular.isDefined(message['long-text'])) {

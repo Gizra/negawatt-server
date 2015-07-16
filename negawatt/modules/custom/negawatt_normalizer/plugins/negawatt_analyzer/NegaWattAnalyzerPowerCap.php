@@ -86,7 +86,9 @@ class NegaWattAnalyzerPowerCap implements \NegaWattAnalyzerInterface {
             $return[] = array(
               'nid' => $meter_nid,
               'message_type' => 'demand_exceeds_cap',
+              'meter_title' => $node_wrapper->label(),
               'description' => $node_wrapper->field_place_description->value(),
+              'address' => $node_wrapper->field_place_address->value(),
               'arguments' => array(
                 '@date' => date('Y-m-d H:i', $timestamp),
                 '@frequency' => 'minute',

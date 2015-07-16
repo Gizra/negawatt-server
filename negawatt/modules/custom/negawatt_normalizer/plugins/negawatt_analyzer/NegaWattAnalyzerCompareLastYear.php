@@ -80,7 +80,9 @@ class NegaWattAnalyzerCompareLastYear implements \NegaWattAnalyzerInterface {
           $return[] = array(
             'nid' => $meter_nid,
             'message_type' => 'demand_deviate',
+            'meter_title' => $node_wrapper->label(),
             'description' => $node_wrapper->field_place_description->value(),
+            'address' => $node_wrapper->field_place_address->value(),
             'arguments' => array(
               // @fixme: date format of 'Y-m' fits monthly data. Change according to frequency.
               '@date' => date('Y-m', $timestamp),
