@@ -9,8 +9,8 @@ class NegawattEntityMeterBase extends \NegawattEntityBaseNode {
    * Overrides \NegawattEntityBaseNode::publicFieldsInfo().
    */
 
-  // Allow reading 100 meters at a time
-  protected $range = 100;
+  // Allow reading 200 meters at a time
+  protected $range = 200;
 
   public function publicFieldsInfo() {
     $public_fields = parent::publicFieldsInfo();
