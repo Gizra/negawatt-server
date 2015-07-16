@@ -7,7 +7,6 @@ angular.module('negawattClientApp')
     // Config map.
     $scope.defaults = Map.getConfig();
     $scope.center = Map.getCenter(account);
-    $scope.meters = getMetersWithOptions(meters.list);
     $scope.layers = {
       baselayers: {
         osm: {
@@ -24,6 +23,22 @@ angular.module('negawattClientApp')
         }
       }
     };
+
+
+    var addressPointsToMarkers = function(points) {
+      debugger
+      return points.map(function(ap) {
+        return {
+          layer: 'realworld',
+          lat: ap[0],
+          lng: ap[1]
+        };
+      });
+    };
+
+    $scope.meters = addressPointsToMarkers(getMetersWithOptions(meters.list));
+
+
 
     if ($stateParams.markerId) {
       isMeterSelected = setSelectedMarker($stateParams.markerId);
@@ -65,7 +80,7 @@ angular.module('negawattClientApp')
 
     // Reload the current $state when meters added more.
     $scope.$on('nwMetersChanged', function(event, meters) {
-      $scope.meters = getMetersWithOptions(meters.list);
+      $scope.meters = addressPointsToMarkers(getMetersWithOptions(meters.list));
 
       if (FilterFactory.get('meter') && $scope.meters[FilterFactory.get('meter')] && !isMeterSelected) {
         setSelectedMarker(FilterFactory.get('meter'));
