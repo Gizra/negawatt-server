@@ -8,6 +8,22 @@ angular.module('negawattClientApp')
     $scope.defaults = Map.getConfig();
     $scope.center = Map.getCenter(account);
     $scope.meters = getMetersWithOptions(meters.list);
+    $scope.layers = {
+      baselayers: {
+        osm: {
+          name: 'OpenStreetMap',
+          type: 'xyz',
+          url: 'https://{s}.tiles.mapbox.com/v3/examples.map-i87786ca/{z}/{x}/{y}.png'
+        }
+      },
+      overlays: {
+        realworld: {
+          name: "Cluster",
+          type: "markercluster",
+          visible: true
+        }
+      }
+    };
 
     if ($stateParams.markerId) {
       isMeterSelected = setSelectedMarker($stateParams.markerId);
