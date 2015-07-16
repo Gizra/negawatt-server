@@ -24,19 +24,7 @@ angular.module('negawattClientApp')
       }
     };
 
-
-    var addressPointsToMarkers = function(points) {
-      debugger
-      return points.map(function(ap) {
-        return {
-          layer: 'realworld',
-          lat: ap[0],
-          lng: ap[1]
-        };
-      });
-    };
-
-    $scope.meters = addressPointsToMarkers(getMetersWithOptions(meters.list));
+    $scope.meters = getMetersWithOptions(meters.list);
 
 
 
@@ -80,7 +68,7 @@ angular.module('negawattClientApp')
 
     // Reload the current $state when meters added more.
     $scope.$on('nwMetersChanged', function(event, meters) {
-      $scope.meters = addressPointsToMarkers(getMetersWithOptions(meters.list));
+      $scope.meters = getMetersWithOptions(meters.list);
 
       if (FilterFactory.get('meter') && $scope.meters[FilterFactory.get('meter')] && !isMeterSelected) {
         setSelectedMarker(FilterFactory.get('meter'));

@@ -71,7 +71,7 @@ angular.module('negawattClientApp')
       // Define endpoint with filters.
       // Get only meters that has electricity data.
       url = Config.backend + '/api/meters?'
-//        + 'filter[has_electricity]=1'
+        //+ 'filter[has_electricity]=1'
         + '&filter[account]=' + accountId
         + '&page=' + pageNumber;
 
@@ -193,6 +193,9 @@ angular.module('negawattClientApp')
 
           delete item.location;
         }
+
+        // Add extra layers.
+        item.layer = 'realworld';
 
         // Set meter tooltip
         meters.data.list[item.id].message = (item.image ? ('<img src="' + item.image.url + '"><br>') : '') +
