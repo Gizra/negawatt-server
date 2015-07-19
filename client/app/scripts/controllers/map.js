@@ -23,7 +23,8 @@ angular.module('negawattClientApp')
             animateAddingMarkers: false,
             spiderfyOnMaxZoom: true,
             showCoverageOnHover: false,
-            zoomToBoundsOnClick: false
+            zoomToBoundsOnClick: false,
+            spiderfyDistanceMultiplier: 2
           },
           visible: true
         }
