@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Map', function ($rootScope, leafletData) {
+  .service('Map', function ($rootScope, leafletData, Utils) {
     var self = this;
 
     // Initial center point.
@@ -122,6 +122,10 @@ angular.module('negawattClientApp')
       cache = {};
     });
 
+    $rootScope.$on('leafletDirectiveMap.zoomlevelschange', function(event, members) {
+      debugger;
+    });
+
     /**
      * Map Event Load
      *
@@ -133,10 +137,11 @@ angular.module('negawattClientApp')
       }
 
       // Set initial max boundaries.
-      getActualBounds().then(function() {
-        members.model.maxbounds = self.getMaxBounds();
-      })
-      event.preventDefault();
+      if (Utils.isEmpty(maxBounds)) {
+        getActualBounds().then(function() {
+          members.model.maxbounds = self.getMaxBounds();
+        })
+      }
     });
 
     /**
