@@ -1,8 +1,11 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Map', function ($rootScope, leafletData, Utils) {
+  .service('Map', function ($rootScope, leafletData, Utils, leafletHelpers) {
     var self = this;
+
+    // Avoid the watch because conflic with clustering plugin and (select/unselect) marker.
+    leafletHelpers.watchOptions.doWatch = false;
 
     // Initial center point.
     var cache = {};
