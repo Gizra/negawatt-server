@@ -7,7 +7,7 @@ Feature: Meter
   Scenario: Show all meters of the account
     Given I login with user "carlos"
     When I visit "/#/dashboard/1"
-    Then I should see "4" markers
+    Then I should see "3" markers
 
   @javascript
   Scenario: Show only meters of a selected
@@ -31,7 +31,7 @@ Feature: Meter
   Scenario: Show meters with not selected category semitransparent
     Given I login with user "carlos"
     When I visit "/#/dashboard/1/category/14"
-    And I should see "4" markers
+    And I should see "3" markers
     And I should print page of "//div[@class='leaflet-marker-pane']"
     Then I should see "2" markers with class "leaflet-marker-icon-transparent"
 
@@ -39,14 +39,14 @@ Feature: Meter
   Scenario: Show only meters not filter in the category menu.
     Given I login with user "carlos"
     When I visit "/#/dashboard/1"
-    Then I should see "4" markers
+    Then I should see "3" markers
     And I uncheck the box "מבנה חינוך"
     And the "מבנה חינוך" checkbox should not be checked
-    And I should see "3" markers
+    And I should see "2" markers
     And I check the box "מבנה חינוך"
     And I uncheck the box "בטחון"
     And the "בטחון" checkbox should not be checked
-    And I should see "2" markers
+    And I should see "1" markers
 
   @javascript
   Scenario: Show meter selected when click it.
