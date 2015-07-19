@@ -37,9 +37,10 @@ angular.module('negawattClientApp')
      */
     function unselect() {
       var self = this;
-      getIcon(this.getCategory(), 'unselect').then(function(icon) {
-        self.icon = icon;
-      });
+      self.icon = getIcon('default', 'unselect');
+      //getIcon(this.getCategory(), 'unselect').then(function(icon) {
+      //  self.icon = icon;
+      //});
     }
 
     /**
@@ -49,13 +50,14 @@ angular.module('negawattClientApp')
      */
     function select() {
       var self = this;
-      if (angular.isDefined(selected)) {
-        selected.unselect();
-      }
-      FilterFactory.setMeterSelected(this);
-      getIcon(this.getCategory(), 'select').then(function(icon) {
-        self.icon = icon;
-      });
+      self.icon = getIcon('default', 'select');
+      //if (angular.isDefined(selected)) {
+      //  selected.unselect();
+      //}
+      //FilterFactory.setMeterSelected(this);
+      //getIcon(this.getCategory(), 'select').then(function(icon) {
+      //  self.icon = icon;
+      //});
     }
 
     /**
@@ -84,7 +86,7 @@ angular.module('negawattClientApp')
       // Get defined icon object.
       var icon = IconFactory[type] && IconFactory[type][state] || IconFactory.getIcon(type, state);
 
-      return $q.when(icon);
+      return icon;
     }
 
   });
