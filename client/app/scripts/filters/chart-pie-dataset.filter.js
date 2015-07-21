@@ -78,7 +78,7 @@ angular.module('negawattClientApp')
             this.push({
               c: [
                 {v: !Utils.isEmpty(labels) && labels[key].label || 'category ' + key},
-                {v: +value},
+                {v: +value, f: $filter('number')(value, 0)},
                 {id: key}
               ]
             });
