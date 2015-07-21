@@ -15,23 +15,7 @@ class NegawattMessageNotificationBase extends \RestfulEntityBase {
     unset($public_fields['label']);
 
     $public_fields['timestamp'] = array(
-      'property' => 'timestamp'
-    );
-
-    // Message short-text, after placeholder replacement
-    $public_fields['text'] = array(
-      'property' => 'mid',
-      'process_callbacks' => array(
-        array($this, 'getText'),
-      ),
-    );
-
-    // Message long-text, after placeholder replacement
-    $public_fields['longText'] = array(
-      'property' => 'mid',
-      'process_callbacks' => array(
-        array($this, 'getLongText'),
-      ),
+      'property' => 'field_event_timestamp'
     );
 
     // Node Id of meter.
