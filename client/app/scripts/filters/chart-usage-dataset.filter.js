@@ -1,5 +1,5 @@
 angular.module('negawattClientApp')
-  .filter('toChartDataset', function (Chart, ChartOptions, moment) {
+  .filter('toChartDataset', function ($filter, Chart, ChartOptions, moment) {
 
     /**
      * From a collection object create a Google Chart data ser object
@@ -138,11 +138,11 @@ angular.module('negawattClientApp')
         angular.forEach(values, function(item, timestamp) {
           var label = moment.unix(timestamp).format(frequency.axis_h_format);
           var col = [
-            { 'v': label },
-            { 'v': item.flat },
-            { 'v': item.peak },
-            { 'v': item.mid  },
-            { 'v': item.low  }
+            {v: label},
+            {v: item.flat, f: $filter('number')(item.flat, 0) + ' kWhs'},
+            {v: item.peak, f: $filter('number')(item.peak, 0) + ' kWhs'},
+            {v: item.mid, f: $filter('number')(item.mid, 0) + ' kWhs'},
+            {v: item.low, f: $filter('number')(item.low, 0) + ' kWhs'}
           ];
           rows.push({ 'c': col });
         });
