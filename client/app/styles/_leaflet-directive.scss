@@ -2,6 +2,9 @@
 .leaflet-popup-content {
   direction: rtl;
   text-align: right;
+  // Override the fixed width that is set on the marker popup, to fit images
+  // that aren't loaded when the marker is first shown.
+  width: auto !important;
 }
 
 .leaflet-marker-icon-transparent {
