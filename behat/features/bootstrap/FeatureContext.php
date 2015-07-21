@@ -254,7 +254,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
             var leafletData = $injector.get("leafletData");
             var Utils = $injector.get("Utils");
             var $filter = $injector.get("$filter");
-            var scopeMeters = angular.element(".angular-leaflet-map").scope().meters;
+            var scopeMeters = angular.element(".angular-leaflet-map").scope().map.meters;
 
             leafletData.getMarkers().then(function(meters) {
               angular.forEach(meters, function(meter, index) {

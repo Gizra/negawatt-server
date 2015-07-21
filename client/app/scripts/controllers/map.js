@@ -2,15 +2,40 @@
 
 angular.module('negawattClientApp')
   .controller('MapCtrl', function ($scope, $state, $stateParams, $location, $filter, Category, Map, leafletData, $timeout, account, meters, FilterFactory) {
+    var vm = this;  
     var isMeterSelected = false;
 
     // Config map.
-    $scope.defaults = Map.getConfig();
-    $scope.center = Map.getCenter(account);
-    $scope.meters = getMetersWithOptions(meters.list);
+    vm.defaults = Map.getConfig();
+    vm.center = Map.getCenter(account);
+    // The first time always loadd all the meters.
+    vm.meters = ($state.is('dashboard.withAccount')) ? meters.listAll : getMetersWithOptions(meters.list);
 
+    // Select marker if is the case.
     if ($stateParams.markerId) {
-      isMeterSelected = setSelectedMarker($stateParams.markerId);
+      isMeterSelected = !!setSelectedMarker($stateParams.markerId);
+    }
+
+    /**
+    * Set the selected Meter.
+    *
+    * @param id int
+    *   The Marker ID.
+    */
+    function setSelectedMarker(id) {
+      var lastSelectedMarkerId = Map.getMarkerSelected();
+      // Unselect the previous marker.
+      if (angular.isDefined(lastSelectedMarkerId) && angular.isDefined(vm.meters[lastSelectedMarkerId])) {
+        vm.meters[Map.getMarkerSelected()].unselect()
+      }
+
+      // Select the marker.
+      if (angular.isDefined(vm.meters[id])) {
+        vm.meters[id].select();
+        Map.setMarkerSelected(id);
+        isMeterSelected = true;
+      }
+
     }
 
     // Hover above marker in the Map -  open tooltip.
@@ -49,9 +74,8 @@ angular.module('negawattClientApp')
 
     // Reload the current $state when meters added more.
     $scope.$on('nwMetersChanged', function(event, meters) {
-      $scope.meters = getMetersWithOptions(meters.list);
-
-      if (FilterFactory.get('meter') && $scope.meters[FilterFactory.get('meter')] && !isMeterSelected) {
+      vm.meters = getMetersWithOptions(meters.list);
+      if (FilterFactory.get('meter') && vm.meters[FilterFactory.get('meter')] && !isMeterSelected) {
         setSelectedMarker(FilterFactory.get('meter'));
       }
     });
@@ -68,19 +92,18 @@ angular.module('negawattClientApp')
     *   The Marker ID.
     */
     function setSelectedMarker(id) {
-        var lastSelectedMarkerId = Map.getMarkerSelected();
-        // Unselect the previous marker.
-        if (angular.isDefined(lastSelectedMarkerId) && angular.isDefined($scope.meters[lastSelectedMarkerId])) {
-          $scope.meters[Map.getMarkerSelected()].unselect()
-        }
+      var lastSelectedMarkerId = Map.getMarkerSelected();
+      // Unselect the previous marker.
+      if (angular.isDefined(lastSelectedMarkerId) && angular.isDefined(vm.meters[lastSelectedMarkerId])) {
+        vm.meters[Map.getMarkerSelected()].unselect()
+      }
 
-        // Select the marker.
-        if (angular.isDefined($scope.meters[id])) {
-          $scope.meters[id].select();
-          Map.setMarkerSelected(id);
-          isMeterSelected = true;
-        }
-
+      // Select the marker.
+      if (angular.isDefined(vm.meters[id])) {
+        vm.meters[id].select();
+        Map.setMarkerSelected(id);
+        isMeterSelected = true;
+      }
     }
 
     /**
