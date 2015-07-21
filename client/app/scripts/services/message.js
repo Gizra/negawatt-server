@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Message', function ($q, $http, $rootScope, $state, $timeout, $sce, Config) {
+  .service('Message', function ($q, $http, $rootScope, $state, $timeout, $sce, Config, moment) {
 
     // A private cache key.
     var cache = {};
@@ -52,28 +52,8 @@ angular.module('negawattClientApp')
       var messages = angular.fromJson(response).data;
 
       angular.forEach(messages, function(message) {
-        // Find a proper meter description
-        var description = message['description'];
-        if (!description) {
-          description = message['address'];
-        }
-        if (!description) {
-          description = message['meter_title'];
-        }
-        if (!description) {
-          description = 'אתר ללא שם';
-        }
-
-        // Build meter-url with meter description and a link to select the meter.
-        var meterUrl = '<a href="/#/dashboard/' + message['meter_account'] + '/marker/' + message['meter'] + '">' + description + '</a>';
-
-        // Replace '!meter_url' placeholder by the URL.
-        if (angular.isDefined(message['long-text'])) {
-          message['long-text'] = message['long-text'].replace('!meter_url', meterUrl);
-        }
-        if (angular.isDefined(message['text'])) {
-          message['text'] = message['text'].replace('!meter_url', meterUrl);
-        }
+        // Prepare date in month format.
+        message['date'] = moment.unix(message.timestamp).format('YYYY-MM');
       });
 
       return messages;
