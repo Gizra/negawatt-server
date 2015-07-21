@@ -118,7 +118,8 @@ angular
           },
           'map@dashboard': {
             templateUrl: 'views/dashboard/main.map.html',
-            controller: 'MapCtrl'
+            controller: 'MapCtrl',
+            controllerAs: 'map'
           },
           'categories@dashboard': {
             templateUrl: 'views/dashboard/main.categories.html',
@@ -166,7 +167,8 @@ angular
           // filtered by the selected category.
           'map@dashboard': {
             templateUrl: 'views/dashboard/main.map.html',
-            controller: 'MapCtrl'
+            controller: 'MapCtrl',
+            controllerAs: 'map'
           },
           // Update usage-chart to show category summary.
           'usage@dashboard': {
@@ -213,7 +215,8 @@ angular
           // if is the case filtered by the selected category.
           'map@dashboard': {
             templateUrl: 'views/dashboard/main.map.html',
-            controller: 'MapCtrl'
+            controller: 'MapCtrl',
+            controllerAs: 'map'
           },
           'categories@dashboard': {
             templateUrl: 'views/dashboard/main.categories.html',

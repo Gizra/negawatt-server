@@ -38,7 +38,8 @@ angular.module('negawattClientApp')
           },
           hAxis: {
             title: chartFrequencyActive.axis_h_title
-          }
+          },
+
         });
     }
 
