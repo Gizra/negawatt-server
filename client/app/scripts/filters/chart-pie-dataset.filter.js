@@ -31,7 +31,8 @@ angular.module('negawattClientApp')
     function getOptions(type) {
       return {
         title: 'Kws per ' + type,
-        pieSliceText: 'label'
+        pieSliceText: 'label',
+        tooltip: {isHtml: true}
       };
     }
 
@@ -48,7 +49,8 @@ angular.module('negawattClientApp')
       var dataset = {
         'cols': [
           {id: 't', label: collection.type, type: 'string'},
-          {id: 's', label: 'Kws', type: 'number'}
+          {id: 's', label: 'Kws', type: 'number'},
+          {id: '', role: 'tooltip', type: 'string', p: {role: 'tooltip', html: true}}
         ],
         'rows': getRows(collection.values, collection.type, labels)
       };
@@ -79,10 +81,15 @@ angular.module('negawattClientApp')
               c: [
                 {v: !Utils.isEmpty(labels) && labels[key].label || 'category ' + key},
                 {v: +value},
-                {id: key}
+                //{id: key},
+                {
+                  v: " <b>Shipping 2</b><br /><img src=\"http://icons.iconarchive.com/icons/antrepo/container-4-cargo-vans/512/Google-Shipping-Box-icon.png\" style=\"height:85px\" />",
+                  p: {}
+                }
               ]
             });
           }, rows);
+
           break;
         case 'meter':
           angular.forEach(obj, function(value, key) {
@@ -96,7 +103,7 @@ angular.module('negawattClientApp')
           }, rows);
           break;
       }
-
+      console.log(rows);
       return rows;
     }
 
