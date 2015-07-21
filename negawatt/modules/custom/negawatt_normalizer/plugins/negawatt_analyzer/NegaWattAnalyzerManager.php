@@ -114,6 +114,7 @@ class NegaWattAnalyzerManager extends \ArrayObject {
       $wrapper->field_message_meter_title->set($value['meter_title']);
       $wrapper->field_message_place_description->set($value['description']);
       $wrapper->field_message_place_address->set($value['address']);
+      $wrapper->field_event_timestamp->set($value['event_timestamp']);
       $wrapper->save();
 
       // Output message.

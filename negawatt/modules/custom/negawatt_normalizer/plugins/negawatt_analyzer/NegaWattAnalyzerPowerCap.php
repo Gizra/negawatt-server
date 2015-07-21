@@ -89,6 +89,7 @@ class NegaWattAnalyzerPowerCap implements \NegaWattAnalyzerInterface {
               'meter_title' => $node_wrapper->label(),
               'description' => $node_wrapper->field_place_description->value(),
               'address' => $node_wrapper->field_place_address->value(),
+              'event_timestamp' => $timestamp,
               'arguments' => array(
                 '@date' => date('Y-m-d H:i', $timestamp),
                 '@frequency' => 'minute',

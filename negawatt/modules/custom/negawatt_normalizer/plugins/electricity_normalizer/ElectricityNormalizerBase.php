@@ -51,6 +51,20 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
   protected $meterLastProcessed = NULL;
 
   /**
+   * Holds a reference to the last good meter reading.
+   *
+   * @var array
+   */
+  protected $lastGoodKnownReading = NULL;
+
+  /**
+   * Holds an array of references to bad meter reading.
+   *
+   * @var array
+   */
+  protected $badMeterReadings = array();
+
+  /**
    * Get the meter node.
    *
    * @return stdClass
@@ -211,7 +225,7 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
       $result = $this->processByFrequency($frequency, $from_timestamp, $to_timestamp);
       $last_processed = max($last_processed, $result['last_processed']);
       if ($result['entities']) {
-        $processed_entities[$frequency] = $result['entities'];
+        $processed_entities[$frequency] = &$result['entities'];
       }
 
       if (!$processed_entities) {
@@ -437,79 +451,6 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
   }
 
   /**
-   * Process raw entities in a certain time frame.
-   *
-   * Process raw-electricity entities between two given timestamps, and create
-   * the appropriate normalized-electricity entities.
-   *
-   * @param int $from_timestamp
-   *    Timestamp of beginning of time frame.
-   * @param int $to_timestamp
-   *    Timestamp of end of time frame.
-   * @param int $frequency
-   *    Current frequency.
-   *
-   * @return array
-   *    The processed normalized entities in the form array[timestamp][rate-type] = entity.
-   */
-  public function processRawEntities($from_timestamp, $to_timestamp, $frequency) {
-    // Output debug message.
-    self::debugMessage('in processRawEntities.', 2);
-    self::debugMessage(format_string('frequency: @frequency, time-frame: [@time_from,@time_to]', array('@frequency' => \NegaWattNormalizerTimeManagerBase::frequencyToStr($frequency))),
-      2, $from_timestamp, $to_timestamp);
-
-    // Create data provider.
-    $data_provider = $this->getDataProviderManager()->createDataProvider($from_timestamp, $to_timestamp, $frequency, $this->getMeterNode());
-
-    // Get data from raw table.
-    $result = $data_provider->getDataFromRawTable();
-
-    // Loop for received rate types and save the entities.
-    $processed_entities = array();
-    $prev_record = $data_provider->getRawEntityBefore();
-    $prev_time_delta = NULL;
-    foreach ($result as $record) {
-      // Allow the sub-classed meter-normalizer to process the data
-      $processed_record = $this->processRawEntity($record, $prev_record);
-
-      // Calc time difference from last entity, in hours.
-      $time_delta = ($prev_record && $prev_record->timestamp) ? ($processed_record->timestamp - $prev_record->timestamp) / 60.0 / 60 : NULL;
-      // When having several raw entities from the same time period (with
-      // different rate types), delta time will be set to 0 on the 2nd iteration
-      // and on. In such cases, use previous delta time.
-      $time_delta = $time_delta ? $time_delta : $prev_time_delta;
-
-      // Calc average power at entity's time slice.
-      // Note that for the first raw entity for a meter, there's no 'previous
-      // timestamp', hence the average power cannot be computed.
-      $avg_power = $time_delta ? ($processed_record->kwh / $time_delta) : NULL;
-
-      // Set entity's values.
-      $normalized_entity = $data_provider->saveNormalizedEntity($processed_record->timestamp, $frequency, $processed_record->rate_type, $processed_record->power_factor, $avg_power, $processed_record->kwh);
-
-      $processed_entities[$processed_record->timestamp][$processed_record->rate_type] = $normalized_entity;
-
-      // Save record and time-delta for next iteration.
-      $prev_record = $record;
-      $prev_time_delta = $time_delta;
-
-      // Output debug message.
-      self::debugMessage("rate-type: $processed_record->rate_type, time-stamp: @time_from, sum-kwh: $processed_record->kwh", 3, $processed_record->timestamp);
-    }
-
-    // The last timestamp processed is the timestamp of last iteration.
-    $last_processed = $prev_record ? $prev_record->timestamp : NULL;
-
-    // Output debug message.
-    self::debugMessage(format_string('total entities: @count, last processed: @time_from', array('@count' => count($processed_entities))), 3, $last_processed);
-
-    return array(
-      'entities' => $processed_entities,
-      'last_processed' => $last_processed,
-    );
-  }
-
-  /**
    * Calculate normalized entities.
    *
    * Calculate the normalized electricity entities for frequency that is NOT
@@ -564,6 +505,154 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
     }
 
     return $processed_entities;
+  }
+
+  /**
+   * Process raw entities in a certain time frame.
+   *
+   * Process raw-electricity entities between two given timestamps, and create
+   * the appropriate normalized-electricity entities.
+   *
+   * @param int $from_timestamp
+   *    Timestamp of beginning of time frame.
+   * @param int $to_timestamp
+   *    Timestamp of end of time frame.
+   * @param int $frequency
+   *    Current frequency.
+   *
+   * @return array
+   *    The processed normalized entities in the form array[timestamp][rate-type] = entity.
+   */
+  public function processRawEntities($from_timestamp, $to_timestamp, $frequency) {
+    // Output debug message.
+    self::debugMessage('in processRawEntities.', 2);
+    self::debugMessage(format_string('frequency: @frequency, time-frame: [@time_from,@time_to]', array('@frequency' => \NegaWattNormalizerTimeManagerBase::frequencyToStr($frequency))),
+      2, $from_timestamp, $to_timestamp);
+
+    // Create data provider.
+    $data_provider = $this->getDataProviderManager()->createDataProvider($from_timestamp, $to_timestamp, $frequency, $this->getMeterNode());
+
+    // Get data from raw table.
+    $result = $data_provider->getDataFromRawTable();
+
+    // Loop for received rate types and save the entities.
+    $processed_entities = array();
+    $prev_record = $data_provider->getRawEntityBefore();
+    $prev_time_delta = NULL;
+    $time_delta = NULL;
+    foreach ($result as $record) {
+      // Allow the sub-classed meter-normalizer to process the data
+      $processed_record = $this->processRawEntity($record, $prev_record);
+
+      // Test for bad meter-reading
+      if ($processed_record->kwh === NULL) {
+        $this->handleBadMeterReading($processed_record);
+      }
+      // This meter reading is OK, but if it follows a bad meter-reading, a
+      // special processing must apply.
+      else if ($this->hasBadMeterReadings()) {
+        // Update retroactively all the bad readings with the average power
+        // consumption at the bad-readings period.
+        $this->endBadMeterReadingsProcessing($processed_record);
+      }
+
+      // Add a new normalized entity.
+      $this->addNormalizedEntity($prev_record, $processed_record, $prev_time_delta, $time_delta, $processed_entities, $data_provider, $frequency);
+
+      // Save record and time-delta for next iteration.
+      $prev_record = $record;
+      $prev_time_delta = $time_delta;
+    }
+
+    // The last timestamp processed is the timestamp of last iteration.
+    $last_processed = $prev_record ? $prev_record->timestamp : NULL;
+
+    // Output debug message.
+    self::debugMessage(format_string('total entities: @count, last processed: @time_from', array('@count' => count($processed_entities))), 3, $last_processed);
+
+    return array(
+      'entities' => &$processed_entities,
+      'last_processed' => $last_processed,
+    );
+  }
+
+  /**
+   * Add a new normalized entity.
+   *
+   * @param $prev_record
+   *  Previous processed raw-record.
+   *
+   * @param $processed_record
+   *  Current raw-record.
+   *
+   * @param $prev_time_delta
+   *  Previous calculated time-delta - will be used in case of multiple rate-types.
+   *
+   * @param $time_delta
+   *  Newly calculated time-delta.
+   *
+   * @param $processed_entities
+   *  Array of processed entities.
+   *
+   * @param $data_provider
+   *  The data-provider.
+   *
+   * @param $frequency
+   *  The current frequency.
+   */
+  protected function addNormalizedEntity($prev_record, $processed_record, $prev_time_delta, &$time_delta, &$processed_entities, $data_provider, $frequency) {
+    // Calc time difference from last entity, in hours.
+    $time_delta = ($prev_record && $prev_record->timestamp) ? ($processed_record->timestamp - $prev_record->timestamp) / 60.0 / 60 : NULL;
+    // When having several raw entities from the same time period (with
+    // different rate types), delta time will be set to 0 on the 2nd iteration
+    // and on. In such cases, use previous delta time.
+    $time_delta = $time_delta ? $time_delta : $prev_time_delta;
+
+    // Calc average power at entity's time slice.
+    // Note that for the first raw entity for a meter, there's no 'previous
+    // timestamp', hence the average power cannot be computed.
+    $avg_power = $time_delta ? ($processed_record->kwh / $time_delta) : NULL;
+
+    // Set entity's values.
+    $normalized_entity = $data_provider->saveNormalizedEntity($processed_record->timestamp, $frequency, $processed_record->rate_type, $processed_record->power_factor, $avg_power, $processed_record->kwh);
+
+    $processed_entities[$processed_record->timestamp][$processed_record->rate_type] = $normalized_entity;
+
+    // Output debug message.
+    self::debugMessage("rate-type: $processed_record->rate_type, time-stamp: @time_from, sum-kwh: $processed_record->kwh", 3, $processed_record->timestamp);
+  }
+
+  /**
+   * Check if there are bad meter-readings in the array.
+   */
+  protected function hasBadMeterReadings() {
+    return count($this->badMeterReadings) > 0;
+  }
+
+  /**
+   * Do required processing on a bad meter-reading record.
+   *
+   * @param $processed_record
+   *  The bad reading record.
+   */
+  protected function handleBadMeterReading(&$processed_record) {
+    // Save the bad reading in the array.
+    $this->badMeterReadings[] = &$processed_record;
+  }
+
+  /**
+   * Do required processing at the end of a series of bad meter-readings.
+   *
+   * @param $processed_record
+   *  The last meter-reading.
+   */
+  protected function endBadMeterReadingsProcessing(&$processed_record) {
+    // Has to zero out the meter's kwh (otherwise, all previous kwhs will be
+    // attributed to this reading).
+    $processed_record->kwh = 0;
+
+    // Just empty bad meters array.
+    $this->badMeterReadings = array();
   }
 
   /**

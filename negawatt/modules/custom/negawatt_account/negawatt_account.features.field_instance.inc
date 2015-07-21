@@ -187,6 +187,49 @@ function negawatt_account_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-account-field_show_inactive_meters'
+  $field_instances['node-account-field_show_inactive_meters'] = array(
+    'bundle' => 'account',
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => 'Show meters with no electricity data on the map?',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 7,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_show_inactive_meters',
+    'label' => 'Show inactive meters',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'display_label' => 1,
+      ),
+      'type' => 'options_onoff',
+      'weight' => 7,
+    ),
+  );
+
   // Exported field_instance: 'node-account-group_access'
   $field_instances['node-account-group_access'] = array(
     'bundle' => 'account',
@@ -304,6 +347,8 @@ function negawatt_account_field_default_field_instances() {
   t('Group');
   t('Group visibility');
   t('Location');
+  t('Show dead meters');
+  t('Show meters with no electricity data on the map?');
   t('geo_zoom');
   t('logo');
 

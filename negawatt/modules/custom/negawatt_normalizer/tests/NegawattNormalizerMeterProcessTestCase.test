@@ -117,6 +117,11 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     // modbus |12/6/14 15:00| flat | month|   1   |  60 | 0.90 |
     // modbus |12/6/14 16:00| flat | min. |   1   |  60 | 0.96 |
     // modbus |12/6/14 15:01| flat | min. |   2   |  40 | 0.90 |
+    // modbus |13/6/14 15:30| unkn | min. |   2   |  50 | 0.90 |
+    // modbus |13/6/14 15:40| unkn | min. |   2   |NULL | 0    |
+    // modbus |13/6/14 15:50| unkn | min. |   2   |NULL | 0    |
+    // modbus |13/6/14 16:00| unkn | min. |   2   |  80 | 0.90 |
+    // modbus |13/6/14 16:10| unkn | min. |   2   |  90 | 0.90 |
     // -------+-------------+------+------+-------+-----+------+
     // iec    | 1/2/14 00:00| flat | month|   3   |  ~1 | 0.96 |
     // iec    | 1/2/14 00:00| low  | month|   3   |  ~2 | 0.97 |
@@ -178,6 +183,52 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
         'meter_nid' => $meter_node2->nid,
         'kwh' => 40,
         'power_factor' => 0.96,
+      ),
+      // Several entries for meter 2 to test bad meter-readings.
+      array(
+        'meter_type' => 'modbus',
+        'timestamp' => strtotime('2014-6-13 15:30'),
+        'rate_type' => 'unknown',
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
+        'meter_nid' => $meter_node2->nid,
+        'kwh' => 50,
+        'power_factor' => 0.90,
+      ),
+      array(
+        'meter_type' => 'modbus',
+        'timestamp' => strtotime('2014-6-13 15:40'),
+        'rate_type' => 'unknown',
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
+        'meter_nid' => $meter_node2->nid,
+        'kwh' => NULL,
+        'power_factor' => 0,
+      ),
+      array(
+        'meter_type' => 'modbus',
+        'timestamp' => strtotime('2014-6-13 15:50'),
+        'rate_type' => 'unknown',
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
+        'meter_nid' => $meter_node2->nid,
+        'kwh' => NULL,
+        'power_factor' => 0,
+      ),
+      array(
+        'meter_type' => 'modbus',
+        'timestamp' => strtotime('2014-6-13 16:00'),
+        'rate_type' => 'unknown',
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
+        'meter_nid' => $meter_node2->nid,
+        'kwh' => 80,
+        'power_factor' => 0.90,
+      ),
+      array(
+        'meter_type' => 'modbus',
+        'timestamp' => strtotime('2014-6-13 16:10'),
+        'rate_type' => 'unknown',
+        'frequency' => \NegaWattNormalizerTimeManagerInterface::MINUTE,
+        'meter_nid' => $meter_node2->nid,
+        'kwh' => 90,
+        'power_factor' => 0.90,
       ),
       // IEC 4 rate-type entries for 2/2014.
       array(
@@ -507,6 +558,46 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     $this->assertEqual($result_entity->sum_kwh, 20, 'Sum kWh calculation was correct.');
     $this->assertEqual($result_entity->avg_power, 40, 'Average power calculation was correct.');
     $this->assertTrue(abs($result_entity->min_power_factor - 0.96) < 0.0001, 'Min power-factor calculation was correct.');
+
+    // Test handling of bad meter-readings (where kwh === NULL)
+    $handler->setMeterNode($this->meterNode2);
+    $result_entities = $handler->process(
+      array(\NegaWattNormalizerTimeManagerInterface::MINUTE),
+      strtotime('2014-6-13 15:30'), strtotime('2014-6-13 15:55'));
+    $result_entities = self::flatten($result_entities);
+    $this->assertTrue(is_array($result_entities) && count($result_entities) == 3, '<b>Testing bad meter-reading handling.</b><br>process() returns an array with 3 object.');
+
+    // Check that new entity values are correct.
+    $result_entity = $result_entities[1];
+    $this->assertIdentical($result_entity->sum_kwh, NULL, 'Sum kWh calculation for second entity was correct.');
+    $this->assertIdentical($result_entity->avg_power, 0.0, 'Average power calculation was correct.');
+
+    $result_entity = $result_entities[2];
+    $this->assertIdentical($result_entity->sum_kwh, NULL, 'Sum kWh calculation for third entity was correct.');
+    $this->assertIdentical($result_entity->avg_power, 0.0, 'Average power calculation was correct.');
+
+    $result_entities = $handler->process(
+      array(\NegaWattNormalizerTimeManagerInterface::MINUTE),
+      strtotime('2014-6-13 15:30'), strtotime('2014-6-13 16:15'));
+    $result_entities = self::flatten($result_entities);
+    $this->assertTrue(is_array($result_entities) && count($result_entities) == 5, '<b>With good meter-readings at the end.</b><br>process() returns an array with 6 object.');
+
+    // Check that new entity values are correct.
+    $result_entity = $result_entities[1];
+    $this->assertIdentical($result_entity->sum_kwh, NULL, 'Sum kWh calculation for second entity was correct.');
+    $this->assertIdentical($result_entity->avg_power, 0.0, 'Average power calculation was correct.');
+
+    $result_entity = $result_entities[2];
+    $this->assertIdentical($result_entity->sum_kwh, NULL, 'Sum kWh calculation for third entity was correct.');
+    $this->assertIdentical($result_entity->avg_power, 0.0, 'Average power calculation was correct.');
+
+    $result_entity = $result_entities[3];
+    $this->assertIdentical($result_entity->sum_kwh, 0, 'Sum kWh calculation for fourth entity was correct.');
+    $this->assertIdentical($result_entity->avg_power, 0.0, 'Average power calculation was correct.');
+
+    $result_entity = $result_entities[4];
+    $this->assertEqual($result_entity->sum_kwh, 10, 'Sum kWh calculation for fifth entity was correct.');
+    $this->assertEqual($result_entity->avg_power, 60, 'Average power calculation was correct.');
   }
 
   /**
@@ -572,8 +663,8 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     $this->assertEqual($wrapper->field_last_processed->value(), strtotime('2014-2-1 00:00'), 'Node last-processed field is correct.');
 
     // Modify an entity in electricity raw table.
-    $entity = entity_load('electricity_raw', array(6));
-    $entity = $entity[6];
+    $entity = entity_load('electricity_raw', array(11));
+    $entity = $entity[11];
     $entity->kwh = 3360;
     $entity->power_factor = 0.90;
     $entity->save();

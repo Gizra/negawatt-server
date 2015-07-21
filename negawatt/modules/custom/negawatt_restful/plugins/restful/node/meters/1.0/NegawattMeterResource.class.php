@@ -193,4 +193,37 @@ class NegawattMeterResource extends \RestfulEntityBaseMultipleBundles {
 
     return parent::getQueryForList();
   }
+
+  /**
+   * {@inheritdoc}
+   *
+   * Return the basic entity field query for meters, with additional filter
+   * that matches 'show-dead-meters' option of the account.
+   */
+  public function getEntityFieldQuery() {
+
+    $query = parent::getEntityFieldQuery();
+
+    $request = $this->getRequest();
+    $filter = !empty($request['filter']) ? $request['filter'] : array();
+    $meter_account = !empty($filter['account']) ? $filter['account'] : NULL;
+
+    // Make sure there is 'account' filter.
+    if (!$meter_account) {
+      throw new \RestfulBadRequestException('Please supply filter[account].');
+    }
+
+    // Get the account node.
+    $wrapper = entity_metadata_wrapper('node', $meter_account);
+    $show_inactive_meters = $wrapper->field_show_inactive_meters->value();
+
+    // Add field condition
+    if (!$show_inactive_meters) {
+      // Account is set not to show dead meters. Add a condition to show
+      // only meters with 'has-electricity' == true.
+      $query->fieldCondition('field_has_electricity', 'value', TRUE);
+    }
+
+    return $query;
+  }
 }
