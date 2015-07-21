@@ -536,6 +536,14 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
+   * @Then I should see the usage graph title :title
+   */
+  public function iShouldSeeTheUsageGraphTitle($title) {
+    $validations = array('//*[contains(@class, "dashboard-usage")]//*[.="' . $title . '" and contains(@class, "state-title")]');
+    $this->checkValidations($validations, TRUE, TRUE);
+  }
+
+  /**
    * Wait to count a number of elements by its XPath.
    *
    * @param string $xpath
