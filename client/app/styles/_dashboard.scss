@@ -226,6 +226,13 @@
     }
   }
 
-}
+  .google-visualization-tooltip {
+    font-size: 10px;
 
+    .google-visualization-tooltip-item {
+      padding: 0 5px;
+      white-space: nowrap;
+    }
+  }
+}
 

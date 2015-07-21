@@ -38,7 +38,8 @@ angular.module('negawattClientApp')
           },
           hAxis: {
             // No title in order to have enough space for the bars labels.
-          }
+          },
+          tooltip: {isHtml: true}
         });
     }
 
@@ -139,10 +140,10 @@ angular.module('negawattClientApp')
           var label = moment.unix(timestamp).format(frequency.axis_h_format);
           var col = [
             {v: label},
-            {v: item.flat, f: $filter('number')(item.flat, 0) + ' kWhs'},
-            {v: item.peak, f: $filter('number')(item.peak, 0) + ' kWhs'},
-            {v: item.mid, f: $filter('number')(item.mid, 0) + ' kWhs'},
-            {v: item.low, f: $filter('number')(item.low, 0) + ' kWhs'}
+            {v: item.flat, f: $filter('number')(item.flat, 0) + ' קוט״ש'},
+            {v: item.peak, f: $filter('number')(item.peak, 0) + ' קוט״ש'},
+            {v: item.mid, f: $filter('number')(item.mid, 0) + ' קוט״ש'},
+            {v: item.low, f: $filter('number')(item.low, 0) + ' קוט״ש'}
           ];
           rows.push({ 'c': col });
         });
