@@ -68,8 +68,6 @@ angular.module('negawattClientApp')
     *   The Marker ID.
     */
     function setSelectedMarker(id) {
-      // $timeout works as helper to select marker after the map it's loaded.
-      $timeout(function() {
         var lastSelectedMarkerId = Map.getMarkerSelected();
         // Unselect the previous marker.
         if (angular.isDefined(lastSelectedMarkerId) && angular.isDefined($scope.meters[lastSelectedMarkerId])) {
@@ -82,7 +80,7 @@ angular.module('negawattClientApp')
           Map.setMarkerSelected(id);
           isMeterSelected = true;
         }
-      });
+
     }
 
     /**

@@ -127,7 +127,7 @@ angular
           'messages@dashboard': {
             templateUrl: 'views/dashboard/main.messages.html',
             controller: 'MessageCtrl',
-            controllerAs: 'inbox'
+            controllerAs: 'message'
           },
           'details@dashboard': {
             templateUrl: 'views/dashboard/main.details.html',
