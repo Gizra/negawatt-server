@@ -214,7 +214,7 @@ angular.module('negawattClientApp')
       var categories = {};
 
       // Categories in an original list array. Used to update the amount of meters by categories whe are multiple pages.
-      categories.list = list;
+      categories.list = Utils.indexById(list);
       // Categories indexed by id, used to easy select a categories.
       categories.collection = getCategoryCollection(list);
       // Get categories in tree model, used into the directive angular-ui-tree.

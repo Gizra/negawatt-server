@@ -13,14 +13,14 @@ Feature: Router
   Scenario: Set default chart frequency monthly
     Given I login with user "carlos"
     When I visit "/#/dashboard/1"
-    Then I should have "חודש" as chart usage label
+    Then I should have 'קוט"ש בחודש' as chart usage label
 
   @javascript
   Scenario: Keep chart frequency monthly at category selection
     Given I login with user "carlos"
     When I visit "/#/dashboard/1"
     Then I click "בטחון"
-    Then I should have "חודש" as chart usage label
+    Then I should have 'קוט"ש בחודש' as chart usage label
 
   @javascript
   Scenario: Remove period parameters when click on a category.
@@ -40,5 +40,3 @@ Feature: Router
     Then the url should match "chartNextPeriod|chartPreviousPeriod"
     And I click "menu-home-link"
     And I am on "http://localhost:9000/#/dashboard/1?chartFreq=2"
-
-

@@ -8,7 +8,7 @@
  * Controller of the negawattClientApp
  */
 angular.module('negawattClientApp')
-  .controller('UsageCtrl', function UsageCtrl($scope, $state, $stateParams, $filter, Electricity, Chart, ChartUsagePeriod, FilterFactory, meters, filters, ChartElectricityUsage) {
+  .controller('UsageCtrl', function UsageCtrl($scope, $state, $stateParams, $filter, Electricity, Chart, ChartUsagePeriod, FilterFactory, meters, filters, ChartElectricityUsage, categories, profile) {
     var vm = this;
     var getChartPeriod = ChartUsagePeriod.getChartPeriod;
 
@@ -28,6 +28,26 @@ angular.module('negawattClientApp')
       // @TODO: Fix Chart usage information of the selected marker. (Mutiple charts)
       // ChartUsage.meterSelected(meters.list[$stateParams.markerId]);
     }
+
+    // Set the current selection label.
+    if ($stateParams.markerId) {
+      // Set marker label.
+      $scope.title = meters.list[$stateParams.markerId] ? meters.list[$stateParams.markerId].label : null;
+    }
+    else if ($stateParams.categoryId) {
+      // When no marker is selected fetch category label.
+      $scope.title = categories.list[$stateParams.categoryId] ? categories.list[$stateParams.categoryId].label : null;
+    }
+    else {
+      // Otherwise display account label.
+      // Find the current selected account in the user's accounts.
+      angular.forEach(profile.account, function(account) {
+        if (account.id == $stateParams.accountId) {
+          $scope.title = account.label;
+        }
+      });
+    }
+
 
     /**
      * Electricity Service Event: When electricity collection change update

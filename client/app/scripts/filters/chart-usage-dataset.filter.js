@@ -34,12 +34,11 @@ angular.module('negawattClientApp')
       return angular.extend(ChartOptions[chartFrequencyActive.chart_type],
         {
           vAxis: {
-            title: chartFrequencyActive.axis_v_title,
+            title: chartFrequencyActive.axis_v_title
           },
           hAxis: {
-            title: chartFrequencyActive.axis_h_title
-          },
-
+            // No title in order to have enough space for the bars labels.
+          }
         });
     }
 

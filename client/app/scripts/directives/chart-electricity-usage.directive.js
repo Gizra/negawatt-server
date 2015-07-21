@@ -5,7 +5,7 @@ angular.module('negawattDirectives', [])
     return {
       restrict: 'EA',
       templateUrl: 'scripts/directives/chart-electricity-usage.directive.html',
-      controller: function chartElectricityUsageCtrl(ChartElectricityUsage, Utils, ChartUsagePeriod, FilterFactory, Electricity, $state, $stateParams, $timeout, $urlRouter, $location, $filter, $scope) {
+      controller: function chartElectricityUsageCtrl(ChartElectricityUsage, ChartUsagePeriod, $stateParams, $filter, $scope) {
         var ctrlChart = this;
 
         // Get chart frequencies. (Tabs the period of time)
