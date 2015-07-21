@@ -4,7 +4,9 @@ angular.module('negawattClientApp')
   .service('Map', function ($rootScope, leafletData, Utils, leafletHelpers) {
     var self = this;
 
-    // Avoid the watch because conflic with clustering plugin and (select/unselect) marker.
+    // Leaflet Directive from 0.8.x start to watch markers properties.
+    // Avoid watching because generate conflict with clustering plugin
+    // and the (select/unselect) marker implementation.
     leafletHelpers.watchOptions.doWatch = false;
 
     // Initial center point.

@@ -95,7 +95,7 @@ angular.module('negawattClientApp')
       var lastSelectedMarkerId = Map.getMarkerSelected();
       // Unselect the previous marker.
       if (angular.isDefined(lastSelectedMarkerId) && angular.isDefined($scope.meters[lastSelectedMarkerId])) {
-        $scope.meters[Map.getMarkerSelected()].unselect()
+        $scope.meters[Map.getMarkerSelected()].unselect();
       }
 
       // Select the marker.
