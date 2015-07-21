@@ -29,10 +29,9 @@ class ElectricityNormalizerModbus extends \ElectricityNormalizerBase {
     }
 
     // Catch bad records
-    if ($processed_record->kwh == 0 || $prev_record->kwh == 0) {
-      // kwh == 0 means a bad reading. Set kwh to 0 (best guess...).
-      // @fixme: maybe put a NULL value to denote a 'hole' in the data.
-      $processed_record->kwh = 0;
+    if ($processed_record->kwh == 0) {
+      // kwh == NULL means a bad reading.
+      $processed_record->kwh = NULL;
       return $processed_record;
     }
 
