@@ -52,8 +52,13 @@ angular.module('negawattClientApp')
       var messages = angular.fromJson(response).data;
 
       angular.forEach(messages, function(message) {
-        // Prepare date in month format.
+        // Prepare event timestamp in month format.
         message['date'] = moment.unix(message.timestamp).format('YYYY-MM');
+
+        message['text'] = !!message.description && message.description
+          || !!message.address && message.address
+          || !!message.title && message.title
+          || '';
       });
 
       return messages;
