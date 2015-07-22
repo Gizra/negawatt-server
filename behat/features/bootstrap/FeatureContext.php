@@ -666,7 +666,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   private function checkValuesPieChart($element, $total_kws) {
     $validations = array(
       '//div[@id="dashboard-controls"]//td[.="' . $element . '"]',
-      '//div[@id="dashboard-controls"]//*[contains(.,"' . number_format($total_kws) . '")]',
+      '//div[@id="dashboard-controls"]//*[contains(.,"' . $total_kws . '")]',
     );
 
     $this->checkValidations($validations, TRUE, TRUE);

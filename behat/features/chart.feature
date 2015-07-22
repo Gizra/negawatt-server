@@ -7,14 +7,14 @@ Feature: Chart
   Scenario: Show chart usage monthly of the total kws of the meters.
     Given I login with user "carlos"
     When I reload "/#/dashboard/1"
-    Then I should see a chart from "7836" KW to "12318" KW average power
+    Then I should see a chart from "7,836" KW to "12,318" KW average power
 
   @javascript
   Scenario: Show pie chart with total kws of the categories.
     Given I login with user "carlos"
     When I reload "/#/dashboard/1"
-    Then I should see category "בטחון" with "98815" Kws
-    And I should see category "מבנה חינוך" with "96654" Kws
+    Then I should see category "בטחון" with "98,815" Kws
+    And I should see category "מבנה חינוך" with "96,654" Kws
 
   @javascript
   Scenario: Show pie chart total kws of the subcategory of security.
@@ -22,7 +22,7 @@ Feature: Chart
     When I reload "/#/dashboard/1"
     And  I should see the category "בטחון"
     And I click "בטחון"
-    Then I should see category "מקלט" with "98815" Kws
+    Then I should see category "מקלט" with "98,815" Kws
 
   @javascript
   Scenario: Show pie chart total kws of the meters.
@@ -30,8 +30,8 @@ Feature: Chart
     When I reload "/#/dashboard/1"
     And  I should see the category "מקלט"
     And I click "מקלט"
-    Then I should see the contract "9311819" with "46166" Kws
-    And I should see the contract "968881" with "52649" Kws
+    Then I should see the contract "9,311,819" with "46,166" Kws
+    And I should see the contract "968,881" with "52,649" Kws
 
   @javascript @wip
   Scenario: Show chart usage monthly of a selected meter.
