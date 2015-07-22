@@ -10,7 +10,7 @@
  */
 function modbus_drush_help($section) {
   switch ($section) {
-    case 'drush:modbus_read_registers':
+    case 'drush:modbus_read_meter':
       return dt('Read electricity values and save in raw-electricity table.');
   }
 }
@@ -30,10 +30,25 @@ function modbus_drush_command() {
       'debug' => 'Get dpm info with dd',
     ),
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_CONFIGURATION,
-    'aliases' => array('modbus'),
+    'aliases' => array('mbs-r'),
     'examples' => array(
       'drush modbus_read_meter --meter_id=123' =>' Read data from meter 123.',
       'drush modbus_read_meter' =>' Read data from all modbus meters.',
+    ),
+  );
+
+  $items['modbus-fill-bad-readings-gaps'] = array(
+    'callback' => 'modbus_fill_gaps',
+    'drupal dependencies' => array(),
+    'description' => 'Go over the raw-electricity table, and fill gaps in meter readings with NULL readings.',
+    'options' => array(
+      'meter_id' => 'Meter ID.',
+    ),
+    'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_CONFIGURATION,
+    'aliases' => array('mbs-fg'),
+    'examples' => array(
+      'drush modbus-fill-bad-readings-gaps --meter_id=123' =>' Fix data for meter 123.',
+      'drush modbus-fill-bad-readings-gaps' =>' Fix data for all modbus meters.',
     ),
   );
 
@@ -330,4 +345,110 @@ function four_bytes_to_float($data) {
   drush_log($float);
 
   return $float;
+}
+
+
+/**
+ * Callback function for filling bad readings gaps.
+ */
+function modbus_fill_gaps() {
+  $meter_id = drush_get_option('meter_id', FALSE);
+
+  if ($meter_id) {
+    modbus_fill_gaps_for_one_meter($meter_id);
+    return;
+  }
+
+  // Meter-ID was not given, loop for all modbus meter nodes
+  $query = new EntityFieldQuery();
+  $result = $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', array('modbus_meter'), 'IN')
+    ->propertyCondition('status', NODE_PUBLISHED)
+    ->execute();
+
+  if (empty($result['node'])) {
+    drush_log('Meters of type modbus were not found.', 'error');
+    return FALSE;
+  }
+
+  $meter_ids = array_keys($result['node']);
+  foreach ($meter_ids as $meter_id) {
+    modbus_fill_gaps_for_one_meter($meter_id);
+  }
+}
+
+/**
+ * Fix data for one Modbus meter.
+ *
+ * @param $meter_id
+ *    Node ID of the meter.
+ *
+ * @return bool
+ *    True if everything went fine.
+ */
+function modbus_fill_gaps_for_one_meter($meter_id) {
+
+  // Get electricity data.
+  $query = db_select('negawatt_electricity', 'e');
+  $result = $query
+    ->fields('e', array('timestamp'))
+    ->condition('meter_nid', $meter_id)
+    ->orderBy('timestamp')
+    ->execute();
+
+  // Prepare a 'bad reading' entity values.
+  // Create a new raw-electricity entity.
+  $bad_reading_values = array(
+    'meter_type' => 'modbus',
+    'meter_nid' => $meter_id,
+    'rate_type' => 'unknown',
+    'frequency' => 5,
+    'kwh' => NULL,
+    'power_factor' => NULL,
+    'kwh_l1' => NULL,
+    'kwh_l2' => NULL,
+    'kwh_l3' => NULL,
+    'power_factor_l1' => NULL,
+    'power_factor_l2' => NULL,
+    'power_factor_l3' => NULL,
+  );
+
+  // The allowed time difference between two readings - 10 mins.
+  // @fixme: get this value from somewhere, don't hard code.
+  $allowed_delta = 10 * 60;
+
+  $prev_timestamp = 0;
+  foreach ($result as $entity) {
+    // Check if the readings are in the allowed time-frame (add 10% for safety).
+    if (!$prev_timestamp || $entity->timestamp - $prev_timestamp < $allowed_delta * 1.1) {
+      // Time delta is good, continue...
+      $prev_timestamp = $entity->timestamp;
+      continue;
+    }
+
+    // Time delta is too big. Add bad reading records.
+    $timestamp = $prev_timestamp + $allowed_delta;
+    $last_timestamp = $entity->timestamp - 0.1 * $allowed_delta;
+
+    $num_records_added = 0;
+    while ($timestamp < $last_timestamp) {
+      $values = $bad_reading_values;
+      $values['timestamp'] = $timestamp;
+
+      $entity = entity_create('electricity_raw', $values);
+      $result = $entity->save();
+
+      if ($result != SAVED_NEW) {
+        drush_log(format_string('timestamp: @timestamp. entity->save() returned @val instead of 1 (SAVED_NEW).', array('@val' => $result, '@timestamp' => $timestamp)), 'error');
+      }
+
+      $timestamp += $allowed_delta;
+      $num_records_added++;
+    }
+
+    drush_log(format_string('@N entities added.', array('@N' => $num_records_added)), 'ok');
+
+    // Done adding records.
+    $prev_timestamp = $entity->timestamp;
+  }
 }
