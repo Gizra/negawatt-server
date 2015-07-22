@@ -6,9 +6,11 @@ angular.module('negawattClientApp')
     var isMeterSelected = false;
 
     // Config map.
-    $scope.defaults = Map.getConfig();
-    $scope.center = Map.getCenter(account);
-    $scope.layers = {
+    vm.defaults = Map.getConfig();
+    vm.center = Map.getCenter(account);
+    // The first time always loadd all the meters.
+    vm.meters = ($state.is('dashboard.withAccount')) ? meters.listAll : getMetersWithOptions(meters.list);
+    vm.layers = {
       baselayers: {
         osm: {
           name: 'OpenStreetMap',
@@ -31,8 +33,6 @@ angular.module('negawattClientApp')
         }
       }
     };
-
-    $scope.meters = getMetersWithOptions(meters.list);
 
     // Select marker if is the case.
     if ($stateParams.markerId) {
