@@ -135,16 +135,16 @@ angular.module('negawattClientApp')
           prevRateType = item.rate_type;
         });
 
+        // Display the unit according to selected frequency.
+        var unit = ['hour', 'minute'].indexOf(frequency.frequency) != -1 ? 'קו״ט' : 'קוט״ש';
+
         // Build rows
         angular.forEach(values, function(item, timestamp) {
           var label = moment.unix(timestamp).format(frequency.axis_h_format);
-          var col = [
-            {v: label},
-            {v: item.flat, f: $filter('number')(item.flat, 0) + ' קוט״ש'},
-            {v: item.peak, f: $filter('number')(item.peak, 0) + ' קוט״ש'},
-            {v: item.mid, f: $filter('number')(item.mid, 0) + ' קוט״ש'},
-            {v: item.low, f: $filter('number')(item.low, 0) + ' קוט״ש'}
-          ];
+          var col = [{v: label}];
+          ['flat', 'peak', 'mid', 'low'].forEach(function(type) {
+            col.push({v: item[type], f: $filter('number')(item[type], 0) + ' ' + unit});
+          });
           rows.push({ 'c': col });
         });
       }
