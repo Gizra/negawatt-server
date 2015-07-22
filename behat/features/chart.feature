@@ -30,8 +30,8 @@ Feature: Chart
     When I reload "/#/dashboard/1"
     And  I should see the category "מקלט"
     And I click "מקלט"
-    Then I should see the contract "9,311,819" with "46,166" Kws
-    And I should see the contract "968,881" with "52,649" Kws
+    Then I should see the contract "9311819" with "46,166" Kws
+    And I should see the contract "968881" with "52,649" Kws
 
   @javascript @wip
   Scenario: Show chart usage monthly of a selected meter.
