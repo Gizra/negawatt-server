@@ -435,8 +435,8 @@ function modbus_fill_gaps_for_one_meter($meter_id) {
       $values = $bad_reading_values;
       $values['timestamp'] = $timestamp;
 
-      $entity = entity_create('electricity_raw', $values);
-      $result = $entity->save();
+      $new_entity = entity_create('electricity_raw', $values);
+      $result = $new_entity->save();
 
       if ($result != SAVED_NEW) {
         drush_log(format_string('timestamp: @timestamp. entity->save() returned @val instead of 1 (SAVED_NEW).', array('@val' => $result, '@timestamp' => $timestamp)), 'error');
@@ -446,7 +446,7 @@ function modbus_fill_gaps_for_one_meter($meter_id) {
       $num_records_added++;
     }
 
-    drush_log(format_string('@N entities added.', array('@N' => $num_records_added)), 'ok');
+    drush_log(format_string('Meter: @meter, time: @time: @N entities added.', array('@meter' => $meter_id, '@time' => date('d/m/y G:i', $prev_timestamp),'@N' => $num_records_added)), 'ok');
 
     // Done adding records.
     $prev_timestamp = $entity->timestamp;
