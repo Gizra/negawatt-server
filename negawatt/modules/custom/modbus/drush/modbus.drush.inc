@@ -147,10 +147,12 @@ function modbus_read_one_meter($meter_id) {
     drush_log('Nothing was read from the meter.', 'error');
     drupal_mail('modbus', 'error-connection', 'brice@gizra.com', 'en');
     drush_print($data);
-    return FALSE;
+    // Fill data array with nulls to put as a bad reading in the DB.
+    $data = array_fill(1, 8, NULL);
   }
-
-  drush_log('Data received.', 'ok');
+  else {
+    drush_log('Data received.', 'ok');
+  }
 
   // Save data onto db.
   if (!modbus_write_data_to_db($meter_id, $data, $timestamp)) {
@@ -158,7 +160,8 @@ function modbus_read_one_meter($meter_id) {
     drush_log($msg, 'error');
   }
 
-  return TRUE;
+  // Return if data was received.
+  return !$data[0];
 }
 
 /**
@@ -179,7 +182,7 @@ function modbus_read_one_meter($meter_id) {
 function modbus_write_data_to_db($meter_id, $data, $timestamp, $debug = FALSE) {
   // Create a new raw-electricity entity.
   $values = array(
-    'type' => 'modbus',
+    'meter_type' => 'modbus',
     'meter_nid' => $meter_id,
     'timestamp' => $timestamp,
     'rate_type' => 'unknown',
