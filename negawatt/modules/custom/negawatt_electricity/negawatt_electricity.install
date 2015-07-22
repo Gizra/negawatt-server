@@ -55,49 +55,49 @@ function negawatt_electricity_schema() {
       'kwh' => array(
         'description' => 'Total (three phases) kWh.',
         'type' => 'float',
-        'not null' => TRUE,
+        'not null' => FALSE,
         'default' => 0,
       ),
       'power_factor' => array(
         'description' => 'total (three phase) power factor.',
         'type' => 'float',
-        'not null' => TRUE,
+        'not null' => FALSE,
         'default' => 0,
       ),
       'kwh_l1' => array(
         'description' => 'L1 kWh.',
         'type' => 'float',
-        'not null' => TRUE,
+        'not null' => FALSE,
         'default' => 0,
       ),
       'kwh_l2' => array(
         'description' => 'L2 kWh.',
         'type' => 'float',
-        'not null' => TRUE,
+        'not null' => FALSE,
         'default' => 0,
       ),
       'kwh_l3' => array(
         'description' => 'L3 kWh.',
         'type' => 'float',
-        'not null' => TRUE,
+        'not null' => FALSE,
         'default' => 0,
       ),
       'power_factor_l1' => array(
         'description' => 'Power factor for L1.',
         'type' => 'float',
-        'not null' => TRUE,
+        'not null' => FALSE,
         'default' => 0,
       ),
       'power_factor_l2' => array(
         'description' => 'Power factor for L2.',
         'type' => 'float',
-        'not null' => TRUE,
+        'not null' => FALSE,
         'default' => 0,
       ),
       'power_factor_l3' => array(
         'description' => 'Power factor for L3.',
         'type' => 'float',
-        'not null' => TRUE,
+        'not null' => FALSE,
         'default' => 0,
       ),
     ),
@@ -141,19 +141,19 @@ function negawatt_electricity_schema() {
       'avg_power' => array(
         'description' => 'Average power (KW) at period.',
         'type' => 'float',
-        'not null' => TRUE,
+        'not null' => FALSE,
         'default' => 0,
       ),
       'sum_kwh' => array(
         'description' => 'Total energy (kWh) at period.',
         'type' => 'float',
-        'not null' => TRUE,
+        'not null' => FALSE,
         'default' => 0,
       ),
       'min_power_factor' => array(
         'description' => 'Minimal (worse) power factor at period.',
         'type' => 'float',
-        'not null' => TRUE,
+        'not null' => FALSE,
         'default' => 0,
       ),
     ),
@@ -163,4 +163,79 @@ function negawatt_electricity_schema() {
     ),
   );
   return $schema;
+}
+
+
+/**
+ * Update electricity table's schema to accept NULLs in case of bad meter readings.
+ */
+function negawatt_electricity_update_7000() {
+
+  db_change_field('negawatt_electricity', 'kwh', 'kwh', array(
+    'description' => 'Total (three phases) kWh.',
+    'type' => 'float',
+    'not null' => FALSE,
+    'default' => 0,
+  ));
+  db_change_field('negawatt_electricity', 'power_factor', 'power_factor', array(
+    'description' => 'total (three phase) power factor.',
+    'type' => 'float',
+    'not null' => FALSE,
+    'default' => 0,
+  ));
+  db_change_field('negawatt_electricity', 'kwh_l1', 'kwh_l1', array(
+    'description' => 'L1 kWh.',
+    'type' => 'float',
+    'not null' => FALSE,
+    'default' => 0,
+  ));
+  db_change_field('negawatt_electricity', 'kwh_l2', 'kwh_l2', array(
+    'description' => 'L2 kWh.',
+    'type' => 'float',
+    'not null' => FALSE,
+    'default' => 0,
+  ));
+  db_change_field('negawatt_electricity', 'kwh_l3', 'kwh_l3', array(
+    'description' => 'L3 kWh.',
+    'type' => 'float',
+    'not null' => FALSE,
+    'default' => 0,
+  ));
+  db_change_field('negawatt_electricity', 'power_factor_l1', 'power_factor_l1', array(
+    'description' => 'Power factor for L1.',
+    'type' => 'float',
+    'not null' => FALSE,
+    'default' => 0,
+  ));
+  db_change_field('negawatt_electricity', 'power_factor_l2', 'power_factor_l2', array(
+    'description' => 'Power factor for L2.',
+    'type' => 'float',
+    'not null' => FALSE,
+    'default' => 0,
+  ));
+  db_change_field('negawatt_electricity', 'power_factor_l3', 'power_factor_l3', array(
+    'description' => 'Power factor for L3.',
+    'type' => 'float',
+    'not null' => FALSE,
+    'default' => 0,
+  ));
+
+  db_change_field('negawatt_electricity_normalized', 'avg_power', 'avg_power', array(
+    'description' => 'Average power (KW) at period.',
+    'type' => 'float',
+    'not null' => FALSE,
+    'default' => 0,
+  ));
+  db_change_field('negawatt_electricity_normalized', 'sum_kwh', 'sum_kwh', array(
+    'description' => 'Total energy (kWh) at period.',
+    'type' => 'float',
+    'not null' => FALSE,
+    'default' => 0,
+  ));
+  db_change_field('negawatt_electricity_normalized', 'min_power_factor', 'min_power_factor', array(
+    'description' => 'Minimal (worse) power factor at period.',
+    'type' => 'float',
+    'not null' => FALSE,
+    'default' => 0,
+  ));
 }
