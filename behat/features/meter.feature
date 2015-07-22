@@ -59,9 +59,9 @@ Feature: Meter
   Scenario: Show meters when change the account by url.
     Given I login with user "carlos"
     When I visit "/#/dashboard/1"
-    And I should see "4" markers
+    And I should see "3" markers
     Then I visit "/#/dashboard/2"
-    And I should see "4" markers
+    And I should see "3" markers
 
   @javascript @wip
   Scenario: Show meter unselected when click on category, after his selection.
