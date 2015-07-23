@@ -123,6 +123,7 @@ angular.module('negawattClientApp')
      * @returns {*}
      */
     function getMetersWithOptions(meters) {
+
       return (FilterFactory.isDefine('category')) ? $filter('setMetersOptionsByActiveCategory')(angular.copy(meters), {transparent: true}, 'noActiveCategory') : meters;
     }
 

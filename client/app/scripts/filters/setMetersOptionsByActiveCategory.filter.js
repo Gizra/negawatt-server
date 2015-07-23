@@ -51,6 +51,8 @@ angular.module('negawattClientApp')
     function setMeterIconOptions(options, condition, meter) {
       var conditionFullfilled = angular.bind(meter, fullfill, condition);
 
+      // Reset icon state.
+      meter.icon.setOptions('activeCategory');
       // Return meters with the active category.
       if (!Utils.isEmpty(meter.icon) && conditionFullfilled()) {
         meter.icon.setOptions(options);
@@ -73,10 +75,10 @@ angular.module('negawattClientApp')
           validate = true;
           break;
         case 'activeCategory':
-          validate = !!(this.meter_categories && this.meter_categories[FilterFactory.get('category')]);
+          validate = !(this.meter_categories && this.meter_categories[FilterFactory.get('category')]);
           break;
         case 'noActiveCategory':
-          validate = !(this.meter_categories && this.meter_categories[FilterFactory.get('category')]);
+          validate = this.meter_categories && !this.meter_categories[FilterFactory.get('category')];
           break;
       }
 

@@ -20,7 +20,7 @@ angular.module('negawattClientApp')
     // Activate filter of meters only if we are in the principal state.
     $scope.filterMeters = FilterFactory.showCategoryFilters();
 
-    // Select category if exist.
+    // Select category if exist, otherwise return an alert.
     if (angular.isUndefined(categories.collection[$stateParams.categoryId]) && $state.is('dashboard.withAccount.categories')) {
       $scope.vm.alerts.new({type: 'default', msg: 'קטגוריה לא קיימת.'});
     }
