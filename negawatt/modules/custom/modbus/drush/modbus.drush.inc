@@ -401,7 +401,7 @@ function modbus_fill_gaps_for_one_meter($meter_id) {
   $bad_reading_values = array(
     'meter_type' => 'modbus',
     'meter_nid' => $meter_id,
-    'rate_type' => 'unknown',
+    'rate_type' => 'estimate',
     'frequency' => 5,
     'kwh' => NULL,
     'power_factor' => NULL,

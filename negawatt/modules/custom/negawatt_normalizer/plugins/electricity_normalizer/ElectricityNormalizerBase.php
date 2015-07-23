@@ -546,18 +546,19 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
 
       // Test for bad meter-reading
       if ($processed_record->kwh === NULL) {
-        $this->handleBadMeterReading($processed_record);
+        $this->handleBadMeterReading($prev_record, $processed_record, $prev_time_delta, $time_delta);
       }
       // This meter reading is OK, but if it follows a bad meter-reading, a
       // special processing must apply.
       else if ($this->hasBadMeterReadings()) {
         // Update retroactively all the bad readings with the average power
         // consumption at the bad-readings period.
-        $this->endBadMeterReadingsProcessing($processed_record);
+        $this->endBadMeterReadingsProcessing($prev_record, $processed_record, $prev_time_delta, $time_delta, $processed_entities, $data_provider, $frequency);
       }
-
-      // Add a new normalized entity.
-      $this->addNormalizedEntity($prev_record, $processed_record, $prev_time_delta, $time_delta, $processed_entities, $data_provider, $frequency);
+      else {
+        // Add a new normalized entity.
+        $this->addNormalizedEntity($prev_record, $processed_record, $prev_time_delta, $time_delta, $processed_entities, $data_provider, $frequency);
+      }
 
       // Save record and time-delta for next iteration.
       $prev_record = $record;
@@ -589,7 +590,7 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
    *  Previous calculated time-delta - will be used in case of multiple rate-types.
    *
    * @param $time_delta
-   *  Newly calculated time-delta.
+   *  Newly calculated time-delta, in hours.
    *
    * @param $processed_entities
    *  Array of processed entities.
@@ -635,9 +636,14 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
    * @param $processed_record
    *  The bad reading record.
    */
-  protected function handleBadMeterReading(&$processed_record) {
+  protected function handleBadMeterReading($prev_record, $processed_record, $prev_time_delta, $time_delta) {
     // Save the bad reading in the array.
-    $this->badMeterReadings[] = &$processed_record;
+    $this->badMeterReadings[] = (object) array(
+      'prev_record' => $prev_record, 
+      'processed_record' => $processed_record, 
+      'prev_time_delta' => $prev_time_delta, 
+      'time_delta' => $time_delta, 
+    );
   }
 
   /**
@@ -646,12 +652,29 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
    * @param $processed_record
    *  The last meter-reading.
    */
-  protected function endBadMeterReadingsProcessing(&$processed_record) {
-    // Has to zero out the meter's kwh (otherwise, all previous kwhs will be
-    // attributed to this reading).
-    $processed_record->kwh = 0;
+  protected function endBadMeterReadingsProcessing($prev_record, $processed_record, $prev_time_delta, &$time_delta, &$processed_entities, $data_provider, $frequency) {
+    // Divide the kwhs on all previous bad readings.
+    // Add one to the number for this record.
+    $bad_reading_time_delta = $processed_record->timestamp - $this->badMeterReadings[0]->prev_record->timestamp;
+    $total_kwhs = $processed_record->kwh - $this->badMeterReadings[0]->prev_record->kwh;
+    $avg_power = $total_kwhs / $bad_reading_time_delta;
 
-    // Just empty bad meters array.
+//    $num_bad_readings = count($this->badMeterReadings) + 1;
+//    $estimated_kwh = $processed_record->kwh / $num_bad_readings;
+
+    // Replace the values in the bad readings array
+    foreach ($this->badMeterReadings as $bad_reading) {
+      $bad_reading->processed_record->avg_power = $avg_power;
+      $bad_reading->processed_record->kwh = $avg_power * $bad_reading->time_delta;
+      $this->addNormalizedEntity($bad_reading->prev_record, $bad_reading->processed_record, $bad_reading->prev_time_delta, $bad_reading->time_delta, $processed_entities, $data_provider, $frequency);
+    }
+
+    // Also set this reading record.
+    $processed_record->avg_power = $avg_power;
+    $processed_record->kwh = $avg_power * $time_delta;
+    $this->addNormalizedEntity($prev_record, $processed_record, $prev_time_delta, $time_delta, $processed_entities, $data_provider, $frequency);
+
+    // And empty bad readings array.
     $this->badMeterReadings = array();
   }
 
