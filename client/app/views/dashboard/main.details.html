@@ -9,6 +9,7 @@
 </div>
 
 <div class="chart-container">
+  <a class="icon-piechart-back" ng-click="chart.back()" href=""><i class="fa fa-chevron-up"></i></a>
   <!-- Spniner - With no data and is loading-->
   <div ng-if="!chart.hasData() && !chart.metersLoaded" class="row chart-empty">
     <div class="title col-md-12 col-centered text-center chart-message"><i class="fa fa-circle-o-notch fa-spin fa-2x nw-icon-loading nw-icon"></i></div>

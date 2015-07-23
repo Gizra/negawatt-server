@@ -18,6 +18,8 @@ angular.module('negawattClientApp')
     // Save dataset values, until wait for load the dataset labels
     // (in the data type meters).
     vm.dataset;
+    // Go back a level up of the category.
+    vm.back = back;
 
     if ($stateParams.markerId) {
       setSelectedMarker($stateParams.markerId);
@@ -129,4 +131,9 @@ angular.module('negawattClientApp')
         $scope.vm.alerts.new({type: 'default', msg: 'מונה לא קיים.'});
       }
     }
+
+    function back() {
+      // Implementation here.
+    }
+
   });
