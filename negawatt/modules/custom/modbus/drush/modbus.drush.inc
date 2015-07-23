@@ -420,7 +420,7 @@ function modbus_fill_gaps_for_one_meter($meter_id) {
   $prev_timestamp = 0;
   foreach ($result as $entity) {
     // Check if the readings are in the allowed time-frame (add 10% for safety).
-    if (!$prev_timestamp || $entity->timestamp - $prev_timestamp < $allowed_delta * 1.1) {
+    if (!$prev_timestamp || $entity->timestamp - $prev_timestamp < $allowed_delta * 1.8) {
       // Time delta is good, continue...
       $prev_timestamp = $entity->timestamp;
       continue;
@@ -428,7 +428,7 @@ function modbus_fill_gaps_for_one_meter($meter_id) {
 
     // Time delta is too big. Add bad reading records.
     $timestamp = $prev_timestamp + $allowed_delta;
-    $last_timestamp = $entity->timestamp - 0.1 * $allowed_delta;
+    $last_timestamp = $entity->timestamp - 0.4 * $allowed_delta;
 
     $num_records_added = 0;
     while ($timestamp < $last_timestamp) {
