@@ -38,7 +38,10 @@ angular.module('negawattClientApp')
         zoomControlPosition: 'bottomleft',
         minZoom: 12,
         maxZoom:19,
-        maxNativeZoom: null
+        maxNativeZoom: null,
+        fadeAnimation: false,
+        zoomAnimation: false,
+        markerZoomAnimation: false
       };
     };
 

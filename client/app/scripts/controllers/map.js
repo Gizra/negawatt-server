@@ -90,7 +90,7 @@ angular.module('negawattClientApp')
 
     // Select marker in the Map.
     $scope.$on('leafletDirectiveMarker.click', function(event, args) {
-      $state.forceGo('dashboard.withAccount.markers', {markerId: args.modelName, categoryId: FilterFactory.get('category'), chartNextPeriod: undefined, chartPreviousPeriod: undefined} );
+      $state.forceGo('dashboard.withAccount.markers', {markerId: args.modelName, categoryId: FilterFactory.get('category')} );
     });
 
     /**
@@ -123,7 +123,6 @@ angular.module('negawattClientApp')
      * @returns {*}
      */
     function getMetersWithOptions(meters) {
-
       return (FilterFactory.isDefine('category')) ? $filter('setMetersOptionsByActiveCategory')(angular.copy(meters), {transparent: true}, 'noActiveCategory') : meters;
     }
 
