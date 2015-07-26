@@ -76,6 +76,12 @@ angular
         },
         controller: 'DashboardCtrl'
       })
+      .state('chart', {
+        url: '/chart',
+        templateUrl: 'views/chart.html',
+        controller: 'BigChartCtrl',
+        controllerAs: 'vm'
+      })
       .state('dashboard.withAccount', {
         url: '/{accountId:int}?{chartFreq:int}&{chartNextPeriod:int}&{chartPreviousPeriod:int}',
         reloadOnSearch: false,
