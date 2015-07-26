@@ -5,11 +5,18 @@ angular.module('negawattClientApp')
     var vm = this;
 
     var options = {
+      'isStacked': 'true',
+      'fill': 20,
+      'displayExactValues': true,
       'height': '500',
       'width': '768',
       'series': {
+        //4: {type: 'line'}
         0: {targetAxisIndex: 0},
-        1: {targetAxisIndex: 1}
+        1: {
+          targetAxisIndex: 1,
+          type: 'line'
+        }
       },
       'vAxes': {
         0: {
@@ -22,7 +29,8 @@ angular.module('negawattClientApp')
           'title': 'Set a title vAxis (Ex. Temperature)',
           'gridlines': {
             'count': 6
-          }
+          },
+          'chart_type': 'LineChart',
         }
       },
       'hAxis': {
@@ -30,9 +38,10 @@ angular.module('negawattClientApp')
       }
     };
 
-    var electricity = electricityMock;
+    var electricity = electricityMock.electricity;
     // Mock active frequency.
     Chart.setActiveFrequency(2);
 
-    vm.dataset = $filter('toChartDataset')(electricity, options)
+    vm.dataset = $filter('toChartDataset')(electricity, options, 'ColumnChart');
+    console.log(vm.dataset);
   });

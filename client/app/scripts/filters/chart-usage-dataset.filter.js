@@ -13,11 +13,11 @@ angular.module('negawattClientApp')
      * @returns {*}
      *  The dataset collection filtered.
      */
-    return function (collection, options){
+    return function (collection, options, type){
       var chartFrequencyActive = Chart.getActiveFrequency();
       // Recreate collection object.
       collection = {
-        type: chartFrequencyActive.chart_type,
+        type: type || chartFrequencyActive.chart_type,
         data: getDataset(collection, chartFrequencyActive),
         options: options || getOptions(chartFrequencyActive)
       }
