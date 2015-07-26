@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('negawattDirectives', [])
+angular.module('negawattClientApp')
   .directive('chartElectricityUsage', function () {
     return {
       restrict: 'EA',
