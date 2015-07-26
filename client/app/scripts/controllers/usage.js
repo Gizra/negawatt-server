@@ -26,7 +26,6 @@ angular.module('negawattClientApp')
       $scope.meterSelected = meters.list[$stateParams.markerId];
     }
 
-
     // Set the current selection label.
     if ($stateParams.markerId) {
       // Set marker label.
@@ -51,7 +50,6 @@ angular.module('negawattClientApp')
       // Realize the first load electricity data after ui-roter resolutions.
       Electricity.refresh(filters.activeElectricityHash);
     }
-
 
     /**
      * Electricity Service Event: When electricity collection change update

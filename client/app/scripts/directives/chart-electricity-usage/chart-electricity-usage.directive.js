@@ -4,7 +4,7 @@ angular.module('negawattDirectives', [])
   .directive('chartElectricityUsage', function () {
     return {
       restrict: 'EA',
-      templateUrl: 'scripts/directives/chart-electricity-usage.directive.html',
+      templateUrl: 'scripts/directives/chart-electricity-usage/chart-electricity-usage.directive.html',
       controller: function chartElectricityUsageCtrl(ChartElectricityUsage, ChartUsagePeriod, $stateParams, $filter, $scope) {
         var ctrlChart = this;
 
