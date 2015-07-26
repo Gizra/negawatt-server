@@ -7,17 +7,19 @@ angular.module('negawattClientApp')
      *
      * @param collection
      *  The collection to format.
+     * @param options
+     *  The chart options.
      *
      * @returns {*}
      *  The dataset collection filtered.
      */
-    return function (collection){
+    return function (collection, options){
       var chartFrequencyActive = Chart.getActiveFrequency();
       // Recreate collection object.
       collection = {
         type: chartFrequencyActive.chart_type,
         data: getDataset(collection, chartFrequencyActive),
-        options: getOptions(chartFrequencyActive)
+        options: options || getOptions(chartFrequencyActive)
       }
       return collection;
     }
