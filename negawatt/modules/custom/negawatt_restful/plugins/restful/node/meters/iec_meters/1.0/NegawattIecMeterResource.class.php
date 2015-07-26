@@ -34,12 +34,13 @@ class NegawattIecMeterResource extends \NegawattEntityMeterBase {
    * to allow update existing nodes in stead of creating a copy.
    */
   public function createEntity() {
-    // Check if a meter with the same label exists.
     $query = new EntityFieldQuery();
     $result = $query->entityCondition('entity_type', 'node')
-      ->propertyCondition('type', array('iec_meter', 'modbus_meter'), 'IN')
-      ->propertyCondition('title', $this->request['label'])
-      ->range(0,1)
+      ->propertyCondition('type', 'iec_meter')
+      ->fieldCondition('field_contract_id', 'value', $this->request['contract'])
+      ->fieldCondition('field_meter_code', 'value', $this->request['meter_code'])
+      ->fieldCondition('field_meter_serial', 'value', $this->request['meter_serial'])
+      ->range(0, 1)
       ->execute();
 
     if (!empty($result['node'])) {

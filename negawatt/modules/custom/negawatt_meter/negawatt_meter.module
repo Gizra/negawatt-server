@@ -267,6 +267,12 @@ function negawatt_meter_node_presave($node) {
   // Set meter category by trying to match description with categories'
   // match-strings.
   negawatt_meter_set_meter_category($node);
+
+  // The label is optional in the IEC meter's restful. Create a default meter
+  // title in case it was left empty.
+  if (!$node->title) {
+    $node->title = negawatt_meter_get_meter_title($node);
+  }
 }
 
 
@@ -444,4 +450,47 @@ function negawatt_meter_vocab_id_from_group_id($group_id) {
     ->execute()
     ->fetchField();
   return $vocabulary_id;
+}
+
+/**
+ * Create a default title for a meter.
+ *
+ * Creates a title according to the description or address when they're
+ * available. Otherwise according to the bundle specific fields.
+ * - For IEC meters: [contract]-[code]-[serial]
+ * - For Modbus meters: [ip]:[port]-[meter id]
+ *
+ * @param $node
+ *   A meter node.
+ *
+ * @return string
+ *   The meter title.
+ */
+function negawatt_meter_get_meter_title($node) {
+  $wrapper = entity_metadata_wrapper('node', $node);
+
+  if ($wrapper->field_place_description->value()) {
+    // Title is the meter description.
+    return $wrapper->field_place_description->value();
+  }
+  if ($wrapper->field_place_address->value()) {
+    // Title is the meter address.
+    return $wrapper->field_place_address->value();
+  }
+
+  switch ($node->type) {
+    // Default IEC title: [contract]-[code]-[serial].
+    case 'iec_meter':
+      $contract = $wrapper->field_contract_id->value();
+      $meter_code = $wrapper->field_meter_code->value();
+      $meter_serial = $wrapper->field_meter_serial->value();
+      return $contract . '-' . $meter_code . '-' . $meter_serial;
+
+    // Default Modbus title: [ip]:[port]-[meter id].
+    case 'modbus_meter':
+      $ip = $wrapper->field_meter_ip_address->value();
+      $port = $wrapper->field_meter_port->value();
+      $id = $wrapper->field_meter_id->value();
+      return $ip . ':' . $port . '-' . $id;
+  }
 }
