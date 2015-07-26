@@ -76,12 +76,6 @@ angular
         },
         controller: 'DashboardCtrl'
       })
-      .state('chart', {
-        url: '/chart',
-        templateUrl: 'views/chart.html',
-        controller: 'BigChartCtrl',
-        controllerAs: 'vm'
-      })
       .state('dashboard.withAccount', {
         url: '/{accountId:int}?{chartFreq:int}&{chartNextPeriod:int}&{chartPreviousPeriod:int}',
         reloadOnSearch: false,
@@ -312,6 +306,12 @@ angular
             controllerAs: 'chart'
           }
         }
+      })
+      .state('onlychart', {
+        url: '/onlychart',
+        templateUrl: 'views/chart.html',
+        controller: 'BigChartCtrl',
+        controllerAs: 'vm'
       });
     // Define interceptors.
     $httpProvider.interceptors.push(function ($q, Auth, $location, localStorageService) {
