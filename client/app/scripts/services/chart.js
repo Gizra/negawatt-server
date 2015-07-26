@@ -48,6 +48,36 @@ angular.module('negawattClientApp')
       getActiveFrequency: function() {
         // Chart frequency test.
         return ($filter('filter')(Utils.toArray(chart.frequencies), isActive, true))[0];
+      },
+
+      /**
+       * Format a date range according to the selected frequency.
+       *
+       * @param from
+       *   Range start timestamp.
+       * @param until
+       *   Range end timestamp.
+       *
+       * @return
+       *   Formatted date range.
+       */
+      formatDateRange: function(from, until) {
+        // Select the range date formatting according to the current frequency.
+        switch (this.getActiveFrequency().frequency) {
+          case 'year':
+            var format = 'YYYY';
+            break;
+          case 'month':
+            var format = 'MM/YYYY';
+            break;
+          case 'day':
+          case 'hour':
+          case 'minute':
+            var format = 'DD/MM/YYYY';
+            break;
+        }
+
+        return moment(from).format(format) + ' - ' + moment(until).format(format);
       }
     };
 

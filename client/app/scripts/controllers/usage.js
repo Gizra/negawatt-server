@@ -77,6 +77,14 @@ angular.module('negawattClientApp')
 
       // Update electricity property with active electricity (if the response has data).
       vm.electricity = $filter('activeElectricityFilters')(electricity);
+
+      if (vm.electricity) {
+        // Update the title's date range, according to the first and last
+        // selected electricity records.
+        var firstEntry = vm.electricity[0];
+        var lastEntry = vm.electricity[vm.electricity.length - 1];
+        $scope.dateRange = ChartUsagePeriod.formatDateRange(firstEntry.timestamp * 1000, lastEntry.timestamp * 1000);
+      }
     });
 
     /**
