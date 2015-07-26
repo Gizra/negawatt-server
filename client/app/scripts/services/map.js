@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Map', function ($rootScope, leafletData) {
+  .service('Map', function ($rootScope, $log, leafletData, leafletHelpers) {
     var self = this;
 
     // Initial center point.
@@ -11,6 +11,11 @@ angular.module('negawattClientApp')
     var broadcastUpdateEventName = 'nwMapChanged';
 
     var maxBounds = {};
+
+    // Check if extra plugins are installed.
+    if (!leafletHelpers.LeafletActiveAreaPlugin.isLoaded()) {
+      $log.error('[AngularJS - Leaflet] The Leaflet-active-area is not loaded.');
+    }
 
     /**
      * Return value of the max bounds for the actual map.
@@ -33,7 +38,10 @@ angular.module('negawattClientApp')
         zoomControlPosition: 'bottomleft',
         minZoom: 12,
         maxZoom:19,
-        maxNativeZoom: null
+        maxNativeZoom: null,
+        fadeAnimation: false,
+        zoomAnimation: false,
+        markerZoomAnimation: false
       };
     };
 

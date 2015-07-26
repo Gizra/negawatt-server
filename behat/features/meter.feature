@@ -32,7 +32,7 @@ Feature: Meter
     Given I login with user "carlos"
     When I visit "/#/dashboard/1/category/14"
     And I should see "4" markers
-    And I should print page of "//div[@class='leaflet-marker-pane']"
+    And I should print page of "//div[contains(@class, 'leaflet-marker-pane')]"
     Then I should see "2" markers with class "leaflet-marker-icon-transparent"
 
   @javascript

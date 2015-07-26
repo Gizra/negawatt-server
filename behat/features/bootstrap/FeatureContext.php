@@ -107,7 +107,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @Then I should see :markers markers with class :css_class
    */
   public function iShouldSeeMarkersWithClass($markers, $css_class) {
-    $xpath = '//div[@class="leaflet-marker-pane"]//img[contains(@class, "' . $css_class . '")]';
+    $xpath = '//div[contains(@class, "leaflet-marker-pane")]//img[contains(@class, "' . $css_class . '")]';
     $this->waitToCountXpathNodes($xpath, $markers);
   }
 

@@ -116,7 +116,7 @@ angular
             templateUrl: 'views/dashboard/main.menu.html',
             controller: 'MenuCtrl'
           },
-          'map@dashboard': {
+          'map': {
             templateUrl: 'views/dashboard/main.map.html',
             controller: 'MapCtrl',
             controllerAs: 'map'

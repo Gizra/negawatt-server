@@ -27,6 +27,7 @@
 
     <!-- Add your site or application content here -->
     <loading-bar-text></loading-bar-text>
+
     <div ui-view></div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
@@ -81,6 +82,10 @@
     <script src="bower_components/moment/locale/he.js"></script>
     <!-- endbuild -->
 
+    <!-- build:js(.) scripts/leaflet.plugins.js -->
+    <script src="bower_components/leaflet-active-area/src/leaflet.activearea.js"></script>
+    <!-- endbuild -->
+
     <script src="scripts/config.js"></script>
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
@@ -128,6 +133,7 @@
     <script src="scripts/directives/chart-electricity-usage.service.js"></script>
 
     <script src="scripts/decorators/uiRouterDecorators.js"></script>
+    <script src="scripts/decorators/leafletDecorators.js"></script>
 
     <!-- endbuild -->
 </body>

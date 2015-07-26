@@ -72,6 +72,14 @@ angular.module('negawattClientApp')
       });
     });
 
+    // Check when the map is loaded.
+    $scope.$on("leafletDirectiveMap.load", function(events, map) {
+      leafletData.getMap().then(function(map){
+        map.setActiveArea('map-activearea')
+          .setView([vm.center.lat, vm.center.lng], vm.center.zoom, {reset: true});
+      });
+    });
+
     // Reload the current $state when meters added more.
     $scope.$on('nwMetersChanged', function(event, meters) {
       vm.meters = getMetersWithOptions(meters.list);
@@ -82,7 +90,7 @@ angular.module('negawattClientApp')
 
     // Select marker in the Map.
     $scope.$on('leafletDirectiveMarker.click', function(event, args) {
-      $state.forceGo('dashboard.withAccount.markers', {markerId: args.modelName, categoryId: FilterFactory.get('category'), chartNextPeriod: undefined, chartPreviousPeriod: undefined} );
+      $state.forceGo('dashboard.withAccount.markers', {markerId: args.modelName, categoryId: FilterFactory.get('category')} );
     });
 
     /**

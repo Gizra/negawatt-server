@@ -18,8 +18,8 @@ angular.module('negawattClientApp')
       Category.reset();
 
       // Refresh home and meter's map.
-      $location.url($state.href('dashboard.withAccount').slice(2));
       Meter.refresh();
+      $state.go('dashboard.withAccount');
     };
 
   });
