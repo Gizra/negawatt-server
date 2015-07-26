@@ -1,0 +1,25 @@
+<span><i class="icon-options"></i></span>
+<div ng-if="meterSelected" class="meter-details">
+  <div><b>שם: </b>{{meterSelected.label}}</div>
+  <div><b>מס׳ חוזה: </b>{{meterSelected.contract}}</div>
+  <div><b>מקום: </b>{{meterSelected.place_description}}</div>
+  <div><b>כתובת: </b>{{meterSelected.place_address}}</div>
+  <div><b>מס׳ סידורי: </b>{{meterSelected.meter_serial}}</div>
+  <div><b>קוד מונה: </b>{{meterSelected.meter_code}}</div>
+</div>
+
+<div class="chart-container">
+  <!-- Spniner - With no data and is loading-->
+  <div ng-if="!chart.hasData() && !chart.metersLoaded" class="row chart-empty">
+    <div class="title col-md-12 col-centered text-center chart-message"><i class="fa fa-circle-o-notch fa-spin fa-2x nw-icon-loading nw-icon"></i></div>
+  </div>
+
+  <div ng-if="chart.hasData() && !meterSelected">
+    <div google-chart chart="chart.categoriesChart" on-select="onSelect(selectedItem, chart.categoriesChart.data)" class="categoriesChart"></div>
+  </div>
+
+  <div ng-if="!chart.hasData() && chart.metersLoaded" class="chart-empty">
+    <div class="title col-md-6 col-centered text-center chart-message">{{chart.message}}</div>
+  </div>
+</div>
+

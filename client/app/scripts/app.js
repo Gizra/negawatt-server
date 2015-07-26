@@ -68,7 +68,7 @@ angular
       .state('dashboard', {
         abstract: true,
         url: '/dashboard',
-        templateUrl: 'views/dashboard/main.html',
+        templateUrl: 'views/dashboard/map/main.html',
         resolve: {
           profile: function(Profile) {
             return Profile.get();
@@ -113,30 +113,30 @@ angular
         },
         views: {
           'menu@dashboard': {
-            templateUrl: 'views/dashboard/main.menu.html',
+            templateUrl: 'views/dashboard/map/main.menu.html',
             controller: 'MenuCtrl'
           },
           'map': {
-            templateUrl: 'views/dashboard/main.map.html',
+            templateUrl: 'views/dashboard/map/main.map.html',
             controller: 'MapCtrl',
             controllerAs: 'map'
           },
           'categories@dashboard': {
-            templateUrl: 'views/dashboard/main.categories.html',
+            templateUrl: 'views/dashboard/map/main.categories.html',
             controller: 'CategoryCtrl'
           },
           'messages@dashboard': {
-            templateUrl: 'views/dashboard/main.messages.html',
+            templateUrl: 'views/dashboard/map/main.messages.html',
             controller: 'MessageCtrl',
             controllerAs: 'message'
           },
           'details@dashboard': {
-            templateUrl: 'views/dashboard/main.details.html',
+            templateUrl: 'views/dashboard/map/main.details.html',
             controller: 'DetailsCtrl',
             controllerAs: 'chart'
           },
           'usage@dashboard': {
-            templateUrl: 'views/dashboard/main.usage.html',
+            templateUrl: 'views/dashboard/map/main.usage.html',
             controller: 'UsageCtrl',
             controllerAs: 'chart'
           }
@@ -166,23 +166,23 @@ angular
           // Replace `meters` data previous resolved, with the cached data
           // filtered by the selected category.
           'map@dashboard': {
-            templateUrl: 'views/dashboard/main.map.html',
+            templateUrl: 'views/dashboard/map/main.map.html',
             controller: 'MapCtrl',
             controllerAs: 'map'
           },
           // Update usage-chart to show category summary.
           'usage@dashboard': {
-            templateUrl: 'views/dashboard/main.usage.html',
+            templateUrl: 'views/dashboard/map/main.usage.html',
             controller: 'UsageCtrl',
             controllerAs: 'chart'
           },
           'categories@dashboard': {
-            templateUrl: 'views/dashboard/main.categories.html',
+            templateUrl: 'views/dashboard/map/main.categories.html',
             controller: 'CategoryCtrl'
           },
           // Update details (pie) chart for categories.
           'details@dashboard': {
-            templateUrl: 'views/dashboard/main.details.html',
+            templateUrl: 'views/dashboard/map/main.details.html',
             controller: 'DetailsCtrl',
             controllerAs: 'chart'
           }
@@ -214,28 +214,99 @@ angular
           // Replace `meters` data previous resolved, with the cached data
           // if is the case filtered by the selected category.
           'map@dashboard': {
-            templateUrl: 'views/dashboard/main.map.html',
+            templateUrl: 'views/dashboard/map/main.map.html',
             controller: 'MapCtrl',
             controllerAs: 'map'
           },
           'categories@dashboard': {
-            templateUrl: 'views/dashboard/main.categories.html',
+            templateUrl: 'views/dashboard/map/main.categories.html',
             controller: 'CategoryCtrl'
           },
           // Update the meter detailed data.
           'details@dashboard': {
-            templateUrl: 'views/dashboard/main.details.html',
+            templateUrl: 'views/dashboard/map/main.details.html',
             controller: 'DetailsCtrl',
             controllerAs: 'chart'
           },
           'usage@dashboard': {
-            templateUrl: 'views/dashboard/main.usage.html',
+            templateUrl: 'views/dashboard/map/main.usage.html',
+            controller: 'UsageCtrl',
+            controllerAs: 'chart'
+          }
+        }
+      })
+      .state('chart', {
+        abstract: true,
+        url: '/chart',
+        templateUrl: 'views/dashboard/chart/main.html',
+        resolve: {
+          profile: function(Profile) {
+            return Profile.get();
+          }
+        },
+        controller: 'DashboardCtrl'
+      })
+      .state('chart.withAccount', {
+        url: '/{accountId:int}?{chartFreq:int}&{chartNextPeriod:int}&{chartPreviousPeriod:int}',
+        reloadOnSearch: false,
+        params: {
+          chartFreq: {
+            // Keep monthly chart type by default.
+            value: 2
+          }
+        },
+        resolve: {
+          account: function($stateParams, Profile, profile) {
+            return Profile.selectAccount($stateParams.accountId, profile);
+          },
+          meters: function(Meter, account, $stateParams, Category, FilterFactory) {
+            // Get first records.
+            return Meter.get(account.id);
+          },
+          categories: function(Category, account) {
+            return Category.get(account.id);
+          },
+          filters: function(FilterFactory, categories, $stateParams, meters, account) {
+            // Define categories filters. Used for the UI Checknboxes.
+            FilterFactory.set('categorized', categories);
+            // Define electricity parameters
+            FilterFactory.set('electricity', $stateParams);
+
+            return {
+              loadElectricity: true,
+              activeElectricityHash: FilterFactory.get('activeElectricityHash')
+            };
+          },
+          messages: function(Message, account) {
+            return Message.get(account);
+          }
+        },
+        views: {
+          'menu@chart': {
+            templateUrl: 'views/dashboard/chart/main.menu.html',
+            controller: 'MenuCtrl'
+          },
+          'categories@chart': {
+            templateUrl: 'views/dashboard/chart/main.categories.html',
+            controller: 'CategoryCtrl'
+          },
+          'messages@chart': {
+            templateUrl: 'views/dashboard/chart/main.messages.html',
+            controller: 'MessageCtrl',
+            controllerAs: 'message'
+          },
+          'details@chart': {
+            templateUrl: 'views/dashboard/chart/main.details.html',
+            controller: 'DetailsCtrl',
+            controllerAs: 'chart'
+          },
+          'usage@chart': {
+            templateUrl: 'views/dashboard/chart/main.usage.html',
             controller: 'UsageCtrl',
             controllerAs: 'chart'
           }
         }
       });
-
     // Define interceptors.
     $httpProvider.interceptors.push(function ($q, Auth, $location, localStorageService) {
       return {

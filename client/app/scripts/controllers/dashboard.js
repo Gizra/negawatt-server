@@ -8,6 +8,8 @@ angular.module('negawattClientApp')
       alerts: Alerts
     };
 
+    $scope.cssVersion = $state.is('chart.withAccount') ? 'v2' : 'v1';
+
     if (profile) {
       // Apply only on the login wotkflow.
       if (!(Object.keys($stateParams).length) && $state.is('dashboard')) {
