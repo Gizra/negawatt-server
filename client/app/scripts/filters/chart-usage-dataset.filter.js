@@ -79,10 +79,15 @@ angular.module('negawattClientApp')
             'id': 'low',
             'label': 'שפל',
             'type': 'number',
+          },
+          {
+            'id': 'estimate',
+            'label': 'הערכה',
+            'type': 'number',
           }
         ],
         // Add rows.
-        rows: getRows(collection, 'single', frequency)
+        rows: getRows(collection, 'single', frequency),
       };
 
       return dataset;
@@ -142,7 +147,8 @@ angular.module('negawattClientApp')
             { 'v': item.flat },
             { 'v': item.peak },
             { 'v': item.mid  },
-            { 'v': item.low  }
+            { 'v': item.low  },
+            { 'v': item.estimate  }
           ];
           rows.push({ 'c': col });
         });
