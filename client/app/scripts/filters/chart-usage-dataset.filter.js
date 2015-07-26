@@ -1,5 +1,5 @@
 angular.module('negawattClientApp')
-  .filter('toChartDataset', function (Chart, ChartOptions, moment) {
+  .filter('toChartDataset', function ($filter, Chart, ChartOptions, moment) {
 
     /**
      * From a collection object create a Google Chart data ser object
@@ -38,7 +38,8 @@ angular.module('negawattClientApp')
           },
           hAxis: {
             // No title in order to have enough space for the bars labels.
-          }
+          },
+          tooltip: {isHtml: true}
         });
     }
 
@@ -134,16 +135,16 @@ angular.module('negawattClientApp')
           prevRateType = item.rate_type;
         });
 
+        // Display the unit according to selected frequency.
+        var unit = ['hour', 'minute'].indexOf(frequency.frequency) != -1 ? 'קו״ט' : 'קוט״ש';
+
         // Build rows
         angular.forEach(values, function(item, timestamp) {
           var label = moment.unix(timestamp).format(frequency.axis_h_format);
-          var col = [
-            { 'v': label },
-            { 'v': item.flat },
-            { 'v': item.peak },
-            { 'v': item.mid  },
-            { 'v': item.low  }
-          ];
+          var col = [{v: label}];
+          ['flat', 'peak', 'mid', 'low'].forEach(function(type) {
+            col.push({v: item[type], f: $filter('number')(item[type], 0) + ' ' + unit});
+          });
           rows.push({ 'c': col });
         });
       }

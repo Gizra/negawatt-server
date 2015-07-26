@@ -31,7 +31,8 @@ angular.module('negawattClientApp')
     function getOptions(type) {
       return {
         title: 'Kws per ' + type,
-        pieSliceText: 'label'
+        pieSliceText: 'label',
+        tooltip: {isHtml: true}
       };
     }
 
@@ -78,7 +79,8 @@ angular.module('negawattClientApp')
             this.push({
               c: [
                 {v: !Utils.isEmpty(labels) && labels[key].label || 'category ' + key},
-                {v: +value},
+                // "f" is for formatting the value in the tooltip.
+                {v: +value, f: $filter('number')(value, 0) + ' קוט״ש'},
                 {id: key}
               ]
             });
@@ -89,7 +91,7 @@ angular.module('negawattClientApp')
             this.push({
               c: [
                 {v: !Utils.isEmpty(labels) && labels[key].contract || 'meter ' + key},
-                {v: +value},
+                {v: +value, f: $filter('number')(value, 0) + ' קוט״ש'},
                 {id: key}
               ]
             });
