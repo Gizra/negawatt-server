@@ -78,7 +78,7 @@ angular.module('negawattClientApp')
           chart_default_time_frame: 24,
           chart_type: 'ColumnChart',
           axis_v_title: 'קוט"ש בחודש',
-          axis_h_format: 'MM-YYYY',
+          axis_h_format: 'MM/YYYY',
           axis_h_title: 'חודש'
         },
         3: {
@@ -89,7 +89,7 @@ angular.module('negawattClientApp')
           chart_default_time_frame: 31,
           chart_type: 'ColumnChart',
           axis_v_title: 'קוט"ש ביום',
-          axis_h_format: 'DD-MM',
+          axis_h_format: 'DD/MM',
           axis_h_title: 'תאריך'
         },
         4: {
@@ -101,7 +101,7 @@ angular.module('negawattClientApp')
           chart_default_time_frame: 168,
           chart_type: 'LineChart',
           axis_v_title: 'KW',
-          axis_h_format: 'HH',
+          axis_h_format: 'HH:mm',
           axis_h_title: 'שעה'
         },
         5: {
@@ -113,7 +113,7 @@ angular.module('negawattClientApp')
           chart_default_time_frame: 1440,
           chart_type: 'LineChart',
           axis_v_title: 'KW',
-          axis_h_format: 'HH',
+          axis_h_format: 'HH:mm',
           axis_h_title: 'שעה'
         }
       };

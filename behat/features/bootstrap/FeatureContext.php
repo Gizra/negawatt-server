@@ -107,7 +107,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @Then I should see :markers markers with class :css_class
    */
   public function iShouldSeeMarkersWithClass($markers, $css_class) {
-    $xpath = '//div[@class="leaflet-marker-pane"]//img[contains(@class, "' . $css_class . '")]';
+    $xpath = '//div[contains(@class, "leaflet-marker-pane")]//img[contains(@class, "' . $css_class . '")]';
     $this->waitToCountXpathNodes($xpath, $markers);
   }
 
@@ -666,7 +666,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   private function checkValuesPieChart($element, $total_kws) {
     $validations = array(
       '//div[@id="dashboard-controls"]//td[.="' . $element . '"]',
-      '//div[@id="dashboard-controls"]//td[.="' . $total_kws . '"]',
+      '//div[@id="dashboard-controls"]//*[contains(.,"' . $total_kws . '")]',
     );
 
     $this->checkValidations($validations, TRUE, TRUE);

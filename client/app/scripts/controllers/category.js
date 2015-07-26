@@ -66,7 +66,7 @@ angular.module('negawattClientApp')
      */
     $scope.select = function(categoryId) {
       FilterFactory.clearMeterSelection();
-      $state.forceGo('dashboard.withAccount.categories', {categoryId: categoryId, chartNextPeriod: undefined, chartPreviousPeriod: undefined});
+      $state.forceGo('dashboard.withAccount.categories', {categoryId: categoryId});
     };
 
     // Reload the categories when added new meters to the map.
