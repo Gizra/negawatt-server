@@ -1,16 +1,10 @@
-<div class="alert-container">
-  <alert ng-repeat="alert in vm.alerts" type="{{alert.type}}" close="vm.alerts.close($index)">{{alert.msg}}</alert>
-</div>
-<ui-view name="map"></ui-view>
 <div id="dashboard-controls">
   <ui-view name="menu" class="dashboard-menu"></ui-view>
 
-  <div class="dashboard-controls-container">
-    <ui-view name="messages" class="dashboard-controls dashboard-controls-col dashboard-messages"></ui-view>
-    <ui-view name="categories" class="dashboard-controls dashboard-controls-col dashboard-categories"></ui-view>
-    <ui-view name="details" class="dashboard-controls dashboard-controls-col dashboard-details"></ui-view>
-    <ui-view name="usage" class="dashboard-controls dashboard-controls-row dashboard-usage"></ui-view>
-  </div>
+  <div class="row">
+    <ui-view name="usage" class="usage col-lg-6"></ui-view>
 
+    <ui-view name="messages" class="messages col-lg-2"></ui-view>
+  </div>
 </div>
 

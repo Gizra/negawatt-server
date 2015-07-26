@@ -234,6 +234,78 @@ angular
             controllerAs: 'chart'
           }
         }
+      })
+      .state('chart', {
+        abstract: true,
+        url: '/chart',
+        templateUrl: 'views/dashboard/chart/main.html',
+        resolve: {
+          profile: function(Profile) {
+            return Profile.get();
+          }
+        },
+        controller: 'DashboardCtrl'
+      })
+      .state('chart.withAccount', {
+        url: '/{accountId:int}?{chartFreq:int}&{chartNextPeriod:int}&{chartPreviousPeriod:int}',
+        reloadOnSearch: false,
+        params: {
+          chartFreq: {
+            // Keep monthly chart type by default.
+            value: 2
+          }
+        },
+        resolve: {
+          account: function($stateParams, Profile, profile) {
+            return Profile.selectAccount($stateParams.accountId, profile);
+          },
+          meters: function(Meter, account, $stateParams, Category, FilterFactory) {
+            // Get first records.
+            return Meter.get(account.id);
+          },
+          categories: function(Category, account) {
+            return Category.get(account.id);
+          },
+          filters: function(FilterFactory, categories, $stateParams, meters, account) {
+            // Define categories filters. Used for the UI Checknboxes.
+            FilterFactory.set('categorized', categories);
+            // Define electricity parameters
+            FilterFactory.set('electricity', $stateParams);
+
+            return {
+              loadElectricity: true,
+              activeElectricityHash: FilterFactory.get('activeElectricityHash')
+            };
+          },
+          messages: function(Message, account) {
+            return Message.get(account);
+          }
+        },
+        views: {
+          'menu@chart': {
+            templateUrl: 'views/dashboard/chart/main.menu.html',
+            controller: 'MenuCtrl'
+          },
+          'categories@chart': {
+            templateUrl: 'views/dashboard/chart/main.categories.html',
+            controller: 'CategoryCtrl'
+          },
+          'messages@chart': {
+            templateUrl: 'views/dashboard/chart/main.messages.html',
+            controller: 'MessageCtrl',
+            controllerAs: 'message'
+          },
+          'details@chart': {
+            templateUrl: 'views/dashboard/chart/main.details.html',
+            controller: 'DetailsCtrl',
+            controllerAs: 'chart'
+          },
+          'usage@chart': {
+            templateUrl: 'views/dashboard/chart/main.usage.html',
+            controller: 'UsageCtrl',
+            controllerAs: 'chart'
+          }
+        }
       });
     // Define interceptors.
     $httpProvider.interceptors.push(function ($q, Auth, $location, localStorageService) {
