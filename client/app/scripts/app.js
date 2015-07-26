@@ -34,7 +34,6 @@ angular
     'template/accordion/accordion.html',
     'angularMoment',
     'ui.indeterminate',
-    'negawattDirectives',
     'angular.filter'
   ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
