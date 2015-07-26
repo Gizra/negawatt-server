@@ -655,14 +655,11 @@ abstract class ElectricityNormalizerBase implements \ElectricityNormalizerInterf
   protected function endBadMeterReadingsProcessing($prev_record, $processed_record, $prev_time_delta, &$time_delta, &$processed_entities, $data_provider, $frequency) {
     // Divide the kwhs on all previous bad readings.
     // Add one to the number for this record.
-    $bad_reading_time_delta = $processed_record->timestamp - $this->badMeterReadings[0]->prev_record->timestamp;
+    $bad_reading_time_delta = ($processed_record->timestamp - $this->badMeterReadings[0]->prev_record->timestamp) / 3600;
     $total_kwhs = $processed_record->kwh - $this->badMeterReadings[0]->prev_record->kwh;
     $avg_power = $total_kwhs / $bad_reading_time_delta;
 
-//    $num_bad_readings = count($this->badMeterReadings) + 1;
-//    $estimated_kwh = $processed_record->kwh / $num_bad_readings;
-
-    // Replace the values in the bad readings array
+   // Replace the values in the bad readings array
     foreach ($this->badMeterReadings as $bad_reading) {
       $bad_reading->processed_record->avg_power = $avg_power;
       $bad_reading->processed_record->kwh = $avg_power * $bad_reading->time_delta;
