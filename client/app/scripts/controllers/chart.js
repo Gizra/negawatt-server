@@ -11,7 +11,6 @@ angular.module('negawattClientApp')
       'height': '500',
       'width': '768',
       'series': {
-        //4: {type: 'line'}
         0: {targetAxisIndex: 0},
         1: {
           targetAxisIndex: 1,
@@ -42,6 +41,6 @@ angular.module('negawattClientApp')
     // Mock active frequency.
     Chart.setActiveFrequency(2);
 
-    vm.dataset = $filter('toChartDataset')(electricity, options, 'ColumnChart');
+    vm.dataset = $filter('toChartDataset')(electricity, compareWith, options, 'ColumnChart');
     console.log(vm.dataset);
   });
