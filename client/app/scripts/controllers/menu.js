@@ -6,7 +6,7 @@ angular.module('negawattClientApp')
     $scope.user = profile.user;
     $scope.timedate = Timedate;
     $scope.accountId = $stateParams.accountId;
-
+console.log(account);
     /**
      * Reset category selection and back to the home.
      */
