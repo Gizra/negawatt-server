@@ -68,7 +68,7 @@ angular
       .state('dashboard', {
         abstract: true,
         url: '/dashboard',
-        templateUrl: 'views/dashboard/main.html',
+        templateUrl: 'views/dashboard/map/main.html',
         resolve: {
           profile: function(Profile) {
             return Profile.get();
@@ -113,30 +113,30 @@ angular
         },
         views: {
           'menu@dashboard': {
-            templateUrl: 'views/dashboard/main.menu.html',
+            templateUrl: 'views/dashboard/map/main.menu.html',
             controller: 'MenuCtrl'
           },
           'map': {
-            templateUrl: 'views/dashboard/main.map.html',
+            templateUrl: 'views/dashboard/map/main.map.html',
             controller: 'MapCtrl',
             controllerAs: 'map'
           },
           'categories@dashboard': {
-            templateUrl: 'views/dashboard/main.categories.html',
+            templateUrl: 'views/dashboard/map/main.categories.html',
             controller: 'CategoryCtrl'
           },
           'messages@dashboard': {
-            templateUrl: 'views/dashboard/main.messages.html',
+            templateUrl: 'views/dashboard/map/main.messages.html',
             controller: 'MessageCtrl',
             controllerAs: 'message'
           },
           'details@dashboard': {
-            templateUrl: 'views/dashboard/main.details.html',
+            templateUrl: 'views/dashboard/map/main.details.html',
             controller: 'DetailsCtrl',
             controllerAs: 'chart'
           },
           'usage@dashboard': {
-            templateUrl: 'views/dashboard/main.usage.html',
+            templateUrl: 'views/dashboard/map/main.usage.html',
             controller: 'UsageCtrl',
             controllerAs: 'chart'
           }
@@ -166,23 +166,23 @@ angular
           // Replace `meters` data previous resolved, with the cached data
           // filtered by the selected category.
           'map@dashboard': {
-            templateUrl: 'views/dashboard/main.map.html',
+            templateUrl: 'views/dashboard/map/main.map.html',
             controller: 'MapCtrl',
             controllerAs: 'map'
           },
           // Update usage-chart to show category summary.
           'usage@dashboard': {
-            templateUrl: 'views/dashboard/main.usage.html',
+            templateUrl: 'views/dashboard/map/main.usage.html',
             controller: 'UsageCtrl',
             controllerAs: 'chart'
           },
           'categories@dashboard': {
-            templateUrl: 'views/dashboard/main.categories.html',
+            templateUrl: 'views/dashboard/map/main.categories.html',
             controller: 'CategoryCtrl'
           },
           // Update details (pie) chart for categories.
           'details@dashboard': {
-            templateUrl: 'views/dashboard/main.details.html',
+            templateUrl: 'views/dashboard/map/main.details.html',
             controller: 'DetailsCtrl',
             controllerAs: 'chart'
           }
@@ -214,28 +214,27 @@ angular
           // Replace `meters` data previous resolved, with the cached data
           // if is the case filtered by the selected category.
           'map@dashboard': {
-            templateUrl: 'views/dashboard/main.map.html',
+            templateUrl: 'views/dashboard/map/main.map.html',
             controller: 'MapCtrl',
             controllerAs: 'map'
           },
           'categories@dashboard': {
-            templateUrl: 'views/dashboard/main.categories.html',
+            templateUrl: 'views/dashboard/map/main.categories.html',
             controller: 'CategoryCtrl'
           },
           // Update the meter detailed data.
           'details@dashboard': {
-            templateUrl: 'views/dashboard/main.details.html',
+            templateUrl: 'views/dashboard/map/main.details.html',
             controller: 'DetailsCtrl',
             controllerAs: 'chart'
           },
           'usage@dashboard': {
-            templateUrl: 'views/dashboard/main.usage.html',
+            templateUrl: 'views/dashboard/map/main.usage.html',
             controller: 'UsageCtrl',
             controllerAs: 'chart'
           }
         }
       });
-
     // Define interceptors.
     $httpProvider.interceptors.push(function ($q, Auth, $location, localStorageService) {
       return {
