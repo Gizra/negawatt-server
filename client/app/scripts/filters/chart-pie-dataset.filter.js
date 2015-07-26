@@ -79,6 +79,7 @@ angular.module('negawattClientApp')
             this.push({
               c: [
                 {v: !Utils.isEmpty(labels) && labels[key].label || 'category ' + key},
+                // "f" is for formatting the value in the tooltip.
                 {v: +value, f: $filter('number')(value, 0) + ' קוט״ש'},
                 {id: key}
               ]
