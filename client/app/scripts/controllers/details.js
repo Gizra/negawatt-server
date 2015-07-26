@@ -11,7 +11,7 @@ angular.module('negawattClientApp')
     $scope.categories = categories;
     $scope.meters = meters;
 
-    // Public controller API
+    // Public API Controller
     vm.categoriesChart = {};
     vm.message = Chart.messages.empty;
     vm.hasData = hasData;
@@ -20,21 +20,17 @@ angular.module('negawattClientApp')
     vm.dataset;
     // Go back a level up of the category.
     vm.back = back;
+    vm.onSelect = onSelect;
+    vm.hideBackButton = hideBackButton;
 
     if ($stateParams.markerId) {
       setSelectedMarker($stateParams.markerId);
       meterSelectedExist();
     }
 
-    // Go to the a new category selected form the pie chart.
-    $scope.onSelect = function(selectedItem, chartData) {
-      if (summary.type === 'category') {
-        categoryId = ChartCategories.getCategoryIdSelected(selectedItem, chartData);
-        if (angular.isDefined(categoryId)) {
-          $state.go('dashboard.withAccount.categories', {accountId: $stateParams.accountId, categoryId: categoryId});
-        }
-      }
-    };
+    if ($stateParams.categoryId) {
+      setParentCategory($stateParams.categoryId, categories);
+    }
 
     // Select the meter when is comming with the 'lazy load'
     $scope.$on('nwMetersChanged', function(event, meters) {
@@ -47,10 +43,8 @@ angular.module('negawattClientApp')
       }
     });
 
-    /**
-     * Electricity Service Event: When electricity change update Pie chart of
-     * consumption, according the summary data.
-     */
+     // Electricity Service Event: When electricity change update Pie chart of
+     // consumption, according the summary data.
     $scope.$on('nwElectricityChanged', function(event, electricity) {
       if (angular.isDefined($stateParams.markerId)) {
         return;
@@ -106,7 +100,9 @@ angular.module('negawattClientApp')
       return vm.categoriesChart.data && !!vm.categoriesChart.data.rows.length;
     }
 
-    // Generate alert if the a meter is selected and is not defined in the UI.
+    /**
+     * Generate alert if the a meter is selected and is not defined in the UI.
+     */
     function render() {
       // Render pie chart.
       if (angular.isDefined(vm.dataset)) {
@@ -125,6 +121,9 @@ angular.module('negawattClientApp')
       vm.categoriesChart = $filter('toPieChartDataset')(summary, labels);
     }
 
+    /**
+     * Show an message if the selected do not exsit.
+     */
     function meterSelectedExist() {
       // Handle applications alerts.
       if (angular.isUndefined($scope.meterSelected) && $state.is('dashboard.withAccount.markers')) {
@@ -132,8 +131,44 @@ angular.module('negawattClientApp')
       }
     }
 
+    /**
+     *
+     */
     function back() {
-      // Implementation here.
+      $state.go('dashboard.withAccount.categories', {accountId: $stateParams.accountId, categoryId: vm.parentCategory});
+    }
+
+    /**
+     * Hide back button
+     *
+     * @returns {boolean}
+     */
+    function hideBackButton() {
+      //!chart.hasData() || chart.meterSelected || !!chart.parentCategory
+      return !vm.parentCategory;
+    }
+
+    // Go to the a new category selected form the pie chart.
+    function onSelect(selectedItem, chartData) {
+      if (summary.type === 'category') {
+        vm.parentCategory;
+        categoryId = ChartCategories.getCategoryIdSelected(selectedItem, chartData);
+        if (angular.isDefined(categoryId)) {
+          $state.go('dashboard.withAccount.categories', {accountId: $stateParams.accountId, categoryId: categoryId});
+        }
+      }
+    };
+
+    /**
+     * Set the parent category.
+     *
+     * @param category
+     *   Id of Category selected.
+     * @param categories
+     *  Collecion o categories
+     */
+    function setParentCategory(category, categories) {
+      vm.parentCategory = (!!categories.list[category].depth) ? category : undefined;
     }
 
   });
