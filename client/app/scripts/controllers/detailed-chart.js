@@ -5,13 +5,12 @@
  * @name negawattClientApp.controller:DetailedChartCtrl
  */
 angular.module('negawattClientApp')
-  .controller('DetailedChartCtrl', function DetailedChartCtrl($scope, $state, $stateParams, $filter, Electricity, Chart, ChartUsagePeriod, FilterFactory, meters, filters, ChartElectricityUsage, categories, profile) {
+  .controller('DetailedChartCtrl', function DetailedChartCtrl($scope, $state, $stateParams, $filter, Electricity, Chart, ChartUsagePeriod, FilterFactory, meters, filters, ChartElectricityUsage, categories, profile, electricityMock) {
     var vm = this;
 
-    $scope.charts = [];
-
-
     var getChartPeriod = ChartUsagePeriod.getChartPeriod;
+    var compareWith;
+    var options;
 
     // Populate the electricity data into the UI.
     vm.electricity;
@@ -25,10 +24,49 @@ angular.module('negawattClientApp')
     if (angular.isDefined($stateParams.markerId)) {
       // Share meter selected.
       $scope.meterSelected = meters.list[$stateParams.markerId];
-
-      // @TODO: Fix Chart usage information of the selected marker. (Mutiple charts)
-      // ChartUsage.meterSelected(meters.list[$stateParams.markerId]);
     }
+
+    options = {
+      'isStacked': 'true',
+      'fill': 20,
+      'displayExactValues': true,
+      'height': '500',
+      'width': '768',
+      'series': {
+        0: {targetAxisIndex: 0},
+        1: {
+          targetAxisIndex: 1,
+          type: 'line'
+        }
+      },
+      'vAxes': {
+        0: {
+          'title': 'Set a title vAxis (Ex. Electricity)',
+          'gridlines': {
+            'count': 6
+          }
+        },
+        1: {
+          'title': 'Set a title vAxis (Ex. Temperature)',
+          'gridlines': {
+            'count': 6
+          },
+          'chart_type': 'LineChart',
+        }
+      },
+      'hAxis': {
+        'title': 'Set a title hAxis'
+      }
+    };
+
+
+    // Mock active frequency.
+    Chart.setActiveFrequency(2);
+
+    vm.electricity = $filter('toChartDataset')(electricityMock.electricity, compareWith, options, 'ColumnChart');
+    console.log(vm.electricity);
+
+
 
     // Set the current selection label.
     if ($stateParams.markerId) {
@@ -48,12 +86,6 @@ angular.module('negawattClientApp')
         }
       });
     }
-
-
-    $scope.addChart = function() {
-      $scope.charts.push($scope.chart);
-      console.log($scope.charts);
-    };
 
     /**
      * Electricity Service Event: When electricity collection change update
@@ -83,14 +115,6 @@ angular.module('negawattClientApp')
 
       // Update electricity property with active electricity (if the response has data).
       vm.electricity = $filter('activeElectricityFilters')(electricity);
-
-      if (vm.electricity) {
-        // Update the title's date range, according to the first and last
-        // selected electricity records.
-        var firstEntry = vm.electricity[0];
-        var lastEntry = vm.electricity[vm.electricity.length - 1];
-        $scope.dateRange = ChartUsagePeriod.formatDateRange(firstEntry.timestamp * 1000, lastEntry.timestamp * 1000);
-      }
     });
 
     /**
@@ -100,5 +124,4 @@ angular.module('negawattClientApp')
       // Realize the first load electricity data after ui-roter resolutions.
       Electricity.refresh(filters.activeElectricityHash);
     }
-
   });
