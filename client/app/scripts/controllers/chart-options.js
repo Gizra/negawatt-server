@@ -1,10 +1,13 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .controller('ChartOptionsCtrl', function() {
+  .controller('ChartOptionsCtrl', function($scope, Chart) {
     var vm = this;
 
-    vm.select = function(item) {
-      console.log(item, 'test');
+    /**
+     * Set Chart options comapre with.
+     */
+    vm.select = function() {
+      Chart.set = ('compareWith', this.compareWith);
     }
   });

@@ -15,12 +15,13 @@ angular.module('negawattClientApp')
       bindToController: true,
       scope: {
         electricity: '=',
-        compareCollection: '=',
+        compareDataset: '=',
+        compareWith: '=',
         date: '=',
         frequency: '=',
         categories: '=',
-        comparing: '=',
-        showComparation: '@'
+        hasExtraChart: '=',
+        showExtraChartButton: '@'
       }
     };
   });

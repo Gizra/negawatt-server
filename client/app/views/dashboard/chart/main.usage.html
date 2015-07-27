@@ -1,8 +1,13 @@
-<chart-detailed electricity="vm.electricity" date="123" categories="vm.categories" comparing="vm.comparing" show-comparation="true"></chart-detailed>
+<chart-detailed electricity="vm.electricity" compare-dataset="" compare-with="vm.compareWith" date="123" categories="vm.categories" has-extra-chart="vm.hasExtraChart" show-extra-chart-button="true"></chart-detailed>
 
-<chart-detailed ng-if="vm.comparing" electricity="vm.electricity" date="123"  categories="vm.categories" ></chart-detailed>
+<chart-detailed ng-if="vm.hasExtraChart" electricity="vm.electricity" compare-dataset="" compare-with="vm.compareWith" date="123" categories="vm.categories"></chart-detailed>
 
-<form name="formCompareWith" ng-controller="ChartOptionsCtrl as options">
-  <input type="radio" ng-model="options.compareWith" ng-change="options.select(this)" value="temperature">Temperature
-  <input type="radio" ng-model="options.compareWith" ng-change="options.select(this)" value="occupancy">Occupancy
+<!-- Form to select the parameters to compare with electricity data -->
+<form name="formCompareWith" ng-controller="ChartOptionsCtrl as extra">
+  <label for="temperature">
+    <input type="radio" ng-model="extra.compareWith" ng-change="extra.select()" value="temperature"> Temperature
+  </label></br>
+  <label>
+    <input type="radio" ng-model="extra.compareWith" ng-change="extra.select()" value="occupancy"> Occupancy
+  </label></br>
 </form>
