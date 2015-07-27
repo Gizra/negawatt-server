@@ -1,6 +1,6 @@
-<chart-detailed electricity="vm.electricity" compare-dataset="" compare-with="vm.compareWith" date="123" categories="vm.categories" has-extra-chart="vm.hasExtraChart" show-extra-chart-button="true"></chart-detailed>
+<chart-detailed compare-with="vm.compareWith" date="123" categories="vm.categories" has-extra-chart="vm.hasExtraChart" show-extra-chart-button="true"></chart-detailed>
 
-<chart-detailed ng-if="vm.hasExtraChart" electricity="vm.electricity" compare-dataset="" compare-with="vm.compareWith" date="123" categories="vm.categories"></chart-detailed>
+<chart-detailed ng-show="vm.hasExtraChart" compare-with="vm.compareWith" date="123" categories="vm.categories"></chart-detailed>
 
 <!-- Form to select the parameters to compare with electricity data -->
 <form name="formCompareWith" ng-controller="ChartOptionsCtrl as extra">
