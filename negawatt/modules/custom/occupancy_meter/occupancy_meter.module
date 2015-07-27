@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Occupancy meter feature.
+ */
+
+include_once 'occupancy_meter.features.inc';

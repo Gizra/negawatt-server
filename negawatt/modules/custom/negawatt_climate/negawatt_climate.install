@@ -1,0 +1,133 @@
+<?php
+
+/**
+ * @file
+ * Code for the Negawatt climate storage schema.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function negawatt_climate_schema() {
+  $schema = array();
+  $schema['negawatt_climate'] = array(
+    'description' => 'The base table for climate meter raw data.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'The primary identifier for the row.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'timestamp' => array(
+        'description' => 'timestamp of recording.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'frequency' => array(
+        'description' => 'The time-interval for the measurement: 1:year, 2:month, 3:day, 4:hour, 5:minute.',
+        'type' => 'int',
+        'unsigned' => FALSE,
+        'not null' => TRUE,
+      ),
+      'meter_nid' => array(
+        'description' => 'The electric meter NID, or Modbus NID.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'temperature' => array(
+        'description' => 'Temperature measurement (in deg. C).',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => NULL,
+      ),
+      'humidity' => array(
+        'description' => 'Relative humidity (in %).',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => NULL,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+  $schema['negawatt_climate_normalized'] = array(
+    'description' => 'The base table for climate meter averages.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'The primary identifier for the row.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'frequency' => array(
+        'description' => 'The time-interval of this data: 1:year, 2:month, 3:day, 4:hour, 5:minute.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'timestamp' => array(
+        'description' => 'timestamp of beginning of period (at 12:00PM).',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'meter_nid' => array(
+        'description' => 'The electric meter NID.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'avg_temp' => array(
+        'description' => 'Average temperature at period.',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => NULL,
+      ),
+      'max_temp' => array(
+        'description' => 'Max temperature at period.',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => NULL,
+      ),
+      'min_temp' => array(
+        'description' => 'Min temperature at period.',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => NULL,
+      ),
+      'deg_days' => array(
+        'description' => 'Degree days at period.',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => NULL,
+      ),
+      'avg_humidity' => array(
+        'description' => 'Average humidity at period.',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => NULL,
+      ),
+      'max_humidity' => array(
+        'description' => 'Max humidity at period.',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => NULL,
+      ),
+      'min_humidity' => array(
+        'description' => 'Min humidity at period.',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => NULL,
+      ),
+    ),
+    'primary key' => array('id'),
+    'indexes' => array(
+      'meter_nid' => array('meter_nid'),
+    ),
+  );
+  return $schema;
+}

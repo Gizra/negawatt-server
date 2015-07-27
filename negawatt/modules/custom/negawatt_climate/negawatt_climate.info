@@ -1,0 +1,16 @@
+name = Negawatt climate storage
+description = Store data from climate connectors
+core = 7.x
+package = Negawatt
+dependencies[] = ctools
+dependencies[] = entity
+dependencies[] = views
+features[ctools][] = strongarm:strongarm:1
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = climate_overview
+features[views_view][] = climate_raw_overview
+files[] = includes/ClimateMetadataController.php
+files[] = includes/ClimateRawMetadataController.php
+files[] = includes/Climate.php
+files[] = includes/ClimateRaw.php
