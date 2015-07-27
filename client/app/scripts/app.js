@@ -297,7 +297,7 @@ angular
           'usage@chart': {
             templateUrl: 'views/dashboard/chart/main.usage.html',
             controller: 'DetailedChartCtrl',
-            controllerAs: 'chart'
+            controllerAs: 'vm'
           }
         }
       })
