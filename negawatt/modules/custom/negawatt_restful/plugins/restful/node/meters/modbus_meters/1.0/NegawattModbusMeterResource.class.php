@@ -4,7 +4,7 @@
  * @file
  * Contains NegawattModbusMeterResource.
  */
-class NegawattModbusMeterResource extends \NegawattEntityMeterBase {
+class NegawattModbusMeterResource extends \NegawattEntityElectricityMeterBase {
   /**
    * Overrides \NegawattEntityBaseNode::publicFieldsInfo().
    */
