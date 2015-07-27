@@ -17,8 +17,13 @@
 
   <div class="col-sm-8">
     <h4 class="title state-title"><small class="date" dir="ltr">{{ chart.dateRange }}</small></h4>
-    <button ng-if="chart.showComparation" ng-click="chart.comparing = !chart.comparing">comparing: {{!!chart.chart.comparing}} </button>
-    <chart-electricity-compare electricity="chart.electricity" compareWith="" options=""></chart-electricity-compare>
+
+    <!-- Button to add comparation chart -->
+    <div ng-if="chart.showComparation">
+      <button ng-click="chart.comparing = !chart.comparing">comparing: {{!!chart.chart.comparing}} </button>
+    </div>
+
+    <chart-electricity-compare electricity="chart.electricity" compareCollection="" options=""></chart-electricity-compare>
   </div>
 
 </div>

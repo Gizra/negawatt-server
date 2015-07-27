@@ -9,7 +9,7 @@ angular.module('negawattClientApp')
     var vm = this;
 
     var getChartPeriod = ChartUsagePeriod.getChartPeriod;
-    var compareWith;
+    var compareCollection;
     var options;
 
     $scope.categories = categories;
@@ -64,9 +64,8 @@ angular.module('negawattClientApp')
     // Mock active frequency.
     Chart.setActiveFrequency(2);
 
-    vm.electricity = $filter('toChartDataset')(electricityMock.electricity, compareWith, options, 'ColumnChart');
+    vm.electricity = $filter('toChartDataset')(electricityMock.electricity, compareCollection, options, 'ColumnChart');
     console.log(vm.electricity);
-
 
     // Set the current selection label.
     if ($stateParams.markerId) {

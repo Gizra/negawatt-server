@@ -15,7 +15,7 @@ angular.module('negawattClientApp')
       bindToController: true,
       scope: {
         electricity: '=',
-        compareWith: '=',
+        compareCollection: '=',
         date: '=',
         frequency: '=',
         categories: '=',

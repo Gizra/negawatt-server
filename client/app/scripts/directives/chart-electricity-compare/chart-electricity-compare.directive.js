@@ -150,7 +150,7 @@ angular.module('negawattClientApp')
       // Isolate scope.
       scope: {
         electricity: '=',
-        compareWith: '=',
+        compareCollection: '=',
         options: '='
       }
     };
