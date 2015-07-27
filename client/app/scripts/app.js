@@ -294,14 +294,9 @@ angular
             controller: 'MessageCtrl',
             controllerAs: 'message'
           },
-          'details@chart': {
-            templateUrl: 'views/dashboard/chart/main.details.html',
-            controller: 'DetailsCtrl',
-            controllerAs: 'chart'
-          },
           'usage@chart': {
             templateUrl: 'views/dashboard/chart/main.usage.html',
-            controller: 'UsageCtrl',
+            controller: 'DetailedChartCtrl',
             controllerAs: 'chart'
           }
         }
