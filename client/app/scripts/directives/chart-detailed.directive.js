@@ -5,15 +5,21 @@ angular.module('negawattClientApp')
     return {
       templateUrl: 'scripts/directives/chart-detailed.directive.html',
       controller: function chartDetailedCtrl() {
-        
+        var chart = this;
+
+        // TODO: Calculation of data range with the directive and service of dat range.
+        chart.dateRange = chart.date;
+
+        chart.comparing = true;
       },
-      controllerAs: 'chart-detailed',
+      controllerAs: 'chart',
       bindToController: true,
       scope: {
         electricity: '=',
         compareWith: '=',
         date: '=',
-        frequency: '='
+        frequency: '=',
+        categories: '='
       }
     };
   });

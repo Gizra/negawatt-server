@@ -12,6 +12,8 @@ angular.module('negawattClientApp')
     var compareWith;
     var options;
 
+    $scope.categories = categories;
+
     // Populate the electricity data into the UI.
     vm.electricity;
 
@@ -59,13 +61,11 @@ angular.module('negawattClientApp')
       }
     };
 
-
     // Mock active frequency.
     Chart.setActiveFrequency(2);
 
     vm.electricity = $filter('toChartDataset')(electricityMock.electricity, compareWith, options, 'ColumnChart');
     console.log(vm.electricity);
-
 
 
     // Set the current selection label.
