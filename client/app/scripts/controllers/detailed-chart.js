@@ -10,6 +10,8 @@ angular.module('negawattClientApp')
 
     var getChartPeriod = ChartUsagePeriod.getChartPeriod;
 
+    $scope.categories = categories;
+
     // Populate the electricity data into the UI.
     vm.electricity;
 
