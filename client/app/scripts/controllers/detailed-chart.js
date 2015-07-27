@@ -8,9 +8,6 @@ angular.module('negawattClientApp')
   .controller('DetailedChartCtrl', function DetailedChartCtrl($scope, $state, $stateParams, $filter, Electricity, Chart, ChartUsagePeriod, FilterFactory, meters, filters, ChartElectricityUsage, categories, profile) {
     var vm = this;
 
-    $scope.charts = [];
-
-
     var getChartPeriod = ChartUsagePeriod.getChartPeriod;
 
     // Populate the electricity data into the UI.
@@ -25,9 +22,6 @@ angular.module('negawattClientApp')
     if (angular.isDefined($stateParams.markerId)) {
       // Share meter selected.
       $scope.meterSelected = meters.list[$stateParams.markerId];
-
-      // @TODO: Fix Chart usage information of the selected marker. (Mutiple charts)
-      // ChartUsage.meterSelected(meters.list[$stateParams.markerId]);
     }
 
     // Set the current selection label.
@@ -48,12 +42,6 @@ angular.module('negawattClientApp')
         }
       });
     }
-
-
-    $scope.addChart = function() {
-      $scope.charts.push($scope.chart);
-      console.log($scope.charts);
-    };
 
     /**
      * Electricity Service Event: When electricity collection change update
@@ -83,14 +71,6 @@ angular.module('negawattClientApp')
 
       // Update electricity property with active electricity (if the response has data).
       vm.electricity = $filter('activeElectricityFilters')(electricity);
-
-      if (vm.electricity) {
-        // Update the title's date range, according to the first and last
-        // selected electricity records.
-        var firstEntry = vm.electricity[0];
-        var lastEntry = vm.electricity[vm.electricity.length - 1];
-        $scope.dateRange = ChartUsagePeriod.formatDateRange(firstEntry.timestamp * 1000, lastEntry.timestamp * 1000);
-      }
     });
 
     /**
@@ -100,5 +80,4 @@ angular.module('negawattClientApp')
       // Realize the first load electricity data after ui-roter resolutions.
       Electricity.refresh(filters.activeElectricityHash);
     }
-
   });
