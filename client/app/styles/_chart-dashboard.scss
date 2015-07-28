@@ -1,5 +1,16 @@
 #wrapper.v2 {
   background: #F1F3FA;
-  height: 100%;
   padding-top: 67px;
+
+  #messages .panel-group {
+    margin: 7px 0 0 7px;
+
+    .panel-heading {
+      padding-left: 40px;
+    }
+
+    p {
+      padding-right: 20px;
+    }
+  }
 }
