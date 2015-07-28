@@ -138,7 +138,7 @@ angular.module('negawattClientApp')
          * @param activeElectricity
          *  The "active electricity" data collection.
          */
-        function renderChart(activeElectricity, compareCollection) {
+        function renderChart(activeElectricity, compareCollection, options) {
           var options = {
             'isStacked': 'true',
             'fill': 20,
