@@ -5,7 +5,7 @@ angular.module('negawattClientApp')
     return {
       restrict: 'EA',
       templateUrl: 'scripts/directives/chart-electricity-compare/chart-electricity-compare.directive.html',
-      controller: function chartElectricityUsageCtrl(ChartElectricityUsage, ChartUsagePeriod, $stateParams, $filter, $scope) {
+      controller: function chartElectricityUsageCtrl(ChartElectricityUsage, ChartUsagePeriod, Chart, $stateParams, $filter, $scope) {
         var ctrlChart = this;
 
         // Get chart frequencies. (Tabs the period of time)
@@ -138,9 +138,47 @@ angular.module('negawattClientApp')
          * @param activeElectricity
          *  The "active electricity" data collection.
          */
-        function renderChart(activeElectricity) {
+        function renderChart(activeElectricity, compareCollection) {
+          var options = {
+            'isStacked': 'true',
+            'fill': 20,
+            'displayExactValues': true,
+            'height': '500',
+            'width': '768',
+            'series': {
+              0: {targetAxisIndex: 0},
+              1: {
+                targetAxisIndex: 1,
+                type: 'line'
+              }
+            },
+            'vAxes': {
+              0: {
+                'title': 'Set a title vAxis (Ex. Electricity)',
+                'gridlines': {
+                  'count': 6
+                }
+              },
+              1: {
+                'title': 'Set a title vAxis (Ex. Temperature)',
+                'gridlines': {
+                  'count': 6
+                },
+                'chart_type': 'LineChart',
+              }
+            },
+            'hAxis': {
+              'title': 'Set a title hAxis'
+            }
+          };
+
+          // Mock active frequency.
+          Chart.setActiveFrequency(2);
+
+          ctrlChart.data = $filter('toChartDataset')(activeElectricity, compareCollection, options, 'ColumnChart');
+          console.log('Directive:', ctrlChart.data);
           // Update data comming fron the server into the directive.
-          ctrlChart.data = $filter('toChartDataset')(activeElectricity);
+          //ctrlChart.data = $filter('toChartDataset')(activeElectricity);
           // Update state.
           setState();
         }
