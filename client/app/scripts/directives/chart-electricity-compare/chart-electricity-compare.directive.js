@@ -35,7 +35,7 @@ angular.module('negawattClientApp')
             return;
           }
 
-          renderChart(current);
+          renderChart(current, ctrlChart.compareCollection, ctrlChart.options);
 
         }, true);
 
@@ -139,38 +139,6 @@ angular.module('negawattClientApp')
          *  The "active electricity" data collection.
          */
         function renderChart(activeElectricity, compareCollection, options) {
-          var options = {
-            'isStacked': 'true',
-            'fill': 20,
-            'displayExactValues': true,
-            'height': '500',
-            'width': '768',
-            'series': {
-              0: {targetAxisIndex: 0},
-              1: {
-                targetAxisIndex: 1,
-                type: 'line'
-              }
-            },
-            'vAxes': {
-              0: {
-                'title': 'Set a title vAxis (Ex. Electricity)',
-                'gridlines': {
-                  'count': 6
-                }
-              },
-              1: {
-                'title': 'Set a title vAxis (Ex. Temperature)',
-                'gridlines': {
-                  'count': 6
-                },
-                'chart_type': 'LineChart',
-              }
-            },
-            'hAxis': {
-              'title': 'Set a title hAxis'
-            }
-          };
 
           // Mock active frequency.
           Chart.setActiveFrequency(2);
