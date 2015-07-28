@@ -16,38 +16,14 @@
   </div>
 
   <div class="col-sm-8">
-    <h4 class="title state-title"><small class="date" dir="ltr">{{ dateRange }}</small></h4>
+    <h4 class="title state-title"><small class="date" dir="ltr">{{ chart.dateRange }}</small></h4>
 
-    <div ng-switch="ctrlChart.state" class="chart-container">
-
-      <!-- Spinner -->
-      <div ng-switch-when="loading" class="row chart-empty">
-        <div class="title col-md-12 col-centered text-center chart-message"><i class="fa fa-circle-o-notch fa-spin fa-2x nw-icon-loading nw-icon"></i></div>
-      </div>
-
-      <!-- No data message -->
-      <div ng-switch-when="empty" class="row chart-empty">
-        <div class="title col-md-6 col-centered text-center chart-message">{{ctrlChart.messages.empty}}</div>
-      </div>
-
-      <!-- Electricity chart -->
-      <div ng-switch-when="data">
-
-        <!-- Chart subcomponent -->
-        <div google-chart chart="ctrlChart.data" id="chart-usage" class="usageChart"></div>
-
-        <!-- Period selection -->
-        <div class="chart-navigation">
-          <button type="button" id="chart-usage-btn-arrow-left" class="btn btn-transparent btn-arrow btn-arrow-left" ng-show="ctrlChart.showNavigation('previous')" ng-click="ctrlChart.changePeriod('previous')" >
-            <span class="glyphicon glyphicon-chevron-left"></span>
-          </button>
-          <button type="button" id="chart-usage-btn-arrow-right" class="btn btn-transparent btn-arrow btn-arrow-right" ng-show="ctrlChart.showNavigation('next')" ng-click="ctrlChart.changePeriod('next')">
-            <span class="glyphicon glyphicon-chevron-right"></span>
-          </button>
-        </div>
-
-      </div>
+    <!-- Button to add comparation chart -->
+    <div ng-if="chart.showExtraChartButton">
+      <button ng-click="chart.hasExtraChart = !chart.hasExtraChart">hasExtraChart: {{!!chart.hasExtraChart}} </button>
     </div>
+
+    <chart-electricity-compare electricity="chart.electricity" compareCollection="" options=""></chart-electricity-compare>
   </div>
 
 </div>

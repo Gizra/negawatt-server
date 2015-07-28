@@ -24,9 +24,6 @@ angular.module('negawattClientApp')
     if (angular.isDefined($stateParams.markerId)) {
       // Share meter selected.
       $scope.meterSelected = meters.list[$stateParams.markerId];
-
-      // @TODO: Fix Chart usage information of the selected marker. (Mutiple charts)
-      // ChartUsage.meterSelected(meters.list[$stateParams.markerId]);
     }
 
     // Set the current selection label.
@@ -48,6 +45,11 @@ angular.module('negawattClientApp')
       });
     }
 
+    //  Force load of the electricity data.
+    if (filters.loadElectricity) {
+      // Realize the first load electricity data after ui-roter resolutions.
+      Electricity.refresh(filters.activeElectricityHash);
+    }
 
     /**
      * Electricity Service Event: When electricity collection change update
@@ -86,13 +88,5 @@ angular.module('negawattClientApp')
         $scope.dateRange = ChartUsagePeriod.formatDateRange(firstEntry.timestamp * 1000, lastEntry.timestamp * 1000);
       }
     });
-
-    /**
-     * Force load of the electricity data.
-     */
-    if (filters.loadElectricity) {
-      // Realize the first load electricity data after ui-roter resolutions.
-      Electricity.refresh(filters.activeElectricityHash);
-    }
 
   });

@@ -297,9 +297,15 @@ angular
           'usage@chart': {
             templateUrl: 'views/dashboard/chart/main.usage.html',
             controller: 'DetailedChartCtrl',
-            controllerAs: 'chart'
+            controllerAs: 'vm'
           }
         }
+      })
+      .state('onlychart', {
+        url: '/onlychart',
+        templateUrl: 'views/chart.html',
+        controller: 'BigChartCtrl',
+        controllerAs: 'vm'
       });
     // Define interceptors.
     $httpProvider.interceptors.push(function ($q, Auth, $location, localStorageService) {

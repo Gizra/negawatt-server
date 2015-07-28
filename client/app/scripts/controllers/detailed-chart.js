@@ -5,15 +5,14 @@
  * @name negawattClientApp.controller:DetailedChartCtrl
  */
 angular.module('negawattClientApp')
-  .controller('DetailedChartCtrl', function DetailedChartCtrl($scope, $state, $stateParams, $filter, Electricity, Chart, ChartUsagePeriod, FilterFactory, meters, filters, ChartElectricityUsage, categories, profile) {
+  .controller('DetailedChartCtrl', function DetailedChartCtrl($scope, $state, $stateParams, $filter, Electricity, Chart, ChartUsagePeriod, FilterFactory, meters, filters, ChartElectricityUsage, categories, profile, electricityMock) {
     var vm = this;
 
-    var getChartPeriod = ChartUsagePeriod.getChartPeriod;
+
+    var compareCollection;
+    var options;
 
     $scope.categories = categories;
-
-    // Populate the electricity data into the UI.
-    vm.electricity;
 
     // Get the parameters chart frecuency.
     if (angular.isDefined($stateParams.chartFreq)) {
@@ -45,35 +44,6 @@ angular.module('negawattClientApp')
       });
     }
 
-    /**
-     * Electricity Service Event: When electricity collection change update
-     * the active electricity (electricity data from a specific period) to
-     * usage chart directive.
-     */
-    $scope.$on("nwElectricityChanged", function(event, electricity) {
-      var missingPeriod;
-
-      if (angular.isUndefined(electricity)) {
-        return;
-      }
-
-      // Save if the period id missing on electricity request, otherwhise false.
-      missingPeriod = $filter('activeElectricityFilters')(electricity, 'noData');
-
-      if (!getChartPeriod().isConfigured()) {
-        // Configure the period for the chart frequency selected, and request
-        // specific electricity data.
-        ChartUsagePeriod.config($filter('activeElectricityFilters')(electricity, 'limits'));
-      }
-
-      if (missingPeriod && getChartPeriod().isConfigured()) {
-        ChartElectricityUsage.requestElectricity(ChartUsagePeriod.stateParams);
-        return;
-      }
-
-      // Update electricity property with active electricity (if the response has data).
-      vm.electricity = $filter('activeElectricityFilters')(electricity);
-    });
 
     /**
      * Force load of the electricity data.
