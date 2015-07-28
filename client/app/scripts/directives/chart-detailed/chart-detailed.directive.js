@@ -3,7 +3,7 @@
 angular.module('negawattClientApp')
   .directive('chartDetailed', function () {
     return {
-      templateUrl: 'scripts/directives/chart-detailed.directive.html',
+      templateUrl: 'scripts/directives/chart-detailed/chart-detailed.directive.html',
       controller: function ChartDetailedCtrl($scope, electricityMock) {
         var chart = this;
         var electricity;
