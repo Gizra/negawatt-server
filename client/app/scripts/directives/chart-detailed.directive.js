@@ -4,13 +4,13 @@ angular.module('negawattClientApp')
   .directive('chartDetailed', function () {
     return {
       templateUrl: 'scripts/directives/chart-detailed.directive.html',
-      controller: function ChartDetailedCtrl($scope, Chart, $filter, ChartUsagePeriod, ChartElectricityUsage, electricityMock) {
+      controller: function ChartDetailedCtrl($scope, electricityMock) {
         var chart = this;
         var electricity;
         var options;
         var compareCollection;
-        var getChartPeriod = ChartUsagePeriod.getChartPeriod;
 
+        chart.getData = getData;
         // TODO: Calculation of data range with the directive and service of dat range.
         chart.dateRange = chart.date;
 
@@ -48,44 +48,12 @@ angular.module('negawattClientApp')
           }
         };
 
-
         /**
-         * Electricity Service Event: When electricity collection change update
-         * the active electricity (electricity data from a specific period) to
-         * usage chart directive.
+         * Get chart dataset with options.
          */
-        $scope.$on("nwElectricityChanged", function(event, electricity) {
-          //var missingPeriod;
-          //
-          //electricity = electricityMock.electricity;
-          //
-          //if (angular.isUndefined(electricity)) {
-          //  return;
-          //}
-
-          //// Save if the period id missing on electricity request, otherwhise false.
-          //missingPeriod = $filter('activeElectricityFilters')(electricity, 'noData');
-          //
-          //if (!getChartPeriod().isConfigured()) {
-          //  // Configure the period for the chart frequency selected, and request
-          //  // specific electricity data.
-          //  ChartUsagePeriod.config($filter('activeElectricityFilters')(electricity, 'limits'));
-          //}
-          //
-          //if (missingPeriod && getChartPeriod().isConfigured()) {
-          //  ChartElectricityUsage.requestElectricity(ChartUsagePeriod.stateParams);
-          //  return;
-          //}
-
-          // Update electricity property with active electricity (if the response has data).
-          //chart.electricity = $filter('activeElectricityFilters')(electricity);
-          //chart.electricity = $filter('toChartDataset')(chart.electricity, compareCollection, options, 'ColumnChart');
-
-
-
-
-        });
-
+        function getData() {
+          console.log('getData');
+        }
 
       },
       controllerAs: 'chart',

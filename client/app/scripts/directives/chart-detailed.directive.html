@@ -18,6 +18,25 @@
   <div class="col-sm-8">
     <h4 class="title state-title"><small class="date" dir="ltr">{{ chart.dateRange }}</small></h4>
 
+    <!-- Form of filters -->
+    <form name="formChartFilters">
+      <div>
+        <input type="text" ng-init="startDate=1370034000" ng-model="startDate" ng-change="chart.getData()"/> start date (unix timestamp)
+      </div>
+      <div>
+        <input type="text" ng-init="endDate=1433106000" ng-model="endDate" ng-change="chart.getData()"/> end date (unix timestamp)
+      </div>
+      <div>
+        <input type="text" ng-init="frequency=2" ng-model="frequency" ng-change="chart.getData()"/> frequency (1: year, month, day, hour, ... 5: minutes)
+      </div>
+      <div>
+        <input type="text" ng-init="siteCategory=3" ng-model="siteCategory" ng-change="chart.getData()"/> site category
+      </div>
+      <div>
+        <input type="text" ng-init="meterCategory=100" ng-model="meterCategory" ng-change="chart.getData()"/> meter category
+      </div>
+    </form>
+
     <!-- Button to add comparation chart -->
     <div ng-if="chart.showExtraChartButton">
       <button ng-click="chart.hasExtraChart = !chart.hasExtraChart">hasExtraChart: {{!!chart.hasExtraChart}} </button>
