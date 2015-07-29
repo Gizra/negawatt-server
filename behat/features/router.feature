@@ -3,26 +3,26 @@ Feature: Router
   As authenticated user
   We need to be able navigate between states.
 
-  @javascript
+  @javascript @wip
   Scenario: Authenticate user have to see homepage when set url "/"
     Given I login with user "carlos"
     When I visit "/#/"
     Then I should see "4" markers
 
-  @javascript
+  @javascript @wip
   Scenario: Set default chart frequency monthly
     Given I login with user "carlos"
     When I visit "/#/dashboard/1"
     Then I should have 'קוט"ש בחודש' as chart usage label
 
-  @javascript
+  @javascript @wip
   Scenario: Keep chart frequency monthly at category selection
     Given I login with user "carlos"
     When I visit "/#/dashboard/1"
     Then I click "בטחון"
     Then I should have 'קוט"ש בחודש' as chart usage label
 
-  @javascript
+  @javascript @wip
   Scenario: Remove period parameters when click on a category.
     Given I login with user "carlos"
     When I visit "/#/dashboard/1"
@@ -31,7 +31,7 @@ Feature: Router
     And I click "בטחון"
     And I am on "http://localhost:9000/#/dashboard/1/category/14?chartFreq=2"
 
-  @javascript
+  @javascript @wip
   Scenario: Remove period parameters when click on home link.
     Given I login with user "carlos"
     When I visit "/#/dashboard/1"
