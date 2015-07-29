@@ -27,7 +27,36 @@
     }
   }
 
-  .tree.panel-body {
+  ul.tree {
     padding-right: 0;
+
+    ol {
+      padding-right: 20px;
+
+      .tree-level-middle {
+        margin: 0;
+
+        span {
+          margin-right: 10px;
+        }
+      }
+    }
+
+    &.panel-body {
+      padding-right: 0;
+    }
+
+    .tree-level-top {
+      margin: 0;
+
+      img {
+        right: auto;
+      }
+    }
+
+    .label {
+      margin-right: 10px;
+    }
   }
+
 }

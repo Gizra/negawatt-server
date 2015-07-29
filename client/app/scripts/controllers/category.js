@@ -17,9 +17,6 @@ angular.module('negawattClientApp')
     $scope.accountId = $stateParams.accountId;
     $scope.chartFreq = $stateParams.chartFreq;
 
-    // Selected tab in the categories selector.
-    $scope.tab = 'sites';
-
     // Activate filter of meters only if we are in the principal state.
     $scope.filterMeters = FilterFactory.showCategoryFilters();
 
