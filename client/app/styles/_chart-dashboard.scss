@@ -1,9 +1,22 @@
 #wrapper.v2 {
   background: #F1F3FA;
-  padding-top: 67px;
+  padding-top: 80px;
+
+  .panel.tabs {
+    // Merge the top border with the nav tabs bottom border.
+    margin-top: -1px;
+  }
+
+  .nav-tabs {
+    margin: 0 4px;
+
+    li {
+      cursor: pointer;
+    }
+  }
 
   #messages .panel-group {
-    margin: 7px 0 0 7px;
+    margin: 0 0 0 7px;
 
     .panel-heading {
       padding-left: 40px;
@@ -12,5 +25,9 @@
     p {
       padding-right: 20px;
     }
+  }
+
+  .tree.panel-body {
+    padding-right: 0;
   }
 }

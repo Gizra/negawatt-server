@@ -1,0 +1,10 @@
+<ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" ng-click="tab = 'sites'">אתרים</a></li>
+    <li><a data-toggle="tab" ng-click="tab = 'categories'">קטגוריות</a></li>
+</ul>
+<div class="panel panel-default tabs">
+    <div class="panel-body">
+        <div ng-if="tab == 'sites'" ng-include="'views/dashboard/chart/tab.sites.html'"></div>
+        <div ng-if="tab == 'categories'" ng-include="'views/dashboard/chart/tab.categories.html'"></div>
+    </div>
+</div>

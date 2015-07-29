@@ -286,7 +286,7 @@ angular
             controller: 'MenuCtrl'
           },
           'categories@chart': {
-            templateUrl: 'views/dashboard/chart/main.categories.html',
+            templateUrl: 'views/dashboard/chart/main.meters.html',
             controller: 'CategoryCtrl'
           },
           'messages@chart': {
