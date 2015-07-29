@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Negawatt meter_site feature.
+ */
+
+include_once 'negawatt_site.features.inc';

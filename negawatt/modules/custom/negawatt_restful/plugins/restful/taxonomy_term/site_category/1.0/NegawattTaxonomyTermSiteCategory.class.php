@@ -2,10 +2,10 @@
 
 /**
  * @file
- * Contains \NegawattTaxonomyTermMeterCategory.
+ * Contains \NegawattTaxonomyTermSiteCategory.
  */
 
-class NegawattTaxonomyTermMeterCategory extends \RestfulEntityBaseTaxonomyTerm {
+class NegawattTaxonomyTermSiteCategory extends \RestfulEntityBaseTaxonomyTerm {
 
   /**
    * {@inheritdoc}
@@ -79,10 +79,10 @@ class NegawattTaxonomyTermMeterCategory extends \RestfulEntityBaseTaxonomyTerm {
 
   /**
    * Callback function to calculate the min and max timestamps of normalized-
-   * electricity data related to the meter.
+   * electricity data related to the site.
    *
    * @param $wrapper
-   *   A wrapper to the meter object.
+   *   A wrapper to the site object.
    *
    * @return array
    *   {
@@ -92,35 +92,32 @@ class NegawattTaxonomyTermMeterCategory extends \RestfulEntityBaseTaxonomyTerm {
    *  If no electricity data is found, return false.
    */
   protected function electricityMinMax($wrapper) {
-    // Find normalized-electricity entities that are related to this meter
+    // Find normalized-electricity entities that are related to this site
     // min and max timestamps
 
     // First, list all children categories of the category.
     $categories = $this->getChildren($wrapper);
     $categories[] = $wrapper->getIdentifier();
 
-    // Gather the meters related to these categories.
-    $meters = array();
+    // Gather the sites related to these categories.
+    $sites = array();
     foreach($categories as $category) {
-      $meters = array_merge($meters, taxonomy_select_nodes($category));
+      $sites = array_merge($sites, taxonomy_select_nodes($category));
     }
 
-    if (empty($meters)) {
+    if (empty($sites)) {
       return NULL;
     }
 
-    // Query min and max timestamps of the meters.
-    $query = db_select('negawatt_electricity_normalized', 'e');
-
-    // Find electricity entities which are related to the relevant meters.
-    $query->condition('e.meter_nid', $meters, 'IN');
+    // Find electricity entities which are related to the relevant sites.
+    $query->condition('e.site_nid', $sites, 'IN');
 
     // Add a query for electricity min and max timestamps.
     $query->addExpression('MIN(e.timestamp)', 'min');
     $query->addExpression('MAX(e.timestamp)', 'max');
 
     // Set grouping.
-    $query->groupBy('e.meter_nid');
+    $query->groupBy('e.site_nid');
 
     return $query->execute()->fetchObject();
   }

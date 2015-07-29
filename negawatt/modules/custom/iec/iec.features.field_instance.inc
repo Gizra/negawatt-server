@@ -13,15 +13,7 @@ function iec_field_default_field_instances() {
   // Exported field_instance: 'node-iec_meter-field_address'
   $field_instances['node-iec_meter-field_address'] = array(
     'bundle' => 'iec_meter',
-    'default_value' => array(
-      0 => array(
-        'element_key' => 'node|iec_meter|field_address|und|0',
-        'thoroughfare' => '',
-        'premise' => '',
-        'locality' => '',
-        'country' => 'IL',
-      ),
-    ),
+    'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
     'display' => array(
@@ -56,9 +48,12 @@ function iec_field_default_field_instances() {
       'module' => 'addressfield',
       'settings' => array(
         'available_countries' => array(),
-        'default_country' => '',
+        'default_country' => 'IL',
         'format_handlers' => array(
           'address' => 'address',
+          'address-optional' => 'address-optional',
+          'address-hide-postal-code' => 0,
+          'address-hide-street' => 0,
           'address-hide-country' => 0,
           'organisation' => 0,
           'name-full' => 0,
@@ -66,7 +61,7 @@ function iec_field_default_field_instances() {
         ),
       ),
       'type' => 'addressfield_standard',
-      'weight' => 10,
+      'weight' => 11,
     ),
   );
 
@@ -155,7 +150,7 @@ function iec_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 2,
+      'weight' => 3,
     ),
   );
 
@@ -198,7 +193,7 @@ function iec_field_default_field_instances() {
         'display_label' => 1,
       ),
       'type' => 'options_onoff',
-      'weight' => 18,
+      'weight' => 17,
     ),
   );
 
@@ -248,7 +243,7 @@ function iec_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 20,
+      'weight' => 18,
     ),
   );
 
@@ -301,7 +296,7 @@ function iec_field_default_field_instances() {
         'year_range' => '-3:+3',
       ),
       'type' => 'date_text',
-      'weight' => 13,
+      'weight' => 14,
     ),
   );
 
@@ -346,7 +341,7 @@ function iec_field_default_field_instances() {
       'module' => 'geolocation',
       'settings' => array(),
       'type' => 'geolocation_text',
-      'weight' => 3,
+      'weight' => 4,
     ),
   );
 
@@ -389,7 +384,7 @@ function iec_field_default_field_instances() {
         'display_label' => 1,
       ),
       'type' => 'options_onoff',
-      'weight' => 4,
+      'weight' => 5,
     ),
   );
 
@@ -426,7 +421,7 @@ function iec_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 14,
+      'weight' => 15,
     ),
   );
 
@@ -472,7 +467,7 @@ function iec_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 8,
+      'weight' => 9,
     ),
   );
 
@@ -515,7 +510,7 @@ function iec_field_default_field_instances() {
         'display_label' => 1,
       ),
       'type' => 'options_onoff',
-      'weight' => 12,
+      'weight' => 13,
     ),
   );
 
@@ -561,7 +556,50 @@ function iec_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 9,
+      'weight' => 10,
+    ),
+  );
+
+  // Exported field_instance: 'node-iec_meter-field_meter_site'
+  $field_instances['node-iec_meter-field_meter_site'] = array(
+    'bundle' => 'iec_meter',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 26,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_meter_site',
+    'label' => 'Meter site',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'entityreference',
+      'settings' => array(
+        'match_operator' => 'CONTAINS',
+        'path' => '',
+        'size' => 60,
+      ),
+      'type' => 'entityreference_autocomplete',
+      'weight' => 2,
     ),
   );
 
@@ -604,7 +642,7 @@ function iec_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => 11,
+      'weight' => 12,
     ),
   );
 
@@ -644,7 +682,7 @@ function iec_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 5,
+      'weight' => 6,
     ),
   );
 
@@ -684,7 +722,7 @@ function iec_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 6,
+      'weight' => 7,
     ),
   );
 
@@ -724,7 +762,7 @@ function iec_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 7,
+      'weight' => 8,
     ),
   );
 
@@ -805,7 +843,7 @@ function iec_field_default_field_instances() {
           'concatenate' => FALSE,
         ),
         'type' => 'og_vocab',
-        'weight' => 23,
+        'weight' => 25,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -849,6 +887,7 @@ function iec_field_default_field_instances() {
   t('Meter Code');
   t('Meter Serial');
   t('Meter processed');
+  t('Meter site');
   t('OG vocabulary');
   t('Parent contract');
   t('Place Address');
