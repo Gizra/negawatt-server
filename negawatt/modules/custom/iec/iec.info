@@ -34,7 +34,6 @@ features[field_base][] = field_meter_category
 features[field_base][] = field_meter_code
 features[field_base][] = field_meter_processed
 features[field_base][] = field_meter_serial
-features[field_base][] = field_meter_site
 features[field_base][] = field_parent_contract
 features[field_base][] = field_place_address
 features[field_base][] = field_place_description
