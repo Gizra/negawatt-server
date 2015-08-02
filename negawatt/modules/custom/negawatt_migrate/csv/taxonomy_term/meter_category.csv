@@ -1,4 +1,6 @@
 id,name,weight,description,field_icon_categories,field_match_strings
+main,ראשי,,מונה ראשי,
+main-iec,ראשי חח"י,,מונה ראשי של חברת החשמל,
 chiller,צ'ילר,,מערכות קירור וחימום,
 lighting,תאורה,,מערכות תאורה,
 refrigeration,מקררים,,מקררים,

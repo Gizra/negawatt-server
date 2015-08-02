@@ -65,49 +65,6 @@ function occupancy_meter_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-occupancy_meter-field_category_valid'
-  $field_instances['node-occupancy_meter-field_category_valid'] = array(
-    'bundle' => 'occupancy_meter',
-    'default_value' => array(
-      0 => array(
-        'value' => 0,
-      ),
-    ),
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'list',
-        'settings' => array(),
-        'type' => 'list_default',
-        'weight' => 11,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_category_valid',
-    'label' => 'Category valid',
-    'required' => 0,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(
-        'display_label' => 1,
-      ),
-      'type' => 'options_onoff',
-      'weight' => 10,
-    ),
-  );
-
   // Exported field_instance: 'node-occupancy_meter-field_image'
   $field_instances['node-occupancy_meter-field_image'] = array(
     'bundle' => 'occupancy_meter',
@@ -636,48 +593,9 @@ function occupancy_meter_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-occupancy_meter-og_vocabulary'
-  $field_instances['node-occupancy_meter-og_vocabulary'] = array(
-    'bundle' => 'occupancy_meter',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'og_vocab',
-        'settings' => array(
-          'concatenate' => FALSE,
-        ),
-        'type' => 'og_vocab',
-        'weight' => 7,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'og_vocabulary',
-    'label' => 'OG vocabulary',
-    'required' => FALSE,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'module' => 'og_vocab',
-      'settings' => array(),
-      'type' => 'og_vocab_complex',
-      'weight' => 9,
-    ),
-  );
-
   // Translatables
   // Included for use with string extractors like potx.
   t('Address');
-  t('Category valid');
   t('Groups audience');
   t('Has data');
   t('Image');
@@ -687,7 +605,6 @@ function occupancy_meter_field_default_field_instances() {
   t('Max frequency');
   t('Meter processed');
   t('Meter site');
-  t('OG vocabulary');
   t('Place Address');
   t('Place Description');
   t('Place Locality');

@@ -1,8 +1,8 @@
-Unique ID,title,Account ref,Location,Contract ID,locality,address,Place Description,Meter Code,Meter Serial,Country,Last processed,Meter category,Max frequency
-meter1,meter1,account1,31.6111|34.7744,1339935,kiryat gat,hazmaut 22,בית ספר רבין,442,36088587,IL,2014-8-1 00:00,,2
-meter2,meter2,account1,31.6111|34.7684,9311819,kiryat gat,zahal 28,עמ 123 מקלט 12,74,1203513,IL,2014-8-1 00:00,shelter_1,2
-meter3,meter3,account1,31.6027|34.7640,968881,kiryat gat,gat 80,בטחון,464,10187716,IL,2014-8-1 00:00,shelter_1,5
-meter4,meter4,account1,31.6030|34.7695,946358,kiryat gat,gat 150,בטחון,54,1165489,IL,2014-8-1 00:00,water_1,5
-meter10,meter10,account2,29.5523145|34.9543239,1339935,Eilat,Tarshish St,נמלון ירוונה,335,86088587,IL,2014-8-1 00:00,nirvana-iec,2
-meter11,meter11,account2,29.551895|34.951700,5985819,Eilat,Derekh Yotam 4,נירוונה - מונה משנה - צ'ילרים,74,1203513,IL,2014-8-1 00:00,nirvana-iec,2
-meter12,meter12,account2,29.551474|34.957052,968881,Eilat,Ofira Park,מלון סיסייד,564,10456716,IL,2014-8-1 00:00,seaside-iec,5
+Unique ID,title,Account ref,Location,Contract ID,locality,address,Place Description,Meter Code,Meter Serial,Country,Last processed,Meter category,Meter site,Max frequency
+meter1,rabin school,account1,31.6111|34.7744,1339935,kiryat gat,hazmaut 22,בית ספר רבין,442,36088587,IL,2014-08-01 00:00,main-iec,site1,2
+meter2,shelter,account1,31.6111|34.7684,9311819,kiryat gat,zahal 28,עמ 123 מקלט 12,74,1203513,IL,2014-08-01 00:00,main-iec,site2,2
+meter3,Security-1,account1,31.6027|34.7640,968881,kiryat gat,gat 80,בטחון,464,10187716,IL,2014-08-01 00:00,main-iec,site3,5
+meter4,Security-2,account1,31.6030|34.7695,946358,kiryat gat,gat 150,בטחון,54,1165489,IL,2014-08-01 00:00,main-iec,site4,5
+meter10,Nirvana-main,account2,29.5523145|34.9543239,1339935,Eilat,Tarshish St,נמלון ירוונה,335,86088587,IL,2014-08-01 00:00,main-iec,site10,2
+meter11,Nirvana-chiller,account2,29.551895|34.951700,5985819,Eilat,Derekh Yotam 4,נירוונה - מונה משנה - צ'ילרים,74,1203513,IL,2014-08-01 00:00,chiller,site10,2
+meter12,Seaside,account2,29.551474|34.957052,968881,Eilat,Ofira Park,מלון סיסייד,564,10456716,IL,2014-08-01 00:00,main-iec,site12,5

@@ -37,88 +37,42 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     $settings[OG_GROUP_FIELD] = array('und' => array('0' => array('value' => 2)));
     $account_node2 = $this->drupalCreateNode($settings);
 
-    // Create vocabularies and OG_Vocabs
-    // Create a new vocabulary
-    $vocabulary1 = (object) array(
-      'name' => 'Meter categories for account 1',
-      'machine_name' => 'meter_category_account1',
-    );
-    taxonomy_vocabulary_save($vocabulary1);
-
-    // Create an OG-vocab and relate new vocabulary with OG.
-    $og_vocab_settings = array(
-      'cardinality' => 1,
-      'required' => FALSE,
-    );
-    // Create og-vocabulary for meter types.
-    $og_vocab = og_vocab_create_og_vocab($vocabulary1->vid, 'node', 'iec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
-    $og_vocab->save();
-    $og_vocab = og_vocab_create_og_vocab($vocabulary1->vid, 'node', 'modbus_meter', OG_VOCAB_FIELD, $og_vocab_settings);
-    $og_vocab->save();
-
-    // Relate vocabulary 1 to account 1.
-    og_vocab_relation_save($vocabulary1->vid, 'node', $account_node1->nid);
-
-    // Create second vocabulary
-    $vocabulary2 = (object) array(
-      'name' => 'Meter categories for account 2',
-      'machine_name' => 'meter_category_account2',
-    );
-    taxonomy_vocabulary_save($vocabulary2);
-
-    // Create og-vocabulary for meter types.
-    $og_vocab = og_vocab_create_og_vocab($vocabulary2->vid, 'node', 'iec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
-    $og_vocab->save();
-    $og_vocab = og_vocab_create_og_vocab($vocabulary2->vid, 'node', 'modbus_meter', OG_VOCAB_FIELD, $og_vocab_settings);
-    $og_vocab->save();
-
-    // Relate vocabulary 2 to account 2.
-    og_vocab_relation_save($vocabulary2->vid, 'node', $account_node2->nid);
-
-    // Attach taxonomy-term fields to the bundles.
-    negawatt_meter_field_attach_create_bundle('taxonomy_term', 'meter_category_account1');
-    negawatt_meter_field_attach_create_bundle('taxonomy_term', 'meter_category_account2');
+    $this->account_node1 = $account_node1;
+    $this->account_node2 = $account_node2;
 
     // Create several meter-categories.
-    // Add school to account 1.
+
+    // Get the vocabulary
+    $vocabulary = taxonomy_vocabulary_machine_name_load('meter_category');
+
+    // Add school.
     $values = array(
-      'vid' => $vocabulary1->vid,
-      'name' => 'account1 school',
-      'vocabulary_machine_name' => $vocabulary1->machine_name,
+      'vid' => $vocabulary->vid,
+      'name' => 'school',
+      'vocabulary_machine_name' => $vocabulary->machine_name,
     );
     $term = entity_create('taxonomy_term', $values);
     $wrapper = entity_metadata_wrapper('taxonomy_term', $term);
     $wrapper->field_match_strings->set('בית ספר|בי"ס');
     $wrapper->save();
     // Save term id for late use.
-    $this->taxonomy_term_ids['account 1 school'] = $term->tid;
+    $this->taxonomy_term_ids['school'] = $term->tid;
 
-    // Add 'other' to account 1.
+    // Add 'other'.
     $values['name'] = 'אחר';
     $term = entity_create('taxonomy_term', $values);
     entity_save('taxonomy_term', $term);
     // Save term id for late use.
-    $this->taxonomy_term_ids['account 1 other'] = $term->tid;
+    $this->taxonomy_term_ids['other'] = $term->tid;
 
-    // Add 'other' to account 2.
-    $values['vid'] = $vocabulary2->vid;
-    $values['vocabulary_machine_name'] = $vocabulary2->machine_name;
-    $term = entity_create('taxonomy_term', $values);
-    entity_save('taxonomy_term', $term);
-    // Save term id for late use.
-    $this->taxonomy_term_ids['account 2 other'] = $term->tid;
-
-    // Add 'street light' to account 2.
-    $values['name'] = 'account2 street light';
+    // Add 'street light'.
+    $values['name'] = 'street light';
     $term = entity_create('taxonomy_term', $values);
     $wrapper = entity_metadata_wrapper('taxonomy_term', $term);
     $wrapper->field_match_strings->set('תאורת|מאור');
     $wrapper->save();
     // Save term id for late use.
-    $this->taxonomy_term_ids['account 2 street light'] = $term->tid;
-
-    $this->account_node1 = $account_node1;
-    $this->account_node2 = $account_node2;
+    $this->taxonomy_term_ids['street light'] = $term->tid;
   }
 
   /**
@@ -163,13 +117,12 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     $settings['field_place_description'] = array('und' => array('0' => array('value' => 'תיאור לא ברור')));
     $meter_node4 = $this->drupalCreateNode($settings);
 
-    // Meter 5 should be assigned to category 'other' too, since ther's no
-    // street lighting category in account 1.
+    // Meter 5 should be assigned to category 'street light'.
     $settings['field_place_description'] = array('und' => array('0' => array('value' => 'מאור רחובות')));
     $meter_node5 = $this->drupalCreateNode($settings);
 
     // Meter 6 for account 2.
-    // Meter 6 should be assigned to category 'street light' since in account 2
+    // Meter 6 should be assigned to category 'street light'.
     // there is such a category.
     $settings[OG_AUDIENCE_FIELD] = array('und' => array('0' => array('target_id' => 2)));
     $meter_node6 = $this->drupalCreateNode($settings);
@@ -313,16 +266,16 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
 
     // Test meter category.
     $meter = $response[0];
-    $tax_id = $this->taxonomy_term_ids['account 1 school'];
+    $tax_id = $this->taxonomy_term_ids['school'];
     $this->assertEqual($meter['meter_categories'][$tax_id]['id'], $tax_id, 'Meter 3 category field (school) is correct.');
     $meter = $response[1];
-    $tax_id = $this->taxonomy_term_ids['account 1 other'];
+    $tax_id = $this->taxonomy_term_ids['other'];
     $this->assertEqual($meter['meter_categories'][$tax_id]['id'], $tax_id, 'Meter 4 category field (other) is correct.');
     $meter = $response[2];
-    $tax_id = $this->taxonomy_term_ids['account 1 other'];
-    $this->assertEqual($meter['meter_categories'][$tax_id]['id'], $tax_id, 'Meter 5 category field (other) is correct.');
+    $tax_id = $this->taxonomy_term_ids['street light'];
+    $this->assertEqual($meter['meter_categories'][$tax_id]['id'], $tax_id, 'Meter 5 category field (street light) is correct.');
     $meter = $response[3];
-    $tax_id = $this->taxonomy_term_ids['account 2 street light'];
+    $tax_id = $this->taxonomy_term_ids['street light'];
     $this->assertEqual($meter['meter_categories'][$tax_id]['id'], $tax_id, 'Meter 6 category field (street light) is correct.');
 
     // Test POST request
@@ -392,6 +345,12 @@ class NegawattRestfulTestCase extends NegawattWebTestCase {
     $this->assertEqual($entity['timestamp'], strtotime('2014-6-12 16:00'), 'Entity timestamp is correct.');
     $summary = $handler->getValueMetadata('electricity', 'summary');
     $this->assertEqual($summary['type'], 'category', 'Summary type is correct.');
+    $this->assertEqual(count($summary['values']), 1, 'Only one category in summary.');
+    $this->assertTrue(!empty($summary['values'][1]), 'Category 1 ("other") in summary.');
+    $this->assertEqual($summary['values'][1], 11360, 'Summary value is correct.');
+    $this->assertTrue(!empty($summary['timestamp']), 'Timestamp appears in summary.');
+    $this->assertEqual($summary['timestamp']['min'], strtotime('2014-6-12 00:00'), 'Min timestamp value is correct.');
+    $this->assertEqual($summary['timestamp']['max'], strtotime('2014-6-12 16:00'), 'Max timestamp value is correct.');
 
     // @todo: Add test for summation of kWh of different meters. For that we
     // need to get the data from a database.

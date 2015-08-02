@@ -29,32 +29,11 @@ class NegawattNormalizerMeterProcessTestCase extends NegawattWebTestCase {
     );
     $account_node1 = $this->drupalCreateNode($settings);
 
-    // Create vocabularies and OG_Vocabs
-    // Create a new vocabulary
-    $vocabulary1 = (object) array(
-      'name' => 'Meter categories for account 1',
-      'machine_name' => 'meter_category_account1',
-    );
-    taxonomy_vocabulary_save($vocabulary1);
+    // Add 'other' term to meter-category vocab.
+    // Get the vocabulary
+    $vocabulary1 = taxonomy_vocabulary_machine_name_load('meter_category');
 
-    // Create an OG-vocab and relate new vocabulary with OG.
-    $og_vocab_settings = array(
-      'cardinality' => 1,
-      'required' => FALSE,
-    );
-    // Create og-vocabulary for meter types.
-    $og_vocab = og_vocab_create_og_vocab($vocabulary1->vid, 'node', 'iec_meter', OG_VOCAB_FIELD, $og_vocab_settings);
-    $og_vocab->save();
-    $og_vocab = og_vocab_create_og_vocab($vocabulary1->vid, 'node', 'modbus_meter', OG_VOCAB_FIELD, $og_vocab_settings);
-    $og_vocab->save();
-
-    // Relate vocabulary to account 1.
-    og_vocab_relation_save($vocabulary1->vid, 'node', $account_node1->nid);
-
-    // Attach taxonomy-term fields to the bundles.
-    negawatt_meter_field_attach_create_bundle('taxonomy_term', 'meter_category_account1');
-
-    // Add 'other' to account 1.
+    // Add 'other' to meter_category.
     $values = array(
       'vid' => $vocabulary1->vid,
       'name' => 'אחר',

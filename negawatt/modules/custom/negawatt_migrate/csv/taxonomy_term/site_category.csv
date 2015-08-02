@@ -1,4 +1,4 @@
-id,name,parent,weight,description,field_icon_categories,field_match_strings
+Unique ID,name,parent,weight,description,field_icon_categories,field_match_strings
 public,מבנה ציבור,,,מבנים ציבוריים כגון משרדים,public_building,
 office,מבנה משרדים,מבנה ציבור,,מבנה משרדים,public_building,
 municipality,משרדי העירייה,מבנה ציבור,,משרדי העירייה,public_building,עירייה|משרד|עיריה|עיריית|אגף
@@ -38,4 +38,5 @@ club,מועדון,רווחה,,מועדון,welfare,מועדון|מועדונית
 elderly,מרכז יום לקשיש,רווחה,,מרכז יום לקשיש,welfare,קשישים|לקשיש
 community,מרכז קהילתי,רווחה,,מרכז קהילתי,welfare,
 culture,תרבות,,,תרבות,culture,
+hotel,מלון,,,מלון,hotel,מלון|אכסניית|אכסנייה
 other,אחר,,,אחר,other,

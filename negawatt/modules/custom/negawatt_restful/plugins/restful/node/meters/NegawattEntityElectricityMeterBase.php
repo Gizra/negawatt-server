@@ -70,22 +70,17 @@ class NegawattEntityElectricityMeterBase extends \NegawattEntityMeterBase {
    */
   protected function meterCategories($value) {
     $wrapper = entity_metadata_wrapper('node', $value);
-    $meter_categories = $wrapper->{OG_VOCAB_FIELD}->value();
-    // Loop for meter-category vocabularies only
+    $meter_category = $wrapper->field_meter_category->value();
+
+    // Get category parents
     $category_ids = array();
-    foreach ($meter_categories as $meter_category) {
-      if (strpos($meter_category->vocabulary_machine_name, 'meter_category_') === FALSE) {
-        // Not a meter category vocabulary, skip.
-        continue;
-      }
-      $categories = taxonomy_get_parents_all($meter_category->tid);
-      foreach ($categories as $category) {
-        $wrapper_category = entity_metadata_wrapper('taxonomy_term', $category);
-        $category_ids[$wrapper_category->tid->value()] = array(
-          "id" => $wrapper_category->tid->value(),
-          "name" => $wrapper_category->field_icon_categories->value(),
-        );
-      }
+    $categories = taxonomy_get_parents_all($meter_category->tid);
+    foreach ($categories as $category) {
+      $wrapper_category = entity_metadata_wrapper('taxonomy_term', $category);
+      $category_ids[$wrapper_category->tid->value()] = array(
+        "id" => $wrapper_category->tid->value(),
+        "name" => $wrapper_category->field_icon_categories->value(),
+      );
     }
 
     return $category_ids;
