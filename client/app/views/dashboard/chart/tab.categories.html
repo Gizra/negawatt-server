@@ -1,35 +1,3 @@
-<ul ui-tree data-drag-enabled="false" data-empty-place-holder-enabled="false" class="tree">
-  <ol ui-tree-nodes="">
-    <li ng-repeat="category in categories.tree" ui-tree-node ng-show="hasMeters(category)">
-      <div ui-tree-handle class="tree-level-top">
-        <a ng-click="select(category.id)" ng-class="{'active-category':  ('categoryId' | includedByParams:category.id) }" href="">
-          <img ng-src="images/categories/{{category.icon}}.png" alt="icon-{{category.icon}}"/>
-          <span>{{category.label}}</span> ({{category.meters}})
-        </a>
-        <input ng-change="toggleMetersByCategory(category)" ng-model="category.checked" ng-show="filterMeters" ui-indeterminate="category.indeterminate" class="hide-meters-category" type="checkbox" name="{{category.label}}"/>
-      </div>
-      <ol ui-tree-nodes="" ng-model="category.children" >
-        <li ng-repeat="subCategory in category.children" ui-tree-node ng-show="hasMeters(subCategory)">
-          <div ui-tree-handle class="tree-level-middle">
-            <a ng-click="select(subCategory.id)" ng-class="{'active-category':  ('categoryId' | includedByParams:subCategory.id) }" href="">
-              <i class="glyphicon glyphicon-chevron-left"></i>
-              <span>{{subCategory.label}}</span> ({{subCategory.meters}})
-            </a>
-            <input ng-change="toggleMetersByCategory(subCategory)" ng-model="subCategory.checked" ng-show="filterMeters" ui-indeterminate="subCategory.indeterminate" class="hide-meters-category" type="checkbox" name="{{subCategory.label}}"/>
-          </div>
-          <ol ui-tree-nodes="" ng-model="subCategory.children">
-            <li ng-repeat="subCategory2 in subCategory.children" ui-tree-node ng-show="hasMeters(subCategory2)">
-              <div ui-tree-handle class="tree-level-bottom">
-                <a ng-click="select(subCategory2.id)" ng-class="{'active-category':  ('categoryId' | includedByParams:subCategory2.id) }" href="">
-                  <i class="glyphicon glyphicon-plus"></i>
-                  <span>{{subCategory2.label}}</span> ({{subCategory2.meters}})
-                </a>
-                <input ng-change="toggleMetersByCategory(subCategory2)" ng-model="subCategory2.checked" ng-show="filterMeters" class="hide-meters-category" type="checkbox" name="{{subCategory2.label}}"/>
-              </div>
-            </li>
-          </ol>
-        </li>
-      </ol>
-    </li>
-  </ol>
-</ul>
+<ol ui-tree-nodes="" ng-model="meterCategoriesTree" id="tree-root" ui-tree data-drag-enabled="false" class="tree by-category">
+    <li ng-repeat="category in meterCategoriesTree" ui-tree-node ng-include="'views/dashboard/chart/branch.category.html'"></li>
+</ol>

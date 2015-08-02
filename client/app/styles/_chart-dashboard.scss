@@ -27,13 +27,17 @@
     }
   }
 
-  ul.tree {
+  button.clear-selection {
+    font-size: 75%;
+    padding: 1px 2px;
+  }
+
+  .tree {
     padding-right: 0;
+    margin-top: 10px;
 
     ol {
-      border: 1px solid #ccc;
-      padding: 10px 20px 10px 10px;
-      margin-bottom: 20px;
+      padding: 0 15px 0 0;
 
       .tree-level-middle {
         margin: 0;
@@ -41,6 +45,16 @@
         span {
           margin-right: 10px;
         }
+      }
+    }
+
+    ol.meters {
+      border: 1px solid #ccc;
+      padding: 10px 10px 10px 0;
+      margin-bottom: 20px;
+
+      .category-labels {
+        display: inline;
       }
     }
 
@@ -57,15 +71,24 @@
     }
 
     .label {
-      margin-right: 10px;
+      margin-right: 1px;
+      font-size: 70%;
     }
 
     label {
       display: inline;
 
       span {
-        margin-right: 10px;
+        margin-left: 5px;
       }
+    }
+
+    &.by-category .meter .category-labels {
+      display: none;
+    }
+
+    &.by-site .meter .label.site {
+      display: none;
     }
   }
 

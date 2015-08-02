@@ -1,24 +1,3 @@
-<ul ui-tree class="tree">
-
-    <li ng-repeat="site in sites" class="tree-level-top">
-        <label>
-            <input ng-change="toggleMetersByCategory(site.id)" ng-model="site.checked" type="checkbox" />
-            <img ng-src="images/categories/{{ siteCategories[site.category].icon }}.png" />
-            <span>{{ site.label }}</span>
-        </label>
-
-        <span class="label" style="background: {{ siteCategories[site.category].background }}">{{ siteCategories[site.category].label }}</span>
-
-        <ol>
-            <li ng-repeat="meterId in site.meters" class="tree-level-middle">
-                <label>
-                    <input ng-change="toggleMetersByCategory(meterId)" ng-model="meter.checked" type="checkbox" />
-
-                    <span>{{ meters[meterId].label }}</span>
-                </label>
-
-                <span class="label" style="background: {{ meterCategories[meters[meterId].category].background }}">{{ meterCategories[meters[meterId].category].label }}</span>
-            </li>
-        </ol>
-    </li>
-</ul>
+<ol ui-tree-nodes="" ng-model="siteCategoriesTree" ui-tree data-drag-enabled="false" class="tree by-site">
+    <li ng-repeat="category in siteCategoriesTree" ui-tree-node ng-include="'views/dashboard/chart/branch.category.html'"></li>
+</ol>

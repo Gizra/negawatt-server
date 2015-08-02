@@ -34,7 +34,8 @@ angular
     'template/accordion/accordion.html',
     'angularMoment',
     'ui.indeterminate',
-    'angular.filter'
+    'angular.filter',
+    'ui.tree'
   ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
     // Handle state 'dashboard' activation via browser url '/'
