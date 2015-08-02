@@ -1,0 +1,41 @@
+id,name,parent,weight,description,field_icon_categories,field_match_strings
+public,מבנה ציבור,,,מבנים ציבוריים כגון משרדים,public_building,
+office,מבנה משרדים,מבנה ציבור,,מבנה משרדים,public_building,
+municipality,משרדי העירייה,מבנה ציבור,,משרדי העירייה,public_building,עירייה|משרד|עיריה|עיריית|אגף
+library,ספריה,מבנה ציבור,,ספריה,public_building,ספריה
+edu,מבנה חינוך,,,מבנה חינוך,education,
+kindergarten,גן ילדים,מבנה חינוך,,גני ילדים,education,גן|פעוטון
+school,בית ספר,מבנה חינוך,,בתי ספר,education,"בית ספר|בית הספר|בי""ס|ביה""ס|ביהס|בה""ס"
+pais,אשכול פיס,מבנה חינוך,,אשכול פיס,education,אשכול פיס|אשכולות פיס
+youth,מרכז נוער,מבנה חינוך,,מרכז נוער,education,
+pedago,מרכז פדגוגי,מבנה חינוך,,מרכז פדגוגי,education,פדגוגי
+outdoor,תאורת חוץ,,,תאורת חוץ,lighting,
+street,תאורת רחובות,תאורת חוץ,,תאורת רחובות,lighting,תאורת|מאור|מרכזיה|מ.רחובות|פארק|תאורה|מרכזית
+traffic,רמזור,תאורת חוץ,,רמזור,traffic_light,רמזור
+security,בטחון,,,בטחון,security,
+shelter,מקלט,בטחון,,מקלט,security,מקלט
+storeroom,מחסן חרום,בטחון,,מחסן חרום,security,מחסן
+police,שיטור קהילתי,בטחון,,שיטור קהילתי,security,שיטור|משמר
+sport,מתקן ספורט,,,מתקן ספורט,sports,
+pool,בריכת שחייה,מתקן ספורט,,בריכת שחייה,sports,שחייה|שחיה
+field,מגרש ספורט,מתקן ספורט,,מגרש ספורט,sports,מגרש
+hall,אולם ספורט,מתקן ספורט,,אולם ספורט,sports,אולם
+religion,שרותי דת,,,שרותי דת,religion,
+prayer,בית תפילה,שרותי דת,,בית תפילה,religion,
+synagogue,בית כנסת,בית תפילה,,בית כנסת,religion,כנסת
+church,כנסיה,בית תפילה,,כנסיה,religion,כנסיה
+mosque,מסגד,בית תפילה,,מסגד,religion,מסגד
+relcouncil,מועצה דתית,שרותי דת,,מועצה דתית,religion,
+mikve,מקווה,שרותי דת,,מקווה,religion,מקווה
+health,בריאות,,,בריאות,health,
+mental,בריאות הנפש,בריאות,,בריאות הנפש,health,
+paishealth,פיס לבריאות,בריאות,,פיס לבריאות,health,פיס לבריאות|פייס לבריאות
+water,מתקן מים,,,מתקן מים,water,מתקן מים|חימצון|בריכת אגירה
+welfare,רווחה,,,רווחה,welfare,רווחה
+apartment,דירת רווחה,רווחה,,דירת רווחה,welfare,
+psyco,השירות הפסיכולוגי,רווחה,,השירות הפסיכולוגי,welfare,פסיכולוגי
+club,מועדון,רווחה,,מועדון,welfare,מועדון|מועדונית
+elderly,מרכז יום לקשיש,רווחה,,מרכז יום לקשיש,welfare,קשישים|לקשיש
+community,מרכז קהילתי,רווחה,,מרכז קהילתי,welfare,
+culture,תרבות,,,תרבות,culture,
+other,אחר,,,אחר,other,

@@ -22,6 +22,7 @@ function negawatt_migrate_migrate_api() {
 
     // Vocabulary.
     'NegawattMeterCategoryTermsMigrate',
+    'NegawattSiteCategoryTermsMigrate',
 
     // Users.
     'NegawattUsersMigrate',

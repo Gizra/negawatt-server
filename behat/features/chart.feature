@@ -3,20 +3,20 @@ Feature: Chart
   As authenticated user
   We need to be able see chart.
 
-  @javascript
+  @javascript @wip
   Scenario: Show chart usage monthly of the total kws of the meters.
     Given I login with user "carlos"
     When I reload "/#/dashboard/1"
     Then I should see a chart from "7,836" KW to "12,318" KW average power
 
-  @javascript
+  @javascript @wip
   Scenario: Show pie chart with total kws of the categories.
     Given I login with user "carlos"
     When I reload "/#/dashboard/1"
     Then I should see category "בטחון" with "98,815" Kws
     And I should see category "מבנה חינוך" with "96,654" Kws
 
-  @javascript
+  @javascript @wip
   Scenario: Show pie chart total kws of the subcategory of security.
     Given I login with user "carlos"
     When I reload "/#/dashboard/1"
@@ -24,7 +24,7 @@ Feature: Chart
     And I click "בטחון"
     Then I should see category "מקלט" with "98,815" Kws
 
-  @javascript
+  @javascript @wip
   Scenario: Show pie chart total kws of the meters.
     Given I login with user "carlos"
     When I reload "/#/dashboard/1"
