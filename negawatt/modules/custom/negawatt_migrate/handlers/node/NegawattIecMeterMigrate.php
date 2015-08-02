@@ -21,13 +21,15 @@ class NegawattIecMeterMigrate extends NegawattMigration {
     array('field_meter_serial', 'Meter Serial'),
     array('country', 'Country'),
     array('field_last_processed', 'Last processed'),
-    array(OG_VOCAB_FIELD, 'Meter category'),
+    array('field_meter_category', 'Meter category'),
+    array('field_meter_site', 'Meter site'),
     array('field_max_frequency', 'Max frequency'),
   );
 
   public $dependencies = array(
     'NegawattAccountMigrate',
     'NegawattMeterCategoryTermsMigrate',
+    'NegawattMeterSiteMigrate',
   );
 
   public function __construct() {
@@ -61,9 +63,12 @@ class NegawattIecMeterMigrate extends NegawattMigration {
       ->defaultValue('1');
 
     $this
-      ->addFieldMapping(OG_VOCAB_FIELD, OG_VOCAB_FIELD)
-      ->sourceMigration('NegawattMeterCategoryTermsMigrate')
-      ->separator('|');
+      ->addFieldMapping('field_meter_category', 'field_meter_category')
+      ->sourceMigration('NegawattMeterCategoryTermsMigrate');
+
+    $this
+      ->addFieldMapping('field_meter_site', 'field_meter_site')
+      ->sourceMigration('NegawattMeterSiteMigrate');
   }
 
   /**

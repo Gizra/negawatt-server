@@ -27,7 +27,7 @@ function climate_meter_field_default_field_instances() {
           'use_widget_handlers' => 1,
         ),
         'type' => 'addressfield_default',
-        'weight' => 6,
+        'weight' => 7,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -65,49 +65,6 @@ function climate_meter_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-climate_meter-field_category_valid'
-  $field_instances['node-climate_meter-field_category_valid'] = array(
-    'bundle' => 'climate_meter',
-    'default_value' => array(
-      0 => array(
-        'value' => 0,
-      ),
-    ),
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'list',
-        'settings' => array(),
-        'type' => 'list_default',
-        'weight' => 11,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_category_valid',
-    'label' => 'Category valid',
-    'required' => 0,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(
-        'display_label' => 1,
-      ),
-      'type' => 'options_onoff',
-      'weight' => 10,
-    ),
-  );
-
   // Exported field_instance: 'node-climate_meter-field_image'
   $field_instances['node-climate_meter-field_image'] = array(
     'bundle' => 'climate_meter',
@@ -122,7 +79,7 @@ function climate_meter_field_default_field_instances() {
           'image_style' => '',
         ),
         'type' => 'image',
-        'weight' => 13,
+        'weight' => 11,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -223,7 +180,7 @@ function climate_meter_field_default_field_instances() {
         'module' => 'geolocation',
         'settings' => array(),
         'type' => 'geolocation_text',
-        'weight' => 1,
+        'weight' => 2,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -264,7 +221,7 @@ function climate_meter_field_default_field_instances() {
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
-        'weight' => 2,
+        'weight' => 3,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -344,7 +301,7 @@ function climate_meter_field_default_field_instances() {
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
-        'weight' => 14,
+        'weight' => 12,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -425,10 +382,11 @@ function climate_meter_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
-          'link' => FALSE,
+          'links' => TRUE,
+          'view_mode' => 'default',
         ),
-        'type' => 'entityreference_label',
-        'weight' => 15,
+        'type' => 'entityreference_entity_view',
+        'weight' => 1,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -446,13 +404,13 @@ function climate_meter_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'entityreference',
+      'module' => 'options',
       'settings' => array(
         'match_operator' => 'CONTAINS',
         'path' => '',
         'size' => 60,
       ),
-      'type' => 'entityreference_autocomplete',
+      'type' => 'options_select',
       'weight' => 2,
     ),
   );
@@ -469,7 +427,7 @@ function climate_meter_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 3,
+        'weight' => 4,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -509,7 +467,7 @@ function climate_meter_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 4,
+        'weight' => 5,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -549,7 +507,7 @@ function climate_meter_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 5,
+        'weight' => 6,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -636,48 +594,9 @@ function climate_meter_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-climate_meter-og_vocabulary'
-  $field_instances['node-climate_meter-og_vocabulary'] = array(
-    'bundle' => 'climate_meter',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'og_vocab',
-        'settings' => array(
-          'concatenate' => FALSE,
-        ),
-        'type' => 'og_vocab',
-        'weight' => 7,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'og_vocabulary',
-    'label' => 'OG vocabulary',
-    'required' => FALSE,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'module' => 'og_vocab',
-      'settings' => array(),
-      'type' => 'og_vocab_complex',
-      'weight' => 9,
-    ),
-  );
-
   // Translatables
   // Included for use with string extractors like potx.
   t('Address');
-  t('Category valid');
   t('Groups audience');
   t('Has data');
   t('Image');
@@ -687,7 +606,6 @@ function climate_meter_field_default_field_instances() {
   t('Max frequency');
   t('Meter processed');
   t('Meter site');
-  t('OG vocabulary');
   t('Place Address');
   t('Place Description');
   t('Place Locality');

@@ -1,0 +1,7 @@
+Unique ID,title,Account ref,Location,locality,address,Place Description,Country,Site category
+site1,בית ספר רבין,account1,31.6111|34.7744,kiryat gat,hazmaut 22,בית ספר רבין,IL,school
+site2,מקלט,account1,31.6111|34.7684,kiryat gat,zahal 28,עמ 123 מקלט 12,IL,shelter
+site3,בטחון 1,account1,31.6027|34.7640,kiryat gat,gat 80,בטחון,IL,security
+site4,בטחון 2,account1,31.6030|34.7695,kiryat gat,gat 150,בטחון,IL,security
+site10,מלון נירוונה,account2,29.5523145|34.9543239,Eilat,Tarshish St,מלון נירוונה,IL,hotel
+site12,מלון סיסייד,account2,29.551474|34.957052,Eilat,Ofira Park,מלון סיסייד,IL,hotel

@@ -61,7 +61,7 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
 
     $public_fields['meter_category'] = array(
       'property' => 'meter_category',
-      'column_for_query' => 'cat.og_vocabulary_target_id',
+      'column_for_query' => 'cat.field_meter_category_target_id',
     );
 
     $public_fields['meter_account'] = array(
@@ -125,8 +125,9 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     $meter_account = $filter['meter_account'];
     // If no category filter was given, take 0 (root) as default.
     $parent_category = !empty($filter['meter_category']) ? $filter['meter_category'] : 0;
-    // Figure out vocab id from group id (the reverse of og_vocab_relation_get() function).
-    $vocabulary_id = negawatt_meter_vocab_id_from_group_id($meter_account);
+    // Figure out vocab id
+    $vocabulary = taxonomy_vocabulary_machine_name_load('meter_category');
+    $vocabulary_id = $vocabulary->vid;
 
     // Get list of child taxonomy terms.
     $taxonomy_array = taxonomy_get_tree($vocabulary_id, $parent_category);
@@ -185,12 +186,12 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
       // If parent category is 0 (that is, root category), there's no need to
       // add 'IN' condition for categories - just grab all of them.
       if ($parent_category != 0) {
-        $query->condition('cat.og_vocabulary_target_id', $child_categories, 'IN');
+        $query->condition('cat.field_meter_category_target_id', $child_categories, 'IN');
       }
-      $query->join('taxonomy_term_data', 'tax', 'tax.tid = cat.og_vocabulary_target_id');
+      $query->join('taxonomy_term_data', 'tax', 'tax.tid = cat.field_meter_category_target_id');
       $query->fields('tax', array('tid', 'name'));
       if ($addGrouping) {
-        $query->groupBy('cat.og_vocabulary_target_id');
+        $query->groupBy('cat.field_meter_category_target_id');
       }
     }
 
@@ -345,18 +346,16 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
    */
   protected function addQueryForCategoryAndAccount($query) {
     // Add a query for meter_category.
-    $field = field_info_field(OG_VOCAB_FIELD);
+    $field = field_info_field('field_meter_category');
     $table_name = _field_sql_storage_tablename($field);
     $query->leftJoin($table_name, 'cat', 'cat.entity_id=meter_nid');
-    $query->addField('cat', 'og_vocabulary_target_id', 'meter_category');
+    $query->addField('cat', 'field_meter_category_target_id', 'meter_category');
 
     // Add a query for meter_account.
     $table_name = 'og_membership';
     $query->leftJoin($table_name, 'acc', 'acc.etid=meter_nid');
     $query->addField('acc', 'gid', 'meter_account');
   }
-
-
 
   /**
    * Prepare data for summary section.
