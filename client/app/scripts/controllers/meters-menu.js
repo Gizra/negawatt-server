@@ -29,7 +29,7 @@ angular.module('negawattClientApp')
 
     $scope.sites = {
       101: {label: 'מרינה', meters: [11, 12, 13], categories: [52]},
-      102: {label: 'וילג׳', meters: [21], categories: [52]},
+      102: {label: 'וילג׳', meters: [21], categories: [52]}
     };
 
     $scope.meterCategoriesTree = [
@@ -59,7 +59,7 @@ angular.module('negawattClientApp')
           {
             id: 5,
             label: 'מרינה',
-            meters: [11, 12, 21],
+            meters: [11, 12, 21]
           },
           {
             id: 6,
@@ -69,17 +69,4 @@ angular.module('negawattClientApp')
         ]
       }
     ];
-
-    // Activate filter of meters only if we are in the principal state.
-    $scope.filterMeters = FilterFactory.showCategoryFilters();
-
-    /**
-     * Set the selected category, to keep in other states.
-     *
-     * @param id int
-     *   The Category ID.
-     */
-    function setSelectedCategory(id) {
-      FilterFactory.set('category', id);
-    }
   });
