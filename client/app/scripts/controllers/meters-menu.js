@@ -10,9 +10,10 @@ angular.module('negawattClientApp')
     $scope.tab = 'sites';
 
     $scope.categories = {
-      1: {label: 'צ׳ילר', background: '#339933', icon: 'astral', meters: [13]},
-      2: {label: 'מונה', background: '#FF6666', icon: 'astral', meters: [11, 21]},
-      3: {label: 'מטבח', background: '#003366', icon: 'astral', meters: [12]},
+      1: {label: 'צ׳ילר', background: '#339933', icon: 'astral'},
+      2: {label: 'מונה', background: '#FF6666', icon: 'astral'},
+      3: {label: 'מטבח', background: '#003366', icon: 'astral'},
+      5: {label: 'מונה ראשי', background: '#003366', icon: 'astral'},
       51: {label: 'אולם ספורט', background: '#6699FF', icon: 'astral'},
       52: {label: 'מלון', background: '#6699FF', icon: 'astral'},
       53: {label: 'מבנה חינוך', background: '#003366', icon: 'astral'},
@@ -34,18 +35,18 @@ angular.module('negawattClientApp')
 
     $scope.meterCategoriesTree = [
       {
-        id: 4,
-        label: 'מונים',
+        id: 2,
+        label: 'מונה',
         categories: [
           {
             id: 5,
             label: 'מונה ראשי',
-            meters: [11, 12, 21],
+            meters: [11, 21]
           },
           {
-            id: 6,
-            label: 'צ׳ילרים',
-            meters: [13]
+            id: 1,
+            label: 'צ׳ילר',
+            meters: [13, 12]
           }
         ]
       }

@@ -3,6 +3,8 @@
         <input ng-change="toggleCategory(category.id)" ng-model="category.checked" type="checkbox" />
 
         <span>{{ category.label }}</span>
+
+        <img ng-src="images/categories/{{categories[category.id].icon}}.png" />
     </label>
 </div>
 
