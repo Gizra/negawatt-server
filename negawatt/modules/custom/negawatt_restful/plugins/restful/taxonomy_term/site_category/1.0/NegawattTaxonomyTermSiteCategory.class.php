@@ -8,6 +8,13 @@
 class NegawattTaxonomyTermSiteCategory extends \RestfulEntityBaseTaxonomyTerm {
 
   /**
+   * Seva site meters between categoryMeters and electricityMinMax.
+   *
+   * @var stdClass
+   */
+  protected $categoryMeters = array();
+
+  /**
    * {@inheritdoc}
    */
   public function publicFieldsInfo() {
@@ -19,6 +26,10 @@ class NegawattTaxonomyTermSiteCategory extends \RestfulEntityBaseTaxonomyTerm {
 
     $public_fields['icon'] = array(
       'property' => 'field_icon_categories',
+    );
+
+    $public_fields['meters'] = array(
+      'callback' => array($this, 'categoryMeters'),
     );
 
     $public_fields['electricity_time_interval'] = array(
@@ -78,20 +89,15 @@ class NegawattTaxonomyTermSiteCategory extends \RestfulEntityBaseTaxonomyTerm {
   }
 
   /**
-   * Callback function to calculate the min and max timestamps of normalized-
-   * electricity data related to the site.
+   * Callback function to get all the meters that correspond to the given category.
    *
    * @param $wrapper
-   *   A wrapper to the site object.
+   *   A wrapper to the site-category object.
    *
    * @return array
-   *   {
-   *    min: min timestamp,
-   *    max: max timestmp
-   *   }
-   *  If no electricity data is found, return false.
+   *   List of meters that relate to the category.
    */
-  protected function electricityMinMax($wrapper) {
+  protected function categoryMeters($wrapper) {
     // Find normalized-electricity entities that are related to this site
     // min and max timestamps
 
@@ -106,20 +112,58 @@ class NegawattTaxonomyTermSiteCategory extends \RestfulEntityBaseTaxonomyTerm {
     }
 
     if (empty($sites)) {
+      return array();
+    }
+
+    // Get the list of meters in the given sites.
+    $query = new EntityFieldQuery();
+    $result = $query
+      ->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', array('iec_meter', 'modbus_meter'), 'IN')
+      ->fieldCondition('field_meter_site', 'target_id', $sites, 'IN')
+      ->execute();
+
+    // Save the list of site meters for later use in electricityMinMax.
+    $this->categoryMeters = array_keys($result['node']);
+
+    return $this->categoryMeters;
+  }
+
+  /**
+   * Callback function to calculate the min and max timestamps of normalized-
+   * electricity data related to the site.
+   *
+   * @return array
+   *   Array with the following keys:
+   *    - min: min timestamp for electricity related to the meters in the category.
+   *    - max: max timestmp for electricity related to the meters in the category.
+   *
+   *  If no electricity data is found, return NULL.
+   */
+  protected function electricityMinMax($wrapper) {
+    // Find normalized-electricity entities that are related to this site
+    // min and max timestamps
+
+    if (empty($this->categoryMeters)) {
       return NULL;
     }
 
+    // Query min and max timestamps of the meters.
+    $query = db_select('negawatt_electricity_normalized', 'e');
+
     // Find electricity entities which are related to the relevant sites.
-    $query->condition('e.site_nid', $sites, 'IN');
+    $query->condition('e.meter_nid', $this->categoryMeters, 'IN');
+
+    // Reset categoryMeters after use.
+    $this->categoryMeters = array();
 
     // Add a query for electricity min and max timestamps.
     $query->addExpression('MIN(e.timestamp)', 'min');
     $query->addExpression('MAX(e.timestamp)', 'max');
 
     // Set grouping.
-    $query->groupBy('e.site_nid');
+    $query->groupBy('e.meter_nid');
 
     return $query->execute()->fetchObject();
   }
-
 }
