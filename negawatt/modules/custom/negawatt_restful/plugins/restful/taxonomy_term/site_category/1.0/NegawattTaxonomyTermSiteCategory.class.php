@@ -8,13 +8,6 @@
 class NegawattTaxonomyTermSiteCategory extends \RestfulEntityBaseTaxonomyTerm {
 
   /**
-   * Seva site meters between categoryMeters and electricityMinMax.
-   *
-   * @var stdClass
-   */
-  protected $categoryMeters = array();
-
-  /**
    * {@inheritdoc}
    */
   public function publicFieldsInfo() {
@@ -28,8 +21,8 @@ class NegawattTaxonomyTermSiteCategory extends \RestfulEntityBaseTaxonomyTerm {
       'property' => 'field_icon_categories',
     );
 
-    $public_fields['meters'] = array(
-      'callback' => array($this, 'categoryMeters'),
+    $public_fields['sites'] = array(
+      'callback' => array($this, 'categorySites'),
     );
 
     $public_fields['electricity_time_interval'] = array(
@@ -40,7 +33,7 @@ class NegawattTaxonomyTermSiteCategory extends \RestfulEntityBaseTaxonomyTerm {
   }
 
   /**
-   *  Get the children of the current category item by id.
+   *  Get the first-level children of the current category item by id.
    */
   protected function getChildren(\EntityMetadataWrapper $wrapper) {
     $vocabulary = taxonomy_vocabulary_machine_name_load($this->getBundle());
@@ -89,49 +82,27 @@ class NegawattTaxonomyTermSiteCategory extends \RestfulEntityBaseTaxonomyTerm {
   }
 
   /**
-   * Callback function to get all the meters that correspond to the given category.
+   * Callback function to get all the sites that correspond directly to the given category.
    *
    * @param $wrapper
    *   A wrapper to the site-category object.
    *
    * @return array
-   *   List of meters that relate to the category.
+   *   List of sites that relate directly to the category.
    */
-  protected function categoryMeters($wrapper) {
-    // Find normalized-electricity entities that are related to this site
-    // min and max timestamps
-
-    // First, list all children categories of the category.
-    $categories = $this->getChildren($wrapper);
-    $categories[] = $wrapper->getIdentifier();
-
-    // Gather the sites related to these categories.
-    $sites = array();
-    foreach($categories as $category) {
-      $sites = array_merge($sites, taxonomy_select_nodes($category));
-    }
-
-    if (empty($sites)) {
-      return array();
-    }
-
-    // Get the list of meters in the given sites.
-    $query = new EntityFieldQuery();
-    $result = $query
-      ->entityCondition('entity_type', 'node')
-      ->entityCondition('bundle', array('iec_meter', 'modbus_meter'), 'IN')
-      ->fieldCondition('field_meter_site', 'target_id', $sites, 'IN')
-      ->execute();
-
-    // Save the list of site meters for later use in electricityMinMax.
-    $this->categoryMeters = array_keys($result['node']);
-
-    return $this->categoryMeters;
+  protected function categorySites($wrapper) {
+    // Get the list of meters in the given site-category.
+    return taxonomy_select_nodes($wrapper->getIdentifier());
   }
 
   /**
    * Callback function to calculate the min and max timestamps of normalized-
-   * electricity data related to the site.
+   * electricity data related to the category.
+   *
+   * The calculation is done ALL THE WAY down the cetegories tree.
+   *
+   * @param $wrapper
+   *   A wrapper to the site-category object.
    *
    * @return array
    *   Array with the following keys:
@@ -144,7 +115,40 @@ class NegawattTaxonomyTermSiteCategory extends \RestfulEntityBaseTaxonomyTerm {
     // Find normalized-electricity entities that are related to this site
     // min and max timestamps
 
-    if (empty($this->categoryMeters)) {
+    // First, list all children categories of the category down the taxonomy tree.
+
+    // Select vocabulary related.
+    $vocabulary = taxonomy_vocabulary_machine_name_load($this->bundle);
+
+    // Get taxonomy tree from current category, downwards.
+    $tree = taxonomy_get_tree($vocabulary->vid, $wrapper->getIdentifier());
+    $categories = array();
+    foreach ($tree as $term) {
+      $categories[] = $term->tid;
+    }
+    $categories[] = $wrapper->getIdentifier();
+
+    // Gather the sites related to these categories.
+    $sites = array();
+    foreach($categories as $category) {
+      $sites = array_merge($sites, taxonomy_select_nodes($category));
+    }
+
+    if (empty($sites)) {
+      return NULL;
+    }
+
+    // Get the list of meters in the given sites.
+    $query = new EntityFieldQuery();
+    $result = $query
+      ->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', array('iec_meter', 'modbus_meter'), 'IN')
+      ->fieldCondition('field_meter_site', 'target_id', $sites, 'IN')
+      ->execute();
+
+    $meters = array_keys($result['node']);
+
+    if (empty($meters)) {
       return NULL;
     }
 
@@ -152,10 +156,7 @@ class NegawattTaxonomyTermSiteCategory extends \RestfulEntityBaseTaxonomyTerm {
     $query = db_select('negawatt_electricity_normalized', 'e');
 
     // Find electricity entities which are related to the relevant sites.
-    $query->condition('e.meter_nid', $this->categoryMeters, 'IN');
-
-    // Reset categoryMeters after use.
-    $this->categoryMeters = array();
+    $query->condition('e.meter_nid', $meters, 'IN');
 
     // Add a query for electricity min and max timestamps.
     $query->addExpression('MIN(e.timestamp)', 'min');
