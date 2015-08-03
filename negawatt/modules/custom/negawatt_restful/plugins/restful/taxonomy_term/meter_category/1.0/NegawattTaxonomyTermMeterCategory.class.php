@@ -13,8 +13,8 @@ class NegawattTaxonomyTermMeterCategory extends \RestfulEntityBaseTaxonomyTerm {
   public function publicFieldsInfo() {
     $public_fields = parent::publicFieldsInfo();
 
-    $public_fields['children'] = array(
-      'callback' => array($this, 'getChildren',)
+    $public_fields['meters'] = array(
+      'callback' => array($this, 'getMeters',)
     );
 
     $public_fields['icon'] = array(
@@ -29,25 +29,11 @@ class NegawattTaxonomyTermMeterCategory extends \RestfulEntityBaseTaxonomyTerm {
   }
 
   /**
-   *  Get the children of the current category item by id.
+   *  Get the meters of the current category item by id.
    */
-  protected function getChildren(\EntityMetadataWrapper $wrapper) {
-    $vocabulary = taxonomy_vocabulary_machine_name_load($this->getBundle());
-    $children = taxonomy_get_children($wrapper->getIdentifier(), $vocabulary->vid);
-
-    // Exit if there is not children.
-    if (empty($children)) {
-      return;
-    }
-
-    $return = array();
-
-    // Get just an array of id.
-    foreach ($children as $term) {
-      $return[] = $term->tid;
-    }
-
-    return $return;
+  protected function getMeters(\EntityMetadataWrapper $wrapper) {
+    // Get the list of meters in the given site-category.
+    return taxonomy_select_nodes($wrapper->getIdentifier());
   }
 
   /**
@@ -92,11 +78,20 @@ class NegawattTaxonomyTermMeterCategory extends \RestfulEntityBaseTaxonomyTerm {
    *  If no electricity data is found, return false.
    */
   protected function electricityMinMax($wrapper) {
-    // Find normalized-electricity entities that are related to this meter
+    // Find normalized-electricity entities that are related to this meter category
     // min and max timestamps
 
-    // First, list all children categories of the category.
-    $categories = $this->getChildren($wrapper);
+    // First, list all children categories of the category down the taxonomy tree.
+
+    // Select vocabulary related.
+    $vocabulary = taxonomy_vocabulary_machine_name_load($this->bundle);
+
+    // Get taxonomy tree from current category, downwards.
+    $tree = taxonomy_get_tree($vocabulary->vid, $wrapper->getIdentifier());
+    $categories = array();
+    foreach ($tree as $term) {
+      $categories[] = $term->tid;
+    }
     $categories[] = $wrapper->getIdentifier();
 
     // Gather the meters related to these categories.
@@ -124,5 +119,4 @@ class NegawattTaxonomyTermMeterCategory extends \RestfulEntityBaseTaxonomyTerm {
 
     return $query->execute()->fetchObject();
   }
-
 }
