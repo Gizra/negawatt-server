@@ -182,6 +182,12 @@ function negawatt_meter_set_meter_location($node) {
     $street_addr = $wrapper->field_place_address->value();
     $city = $wrapper->field_place_locality->value();
     $full_address = $street_addr . ', ' . $city;
+
+    if ($full_address == ', ') {
+      // Don't try to geocode empty address.
+      return;
+    }
+
     $geocode_succeeded = TRUE;
     try {
       $geocode = $geocoder->geocode($full_address);

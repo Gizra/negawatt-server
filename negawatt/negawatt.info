@@ -40,7 +40,6 @@ dependencies[] = module_filter
 dependencies[] = og
 dependencies[] = og_access
 dependencies[] = og_ui
-dependencies[] = og_vocab
 dependencies[] = restful
 dependencies[] = restful_token_auth
 dependencies[] = strongarm

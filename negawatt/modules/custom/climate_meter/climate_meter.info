@@ -15,7 +15,6 @@ dependencies[] = negawatt_account
 dependencies[] = occupancy_meter
 dependencies[] = og
 dependencies[] = og_ui
-dependencies[] = og_vocab
 dependencies[] = options
 dependencies[] = strongarm
 dependencies[] = text

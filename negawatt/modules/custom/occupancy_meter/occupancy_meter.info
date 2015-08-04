@@ -14,7 +14,6 @@ dependencies[] = modbus
 dependencies[] = negawatt_account
 dependencies[] = og
 dependencies[] = og_ui
-dependencies[] = og_vocab
 dependencies[] = options
 dependencies[] = strongarm
 dependencies[] = text

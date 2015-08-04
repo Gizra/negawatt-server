@@ -91,9 +91,6 @@ projects[module_filter][version] = 2.0
 projects[og][subdir] = "contrib"
 projects[og][version] = 2.x-dev
 
-projects[og_vocab][subdir] = "contrib"
-projects[og_vocab][version] = "1.2"
-
 projects[purl][subdir] = "contrib"
 projects[purl][version] = "1.x-dev"
 

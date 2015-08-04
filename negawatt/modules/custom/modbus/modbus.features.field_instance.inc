@@ -297,7 +297,7 @@ function modbus_field_default_field_instances() {
       'module' => 'geolocation',
       'settings' => array(),
       'type' => 'geolocation_text',
-      'weight' => 4,
+      'weight' => 3,
     ),
   );
 
@@ -340,7 +340,7 @@ function modbus_field_default_field_instances() {
         'display_label' => 1,
       ),
       'type' => 'options_onoff',
-      'weight' => 5,
+      'weight' => 4,
     ),
   );
 
@@ -356,7 +356,7 @@ function modbus_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 2,
+        'weight' => 6,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -380,7 +380,7 @@ function modbus_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 3,
+      'weight' => 9,
     ),
   );
 
@@ -523,7 +523,7 @@ function modbus_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 6,
+        'weight' => 7,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -568,7 +568,7 @@ function modbus_field_default_field_instances() {
           'thousand_separator' => ' ',
         ),
         'type' => 'number_integer',
-        'weight' => 7,
+        'weight' => 8,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -712,7 +712,7 @@ function modbus_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 9,
+      'weight' => 8,
     ),
   );
 
@@ -768,7 +768,7 @@ function modbus_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 8,
+        'weight' => 2,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -792,7 +792,7 @@ function modbus_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 7,
+      'weight' => 5,
     ),
   );
 
@@ -832,7 +832,7 @@ function modbus_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 8,
+      'weight' => 7,
     ),
   );
 
@@ -847,7 +847,7 @@ function modbus_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
-          'link' => FALSE,
+          'link' => 1,
         ),
         'type' => 'entityreference_label',
         'weight' => 0,
