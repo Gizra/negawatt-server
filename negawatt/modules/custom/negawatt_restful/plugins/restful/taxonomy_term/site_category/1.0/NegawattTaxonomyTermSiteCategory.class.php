@@ -21,6 +21,10 @@ class NegawattTaxonomyTermSiteCategory extends \RestfulEntityBaseTaxonomyTerm {
       'property' => 'field_icon_categories',
     );
 
+    $public_fields['color'] = array(
+      'property' => 'field_color',
+    );
+
     $public_fields['sites'] = array(
       'callback' => array($this, 'categorySites'),
     );

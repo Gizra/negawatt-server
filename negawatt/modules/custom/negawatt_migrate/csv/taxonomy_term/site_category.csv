@@ -1,42 +1,42 @@
-Unique ID,name,parent,weight,description,field_icon_categories,field_match_strings
-public,מבנה ציבור,,,מבנים ציבוריים כגון משרדים,public_building,
-office,מבנה משרדים,מבנה ציבור,,מבנה משרדים,public_building,
-municipality,משרדי העירייה,מבנה ציבור,,משרדי העירייה,public_building,עירייה|משרד|עיריה|עיריית|אגף
-library,ספריה,מבנה ציבור,,ספריה,public_building,ספריה
-edu,מבנה חינוך,,,מבנה חינוך,education,
-kindergarten,גן ילדים,מבנה חינוך,,גני ילדים,education,גן|פעוטון
-school,בית ספר,מבנה חינוך,,בתי ספר,education,"בית ספר|בית הספר|בי""ס|ביה""ס|ביהס|בה""ס"
-pais,אשכול פיס,מבנה חינוך,,אשכול פיס,education,אשכול פיס|אשכולות פיס
-youth,מרכז נוער,מבנה חינוך,,מרכז נוער,education,
-pedago,מרכז פדגוגי,מבנה חינוך,,מרכז פדגוגי,education,פדגוגי
-outdoor,תאורת חוץ,,,תאורת חוץ,lighting,
-street,תאורת רחובות,תאורת חוץ,,תאורת רחובות,lighting,תאורת|מאור|מרכזיה|מ.רחובות|פארק|תאורה|מרכזית
-traffic,רמזור,תאורת חוץ,,רמזור,traffic_light,רמזור
-security,בטחון,,,בטחון,security,
-shelter,מקלט,בטחון,,מקלט,security,מקלט
-storeroom,מחסן חרום,בטחון,,מחסן חרום,security,מחסן
-police,שיטור קהילתי,בטחון,,שיטור קהילתי,security,שיטור|משמר
-sport,מתקן ספורט,,,מתקן ספורט,sports,
-pool,בריכת שחייה,מתקן ספורט,,בריכת שחייה,sports,שחייה|שחיה
-field,מגרש ספורט,מתקן ספורט,,מגרש ספורט,sports,מגרש
-hall,אולם ספורט,מתקן ספורט,,אולם ספורט,sports,אולם
-religion,שרותי דת,,,שרותי דת,religion,
-prayer,בית תפילה,שרותי דת,,בית תפילה,religion,
-synagogue,בית כנסת,בית תפילה,,בית כנסת,religion,כנסת
-church,כנסיה,בית תפילה,,כנסיה,religion,כנסיה
-mosque,מסגד,בית תפילה,,מסגד,religion,מסגד
-relcouncil,מועצה דתית,שרותי דת,,מועצה דתית,religion,
-mikve,מקווה,שרותי דת,,מקווה,religion,מקווה
-health,בריאות,,,בריאות,health,
-mental,בריאות הנפש,בריאות,,בריאות הנפש,health,
-paishealth,פיס לבריאות,בריאות,,פיס לבריאות,health,פיס לבריאות|פייס לבריאות
-water,מתקן מים,,,מתקן מים,water,מתקן מים|חימצון|בריכת אגירה
-welfare,רווחה,,,רווחה,welfare,רווחה
-apartment,דירת רווחה,רווחה,,דירת רווחה,welfare,
-psyco,השירות הפסיכולוגי,רווחה,,השירות הפסיכולוגי,welfare,פסיכולוגי
-club,מועדון,רווחה,,מועדון,welfare,מועדון|מועדונית
-elderly,מרכז יום לקשיש,רווחה,,מרכז יום לקשיש,welfare,קשישים|לקשיש
-community,מרכז קהילתי,רווחה,,מרכז קהילתי,welfare,
-culture,תרבות,,,תרבות,culture,
-hotel,מלון,,,מלון,hotel,מלון|אכסניית|אכסנייה
-other,אחר,,,אחר,other,
+Unique ID,name,parent,weight,description,field_icon_categories,field_match_strings,field_color
+public,מבנה ציבור,,,מבנים ציבוריים כגון משרדים,public_building,,#e53967
+office,מבנה משרדים,מבנה ציבור,,מבנה משרדים,public_building,,#59164c
+municipality,משרדי העירייה,מבנה ציבור,,משרדי העירייה,public_building,עירייה|משרד|עיריה|עיריית|אגף,#c6b6f2
+library,ספריה,מבנה ציבור,,ספריה,public_building,ספריה,#000733
+edu,מבנה חינוך,,,מבנה חינוך,education,,#2d86b3
+kindergarten,גן ילדים,מבנה חינוך,,גני ילדים,education,גן|פעוטון,#66ccaa
+school,בית ספר,מבנה חינוך,,בתי ספר,education,"בית ספר|בית הספר|בי""ס|ביה""ס|ביהס|בה""ס",#5ea653
+pais,אשכול פיס,מבנה חינוך,,אשכול פיס,education,אשכול פיס|אשכולות פיס,#bfb68f
+youth,מרכז נוער,מבנה חינוך,,מרכז נוער,education,,#733d00
+pedago,מרכז פדגוגי,מבנה חינוך,,מרכז פדגוגי,education,פדגוגי,#992900
+outdoor,תאורת חוץ,,,תאורת חוץ,lighting,,#660029
+street,תאורת רחובות,תאורת חוץ,,תאורת רחובות,lighting,תאורת|מאור|מרכזיה|מ.רחובות|פארק|תאורה|מרכזית,#f240ff
+traffic,רמזור,תאורת חוץ,,רמזור,traffic_light,רמזור,#241966
+security,בטחון,,,בטחון,security,,#408cff
+shelter,מקלט,בטחון,,מקלט,security,מקלט,#0d2633
+storeroom,מחסן חרום,בטחון,,מחסן חרום,security,מחסן,#20402d
+police,שיטור קהילתי,בטחון,,שיטור קהילתי,security,שיטור|משמר,#245900
+sport,מתקן ספורט,,,מתקן ספורט,sports,,#59502d
+pool,בריכת שחייה,מתקן ספורט,,בריכת שחייה,sports,שחייה|שחיה,#4c2a13
+field,מגרש ספורט,מתקן ספורט,,מגרש ספורט,sports,מגרש,#734139
+hall,אולם ספורט,מתקן ספורט,,אולם ספורט,sports,אולם,#330014
+religion,שרותי דת,,,שרותי דת,religion,,#524359
+prayer,בית תפילה,שרותי דת,,בית תפילה,religion,,#1d00d9
+synagogue,בית כנסת,בית תפילה,,בית כנסת,religion,כנסת,#1d3f73
+church,כנסיה,בית תפילה,,כנסיה,religion,כנסיה,#1a6166
+mosque,מסגד,בית תפילה,,מסגד,religion,מסגד,#56735a
+relcouncil,מועצה דתית,שרותי דת,,מועצה דתית,religion,,#ccff00
+mikve,מקווה,שרותי דת,,מקווה,religion,מקווה,#ffcc00
+health,בריאות,,,בריאות,health,,#f26100
+mental,בריאות הנפש,בריאות,,בריאות הנפש,health,,#e6acac
+paishealth,פיס לבריאות,בריאות,,פיס לבריאות,health,פיס לבריאות|פייס לבריאות,#f279ba
+water,מתקן מים,,,מתקן מים,water,מתקן מים|חימצון|בריכת אגירה,#8959b3
+welfare,רווחה,,,רווחה,welfare,רווחה,#4059ff
+apartment,דירת רווחה,רווחה,,דירת רווחה,welfare,,#b6d6f2
+psyco,השירות הפסיכולוגי,רווחה,,השירות הפסיכולוגי,welfare,פסיכולוגי,#00cad9
+club,מועדון,רווחה,,מועדון,welfare,מועדון|מועדונית,#39e639
+elderly,מרכז יום לקשיש,רווחה,,מרכז יום לקשיש,welfare,קשישים|לקשיש,#c5cc66
+community,מרכז קהילתי,רווחה,,מרכז קהילתי,welfare,,#cc8800
+culture,תרבות,,,תרבות,culture,,#e59173
+hotel,מלון,,,מלון,hotel,מלון|אכסניית|אכסנייה,#ff4040
+other,אחר,,,אחר,other,,#000000

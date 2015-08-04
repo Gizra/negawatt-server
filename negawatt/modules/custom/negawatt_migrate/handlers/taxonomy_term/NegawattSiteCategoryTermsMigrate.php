@@ -22,6 +22,7 @@ class NegawattSiteCategoryTermsMigrate extends Migration {
     array('description', 'description'),
     array('field_icon_categories', 'field_icon_categories'),
     array('field_match_strings', 'field_match_strings'),
+    array('field_color', 'field_color'),
   );
 
   public function __construct() {
@@ -37,6 +38,7 @@ class NegawattSiteCategoryTermsMigrate extends Migration {
       'description',
       'field_icon_categories',
       'field_match_strings',
+      'field_color',
     );
 
     $this->addSimpleMappings($field_names);
