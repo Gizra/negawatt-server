@@ -22,7 +22,7 @@
     "angular-loading-bar": "~0.7.1",
     "angular-ui-bootstrap-bower": "~0.12.1",
     "weather-icons": "~1.3.2",
-    "angular-ui-tree": "~2.3.0",
+    "angular-ui-tree": "~2.6.0",
     "ui-utils": "~0.2.3",
     "angular-filter": "~0.5.4",
     "leaflet-active-area": "Mappy/Leaflet-active-area",

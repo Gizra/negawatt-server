@@ -80,7 +80,7 @@ angular.module('negawattClientApp')
       // Update electricity property with active electricity (if the response has data).
       vm.electricity = $filter('activeElectricityFilters')(electricity);
 
-      if (vm.electricity) {
+      if (vm.electricity && vm.electricity.length) {
         // Update the title's date range, according to the first and last
         // selected electricity records.
         var firstEntry = vm.electricity[0];

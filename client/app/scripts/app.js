@@ -34,7 +34,8 @@ angular
     'template/accordion/accordion.html',
     'angularMoment',
     'ui.indeterminate',
-    'angular.filter'
+    'angular.filter',
+    'ui.tree'
   ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
     // Handle state 'dashboard' activation via browser url '/'
@@ -285,9 +286,9 @@ angular
             templateUrl: 'views/dashboard/chart/main.menu.html',
             controller: 'MenuCtrl'
           },
-          'categories@chart': {
-            templateUrl: 'views/dashboard/chart/main.categories.html',
-            controller: 'CategoryCtrl'
+          'meters-menu@chart': {
+            templateUrl: 'views/dashboard/chart/main.meters-menu.html',
+            controller: 'MetersMenuCtrl'
           },
           'messages@chart': {
             templateUrl: 'views/dashboard/chart/main.messages.html',
