@@ -10,8 +10,9 @@ angular.module('negawattClientApp')
         var compareCollection;
         var getChartPeriod = ChartUsagePeriod.getChartPeriod;
 
+        chart.title = 'מלון אסטרל מרינה';
         // TODO: Calculation of data range with the directive and service of dat range.
-        chart.dateRange = chart.date;
+        chart.dateRange = '2012 - 2015';
 
 
 
@@ -77,6 +78,130 @@ angular.module('negawattClientApp')
             'hAxis': {
               'title': 'Set a title hAxis'
             }
+          };
+
+          $scope.chartObject = {
+            "type": "PieChart",
+            "displayed": true,
+            "data": {
+              "cols": [
+                {
+                  "id": "month",
+                  "label": "Month",
+                  "type": "string",
+                  "p": {}
+                },
+                {
+                  "id": "laptop-id",
+                  "label": "Laptop",
+                  "type": "number",
+                  "p": {}
+                },
+                {
+                  "id": "desktop-id",
+                  "label": "Desktop",
+                  "type": "number",
+                  "p": {}
+                },
+                {
+                  "id": "server-id",
+                  "label": "Server",
+                  "type": "number",
+                  "p": {}
+                },
+                {
+                  "id": "cost-id",
+                  "label": "Shipping",
+                  "type": "number"
+                }
+              ],
+              "rows": [
+                {
+                  "c": [
+                    {
+                      "v": "January"
+                    },
+                    {
+                      "v": 19,
+                      "f": "42 items"
+                    },
+                    {
+                      "v": 12,
+                      "f": "Ony 12 items"
+                    },
+                    {
+                      "v": 7,
+                      "f": "7 servers"
+                    },
+                    {
+                      "v": 4
+                    },
+                    null
+                  ]
+                },
+                {
+                  "c": [
+                    {
+                      "v": "February"
+                    },
+                    {
+                      "v": 13
+                    },
+                    {
+                      "v": 1,
+                      "f": "1 unit (Out of stock this month)"
+                    },
+                    {
+                      "v": 0
+                    },
+                    {
+                      "v": 2
+                    },
+                    null
+                  ]
+                },
+                {
+                  "c": [
+                    {
+                      "v": "March"
+                    },
+                    {
+                      "v": 24
+                    },
+                    {
+                      "v": 5
+                    },
+                    {
+                      "v": 11
+                    },
+                    {
+                      "v": 6
+                    },
+                    null
+                  ]
+                }
+              ]
+            },
+            "options": {
+              "isStacked": "true",
+              "fill": 20,
+              "displayExactValues": true,
+              "vAxis": {
+                "title": "Sales unit",
+                "gridlines": {
+                  "count": 0
+                }
+              },
+              "hAxis": {
+                "title": "Date"
+              },
+              "tooltip": {
+                "isHtml": false
+              },
+              legend: {position: 'none'}
+            },
+            "formatters": {},
+            "view": {}
           };
 
           // Mock active frequency.

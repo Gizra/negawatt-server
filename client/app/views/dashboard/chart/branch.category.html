@@ -1,0 +1,17 @@
+<div>
+    <label>
+        <input ng-change="toggleCategory(category.id)" ng-model="category.checked" type="checkbox" />
+
+        <span>{{ category.label }}</span>
+
+        <img ng-src="images/categories/{{categories[category.id].icon}}.png" />
+    </label>
+</div>
+
+<ol ui-tree-categorys="" ng-model="category.meters" ng-if="category.meters" class="meters">
+  <li ng-repeat="meterId in category.meters" ng-include="'views/dashboard/chart/branch.meter.html'"> </li>
+</ol>
+
+<ol ui-tree-categorys="" ng-model="category.categories" ng-if="category.categories.length" class="categories">
+    <li ng-repeat="category in category.categories" ui-tree-category ng-include="'views/dashboard/chart/branch.category.html'"></li>
+</ol>

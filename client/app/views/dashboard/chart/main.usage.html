@@ -1,13 +1,13 @@
-<chart-detailed compare-with="vm.compareWith" date="123" categories="vm.categories" has-extra-chart="vm.hasExtraChart" show-extra-chart-button="true"></chart-detailed>
+<ul class="nav nav-pills">
+  <li class="active"><a>שנה</a></li>
+  <li><a>חודש</a></li>
+  <li><a>יום</a></li>
+  <li><a>שעה</a></li>
+  <li><a>דקות</a></li>
+</ul>
 
-<chart-detailed ng-show="vm.hasExtraChart" compare-with="vm.compareWith" date="123" categories="vm.categories"></chart-detailed>
-
-<!-- Form to select the parameters to compare with electricity data -->
-<form name="formCompareWith" ng-controller="ChartOptionsCtrl as extra">
-  <label for="temperature">
-    <input type="radio" ng-model="extra.compareWith" ng-change="extra.select()" value="temperature"> Temperature
-  </label></br>
-  <label>
-    <input type="radio" ng-model="extra.compareWith" ng-change="extra.select()" value="occupancy"> Occupancy
-  </label></br>
-</form>
+<div class="panel panel-default tabs ng-scope">
+  <div class="panel-body">
+    <chart-detailed compare-with="vm.compareWith" date="123" categories="vm.categories" has-extra-chart="vm.hasExtraChart" show-extra-chart-button="true"></chart-detailed>
+  </div>
+</div>

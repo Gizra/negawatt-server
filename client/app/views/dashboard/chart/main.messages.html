@@ -1,4 +1,5 @@
 <div id="messages">
+  <div class="panel-heading">התראות</div>
   <accordion>
     <accordion-group ng-repeat="messagesGrouped in ::messages track by $id(messagesGrouped)" is-disabled="messagesGrouped.length === 1" is-open="status.open" class="message-wrapper">
       <accordion-heading>
@@ -19,5 +20,6 @@
     </accordion-group>
   </accordion>
 </div>
+
 
 

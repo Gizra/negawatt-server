@@ -1,28 +1,28 @@
+<div class="row">
+  <h4 class="col-sm-8 title state-title"> {{ chart.title }} <small class="date" dir="ltr">{{ chart.dateRange }}</small></h4>
+  <div class="col-sm-4 form-inline">
+    <button type="button" class="btn btn-default disabled"><span class="glyphicon glyphicon-chevron-right"></span></button>
+
+    <select type="email" class="form-control" id="year">
+      <option>2015</option>
+    </select>
+
+    <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span></button>
+
+    <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus" alt="השווה לתאריך אחר"></span></button>
+  </div>
+</div>
+
 <div class="row detailed-chart">
+
 
   <div class="col-sm-4">
     <div class="chart-container">
-
-      <!-- Spniner - With no data and is loading -->
-      <div ng-if="!chart.hasData() && !chart.metersLoaded" class="row chart-empty">
-        <div class="title col-md-12 col-centered text-center chart-message"><i class="fa fa-circle-o-notch fa-spin fa-2x nw-icon-loading nw-icon"></i></div>
-      </div>
-
-      <div ng-if="chart.hasData() && !meterSelected">
-        <div google-chart chart="chart.categoriesChart" on-select="onSelect(selectedItem, chart.categoriesChart.data)" class="categoriesChart"></div>
-      </div>
-
+      <div google-chart chart="chartObject"></div>
     </div>
   </div>
 
   <div class="col-sm-8">
-    <h4 class="title state-title"><small class="date" dir="ltr">{{ chart.dateRange }}</small></h4>
-
-    <!-- Button to add comparation chart -->
-    <div ng-if="chart.showExtraChartButton">
-      <button ng-click="chart.hasExtraChart = !chart.hasExtraChart">hasExtraChart: {{!!chart.hasExtraChart}} </button>
-    </div>
-
     <chart-electricity-compare electricity="chart.electricity" compareCollection="" options=""></chart-electricity-compare>
   </div>
 
