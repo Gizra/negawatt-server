@@ -8,6 +8,14 @@
 class NegawattTaxonomyTermSiteCategory extends \RestfulEntityBaseTaxonomyTerm {
 
   /**
+   * Save the account id from the request.
+   *
+   * @var int
+   *  Account id.
+   */
+  protected $account_id = NULL;
+
+  /**
    * {@inheritdoc}
    */
   public function publicFieldsInfo() {
@@ -42,11 +50,6 @@ class NegawattTaxonomyTermSiteCategory extends \RestfulEntityBaseTaxonomyTerm {
   protected function getChildren(\EntityMetadataWrapper $wrapper) {
     $vocabulary = taxonomy_vocabulary_machine_name_load($this->getBundle());
     $children = taxonomy_get_children($wrapper->getIdentifier(), $vocabulary->vid);
-
-    // Exit if there is not children.
-    if (empty($children)) {
-      return;
-    }
 
     $return = array();
 
@@ -86,6 +89,32 @@ class NegawattTaxonomyTermSiteCategory extends \RestfulEntityBaseTaxonomyTerm {
   }
 
   /**
+   * {@inheritdoc}
+   *
+   * Verify the account parameter of the request and save account-id.
+   */
+  public function process($path = '', array $request = array(), $method = \RestfulInterface::GET, $check_rate_limit = TRUE) {
+    if (empty($request['account']) || !intval($request['account'])) {
+      throw new \RestfulBadRequestException('The "account" parameter is missing for the request, thus the vocabulary cannot be set for the account.');
+    }
+    // Get the account node.
+    $node = node_load($request['account']);
+    if (!$node) {
+      throw new \RestfulBadRequestException('The "account" parameter is not a node.');
+    }
+    elseif ($node->type != 'account') {
+      throw new \RestfulBadRequestException('The "account" parameter is not a of type "account".');
+    }
+
+    // Save account id.
+    $this->account_id = $request['account'];
+
+    // Remove account ID from the request because it's not a field in the taxonomy.
+    unset($request['account']);
+    return parent::process($path, $request, $method, $check_rate_limit);
+  }
+
+  /**
    * Callback function to get all the sites that correspond directly to the given category.
    *
    * @param $wrapper
@@ -95,8 +124,22 @@ class NegawattTaxonomyTermSiteCategory extends \RestfulEntityBaseTaxonomyTerm {
    *   List of sites that relate directly to the category.
    */
   protected function categorySites($wrapper) {
-    // Get the list of meters in the given site-category.
-    return taxonomy_select_nodes($wrapper->getIdentifier());
+    // Look for all the sites that are connected to this category, and of relevant account.
+    $query = new EntityFieldQuery();
+
+    $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'meter_site')
+      ->propertyCondition('status', NODE_PUBLISHED)
+      ->fieldCondition('field_site_category', 'target_id', $wrapper->getIdentifier())
+      ->fieldCondition(OG_AUDIENCE_FIELD, 'target_id', $this->account_id);
+
+    $result = $query->execute();
+
+    if (empty($result['node'])) {
+      return array();
+    }
+
+    return array_keys($result['node']);
   }
 
   /**
@@ -135,7 +178,8 @@ class NegawattTaxonomyTermSiteCategory extends \RestfulEntityBaseTaxonomyTerm {
     // Gather the sites related to these categories.
     $sites = array();
     foreach($categories as $category) {
-      $sites = array_merge($sites, taxonomy_select_nodes($category));
+      $wrapper = entity_metadata_wrapper('taxonomy_term', $category);
+      $sites = array_merge($sites, $this->categorySites($wrapper));
     }
 
     if (empty($sites)) {

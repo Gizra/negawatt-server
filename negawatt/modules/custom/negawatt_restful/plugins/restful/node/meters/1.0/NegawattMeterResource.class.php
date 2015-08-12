@@ -140,6 +140,7 @@ class NegawattMeterResource extends \RestfulEntityBaseMultipleBundles {
     $query->join('node', 'n', 'n.nid = e.meter_nid');
     // @todo: if merged with NegawattEntityMeterBase::prepareSummary(), here was
     // a condition to take only the meter bundle.
+    $query->condition('n.type', array('iec_meter', 'modbus_meter'), 'IN');
 
     // Handle 'account' filter (if exists)
     if (!empty($filter['account'])) {
@@ -202,7 +203,9 @@ class NegawattMeterResource extends \RestfulEntityBaseMultipleBundles {
    */
   public function getEntityFieldQuery() {
 
-    $query = parent::getEntityFieldQuery();
+    $query = parent::getEntityFieldQuery()
+      ->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', array('iec_meter', 'modbus_meter'), 'IN');
 
     $request = $this->getRequest();
     $filter = !empty($request['filter']) ? $request['filter'] : array();
@@ -222,6 +225,9 @@ class NegawattMeterResource extends \RestfulEntityBaseMultipleBundles {
       // Account is set not to show dead meters. Add a condition to show
       // only meters with 'has-electricity' == true.
       $query->fieldCondition('field_has_electricity', 'value', TRUE);
+
+      // Also add a note in the summary section
+      $this->valueMetadata['meter']['summary']['hide_inactive_meters'] = TRUE;
     }
 
     return $query;

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Category', function ($q, $http, $timeout, $state, $rootScope, $filter, Config, Utils, Meter, FilterFactory) {
+  .service('MeterCategory', function ($q, $http, $timeout, $state, $rootScope, $filter, Config, Utils, Meter, FilterFactory) {
     var self = this;
 
     // A private cache key.
@@ -11,10 +11,10 @@ angular.module('negawattClientApp')
     var getCategories;
 
     // Update event broadcast name.
-    var broadcastUpdateEventName = 'nwCategoriesChanged';
+    var broadcastUpdateEventName = 'nwMeterCategoriesChanged';
 
     /**
-     * Return the promise with the category list, from cache or the server.
+     * Return the promise with the meter-categories list, from cache or the server.
      *
      * @param accountId - int
      *  The account ID.
@@ -53,7 +53,7 @@ angular.module('negawattClientApp')
     };
 
     /**
-     * Return categories array from the server.
+     * Return meter-categories array from the server.
      *
      * @returns {$q.promise}
      */
@@ -162,7 +162,7 @@ angular.module('negawattClientApp')
      */
     function addNumberOfMetersByCategory(categories) {
       var deferred = $q.defer();
-      var metersCategories;
+      var meterCategories;
       var list = (angular.isArray(categories)) ? categories : categories.list;
 
       // Set meters in 0.
@@ -174,12 +174,12 @@ angular.module('negawattClientApp')
       self.indexed = Utils.indexById(list);
 
       // Get the meter list categories.
-      metersCategories = self.meters
+      meterCategories = self.meters
         .map(function(meter) {
           return meter.meter_categories ? meter.meter_categories : [];
         });
 
-      angular.forEach(metersCategories, function(categories) {
+      angular.forEach(meterCategories, function(categories) {
         angular.forEach(categories, function(category) {
           // Set selected categories.
           var categoriesIds = [+category.id] ;

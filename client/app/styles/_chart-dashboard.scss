@@ -93,6 +93,12 @@
     label span {
       margin-right: 10px;
     }
+
+    .meter {
+      // Don't wrap long meter names
+      overflow: hidden;
+      white-space: nowrap;
+    }
   }
 
 }

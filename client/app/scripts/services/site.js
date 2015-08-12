@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Meter', function ($q, $http, $timeout, $rootScope, $filter, Config, Marker, Utils, FilterFactory) {
+  .service('Site', function ($q, $http, $timeout, $rootScope, $filter, Config, Marker, Utils, FilterFactory) {
     var self = this;
 
     // A private cache key.
@@ -11,25 +11,24 @@ angular.module('negawattClientApp')
     var skipResetCache = false;
 
     // Force to only execute one request
-    var getMeters;
+    var getSites;
 
     // Update event broadcast name.
-    var broadcastUpdateEventName = 'nwMetersChanged';
+    var broadcastUpdateEventName = 'nwSitesChanged';
 
     /**
-     * Return a promise with the meter list, from cache or the server.
+     * Return a promise with the list of sites, from cache or the server.
      *
      * @param accountId
      *  The account ID.
      * @param categoryId
      *  The category ID.
      *
-     * @returns {Promise}
-     *
+     * @return {Promise}
      */
     this.get = function(accountId, categoryId) {
       // We return the promise in progress, cache data filtered or data from the server.
-      getMeters = $q.when(getMeters || metersFiltered() || getDataFromBackend(accountId));
+      getSites = $q.when(getSites || sitesFiltered() || getDataFromBackend(accountId));
 
       // Filtering in the case we have categoryId defined.
       if (angular.isDefined(categoryId)) {
@@ -38,30 +37,30 @@ angular.module('negawattClientApp')
 
       // Clear the promise cached, after resolve or reject the promise. Permit access to the cache data, when
       // the promise excecution is done (finally).
-      getMeters.finally(function getMeterFinally() {
-        getMeters = undefined;
+      getSites.finally(function getSiteFinally() {
+        getSites = undefined;
       });
 
-      return getMeters;
+      return getSites;
     };
 
     /**
-     * Broadcast a notification of the meter data and it filters had changed.
+     * Broadcast a notification of the site data and it filters had changed.
      */
     this.refresh = function() {
       // Broadcast and event to update the markers in the map.
-      $rootScope.$broadcast(broadcastUpdateEventName, metersFiltered());
+      $rootScope.$broadcast(broadcastUpdateEventName, sitesFiltered());
     };
 
     /**
-     * Return meters array from the server.
+     * Return sites array from the server.
      *
      * @param accountId
      *  The account ID.
      * @param pageNumber
-     *  The url for the next list (page) of meters.
+     *  The url for the next list (page) of sites.
      *
-     * @returns {$q.promise}
+     * @return {$q.promise}
      */
     function getDataFromBackend(accountId, pageNumber) {
       var deferred = $q.defer();
@@ -69,26 +68,26 @@ angular.module('negawattClientApp')
       pageNumber = pageNumber || 1;
 
       // Define endpoint with filters.
-      // Get only meters that has electricity data.
-      url = Config.backend + '/api/meters?'
+      // Get only sites that has electricity data.
+      url = Config.backend + '/api/sites?'
         + '&filter[account]=' + accountId
         + '&page=' + pageNumber;
 
       $http({
         method: 'GET',
         url: url,
-        transformResponse: prepareMetersForLeafletMarkers
-      }).success(function(meters) {
-        var hasNextPage = !!meters.next;
-        setCache(meters.data, hasNextPage);
+        transformResponse: prepareSitesForLeafletMarkers
+      }).success(function(sites) {
+        var hasNextPage = !!sites.next;
+        setCache(sites.data, hasNextPage);
 
-        // Resolve with the meters filtered from cache.data.
-        deferred.resolve(metersFiltered());
+        // Resolve with the sites filtered from cache.data.
+        deferred.resolve(sitesFiltered());
 
         // Update with the rest of the markers.
         if (hasNextPage) {
           skipResetCache = true;
-          getDataFromBackend(accountId, getPageNumber(meters.next.href));
+          getDataFromBackend(accountId, getPageNumber(sites.next.href));
         }
 
         resetCache();
@@ -98,19 +97,19 @@ angular.module('negawattClientApp')
     }
 
     /**
-     * Save meters in cache, and broadcast en event to inform that the meters data changed.
+     * Save sites in cache, and broadcast en event to inform that the sites data changed.
      *
      * @param data
-     *  The meter list.
+     *  The site list.
      * @param hasMore
      *  Indicate if has more data to request.
      */
     function setCache(data, hasMore) {
-      var activeMeter;
+      var activeSite;
 
       if (angular.isUndefined(cache.data)) {
         cache.data = {
-          // Save all the meters during the cache are avalible.
+          // Save all the sites during the cache are avalible.
           listAll: {},
           // Keep the actual collection filtered, used to show into the map.
           list: {},
@@ -120,7 +119,7 @@ angular.module('negawattClientApp')
         };
       }
 
-      // Extend meters properties explicit because we don have deep copy.
+      // Extend sites properties explicit because we don have deep copy.
       // TODO: from angular v1.4 use angular.merge().
       angular.extend(cache.data.listAll, data && data.list);
       angular.extend(cache.data.summary, data && data.summary);
@@ -129,13 +128,13 @@ angular.module('negawattClientApp')
       cache.timestamp = new Date();
 
       // Broadcast and event to update the markers in the map.
-      $rootScope.$broadcast(broadcastUpdateEventName, metersFiltered());
+      $rootScope.$broadcast(broadcastUpdateEventName, sitesFiltered());
 
-      // Broadcast event that we have a activeMeter
-      activeMeter = $filter('meterById')(cache.data.listAll, FilterFactory.get('meter'));
-      if  (!Utils.isEmpty(activeMeter) && activeMeter.has_electricity) {
+      // Broadcast event that we have a activeSite
+      activeSite = $filter('siteById')(cache.data.listAll, FilterFactory.get('site'));
+      if (!Utils.isEmpty(activeSite) && activeSite.has_electricity) {
         // Broadcast and event to update the markers in the map.
-        $rootScope.$broadcast('activeMeter', activeMeter);
+        $rootScope.$broadcast('activeSite', activeSite);
       }
 
       // Active the reset after update the cache.
@@ -143,7 +142,7 @@ angular.module('negawattClientApp')
     }
 
     /**
-     * Reset the meters in the cache.
+     * Reset the sites in the cache.
      */
     function resetCache() {
       if (skipResetCache) {
@@ -157,68 +156,69 @@ angular.module('negawattClientApp')
     }
 
     /**
-     * Convert the array of list of meters to and object of meters.
+     * Convert the array of list of sites to and object of sites.
      *
      * Also prepare the lang and lat values so Leaflet can pick them up.
      *
      * @param response []
-     *   Response List of meters in an array.
+     *   Response List of sites in an array.
      *
-     * @returns {*}
-     *   List of meters organized in an object, each meter it's a property keyed
+     * @return {*}
+     *   List of sites organized in an object, each site it's a property keyed
      *   by the id.
      */
-    function prepareMetersForLeafletMarkers(response) {
-      var meters = {};
+    function prepareSitesForLeafletMarkers(response) {
+      var sites = {};
 
       // Unserialize the response.
       response = angular.fromJson(response);
 
-      // Save meters and the next request to get hasNextPage meters (if exist).
-      meters = {
+      // Save sites and the next request to get hasNextPage sites (if exist).
+      sites = {
         data: {
           list: Utils.indexById(response.data)
         },
         next: response.next
       };
 
-      angular.forEach(meters.data.list, function(item) {
-        meters.data.list[item.id] = item;
+      angular.forEach(sites.data.list, function(item) {
+        sites.data.list[item.id] = item;
 
         // Convert the geo location properties as expected by leaflet map.
         if (item.location) {
-          meters.data.list[item.id].lat = parseFloat(item.location.lat);
-          meters.data.list[item.id].lng = parseFloat(item.location.lng);
+          sites.data.list[item.id].lat = parseFloat(item.location.lat);
+          sites.data.list[item.id].lng = parseFloat(item.location.lng);
 
           delete item.location;
         }
 
-        // Set meter tooltip
-        meters.data.list[item.id].message = (item.image ? ('<img src="' + item.image.url + '"><br>') : '') +
+        // Set site tooltip with image (if exists).
+        var itemImage = item.image ? ('<img src="' + item.image.url + '"><br>') : '';
+        sites.data.list[item.id].message = itemImage +
           item.place_description + '<br>' + item.place_address + '<br>' + item.place_locality;
 
-        // Extend meter with marker properties and methods.
-        angular.extend(meters.data.list[item.id], Marker);
+        // Extend site with marker properties and methods.
+        angular.extend(sites.data.list[item.id], Marker);
 
         // Define default icon properties and methods, in order, to be changed later.
-        meters.data.list[item.id].unselect();
+        sites.data.list[item.id].unselect();
       });
 
-      // Add summary property inside the meter data object, as private property.
-      meters.data.summary = response.summary;
+      // Add summary property inside the site data object, as private property.
+      sites.data.summary = response.summary;
 
-      return meters;
+      return sites;
     }
 
     /**
-     * Return meters filter by the active filters.
+     * Return sites filter by the active filters.
      *
-     * @returns {*|cache.data|{list, total}}
+     * @return {*|cache.data|{list, total}}
      */
-    function metersFiltered() {
+    function sitesFiltered() {
       if (angular.isDefined(cache.data)) {
         // Filter by categories filters unchecked (checkboxes).
-        cache.data.list = (!FilterFactory.isDefine('category') && !FilterFactory.isDefine('meter'))
+        cache.data.list = (!FilterFactory.isDefine('category') && !FilterFactory.isDefine('site'))
           ? FilterFactory.byCategoryFilters(cache.data)
           : cache.data.listAll;
       }
@@ -237,7 +237,7 @@ angular.module('negawattClientApp')
       return regex.exec(url).pop();
     }
 
-    // Clear meter cache.
+    // Clear site cache.
     $rootScope.$on('nwClearCache', function() {
       cache = {};
     });

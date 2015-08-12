@@ -263,6 +263,10 @@ angular
             // Get first records.
             return Meter.get(account.id);
           },
+          sites: function(Site, account, $stateParams, Category, FilterFactory) {
+            // Get first records.
+            return Site.get(account.id);
+          },
           categories: function(Category, account) {
             return Category.get(account.id);
           },

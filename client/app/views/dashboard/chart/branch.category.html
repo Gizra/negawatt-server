@@ -1,17 +1,15 @@
 <div>
-    <label>
-        <input ng-change="toggleCategory(category.id)" ng-model="category.checked" type="checkbox" />
-
-        <span>{{ category.label }}</span>
-
-        <img ng-src="images/categories/{{categories[category.id].icon}}.png" />
-    </label>
+  <label>
+    <input ng-change="toggleCategory(category.id)" ng-model="category.showInChart" type="checkbox" />
+    <img ng-src="images/categories/{{category.icon}}.png" />
+    <span>{{ category.label }}</span>
+  </label>
 </div>
 
-<ol ui-tree-categorys="" ng-model="category.meters" ng-if="category.meters" class="meters">
+<ol ui-tree-categorys="" ng-model="category.meters" ng-if="category.meters.length" class="meters">
   <li ng-repeat="meterId in category.meters" ng-include="'views/dashboard/chart/branch.meter.html'"> </li>
 </ol>
 
-<ol ui-tree-categorys="" ng-model="category.categories" ng-if="category.categories.length" class="categories">
-    <li ng-repeat="category in category.categories" ui-tree-category ng-include="'views/dashboard/chart/branch.category.html'"></li>
+<ol ui-tree-categorys="" ng-model="category.children" ng-if="category.children.length" class="categories">
+  <li ng-repeat="category in category.children" ng-show="category.numberOfSites || category.isSite" ui-tree-category ng-include="'views/dashboard/chart/branch.category.html'"> </li>
 </ol>

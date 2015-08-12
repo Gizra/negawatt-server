@@ -119,15 +119,10 @@ function _create_site_node($meter_node) {
     $site_wrapper->$field->set($meter_wrapper->$field->value());
   }
 
-  // Clear address fields in the meter itself
+  // Reset meter fields
   $fields = array(
-    array('field_address', array()),
     array('field_image', array()),
-    array('field_location', array()),
-    array('field_location_valid', FALSE),
     array('field_category_valid', TRUE),
-    array('field_place_address', ''),
-    array('field_place_locality', ''),
   );
   foreach ($fields as $field) {
     $meter_wrapper->$field[0]->set($field[1]);
@@ -135,9 +130,14 @@ function _create_site_node($meter_node) {
 
   // Set the meter category according to the old meter categories field.
   if (!empty($old_meter_categories[$meter_node->nid])) {
-    $term = _get_or_create_term($old_meter_categories[$meter_node->nid]['name'], 'site_category');
+    $term_name = $old_meter_categories[$meter_node->nid]['name'];
+    $term = _get_or_create_term($term_name, 'site_category');
 
     $site_wrapper->field_site_category->set($term->tid);
+
+    if ($term_name != 'אחר') {
+      $site_wrapper->field_category_valid->set(TRUE);
+    }
   }
 
   $site_wrapper->save();

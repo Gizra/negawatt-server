@@ -165,7 +165,7 @@ angular.module('negawattClientApp')
     }
 
     /**
-     * Return querysting of the paramenter, representing the electricity filter.
+     * Return querystring of the parameter, representing the electricity filter.
      *
      * @param params
      *
@@ -587,7 +587,8 @@ angular.module('negawattClientApp')
           categories[index].indeterminate = isInderminate(category.id);
 
           // Check if the children have tha same 'checked' value.
-          if (category.children) {
+          // Note that 'children' might be an empty array.
+          if (category.children && category.children.length) {
             childrenCheckedState = getChildrenCheckedState(category.children);
             if (childrenCheckedState !== 'indeterminate') {
               categories[index].checked = childrenCheckedState;

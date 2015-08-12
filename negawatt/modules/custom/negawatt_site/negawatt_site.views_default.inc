@@ -1,28 +1,28 @@
 <?php
 /**
  * @file
- * negawatt_meter.views_default.inc
+ * negawatt_site.views_default.inc
  */
 
 /**
  * Implements hook_views_default_views().
  */
-function negawatt_meter_views_default_views() {
+function negawatt_site_views_default_views() {
   $export = array();
 
   $view = new view();
-  $view->name = 'meters';
+  $view->name = 'sites';
   $view->description = '';
   $view->tag = 'default';
   $view->base_table = 'node';
-  $view->human_name = 'Meters';
+  $view->human_name = 'Sites';
   $view->core = 7;
   $view->api_version = '3.0';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Meters';
+  $handler->display->display_options['title'] = 'Sites';
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['access']['type'] = 'perm';
   $handler->display->display_options['cache']['type'] = 'none';
@@ -34,15 +34,12 @@ function negawatt_meter_views_default_views() {
   $handler->display->display_options['style_plugin'] = 'views_aggregator';
   $handler->display->display_options['style_options']['columns'] = array(
     'title' => 'title',
-    'type' => 'type',
+    'og_group_ref' => 'og_group_ref',
     'field_place_address' => 'field_place_address',
     'field_place_description' => 'field_place_description',
     'term_node_tid' => 'term_node_tid',
-    'field_max_frequency' => 'field_max_frequency',
-    'field_last_processed' => 'field_last_processed',
     'field_category_valid' => 'field_category_valid',
     'field_location_valid' => 'field_location_valid',
-    'field_has_electricity' => 'field_has_electricity',
     'delete_node' => 'delete_node',
     'edit_node' => 'edit_node',
   );
@@ -63,7 +60,7 @@ function negawatt_meter_views_default_views() {
       'aggr_column' => 'views_aggregator_count',
       'aggr_par_column' => '',
     ),
-    'type' => array(
+    'og_group_ref' => array(
       'sortable' => 1,
       'default_sort_order' => 'asc',
       'align' => '',
@@ -71,7 +68,7 @@ function negawatt_meter_views_default_views() {
       'empty_column' => 0,
       'has_aggr' => 0,
       'aggr' => array(
-        'views_aggregator_enumerate' => 'views_aggregator_enumerate',
+        'views_aggregator_first' => 'views_aggregator_first',
       ),
       'aggr_par' => '',
       'has_aggr_column' => 0,
@@ -123,36 +120,6 @@ function negawatt_meter_views_default_views() {
       'aggr_column' => 'views_aggregator_sum',
       'aggr_par_column' => '',
     ),
-    'field_max_frequency' => array(
-      'sortable' => 1,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-      'has_aggr' => 0,
-      'aggr' => array(
-        'views_aggregator_first' => 'views_aggregator_first',
-      ),
-      'aggr_par' => '',
-      'has_aggr_column' => 0,
-      'aggr_column' => 'views_aggregator_sum',
-      'aggr_par_column' => '',
-    ),
-    'field_last_processed' => array(
-      'sortable' => 1,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-      'has_aggr' => 0,
-      'aggr' => array(
-        'views_aggregator_first' => 'views_aggregator_first',
-      ),
-      'aggr_par' => '',
-      'has_aggr_column' => 1,
-      'aggr_column' => 'views_aggregator_count',
-      'aggr_par_column' => '',
-    ),
     'field_category_valid' => array(
       'sortable' => 1,
       'default_sort_order' => 'asc',
@@ -177,21 +144,6 @@ function negawatt_meter_views_default_views() {
       'has_aggr' => 0,
       'aggr' => array(
         'views_aggregator_count' => 'views_aggregator_count',
-      ),
-      'aggr_par' => '',
-      'has_aggr_column' => 1,
-      'aggr_column' => 'views_aggregator_count',
-      'aggr_par_column' => '1',
-    ),
-    'field_has_electricity' => array(
-      'sortable' => 1,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-      'has_aggr' => 0,
-      'aggr' => array(
-        'views_aggregator_first' => 'views_aggregator_first',
       ),
       'aggr_par' => '',
       'has_aggr_column' => 1,
@@ -241,25 +193,12 @@ function negawatt_meter_views_default_views() {
   $handler->display->display_options['fields']['title']['field'] = 'title';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* Field: Content: Type */
-  $handler->display->display_options['fields']['type']['id'] = 'type';
-  $handler->display->display_options['fields']['type']['table'] = 'node';
-  $handler->display->display_options['fields']['type']['field'] = 'type';
-  $handler->display->display_options['fields']['type']['label'] = 'Meter Type';
   /* Field: Content: Groups audience */
   $handler->display->display_options['fields']['og_group_ref']['id'] = 'og_group_ref';
   $handler->display->display_options['fields']['og_group_ref']['table'] = 'og_membership';
   $handler->display->display_options['fields']['og_group_ref']['field'] = 'og_group_ref';
   $handler->display->display_options['fields']['og_group_ref']['label'] = 'Account';
   $handler->display->display_options['fields']['og_group_ref']['settings'] = array(
-    'link' => 1,
-  );
-  /* Field: Content: Meter site */
-  $handler->display->display_options['fields']['field_meter_site']['id'] = 'field_meter_site';
-  $handler->display->display_options['fields']['field_meter_site']['table'] = 'field_data_field_meter_site';
-  $handler->display->display_options['fields']['field_meter_site']['field'] = 'field_meter_site';
-  $handler->display->display_options['fields']['field_meter_site']['label'] = 'Site';
-  $handler->display->display_options['fields']['field_meter_site']['settings'] = array(
     'link' => 1,
   );
   /* Field: Content: Place Address */
@@ -281,21 +220,6 @@ function negawatt_meter_views_default_views() {
     'meter_category_account3' => 0,
     'meter_category' => 0,
   );
-  /* Field: Content: Max frequency */
-  $handler->display->display_options['fields']['field_max_frequency']['id'] = 'field_max_frequency';
-  $handler->display->display_options['fields']['field_max_frequency']['table'] = 'field_data_field_max_frequency';
-  $handler->display->display_options['fields']['field_max_frequency']['field'] = 'field_max_frequency';
-  /* Field: Content: Last processed */
-  $handler->display->display_options['fields']['field_last_processed']['id'] = 'field_last_processed';
-  $handler->display->display_options['fields']['field_last_processed']['table'] = 'field_data_field_last_processed';
-  $handler->display->display_options['fields']['field_last_processed']['field'] = 'field_last_processed';
-  $handler->display->display_options['fields']['field_last_processed']['settings'] = array(
-    'format_type' => 'short',
-    'fromto' => 'both',
-    'multiple_number' => '',
-    'multiple_from' => '',
-    'multiple_to' => '',
-  );
   /* Field: Content: Category valid */
   $handler->display->display_options['fields']['field_category_valid']['id'] = 'field_category_valid';
   $handler->display->display_options['fields']['field_category_valid']['table'] = 'field_data_field_category_valid';
@@ -304,10 +228,6 @@ function negawatt_meter_views_default_views() {
   $handler->display->display_options['fields']['field_location_valid']['id'] = 'field_location_valid';
   $handler->display->display_options['fields']['field_location_valid']['table'] = 'field_data_field_location_valid';
   $handler->display->display_options['fields']['field_location_valid']['field'] = 'field_location_valid';
-  /* Field: Content: Has electricity */
-  $handler->display->display_options['fields']['field_has_electricity']['id'] = 'field_has_electricity';
-  $handler->display->display_options['fields']['field_has_electricity']['table'] = 'field_data_field_has_electricity';
-  $handler->display->display_options['fields']['field_has_electricity']['field'] = 'field_has_electricity';
   /* Field: Content: Delete link */
   $handler->display->display_options['fields']['delete_node']['id'] = 'delete_node';
   $handler->display->display_options['fields']['delete_node']['table'] = 'views_entity_node';
@@ -356,7 +276,6 @@ function negawatt_meter_views_default_views() {
   $handler->display->display_options['filters']['og_group_ref_target_id']['expose']['label'] = 'Account';
   $handler->display->display_options['filters']['og_group_ref_target_id']['expose']['operator'] = 'og_group_ref_target_id_op';
   $handler->display->display_options['filters']['og_group_ref_target_id']['expose']['identifier'] = 'og_group_ref_target_id';
-  $handler->display->display_options['filters']['og_group_ref_target_id']['expose']['remember'] = TRUE;
   $handler->display->display_options['filters']['og_group_ref_target_id']['expose']['remember_roles'] = array(
     2 => '2',
     1 => 0,
@@ -385,8 +304,7 @@ function negawatt_meter_views_default_views() {
   $handler->display->display_options['filters']['type']['table'] = 'node';
   $handler->display->display_options['filters']['type']['field'] = 'type';
   $handler->display->display_options['filters']['type']['value'] = array(
-    'iec_meter' => 'iec_meter',
-    'modbus_meter' => 'modbus_meter',
+    'meter_site' => 'meter_site',
   );
   $handler->display->display_options['filters']['type']['group'] = 1;
   /* Filter criterion: Content: Place Description (field_place_description) */
@@ -405,97 +323,6 @@ function negawatt_meter_views_default_views() {
     1 => 0,
     3 => 0,
     4 => 0,
-  );
-  /* Filter criterion: Content: Type */
-  $handler->display->display_options['filters']['type_1']['id'] = 'type_1';
-  $handler->display->display_options['filters']['type_1']['table'] = 'node';
-  $handler->display->display_options['filters']['type_1']['field'] = 'type';
-  $handler->display->display_options['filters']['type_1']['value'] = array(
-    'iec_meter' => 'iec_meter',
-    'modbus_meter' => 'modbus_meter',
-  );
-  $handler->display->display_options['filters']['type_1']['group'] = 1;
-  $handler->display->display_options['filters']['type_1']['exposed'] = TRUE;
-  $handler->display->display_options['filters']['type_1']['expose']['operator_id'] = 'type_1_op';
-  $handler->display->display_options['filters']['type_1']['expose']['label'] = 'Type';
-  $handler->display->display_options['filters']['type_1']['expose']['operator'] = 'type_1_op';
-  $handler->display->display_options['filters']['type_1']['expose']['identifier'] = 'type_1';
-  $handler->display->display_options['filters']['type_1']['expose']['remember'] = TRUE;
-  $handler->display->display_options['filters']['type_1']['expose']['remember_roles'] = array(
-    2 => '2',
-    1 => 0,
-    3 => 0,
-    4 => 0,
-  );
-  $handler->display->display_options['filters']['type_1']['is_grouped'] = TRUE;
-  $handler->display->display_options['filters']['type_1']['group_info']['label'] = 'Type';
-  $handler->display->display_options['filters']['type_1']['group_info']['identifier'] = 'type_1';
-  $handler->display->display_options['filters']['type_1']['group_info']['remember'] = 1;
-  $handler->display->display_options['filters']['type_1']['group_info']['group_items'] = array(
-    1 => array(
-      'title' => 'IEC Meter',
-      'operator' => 'in',
-      'value' => array(
-        'iec_meter' => 'iec_meter',
-        'all' => 0,
-        'account' => 0,
-        'modbus_meter' => 0,
-      ),
-    ),
-    2 => array(
-      'title' => 'Modbus Meter',
-      'operator' => 'in',
-      'value' => array(
-        'modbus_meter' => 'modbus_meter',
-        'all' => 0,
-        'account' => 0,
-        'iec_meter' => 0,
-      ),
-    ),
-  );
-  /* Filter criterion: Content: Max frequency (field_max_frequency) */
-  $handler->display->display_options['filters']['field_max_frequency_value']['id'] = 'field_max_frequency_value';
-  $handler->display->display_options['filters']['field_max_frequency_value']['table'] = 'field_data_field_max_frequency';
-  $handler->display->display_options['filters']['field_max_frequency_value']['field'] = 'field_max_frequency_value';
-  $handler->display->display_options['filters']['field_max_frequency_value']['group'] = 1;
-  $handler->display->display_options['filters']['field_max_frequency_value']['exposed'] = TRUE;
-  $handler->display->display_options['filters']['field_max_frequency_value']['expose']['operator_id'] = 'field_max_frequency_value_op';
-  $handler->display->display_options['filters']['field_max_frequency_value']['expose']['label'] = 'Max frequency (field_max_frequency)';
-  $handler->display->display_options['filters']['field_max_frequency_value']['expose']['operator'] = 'field_max_frequency_value_op';
-  $handler->display->display_options['filters']['field_max_frequency_value']['expose']['identifier'] = 'field_max_frequency_value';
-  $handler->display->display_options['filters']['field_max_frequency_value']['is_grouped'] = TRUE;
-  $handler->display->display_options['filters']['field_max_frequency_value']['group_info']['label'] = 'Max frequency';
-  $handler->display->display_options['filters']['field_max_frequency_value']['group_info']['identifier'] = 'field_max_frequency_value';
-  $handler->display->display_options['filters']['field_max_frequency_value']['group_info']['remember'] = 1;
-  $handler->display->display_options['filters']['field_max_frequency_value']['group_info']['group_items'] = array(
-    1 => array(
-      'title' => 'Month',
-      'operator' => 'or',
-      'value' => array(
-        2 => '2',
-      ),
-    ),
-    2 => array(
-      'title' => 'Day',
-      'operator' => 'or',
-      'value' => array(
-        3 => '3',
-      ),
-    ),
-    3 => array(
-      'title' => 'Hour',
-      'operator' => 'or',
-      'value' => array(
-        4 => '4',
-      ),
-    ),
-    4 => array(
-      'title' => 'Minute',
-      'operator' => 'or',
-      'value' => array(
-        5 => '5',
-      ),
-    ),
   );
   /* Filter criterion: Content: Category valid (field_category_valid) */
   $handler->display->display_options['filters']['field_category_valid_value']['id'] = 'field_category_valid_value';
@@ -579,16 +406,40 @@ function negawatt_meter_views_default_views() {
       ),
     ),
   );
+  /* Filter criterion: Content: Site Category (field_site_category) */
+  $handler->display->display_options['filters']['field_site_category_target_id']['id'] = 'field_site_category_target_id';
+  $handler->display->display_options['filters']['field_site_category_target_id']['table'] = 'field_data_field_site_category';
+  $handler->display->display_options['filters']['field_site_category_target_id']['field'] = 'field_site_category_target_id';
+  $handler->display->display_options['filters']['field_site_category_target_id']['group'] = 1;
+  $handler->display->display_options['filters']['field_site_category_target_id']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_site_category_target_id']['expose']['operator_id'] = 'field_site_category_target_id_op';
+  $handler->display->display_options['filters']['field_site_category_target_id']['expose']['label'] = 'Category';
+  $handler->display->display_options['filters']['field_site_category_target_id']['expose']['operator'] = 'field_site_category_target_id_op';
+  $handler->display->display_options['filters']['field_site_category_target_id']['expose']['identifier'] = 'field_site_category_target_id';
+  $handler->display->display_options['filters']['field_site_category_target_id']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    3 => 0,
+    4 => 0,
+  );
+  $handler->display->display_options['filters']['field_site_category_target_id']['group_info']['label'] = 'Site Category (field_site_category)';
+  $handler->display->display_options['filters']['field_site_category_target_id']['group_info']['identifier'] = 'field_site_category_target_id';
+  $handler->display->display_options['filters']['field_site_category_target_id']['group_info']['remember'] = FALSE;
+  $handler->display->display_options['filters']['field_site_category_target_id']['group_info']['group_items'] = array(
+    1 => array(),
+    2 => array(),
+    3 => array(),
+  );
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
-  $handler->display->display_options['path'] = 'admin/content/meters';
+  $handler->display->display_options['path'] = 'admin/content/sites';
   $handler->display->display_options['menu']['type'] = 'tab';
-  $handler->display->display_options['menu']['title'] = 'Meters';
+  $handler->display->display_options['menu']['title'] = 'Sites';
   $handler->display->display_options['menu']['weight'] = '-1';
   $handler->display->display_options['menu']['context'] = 0;
   $handler->display->display_options['menu']['context_only_inline'] = 0;
-  $export['meters'] = $view;
+  $export['sites'] = $view;
 
   return $export;
 }

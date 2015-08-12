@@ -1,12 +1,11 @@
-<div class="meter">
-    <label>
-        <input ng-change="toggleMeter(meterId)" ng-model="meters[meterId].checked" type="checkbox" />
+<div class="meter" ng-if="meters[meterId]">
+  <label>
+    <input ng-change="toggleMeter(meterId)" ng-model="meters[meterId].checked" type="checkbox" meter-id="{{meterId}}"/>
+    <span>{{ meters[meterId].label }}, {{ meters[meterId].place_address }}</span>
+  </label>
 
-        <span>{{ meters[meterId].label }}</span>
-    </label>
-
-    <div class="category-labels">
-        <span ng-repeat="categoryId in meters[meterId].categories" class="label" style="background: {{ categories[categoryId].background }}">{{ categories[categoryId].label }}</span>
-    </div>
-    <span class="site label label-default">{{ sites[meters[meterId].site].label }}</span>
+  <div class="category-labels">
+    <span ng-repeat="categoryId in meters[meterId].categories" class="label" style="background: {{ categories[categoryId].background }}">{{ categories[categoryId].label }}</span>
+  </div>
+  <span class="site label label-default">{{ sites[meters[meterId].site].label }}</span>
 </div>

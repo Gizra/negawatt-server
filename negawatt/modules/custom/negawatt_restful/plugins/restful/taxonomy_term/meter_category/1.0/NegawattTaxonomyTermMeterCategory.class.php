@@ -33,7 +33,7 @@ class NegawattTaxonomyTermMeterCategory extends \RestfulEntityBaseTaxonomyTerm {
    */
   protected function getMeters(\EntityMetadataWrapper $wrapper) {
     // Get the list of meters in the given site-category.
-    return taxonomy_select_nodes($wrapper->getIdentifier());
+    return taxonomy_select_nodes($wrapper->getIdentifier(), $pager = FALSE);
   }
 
   /**
@@ -97,7 +97,7 @@ class NegawattTaxonomyTermMeterCategory extends \RestfulEntityBaseTaxonomyTerm {
     // Gather the meters related to these categories.
     $meters = array();
     foreach($categories as $category) {
-      $meters = array_merge($meters, taxonomy_select_nodes($category));
+      $meters = array_merge($meters, taxonomy_select_nodes($category, $pager = FALSE));
     }
 
     if (empty($meters)) {

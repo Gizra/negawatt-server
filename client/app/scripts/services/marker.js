@@ -21,8 +21,8 @@ angular.module('negawattClientApp')
      * @returns {*|string}
      */
     function getCategory() {
-      var category = Object.keys(this.meter_categories)[0];
-      return category && this.meter_categories[category].name || 'default';
+      var category = this.site_categories && Object.keys(this.site_categories)[0];
+      return category && this.site_categories[category].name || 'default';
     }
 
     /**

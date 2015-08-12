@@ -29,19 +29,6 @@ angular.module('negawattClientApp')
     }
 
     /**
-     * Determine if a category has meters.
-     *
-     * @param category
-     *  The category.
-     *
-     * @returns {boolean}
-     *  It's true if the category has meters.
-     */
-    $scope.hasMeters = function(category) {
-      return !!category.meters;
-    };
-
-    /**
      * Check/Unckeck category to filter meters over the map.
      *
      * @param id

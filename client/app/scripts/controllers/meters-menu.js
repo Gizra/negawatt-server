@@ -5,34 +5,19 @@
  * @name negawattClientApp.controller: MetersMenuCtrl
  */
 angular.module('negawattClientApp')
-  .controller('MetersMenuCtrl', function ($scope, $state, $stateParams, $filter, Category, Meter, FilterFactory) {
+  .controller('MetersMenuCtrl', function ($scope, $state, $stateParams, $filter, Category, Meter, Site, FilterFactory, categories, meters, sites) {
+
+    var vm = this;
+
     // Selected tab in the categories selector.
     $scope.tab = 'sites';
 
-    $scope.categories = {
-      1: {label: 'צ׳ילר', background: '#339933', icon: 'astral'},
-      2: {label: 'מונה', background: '#FF6666', icon: 'astral'},
-      3: {label: 'מטבח', background: '#003366', icon: 'astral'},
-      5: {label: 'מונה ראשי', background: '#003366', icon: 'astral'},
-      51: {label: 'אולם ספורט', background: '#6699FF', icon: 'astral'},
-      52: {label: 'מלון', background: '#6699FF', icon: 'astral'},
-      53: {label: 'מבנה חינוך', background: '#003366', icon: 'astral'},
-      54: {label: 'בית ספר', background: '#141F33', icon: 'astral'},
-      55: {label: 'גן ילדים', background: '#141F33', icon: 'astral'}
-    };
+    $scope.categories = categories;
+    $scope.meters = meters.listAll;
+    $scope.sites = sites.listAll;
+    $scope.siteCategoriesTree = categories.tree;
 
-    $scope.meters = {
-      11: {label: 'מונה ראשי', categories: [2], site: 101},
-      12: {label: 'מטבח 1', categories: [3], site: 101},
-      13: {label: 'צ׳ילר 1', categories: [1, 3], site: 101},
-      21: {label: 'מונה ראשי', categories: [2], site: 102}
-    };
-
-    $scope.sites = {
-      101: {label: 'מרינה', meters: [11, 12, 13], categories: [52]},
-      102: {label: 'וילג׳', meters: [21], categories: [52]}
-    };
-
+    // Build meterCategoriesTree.
     $scope.meterCategoriesTree = [
       {
         id: 2,
@@ -52,22 +37,27 @@ angular.module('negawattClientApp')
       }
     ];
 
-    $scope.siteCategoriesTree = [
-      {
-        id: 7,
-        label: 'מלונות',
-        categories: [
-          {
-            id: 5,
-            label: 'מרינה',
-            meters: [11, 12, 21]
-          },
-          {
-            id: 6,
-            label: 'וילג׳',
-            meters: [13]
-          }
-        ]
-      }
-    ];
+    // Reload the categories when new sites/meters are added (new page arrives).
+    vm.reloadCategories = function(accountId) {
+      // Update categories tree with number of sites.
+      Category.get(accountId)
+        .then(function(categories) {
+          // Update 'categories' object resolved by ui-router.
+          $state.setGlobal('categories', categories);
+          $scope.categories = categories;
+        });
+    };
+
+    // Reload the categories when new sites are added (new sites page arrived).
+    $scope.$on('nwSitesChanged', function(event, meters) {
+      // Update categories tree with number of sites.
+      vm.reloadCategories($stateParams.accountId);
+    });
+
+    // Reload the categories when new meters are added (new meters page arrived).
+    $scope.$on('nwMetersChanged', function(event, meters) {
+      // Update categories tree with number of sites.
+      vm.reloadCategories($stateParams.accountId);
+    });
+
   });
