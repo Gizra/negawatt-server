@@ -5,46 +5,32 @@
  * @name negawattClientApp.controller: MetersMenuCtrl
  */
 angular.module('negawattClientApp')
-  .controller('MetersMenuCtrl', function ($scope, $state, $stateParams, $filter, Category, Meter, Site, FilterFactory, categories, meters, sites) {
+  .controller('MetersMenuCtrl', function ($scope, $state, $stateParams, $filter, SiteCategory, MeterCategory, Meter, Site, FilterFactory, siteCategories, sites, meterCategories, meters) {
 
     var vm = this;
 
     // Selected tab in the categories selector.
     $scope.tab = 'sites';
 
-    $scope.categories = categories;
     $scope.meters = meters.listAll;
-    $scope.sites = sites.listAll;
-    $scope.siteCategoriesTree = categories.tree;
-
-    // Build meterCategoriesTree.
-    $scope.meterCategoriesTree = [
-      {
-        id: 2,
-        label: 'מונה',
-        categories: [
-          {
-            id: 5,
-            label: 'מונה ראשי',
-            meters: [11, 21]
-          },
-          {
-            id: 1,
-            label: 'צ׳ילר',
-            meters: [13, 12]
-          }
-        ]
-      }
-    ];
+    $scope.siteCategoriesTree = siteCategories.tree;
+    $scope.meterCategoriesTree = meterCategories.tree;
 
     // Reload the categories when new sites/meters are added (new page arrives).
     vm.reloadCategories = function(accountId) {
       // Update categories tree with number of sites.
-      Category.get(accountId)
-        .then(function(categories) {
+      SiteCategory.get(accountId)
+        .then(function(siteCategories) {
           // Update 'categories' object resolved by ui-router.
-          $state.setGlobal('categories', categories);
-          $scope.categories = categories;
+          $state.setGlobal('siteCategories', siteCategories);
+          $scope.siteCategories = siteCategories;
+        });
+
+      MeterCategory.get(accountId)
+        .then(function(meterCategories) {
+          // Update 'categories' object resolved by ui-router.
+          $state.setGlobal('meterCategories', meterCategories);
+          $scope.meterCategories = meterCategories;
         });
     };
 

@@ -5,14 +5,13 @@
  * @name negawattClientApp.controller:DetailedChartCtrl
  */
 angular.module('negawattClientApp')
-  .controller('DetailedChartCtrl', function DetailedChartCtrl($scope, $state, $stateParams, $filter, Electricity, Chart, ChartUsagePeriod, FilterFactory, meters, filters, ChartElectricityUsage, categories, profile, electricityMock) {
+  .controller('DetailedChartCtrl', function DetailedChartCtrl($scope, $state, $stateParams, $filter, Electricity, Chart, ChartUsagePeriod, FilterFactory, meters, filters, ChartElectricityUsage, siteCategories, profile, electricityMock) {
     var vm = this;
-
 
     var compareCollection;
     var options;
 
-    $scope.categories = categories;
+    $scope.siteCategories = siteCategories;
 
     // Get the parameters chart frecuency.
     if (angular.isDefined($stateParams.chartFreq)) {
@@ -32,7 +31,7 @@ angular.module('negawattClientApp')
     }
     else if ($stateParams.categoryId) {
       // When no marker is selected fetch category label.
-      $scope.title = categories.list[$stateParams.categoryId] ? categories.list[$stateParams.categoryId].label : null;
+      $scope.title = siteCategories.list[$stateParams.categoryId] ? siteCategories.list[$stateParams.categoryId].label : null;
     }
     else {
       // Otherwise display account label.

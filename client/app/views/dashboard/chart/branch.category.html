@@ -6,10 +6,10 @@
   </label>
 </div>
 
-<ol ui-tree-categorys="" ng-model="category.meters" ng-if="category.meters.length" class="meters">
+<ol ui-tree-categorys ng-model="category.meters" ng-if="category.meters.length" class="meters">
   <li ng-repeat="meterId in category.meters" ng-include="'views/dashboard/chart/branch.meter.html'"> </li>
 </ol>
 
-<ol ui-tree-categorys="" ng-model="category.children" ng-if="category.children.length" class="categories">
+<ol ui-tree-categorys ng-model="category.children" ng-if="category.children.length" class="categories">
   <li ng-repeat="category in category.children" ng-show="category.numberOfSites || category.isSite" ui-tree-category ng-include="'views/dashboard/chart/branch.category.html'"> </li>
 </ol>

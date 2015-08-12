@@ -89,16 +89,16 @@ angular
           account: function($stateParams, Profile, profile) {
             return Profile.selectAccount($stateParams.accountId, profile);
           },
-          meters: function(Meter, account, $stateParams, Category, FilterFactory) {
+          meters: function(Meter, account) {
             // Get first records.
             return Meter.get(account.id);
           },
-          categories: function(Category, account) {
-            return Category.get(account.id);
+          siteCategories: function(SiteCategory, account) {
+            return SiteCategory.get(account.id);
           },
-          filters: function(FilterFactory, categories, $stateParams, meters, account) {
+          filters: function(FilterFactory, siteCategories, $stateParams, meters, account) {
             // Define categories filters. Used for the UI Checknboxes.
-            FilterFactory.set('categorized', categories);
+            FilterFactory.set('categorized', siteCategories);
             // Define electricity parameters
             FilterFactory.set('electricity', $stateParams);
 
@@ -152,10 +152,10 @@ angular
 
             return Meter.get(account.id, $stateParams.categoryId);
           },
-          categories: function(Category, account, categories) {
-            return Category.get(account.id);
+          siteCategories: function(SiteCategory, account) {
+            return SiteCategory.get(account.id);
           },
-          filters: function(categories, $stateParams, FilterFactory) {
+          filters: function(siteCategories, $stateParams, FilterFactory) {
             return {
               loadElectricity: true,
               activeElectricityHash: FilterFactory.get('activeElectricityHash')
@@ -198,8 +198,8 @@ angular
             // Necessary to resolve again to apply the filter, of category id.
             return Meter.get(account.id, $stateParams.categoryId);
           },
-          categories: function(Category, account, categories) {
-            return Category.get(account.id);
+          siteCategories: function(SiteCategory, account) {
+            return SiteCategory.get(account.id);
           },
           filters: function(meters, $stateParams, FilterFactory) {
             FilterFactory.set('electricity', $stateParams);
@@ -259,20 +259,23 @@ angular
           account: function($stateParams, Profile, profile) {
             return Profile.selectAccount($stateParams.accountId, profile);
           },
-          meters: function(Meter, account, $stateParams, Category, FilterFactory) {
+          meters: function(Meter, account) {
             // Get first records.
             return Meter.get(account.id);
           },
-          sites: function(Site, account, $stateParams, Category, FilterFactory) {
+          sites: function(Site, account) {
             // Get first records.
             return Site.get(account.id);
           },
-          categories: function(Category, account) {
-            return Category.get(account.id);
+          siteCategories: function(SiteCategory, account) {
+            return SiteCategory.get(account.id);
           },
-          filters: function(FilterFactory, categories, $stateParams, meters, account) {
+          meterCategories: function(MeterCategory, account) {
+            return MeterCategory.get(account.id);
+          },
+          filters: function(FilterFactory, siteCategories, $stateParams, meters, account) {
             // Define categories filters. Used for the UI Checknboxes.
-            FilterFactory.set('categorized', categories);
+            FilterFactory.set('categorized', siteCategories);
             // Define electricity parameters
             FilterFactory.set('electricity', $stateParams);
 

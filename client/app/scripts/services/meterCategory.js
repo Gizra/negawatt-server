@@ -21,7 +21,7 @@ angular.module('negawattClientApp')
      * @param categoryId - int
      *  The category ID.
      *
-     * @returns {Promise}
+     * @return {Promise}
      */
     this.get = function(accountId, categoryId) {
 
@@ -55,7 +55,7 @@ angular.module('negawattClientApp')
     /**
      * Return meter-categories array from the server.
      *
-     * @returns {$q.promise}
+     * @return {$q.promise}
      */
     function getCategoriesFromServer(accountId) {
       var deferred = $q.defer();
@@ -75,23 +75,25 @@ angular.module('negawattClientApp')
     }
 
     /**
-     * Return a promise with the categories list, filter by category.
+     * Return a promise with the categories list, filtered by category.
      *
      * @param getCategories
      *  Promise with the list of categories.
      * @param categoryId
      *  The category ID.
-     * @returns {$q.promise}
-     *  Promise with the list of categories filtered.
+     *
+     * @return {$q.promise}
+     *  Promise with the list of filtered categories.
      */
     function getCategoriesFilterByCategory(getCategories, categoryId) {
       var deferred = $q.defer();
 
-      // Filter meters with a category.
-      getCategories.then(function getCategoriesFilterByCategoryResolve(categories) {
+      // Filter meters by category.
+      getCategories.then(function getCategoriesFilteredByCategoryResolve(categories) {
         // Necessary to separate the cache from the filtering.
         categories = categories;
-        categories.collection = $filter('filter')(Utils.toArray(categories.collection), {id: parseInt(categoryId)}, true).pop().children;
+        categories.collection = $filter('filter')(Utils.toArray(categories.collection),
+          {id: parseInt(categoryId)}, true).pop().children;
         deferred.resolve(categories);
       });
 
@@ -130,7 +132,6 @@ angular.module('negawattClientApp')
      *  Promise of list of categories, comming from cache or the server.
      * @param accountId - int
      *  The account ID.
-     *
      */
     function prepareCategories(getCategories, accountId) {
       var deferred = $q.defer();
@@ -139,7 +140,6 @@ angular.module('negawattClientApp')
       Meter.get(accountId).then(function(meters) {
         self.meters = Utils.toArray(meters.listAll);
         getCategories
-          .then(addNumberOfMetersByCategory)
           .then(prepareData)
           .then(function prepareCategoriesResolve(categories) {
             setCache(categories);
@@ -150,92 +150,33 @@ angular.module('negawattClientApp')
       return deferred.promise;
     }
 
-
     /**
-     * Calculate the quantity of the meters for each category and quantity of meters in his children categories.
+     * Convert the array of categories to an object with properties list, collection and tree.
      *
-     * @param categories - string|{*}
-     *    List of categories wrapped in $http request response or cache object.
-     * @returns {*}
-     *    List of categories with the quantity of meters in the category.
-     *
-     */
-    function addNumberOfMetersByCategory(categories) {
-      var deferred = $q.defer();
-      var meterCategories;
-      var list = (angular.isArray(categories)) ? categories : categories.list;
-
-      // Set meters in 0.
-      angular.forEach(list, function(category) {
-        category.meters = 0;
-      }, list);
-
-      // Index categories.
-      self.indexed = Utils.indexById(list);
-
-      // Get the meter list categories.
-      meterCategories = self.meters
-        .map(function(meter) {
-          return meter.meter_categories ? meter.meter_categories : [];
-        });
-
-      angular.forEach(meterCategories, function(categories) {
-        angular.forEach(categories, function(category) {
-          // Set selected categories.
-          var categoriesIds = [+category.id] ;
-
-          // Increase amount of meters.
-          angular.forEach(categoriesIds, function(itemsId) {
-            self.indexed[itemsId].meters++;
-          });
-        });
-      });
-
-      // Return list
-      list = Utils.toArray(self.indexed);
-      deferred.resolve(list);
-
-      return deferred.promise;
-    }
-
-    /**
-     * Convert the array of list of categories to and object of categories, order in structure
-     * tree (for the directive angular-ui-tree) and collection (used to index and select the categories).
+     * list: an array of the categories,
+     * collection: an indexed array (object) of the categories (used to index and select the categories),
+     * tree: the categories in tree structure (for the directive angular-ui-tree).
      *
      * @param list - {string}
      *   Response of the request that contains the List of categories in an array.
      *
-     * @returns {*}
-     *   List of categories organized in an object, each category keyed by its
-     *   ID.
+     * @return {*}
+     *   List of categories organized in an object, each category keyed by its ID.
      */
     function prepareData(list) {
       var deferred = $q.defer();
-      var categories = {};
+      var meterCategories = {};
 
-      // Categories in an original list array. Used to update the amount of meters by categories whe are multiple pages.
-      categories.list = Utils.indexById(list);
+      // Categories in an original list array.
+      // Used to update the amount of meters by categories while downloading multiple pages.
+      meterCategories.list = list;
       // Categories indexed by id, used to easy select a categories.
-      categories.collection = getCategoryCollection(list);
-      // Get categories in tree model, used into the directive angular-ui-tree.
-      categories.tree = getCategoryTree(list);
+      meterCategories.collection = Utils.indexById(list);
+      // Categories in tree model, used for angular-ui-tree directive.
+      meterCategories.tree = getCategoryTree(list);
 
-      deferred.resolve(categories);
+      deferred.resolve(meterCategories);
       return deferred.promise;
-    }
-
-    /**
-     * Return categories in collection indexed by id.
-     *
-     * @param list
-     *    List of categories.
-     *
-     * @returns {*}
-     *    Categories collection indexed by id.
-     */
-    function getCategoryCollection(list) {
-
-      return Utils.indexById(list);
     }
 
     /**
@@ -244,8 +185,7 @@ angular.module('negawattClientApp')
      * @param list
      *    List of categories.
      *
-     * @returns {*}
-     *
+     * @return {*}
      */
     function getCategoryTree(list) {
       var categoryTree;
@@ -263,9 +203,8 @@ angular.module('negawattClientApp')
      * @param list - {*[]}
      *    Categories, with children with ID.
      *
-     * @returns Array - [*[]]
+     * @return Array - [*[]]
      *    Categories, with children object.
-     *
      */
     function updateCategoryWithChildren(list) {
       // Save object of categories index by id.
@@ -287,24 +226,6 @@ angular.module('negawattClientApp')
     }
 
     /**
-     * Return parent id, if the category id have parent.
-     *
-     * @param categoryId
-     *    Child category Id.
-     *
-     * @param categories
-     *    List of categories.
-     *
-     * @returns {*}
-     */
-    function getParentId(categoryId, categories) {
-      // Check if have parent.
-      var parent = ($filter('filter')(categories, {children: categoryId}, true)).pop();
-
-      return (angular.isDefined(parent)) ? parent.id : undefined;
-    }
-
-    /**
      * Return the category cache filter.
      */
     function categoriesFiltered() {
@@ -318,13 +239,15 @@ angular.module('negawattClientApp')
     }
 
     /**
-     * Add properties {} to each element on data, to be habdle for (check/uncheck)
-     * category selection.
+     * Add properties for check/unchech handling.
+     *
+     * Add 'checked', 'indeterminate' properties to each element on data, used to handle
+     * check/uncheck for category selection.
      *
      * @param response
      *  The response from the category request.
      *
-     * @returns {*}
+     * @return {*}
      */
     function prepareSelector(response) {
       response = angular.fromJson(response);

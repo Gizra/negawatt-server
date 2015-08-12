@@ -8,13 +8,21 @@
 class NegawattTaxonomyTermMeterCategory extends \RestfulEntityBaseTaxonomyTerm {
 
   /**
+   * Save the account id from the request.
+   *
+   * @var int
+   *  Account id.
+   */
+  protected $account_id = NULL;
+
+  /**
    * {@inheritdoc}
    */
   public function publicFieldsInfo() {
     $public_fields = parent::publicFieldsInfo();
 
     $public_fields['meters'] = array(
-      'callback' => array($this, 'getMeters',)
+      'callback' => array($this, 'getCategoryMeters',)
     );
 
     $public_fields['icon'] = array(
@@ -29,11 +37,51 @@ class NegawattTaxonomyTermMeterCategory extends \RestfulEntityBaseTaxonomyTerm {
   }
 
   /**
+   * {@inheritdoc}
+   *
+   * Verify the account parameter of the request and save account-id.
+   */
+  public function process($path = '', array $request = array(), $method = \RestfulInterface::GET, $check_rate_limit = TRUE) {
+    if (empty($request['account']) || !intval($request['account'])) {
+      throw new \RestfulBadRequestException('The "account" parameter is missing for the request, thus the vocabulary cannot be set for the account.');
+    }
+    // Get the account node.
+    $node = node_load($request['account']);
+    if (!$node) {
+      throw new \RestfulBadRequestException('The "account" parameter is not a node.');
+    }
+    elseif ($node->type != 'account') {
+      throw new \RestfulBadRequestException('The "account" parameter is not a of type "account".');
+    }
+
+    // Save account id.
+    $this->account_id = $request['account'];
+
+    // Remove account ID from the request because it's not a field in the taxonomy.
+    unset($request['account']);
+    return parent::process($path, $request, $method, $check_rate_limit);
+  }
+
+  /**
    *  Get the meters of the current category item by id.
    */
-  protected function getMeters(\EntityMetadataWrapper $wrapper) {
+  protected function getCategoryMeters(\EntityMetadataWrapper $wrapper) {
     // Get the list of meters in the given site-category.
-    return taxonomy_select_nodes($wrapper->getIdentifier(), $pager = FALSE);
+    $query = new EntityFieldQuery();
+
+    $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', array('iec_meter', 'modbus_meter'), 'IN')
+      ->propertyCondition('status', NODE_PUBLISHED)
+      ->fieldCondition('field_meter_category', 'target_id', $wrapper->getIdentifier())
+      ->fieldCondition(OG_AUDIENCE_FIELD, 'target_id', $this->account_id);
+
+    $result = $query->execute();
+
+    if (empty($result['node'])) {
+      return array();
+    }
+
+    return array_keys($result['node']);
   }
 
   /**
@@ -97,7 +145,8 @@ class NegawattTaxonomyTermMeterCategory extends \RestfulEntityBaseTaxonomyTerm {
     // Gather the meters related to these categories.
     $meters = array();
     foreach($categories as $category) {
-      $meters = array_merge($meters, taxonomy_select_nodes($category, $pager = FALSE));
+      $wrapper = entity_metadata_wrapper('taxonomy_term', $category);
+      $meters = array_merge($meters,  $this->getCategoryMeters($wrapper));
     }
 
     if (empty($meters)) {

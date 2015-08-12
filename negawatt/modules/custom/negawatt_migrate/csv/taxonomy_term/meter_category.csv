@@ -1,12 +1,12 @@
 id,name,weight,description,field_icon_categories,field_match_strings
-main,ראשי,,מונה ראשי,
-main-iec,ראשי חח"י,,מונה ראשי של חברת החשמל,
-chiller,צ'ילר,,מערכות קירור וחימום,
-lighting,תאורה,,מערכות תאורה,
-refrigeration,מקררים,,מקררים,
-ovens,תנורים,,תנורים,
-pumps,משאבות,,מערכות שאיבה ומגופים,
-compressors,מדחסים,,מדחסי אויר,
-bellows,מפוחים,,מפוחים,
-ventilators,מאווררים,,מאווררים,
-other,אחר,,מערכות שונות,
+main,ראשי,,מונה ראשי,mains
+main-iec,ראשי חח"י,,מונה ראשי של חברת החשמל,utility
+chiller,צ'ילר,,מערכות קירור וחימום,chiller
+lighting,תאורה,,מערכות תאורה,lighting
+refrigeration,מקררים,,מקררים,refrig
+ovens,תנורים,,תנורים,oven
+pumps,משאבות,,מערכות שאיבה ומגופים,pump
+compressors,מדחסים,,מדחסי אויר,compressor
+bellows,מפוחים,,מפוחים,bellow
+ventilators,מאווררים,,מאווררים,ventilator
+other,אחר,,מערכות שונות,other
