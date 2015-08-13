@@ -1,14 +1,14 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .controller('DetailsCtrl', function ($scope, $state, $stateParams, FilterFactory, Chart, ChartCategories, meters, $filter, categories) {
+  .controller('DetailsCtrl', function ($scope, $state, $stateParams, FilterFactory, Chart, ChartCategories, meters, $filter, siteCategories) {
     var vm = this;
     // Category id selected from pie chart.
     var categoryId;
     // Summary property of electricity.
     var summary;
 
-    $scope.categories = categories;
+    $scope.categories = siteCategories;
     $scope.meters = meters;
 
     // Public controller API
