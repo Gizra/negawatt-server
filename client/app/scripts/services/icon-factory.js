@@ -51,7 +51,7 @@ angular.module('negawattClientApp')
       var deferred = $q.defer();
       // To avoid circular dependency, the inject get Category service
       // on run time.
-      var category = $injector.get('Category');
+      var category = $injector.get('SiteCategory');
 
       // Get category list.
       category.get().then(function(categories) {

@@ -8,7 +8,7 @@
  * Controller of the negawattClientApp
  */
 angular.module('negawattClientApp')
-  .controller('UsageCtrl', function UsageCtrl($scope, $state, $stateParams, $filter, Electricity, Chart, ChartUsagePeriod, FilterFactory, meters, filters, ChartElectricityUsage, categories, profile) {
+  .controller('UsageCtrl', function UsageCtrl($scope, $state, $stateParams, $filter, Electricity, Chart, ChartUsagePeriod, FilterFactory, meters, filters, ChartElectricityUsage, siteCategories, profile) {
     var vm = this;
     var getChartPeriod = ChartUsagePeriod.getChartPeriod;
 
@@ -33,7 +33,7 @@ angular.module('negawattClientApp')
     }
     else if ($stateParams.categoryId) {
       // When no marker is selected fetch category label.
-      $scope.title = categories.list[$stateParams.categoryId] ? categories.list[$stateParams.categoryId].label : null;
+      $scope.title = siteCategories.list[$stateParams.categoryId] ? siteCategories.list[$stateParams.categoryId].label : null;
     }
     else {
       // Otherwise display account label.

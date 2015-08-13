@@ -8,12 +8,12 @@
  * Controller of the negawattClientApp
  */
 angular.module('negawattClientApp')
-  .controller('CategoryCtrl', function ($scope, $state, $stateParams, $filter, Category, Meter, FilterFactory, categories, meters) {
+  .controller('CategoryCtrl', function ($scope, $state, $stateParams, $filter, SiteCategory, Meter, FilterFactory, siteCategories, meters) {
 
     // Define property in the parent scope, permit to be accesable
     // by scope methods of the controller.
 
-    $scope.categories = categories;
+    $scope.categories = siteCategories;
     $scope.accountId = $stateParams.accountId;
     $scope.chartFreq = $stateParams.chartFreq;
 
@@ -21,7 +21,7 @@ angular.module('negawattClientApp')
     $scope.filterMeters = FilterFactory.showCategoryFilters();
 
     // Select category if exist, otherwise return an alert.
-    if (angular.isUndefined(categories.collection[$stateParams.categoryId]) && $state.is('dashboard.withAccount.categories')) {
+    if (angular.isUndefined(siteCategories.collection[$stateParams.categoryId]) && $state.is('dashboard.withAccount.categories')) {
       $scope.vm.alerts.new({type: 'default', msg: 'קטגוריה לא קיימת.'});
     }
     else {
@@ -60,11 +60,11 @@ angular.module('negawattClientApp')
     $scope.$on('nwMetersChanged', function(event, meters) {
       // Update categories tree with number of meters.
 
-      Category.get($stateParams.accountId)
-        .then(function(categories) {
+      SiteCategory.get($stateParams.accountId)
+        .then(function(siteCategories) {
           // Update 'categories' object resolved by ui-router.
-          $state.setGlobal('categories', categories);
-          $scope.categories = categories;
+          $state.setGlobal('siteCategories', siteCategories);
+          $scope.categories = siteCategories;
         });
     });
 

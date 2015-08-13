@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .controller('MapCtrl', function ($scope, $state, $stateParams, $location, $filter, Category, Map, leafletData, $timeout, account, meters, FilterFactory) {
+  .controller('MapCtrl', function ($scope, $state, $stateParams, $location, $filter, Map, leafletData, $timeout, account, meters, FilterFactory) {
     var vm = this;  
     var isMeterSelected = false;
 
