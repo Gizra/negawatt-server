@@ -21,19 +21,16 @@ ol, ul {
     color: #26858d  !important;
   }
 
-  li {
-    line-height: 25px;
+  img {
+    position: relative;
+    right: 5px;
+    left: 8px;
+    bottom: 3px;
+    width: 17px;
   }
 
   .tree-level-top {
     margin-left: 10px;
-
-    img {
-      position: relative;
-      right: 13px;
-      bottom: 3px;
-      width: 17px;
-    }
 
     a {
       color: #2c2c2c;
@@ -92,6 +89,9 @@ ol, ul {
       }
     }
 
+    label {
+      font-weight: normal;
+    }
   }
 
   // Style of the input checkbox.

@@ -27,22 +27,22 @@ angular.module('negawattClientApp')
     // Set the current selection label.
     if ($stateParams.markerId) {
       // Set marker label.
-      $scope.title = meters.list[$stateParams.markerId] ? meters.list[$stateParams.markerId].label : null;
+      this.title = meters.list[$stateParams.markerId] ? meters.list[$stateParams.markerId].label : null;
     }
     else if ($stateParams.categoryId) {
       // When no marker is selected fetch category label.
-      $scope.title = siteCategories.list[$stateParams.categoryId] ? siteCategories.list[$stateParams.categoryId].label : null;
+      this.title = siteCategories.list[$stateParams.categoryId] ? siteCategories.list[$stateParams.categoryId].label : null;
     }
     else {
       // Otherwise display account label.
       // Find the current selected account in the user's accounts.
       angular.forEach(profile.account, function(account) {
         if (account.id == $stateParams.accountId) {
-          $scope.title = account.label;
+          this.title = account.label;
+          return;
         }
-      });
+      }, vm);
     }
-
 
     /**
      * Force load of the electricity data.

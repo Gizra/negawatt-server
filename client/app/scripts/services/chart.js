@@ -37,7 +37,7 @@ angular.module('negawattClientApp')
       setActiveFrequency: function(chartFreq) {
         resetFrequencies();
          // Chart frequency test.
-        chart.frequencies[chartFreq].active = true;
+        chart.frequencies[chartFreq].active = 'active';
       },
       /**
        * Return the frequency object active.
@@ -68,16 +68,25 @@ angular.module('negawattClientApp')
             var format = 'YYYY';
             break;
           case 'month':
+          case 'day':
             var format = 'MM/YYYY';
             break;
-          case 'day':
           case 'hour':
           case 'minute':
             var format = 'DD/MM/YYYY';
             break;
         }
 
-        return moment(from).format(format) + ' - ' + moment(until).format(format);
+        switch (this.getActiveFrequency().frequency) {
+          case 'year':
+          case 'month':
+          case 'hour':
+            return moment(from).format(format) + '-' + moment(until).format(format);
+
+          case 'day':
+          case 'minute':
+            return moment(from).format(format);
+        }
       }
     };
 
@@ -90,8 +99,8 @@ angular.module('negawattClientApp')
     function setFrequencies() {
       return {
         1: {
-          frequency: 'year',
-          label: 'שנה',
+          frequency: 'years',
+          label: 'שנים',
           type: '1',
           unit_num_seconds: 365 * 24 * 60 * 60,
           chart_default_time_frame: 10,
@@ -101,8 +110,8 @@ angular.module('negawattClientApp')
           axis_h_title: 'שנה'
         },
         2: {
-          frequency: 'month',
-          label: 'חודש',
+          frequency: 'year',
+          label: 'שנה',
           type: '2',
           unit_num_seconds: 31 * 24 * 60 * 60,
           chart_default_time_frame: 24,
@@ -112,8 +121,8 @@ angular.module('negawattClientApp')
           axis_h_title: 'חודש'
         },
         3: {
-          frequency: 'day',
-          label: 'יום',
+          frequency: 'month',
+          label: 'חודש',
           type: '3',
           unit_num_seconds: 24 * 60 * 60,
           chart_default_time_frame: 31,
@@ -123,8 +132,8 @@ angular.module('negawattClientApp')
           axis_h_title: 'תאריך'
         },
         4: {
-          frequency: 'hour',
-          label: 'שעה',
+          frequency: 'week',
+          label: 'שבוע',
           type: '4',
           unit_num_seconds: 60 * 60,
           // One week.
@@ -135,8 +144,8 @@ angular.module('negawattClientApp')
           axis_h_title: 'שעה'
         },
         5: {
-          frequency: 'minute',
-          label: 'דקות',
+          frequency: 'day',
+          label: 'יום',
           type: '5',
           unit_num_seconds: 60,
           // 48 hours.
@@ -154,7 +163,7 @@ angular.module('negawattClientApp')
      */
     function resetFrequencies() {
       angular.forEach(chart.frequencies, function(frequency) {
-        frequency.active = false;
+        frequency.active = '';
       });
     };
 

@@ -1,13 +1,7 @@
-<ul class="nav nav-pills">
-  <li class="active"><a>שנה</a></li>
-  <li><a>חודש</a></li>
-  <li><a>יום</a></li>
-  <li><a>שעה</a></li>
-  <li><a>דקות</a></li>
-</ul>
+<chart-detailed-tabs></chart-detailed-tabs>
 
 <div class="panel panel-default tabs ng-scope">
   <div class="panel-body">
-    <chart-detailed compare-with="vm.compareWith" date="123" categories="vm.categories" has-extra-chart="vm.hasExtraChart" show-extra-chart-button="true"></chart-detailed>
+    <chart-detailed title="{{vm.title}}" compare-with="vm.compareWith" date="123" categories="vm.categories" has-extra-chart="vm.hasExtraChart" show-extra-chart-button="true"></chart-detailed>
   </div>
 </div>

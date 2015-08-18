@@ -1,4 +1,4 @@
-<div class="meter" ng-if="meters[meterId]">
+<div class="meter tree-level-bottom" ng-if="meters[meterId]">
   <label>
     <input ng-change="toggleMeter(meterId)" ng-model="meters[meterId].checked" type="checkbox" meter-id="{{meterId}}"/>
     <span>{{ meters[meterId].label }}, {{ meters[meterId].place_address }}</span>

@@ -14,6 +14,44 @@
     }
   }
 
+  chart-detailed {
+    // To allow usage-chart overlap the pie, put them inside a 'relatove' div.
+    .detailed-chart {
+      position: relative;
+      height: 350px;
+    }
+
+    // Each chart must be inside an 'absolute' div.
+    // Move pie chart to the right, and above usage-chart.
+    .pie-chart-container {
+      position: absolute;
+      right: -12%;
+      top: 50px;
+      z-index: 10;
+    }
+
+    // Stick usage chart to the left and a little to the top.
+    // Z-index below the pie, but over other elements.
+    .usage-chart-container {
+      position: absolute;
+      left: 0px;
+      top: -10%;
+      z-index: 5;
+    }
+
+  }
+
+  chart-detailed-date-picker {
+    // Put input controls above usage-chart.
+    .input-group {
+      z-index: 20;
+    }
+
+    .form-control {
+      padding: 6px;
+    }
+  }
+
   #messages .panel-group {
     margin: 0 0 0 7px;
 

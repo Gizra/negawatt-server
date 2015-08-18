@@ -1,0 +1,6 @@
+<!-- Frequency time tabs -->
+<ul class="nav nav-tabs">
+  <li ng-repeat="frequency in ctrlChartTabs.frequencies" class="{{frequency.active}}">
+    <a ng-click="ctrlChartTabs.changeFrequency(frequency)">{{frequency.label}}</a>
+  </li>
+</ul>

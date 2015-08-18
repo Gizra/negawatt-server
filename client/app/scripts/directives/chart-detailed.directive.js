@@ -1,20 +1,107 @@
 'use strict';
 
 angular.module('negawattClientApp')
+  .directive('chartDetailedTabs', function() {
+    return {
+      templateUrl: 'scripts/directives/chart-detailed-tabs.directive.html',
+      controller: function ChartDetailedCtrlTabs($scope, Chart, $filter, ChartUsagePeriod, ChartElectricityUsage, $stateParams) {
+
+        var ctrlChartTabs = this;
+
+        // Get chart frequencies (in order to draw frequency tabs)
+        ctrlChartTabs.frequencies = ChartUsagePeriod.getFrequencies();
+
+        // Handler for click in frequency tab.
+        ctrlChartTabs.changeFrequency = function(frequency) {
+          ChartUsagePeriod.changeFrequency(frequency.type);
+          ChartElectricityUsage.requestElectricity(ChartUsagePeriod.stateParams);
+        };
+      },
+      controllerAs: 'ctrlChartTabs'
+    };
+  })
+
+  .directive('chartDetailedDatePicker', function () {
+    return {
+      scope: {
+      },
+      templateUrl: 'scripts/directives/chart-detailed-date-selector.directive.html',
+      controller: function ChartDetailedDatePickerCtrl($scope, $stateParams, $timeout, Electricity) {
+
+        var ctrlChartDatePicker = this;
+
+        ctrlChartDatePicker.open = function (dateOption) {
+          $timeout(function () {
+            dateOption.opened = true;
+          });
+        };
+
+        // Handle change in frequency (
+        ctrlChartDatePicker.frequencyChanged = function (chartFreq) {
+          ctrlChartDatePicker.chartFreq = chartFreq;
+        };
+
+        var now = new Date(),
+          dateOptions = {
+          1: {
+            frequency: 1,
+            'datepicker-mode': "'year'",
+            'min-mode': "year",
+            'format': 'yyyy',
+          },
+          2: {
+            frequency: 2,
+            'datepicker-mode': "'year'",
+            'min-mode': "year",
+            'format': 'yyyy',
+          },
+          3: {
+            frequency: 3,
+            'datepicker-mode': "'month'",
+            'min-mode': "month",
+            'formatMonth': 'MMM',
+            'format': 'MM/yyyy',
+          },
+          4: {
+            frequency: 4,
+            'starting-day': 1,
+            'formatMonth': 'MMM',
+            'showWeeks': false,
+            'format': 'dd/MM/yy',
+          },
+          5: {
+            frequency: 5,
+            'starting-day': 1,
+            'formatMonth': 'MMM',
+            'showWeeks': false,
+            'format': 'dd/MM/yy',
+          }
+        };
+
+        ctrlChartDatePicker.dt = now.getTime();
+        ctrlChartDatePicker.minDate = undefined;
+        ctrlChartDatePicker.maxDate = undefined;
+        ctrlChartDatePicker.dateOptions = dateOptions;
+        ctrlChartDatePicker.frequencyChanged($stateParams.chartFreq);
+
+        // Capture change in $stateParams to update chartFreq binding.
+        $scope.$on('$locationChangeSuccess', function(event) {
+          ctrlChartDatePicker.frequencyChanged($stateParams.chartFreq);
+        });
+
+      },
+      controllerAs: 'ctrlChartDatePicker'
+    }
+  })
+
   .directive('chartDetailed', function () {
     return {
       templateUrl: 'scripts/directives/chart-detailed.directive.html',
-      controller: function ChartDetailedCtrl($scope, Chart, $filter, ChartUsagePeriod, ChartElectricityUsage) {
+      controller: function ChartDetailedCtrl($scope, $window, $stateParams, Chart, $filter, ChartUsagePeriod, ChartElectricityUsage) {
         var chart = this;
         var options;
         var compareCollection;
         var getChartPeriod = ChartUsagePeriod.getChartPeriod;
-
-        chart.title = 'מלון אסטרל מרינה';
-        // TODO: Calculation of data range with the directive and service of dat range.
-        chart.dateRange = '2012 - 2015';
-
-
 
         /**
          * Electricity Service Event: When electricity collection change update
@@ -42,44 +129,15 @@ angular.module('negawattClientApp')
             return;
           }
 
+          // Update chart title's date range.
+          chart.dateRange = Chart.formatDateRange($stateParams.chartPreviousPeriod * 1000, $stateParams.chartNextPeriod * 1000);
+
           // Update electricity property with active electricity (if the response has data).
+          options = {};
           chart.electricity = $filter('activeElectricityFilters')(electricity);
-          //chart.electricity = $filter('toChartDataset')(chart.electricity, compareCollection, options, 'ColumnChart');
+          chart.data = $filter('toChartDataset')(chart.electricity, compareCollection, options, 'ColumnChart');
 
-
-          options = {
-            'isStacked': 'true',
-            'fill': 20,
-            'displayExactValues': true,
-            'height': '500',
-            'width': '768',
-            'series': {
-              0: {targetAxisIndex: 0},
-              1: {
-                targetAxisIndex: 1,
-                type: 'line'
-              }
-            },
-            'vAxes': {
-              0: {
-                'title': 'Set a title vAxis (Ex. Electricity)',
-                'gridlines': {
-                  'count': 6
-                }
-              },
-              1: {
-                'title': 'Set a title vAxis (Ex. Temperature)',
-                'gridlines': {
-                  'count': 6
-                },
-                'chart_type': 'LineChart',
-              }
-            },
-            'hAxis': {
-              'title': 'Set a title hAxis'
-            }
-          };
-
+          // Update pie chart.
           $scope.chartObject = {
             "type": "PieChart",
             "displayed": true,
@@ -198,25 +256,34 @@ angular.module('negawattClientApp')
               "tooltip": {
                 "isHtml": false
               },
-              legend: {position: 'none'}
+              legend: {position: 'none'},
+              backgroundColor: 'none'
             },
             "formatters": {},
             "view": {}
           };
 
-          // Mock active frequency.
-          Chart.setActiveFrequency(2);
-
-          chart.electricity = $filter('toChartDataset')(chart.electricity, compareCollection, options, 'ColumnChart');
-          console.log('Directive:', chart.electricity);
-
         });
 
+        // Watch window width, and update chart parameters to resize the chart.
+        $scope.$watch(
+          function () {
+            return $window.innerWidth;
+          },
+          function (value) {
+            // Window was resized, recalc chart options.
+            if (chart.data != undefined) {
+              chart.data.options = $filter('toChartDataset')('options-only');
+            }
+          },
+          true
+        );
 
       },
       controllerAs: 'chart',
       bindToController: true,
       scope: {
+        title: '@',
         compareWith: '=',
         date: '=',
         frequency: '=',

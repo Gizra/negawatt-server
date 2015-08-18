@@ -1,5 +1,5 @@
 angular.module('negawattClientApp')
-  .filter('toChartDataset', function ($filter, Chart, ChartOptions, moment) {
+  .filter('toChartDataset', function ($filter, Chart, ChartOptions, moment, $window) {
 
     /**
      * From a collection object create a Google Chart data ser object
@@ -19,6 +19,11 @@ angular.module('negawattClientApp')
      */
     return function (collection, compareWith, options, type){
       var chartFrequencyActive = Chart.getActiveFrequency();
+      // Check if asked to return chart options only.
+      if (collection == 'options-only') {
+        return getOptions(chartFrequencyActive);
+      }
+
       // Recreate collection object.
       collection = {
         type: type || chartFrequencyActive.chart_type,
@@ -37,14 +42,23 @@ angular.module('negawattClientApp')
      *  Chart options object.
      */
     function getOptions(chartFrequencyActive) {
+      var w = angular.element($window),
+        width = w.width(),
+        height = w.height();
+
       return angular.extend(ChartOptions[chartFrequencyActive.chart_type],
         {
+          titlePosition: 'none',
           vAxis: {
             title: chartFrequencyActive.axis_v_title
           },
           hAxis: {
             // No title in order to have enough space for the bars labels.
           },
+          legend: { position: 'bottom' },
+          backgroundColor: 'none',
+          height: 350,
+          width: width * 7 / 12 - 150,
           tooltip: {isHtml: true}
         });
     }

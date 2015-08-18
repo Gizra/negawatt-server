@@ -1,28 +1,22 @@
+<!-- Chart detailed directive -->
 <div class="row">
   <h4 class="col-sm-8 title state-title"> {{ chart.title }} <small class="date" dir="ltr">{{ chart.dateRange }}</small></h4>
   <div class="col-sm-4 form-inline">
-    <button type="button" class="btn btn-default disabled"><span class="glyphicon glyphicon-chevron-right"></span></button>
 
-    <select type="email" class="form-control" id="year">
-      <option>2015</option>
-    </select>
+    <chart-detailed-date-picker></chart-detailed-date-picker>
 
-    <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span></button>
-
-    <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus" alt="השווה לתאריך אחר"></span></button>
   </div>
 </div>
 
 <div class="row detailed-chart">
 
-
-  <div class="col-sm-4">
+  <div class="pie-chart-container">
     <div class="chart-container">
       <div google-chart chart="chartObject"></div>
     </div>
   </div>
 
-  <div class="col-sm-8">
+  <div class="usage-chart-container">
     <chart-electricity-compare electricity="chart.electricity" compareCollection="" options=""></chart-electricity-compare>
   </div>
 
