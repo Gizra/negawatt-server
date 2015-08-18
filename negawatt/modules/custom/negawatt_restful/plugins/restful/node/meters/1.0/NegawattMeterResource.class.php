@@ -39,13 +39,6 @@ class NegawattMeterResource extends \RestfulEntityBaseMultipleBundles {
     foreach ($ids as $id) {
       $node = node_load($id);
 
-      if ($node->type == 'iec_meter') {
-        $resource = 'iec_meters';
-      }
-      elseif ($node->type == 'modbus_meter') {
-        $resource = 'modbus_meters';
-      }
-
       // The resource, by convention, is the plural form of the content-type
       // (for 'modbus_meter', it'll be 'modbus_meters').
       $resource = $node->type . 's';

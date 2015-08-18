@@ -1,11 +1,11 @@
-<div class="panel panel-default">
+<div ng-model="propertyMeters" class="panel panel-default">
     <div class="panel-heading">מאפייני אתרים</div>
     <div class="panel-body">
         <ul class="tree">
-            <li>
+            <li ng-repeat="meter in propertyMeters" class="meter property-meter tree-level-bottom">
                 <label>
                     <input type="checkbox" />
-                    <span>טמפרטורה</span>
+                    <span>{{meter.label}}</span>
                 </label>
             </li>
         </ul>

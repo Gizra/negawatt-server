@@ -269,6 +269,10 @@ angular
             // Get first records.
             return Meter.get(account.id);
           },
+          propertyMeters: function(PropertyMeter, account) {
+            // Get first records.
+            return PropertyMeter.get(account.id);
+          },
           sites: function(Site, account) {
             // Get first records.
             return Site.get(account.id);

@@ -5,7 +5,7 @@
  * @name negawattClientApp.controller: MetersMenuCtrl
  */
 angular.module('negawattClientApp')
-  .controller('MetersMenuCtrl', function ($scope, $state, $stateParams, $filter, SiteCategory, MeterCategory, Meter, Site, FilterFactory, siteCategories, sites, meterCategories, meters) {
+  .controller('MetersMenuCtrl', function ($scope, $state, $stateParams, $filter, SiteCategory, siteCategories, MeterCategory, meterCategories, Meter, meters, PropertyMeter, propertyMeters, Site, sites, FilterFactory) {
 
     var vm = this;
 
@@ -13,6 +13,7 @@ angular.module('negawattClientApp')
     $scope.tab = 'sites';
 
     $scope.meters = meters.listAll;
+    $scope.propertyMeters = propertyMeters.listAll;
     $scope.siteCategoriesTree = siteCategories.tree;
     $scope.meterCategoriesTree = meterCategories.tree;
 
