@@ -61,12 +61,22 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
 
     $public_fields['meter_category'] = array(
       'property' => 'meter_category',
-      'column_for_query' => 'cat.field_meter_category_target_id',
+      'column_for_query' => 'meter_cat.field_meter_category_target_id',
     );
 
     $public_fields['meter_account'] = array(
       'property' => 'meter_account',
       'column_for_query' => 'acc.gid',
+    );
+
+    $public_fields['meter_site'] = array(
+      'property' => 'meter_site',
+      'column_for_query' => 'site.field_meter_site_target_id',
+    );
+
+    $public_fields['site_category'] = array(
+      'property' => 'site_category',
+      'column_for_query' => 'site_cat.field_site_category_target_id',
     );
 
     $public_fields['min_power_factor'] = array(
@@ -101,19 +111,110 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
   }
 
   /**
-   * If $filter contains filter for 'meter_category', modify $query to catch the
-   * given category, and all its parent categories.
+   * Get the list of sites related to site-category.
+   *
+   * @param $category_id
+   *  Site category id.
+   * @param $meter_account
+   *  The meter-account.
+   *
+   * @return array
+   *  Array of site ids.
+   */
+  protected function getSitesByCategory($category_id, $meter_account) {
+    $query = new EntityFieldQuery();
+
+    $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'meter_site')
+      ->propertyCondition('status', NODE_PUBLISHED)
+      ->fieldCondition('field_site_category', 'target_id', $category_id)
+      ->fieldCondition(OG_AUDIENCE_FIELD, 'target_id', $meter_account);
+
+    $result = $query->execute();
+
+    if (empty($result['node'])) {
+      return array();
+    }
+
+    return array_keys($result['node']);
+  }
+
+  /**
+   * Get the list of meters related to a list of sites.
+   *
+   * @param $site_ids
+   *  An array of site ids.
+   * @param $meter_account
+   *  The meter-account.
+   *
+   * @return array
+   *  Array of meter ids.
+   */
+  protected function getMetersBySites($site_ids, $meter_account) {
+    if (empty($site_ids)) {
+      return array();
+    }
+
+    $query = new EntityFieldQuery();
+
+    $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', array('iec_meter', 'modbus_meter'), 'IN')
+      ->propertyCondition('status', NODE_PUBLISHED)
+      ->fieldCondition('field_meter_site', 'target_id', $site_ids, 'IN')
+      ->fieldCondition(OG_AUDIENCE_FIELD, 'target_id', $meter_account);
+
+    $result = $query->execute();
+
+    if (empty($result['node'])) {
+      return array();
+    }
+
+    return array_keys($result['node']);
+  }
+
+  /**
+   * Get the list of meters related to meter-category.
+   *
+   * @param $category_id
+   *  Meter category id.
+   * @param $meter_account
+   *  The meter-account.
+   *
+   * @return array
+   *  Array of site ids.
+   */
+  protected function getMetersByCategory($category_id, $meter_account) {
+    $query = new EntityFieldQuery();
+
+    $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', array('iec_meter', 'modbus_meter'), 'IN')
+      ->propertyCondition('status', NODE_PUBLISHED)
+      ->fieldCondition('field_meter_category', 'target_id', $category_id)
+      ->fieldCondition(OG_AUDIENCE_FIELD, 'target_id', $meter_account);
+
+    $result = $query->execute();
+
+    if (empty($result['node'])) {
+      return array();
+    }
+
+    return array_keys($result['node']);
+  }
+
+  /**
+   * If $filter contains filter for 'site_category', modify $query to catch the
+   * given category, and all its child categories.
    *
    * @param $query
    * @param $filter
    * @return array
    */
-  protected function handleMeterCategoryFilter($query, &$filter, $addGrouping = TRUE) {
-    // Handle meter categories.
+  protected function handleSiteCategoryFilter($query, &$filter, $addGrouping = TRUE) {
+    // Handle site categories.
 
     // Bother handling category filtering only if no 'meter' filter exists.
     // If meter filter exists, it'll also filter for the category.
-    $result_type = 'meter';
+    $result_type = 'meters';
     if (!empty($filter['meter'])) {
       // Just set group by meter-nid
       if ($addGrouping) {
@@ -123,20 +224,38 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     }
 
     $meter_account = $filter['meter_account'];
-    // If no category filter was given, take 0 (root) as default.
-    $parent_category = !empty($filter['meter_category']) ? $filter['meter_category'] : 0;
-    // Figure out vocab id
-    $vocabulary = taxonomy_vocabulary_machine_name_load('meter_category');
-    $vocabulary_id = $vocabulary->vid;
 
-    // Get list of child taxonomy terms.
-    $taxonomy_array = taxonomy_get_tree($vocabulary_id, $parent_category);
+    // Handle site-categories only if there's no meter-category filter.
+    if (empty($filter['meter_category'])) {
+      // If no category-filter was given, take 0 (root) as default.
+      $parent_category_id = !empty($filter['site_category']) ? $filter['site_category'] : 0;
+      // Figure out vocab id
+      $vocabulary = taxonomy_vocabulary_machine_name_load('site_category');
+      $vocabulary_id = $vocabulary->vid;
+      // Get list of child taxonomy terms.
+      $taxonomy_array = taxonomy_get_tree($vocabulary_id, $parent_category_id);
+    }
+
     if (empty($taxonomy_array)) {
-      // No sub categories were found. Show division by meters.
-      $result_type = 'meter';
+      // No sub categories were found (or filter by meter-category was given),
+      // show division by meters.
 
       // Find all meters attached to the category.
-      $meters = taxonomy_select_nodes($parent_category, FALSE);
+      if (empty($filter['meter_category'])) {
+        // No meter-category was given, use site-category.
+        $sites = $this->getSitesByCategory($parent_category_id, $meter_account);
+        $meters = $this->getMetersBySites($sites, $meter_account);
+      }
+      else {
+        // Meter-category was given, use it to find the meters
+        $meters = $this->getMetersByCategory($filter['meter_category'], $meter_account);
+      }
+    }
+
+    if (empty($taxonomy_array)) {
+      // No sub categories were found (or filter by meter-category was given),
+      // show division by meters - meters list was prepared above.
+      $result_type = 'meters';
 
       // Check that there are meters in this category.
       if (empty($meters)) {
@@ -155,7 +274,7 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     }
     else {
       // Sub categories were found, show division by sub categories.
-      $result_type = 'category';
+      $result_type = 'site_categories';
 
       // Build a mapping array: cat_id => array(all child cat ids);
       $child_cat_mapping = array();
@@ -185,17 +304,17 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
       // Modify the query to sum electricity in each of the sub categories.
       // If parent category is 0 (that is, root category), there's no need to
       // add 'IN' condition for categories - just grab all of them.
-      if ($parent_category != 0) {
-        $query->condition('cat.field_meter_category_target_id', $child_categories, 'IN');
+      if ($parent_category_id != 0) {
+        $query->condition('site_cat.field_site_category_target_id', $child_categories, 'IN');
       }
-      $query->join('taxonomy_term_data', 'tax', 'tax.tid = cat.field_meter_category_target_id');
+      $query->join('taxonomy_term_data', 'tax', 'tax.tid = site_cat.field_site_category_target_id');
       $query->fields('tax', array('tid', 'name'));
       if ($addGrouping) {
-        $query->groupBy('cat.field_meter_category_target_id');
+        $query->groupBy('site_cat.field_site_category_target_id');
       }
     }
 
-    unset($filter['meter_category']);
+    unset($filter['site_category']);
 
     return array(
       'result_type' => $result_type,
@@ -271,7 +390,7 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     // Handle meter categories: for last level categories prepare for summary
     // of all meters in the category, for higher level categories prepare for
     // summary of all sub-categories.
-    $cat_result = $this->handleMeterCategoryFilter($query, $filter, FALSE /*addGrouping*/);
+    $cat_result = $this->handleSiteCategoryFilter($query, $filter, FALSE /*addGrouping*/);
 
     if (!empty($cat_result['summary'])) {
       // If summery was given, pass it to the formatter and quit.
@@ -348,8 +467,19 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     // Add a query for meter_category.
     $field = field_info_field('field_meter_category');
     $table_name = _field_sql_storage_tablename($field);
-    $query->leftJoin($table_name, 'cat', 'cat.entity_id=meter_nid');
-    $query->addField('cat', 'field_meter_category_target_id', 'meter_category');
+    $query->leftJoin($table_name, 'meter_cat', 'meter_cat.entity_id=meter_nid');
+    $query->addField('meter_cat', 'field_meter_category_target_id', 'meter_category');
+
+    // Add a query for site_category.
+    $field = field_info_field('field_meter_site');
+    $table_name = _field_sql_storage_tablename($field);
+    $query->leftJoin($table_name, 'site', 'site.entity_id=meter_nid');
+    $query->addField('site', 'field_meter_site_target_id', 'meter_site');
+
+    $field = field_info_field('field_site_category');
+    $table_name = _field_sql_storage_tablename($field);
+    $query->leftJoin($table_name, 'site_cat', 'site_cat.entity_id=site.field_meter_site_target_id');
+    $query->addField('site_cat', 'field_site_category_target_id', 'site_category');
 
     // Add a query for meter_account.
     $table_name = 'og_membership';
@@ -381,7 +511,7 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     // Handle meter categories: for last level categories prepare for summary
     // of all meters in the category, for higher level categories prepare for
     // summary of all sub-categories.
-    $cat_result = $this->handleMeterCategoryFilter($query, $filter);
+    $cat_result = $this->handleSiteCategoryFilter($query, $filter);
 
     if (!empty($cat_result['summary'])) {
       // If summery was given, pass it to the formatter and quit.
@@ -395,7 +525,7 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     // Finish query and get result.
     $result = $this->queryForSummary($query);
 
-    if ($result_type == 'meter') {
+    if ($result_type == 'meters') {
       // Prepare the total section of the summary, for 'meters' result type.
       $total = $this->prepareTotalForMeters($result);
     }
@@ -483,9 +613,9 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     /**
    * Override RestfulBase::parseRequestForListFilter.
    *
-   * Modify the filter for meter-category to catch all the electricity
-   * entities that belong to the given meter-category, or any of its
-   * children. E.g., if a meter-category of educational-buildings is given,
+   * Modify the filter for site-category to catch all the electricity
+   * entities that belong to the given site-category, or any of its
+   * children. E.g., if a site-category of educational-buildings is given,
    * catch all the entities that belong to schools or kindergartens as well.
    *
    * @return array
@@ -494,14 +624,14 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
   protected function parseRequestForListFilter() {
     $filters = parent::parseRequestForListFilter();
 
-    // Modify meter category filter
+    // Modify site category filter
     foreach ($filters as &$filter) {
-      // Not meter-category, skip.
-      if ($filter['public_field'] != 'meter_category') {
+      // Not site-category, skip.
+      if ($filter['public_field'] != 'site_category') {
         continue;
       }
 
-      // Modify the filter to find entities with meter-category as given
+      // Modify the filter to find entities with site-category as given
       // in the filter, or any of its children
       $term_ids = array();
       foreach ($filter['value'] as $term_id) {
@@ -517,7 +647,7 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
         }
       }
 
-      // Modify the filter to find all entities with meter-category in the set
+      // Modify the filter to find all entities with site-category in the set
       // we just found.
       $filter['value'] = $term_ids;
       $filter['operator'][0] = 'IN';
