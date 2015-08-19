@@ -48,12 +48,14 @@ angular.module('negawattClientApp')
             'datepicker-mode': "'year'",
             'min-mode': "year",
             'format': 'yyyy',
+            dt: now.getTime()
           },
           2: {
             frequency: 2,
             'datepicker-mode': "'year'",
             'min-mode': "year",
             'format': 'yyyy',
+            dt: now.getTime()
           },
           3: {
             frequency: 3,
@@ -61,6 +63,7 @@ angular.module('negawattClientApp')
             'min-mode': "month",
             'formatMonth': 'MMM',
             'format': 'MM/yyyy',
+            dt: now.getTime()
           },
           4: {
             frequency: 4,
@@ -68,6 +71,7 @@ angular.module('negawattClientApp')
             'formatMonth': 'MMM',
             'showWeeks': false,
             'format': 'dd/MM/yy',
+            dt: now.getTime()
           },
           5: {
             frequency: 5,
@@ -75,10 +79,11 @@ angular.module('negawattClientApp')
             'formatMonth': 'MMM',
             'showWeeks': false,
             'format': 'dd/MM/yy',
+            dt: now.getTime()
           }
         };
 
-        ctrlChartDatePicker.dt = now.getTime();
+        ctrlChartDatePicker.refDate = now.getTime();
         ctrlChartDatePicker.minDate = undefined;
         ctrlChartDatePicker.maxDate = undefined;
         ctrlChartDatePicker.dateOptions = dateOptions;
