@@ -28,6 +28,7 @@ function negawatt_electricity_views_default_views() {
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['exposed_form']['options']['autosubmit'] = TRUE;
   $handler->display->display_options['pager']['type'] = 'full';
   $handler->display->display_options['pager']['options']['items_per_page'] = '25';
   $handler->display->display_options['style_plugin'] = 'table';
@@ -147,7 +148,6 @@ function negawatt_electricity_views_default_views() {
   $handler->display->display_options['filters']['meter_nid']['exposed'] = TRUE;
   $handler->display->display_options['filters']['meter_nid']['expose']['operator_id'] = 'meter_nid_op';
   $handler->display->display_options['filters']['meter_nid']['expose']['label'] = 'Meter_nid';
-  $handler->display->display_options['filters']['meter_nid']['expose']['use_operator'] = TRUE;
   $handler->display->display_options['filters']['meter_nid']['expose']['operator'] = 'meter_nid_op';
   $handler->display->display_options['filters']['meter_nid']['expose']['identifier'] = 'meter_nid';
   $handler->display->display_options['filters']['meter_nid']['expose']['remember'] = TRUE;
@@ -180,7 +180,6 @@ function negawatt_electricity_views_default_views() {
   $handler->display->display_options['filters']['timestamp']['exposed'] = TRUE;
   $handler->display->display_options['filters']['timestamp']['expose']['operator_id'] = 'timestamp_op';
   $handler->display->display_options['filters']['timestamp']['expose']['label'] = 'Timestamp';
-  $handler->display->display_options['filters']['timestamp']['expose']['use_operator'] = TRUE;
   $handler->display->display_options['filters']['timestamp']['expose']['operator'] = 'timestamp_op';
   $handler->display->display_options['filters']['timestamp']['expose']['identifier'] = 'timestamp';
   $handler->display->display_options['filters']['timestamp']['expose']['remember'] = TRUE;
@@ -197,7 +196,6 @@ function negawatt_electricity_views_default_views() {
   $handler->display->display_options['filters']['frequency']['exposed'] = TRUE;
   $handler->display->display_options['filters']['frequency']['expose']['operator_id'] = 'frequency_op';
   $handler->display->display_options['filters']['frequency']['expose']['label'] = 'frequency';
-  $handler->display->display_options['filters']['frequency']['expose']['use_operator'] = TRUE;
   $handler->display->display_options['filters']['frequency']['expose']['operator'] = 'frequency_op';
   $handler->display->display_options['filters']['frequency']['expose']['identifier'] = 'frequency';
   $handler->display->display_options['filters']['frequency']['expose']['remember'] = TRUE;
@@ -237,6 +235,7 @@ function negawatt_electricity_views_default_views() {
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['exposed_form']['options']['autosubmit'] = TRUE;
   $handler->display->display_options['pager']['type'] = 'full';
   $handler->display->display_options['pager']['options']['items_per_page'] = '25';
   $handler->display->display_options['style_plugin'] = 'table';
@@ -245,6 +244,7 @@ function negawatt_electricity_views_default_views() {
     'meter_type' => 'meter_type',
     'timestamp' => 'timestamp',
     'rate_type' => 'rate_type',
+    'frequency' => 'frequency',
     'meter_nid' => 'meter_nid',
     'kwh' => 'kwh',
     'power_factor' => 'power_factor',
@@ -255,7 +255,7 @@ function negawatt_electricity_views_default_views() {
     'power_factor_l2' => 'power_factor_l2',
     'power_factor_l3' => 'power_factor_l3',
   );
-  $handler->display->display_options['style_options']['default'] = 'timestamp';
+  $handler->display->display_options['style_options']['default'] = 'frequency';
   $handler->display->display_options['style_options']['info'] = array(
     'id_1' => array(
       'sortable' => 1,
@@ -279,6 +279,13 @@ function negawatt_electricity_views_default_views() {
       'empty_column' => 0,
     ),
     'rate_type' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'frequency' => array(
       'sortable' => 1,
       'default_sort_order' => 'asc',
       'align' => '',
@@ -430,7 +437,6 @@ function negawatt_electricity_views_default_views() {
   $handler->display->display_options['filters']['meter_nid']['exposed'] = TRUE;
   $handler->display->display_options['filters']['meter_nid']['expose']['operator_id'] = 'meter_nid_op';
   $handler->display->display_options['filters']['meter_nid']['expose']['label'] = 'Meter_nid';
-  $handler->display->display_options['filters']['meter_nid']['expose']['use_operator'] = TRUE;
   $handler->display->display_options['filters']['meter_nid']['expose']['operator'] = 'meter_nid_op';
   $handler->display->display_options['filters']['meter_nid']['expose']['identifier'] = 'meter_nid';
   $handler->display->display_options['filters']['meter_nid']['expose']['remember'] = TRUE;
@@ -463,7 +469,6 @@ function negawatt_electricity_views_default_views() {
   $handler->display->display_options['filters']['timestamp']['exposed'] = TRUE;
   $handler->display->display_options['filters']['timestamp']['expose']['operator_id'] = 'timestamp_op';
   $handler->display->display_options['filters']['timestamp']['expose']['label'] = 'Timestamp';
-  $handler->display->display_options['filters']['timestamp']['expose']['use_operator'] = TRUE;
   $handler->display->display_options['filters']['timestamp']['expose']['operator'] = 'timestamp_op';
   $handler->display->display_options['filters']['timestamp']['expose']['identifier'] = 'timestamp';
   $handler->display->display_options['filters']['timestamp']['expose']['remember'] = TRUE;
@@ -480,7 +485,6 @@ function negawatt_electricity_views_default_views() {
   $handler->display->display_options['filters']['meter_type']['exposed'] = TRUE;
   $handler->display->display_options['filters']['meter_type']['expose']['operator_id'] = 'meter_type_op';
   $handler->display->display_options['filters']['meter_type']['expose']['label'] = 'meter_type';
-  $handler->display->display_options['filters']['meter_type']['expose']['use_operator'] = TRUE;
   $handler->display->display_options['filters']['meter_type']['expose']['operator'] = 'meter_type_op';
   $handler->display->display_options['filters']['meter_type']['expose']['identifier'] = 'meter_type';
   $handler->display->display_options['filters']['meter_type']['expose']['remember'] = TRUE;

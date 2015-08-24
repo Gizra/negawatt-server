@@ -2,16 +2,16 @@
 
 /**
  * @file
- * Code for the Negawatt climate storage schema.
+ * Code for the Negawatt occupancy storage schema.
  */
 
 /**
  * Implements hook_schema().
  */
-function negawatt_climate_schema() {
+function negawatt_occupancy_schema() {
   $schema = array();
-  $schema['negawatt_climate'] = array(
-    'description' => 'The base table for climate meter raw data.',
+  $schema['negawatt_occupancy'] = array(
+    'description' => 'The base table for occupancy meter raw data.',
     'fields' => array(
       'id' => array(
         'description' => 'The primary identifier for the row.',
@@ -33,28 +33,34 @@ function negawatt_climate_schema() {
         'not null' => TRUE,
       ),
       'meter_nid' => array(
-        'description' => 'The climate meter NID.',
+        'description' => 'The meter NID.',
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
       ),
-      'temperature' => array(
-        'description' => 'Temperature measurement (in deg. C).',
+      'occupancy_abs' => array(
+        'description' => 'Occupancy in absolute number of rooms.',
+        'type' => 'int',
+        'not null' => FALSE,
+        'default' => NULL,
+      ),
+      'occupancy_rel' => array(
+        'description' => 'Relative occupancy (in %).',
         'type' => 'float',
         'not null' => FALSE,
         'default' => NULL,
       ),
-      'humidity' => array(
-        'description' => 'Relative humidity (in %).',
-        'type' => 'float',
+      'guests' => array(
+        'description' => 'Number of guests.',
+        'type' => 'int',
         'not null' => FALSE,
         'default' => NULL,
       ),
     ),
     'primary key' => array('id'),
   );
-  $schema['negawatt_climate_normalized'] = array(
-    'description' => 'The base table for climate meter averages.',
+  $schema['negawatt_occupancy_normalized'] = array(
+    'description' => 'The base table for occupancy meter averages.',
     'fields' => array(
       'id' => array(
         'description' => 'The primary identifier for the row.',
@@ -81,44 +87,20 @@ function negawatt_climate_schema() {
         'unsigned' => TRUE,
         'not null' => TRUE,
       ),
-      'avg_temp' => array(
-        'description' => 'Average temperature at period.',
+      'avg_occupancy' => array(
+        'description' => 'Average relative occupancy (percent) at period.',
         'type' => 'float',
         'not null' => FALSE,
         'default' => NULL,
       ),
-      'max_temp' => array(
-        'description' => 'Max temperature at period.',
+      'max_occupancy' => array(
+        'description' => 'Max relative occupancy (percent) at period.',
         'type' => 'float',
         'not null' => FALSE,
         'default' => NULL,
       ),
-      'min_temp' => array(
-        'description' => 'Min temperature at period.',
-        'type' => 'float',
-        'not null' => FALSE,
-        'default' => NULL,
-      ),
-      'deg_days' => array(
-        'description' => 'Degree days at period.',
-        'type' => 'float',
-        'not null' => FALSE,
-        'default' => NULL,
-      ),
-      'avg_humidity' => array(
-        'description' => 'Average humidity at period.',
-        'type' => 'float',
-        'not null' => FALSE,
-        'default' => NULL,
-      ),
-      'max_humidity' => array(
-        'description' => 'Max humidity at period.',
-        'type' => 'float',
-        'not null' => FALSE,
-        'default' => NULL,
-      ),
-      'min_humidity' => array(
-        'description' => 'Min humidity at period.',
+      'min_occupancy' => array(
+        'description' => 'Min relative occupancy (percent) at period.',
         'type' => 'float',
         'not null' => FALSE,
         'default' => NULL,
