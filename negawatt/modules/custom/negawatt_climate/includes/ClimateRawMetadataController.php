@@ -28,6 +28,10 @@ class ClimateRawMetadataController extends EntityDefaultMetadataController {
       $properties[$property_name]['setter callback'] = 'entity_property_verbatim_set';
     }
 
+    $properties['temperature']['type'] = 'decimal';
+    $properties['humidity']['type'] = 'decimal';
+    $properties['meter_nid']['type'] = 'node';
+
     return $info;
   }
 

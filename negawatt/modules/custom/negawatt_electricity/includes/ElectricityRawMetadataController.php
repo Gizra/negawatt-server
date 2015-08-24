@@ -30,6 +30,10 @@ class ElectricityRawMetadataController extends EntityDefaultMetadataController {
       $properties[$property_name]['setter callback'] = 'entity_property_verbatim_set';
     }
 
+    $properties['kwh']['type'] = 'decimal';
+    $properties['power_factor']['type'] = 'decimal';
+    $properties['meter_nid']['type'] = 'node';
+
     return $info;
   }
 

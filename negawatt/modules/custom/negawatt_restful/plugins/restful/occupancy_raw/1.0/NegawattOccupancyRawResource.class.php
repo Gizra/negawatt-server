@@ -91,7 +91,7 @@ class NegawattOccupancyRawResource extends RestfulEntityBase {
    * {@inheritdoc}
    */
   public function getQueryForList() {
-    // Override getQuery.
+    // Override getQueryForList.
     // Make sure meter field filter exists.
 
     // Prepare a sum query.

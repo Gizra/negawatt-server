@@ -20,20 +20,31 @@ class NegawattClimateRawResource extends RestfulEntityBase {
       'property' => 'timestamp'
     );
 
+    $public_fields['datetime'] = array(
+      'property' => 'timestamp',
+      'callback' => array($this, 'timestampToDatetime'),
+    );
+
+    $public_fields['meter'] = array(
+      'property' => 'meter_nid',
+      'resource' => array(
+        'climate_meter' => array(
+          'name' => 'climate_meter',
+          'full_view' => FALSE,
+        ),
+      ),
+    );
+
+    $public_fields['frequency'] = array(
+      'property' => 'frequency',
+    );
+
     $public_fields['temperature'] = array(
       'property' => 'temperature'
     );
 
     $public_fields['humidity'] = array(
       'property' => 'humidity'
-    );
-
-    $public_fields['meter'] = array(
-      'property' => 'meter_nid',
-    );
-
-    $public_fields['frequency'] = array(
-      'property' => 'frequency',
     );
 
     return $public_fields;
@@ -68,10 +79,10 @@ class NegawattClimateRawResource extends RestfulEntityBase {
   /**
    * Get a list of entities.
    *
-   * @return array
-   *   Array of entities, as passed to RestfulEntityBase::viewEntity().
+   * {@inheritdoc}
    *
-   * @throws RestfulBadRequestException
+   * Override RestfulEntityBase::getList().
+   * Allow to create new entity with GET query in stead of POST.
    */
   public function getList() {
     $request = $this->getRequest();
@@ -83,8 +94,16 @@ class NegawattClimateRawResource extends RestfulEntityBase {
 
     // 'key' parameter was given, create new climate entity.
 
+    // If datetime field was given, convert it to timestamp.
+    if (!empty($this->request['datetime'])) {
+      // Note the '|' in the format string, which resets other fields (hour, minute...) to zero.
+      $this->request['timestamp'] = date_timestamp_get(date_create_from_format('d/m/Y|', $this->request['datetime']));
+      unset($this->request['datetime']);
+      $request = $this->getRequest();
+    }
+
     // Make sure required parameters are given.
-    $required_parameters = array('account', 'timestamp', 'key');
+    $required_parameters = array('meter', 'timestamp', 'key');
     foreach ($required_parameters as $required_parameter) {
       if (empty($request[$required_parameter])) {
         throw new \RestfulBadRequestException(format_string('Please supply \'@param\' parameter.', array('@param' => $required_parameter)));
@@ -92,24 +111,30 @@ class NegawattClimateRawResource extends RestfulEntityBase {
     }
 
     // Read parameters.
-    $account = !empty($request['account']) ? $request['account'] : NULL;
+    $meter = $request['meter'];
+    $timestamp = $request['timestamp'];
+    $key = $request['key'];
     $temperature = !empty($request['temperature']) ? $request['temperature'] : NULL;
     $humidity = !empty($request['humidity']) ? $request['humidity'] : NULL;
-    $timestamp = !empty($request['time']) ? $request['time'] : NULL;
-    $key = !empty($request['key']) ? $request['key'] : NULL;
 
     // Check key.
-    $key_base = 214357;
-    $calculated_key = ($temperature * $humidity * $timestamp) % $key_base;
+    $key_base = 9482687;
+    $calculated_key = ($meter * $timestamp) % $key_base;
+    $calculated_key *= $temperature ? $temperature : 1;
+    $calculated_key *= $humidity ? $humidity : 1;
+    $calculated_key %= $key_base;
     if ($key != $calculated_key) {
       throw new \RestfulBadRequestException('Wrong key parameter.');
     }
     // Key ok, remove it from the request since it's not a value parameter
-    unset($request['key']);
+    unset($this->request['key']);
+    unset($this->request['q']);
 
     // Create the entity.
     return $this->createEntity();
   }
 
-
+  protected function timestampToDatetime($wrapper) {
+    return date('d/m/Y', $wrapper->timestamp->value());
+  }
 }
