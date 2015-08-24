@@ -27,7 +27,7 @@ function occupancy_meter_field_default_field_instances() {
           'use_widget_handlers' => 1,
         ),
         'type' => 'addressfield_default',
-        'weight' => 6,
+        'weight' => 7,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -65,6 +65,49 @@ function occupancy_meter_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-occupancy_meter-field_category_valid'
+  $field_instances['node-occupancy_meter-field_category_valid'] = array(
+    'bundle' => 'occupancy_meter',
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 11,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_category_valid',
+    'label' => 'Category valid',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'display_label' => 1,
+      ),
+      'type' => 'options_onoff',
+      'weight' => 9,
+    ),
+  );
+
   // Exported field_instance: 'node-occupancy_meter-field_image'
   $field_instances['node-occupancy_meter-field_image'] = array(
     'bundle' => 'occupancy_meter',
@@ -76,10 +119,10 @@ function occupancy_meter_field_default_field_instances() {
         'module' => 'image',
         'settings' => array(
           'image_link' => '',
-          'image_style' => '',
+          'image_style' => 'thumbnail_rotate',
         ),
         'type' => 'image',
-        'weight' => 13,
+        'weight' => 12,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -177,10 +220,18 @@ function occupancy_meter_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'geolocation',
-        'settings' => array(),
-        'type' => 'geolocation_text',
-        'weight' => 1,
+        'module' => 'geolocation_googlemaps',
+        'settings' => array(
+          'map_height' => '200px',
+          'map_imageformat' => 'png8',
+          'map_link' => 0,
+          'map_maptype' => 'roadmap',
+          'map_width' => '300px',
+          'map_zoomlevel' => 17,
+          'marker_icon' => '',
+        ),
+        'type' => 'geolocation_googlemaps_static',
+        'weight' => 2,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -221,7 +272,7 @@ function occupancy_meter_field_default_field_instances() {
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
-        'weight' => 2,
+        'weight' => 3,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -301,7 +352,7 @@ function occupancy_meter_field_default_field_instances() {
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
-        'weight' => 14,
+        'weight' => 13,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -382,10 +433,10 @@ function occupancy_meter_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
-          'link' => FALSE,
+          'link' => 1,
         ),
         'type' => 'entityreference_label',
-        'weight' => 15,
+        'weight' => 1,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -426,7 +477,7 @@ function occupancy_meter_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 3,
+        'weight' => 4,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -466,7 +517,7 @@ function occupancy_meter_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 4,
+        'weight' => 5,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -506,7 +557,7 @@ function occupancy_meter_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 5,
+        'weight' => 6,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -543,9 +594,11 @@ function occupancy_meter_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'og_ui',
-        'settings' => array(),
-        'type' => 'og_list_default',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => 1,
+        ),
+        'type' => 'entityreference_label',
         'weight' => 0,
       ),
       'teaser' => array(
@@ -596,6 +649,7 @@ function occupancy_meter_field_default_field_instances() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Address');
+  t('Category valid');
   t('Groups audience');
   t('Has data');
   t('Image');

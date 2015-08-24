@@ -1,0 +1,54 @@
+<?php
+/**
+ * @file
+ * Code for the Negawatt occupancy storage feature.
+ */
+
+include_once 'negawatt_occupancy.features.inc';
+
+/**
+ * Implements hook_entity_info().
+ */
+function negawatt_occupancy_entity_info() {
+  $return = array(
+    'occupancy' => array(
+      'label' => t('Occupancy data', array(), array('context' => 'occupancy entity')),
+      'locking mode' => 'pessimistic',
+      'base table' => 'negawatt_occupancy_normalized',
+      'fieldable' => TRUE,
+      'entity keys' => array(
+        'id' => 'id',
+      ),
+      'entity class' => 'Occupancy',
+      'controller class' => 'EntityAPIController',
+      'metadata controller class' => 'OccupancyMetadataController',
+      'views controller class' => 'EntityDefaultViewsController',
+      'entity cache' => module_exists('entitycache'),
+    ),
+
+    'occupancy_raw' => array(
+      'label' => t('Occupancy raw data', array(), array('context' => 'occupancy raw entity')),
+      'base table' => 'negawatt_occupancy',
+      'fieldable' => TRUE,
+      'entity keys' => array(
+        'id' => 'id',
+      ),
+      'entity class' => 'OccupancyRaw',
+      'controller class' => 'EntityAPIController',
+      'metadata controller class' => 'OccupancyRawMetadataController',
+      'views controller class' => 'EntityDefaultViewsController',
+      'entity cache' => module_exists('entitycache'),
+    ),
+  );
+
+  return $return;
+}
+
+/**
+ * Returns occupancy controller.
+ *
+ * @return OccupancyEntityController
+ */
+function negawatt_occupancy_get_controller() {
+  return entity_get_controller('occupancy');
+}

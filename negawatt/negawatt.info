@@ -56,6 +56,7 @@ dependencies[] = negawatt_message
 dependencies[] = negawatt_meter
 dependencies[] = negawatt_migrate
 dependencies[] = negawatt_normalizer
+dependencies[] = negawatt_occupancy
 dependencies[] = negawatt_restful
 dependencies[] = negawatt_site
 dependencies[] = negawatt_taxonomy

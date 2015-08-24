@@ -65,6 +65,49 @@ function climate_meter_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-climate_meter-field_category_valid'
+  $field_instances['node-climate_meter-field_category_valid'] = array(
+    'bundle' => 'climate_meter',
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 11,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_category_valid',
+    'label' => 'Category valid',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'display_label' => 1,
+      ),
+      'type' => 'options_onoff',
+      'weight' => 9,
+    ),
+  );
+
   // Exported field_instance: 'node-climate_meter-field_image'
   $field_instances['node-climate_meter-field_image'] = array(
     'bundle' => 'climate_meter',
@@ -76,7 +119,7 @@ function climate_meter_field_default_field_instances() {
         'module' => 'image',
         'settings' => array(
           'image_link' => '',
-          'image_style' => '',
+          'image_style' => 'thumbnail_rotate',
         ),
         'type' => 'image',
         'weight' => 11,
@@ -177,9 +220,17 @@ function climate_meter_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'geolocation',
-        'settings' => array(),
-        'type' => 'geolocation_text',
+        'module' => 'geolocation_googlemaps',
+        'settings' => array(
+          'map_height' => '200px',
+          'map_imageformat' => 'png8',
+          'map_link' => 0,
+          'map_maptype' => 'roadmap',
+          'map_width' => '300px',
+          'map_zoomlevel' => 17,
+          'marker_icon' => '',
+        ),
+        'type' => 'geolocation_googlemaps_static',
         'weight' => 2,
       ),
       'teaser' => array(
@@ -382,10 +433,9 @@ function climate_meter_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
-          'links' => TRUE,
-          'view_mode' => 'default',
+          'link' => 1,
         ),
-        'type' => 'entityreference_entity_view',
+        'type' => 'entityreference_label',
         'weight' => 1,
       ),
       'teaser' => array(
@@ -544,9 +594,11 @@ function climate_meter_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'og_ui',
-        'settings' => array(),
-        'type' => 'og_list_default',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => 1,
+        ),
+        'type' => 'entityreference_label',
         'weight' => 0,
       ),
       'teaser' => array(
@@ -597,6 +649,7 @@ function climate_meter_field_default_field_instances() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Address');
+  t('Category valid');
   t('Groups audience');
   t('Has data');
   t('Image');
