@@ -24,7 +24,8 @@ angular.module('negawattClientApp')
   .directive('chartDetailedDatePicker', function () {
     return {
       scope: {
-        showCompareChart: '='
+        showCompareChart: '=',
+        showCompareChartButton: '='
       },
       templateUrl: 'scripts/directives/chart-detailed/chart-detailed-date-selector.directive.html',
       controller: function ChartDetailedDatePickerCtrl($scope, $stateParams, $timeout) {
@@ -238,7 +239,7 @@ angular.module('negawattClientApp')
         siteProperties: '=',
         categories: '=',
         hasExtraChart: '=',
-        showChartControls: '@',
+        showExtraChartButton: '=',
         chartObject: '='
       }
     };

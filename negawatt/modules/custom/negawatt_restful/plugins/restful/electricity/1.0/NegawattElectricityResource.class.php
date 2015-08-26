@@ -416,7 +416,9 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
    * Return the total section of the summary, for 'meters' result type.
    *
    * @param $result
+   *  Database query result.
    * @return mixed
+   *  An array from meter ids to their electricity consumption.
    */
   protected function prepareTotalForMeters($result) {
     // Collect meters' totals as an array(meter_nid => sum).
@@ -431,8 +433,11 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
    * Return the total section of the summary, for 'categories' result type.
    *
    * @param $result
+   *  Database query result.
    * @param $child_cat_mapping
+   *  A map from category id to array of its child category ids.
    * @return mixed
+   *  An array from category ids to their electricity consumption.
    */
   protected function prepareTotalForCategories($result, $child_cat_mapping) {
     // Sum all child categories' totals into the parent category, so only
@@ -455,6 +460,54 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
   }
 
   /**
+   * Return the total section of the summary, for 'sites' result type.
+   *
+   * Called when total-for-categories found only one category with electricity.
+   * Look for the electricity consumption of the category's sites and prepare
+   * a total section.
+   *
+   * @param $total
+   *  An array with one entry category-id => consumption.
+   * @return mixed
+   *  An array from site ids to their electricity consumption.
+   */
+  protected function prepareTotalForSites($total, $meter_account) {
+    // Get category id.
+    $cat_id = array_keys($total)[0];
+
+    // Query the sites that relate to this category id, and sum their electricity.
+
+    // The section below was copied from the beginning of prepareSummary()
+    // Load query and apply filter options.
+    $query = parent::getQuery();
+    $this->queryForListFilter($query);
+
+    // Add a query for meter_category and meter_account.
+    $this->addQueryForCategoryAndAccount($query);
+
+    // Get list of sits.
+    $sites = $this->getSitesByCategory($cat_id, $meter_account);
+    if (empty($sites)) {
+      // If no sites were found, return an empty array.
+      return array();
+    }
+    // Modify the query to sum electricity according to the sites.
+    $query->condition('site.field_meter_site_target_id', $sites, 'IN');
+    // Group by site id
+    $query->groupBy('site.field_meter_site_target_id');
+
+    // Finish query and get result.
+    $result = $this->queryForSummary($query);
+
+    // Collect sites' totals as an array(meter_site => sum).
+    $total = array();
+    foreach ($result as $row) {
+      $total[$row->meter_site] = $row->sum;
+    }
+    return $total;
+  }
+
+  /**
    * Prepare data for summary section.
    *
    * Prepare a list of sub-categories and their total electricity (kWh)
@@ -470,12 +523,13 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     $query->leftJoin($table_name, 'meter_cat', 'meter_cat.entity_id=meter_nid');
     $query->addField('meter_cat', 'field_meter_category_target_id', 'meter_category');
 
-    // Add a query for site_category.
+    // Add a query for site.
     $field = field_info_field('field_meter_site');
     $table_name = _field_sql_storage_tablename($field);
     $query->leftJoin($table_name, 'site', 'site.entity_id=meter_nid');
     $query->addField('site', 'field_meter_site_target_id', 'meter_site');
 
+    // Add a query for site_category.
     $field = field_info_field('field_site_category');
     $table_name = _field_sql_storage_tablename($field);
     $query->leftJoin($table_name, 'site_cat', 'site_cat.entity_id=site.field_meter_site_target_id');
@@ -532,6 +586,12 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     else {
       // Prepare the total section of the summary, for 'categories' result type.
       $total = $this->prepareTotalForCategories($result, $child_cat_mapping);
+
+      if (count($total) == 1) {
+        // Only one category was found. Show summary for its sites.
+        $result_type = 'sites';
+        $total = $this->prepareTotalForSites($total, $filter['meter_account']);
+      }
     }
 
     // Fill the total section to be output by the formatter.

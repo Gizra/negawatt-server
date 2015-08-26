@@ -48,28 +48,29 @@ angular.module('negawattClientApp')
      *
      */
     function getDataset(collection, labels) {
-      if (collection.type == 'site_categories') {
-        // Prepare categories dataset.
-        data = {
-          cols: [
-            {
-              label: 'קטגוריה', // collection.type
-              type: 'string'
-            },
-            {
-              label: 'קוט"ש',
-              type: 'number'
-            }
-          ],
-          'rows': getRows(collection.values, collection.type, labels)
-        };
+      var label;
+      switch (collection.type) {
+        case 'site_categories':
+          label = 'קטגוריה';
+          break;
+        case 'sites':
+          label = 'אתר';
+          break;
+        case 'meters':
+          label = 'מונה';
+          break;
+      }
 
-        return data;
-      }
-      else {
-        // type == meters
-      }
-      return {};
+      // Prepare categories dataset.
+      data = {
+        cols: [
+          { label: label, type: 'string' },
+          { label: 'קוט"ש', type: 'number' }
+        ],
+        'rows': getRows(collection.values, collection.type, labels)
+      };
+
+      return data;
 
     }
 
@@ -91,31 +92,32 @@ angular.module('negawattClientApp')
       var rows = [];
 
       // Transform to Google Pie Chart compatible.
+
+      // DefualtLabel is a name for a label that is not found in labels array.
+      var defaultLabel;
       switch (type) {
         case 'site_categories':
-          angular.forEach(obj, function(value, key) {
-            this.push({
-              c: [
-                { v: !Utils.isEmpty(labels) && labels[key].label || 'Category ' + key},
-                // "f" is for formatting the value in the tooltip.
-                { v: +value, f: $filter('number')(value, 0) + ' קוט״ש'},
-                { id: key}
-              ]
-            });
-          }, rows);
+          defaultLabel = 'Category ';
+          break;
+        case 'sites':
+          defaultLabel = 'Site ';
           break;
         case 'meters':
-          angular.forEach(obj, function(value, key) {
-            this.push({
-              c: [
-                { v: !Utils.isEmpty(labels) && labels[key].contract || 'Meter ' + key},
-                { v: +value, f: $filter('number')(value, 0) + ' קוט״ש'},
-                { id: key}
-              ]
-            });
-          }, rows);
+          defaultLabel = 'Meter ';
           break;
       }
+
+      // Fill result rows.
+      angular.forEach(obj, function(value, key) {
+        this.push({
+          c: [
+            { v: !Utils.isEmpty(labels) && labels[key].label || defaultLabel + key},
+            // "f" is for formatting the value in the tooltip.
+            { v: +value, f: $filter('number')(value, 0) + ' קוט״ש'},
+            { id: key}
+          ]
+        });
+      }, rows);
 
       return rows;
     }

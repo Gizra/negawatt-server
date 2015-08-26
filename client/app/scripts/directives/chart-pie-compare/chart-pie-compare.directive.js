@@ -5,7 +5,7 @@ angular.module('negawattClientApp')
     return {
       restrict: 'EA',
       templateUrl: 'scripts/directives/chart-pie-compare/chart-pie-compare.directive.html',
-      controller: function chartPieUsageCtrl(/*ChartElectricityUsage,*/ ChartUsagePeriod, Chart, $stateParams, $filter, $scope, Utils) {
+      controller: function chartPieUsageCtrl(ChartUsagePeriod, Chart, $stateParams, $filter, $scope, Utils) {
         var ctrlPieChart = this;
 
         // Save the state of the directive (to handle views in the directive. "undefined|empty|loading|data").
@@ -72,13 +72,13 @@ angular.module('negawattClientApp')
         }
 
         /**
-         * Return true is ctrlPieChart.data have valid electricity data, otherwise
+         * Return true if ctrlPieChart.data have valid electricity data, otherwise
          * false.
          *
          * @returns {*|boolean}
          */
         function hasData() {
-          return ctrlPieChart.data.data.rows.length || false;
+          return ctrlPieChart.data.data.rows && ctrlPieChart.data.data.rows.length || false;
         }
 
         /**

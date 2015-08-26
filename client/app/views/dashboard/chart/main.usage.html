@@ -3,7 +3,7 @@
 <div class="panel panel-default tabs ng-scope">
   <div class="panel-body">
     <!-- Original Chart -->
-    <chart-detailed title="{{detailedChartCtrl.title}}" site-properties="detailedChartCtrl.siteProperties" categories="detailedChartCtrl.categories" account="detailedChartCtrl.account" has-extra-chart="detailedChartCtrl.hasExtraChart" show-chart-controls="true"></chart-detailed>
+    <chart-detailed title="{{detailedChartCtrl.title}}" site-properties="detailedChartCtrl.siteProperties" categories="detailedChartCtrl.categories" account="detailedChartCtrl.account" has-extra-chart="detailedChartCtrl.hasExtraChart" show-extra-chart-button="true"></chart-detailed>
     <!-- Compare (extra) Chart -->
-    <chart-detailed ng-show="detailedChartCtrl.hasExtraChart" site-properties="detailedChartCtrl.siteProperties" categories="detailedChartCtrl.categories" account="detailedChartCtrl.account"></chart-detailed>  </div>
+    <chart-detailed ng-show="detailedChartCtrl.hasExtraChart" site-properties="detailedChartCtrl.siteProperties" categories="detailedChartCtrl.categories" account="detailedChartCtrl.account" show-extra-chart-button="false"></chart-detailed>  </div>
 </div>

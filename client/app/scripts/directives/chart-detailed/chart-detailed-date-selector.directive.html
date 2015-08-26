@@ -6,7 +6,7 @@
     <span class="input-group-btn"><button type="button" class="btn btn-default" ng-click="ctrlChartDatePicker.open(dateOp)"><i class="glyphicon glyphicon-calendar"></i></button></span>
     <span class="input-group-btn"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span></button></span>
 
-    <span class="input-group-btn">
+    <span class="input-group-btn" ng-if="ctrlChartDatePicker.showCompareChartButton">
       <button type="button" class="btn btn-default" ng-model="ctrlChartDatePicker.showCompareChart" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0" alt="השווה לתאריך אחר">
         <span ng-if="!ctrlChartDatePicker.showCompareChart" class="glyphicon glyphicon-plus"></span>
         <span ng-if="ctrlChartDatePicker.showCompareChart" class="glyphicon glyphicon-minus"></span>
