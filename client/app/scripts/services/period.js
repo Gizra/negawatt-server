@@ -9,6 +9,8 @@ angular.module('negawattClientApp')
       next: null,
       previous: null,
       activeTimeFrame: null,
+      referenceDate: moment().unix(),
+
       /**
        * Return true if the limits are configured, otherwise return false.
        *
@@ -54,7 +56,7 @@ angular.module('negawattClientApp')
           this.next = this.max;
         }
         else {
-          // Set default if is oout of range.
+          // Set default if is out of range.
           if (this.isOutOfRange(newPeriod)) {
             // Set the next timestamp by default in 'now' of maximum limit.
             this.next = this.max || moment().unix();

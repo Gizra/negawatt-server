@@ -8,6 +8,8 @@ angular.module('negawattClientApp')
 
         var ctrlChartTabs = this;
 
+        ChartUsagePeriod.config();
+
         // Get chart frequencies (in order to draw frequency tabs)
         ctrlChartTabs.frequencies = ChartUsagePeriod.getFrequencies();
 
