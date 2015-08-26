@@ -1,8 +1,17 @@
 'use strict';
 
+/**
+ * @ngdoc function
+ * @name negawattClientApp.controller:DetailsCtrl
+ * @description
+ *  Details chart controller.
+ *
+ * Controller for the details (pie) chart, in dashboard mode.
+ */
+
 angular.module('negawattClientApp')
   .controller('DetailsCtrl', function ($scope, $state, $stateParams, FilterFactory, Chart, ChartCategories, meters, $filter, siteCategories) {
-    var vm = this;
+    var detailsCtrl = this;
     // Category id selected from pie chart.
     var categoryId;
     // Summary property of electricity.
@@ -12,12 +21,12 @@ angular.module('negawattClientApp')
     $scope.meters = meters;
 
     // Public controller API
-    vm.categoriesChart = {};
-    vm.message = Chart.messages.empty;
-    vm.hasData = hasData;
+    detailsCtrl.categoriesChart = {};
+    detailsCtrl.message = Chart.messages.empty;
+    detailsCtrl.hasData = hasData;
     // Save dataset values, until wait for load the dataset labels
     // (in the data type meters).
-    vm.dataset;
+    detailsCtrl.dataset;
 
     if ($stateParams.markerId) {
       setSelectedMarker($stateParams.markerId);
@@ -26,7 +35,7 @@ angular.module('negawattClientApp')
 
     // Go to the a new category selected form the pie chart.
     $scope.onSelect = function(selectedItem, chartData) {
-      if (summary.type === 'category') {
+      if (summary.type === 'site_categories') {
         categoryId = ChartCategories.getCategoryIdSelected(selectedItem, chartData);
         if (angular.isDefined(categoryId)) {
           $state.go('dashboard.withAccount.categories', {accountId: $stateParams.accountId, categoryId: categoryId});
@@ -38,7 +47,7 @@ angular.module('negawattClientApp')
     $scope.$on('nwMetersChanged', function(event, meters) {
       $scope.meterSelected = meters.list[$stateParams.markerId];
 
-      vm.metersLoaded = meters.loaded;
+      detailsCtrl.metersLoaded = meters.loaded;
       if (meters.loaded) {
         meterSelectedExist();
         render();
@@ -63,13 +72,13 @@ angular.module('negawattClientApp')
       }
 
       // Set collection (Categories | Meters) to add labels on the pie chart. According the summary type data.
-      if (summary.type === 'category') {
+      if (summary.type === 'site_categories') {
         labels = $scope.categories.collection;
         renderChart(summary, labels);
       }
       else {
         labels = {};
-        vm.dataset = {
+        detailsCtrl.dataset = {
           summary: summary,
           labels: labels
         }
@@ -77,8 +86,8 @@ angular.module('negawattClientApp')
       }
 
       // Render pie chart in case of electricity data update.
-      vm.metersLoaded = meters.loaded;
-      if (vm.metersLoaded) {
+      detailsCtrl.metersLoaded = meters.loaded;
+      if (detailsCtrl.metersLoaded) {
         render();
       }
     });
@@ -101,14 +110,14 @@ angular.module('negawattClientApp')
      * @returns {boolean}
      */
     function hasData() {
-      return vm.categoriesChart.data && !!vm.categoriesChart.data.rows.length;
+      return detailsCtrl.categoriesChart.data && !!detailsCtrl.categoriesChart.data.rows.length;
     }
 
     // Generate alert if the a meter is selected and is not defined in the UI.
     function render() {
       // Render pie chart.
-      if (angular.isDefined(vm.dataset)) {
-        renderChart(vm.dataset.summary, $scope.meters.listAll);
+      if (angular.isDefined(detailsCtrl.dataset)) {
+        renderChart(detailsCtrl.dataset.summary, $scope.meters.listAll);
       }
     }
 
@@ -120,13 +129,13 @@ angular.module('negawattClientApp')
      */
     function renderChart(summary, labels) {
       // Prepare the content as Google Chart Dataset object definition.
-      vm.categoriesChart = $filter('toPieChartDataset')(summary, labels);
+      detailsCtrl.categoriesChart = $filter('toPieChartDataset')(summary, labels);
     }
 
     function meterSelectedExist() {
       // Handle applications alerts.
       if (angular.isUndefined($scope.meterSelected) && $state.is('dashboard.withAccount.markers')) {
-        $scope.vm.alerts.new({type: 'default', msg: 'מונה לא קיים.'});
+        $scope.detailsCtrl.alerts.new({type: 'default', msg: 'מונה לא קיים.'});
       }
     }
   });

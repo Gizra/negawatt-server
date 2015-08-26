@@ -9,11 +9,11 @@
  */
 angular.module('negawattClientApp')
   .controller('UsageCtrl', function UsageCtrl($scope, $state, $stateParams, $filter, Electricity, Chart, ChartUsagePeriod, FilterFactory, meters, filters, ChartElectricityUsage, siteCategories, profile) {
-    var vm = this;
+    var usageCtrl = this;
     var getChartPeriod = ChartUsagePeriod.getChartPeriod;
 
     // Populate the electricity data into the UI.
-    vm.electricity;
+    usageCtrl.electricity;
 
     // Get the parameters chart frecuency.
     if (angular.isDefined($stateParams.chartFreq)) {
@@ -78,13 +78,13 @@ angular.module('negawattClientApp')
       }
 
       // Update electricity property with active electricity (if the response has data).
-      vm.electricity = $filter('activeElectricityFilters')(electricity);
+      usageCtrl.electricity = $filter('activeElectricityFilters')(electricity);
 
-      if (vm.electricity && vm.electricity.length) {
+      if (usageCtrl.electricity && usageCtrl.electricity.length) {
         // Update the title's date range, according to the first and last
         // selected electricity records.
-        var firstEntry = vm.electricity[0];
-        var lastEntry = vm.electricity[vm.electricity.length - 1];
+        var firstEntry = usageCtrl.electricity[0];
+        var lastEntry = usageCtrl.electricity[usageCtrl.electricity.length - 1];
         $scope.dateRange = ChartUsagePeriod.formatDateRange(firstEntry.timestamp * 1000, lastEntry.timestamp * 1000);
       }
     });

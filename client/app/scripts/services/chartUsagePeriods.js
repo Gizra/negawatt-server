@@ -73,7 +73,7 @@ angular.module('negawattClientApp')
       period.setTimeFrame(this.getActiveFrequency());
 
       updateStateParams();
-    }
+    };
 
     /**
      * Return a boolean to indicate if the ui button of the next or previous period
@@ -100,7 +100,7 @@ angular.module('negawattClientApp')
      */
     function updateStateParams() {
       var params = {
-        chartFreq: +period.chart.type,
+        chartFreq: +period.activeTimeFrame.type,
         chartNextPeriod: period.next || undefined,
         chartPreviousPeriod: period.previous || undefined
       };
@@ -127,7 +127,7 @@ angular.module('negawattClientApp')
       // Calculate the new period od period.
       if (periodDirection === 'next' && period.next !== null) {
         newPeriod = {
-          next: (moment.unix(period.next).isAfter(moment.unix(period.max), period.chart.frequency) || moment.unix(period.next).isSame(moment.unix(period.max), period.chart.frequency)) ? null : period.add(period.next).unix(),
+          next: (moment.unix(period.next).isAfter(moment.unix(period.max), period.activeTimeFrame.frequency) || moment.unix(period.next).isSame(moment.unix(period.max), period.activeTimeFrame.frequency)) ? null : period.add(period.next).unix(),
           previous: period.add(period.previous).unix()
         };
       }
@@ -135,14 +135,14 @@ angular.module('negawattClientApp')
       if (periodDirection === 'previous' && period.previous !== null){
         newPeriod = {
           next: period.subtract(period.next).unix(),
-          previous: (moment.unix(period.previous).isBefore(moment.unix(period.min), period.chart.frequency) || moment.unix(period.previous).isSame(moment.unix(period.min), period.chart.frequency)) ? null : period.subtract(period.previous).unix()
+          previous: (moment.unix(period.previous).isBefore(moment.unix(period.min), period.activeTimeFrame.frequency) || moment.unix(period.previous).isSame(moment.unix(period.min), period.activeTimeFrame.frequency)) ? null : period.subtract(period.previous).unix()
         };
       }
 
       // Extend the Period factory methods.
       newPeriod = extend(copy(period), newPeriod);
       return newPeriod;
-    };
+    }
 
     /**
      * Clear the actual period and the theirs limits.

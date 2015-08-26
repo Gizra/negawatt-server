@@ -1,0 +1,37 @@
+<!-- Chart detailed directive -->
+<div class="row">
+  <h4 class="col-sm-8 title state-title"> {{ chart.title }} <small class="date" dir="ltr">{{ chart.dateRange }}</small></h4>
+  <div class="col-sm-4 form-inline">
+
+    <chart-detailed-date-picker show-compare-chart="chart.hasExtraChart"></chart-detailed-date-picker>
+
+  </div>
+</div>
+
+<div class="row detailed-chart">
+
+  <chart-pie-compare summary="chart.summary" options="chart.pieOptions"></chart-pie-compare>
+
+  <div class="usage-chart-container">
+
+    <!-- Form of filters -->
+    <form name="formChartFilters" style="display:none">
+      <div>
+        <input type="text" ng-model="chart.startDate" ng-change="chart.filtersChanged()"/> start date (unix timestamp)
+      </div>
+      <div>
+        <input type="text" ng-model="chart.endDate" ng-change="chart.filtersChanged()"/> end date (unix timestamp)
+      </div>
+      <div>
+        <input type="text" ng-model="chart.siteCategory" ng-change="chart.filtersChanged()"/> site category
+      </div>
+      <div>
+        <input type="text" ng-model="chart.meter" ng-change="chart.filtersChanged()"/> meter category
+      </div>
+    </form>
+
+    <chart-electricity-compare electricity="chart.electricity" compareCollection="chart.compareCollection" options="chart.options"></chart-electricity-compare>
+
+  </div>
+
+</div>

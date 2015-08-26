@@ -21,47 +21,25 @@ angular.module('negawattClientApp')
       var chartFrequencyActive = Chart.getActiveFrequency();
       // Check if asked to return chart options only.
       if (collection == 'options-only') {
-        return getOptions(chartFrequencyActive);
+        return ChartOptions.getOptions(chartFrequencyActive);
+      }
+
+      if (angular.isUndefined(options)) {
+        ChartOptions.getOptions(chartFrequencyActive.type);
+      }
+
+      if (compareWith) {
+        collection = collection.concat(compareWith);
       }
 
       // Recreate collection object.
       collection = {
-        type: type || chartFrequencyActive.chart_type,
+        type: type || options.chart_type,
         data: getDataset(collection, chartFrequencyActive),
-        options: options || getOptions(chartFrequencyActive)
-      }
+        options: options
+      };
       return collection;
-    }
-
-    /**
-     * Return the options of the selected chart.
-     *
-     * @param chartFrequencyActive
-     *  The specific chart options of the seleted frequency.
-     * @returns {*}
-     *  Chart options object.
-     */
-    function getOptions(chartFrequencyActive) {
-      var w = angular.element($window),
-        width = w.width(),
-        height = w.height();
-
-      return angular.extend(ChartOptions[chartFrequencyActive.chart_type],
-        {
-          titlePosition: 'none',
-          vAxis: {
-            title: chartFrequencyActive.axis_v_title
-          },
-          hAxis: {
-            // No title in order to have enough space for the bars labels.
-          },
-          legend: { position: 'bottom' },
-          backgroundColor: 'none',
-          height: 350,
-          width: width * 7 / 12 - 150,
-          tooltip: {isHtml: true}
-        });
-    }
+    };
 
     /**
      * Return the object with the dataset based on the collection object.
@@ -107,7 +85,7 @@ angular.module('negawattClientApp')
       };
 
       return dataset;
-    };
+    }
 
     /**
      * Return the collection data in the type of the two chart type indicated.

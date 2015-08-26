@@ -5,7 +5,7 @@ angular.module('negawattClientApp')
     return {
       restrict: 'EA',
       templateUrl: 'scripts/directives/chart-electricity-compare/chart-electricity-compare.directive.html',
-      controller: function chartElectricityUsageCtrl(ChartElectricityUsage, ChartUsagePeriod, $stateParams, $filter, $scope) {
+      controller: function chartElectricityUsageCtrl(ChartElectricityUsage, ChartUsagePeriod, $stateParams, $filter, $scope, Utils) {
         var ctrlChart = this;
 
         // Get chart frequencies. (Tabs the period of time)
@@ -30,12 +30,15 @@ angular.module('negawattClientApp')
         /**
          * Directive Event: When new electricity data is updated from the server.
          */
-        $scope.$watch('ctrlChart.electricity', function(current) {
-          if (angular.isUndefined(current)) {
+        $scope.$watchGroup(['ctrlChart.electricity', 'ctrlChart.compareCollection', 'ctrlChart.options'], function(chart) {
+          if (angular.isUndefined(chart)
+            || Utils.isEmpty(chart[0])
+            || angular.isUndefined(chart[2])) {
+
             return;
           }
 
-          renderChart(current);
+          renderChart(chart[0], chart[1], chart[2]);
 
         }, true);
 
@@ -138,9 +141,11 @@ angular.module('negawattClientApp')
          * @param activeElectricity
          *  The "active electricity" data collection.
          */
-        function renderChart(activeElectricity) {
-          // Update data comming fron the server into the directive.
-          ctrlChart.data = $filter('toChartDataset')(activeElectricity);
+        function renderChart(activeElectricity, compareCollection, options) {
+          // Convert the data coming from the server into google chart format.
+          ctrlChart.data = $filter('toChartDataset')(activeElectricity, compareCollection, options);
+          console.log('chartElectricityCompare renderChart data:', ctrlChart.data);
+
           // Update state.
           setState();
         }

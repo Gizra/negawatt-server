@@ -1,11 +1,16 @@
 <!-- Date selector -->
-<div ng-repeat="dateOp in ctrlChartDatePicker.dateOptions" class="inline" ng-show="dateOp.frequency == ctrlChartDatePicker.chartFreq">
+<div ng-repeat="dateOp in ctrlChartDatePicker.dateOptions" class="inline" ng-if="dateOp.frequency == ctrlChartDatePicker.chartFreq">
   <p class="input-group">
     <span class="input-group-btn"><button type="button" class="btn btn-default disabled"><span class="glyphicon glyphicon-chevron-right"></span></button></span>
     <input type="text" size="9" class="form-control" datepicker-popup="{{dateOp.format}}" ng-model="ctrlChartDatePicker.dt"  show-button-bar="false" is-open="dateOp.opened" min-date="ctrlChartDatePicker.minDate" max-date="ctrlChartDatePicker.maxDat" datepicker-options="dateOp" date-disabled="" ng-required="true"/>
     <span class="input-group-btn"><button type="button" class="btn btn-default" ng-click="ctrlChartDatePicker.open(dateOp)"><i class="glyphicon glyphicon-calendar"></i></button></span>
     <span class="input-group-btn"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span></button></span>
 
-    <span class="input-group-btn"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus" alt="השווה לתאריך אחר"></span></button></span>
+    <span class="input-group-btn">
+      <button type="button" class="btn btn-default" ng-model="ctrlChartDatePicker.showCompareChart" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0" alt="השווה לתאריך אחר">
+        <span ng-if="!ctrlChartDatePicker.showCompareChart" class="glyphicon glyphicon-plus"></span>
+        <span ng-if="ctrlChartDatePicker.showCompareChart" class="glyphicon glyphicon-minus"></span>
+      </button>
+    </span>
   </p>
 </div>

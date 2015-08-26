@@ -15,7 +15,7 @@
   }
 
   chart-detailed {
-    // To allow usage-chart overlap the pie, put them inside a 'relatove' div.
+    // To allow usage-chart overlap the pie, put them inside a 'relative' div.
     .detailed-chart {
       position: relative;
       height: 350px;
@@ -37,6 +37,21 @@
       left: 0px;
       top: -10%;
       z-index: 5;
+    }
+
+    chart-pie-compare {
+      // Position pie chart 'loading' spinner
+      .chart-empty {
+        width: 500px;
+        margin-top: 100px;
+      }
+    }
+
+    chart-electricity-compare {
+      // Position electricity chart 'loading' spinner
+      .chart-empty {
+        height: 400px;
+      }
     }
 
   }

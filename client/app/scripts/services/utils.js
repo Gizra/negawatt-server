@@ -99,7 +99,7 @@ angular.module('negawattClientApp')
     /**
      * Convert a object to a hash code.
      *
-     * @param object
+     * @param obj
      *   JSON Format object.
      *
      * @returns {string}
@@ -107,13 +107,13 @@ angular.module('negawattClientApp')
      */
     this.objToHash = function(obj) {
       return obj && md5.createHash(JSON.stringify(obj));
-    }
+    };
 
     /**
      * Clean undefined properties from the obj.
      *
      * @param obj
-     *  The object wit properties undefined.
+     *  The object with properties undefined.
      *
      * @returns {*}
      *  The object cleaned.
@@ -126,7 +126,7 @@ angular.module('negawattClientApp')
       });
 
       return obj;
-    }
+    };
 
     /**
      * Check if an object or array is empty.

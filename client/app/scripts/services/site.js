@@ -16,6 +16,9 @@ angular.module('negawattClientApp')
     // Update event broadcast name.
     var broadcastUpdateEventName = 'nwSitesChanged';
 
+    // Share site properties between controls.
+    this.properties = {};
+
     /**
      * Return a promise with the list of sites, from cache or the server.
      *

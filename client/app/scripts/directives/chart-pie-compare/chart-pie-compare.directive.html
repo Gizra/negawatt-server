@@ -1,0 +1,20 @@
+<!-- Content -->
+<div ng-switch="ctrlPieChart.state" class="pie-chart-container">
+
+  <!-- Spniner - With no data and is loading-->
+  <div ng-switch-when="loading" class="row chart-empty">
+    <div class="title col-md-12 col-centered text-center chart-message"><i class="fa fa-circle-o-notch fa-spin fa-2x nw-icon-loading nw-icon"></i></div>
+  </div>
+
+  <!-- Message to the User no Chart - No data -->
+  <div ng-switch-when="empty" class="row chart-empty">
+    <div class="title col-md-6 col-centered text-center chart-message">{{ctrlPieChart.messages.empty}}</div>
+  </div>
+
+  <!-- Chart with electricity data -->
+  <div ng-switch-when="data" class="chart-container">
+
+    <!-- Chart subcomponent -->
+    <div google-chart chart="ctrlPieChart.data" id="chart-pie"></div>
+  </div>
+</div>

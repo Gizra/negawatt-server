@@ -95,14 +95,26 @@ angular.module('negawattClientApp')
       /**
        * Return the electricity filters according a hash.
        *
-       * @param name
+       * @param hash
        *  The hash.
        *
        * @returns {*}
        *  The electricity filters.
        */
-      getElectricity: function(name) {
-        return this.filters['electricity'] && this.filters['electricity'][name];
+      getElectricity: function(hash) {
+        return this.filters['electricity'] && this.filters['electricity'][hash];
+      },
+      /**
+       * Return the temperature filters according a hash.
+       *
+       * @param hash
+       *  The hash.
+       *
+       * @returns {*}
+       *  The temperature filters.
+       */
+      getTemperature: function(hash) {
+        return this.filters['temperature'] && this.filters['temperature'][hash];
       },
       /**
        * Return if is defined a filter.
@@ -131,6 +143,9 @@ angular.module('negawattClientApp')
           case 'electricity':
             setElectricity.bind(this, name, value)();
             break;
+          case 'temperature':
+            setTemperature.bind(this, name, value)();
+            break;
           default:
             this.filters[name] = value;
         }
@@ -140,6 +155,44 @@ angular.module('negawattClientApp')
         return this.filters && this.filters[name];
       }
     };
+
+    /**
+     * Save of the temperature filters, index by unique hash string.
+     *
+     * @param name
+     *  Filter name. By default 'temperature'
+     * @param params
+     *  Parameters object regulary comming from the query string.
+     */
+    function setTemperature(name, params) {
+      // Prepare temperature filter in querystring format.
+      var filter = getTemperatureFilter(params);
+
+      // Clean Properties.
+      filter = Utils.cleanProperties(filter);
+
+      // Set property with the filters.
+      this.filters[name] = angular.isUndefined(this.filters[name]) ? {} : this.filters[name];
+      this.filters[name][this.get('activeElectricityHash')] = filter;
+    }
+
+    /**
+     * Return querystring of the parameter, representing the temperature filter.
+     *
+     * @param params
+     *
+     * @returns {Object}
+     */
+    function getTemperatureFilter(params) {
+      var filter;
+
+      // Prepare filters for data request.
+      filter = {
+        'filter[meter]': params.meter
+      };
+
+      return filter;
+    }
 
     /**
      * Save of the electricity filters, index by unique hash string.
@@ -178,7 +231,7 @@ angular.module('negawattClientApp')
         multipleGraphs: isMultiGraphs
       };
       var getFromCategory = {
-        selectorType: 'meter_category',
+        selectorType: 'site_category',
         selectorId: params.categoryId,
         multipleGraphs: isMultiGraphs
       };
@@ -195,7 +248,7 @@ angular.module('negawattClientApp')
      */
     function isMultiGraphs() {
       return angular.isArray(this.selectorId);
-    };
+    }
 
     /**
      * Translate selector type and ID to filters.
@@ -205,7 +258,7 @@ angular.module('negawattClientApp')
      * @param chartFreq
      *   Required frequency, e.g. 2 for MONTH.
      * @param selectorType
-     *   Type of filter, e.g. 'meter' or 'meter_category'.
+     *   Type of filter, e.g. 'meter' or 'site_category'.
      * @param selectorId
      *   ID of the selector, e.g. meter ID or category ID.
      * @param period
@@ -262,7 +315,7 @@ angular.module('negawattClientApp')
       }
 
       return filters;
-    };
+    }
 
     /**
      * Set the states of the filter checkoxes control.

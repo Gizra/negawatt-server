@@ -1,6 +1,6 @@
 <div class="tree-level-middle">
   <label>
-    <input ng-change="toggleCategory(category.id)" ng-model="category.showInChart" type="checkbox" />
+    <input ng-change="category.select()" ng-model="category.id" type="checkbox" />
     <img ng-show="category.icon" ng-src="images/categories/{{category.icon}}.png" />
     <span>{{ category.label }}</span>
   </label>

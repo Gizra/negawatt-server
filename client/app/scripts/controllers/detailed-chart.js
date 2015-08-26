@@ -3,11 +3,20 @@
 /**
  * @ngdoc function
  * @name negawattClientApp.controller:DetailedChartCtrl
+ * @description
+ *  Details chart controller.
+ *
+ * Controller for the details (pie) chart, in chart mode.
  */
-angular.module('negawattClientApp')
-  .controller('DetailedChartCtrl', function DetailedChartCtrl($scope, $state, $stateParams, $filter, Electricity, Chart, ChartUsagePeriod, FilterFactory, meters, filters, ChartElectricityUsage, siteCategories, profile, electricityMock) {
-    var vm = this;
 
+angular.module('negawattClientApp')
+  .controller('DetailedChartCtrl', function DetailedChartCtrl($scope, $state, $stateParams, $filter, Electricity, Chart, ChartUsagePeriod, FilterFactory, meters, filters, ChartElectricityUsage, siteCategories, profile) {
+    var detailedChartCtrl = this;
+
+    // Start with no compare chart.
+    detailedChartCtrl.hasExtraChart = false;
+
+    detailedChartCtrl.account = $stateParams.accountId;
     var compareCollection;
     var options;
 
@@ -41,14 +50,11 @@ angular.module('negawattClientApp')
           this.title = account.label;
           return;
         }
-      }, vm);
+      }, detailedChartCtrl);
     }
 
-    /**
-     * Force load of the electricity data.
-     */
-    if (filters.loadElectricity) {
-      // Realize the first load electricity data after ui-roter resolutions.
-      Electricity.refresh(filters.activeElectricityHash);
-    }
+    $scope.$on('sitePropertiesCtrlChange', function (event, siteProperties) {
+      console.log(event, siteProperties);
+      detailedChartCtrl.siteProperties = (!siteProperties) ? undefined : siteProperties;
+    });
   });

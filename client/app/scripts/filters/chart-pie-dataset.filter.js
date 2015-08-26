@@ -18,9 +18,9 @@ angular.module('negawattClientApp')
         type: 'PieChart',
         data: getDataset(collection, labels),
         options: getOptions(collection.type)
-      }
+      };
       return collection;
-    }
+    };
 
     /**
      * Return the options of the selected chart.
@@ -30,9 +30,11 @@ angular.module('negawattClientApp')
      */
     function getOptions(type) {
       return {
-        title: 'Kws per ' + type,
+        //title: 'Kws per ' + type,
         pieSliceText: 'label',
-        tooltip: {isHtml: true}
+        tooltip: {isHtml: true},
+        legend: {position: 'none'},
+        backgroundColor: 'none'
       };
     }
 
@@ -46,16 +48,30 @@ angular.module('negawattClientApp')
      *
      */
     function getDataset(collection, labels) {
-      var dataset = {
-        'cols': [
-          {id: 't', label: collection.type, type: 'string'},
-          {id: 's', label: 'Kws', type: 'number'}
-        ],
-        'rows': getRows(collection.values, collection.type, labels)
-      };
+      if (collection.type == 'site_categories') {
+        // Prepare categories dataset.
+        data = {
+          cols: [
+            {
+              label: 'קטגוריה', // collection.type
+              type: 'string'
+            },
+            {
+              label: 'קוט"ש',
+              type: 'number'
+            }
+          ],
+          'rows': getRows(collection.values, collection.type, labels)
+        };
 
-      return dataset;
-    };
+        return data;
+      }
+      else {
+        // type == meters
+      }
+      return {};
+
+    }
 
     /**
      * Return the collection in dataset Pie chart google format. According to
@@ -64,7 +80,9 @@ angular.module('negawattClientApp')
      * @param obj
      *  The collection to filter.
      * @param type
-     *  The type of the data (category|meter).
+     *  The type of the data (site_categories|meters).
+     * @param labels
+     *  Array of labels.
      *
      * @returns {Array}
      *  An array of the data ordering as the type requested.
@@ -74,25 +92,25 @@ angular.module('negawattClientApp')
 
       // Transform to Google Pie Chart compatible.
       switch (type) {
-        case 'category':
+        case 'site_categories':
           angular.forEach(obj, function(value, key) {
             this.push({
               c: [
-                {v: !Utils.isEmpty(labels) && labels[key].label || 'category ' + key},
+                { v: !Utils.isEmpty(labels) && labels[key].label || 'Category ' + key},
                 // "f" is for formatting the value in the tooltip.
-                {v: +value, f: $filter('number')(value, 0) + ' קוט״ש'},
-                {id: key}
+                { v: +value, f: $filter('number')(value, 0) + ' קוט״ש'},
+                { id: key}
               ]
             });
           }, rows);
           break;
-        case 'meter':
+        case 'meters':
           angular.forEach(obj, function(value, key) {
             this.push({
               c: [
-                {v: !Utils.isEmpty(labels) && labels[key].contract || 'meter ' + key},
-                {v: +value, f: $filter('number')(value, 0) + ' קוט״ש'},
-                {id: key}
+                { v: !Utils.isEmpty(labels) && labels[key].contract || 'Meter ' + key},
+                { v: +value, f: $filter('number')(value, 0) + ' קוט״ש'},
+                { id: key}
               ]
             });
           }, rows);

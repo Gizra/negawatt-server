@@ -27,6 +27,7 @@ angular
     'ui.bootstrap.tabs',
     'ui.bootstrap.alert',
     'ui.bootstrap.accordion',
+    'ui.bootstrap.buttons',
     'ui.bootstrap.datepicker',
     'template/datepicker/datepicker.html',
     'template/datepicker/popup.html',
@@ -315,7 +316,7 @@ angular
           'usage@chart': {
             templateUrl: 'views/dashboard/chart/main.usage.html',
             controller: 'DetailedChartCtrl',
-            controllerAs: 'vm'
+            controllerAs: 'detailedChartCtrl'
           }
         }
       })
@@ -323,7 +324,7 @@ angular
         url: '/onlychart',
         templateUrl: 'views/chart.html',
         controller: 'BigChartCtrl',
-        controllerAs: 'vm'
+        controllerAs: 'bigChartCtrl'
       });
     // Define interceptors.
     $httpProvider.interceptors.push(function ($q, Auth, $location, localStorageService) {

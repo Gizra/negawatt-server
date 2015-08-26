@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('ChartElectricityCompare', function (FilterFactory, Electricity) {
+  .service('ChartElectricityUsage', function (FilterFactory, Electricity) {
 
     this.requestElectricity = requestElectricity;
 

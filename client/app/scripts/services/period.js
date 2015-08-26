@@ -8,7 +8,7 @@ angular.module('negawattClientApp')
       min: null,
       next: null,
       previous: null,
-      chart: null,
+      activeTimeFrame: null,
       /**
        * Return true if the limits are configured, otherwise return false.
        *
@@ -21,14 +21,14 @@ angular.module('negawattClientApp')
        * Set the default configuration of the period based on the type of Chart
        * and set his limits.
        *
-       * @param chart
+       * @param activeTimeFrame
        */
-      setTimeFrame: function(chart) {
-        // Save chart configuration.
-        this.chart = chart;
+      setTimeFrame: function(activeTimeFrame) {
+        // Save activeTimeFrame configuration.
+        this.activeTimeFrame = activeTimeFrame;
       },
       /**
-       * Set the limits (maximum and minimum) values for the period of the chart,
+       * Set the limits (maximum and minimum) values for the period of the activeTimeFrame,
        * expresed in timestamp unix format.
        *
        * @param max
@@ -71,7 +71,7 @@ angular.module('negawattClientApp')
         this.previous = (this.next === null) ? null : this.getPrevious();
       },
       getPrevious: function() {
-        return moment.unix(this.next).subtract(this.chart && this.chart.chart_default_time_frame, this.chart && this.chart.frequency).unix();
+        return moment.unix(this.next).subtract(this.activeTimeFrame && this.activeTimeFrame.chart_default_time_frame, this.activeTimeFrame && this.activeTimeFrame.frequency).unix();
       },
       isLast: function() {
         return !this.next;
@@ -115,10 +115,10 @@ angular.module('negawattClientApp')
         return outOfRange;
       },
       add: function(time) {
-        return moment.unix(time).add(this.chart && this.chart.chart_default_time_frame, this.chart && this.chart.frequency);
+        return moment.unix(time).add(this.activeTimeFrame && this.activeTimeFrame.chart_default_time_frame, this.activeTimeFrame && this.activeTimeFrame.frequency);
       },
       subtract: function(time) {
-        return moment.unix(time).subtract(this.chart && this.chart.chart_default_time_frame, this.chart && this.chart.frequency);
+        return moment.unix(time).subtract(this.activeTimeFrame && this.activeTimeFrame.chart_default_time_frame, this.activeTimeFrame && this.activeTimeFrame.frequency);
       }
     }
   });

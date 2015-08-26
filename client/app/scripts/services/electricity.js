@@ -34,7 +34,7 @@ angular.module('negawattClientApp')
       }
 
       // Preparation of the promise and cache for Electricity request.
-      getElectricity[hash] = $q.when(getElectricity[hash] || electricityRecords(hash) || getDataFromBackend(hash, 1, false));
+      getElectricity[hash] = $q.when(getElectricity[hash] || electricityData(hash) || getDataFromBackend(hash, 1, false));
 
       // Clear the promise cached, after resolve or reject the
       // promise. Permit access to the cache data, when
@@ -61,7 +61,7 @@ angular.module('negawattClientApp')
       angular.isUndefined(cache[hash]) && self.get(hash);
 
       // Broadcast an update event.
-      angular.isDefined(cache[hash]) && $rootScope.$broadcast(broadcastUpdateEventName, electricityRecords());
+      angular.isDefined(cache[hash]) && $rootScope.$broadcast(broadcastUpdateEventName, electricityData(hash));
     };
 
     /**
@@ -107,7 +107,7 @@ angular.module('negawattClientApp')
 
         setCache(electricity, hash, skipResetCache, noData);
 
-        deferred.resolve(electricityRecords(hash));
+        deferred.resolve(electricityData(hash));
 
         // If there are more pages, read them.
         if (hasNextPage && !noData) {
@@ -123,17 +123,17 @@ angular.module('negawattClientApp')
      *
      * @param electricity
      *   The data to cache.
-     * @param key
+     * @param hash
      *   A key for the cached data - the hash code of the filters.
      * @param skipResetCache
      *   If false, a timer will be set to clear the cache in 60 sec.
      * @param noData
      *   True if parameter noData is 1, otherwise is false.
      */
-    function setCache(electricity, key, skipResetCache, noData) {
+    function setCache(electricity, hash, skipResetCache, noData) {
       // Cache messages data.
-      cache[key] = {
-        data: (cache[key] ? cache[key].data : []).concat(electricity.data),
+      cache[hash] = {
+        data: (cache[hash] ? cache[hash].data : []).concat(electricity.data),
         limits: electricity.summary.timestamp,        
         timestamp: new Date(),
         noData: noData,
@@ -141,7 +141,7 @@ angular.module('negawattClientApp')
       };
 
       // Broadcast an update event.
-      $rootScope.$broadcast(broadcastUpdateEventName, electricityRecords());
+      $rootScope.$broadcast(broadcastUpdateEventName, electricityData(hash));
 
       // If asked to skip cache timer reset, return now.
       // Will happen when reading multiple page data - when reading pages
@@ -153,8 +153,8 @@ angular.module('negawattClientApp')
 
       // Clear cache in 30 minutes.
       timeouts.push($timeout(function() {
-        if (angular.isDefined(cache[key])) {
-          cache[key] = undefined;
+        if (angular.isDefined(cache[hash])) {
+          cache[hash] = undefined;
         }
       }, 1800000));
     }
@@ -179,8 +179,8 @@ angular.module('negawattClientApp')
      *  Hash string that reprsente the filters and the result of the query
      * @returns {*}
      */
-    function electricityRecords(hash) {
-      return (angular.isUndefined(hash)) ? cache : cache[hash] && cache[hash].data;
+    function electricityData(hash) {
+      return (angular.isUndefined(hash)) ? cache : cache[hash];
     }
   });
 
