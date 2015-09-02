@@ -180,7 +180,12 @@ angular.module('negawattClientApp')
      * @returns {*}
      */
     function electricityData(hash) {
-      return (angular.isUndefined(hash)) ? cache : cache[hash];
+      var data = angular.isUndefined(hash) ? cache : cache[hash];
+      if (data) {
+        // Data was found, broadcast an update event.
+        $rootScope.$broadcast(broadcastUpdateEventName, data);
+      }
+      return data;
     }
   });
 

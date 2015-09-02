@@ -82,7 +82,6 @@ angular.module('negawattClientApp')
           summary: summary,
           labels: labels
         }
-
       }
 
       // Render pie chart in case of electricity data update.

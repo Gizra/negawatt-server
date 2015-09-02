@@ -42,6 +42,10 @@ angular.module('negawattClientApp')
 
         }, true);
 
+        $scope.$on('nwChartBeginLoading', function() {
+          setState('loading');
+        });
+
         // Privete functions.
 
         /**
@@ -144,7 +148,6 @@ angular.module('negawattClientApp')
         function renderChart(activeElectricity, compareCollection, options) {
           // Convert the data coming from the server into google chart format.
           ctrlChart.data = $filter('toChartDataset')(activeElectricity, compareCollection, options);
-          console.log('chartElectricityCompare renderChart data:', ctrlChart.data);
 
           // Update state.
           setState();

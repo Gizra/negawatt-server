@@ -28,12 +28,12 @@ angular.module('negawattClientApp')
      *
      * @param limits
      */
-    this.config = function(limits) {
-      period.setLimits(limits)
+    this.config = function(params) {
+      period.setLimits(params);
       // Set frequency from selected chart configuration.
       period.setTimeFrame(this.getActiveFrequency());
       // Set initial period according the time frame.
-      period.setPeriod();
+      period.setPeriod(params);
 
       updateStateParams();
     };
@@ -58,21 +58,54 @@ angular.module('negawattClientApp')
      *  Return the actual period values.
      */
     this.changePeriod = function(periodDirection) {
-      // Set the new period.
-      period.setPeriod(getNewPeriod(periodDirection));
+      if (periodDirection == 'next') {
+        period.goNextPeriod();
+      }
+      else {
+        period.goPreviousPeriod();
+      }
 
       updateStateParams();
-    }
+    };
 
     /**
+     * Called when frequency is changed.
      *
+     * @param frequency
+     *  Frequency object of the new frequency selected.
      */
     this.changeFrequency = function(frequency) {
       reset();
       this.setActiveFrequency(frequency);
       period.setTimeFrame(this.getActiveFrequency());
 
+      // Unset next and previous. They will be set after electricity (with noData) is received.
+      period.previous = undefined;
+      period.next = undefined;
+
       updateStateParams();
+    };
+
+    /**
+     * Called when reference-date is changed.
+     *
+     * @param date
+     *  A new reference date.
+     */
+    this.setReferenceDate = function(date) {
+      period.setPeriod({newDate: date});
+
+      updateStateParams();
+    };
+
+    /**
+     * Return reference-data.
+     *
+     * @return {int}
+     *  Reference date.
+     */
+    this.getReferenceDate = function() {
+      return period.referenceDate;
     };
 
     /**
@@ -110,38 +143,6 @@ angular.module('negawattClientApp')
 
       // Refresh $state with new params.
       $state.refreshUrlWith($stateParams);
-    }
-
-    /**
-     * Calculate the next and previous periods in unix format time.
-     *
-     * @param periodDirection
-     *  String to indicate if is next or previous.
-     *
-     * @returns {{next: null, previous: null}|*}
-     */
-    function getNewPeriod(periodDirection) {
-      // Define new period.
-      var newPeriod = {};
-
-      // Calculate the new period od period.
-      if (periodDirection === 'next' && period.next !== null) {
-        newPeriod = {
-          next: (moment.unix(period.next).isAfter(moment.unix(period.max), period.activeTimeFrame.frequency) || moment.unix(period.next).isSame(moment.unix(period.max), period.activeTimeFrame.frequency)) ? null : period.add(period.next).unix(),
-          previous: period.add(period.previous).unix()
-        };
-      }
-      // This calculate the previous period.
-      if (periodDirection === 'previous' && period.previous !== null){
-        newPeriod = {
-          next: period.subtract(period.next).unix(),
-          previous: (moment.unix(period.previous).isBefore(moment.unix(period.min), period.activeTimeFrame.frequency) || moment.unix(period.previous).isSame(moment.unix(period.min), period.activeTimeFrame.frequency)) ? null : period.subtract(period.previous).unix()
-        };
-      }
-
-      // Extend the Period factory methods.
-      newPeriod = extend(copy(period), newPeriod);
-      return newPeriod;
     }
 
     /**

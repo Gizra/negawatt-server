@@ -35,6 +35,10 @@ angular.module('negawattClientApp')
 
         }, true);
 
+        $scope.$on('nwChartBeginLoading', function() {
+          setState('loading');
+        });
+
         // Private functions.
 
         /**
@@ -91,7 +95,6 @@ angular.module('negawattClientApp')
         function renderChart(summary, options) {
           // Convert the data coming from the server into google chart format.
           ctrlPieChart.data = $filter('toPieChartDataset')(summary, options);
-          console.log('chartPieCompare renderChart data:', ctrlPieChart.data);
 
           // Update state.
           setState();

@@ -3,7 +3,7 @@
   <h4 class="col-sm-8 title state-title"> {{ chart.title }} <small class="date" dir="ltr">{{ chart.dateRange }}</small></h4>
   <div class="col-sm-4 form-inline">
 
-    <chart-detailed-date-picker show-compare-chart="chart.hasExtraChart" show-compare-chart-button="chart.showExtraChartButton"></chart-detailed-date-picker>
+    <chart-detailed-date-picker reference-date="chart.referenceDate" show-compare-chart="chart.hasExtraChart" show-compare-chart-button="!chart.isCompareChart"></chart-detailed-date-picker>
 
   </div>
 </div>

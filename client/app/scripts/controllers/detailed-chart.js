@@ -6,7 +6,7 @@
  * @description
  *  Details chart controller.
  *
- * Controller for the details (pie) chart, in chart mode.
+ * Controller for the charts section (both usage and pie, probably times two, if compare-chart is on), in chart mode.
  */
 
 angular.module('negawattClientApp')
@@ -54,7 +54,6 @@ angular.module('negawattClientApp')
     }
 
     $scope.$on('sitePropertiesCtrlChange', function (event, siteProperties) {
-      console.log(event, siteProperties);
       detailedChartCtrl.siteProperties = (!siteProperties) ? undefined : siteProperties;
     });
   });

@@ -64,27 +64,27 @@ angular.module('negawattClientApp')
       formatDateRange: function(from, until) {
         // Select the range date formatting according to the current frequency.
         switch (this.getActiveFrequency().frequency) {
+          case 'years':
           case 'year':
             var format = 'YYYY';
             break;
           case 'month':
-          case 'day':
             var format = 'MM/YYYY';
             break;
-          case 'hour':
-          case 'minute':
+          case 'week':
+          case 'day':
             var format = 'DD/MM/YYYY';
             break;
         }
 
         switch (this.getActiveFrequency().frequency) {
           case 'year':
-          case 'month':
+          case 'week':
+          case 'day':
           case 'hour':
             return moment(from).format(format) + '-' + moment(until).format(format);
 
-          case 'day':
-          case 'minute':
+          case 'month':
             return moment(from).format(format);
         }
       }
@@ -106,7 +106,13 @@ angular.module('negawattClientApp')
           chart_default_time_frame: 10,
           axis_v_title: 'קוט"ש בשנה',
           axis_h_format: 'YYYY',
-          axis_h_title: 'שנה'
+          axis_h_title: 'שנה',
+          get_period: function(timestamp) {
+            // Return a period, from the beginning of 9 years ago, to the end of this year
+            // (total 10 years).
+            var year = moment.unix(timestamp).year();
+            return { from: moment({y: year - 9}).unix(), to: moment({y: year + 1}).unix() }
+          }
         },
         2: {
           frequency: 'year',
@@ -116,7 +122,13 @@ angular.module('negawattClientApp')
           chart_default_time_frame: 24,
           axis_v_title: 'קוט"ש בחודש',
           axis_h_format: 'MM/YYYY',
-          axis_h_title: 'חודש'
+          axis_h_title: 'חודש',
+          get_period: function(timestamp) {
+            // Return a period, from the beginning of the previous year to year's end
+            // (total 2 years).
+            var year = moment.unix(timestamp).year();
+            return { from: moment({y: year - 1}).unix(), to: moment({y: year + 1}).unix() }
+          }
         },
         3: {
           frequency: 'month',
@@ -126,7 +138,13 @@ angular.module('negawattClientApp')
           chart_default_time_frame: 31,
           axis_v_title: 'קוט"ש ביום',
           axis_h_format: 'DD/MM',
-          axis_h_title: 'תאריך'
+          axis_h_title: 'תאריך',
+          get_period: function(timestamp) {
+            // Return a period, from the beginning of the month to its end.
+            var year = moment.unix(timestamp).year(),
+              month = moment.unix(timestamp).month();
+            return { from: moment({y: year, M: month}).unix(), to: moment({y: year, M: month + 1}).unix() }
+          }
         },
         4: {
           frequency: 'week',
@@ -137,7 +155,15 @@ angular.module('negawattClientApp')
           chart_default_time_frame: 168,
           axis_v_title: 'KW',
           axis_h_format: 'HH:mm',
-          axis_h_title: 'שעה'
+          axis_h_title: 'שעה',
+          get_period: function(timestamp) {
+            // Return a period, from the beginning of the week (Sunday) to its end.
+            var year = moment.unix(timestamp).year(),
+              month = moment.unix(timestamp).month(),
+              day = moment.unix(timestamp).date(),
+              dayOfWeek = moment.unix(timestamp).day(); // 0 - Sunday
+            return { from: moment({y: year, M: month, d: day - dayOfWeek}).unix(), to: moment({y: year, M: month, d: day - dayOfWeek + 7}).unix() }
+          }
         },
         5: {
           frequency: 'day',
@@ -148,7 +174,14 @@ angular.module('negawattClientApp')
           chart_default_time_frame: 1440,
           axis_v_title: 'KW',
           axis_h_format: 'HH:mm',
-          axis_h_title: 'שעה'
+          axis_h_title: 'שעה',
+          get_period: function(timestamp) {
+            // Return a period, from the beginning of the day to its end.
+            var year = moment.unix(timestamp).year(),
+              month = moment.unix(timestamp).month(),
+              day = moment.unix(timestamp).date();
+            return { from: moment({y: year, M: month, d: day}).unix(), to: moment({y: year, M: month, d: day + 1}).unix() }
+          }
         }
       };
     }

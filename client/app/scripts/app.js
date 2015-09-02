@@ -50,7 +50,7 @@ angular
     $urlRouterProvider.when('/', function($injector, $location, $state, Profile) {
       Profile.get().then(function(profile) {
         if (profile) {
-          $state.go('dashboard.withAccount', {accountId: profile.account[0].id});
+          $state.go('chart.withAccount', {accountId: profile.account[0].id});
         }
       });
     });

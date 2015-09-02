@@ -7,6 +7,7 @@ angular.module('negawattClientApp')
     var ChartOptions;
 
     ChartOptions = {
+      getChartType: getChartType,
       getOptions: getOptions
     };
 
@@ -121,6 +122,18 @@ angular.module('negawattClientApp')
       });
     }
 
+    function getChartType(frequency) {
+      switch (+frequency) {
+        case 1:
+        case 2:
+        case 3:
+          return 'columnChart';
+        case 4:
+        case 5:
+          return 'lineChart';
+      }
+    }
+
     /**
      * Return the options of the selected chart.
      *
@@ -133,27 +146,13 @@ angular.module('negawattClientApp')
      *  Chart options object.
      */
     function getOptions(frequency, withSeries) {
-      var options;
+      switch (getChartType(frequency)) {
+        case 'columnChart':
+          return (withSeries) ? getColumnCompareOptions() : getColumnOptions();
 
-      if (angular.isString(frequency)) {
-        frequency = +frequency;
+        case 'lineChart':
+          return (withSeries) ? getLineCompareOptions() : getLineOptions();
       }
-
-      switch (frequency) {
-        case 1:
-        case 2:
-        case 3:
-          options = (withSeries) ? getColumnCompareOptions() : getColumnOptions();
-          break;
-        case 4:
-        // Temporal test
-        //case 2:
-        case 5:
-          options = (withSeries) ? getLineCompareOptions() : getLineOptions();
-          break;
-      }
-
-      return options;
     }
 
     return ChartOptions;

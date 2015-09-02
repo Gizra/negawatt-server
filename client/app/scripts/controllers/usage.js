@@ -57,14 +57,14 @@ angular.module('negawattClientApp')
      * usage chart directive.
      */
     $scope.$on("nwElectricityChanged", function(event, electricity) {
-      var missingPeriod;
+      var noData;
 
       if (angular.isUndefined(electricity)) {
         return;
       }
 
       // Save if the period id missing on electricity request, otherwhise false.
-      missingPeriod = $filter('activeElectricityFilters')(electricity, 'noData');
+      noData = $filter('activeElectricityFilters')(electricity, 'noData');
 
       if (!getChartPeriod().isConfigured()) {
         // Configure the period for the chart frequency selected, and request
@@ -72,7 +72,7 @@ angular.module('negawattClientApp')
         ChartUsagePeriod.config($filter('activeElectricityFilters')(electricity, 'limits'));
       }
 
-      if (missingPeriod && getChartPeriod().isConfigured()) {
+      if (noData && getChartPeriod().isConfigured()) {
         ChartElectricityUsage.requestElectricity(ChartUsagePeriod.stateParams);
         return;
       }

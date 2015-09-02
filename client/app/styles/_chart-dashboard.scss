@@ -65,6 +65,11 @@
     .form-control {
       padding: 6px;
     }
+
+    // Make date selector popup LTR.
+    table {
+      direction: ltr;
+    }
   }
 
   #messages .panel-group {

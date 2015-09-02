@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('ChartDetailed', function ($q, FilterFactory, Electricity, Temperature) {
+  .service('ChartDetailedService', function ($q, FilterFactory, Electricity, Temperature) {
     var self = this;
     var isUndefined = angular.isUndefined;
 

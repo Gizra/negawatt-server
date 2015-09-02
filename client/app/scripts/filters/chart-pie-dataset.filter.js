@@ -33,7 +33,7 @@ angular.module('negawattClientApp')
         //title: 'Kws per ' + type,
         pieSliceText: 'label',
         tooltip: {isHtml: true},
-        legend: {position: 'none'},
+        legend: {position: 'bottom'},
         backgroundColor: 'none'
       };
     }

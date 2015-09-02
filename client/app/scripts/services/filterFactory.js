@@ -276,22 +276,23 @@ angular.module('negawattClientApp')
         'filter[frequency]': params.chartFreq
       };
 
-      // Add filters by period are defined.
-      if (params.chartPreviousPeriod && params.chartNextPeriod) {
+      // Check noData option.
+      if (params.noData) {
+        // No need for timestamp filters
         angular.extend(filters, {
-          'filter[timestamp][operator]': 'BETWEEN',
-          'filter[timestamp][value][0]': params.chartPreviousPeriod || '', // chartBeginTimestamp,
-          'filter[timestamp][value][1]': params.chartNextPeriod || ''// chartEndTimestamp
-        });
-        // Set filter electtricity.nodata
-        FilterFactory.set('electricity-nodata', false);
-      }
-      // Avoid to make calculation on the server side, and get data not accurate.
-      else {
-        angular.extend(filters, {
-          'nodata':1,
+          nodata: 1
         });
         FilterFactory.set('electricity-nodata', true);
+      }
+      else {
+      // Add filters by period.
+        angular.extend(filters, {
+          'filter[timestamp][operator]': 'BETWEEN',
+          'filter[timestamp][value][0]': params.chartPreviousPeriod || '',
+          'filter[timestamp][value][1]': params.chartNextPeriod || ''
+        });
+        // Set filter electricity.nodata
+        FilterFactory.set('electricity-nodata', false);
       }
 
       if (params.selectorType) {

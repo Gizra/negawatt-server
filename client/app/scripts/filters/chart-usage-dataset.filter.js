@@ -112,7 +112,7 @@ angular.module('negawattClientApp')
         // ----------------------------------
 
         // Create a temp array like { time: {low: 1, mid:4, peak:5}, time: {..}, ..}.
-        isLineChart = frequency.chart_type === 'LineChart';
+        isLineChart = ChartOptions.getChartType(frequency.type) == 'lineChart';
 
         angular.forEach(collection, function(item) {
           if (!(item.timestamp in values)) {
