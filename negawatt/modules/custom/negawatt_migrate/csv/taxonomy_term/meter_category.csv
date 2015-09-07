@@ -146,3 +146,43 @@ account7,elderly_7,מרכז יום לקשיש,רווחה,,מרכז יום לקש
 account7,community_7,מרכז קהילתי,רווחה,,מרכז קהילתי,welfare
 account7,culture_7,תרבות,,,תרבות,culture
 account7,other_7,אחר,,,אחר,other
+account1199,public_1199,מבנה ציבור,,,מבנים ציבוריים כגון משרדים,public_building
+account1199,office_1199,מבנה משרדים,מבנה ציבור,,מבנה משרדים,public_building
+account1199,municipality_1199,משרדי העירייה,מבנה ציבור,,משרדי העירייה,public_building,עירייה|משרד|עיריה|עיריית|אגף
+account1199,library_1199,ספריה,מבנה ציבור,,ספריה,public_building,ספריה
+account1199,edu_1199,מבנה חינוך,,,מבנה חינוך,education
+account1199,kindergarten_1199,גן ילדים,מבנה חינוך,,גני ילדים,education,גן|פעוטון
+account1199,school_1199,בית ספר,מבנה חינוך,,בתי ספר,education,בית ספר|בית הספר|בי"ס|ביה"ס|ביהס|בה"ס
+account1199,pais_1199,אשכול פיס,מבנה חינוך,,אשכול פיס,education,אשכול פיס|אשכולות פיס
+account1199,youth_1199,מרכז נוער,מבנה חינוך,,מרכז נוער,education
+account1199,pedago_1199,מרכז פדגוגי,מבנה חינוך,,מרכז פדגוגי,education,פדגוגי
+account1199,outdoor_1199,תאורת חוץ,,,תאורת חוץ,lighting
+account1199,street_1199,תאורת רחובות,תאורת חוץ,,תאורת רחובות,lighting,תאורת|מאור|מרכזיה|מ.רחובות|פארק|תאורה|מרכזית
+account1199,traffic_1199,רמזור,תאורת חוץ,,רמזור,traffic_light,רמזור
+account1199,security_1199,בטחון,,,בטחון,security
+account1199,shelter_1199,מקלט,בטחון,,מקלט,security,מקלט
+account1199,storeroom_1199,מחסן חרום,בטחון,,מחסן חרום,security,מחסן
+account1199,police_1199,שיטור קהילתי,בטחון,,שיטור קהילתי,security,שיטור|משמר
+account1199,sport_1199,מתקן ספורט,,,מתקן ספורט,sports
+account1199,pool_1199,בריכת שחייה,מתקן ספורט,,בריכת שחייה,sports,שחייה|שחיה
+account1199,field_1199,מגרש ספורט,מתקן ספורט,,מגרש ספורט,sports,מגרש
+account1199,hall_1199,אולם ספורט,מתקן ספורט,,אולם ספורט,sports,אולם
+account1199,religion_1199,שרותי דת,,,שרותי דת,religion
+account1199,prayer_1199,בית תפילה,שרותי דת,,בית תפילה,religion
+account1199,synagogue_1199,בית כנסת,בית תפילה,,בית כנסת,religion,כנסת
+account1199,church_1199,כנסיה,בית תפילה,,כנסיה,religion,כנסיה
+account1199,mosque_1199,מסגד,בית תפילה,,מסגד,religion,מסגד
+account1199,relcouncil_1199,מועצה דתית,שרותי דת,,מועצה דתית,religion
+account1199,mikve_1199,מקווה,שרותי דת,,מקווה,religion,מקווה
+account1199,health_1199,בריאות,,,בריאות,health
+account1199,mental_1199,בריאות הנפש,בריאות,,בריאות הנפש,health
+account1199,paishealth_1199,פיס לבריאות,בריאות,,פיס לבריאות,health,פיס לבריאות|פייס לבריאות
+account1199,water_1199,מתקן מים,,,מתקן מים,water,מתקן מים|חימצון|בריכת אגירה
+account1199,welfare_1199,רווחה,,,רווחה,welfare,רווחה
+account1199,apartment_1199,דירת רווחה,רווחה,,דירת רווחה,welfare
+account1199,psyco_1199,השירות הפסיכולוגי,רווחה,,השירות הפסיכולוגי,welfare,פסיכולוגי
+account1199,club_1199,מועדון,רווחה,,מועדון,welfare,מועדון|מועדונית
+account1199,elderly_1199,מרכז יום לקשיש,רווחה,,מרכז יום לקשיש,welfare,קשישים|לקשיש
+account1199,community_1199,מרכז קהילתי,רווחה,,מרכז קהילתי,welfare
+account1199,culture_1199,תרבות,,,תרבות,culture
+account1199,other_1199,אחר,,,אחר,other
