@@ -35,8 +35,8 @@ angular.module('negawattClientApp')
       accountId = +accountId;
       // Check if accountId is the same of active.
       if (angular.isUndefined(profile.active) || profile.active.id !== accountId) {
-        // Get select the account as active.
-        profile.active = ($filter('filter')(profile.account, {id: accountId})).pop();
+        // Select the account with proper id.
+        profile.active = profile.account.filter(function(elem){return elem.id == accountId;}).pop();
 
         // Clear app cache, if new account was selected or there not define the active account.
         $rootScope.$broadcast('nwClearCache');
