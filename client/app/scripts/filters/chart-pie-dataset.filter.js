@@ -62,7 +62,7 @@ angular.module('negawattClientApp')
       }
 
       // Prepare categories dataset.
-      data = {
+      var data = {
         cols: [
           { label: label, type: 'string' },
           { label: 'קוט"ש', type: 'number' }
@@ -94,16 +94,19 @@ angular.module('negawattClientApp')
       // Transform to Google Pie Chart compatible.
 
       // DefualtLabel is a name for a label that is not found in labels array.
-      var defaultLabel;
+      var defaultLabel, selType;
       switch (type) {
         case 'site_categories':
           defaultLabel = 'Category ';
+          selType = 'site_category';
           break;
         case 'sites':
           defaultLabel = 'Site ';
+          selType = 'site';
           break;
         case 'meters':
           defaultLabel = 'Meter ';
+          selType = 'meter';
           break;
       }
 
@@ -114,7 +117,8 @@ angular.module('negawattClientApp')
             { v: !Utils.isEmpty(labels) && labels[key].label || defaultLabel + key},
             // "f" is for formatting the value in the tooltip.
             { v: +value, f: $filter('number')(value, 0) + ' קוט״ש'},
-            { id: key}
+            { id: key},
+            { onSelect: {sel: selType, ids: key}}
           ]
         });
       }, rows);

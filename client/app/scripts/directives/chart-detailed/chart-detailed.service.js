@@ -11,13 +11,15 @@ angular.module('negawattClientApp')
     /**
      * Return a promise with electricity collection.
      *
-     * @param filters
+     * @param filters (optional)
      *   Filters of the query.
      *
      * @returns {Promise}
      */
     function getElectricity(filters) {
-      FilterFactory.set('electricity', filters);
+      if (filters) {
+        FilterFactory.setElectricity(filters);
+      }
       var electricity = Electricity.get(FilterFactory.get('activeElectricityHash'));
 
       return isUndefined(electricity) ? $q.promise : electricity;
@@ -52,7 +54,7 @@ angular.module('negawattClientApp')
      * @returns {Promise}
      */
     function getTemperature(filters) {
-      FilterFactory.set('temperature', filters);
+      FilterFactory.setTemperature(filters);
       var temperature = Temperature.get(FilterFactory.get('activeElectricityHash'));
 
       return isUndefined(temperature) ? $q.promise : temperature;

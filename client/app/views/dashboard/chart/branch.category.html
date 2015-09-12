@@ -1,6 +1,6 @@
 <div class="tree-level-middle">
   <label>
-    <input ng-change="category.select()" ng-model="category.id" type="checkbox" />
+    <input ng-change="selectCategory(category)" ng-model="category.selected" type="checkbox" ng-disabled="category.isSite ? disableSites : disableCategories" id="check-site-cat-{{category.id}}"/>
     <img ng-show="category.icon" ng-src="images/categories/{{category.icon}}.png" />
     <span>{{ category.label }}</span>
   </label>
@@ -11,5 +11,5 @@
 </ol>
 
 <ol ui-tree-categorys ng-model="category.children" ng-if="category.children.length" class="categories">
-  <li ng-repeat="category in category.children" ng-show="category.numberOfSites || category.isSite" ui-tree-category ng-include="'views/dashboard/chart/branch.category.html'"> </li>
+  <li ng-repeat="category in category.children" ng-if="category.numberOfSites || category.isSite" ui-tree-category ng-include="'views/dashboard/chart/branch.category.html'"> </li>
 </ol>

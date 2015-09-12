@@ -209,7 +209,7 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
    * @param $filter
    * @return array
    */
-  protected function handleSiteCategoryFilter($query, &$filter, $addGrouping = TRUE) {
+  protected function handleSiteCategoryFilter($query, &$filter) {
     // Handle site categories.
 
     // Bother handling category filtering only if no 'meter' filter exists.
@@ -217,23 +217,57 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     $result_type = 'meters';
     if (!empty($filter['meter'])) {
       // Just set group by meter-nid
-      if ($addGrouping) {
-        $query->groupBy('meter_nid');
-      }
-      return array('result_type' => $result_type);
+      $query->groupBy('meter_nid');
+      return array('result_type' => 'meters');
     }
 
     $meter_account = $filter['meter_account'];
 
+    if (!empty($filter['meter_site'])) {
+      // Filter for sites was given
+      // If only one site was given, group by meters
+      if (empty($filter['meter_site']['operator']) || $filter['meter_site']['operator'] == 'IN' && count($filter['meter_site']['value']) == 1) {
+        // Just set group by meter-nid
+        $query->groupBy('meter_nid');
+        return array('result_type' => 'meters');
+      }
+      // More than one site was given, group by sites.
+      return array('result_type' => 'sites');
+    }
+
     // Handle site-categories only if there's no meter-category filter.
     if (empty($filter['meter_category'])) {
-      // If no category-filter was given, take 0 (root) as default.
-      $parent_category_id = !empty($filter['site_category']) ? $filter['site_category'] : 0;
       // Figure out vocab id
       $vocabulary = taxonomy_vocabulary_machine_name_load('site_category');
       $vocabulary_id = $vocabulary->vid;
+      // If no category-filter was given, take 0 (root) as default.
+      $parent_category_id = !empty($filter['site_category']) ? $filter['site_category'] : 0;
+      // If filter has operator 'IN' but only one value, treat it as plain cat-id
+      if (!is_numeric($parent_category_id) && $parent_category_id['operator'] == 'IN' && count($parent_category_id['value'] == 1)) {
+        $parent_category_id = $parent_category_id['value'][0];
+      }
       // Get list of child taxonomy terms.
-      $taxonomy_array = taxonomy_get_tree($vocabulary_id, $parent_category_id);
+      if (is_numeric($parent_category_id)) {
+        // Parent cat. id is a number, get all sub categories from the tree.
+        $taxonomy_array = taxonomy_get_tree($vocabulary_id, $parent_category_id);
+      }
+      else {
+        // Parent cat. id is not a number. Might be an 'IN' filter.
+        if ($parent_category_id['operator'] == 'IN') {
+          // Concat all child categories lists.
+          $taxonomy_array = array();
+          foreach ($parent_category_id['value'] as $cat_id) {
+            // Add the category itself.
+            $taxonomy_array[] = (object) array('tid' => $cat_id, 'depth' => 0);
+            // Now add all sub categories, but has to advance their 'depth' parameter one place.
+            $taxonomy_tree = taxonomy_get_tree($vocabulary_id, $cat_id);
+            foreach ($taxonomy_tree as $item) {
+              $item->depth++;
+            }
+            $taxonomy_array = array_merge($taxonomy_array, $taxonomy_tree);
+          }
+        }
+      }
     }
 
     if (empty($taxonomy_array)) {
@@ -268,9 +302,7 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
       // Modify the query to sum electricity according to the meters in the category.
       $query->condition('negawatt_electricity_normalized.meter_nid', $meters, 'IN');
       $query->fields('negawatt_electricity_normalized', array('meter_nid'));
-      if ($addGrouping) {
-        $query->groupBy('negawatt_electricity_normalized.meter_nid');
-      }
+      $query->groupBy('negawatt_electricity_normalized.meter_nid');
     }
     else {
       // Sub categories were found, show division by sub categories.
@@ -309,9 +341,7 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
       }
       $query->join('taxonomy_term_data', 'tax', 'tax.tid = site_cat.field_site_category_target_id');
       $query->fields('tax', array('tid', 'name'));
-      if ($addGrouping) {
-        $query->groupBy('site_cat.field_site_category_target_id');
-      }
+      $query->groupBy('site_cat.field_site_category_target_id');
     }
 
     unset($filter['site_category']);
@@ -387,17 +417,6 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     // Add a query for meter_category and meter_account.
     $this->addQueryForCategoryAndAccount($query);
 
-    // Handle meter categories: for last level categories prepare for summary
-    // of all meters in the category, for higher level categories prepare for
-    // summary of all sub-categories.
-    $cat_result = $this->handleSiteCategoryFilter($query, $filter, FALSE /*addGrouping*/);
-
-    if (!empty($cat_result['summary'])) {
-      // If summery was given, pass it to the formatter and quit.
-      $this->valueMetadata['electricity']['summary'] = $cat_result['summary'];
-      return;
-    }
-
     // Add min/max timestamp expressions.
     $query->addExpression('MIN(timestamp)', 'min_ts');
     $query->addExpression('MAX(timestamp)', 'max_ts');
@@ -466,15 +485,15 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
    * Look for the electricity consumption of the category's sites and prepare
    * a total section.
    *
-   * @param $total
-   *  An array with one entry category-id => consumption.
+   * @param $cat_id
+   *  A category id, if to list all sites in the category. Might be null.
+   * @param $sites
+   *  An array of site ids, if $cat_id is null.
+   *
    * @return mixed
    *  An array from site ids to their electricity consumption.
    */
-  protected function prepareTotalForSites($total, $meter_account) {
-    // Get category id.
-    $cat_id = array_keys($total)[0];
-
+  protected function prepareTotalForSites($cat_id, $sites, $meter_account) {
     // Query the sites that relate to this category id, and sum their electricity.
 
     // The section below was copied from the beginning of prepareSummary()
@@ -486,7 +505,10 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     $this->addQueryForCategoryAndAccount($query);
 
     // Get list of sits.
-    $sites = $this->getSitesByCategory($cat_id, $meter_account);
+    if ($cat_id) {
+      $sites = $this->getSitesByCategory($cat_id, $meter_account);
+    }
+
     if (empty($sites)) {
       // If no sites were found, return an empty array.
       return array();
@@ -583,6 +605,10 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
       // Prepare the total section of the summary, for 'meters' result type.
       $total = $this->prepareTotalForMeters($result);
     }
+    else if ($result_type == 'sites') {
+      // Prepare the total section of the summary, for 'meters' result type.
+      $total = $this->prepareTotalForSites(null, $filter['meter_site']['value'], $filter['meter_account']);
+    }
     else {
       // Prepare the total section of the summary, for 'categories' result type.
       $total = $this->prepareTotalForCategories($result, $child_cat_mapping);
@@ -590,7 +616,9 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
       if (count($total) == 1) {
         // Only one category was found. Show summary for its sites.
         $result_type = 'sites';
-        $total = $this->prepareTotalForSites($total, $filter['meter_account']);
+        $cat_ids = array_keys($total);
+        $cat_id = $cat_ids[0];
+        $total = $this->prepareTotalForSites($cat_id, null, $filter['meter_account']);
       }
     }
 
@@ -644,6 +672,14 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     // If filtering for 'meter IN ...', don't sum over meters - add a group by meter.
     if (!empty($this->request['filter']['meter']['operator']) && $this->request['filter']['meter']['operator'] == 'IN') {
       $query->groupBy('meter_nid');
+    }
+    // If filtering for 'meter_site IN ...' - add a group by site.
+    else if (!empty($this->request['filter']['meter_site']['operator']) && $this->request['filter']['meter_site']['operator'] == 'IN') {
+      $query->groupBy('site.field_meter_site_target_id');
+    }
+    // If filtering for 'site_category IN ...' - add a group by category.
+    else if (!empty($this->request['filter']['site_category']['operator']) && $this->request['filter']['site_category']['operator'] == 'IN') {
+      $query->groupBy('site_cat.field_site_category_target_id');
     }
     $query->groupBy('timestamp_rounded');
     $query->groupBy('rate_type');

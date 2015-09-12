@@ -15,6 +15,6 @@
   <div ng-switch-when="data">
 
     <!-- Chart subcomponent -->
-    <div google-chart chart="ctrlChart.data" id="chart-usage" class="usageChart"></div>
+    <div google-chart chart="ctrlChart.data" id="chart-usage" class="usageChart" on-select="onSelect(selectedItem, ctrlChart.data)"></div>
   </div>
 </div>

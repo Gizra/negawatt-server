@@ -105,9 +105,9 @@ angular
           },
           filters: function(FilterFactory, siteCategories, $stateParams, meters, account) {
             // Define categories filters. Used for the UI Checknboxes.
-            FilterFactory.set('categorized', siteCategories);
+            FilterFactory.setCategories(siteCategories);
             // Define electricity parameters
-            FilterFactory.set('electricity', $stateParams);
+            FilterFactory.setElectricity($stateParams);
 
             return {
               loadElectricity: true,
@@ -209,7 +209,7 @@ angular
             return SiteCategory.get(account.id);
           },
           filters: function(meters, $stateParams, FilterFactory) {
-            FilterFactory.set('electricity', $stateParams);
+            FilterFactory.setElectricity($stateParams);
 
             return {
               loadElectricity: true,
@@ -254,7 +254,7 @@ angular
         controller: 'DashboardCtrl'
       })
       .state('chart.withAccount', {
-        url: '/{accountId:int}?{chartFreq:int}&{chartNextPeriod:int}&{chartPreviousPeriod:int}',
+        url: '/{accountId:int}?{chartFreq:int}&{sel}&{ids}&{chartType}&{chartNextPeriod:int}&{chartPreviousPeriod:int}',
         reloadOnSearch: false,
         params: {
           chartFreq: {
@@ -286,9 +286,9 @@ angular
           },
           filters: function(FilterFactory, siteCategories, $stateParams, meters, account) {
             // Define categories filters. Used for the UI Checknboxes.
-            FilterFactory.set('categorized', siteCategories);
+            FilterFactory.setCategories(siteCategories);
             // Define electricity parameters
-            FilterFactory.set('electricity', $stateParams);
+            FilterFactory.setElectricity($stateParams);
 
             return {
               loadElectricity: true,
@@ -306,7 +306,8 @@ angular
           },
           'meters-menu@chart': {
             templateUrl: 'views/dashboard/chart/main.meters-menu.html',
-            controller: 'MetersMenuCtrl'
+            controller: 'MetersMenuCtrl',
+            controllerAs: 'metersMenuCtrl'
           },
           'messages@chart': {
             templateUrl: 'views/dashboard/chart/main.messages.html',
@@ -320,12 +321,6 @@ angular
           }
         }
       })
-      .state('onlychart', {
-        url: '/onlychart',
-        templateUrl: 'views/chart.html',
-        controller: 'BigChartCtrl',
-        controllerAs: 'bigChartCtrl'
-      });
     // Define interceptors.
     $httpProvider.interceptors.push(function ($q, Auth, $location, localStorageService) {
       return {

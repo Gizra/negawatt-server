@@ -132,7 +132,6 @@ angular.module('negawattClientApp')
         chart.pieOptions = {};
         chart.frequency = $stateParams.chartFreq;
         chart.account = $stateParams.accountId;
-        chart.siteCategory = 3;
 
         var period = ChartUsagePeriod;
         period.config();
@@ -177,11 +176,12 @@ angular.module('negawattClientApp')
         function refreshChart() {
           // Prepare filters to get electricity.
           var filters = {
-            accountId: chart.account,
-            chartFreq: chart.frequency,
+            accountId: $stateParams.accountId,
+            chartFreq: $stateParams.chartFreq,
             chartPreviousPeriod: period.getChartPeriod().previous,
             chartNextPeriod: period.getChartPeriod().next,
-            meter: chart.meter,
+            sel: $stateParams.sel,
+            ids: $stateParams.ids,
             noData: chart.checkTimeRange
           };
 
@@ -223,7 +223,7 @@ angular.module('negawattClientApp')
          * Set the chart options according a configuration.
          */
         function setChartOptions(config) {
-          chart.options = ChartOptions.getOptions(config.chartFreq, !!config.compareWith);
+          chart.options = ChartOptions.getOptions(config.chartFreq, config.chartType, !!config.compareWith);
         }
 
         /**
@@ -305,7 +305,7 @@ angular.module('negawattClientApp')
           function () {
             // Window was resized, recalc chart options.
             if (chart.data != undefined) {
-              chart.data.options = $filter('toChartDataset')('options-only');
+              chart.data.options = $filter('toChartDataset')('options-only', $stateParams.chartType);
             }
           },
           true

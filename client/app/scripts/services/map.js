@@ -34,7 +34,7 @@ angular.module('negawattClientApp')
      */
     this.getConfig = function() {
       return {
-        tileLayer: 'https://{s}.tiles.mapbox.com/v3/examples.map-i87786ca/{z}/{x}/{y}.png',
+        tileLayer: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         zoomControlPosition: 'bottomleft',
         minZoom: 12,
         maxZoom:19,

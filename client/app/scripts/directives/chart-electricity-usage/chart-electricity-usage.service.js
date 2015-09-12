@@ -12,7 +12,7 @@ angular.module('negawattClientApp')
      */
     function requestElectricity(stateParams) {
       // Refresh the electricity filters as active, and generate new hash.
-      FilterFactory.set('electricity', stateParams);
+      FilterFactory.setElectricity(stateParams);
       // Request electricity data with new data
       Electricity.refresh(FilterFactory.get('activeElectricityHash')) ;
     }

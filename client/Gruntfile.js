@@ -7,6 +7,11 @@
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
+// Ports configuration:
+var connectPort = 9002,
+  testPort = 9003,
+  liverelodePort = 35730;
+
 module.exports = function (grunt) {
 
   // Load grunt tasks automatically
@@ -67,10 +72,10 @@ module.exports = function (grunt) {
     // The actual grunt server settings
     connect: {
       options: {
-        port: 9000,
+        port: connectPort,
         // Change this to '0.0.0.0' to access the server from outside.
         hostname: 'localhost',
-        livereload: 35729
+        livereload: liverelodePort
       },
       livereload: {
         options: {
@@ -89,7 +94,7 @@ module.exports = function (grunt) {
       },
       test: {
         options: {
-          port: 9001,
+          port: testPort,
           middleware: function (connect) {
             return [
               connect.static('.tmp'),
@@ -340,8 +345,8 @@ module.exports = function (grunt) {
             '*.{ico,png,txt}',
             '.htaccess',
             '*.html',
-            'views/{,*/}*.html',
-            'scripts/{,*/}*.html',
+            'views/**/*.html',
+            'scripts/**/*.html',
             'images/{,*/}*.*'
           ]
         }, {
@@ -356,9 +361,9 @@ module.exports = function (grunt) {
           src: ['fonts/*.*']
         }, {
           expand: true,
-          cwd: '.',
-          src: 'bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*',
-          dest: '<%= yeoman.dist %>'
+          cwd: 'bower_components/bootstrap-sass-official/assets/fonts/bootstrap',
+          src: '*',
+          dest: '<%= yeoman.dist %>/fonts'
         }, {
           expand: true,
           cwd: '<%= yeoman.app %>',
@@ -435,7 +440,7 @@ module.exports = function (grunt) {
     buildcontrol: {
       dist: {
         options: {
-          remote: 'git@github.com:Gizra/negawatt-server.git',
+          remote: 'git@github.com:Gizra/negawatt2-server.git',
           branch: 'gh-pages',
           commit: true,
           push: true
@@ -443,7 +448,7 @@ module.exports = function (grunt) {
       },
       live: {
         options: {
-          remote: 'git@github.com:Gizra/negawatt-live.git',
+          remote: 'git@github.com:Gizra/negawatt2-live.git',
           branch: 'gh-pages',
           commit: true,
           push: true,

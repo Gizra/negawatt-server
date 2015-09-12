@@ -14,23 +14,7 @@
 
   <div class="usage-chart-container">
 
-    <!-- Form of filters -->
-    <form name="formChartFilters" style="display:none">
-      <div>
-        <input type="text" ng-model="chart.startDate" ng-change="chart.filtersChanged()"/> start date (unix timestamp)
-      </div>
-      <div>
-        <input type="text" ng-model="chart.endDate" ng-change="chart.filtersChanged()"/> end date (unix timestamp)
-      </div>
-      <div>
-        <input type="text" ng-model="chart.siteCategory" ng-change="chart.filtersChanged()"/> site category
-      </div>
-      <div>
-        <input type="text" ng-model="chart.meter" ng-change="chart.filtersChanged()"/> meter category
-      </div>
-    </form>
-
-    <chart-electricity-compare electricity="chart.electricity" compareCollection="chart.compareCollection" options="chart.options"></chart-electricity-compare>
+    <chart-electricity-compare electricity="chart.electricity" compareCollection="chart.compareCollection" options="chart.options" summary="chart.summary"></chart-electricity-compare>
 
   </div>
 

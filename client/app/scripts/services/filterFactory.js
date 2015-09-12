@@ -5,6 +5,113 @@ angular.module('negawattClientApp')
   .factory('FilterFactory', function ($filter, $state, $stateParams, $rootScope, $injector, Utils) {
     return {
       filters: {},
+
+      /**
+       * Add or remove an object form the active-electricity-filter after clicking
+       * the checkbox in the categories/meters tree.
+       *
+       * @param sel
+       *   Selection type (e.g. 'site'.
+       * @param ids
+       *   Ids of selected objects.
+       */
+      updateSelection: function(sel, ids) {
+        $stateParams.sel = sel;
+        $stateParams.ids = ids;
+
+        // Refresh $state with new params.
+        $state.refreshUrlWith($stateParams);
+
+        this.setElectricity($stateParams);
+      },
+
+      /**
+       * Add or remove an object form the active-electricity-filter after clicking
+       * the checkbox in the categories/meters tree.
+       *
+       * @param object
+       *   The meter object.
+       * @param name
+       *   The name of the object.
+       *
+       * @return boolean
+       *   True if objects are selected, false if the last object is unselected.
+       */
+      addObjectSelected: function(object, name) {
+        var objectsSelected = true;
+
+        if (!object.selected) {
+          // object unselected, remove it from state-params.
+          var objects = $stateParams.ids.split(',');
+          // object.id is a number, objects is an array of strings. Convert object.id to string.
+          objects.splice(objects.indexOf('' + object.id), 1);
+          $stateParams.ids = objects.join();
+
+          // Unset sel if no object is selected
+          if ($stateParams.ids == '') {
+            $stateParams.sel = undefined;
+            objectsSelected = false;
+          }
+        }
+        else {
+          // object selected.
+          // Set selected object to object.
+          $stateParams.sel = name;
+
+          // Select the object.
+          var objects = $stateParams.ids ? $stateParams.ids.split(',') : [];
+          objects.push(object.id);
+          $stateParams.ids = objects.join();
+        }
+
+        // Refresh $state with new params.
+        this.updateSelection($stateParams.sel, $stateParams.ids);
+
+        return objectsSelected;
+      },
+
+      /**
+       * Add or remove a meter form the active-electricity-filter after clicking
+       * the checkbox in the categories/meters tree.
+       *
+       * @param meter
+       *   The meter object.
+       *
+       * @return boolean
+       *   True if objects are selected, false if the last object is unselected.
+       */
+      addMeterSelected: function(meter) {
+        return this.addObjectSelected(meter, 'meter');
+      },
+
+      /**
+       * Add or remove a category form the active-electricity-filter after clicking
+       * the checkbox in the categories/meters tree.
+       *
+       * @param category
+       *   The category object.
+       *
+       * @return boolean
+       *   True if objects are selected, false if the last object is unselected.
+       */
+      addSiteCategorySelected: function(category) {
+        return this.addObjectSelected(category, 'site_category');
+      },
+
+      /**
+       * Add or remove a site form the active-electricity-filter after clicking
+       * the checkbox in the categories/meters tree.
+       *
+       * @param site
+       *   The site object.
+       *
+       * @return boolean
+       *   True if objects are selected, false if the last object is unselected.
+       */
+      addSiteSelected: function(site) {
+        return this.addObjectSelected(site, 'meter_site');
+      },
+
       /**
        * Filter meters by categories checked on the category menu
        * (categories filters).
@@ -18,10 +125,11 @@ angular.module('negawattClientApp')
       byCategoryFilters: function(meters) {
         meters = Utils.toArray(meters.listAll);
 
-        meters = $filter('filterMeterByCategories')(meters, getCategoriesChecked.bind(this)(), this.isDefine('categorized'));
+        meters = $filter('filterMeterByCategories')(meters, getCategoriesChecked.bind(this)(), this.isDefine('categories'));
 
         return meters;
       },
+
       /**
        * Return if need it, to show checkboxes to filter meter by categories.
        *
@@ -34,6 +142,7 @@ angular.module('negawattClientApp')
         }
         return showControls;
       },
+
       /**
        * Clear the all the filters for the meters and also
        */
@@ -45,6 +154,7 @@ angular.module('negawattClientApp')
         // Clear all the filters.
         this.filters = {};
       },
+
       /**
        * Return meter saved in the meter filters service.
        *
@@ -53,6 +163,7 @@ angular.module('negawattClientApp')
       getMeterSelected: function() {
         return this.filters.meterSelected || undefined;
       },
+
       /**
        * Save in the meter filters service, the meter selected.
        *
@@ -62,6 +173,7 @@ angular.module('negawattClientApp')
       setMeterSelected: function(meter) {
         this.filters.meterSelected = meter;
       },
+
       /**
        * Clear the meter selection saved.
        */
@@ -74,6 +186,7 @@ angular.module('negawattClientApp')
         this.filters.meterSelected = undefined;
         this.filters.meter = undefined;
       },
+
       /**
        * Extend the categories with the category filters.
        *
@@ -85,13 +198,14 @@ angular.module('negawattClientApp')
        */
       refreshCategoriesFilters: function(categories) {
         // Get category filters.
-        var categorized = this.get('categorized');
+        var categorized = this.get('categories');
 
         // Extend object categories.
         categories.$$extendWithFilter = $$extendWithFilter;
 
         return categorized && categories.$$extendWithFilter(categorized) || categories;
       },
+
       /**
        * Return the electricity filters according a hash.
        *
@@ -104,6 +218,7 @@ angular.module('negawattClientApp')
       getElectricity: function(hash) {
         return this.filters['electricity'] && this.filters['electricity'][hash];
       },
+
       /**
        * Return the temperature filters according a hash.
        *
@@ -116,6 +231,7 @@ angular.module('negawattClientApp')
       getTemperature: function(hash) {
         return this.filters['temperature'] && this.filters['temperature'][hash];
       },
+
       /**
        * Return if is defined a filter.
        *
@@ -131,50 +247,87 @@ angular.module('negawattClientApp')
 
         return isDefined;
       },
+
+      /**
+       * Save a value in filters list.
+       *
+       * @param name
+       *  The value's name.
+       * @param value
+       *  The value.
+       */
       set: function(name, value) {
-        // Use angular copy to decopling from the source value,
+        // Use angular copy to decouple from the source value,
         // example: category cache.
         value = angular.copy(value);
-        // Extra task if is the filter categorized.
-        switch (name) {
-          case 'categorized':
-            setCategorized.bind(this, name, value)();
-            break;
-          case 'electricity':
-            setElectricity.bind(this, name, value)();
-            break;
-          case 'temperature':
-            setTemperature.bind(this, name, value)();
-            break;
-          default:
-            this.filters[name] = value;
-        }
-
+        this.filters[name] = value;
       },
+
+      /**
+       * Get a value from the filters list.
+       *
+       * @param name
+       *  The value's name.
+       */
       get: function(name) {
         return this.filters && this.filters[name];
+      },
+
+      /**
+       * Save of the params as current electricity filter.
+       *
+       * @param params
+       *  Parameter object regularly coming from the query string.
+       */
+      setElectricity: function (params) {
+        // Prepare electricity filter in querystring format.
+        var filter = getElectricityFilter(params);
+        // Create and save hash.
+        var hash = Utils.objToHash(filter);
+        this.set('activeElectricityHash', hash);
+
+        // Clean Properties.
+        filter = Utils.cleanProperties(filter);
+
+        // Set property with the filters.
+        this.filters['electricity'] = angular.isUndefined(this.filters['electricity']) ? {} : this.filters['electricity'];
+        this.filters['electricity'][this.get('activeElectricityHash')] = filter;
+      },
+
+      /**
+       * Set the states of the filter checkoxes control.
+       *
+       * @param value {Array[{*}]|{*}}
+       *  The categories collection or the object with the value update.
+       */
+      setCategories: function (value) {
+        // Get categories object.
+        var categories = getCategories(value);
+
+        this.filters['categories'] = categories;
+
+        // Add extra methods to the object
+        addMethodsCategorized(this.filters['categories']);
+      },
+
+      /**
+       * Save of the temperature filters, index by unique hash string.
+       *
+       * @param params
+       *  Parameters object regularly coming from the query string.
+       */
+      setTemperature: function (params) {
+        // Prepare temperature filter in querystring format.
+        var filter = getTemperatureFilter(params);
+
+        // Clean Properties.
+        filter = Utils.cleanProperties(filter);
+
+        // Set property with the filters.
+        this.filters['temperature'] = angular.isUndefined(this.filters['temperature']) ? {} : this.filters['temperature'];
+        this.filters['temperature'][this.get('activeElectricityHash')] = filter;
       }
-    };
-
-    /**
-     * Save of the temperature filters, index by unique hash string.
-     *
-     * @param name
-     *  Filter name. By default 'temperature'
-     * @param params
-     *  Parameters object regulary comming from the query string.
-     */
-    function setTemperature(name, params) {
-      // Prepare temperature filter in querystring format.
-      var filter = getTemperatureFilter(params);
-
-      // Clean Properties.
-      filter = Utils.cleanProperties(filter);
-
-      // Set property with the filters.
-      this.filters[name] = angular.isUndefined(this.filters[name]) ? {} : this.filters[name];
-      this.filters[name][this.get('activeElectricityHash')] = filter;
-    }
+  };
 
     /**
      * Return querystring of the parameter, representing the temperature filter.
@@ -195,29 +348,6 @@ angular.module('negawattClientApp')
     }
 
     /**
-     * Save of the electricity filters, index by unique hash string.
-     *
-     * @param name
-     *  Filter name. By default 'electricity;
-     * @param value
-     *  Parameter object regulary comming from the query string.
-     */
-    function setElectricity(name, params) {
-      // Prepare electricity filter in querystring format.
-      var filter = getElectricityFilter(params);
-      // Create and save hash.
-      var hash = Utils.objToHash(filter);
-      this.set('activeElectricityHash', hash);
-
-      // Clean Properties.
-      filter = Utils.cleanProperties(filter);
-
-      // Set property with the filters.
-      this.filters[name] = angular.isUndefined(this.filters[name]) ? {} : this.filters[name];
-      this.filters[name][this.get('activeElectricityHash')] = filter;
-    }
-
-    /**
      * Return querystring of the parameter, representing the electricity filter.
      *
      * @param params
@@ -225,18 +355,12 @@ angular.module('negawattClientApp')
      * @returns {Object}
      */
     function getElectricityFilter(params) {
-      var getFromMeter = {
-        selectorType: 'meter',
-        selectorId: params.markerId && params.markerId.split(','),
-        multipleGraphs: isMultiGraphs
-      };
-      var getFromCategory = {
-        selectorType: 'site_category',
-        selectorId: params.categoryId,
-        multipleGraphs: isMultiGraphs
-      };
       // Complete params object to request electricity.
-      angular.extend(params, (params.markerId) ? getFromMeter : getFromCategory);
+      angular.extend(params, {
+        selectorType: params.sel,
+        selectorId: params.ids && params.ids.split(','),
+        multipleGraphs: isMultiGraphs
+      });
 
       return filtersFromSelector(params);
     }
@@ -285,7 +409,7 @@ angular.module('negawattClientApp')
         FilterFactory.set('electricity-nodata', true);
       }
       else {
-      // Add filters by period.
+        // Add filters by period.
         angular.extend(filters, {
           'filter[timestamp][operator]': 'BETWEEN',
           'filter[timestamp][value][0]': params.chartPreviousPeriod || '',
@@ -319,27 +443,6 @@ angular.module('negawattClientApp')
     }
 
     /**
-     * Set the states of the filter checkoxes control.
-     *
-     * @param name
-     *  The name of the filter.
-     * @param value {Array[{*}]|{*}}
-     *  The categories collection or the object with the value update.
-     */
-    function setCategorized(name, value) {
-      // Get categories object.
-      var categories = getCategories(value);
-
-      // Define the initial object or update a specific category.
-      categories = (angular.isArray(categories)) ? getCategoriesWithMeters(categories) : getCategoriesWithCategoryUpdate.bind(this, value)();
-
-      this.filters[name] = categories;
-
-      // Add extra methods to the object
-      addMethodsCategorized(this.filters[name]);
-    }
-
-    /**
      * Add extra method to handle the array of filter of categories.
      *
      * @param categories
@@ -358,7 +461,7 @@ angular.module('negawattClientApp')
      * Return collection of categories.
      *
      * @param value
-     *  Thae category object.
+     *  The category object.
      */
     function getCategories(value) {
       return value['tree'] || value;
@@ -413,7 +516,7 @@ angular.module('negawattClientApp')
      */
     function getCategoriesWithCategoryUpdate(value, categories) {
       if (angular.isUndefined(categories)) {
-        categories = this.get('categorized');
+        categories = this.get('categories');
       }
 
       angular.forEach(categories, function(category, index) {
@@ -530,7 +633,7 @@ angular.module('negawattClientApp')
      */
     function getCategoryChildren(categoryId, categories) {
       var children;
-      categories = categories || this.get('categorized');
+      categories = categories || this.get('categories');
 
       angular.forEach(categories, function(category) {
         if (category.id === categoryId) {
@@ -600,7 +703,7 @@ angular.module('negawattClientApp')
      */
     function getCategoriesChecked(categories) {
       var filter = [];
-      var categories = categories || this.get('categorized');
+      var categories = categories || this.get('categories');
       // Return filter object.
       angular.forEach(categories, function(category) {
 

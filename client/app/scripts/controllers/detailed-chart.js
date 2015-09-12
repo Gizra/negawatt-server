@@ -10,7 +10,7 @@
  */
 
 angular.module('negawattClientApp')
-  .controller('DetailedChartCtrl', function DetailedChartCtrl($scope, $state, $stateParams, $filter, Electricity, Chart, ChartUsagePeriod, FilterFactory, meters, filters, ChartElectricityUsage, siteCategories, profile) {
+  .controller('DetailedChartCtrl', function DetailedChartCtrl($scope, $state, $stateParams, $filter, Electricity, Chart, ChartUsagePeriod, FilterFactory, meters, filters, ChartElectricityUsage, siteCategories, sites, profile) {
     var detailedChartCtrl = this;
 
     // Start with no compare chart.
@@ -21,6 +21,8 @@ angular.module('negawattClientApp')
     var options;
 
     $scope.siteCategories = siteCategories;
+    $scope.sites = sites;
+    $scope.meters = meters;
 
     // Get the parameters chart frecuency.
     if (angular.isDefined($stateParams.chartFreq)) {

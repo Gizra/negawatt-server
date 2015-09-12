@@ -38,7 +38,7 @@ angular.module('negawattClientApp')
       // Set category filters.
       var filter = {};
       filter[category.id] = category.checked;
-      FilterFactory.set('categorized', filter);
+      FilterFactory.setCategories(filter);
 
       // Update meters on the map, this also update the number of meters on the Category menu.
       $scope.$parent.$broadcast('nwMetersChanged', {

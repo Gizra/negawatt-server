@@ -15,6 +15,6 @@
   <div ng-switch-when="data" class="chart-container">
 
     <!-- Chart subcomponent -->
-    <div google-chart chart="ctrlPieChart.data" id="chart-pie"></div>
+    <div google-chart chart="ctrlPieChart.data" id="chart-pie" on-select="onSelect(selectedItem, ctrlPieChart.data)"></div>
   </div>
 </div>

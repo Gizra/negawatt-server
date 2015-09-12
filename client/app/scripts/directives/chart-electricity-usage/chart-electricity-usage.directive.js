@@ -140,7 +140,7 @@ angular.module('negawattClientApp')
          */
         function renderChart(activeElectricity) {
           // Update data comming fron the server into the directive.
-          ctrlChart.data = $filter('toChartDataset')(activeElectricity);
+          ctrlChart.data = $filter('toChartDataset')(activeElectricity, $stateParams.chartType);
           // Update state.
           setState();
         }

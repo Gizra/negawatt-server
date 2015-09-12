@@ -49,7 +49,7 @@ angular.module('negawattClientApp')
      * Reset the category filters.
      */
     this.reset = function() {
-      FilterFactory.set('categorized', categoriesFiltered());
+      FilterFactory.setCategories(categoriesFiltered());
     };
 
     /**

@@ -79,7 +79,8 @@ class NegawattEntityElectricityMeterBase extends \NegawattEntityMeterBase {
       $wrapper_category = entity_metadata_wrapper('taxonomy_term', $category);
       $category_ids[$wrapper_category->tid->value()] = array(
         "id" => $wrapper_category->tid->value(),
-        "name" => $wrapper_category->field_icon_categories->value(),
+        "name" => $wrapper_category->name->value(),
+        "color" => $wrapper_category->field_color->value(),
       );
     }
 

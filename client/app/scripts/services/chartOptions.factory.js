@@ -24,18 +24,18 @@ angular.module('negawattClientApp')
       var chartFrequencyActive = Chart.getActiveFrequency();
 
       return {
-        'height': '350',
-        'width': width * 7 / 12 - 150,
+        height: '350',
+        width: width * 7 / 12 - 150,
         titlePosition: 'none',
         legend: { position: 'bottom' },
         backgroundColor: 'none',
-        'vAxis': {
-          'title': chartFrequencyActive.axis_v_title,
-          'gridlines': {
-            'count': 3
+        vAxis: {
+          title: chartFrequencyActive.axis_v_title,
+          gridlines: {
+            count: 3
           }
         },
-        'hAxis': {
+        hAxis: {
           // No title in order to have enough space for the bars labels.
         },
         tooltip: {isHtml: true}
@@ -67,15 +67,42 @@ angular.module('negawattClientApp')
     }
 
     /**
+     * Get stack option based on chart type.
+     *
+     * @param chartType
+     *  One of 'sum', 'detailed', 'stacked', 'percent'.
+     *
+     * @returns {string|boolean}
+     *  Stack option.
+     */
+    function getStackOptions(chartType) {
+      // chartType defaults to sum.
+      chartType = chartType ? chartType : 'sum';
+
+      switch (chartType) {
+        case 'sum':
+        case 'stacked':
+          return true;
+        case 'percent':
+          return 'percent';
+        default:
+          return false;
+      }
+    }
+
+    /**
      * Get configuration for a Google Coloumn Chart.
+     *
+     * @param chartType
+     *  One of 'sum', 'detailed', 'stacked', 'percent'.
      *
      * @returns {*}
      *  Configuration object.
      */
-    function getColumnOptions() {
+    function getColumnOptions(chartType) {
       return extend(getCommonOptions(), {
         'chart_type': 'ColumnChart',
-        'isStacked': 'true',
+        'isStacked': getStackOptions(chartType),
         'fill': 20,
         'displayExactValues': true,
         'bar': { groupWidth: '75%' }
@@ -85,13 +112,16 @@ angular.module('negawattClientApp')
     /**
      * Get configuration for a Google Column Chart with series.
      *
+     * @param chartType
+     *  One of 'sum', 'detailed', 'stacked', 'percent'.
+     *
      * @returns {*}
      *  Configuration object.
      */
-    function getColumnCompareOptions() {
+    function getColumnCompareOptions(chartType) {
       return extend(getCommonOptions(), {
         'chart_type': 'ColumnChart',
-        'isStacked': 'true',
+        'isStacked': getStackOptions(chartType),
         'fill': 20,
         'displayExactValues': true,
         'series': {
@@ -139,16 +169,18 @@ angular.module('negawattClientApp')
      *
      * @param frequency
      *  The frequency number (Ex. year:1, month:2 .... minute:5).
+     * @param chartType
+     *  One of 'sum', 'detailed', 'stacked', 'percent'.
      * @param withSeries
      *  True if the chart will be organize in series.
      *
      * @returns {*}
      *  Chart options object.
      */
-    function getOptions(frequency, withSeries) {
+    function getOptions(frequency, chartType, withSeries) {
       switch (getChartType(frequency)) {
         case 'columnChart':
-          return (withSeries) ? getColumnCompareOptions() : getColumnOptions();
+          return (withSeries) ? getColumnCompareOptions(chartType) : getColumnOptions(chartType);
 
         case 'lineChart':
           return (withSeries) ? getLineCompareOptions() : getLineOptions();

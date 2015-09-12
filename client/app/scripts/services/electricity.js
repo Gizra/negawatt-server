@@ -72,7 +72,7 @@ angular.module('negawattClientApp')
     this.forceResolve = function(hash) {
       // Initial electricity data force.
       angular.isUndefined(cache[hash]) && self.get(hash);
-    }
+    };
 
     /**
      * Return electricity data array from the server.
@@ -139,9 +139,6 @@ angular.module('negawattClientApp')
         noData: noData,
         summary: electricity.summary
       };
-
-      // Broadcast an update event.
-      $rootScope.$broadcast(broadcastUpdateEventName, electricityData(hash));
 
       // If asked to skip cache timer reset, return now.
       // Will happen when reading multiple page data - when reading pages

@@ -5,11 +5,29 @@ angular.module('negawattClientApp')
     return {
       restrict: 'EA',
       templateUrl: 'scripts/directives/chart-pie-compare/chart-pie-compare.directive.html',
-      controller: function chartPieUsageCtrl(ChartUsagePeriod, Chart, $stateParams, $filter, $scope, Utils) {
+      controller: function chartPieUsageCtrl(ChartUsagePeriod, Chart, $stateParams, $filter, $scope, $state, Utils) {
         var ctrlPieChart = this;
 
         // Save the state of the directive (to handle views in the directive. "undefined|empty|loading|data").
         ctrlPieChart.state = 'loading';
+
+        // Select category form the pie chart.
+        $scope.onSelect = function(selectedItem, chartData) {
+
+          var row = selectedItem.row;
+          var onSelect = chartData.data.rows[row].c[3].onSelect;
+
+          // Go to the referenced object.
+          $stateParams.sel = onSelect.sel;
+          $stateParams.ids = onSelect.ids;
+
+          // Refresh $state with new params.
+          $state.refreshUrlWith($stateParams);
+
+          // Reload electricity to update charts.
+          var chartDetailedCtrl = $scope.$parent.chart;
+          chartDetailedCtrl.getElectricity($stateParams);
+        };
 
         /**
          * Messages to show when there is no data.
@@ -93,8 +111,23 @@ angular.module('negawattClientApp')
          *  The "active electricity" data collection.
          */
         function renderChart(summary, options) {
+          // Take sites, meters, and categories from chartDetailedCtrl's scope.
+          var chartDetailedScope = $scope.$parent.$parent;
+          var labels;
+          switch (summary.type) {
+            case 'site_categories':
+              labels = chartDetailedScope.siteCategories.collection;
+              break;
+            case 'sites':
+              labels = chartDetailedScope.sites.listAll;
+              break;
+            case 'meters':
+              labels = chartDetailedScope.meters.listAll;
+              break;
+          }
+
           // Convert the data coming from the server into google chart format.
-          ctrlPieChart.data = $filter('toPieChartDataset')(summary, options);
+          ctrlPieChart.data = $filter('toPieChartDataset')(summary, labels);
 
           // Update state.
           setState();

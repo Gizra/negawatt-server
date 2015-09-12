@@ -10,7 +10,7 @@ angular.module('negawattClientApp')
      * @param categories
      *  An array categories ids.
      * @param hasFilter
-     *  The categories filter 'categorized' is defined.
+     *  The categories filter 'categories' is defined.
      *
      * @returns {*}
      *  The meters collection filtered.
