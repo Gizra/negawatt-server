@@ -120,7 +120,6 @@ angular.module('negawattClientApp')
       templateUrl: 'scripts/directives/chart-detailed/chart-detailed.directive.html',
       controller: function ChartDetailedCtrl($scope, $window, $filter, ChartDetailedService, ChartOptions, ChartUsagePeriod, $stateParams) {
         var chart = this;
-        var compareCollection;
 
         // Extend the service with the scope of the directive and
         // extend the controller of the directive with the service.
@@ -295,6 +294,19 @@ angular.module('negawattClientApp')
 
           // Set chart properties and get electricity.
           refreshChart();
+        });
+
+        /**
+         * Electricity Service Event: When electricity changes, update charts with
+         * new consumption data.
+         *
+         * Actually, the handler receives the event after electricity is loaded with
+         * nodata=1 (to get min/max timestamps for new frequency), and refreshChart()
+         * asks for new electricity data (without the nodata=1 parameter).
+         */
+        $scope.$on('nwTemperatureChanged', function(event, climate) {
+            // Take climate data.
+            chart.compareCollection = climate;
         });
 
         /**

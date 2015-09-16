@@ -6,6 +6,7 @@ angular.module('negawattClientApp')
     var isUndefined = angular.isUndefined;
 
     this.getElectricity = getElectricity;
+    this.getTemperature = getTemperature;
     this.getCompareCollection = getCompareCollection;
 
     /**
@@ -17,9 +18,9 @@ angular.module('negawattClientApp')
      * @returns {Promise}
      */
     function getElectricity(filters) {
-      if (filters) {
-        FilterFactory.setElectricity(filters);
-      }
+      //if (filters) {
+      //  FilterFactory.setElectricity(filters);
+      //}
       var electricity = Electricity.get(FilterFactory.get('activeElectricityHash'));
 
       return isUndefined(electricity) ? $q.promise : electricity;
@@ -54,8 +55,8 @@ angular.module('negawattClientApp')
      * @returns {Promise}
      */
     function getTemperature(filters) {
-      FilterFactory.setTemperature(filters);
-      var temperature = Temperature.get(FilterFactory.get('activeElectricityHash'));
+      //FilterFactory.setTemperature(filters);
+      var temperature = Temperature.get(FilterFactory.get('activeTemperatureHash'));
 
       return isUndefined(temperature) ? $q.promise : temperature;
     }

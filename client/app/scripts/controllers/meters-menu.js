@@ -122,6 +122,20 @@ angular.module('negawattClientApp')
       ChartDetailedService.getElectricity();
     }
 
+    /**
+     * Handler for site selection.
+     *
+     * @param site
+     *  Site object.
+     */
+    $scope.selectTemperature = function (meter) {
+      // Add/remove site from selected list.
+      var selected = FilterFactory.addClimateSelected(meter);
+
+      // Reload electricity data to update charts.
+      ChartDetailedService.getTemperature(meter);
+    }
+
     // Reload the categories when new sites are added (new sites page arrived).
     $scope.$on('nwSitesChanged', function() {
       // Update categories tree with number of sites.
