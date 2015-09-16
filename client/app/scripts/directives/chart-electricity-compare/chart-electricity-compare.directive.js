@@ -215,8 +215,10 @@ angular.module('negawattClientApp')
               break;
           }
 
+          var compareLabelsField = 'avg_temp';
+
           // Convert the data coming from the server into google chart format.
-          ctrlChart.data = $filter('toChartDataset')(activeElectricity, $stateParams.chartType, compareCollection, options, labels, labelsField, oneItemSelected);
+          ctrlChart.data = $filter('toChartDataset')(activeElectricity, $stateParams.chartType, compareCollection, options, labels, labelsField, compareLabelsField, oneItemSelected);
 
           // Update state.
           setState();

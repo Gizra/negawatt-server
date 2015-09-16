@@ -21,11 +21,11 @@ angular.module('negawattClientApp')
      * @returns {*}
      *  The dataset collection filtered.
      */
-    return function (collection, chartType, compareWith, options, labels, labelsField, oneItemSelected) {
+    return function (collection, chartType, compareWith, options, labels, labelsField, compareLabelsField, oneItemSelected) {
 
       // chartType defaults to detailed.
       chartType = chartType ? chartType : 'detailed';
-      // However, if there's only one label, revert to 'sum', that will display only one
+      // However, if there's only one item, revert to 'sum', that will display only one
       // meter/category, but split into TOUse rate-types.
       if (chartType == 'detailed' && oneItemSelected) {
         chartType = 'sum';
@@ -40,14 +40,14 @@ angular.module('negawattClientApp')
 
       options = ChartOptions.getOptions(chartFrequencyActive.type, chartType);
 
-      if (compareWith) {
-        collection = collection.concat(compareWith);
-      }
+      //if (compareWith) {
+      //  collection = collection.concat(compareWith);
+      //}
 
       // Recreate collection object.
       collection = {
         type: options.chart_type,
-        data: getDataset(collection, chartFrequencyActive, chartType, labels, labelsField),
+        data: getDataset(collection, chartFrequencyActive, chartType, labels, labelsField, compareWith, compareLabelsField),
         options: options
       };
       return collection;
@@ -69,13 +69,13 @@ angular.module('negawattClientApp')
      *
      * @returns {{cols: *[], rows: Array}}
      */
-    function getDataset(collection, frequency, chartType, labels, labelsField) {
+    function getDataset(collection, frequency, chartType, labels, labelsField, compareWith, compareLabelsField) {
       var labelsUsed = [];
       var dataset = {
         // Add rows.
-        rows: getRows(collection, frequency, chartType, labelsUsed, labelsField),
+        rows: getRows(collection, frequency, chartType, labelsUsed, labelsField, compareWith, compareLabelsField),
         // Add columns.
-        cols: getColumns(collection, frequency, chartType, labelsUsed, labels)
+        cols: getColumns(collection, frequency, chartType, labelsUsed, labels, compareWith)
       };
 
       return dataset;
@@ -94,7 +94,7 @@ angular.module('negawattClientApp')
      * @returns {Array}
      *  An array of the data ordering as the type requested.
      */
-    function getRows(collection, frequency, chartType, labelsUsed, labelsField) {
+    function getRows(collection, frequency, chartType, labelsUsed, labelsField, compareWith, compareLabelsField) {
       var values = {};
       var rows = [];
       var prevRateType;
@@ -137,6 +137,14 @@ angular.module('negawattClientApp')
         // Display the unit according to selected frequency.
         var unit = ['hour', 'minute'].indexOf(frequency.frequency) != -1 ? 'קו״ט' : 'קוט״ש';
 
+        // If 'compareCollection' is given, convert it to an indexed array.
+        var compareWithIndexed = {};
+        if (compareWith) {
+          angular.forEach(compareWith, function (item) {
+            compareWithIndexed[item.timestamp] = item;
+          })
+        }
+
         // Build rows
         angular.forEach(values, function(item, timestamp) {
           var label = moment.unix(timestamp).format(frequency.axis_h_format);
@@ -144,6 +152,11 @@ angular.module('negawattClientApp')
           ['flat', 'peak', 'mid', 'low'].forEach(function(type) {
             col.push({v: item[type], f: $filter('number')(item[type], 0) + ' ' + unit});
           });
+          // Add compareWith column, if exists.
+          if (compareWith) {
+            var n = compareWithIndexed[timestamp] ? compareWithIndexed[timestamp][compareLabelsField] : undefined;
+            col.push(n ? {v: n, f: $filter('number')(n, 0)} : {})
+          }
           rows.push({ c: col, onSelect: timestamp });
         });
       }
@@ -178,6 +191,11 @@ angular.module('negawattClientApp')
           labelsUsed.forEach(function(type) {
             col.push({v: item[type], f: $filter('number')(item[type], 0) + ' ' + unit});
           });
+          // Add compareWith column, if exists.
+          if (compareWith) {
+            var n = compareWithIndexed[timestamp] ? compareWithIndexed[timestamp][compareLabelsField] : undefined;
+            col.push(n ? {v: n, f: $filter('number')(n, 0)} : {})
+          }
           rows.push({ 'c': col, onSelect: timestamp });
         });
       }
@@ -202,7 +220,7 @@ angular.module('negawattClientApp')
      * @returns {Array}
      *  An array of the data ordering as the type requested.
      */
-    function getColumns(collection, frequency, chartType, labelsUsed, labels) {
+    function getColumns(collection, frequency, chartType, labelsUsed, labels, compareWith) {
       if (chartType == 'sum') {
         return [
           {
@@ -229,6 +247,11 @@ angular.module('negawattClientApp')
             'id': 'low',
             'label': 'שפל',
             'type': 'number',
+          },
+          {
+            'id': 'temp',
+            'label': 'טמפרטורה',
+            'type': 'number',
           }
         ];
       }
@@ -251,6 +274,13 @@ angular.module('negawattClientApp')
           })
         });
 
+        if (compareWith) {
+          column.push({
+            'id': 'temp',
+            'label': 'טמפרטורה',
+            'type': 'number'
+          })
+        }
         return columns;
       }
     }
