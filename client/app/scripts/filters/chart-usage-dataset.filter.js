@@ -35,10 +35,10 @@ angular.module('negawattClientApp')
 
       // Check if asked to return chart options only.
       if (collection == 'options-only') {
-        return ChartOptions.getOptions(chartFrequencyActive, chartType);
+        return ChartOptions.getOptions(chartFrequencyActive, chartType, !!compareWith);
       }
 
-      options = ChartOptions.getOptions(chartFrequencyActive.type, chartType);
+      options = ChartOptions.getOptions(chartFrequencyActive.type, chartType, !!compareWith);
 
       //if (compareWith) {
       //  collection = collection.concat(compareWith);
@@ -222,7 +222,7 @@ angular.module('negawattClientApp')
      */
     function getColumns(collection, frequency, chartType, labelsUsed, labels, compareWith) {
       if (chartType == 'sum') {
-        return [
+        var columns = [
           {
             'id': 'month',
             'label': 'Month',
@@ -247,13 +247,17 @@ angular.module('negawattClientApp')
             'id': 'low',
             'label': 'שפל',
             'type': 'number',
-          },
-          {
+          }
+          ];
+        if (compareWith) {
+          // @fixme: put proper label here, in stead of hard coded temperature.
+          columns.push({
             'id': 'temp',
             'label': 'טמפרטורה',
             'type': 'number',
-          }
-        ];
+          });
+        }
+        return columns;
       }
       else if (chartType == 'detailed') {
         // First column is allways month

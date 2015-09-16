@@ -126,7 +126,10 @@ angular.module('negawattClientApp')
         'displayExactValues': true,
         'series': {
           0: {targetAxisIndex: 0},
-          1: {
+          1: {targetAxisIndex: 0},
+          2: {targetAxisIndex: 0},
+          3: {targetAxisIndex: 0},
+          4: {
             targetAxisIndex: 1,
             type: 'line'
           }
