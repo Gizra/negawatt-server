@@ -134,7 +134,7 @@ angular.module('negawattClientApp')
 
       // Reload electricity data to update charts.
       ChartDetailedService.getTemperature(meter);
-    }
+    };
 
     // Reload the categories when new sites are added (new sites page arrived).
     $scope.$on('nwSitesChanged', function() {

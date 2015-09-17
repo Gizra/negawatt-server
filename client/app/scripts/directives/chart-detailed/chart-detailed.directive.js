@@ -191,10 +191,6 @@ angular.module('negawattClientApp')
           };
           setChartOptions(config);
 
-          if (chart.compareWith && chart.meter) {
-            chart.compareCollection = ChartDetailedService.getCompareCollection(chart.compareWith, filters);
-          }
-
           // Update date-range text near the chart title.
           chart.dateRange = period.formatDateRange(period.getChartPeriod().previous * 1000, period.getChartPeriod().next * 1000);
 
@@ -204,6 +200,17 @@ angular.module('negawattClientApp')
           chart.referenceDate = period.getChartPeriod().referenceDate * 1000;
 
           chart.getElectricity(filters);
+
+          // Get compare collection, if one was selected.
+          if ($stateParams.climate) {
+            var climateFilters = {
+              meter: $stateParams.climate,
+              frequency: $stateParams.chartFreq,
+              chartPreviousPeriod: period.getChartPeriod().previous,
+              chartNextPeriod: period.getChartPeriod().next
+            };
+            chart.compareCollection = ChartDetailedService.getCompareCollection('temperature', climateFilters);
+          }
         }
 
         /**
