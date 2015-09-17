@@ -289,6 +289,8 @@ angular
             FilterFactory.setCategories(siteCategories);
             // Define electricity parameters
             FilterFactory.setElectricity($stateParams);
+            // Define climate parameters
+            FilterFactory.setTemperature($stateParams);
 
             return {
               loadElectricity: true,
