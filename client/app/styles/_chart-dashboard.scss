@@ -24,8 +24,10 @@
     // Each chart must be inside an 'absolute' div.
     // Move pie chart to the right, and above usage-chart.
     .pie-chart-container {
+      width: 200px;
+      height: 250px;
       position: absolute;
-      right: -12%;
+      right: -2%;
       top: 50px;
       z-index: 10;
     }
