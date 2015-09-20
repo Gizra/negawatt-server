@@ -359,6 +359,12 @@ angular.module('negawattClientApp')
        *  Parameters object regularly coming from the query string.
        */
       setTemperature: function (params) {
+        if (!params.climate) {
+          // No climate meter selected, clear active hast.
+          this.set('activeTemperatureHash', undefined);
+          this.filters['temperature'] = {};
+          return;
+        }
         // Prepare temperature filter in querystring format.
         var filter = getTemperatureFilter(params);
         // Create and save hash.
