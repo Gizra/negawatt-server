@@ -209,7 +209,11 @@ angular.module('negawattClientApp')
               chartPreviousPeriod: period.getChartPeriod().previous,
               chartNextPeriod: period.getChartPeriod().next
             };
-            chart.compareCollection = ChartDetailedService.getCompareCollection('temperature', climateFilters);
+            // Get climate promise and wait for response.
+            ChartDetailedService.getCompareCollection('temperature', climateFilters)
+              .then(function(data) {
+                chart.compareCollection = data;
+              });
           }
         }
 

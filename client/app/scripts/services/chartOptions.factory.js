@@ -127,6 +127,7 @@ angular.module('negawattClientApp')
      *  Configuration object.
      */
     function getColumnCompareOptions(chartType) {
+      var chartFrequencyActive = Chart.getActiveFrequency();
       return extend(getCommonOptions(), {
         'chart_type': 'ColumnChart',
         'isStacked': getStackOptions(chartType),
