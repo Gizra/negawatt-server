@@ -31,6 +31,7 @@ angular.module('negawattClientApp')
         backgroundColor: 'none',
         vAxis: {
           title: chartFrequencyActive.axis_v_title,
+          format: 'short',
           gridlines: {
             count: 3
           }
@@ -62,7 +63,14 @@ angular.module('negawattClientApp')
      */
     function getLineCompareOptions() {
       return extend(getCommonOptions(), {
-        'chart_type': 'LineChart'
+        chart_type: 'LineChart',
+        'series': {
+          0: {targetAxisIndex: 0},
+          1: {targetAxisIndex: 0},
+          2: {targetAxisIndex: 0},
+          3: {targetAxisIndex: 0},
+          4: {targetAxisIndex: 1}
+        }
       });
     }
 
@@ -136,13 +144,15 @@ angular.module('negawattClientApp')
         },
         'vAxes': {
           0: {
-            'title': 'Set a title vAxis (Ex. Electricity)',
+            title: chartFrequencyActive.axis_v_title,
+            format: 'short',
             'gridlines': {
               'count': 6
             }
           },
           1: {
-            'title': 'Set a title vAxis (Ex. Temperature)',
+            title: 'טמפרטורה',
+            format: 'short',
             'gridlines': {
               'count': 6
             },
