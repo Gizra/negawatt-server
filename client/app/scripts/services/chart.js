@@ -137,7 +137,7 @@ angular.module('negawattClientApp')
           unit_num_seconds: 24 * 60 * 60,
           chart_default_time_frame: 31,
           axis_v_title: 'קוט"ש ביום',
-          axis_h_format: 'DD/MM',
+          axis_h_format: 'DD/MM/YY',
           axis_h_title: 'תאריך',
           get_period: function(timestamp) {
             // Return a period, from the beginning of the month to its end.
@@ -154,7 +154,7 @@ angular.module('negawattClientApp')
           // One week.
           chart_default_time_frame: 168,
           axis_v_title: 'KW',
-          axis_h_format: 'HH:mm',
+          axis_h_format: 'HH:mm DD/MM',
           axis_h_title: 'שעה',
           get_period: function(timestamp) {
             // Return a period, from the beginning of the week (Sunday) to its end.
@@ -173,7 +173,7 @@ angular.module('negawattClientApp')
           // 48 hours.
           chart_default_time_frame: 1440,
           axis_v_title: 'KW',
-          axis_h_format: 'HH:mm',
+          axis_h_format: 'HH:mm DD/MM',
           axis_h_title: 'שעה',
           get_period: function(timestamp) {
             // Return a period, from the beginning of the day to its end.
