@@ -147,15 +147,19 @@ angular.module('negawattClientApp')
 
         // Build rows
         angular.forEach(values, function(item, timestamp) {
+          var time = moment.unix(timestamp).toDate();
           var label = moment.unix(timestamp).format(frequency.axis_h_format);
-          var col = [{v: label}];
+          var col = [{v: time}];
           ['flat', 'peak', 'mid', 'low'].forEach(function(type) {
-            col.push({v: item[type], f: $filter('number')(item[type], 0) + ' ' + unit});
+            var value = item[type];
+            col.push({v: value});
+            col.push(value ? {v: label + '\n' + $filter('number')(item[type], 0) + ' ' + unit} : {});
           });
           // Add compareWith column, if exists.
           if (compareWith) {
             var n = compareWithIndexed[timestamp] ? compareWithIndexed[timestamp][compareLabelsField] : undefined;
-            col.push(n ? {v: n, f: $filter('number')(n, 0)} : {})
+            col.push(n ? {v: n} : {})
+            col.push(n ? {v: label + '\n' + $filter('number')(n, 0) + ' מעלות'} : {})
           }
           rows.push({ c: col, onSelect: timestamp });
         });
@@ -226,7 +230,7 @@ angular.module('negawattClientApp')
           {
             'id': 'month',
             'label': 'Month',
-            'type': 'string',
+            'type': 'date',
           },
           {
             'id': 'flat',
@@ -234,9 +238,19 @@ angular.module('negawattClientApp')
             'type': 'number',
           },
           {
+            'id': 'flat',
+            'type': 'string',
+            p: {role: 'tooltip'}
+          },
+          {
             'id': 'peak',
             'label': 'פסגה',
             'type': 'number',
+          },
+          {
+            'id': 'peak',
+            'type': 'string',
+            p: {role: 'tooltip'}
           },
           {
             'id': 'mid',
@@ -244,9 +258,19 @@ angular.module('negawattClientApp')
             'type': 'number',
           },
           {
+            'id': 'mid',
+            'type': 'string',
+            p: {role: 'tooltip'}
+          },
+          {
             'id': 'low',
             'label': 'שפל',
             'type': 'number',
+          },
+          {
+            'id': 'low',
+            'type': 'string',
+            p: {role: 'tooltip'}
           }
           ];
         if (compareWith) {
@@ -255,7 +279,12 @@ angular.module('negawattClientApp')
             'id': 'temp',
             'label': 'טמפרטורה',
             'type': 'number',
-          });
+          },
+            {
+              'id': 'temp',
+              'type': 'string',
+              p: {role: 'tooltip'}
+            });
         }
         return columns;
       }
