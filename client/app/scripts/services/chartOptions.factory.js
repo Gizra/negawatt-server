@@ -32,14 +32,16 @@ angular.module('negawattClientApp')
         vAxis: {
           title: chartFrequencyActive.axis_v_title,
           format: 'short',
-          gridlines: {
-            count: 3
-          }
+          gridlines: {count: 5}
         },
         hAxis: {
           // No title in order to have enough space for the bars labels.
         },
-        tooltip: {isHtml: true}
+        tooltip: {isHtml: true},
+        crosshair: {
+          trigger: 'both',
+          orientation: 'vertical'
+        }
       }
     }
 
@@ -62,6 +64,8 @@ angular.module('negawattClientApp')
      *  Configuration object.
      */
     function getLineCompareOptions() {
+      var chartFrequencyActive = Chart.getActiveFrequency();
+
       return extend(getCommonOptions(), {
         chart_type: 'LineChart',
         'series': {
@@ -70,7 +74,18 @@ angular.module('negawattClientApp')
           2: {targetAxisIndex: 0},
           3: {targetAxisIndex: 0},
           4: {targetAxisIndex: 1}
-        }
+        },
+        'vAxes': {
+          0: {
+            title: chartFrequencyActive.axis_v_title,
+            format: 'short',
+          },
+          1: {
+            // @fixme: get title from somewhere.
+            title: 'טמפרטורה',
+            format: 'short',
+          }
+        },
       });
     }
 
@@ -147,22 +162,14 @@ angular.module('negawattClientApp')
           0: {
             title: chartFrequencyActive.axis_v_title,
             format: 'short',
-            'gridlines': {
-              'count': 6
-            }
           },
           1: {
+            // @fixme: get title from somewhere.
             title: 'טמפרטורה',
             format: 'short',
-            'gridlines': {
-              'count': 6
-            },
             'chart_type': 'LineChart'
           }
         },
-        'hAxis': {
-          'title': 'Set a title hAxis'
-        }
       });
     }
 
