@@ -204,8 +204,8 @@ angular.module('negawattClientApp')
           // Get compare collection, if one was selected.
           if ($stateParams.climate) {
             var climateFilters = {
-              meter: $stateParams.climate,
-              frequency: $stateParams.chartFreq,
+              climate: $stateParams.climate,
+              chartFreq: $stateParams.chartFreq,
               chartPreviousPeriod: period.getChartPeriod().previous,
               chartNextPeriod: period.getChartPeriod().next
             };
