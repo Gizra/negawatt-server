@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .factory('ChartOptions', function ($window, Chart) {
+  .factory('ChartOptions', function ($stateParams, $window, Chart, moment) {
     var extend = angular.extend;
 
     var ChartOptions;
@@ -27,7 +27,10 @@ angular.module('negawattClientApp')
         height: '350',
         width: width * 7 / 12 - 150,
         titlePosition: 'none',
-        legend: { position: 'bottom' },
+        legend: {
+          maxLines: 3,
+          position: 'top'
+        },
         backgroundColor: 'none',
         vAxis: {
           title: chartFrequencyActive.axis_v_title,
@@ -36,6 +39,8 @@ angular.module('negawattClientApp')
         },
         hAxis: {
           // No title in order to have enough space for the bars labels.
+          minValue: moment.unix($stateParams.chartPreviousPeriod).toDate(),
+          maxValue: moment.unix($stateParams.chartNextPeriod - 1).toDate(),
         },
         tooltip: {isHtml: true},
         crosshair: {
@@ -142,22 +147,34 @@ angular.module('negawattClientApp')
      *  Configuration object.
      */
     function getColumnCompareOptions(chartType) {
+      var numSeries = $stateParams.sel ? $stateParams.sel.split(',').length : 1;
+      numSeries = (numSeries == 1) ? 4 : numSeries;
+      var series = {};
+      for (var i = 0; i < numSeries; i++) {
+        series[i] = {targetAxisIndex: 0};
+      }
+      series[numSeries] = {
+        targetAxisIndex: 1,
+          type: 'line'
+      };
+
       var chartFrequencyActive = Chart.getActiveFrequency();
       return extend(getCommonOptions(), {
         'chart_type': 'ColumnChart',
         'isStacked': getStackOptions(chartType),
         'fill': 20,
         'displayExactValues': true,
-        'series': {
-          0: {targetAxisIndex: 0},
-          1: {targetAxisIndex: 0},
-          2: {targetAxisIndex: 0},
-          3: {targetAxisIndex: 0},
-          4: {
-            targetAxisIndex: 1,
-            type: 'line'
-          }
-        },
+        'series': series,
+      //{
+      //    0: {targetAxisIndex: 0},
+      //    1: {targetAxisIndex: 0},
+      //    2: {targetAxisIndex: 0},
+      //    3: {targetAxisIndex: 0},
+      //    4: {
+      //      targetAxisIndex: 1,
+      //      type: 'line'
+      //    }
+      //  },
         'vAxes': {
           0: {
             title: chartFrequencyActive.axis_v_title,
