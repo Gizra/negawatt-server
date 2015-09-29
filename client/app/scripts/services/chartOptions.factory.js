@@ -147,12 +147,15 @@ angular.module('negawattClientApp')
      *  Configuration object.
      */
     function getColumnCompareOptions(chartType) {
-      var numSeries = $stateParams.sel ? $stateParams.sel.split(',').length : 1;
+      // Build 'series' object.
+      var numSeries = $stateParams.ids ? $stateParams.ids.split(',').length : 1;
+      // If there's only one series, TOUse will be displayed, using 4 series.
       numSeries = (numSeries == 1) ? 4 : numSeries;
       var series = {};
       for (var i = 0; i < numSeries; i++) {
         series[i] = {targetAxisIndex: 0};
       }
+      // Add a last series for temperature (if exists).
       series[numSeries] = {
         targetAxisIndex: 1,
           type: 'line'
@@ -165,16 +168,6 @@ angular.module('negawattClientApp')
         'fill': 20,
         'displayExactValues': true,
         'series': series,
-      //{
-      //    0: {targetAxisIndex: 0},
-      //    1: {targetAxisIndex: 0},
-      //    2: {targetAxisIndex: 0},
-      //    3: {targetAxisIndex: 0},
-      //    4: {
-      //      targetAxisIndex: 1,
-      //      type: 'line'
-      //    }
-      //  },
         'vAxes': {
           0: {
             title: chartFrequencyActive.axis_v_title,
