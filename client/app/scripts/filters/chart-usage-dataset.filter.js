@@ -101,6 +101,14 @@ angular.module('negawattClientApp')
       var isLineChart;
       var powerValueProperty = getPowerValueProperty(frequency);
 
+      // If 'compareCollection' is given, convert it to an indexed array.
+      var compareWithIndexed = {};
+      if (compareWith) {
+        angular.forEach(compareWith, function (item) {
+          compareWithIndexed[item.timestamp] = item;
+        })
+      }
+
       if (chartType == 'sum') {
         // Prepare data for a single graph, summing multiple meters to one column.
         // -----------------------------------------------------------------------
@@ -137,14 +145,6 @@ angular.module('negawattClientApp')
         // Display the unit according to selected frequency.
         var unit = ['hour', 'minute'].indexOf(frequency.frequency) != -1 ? 'קו״ט' : 'קוט״ש';
 
-        // If 'compareCollection' is given, convert it to an indexed array.
-        var compareWithIndexed = {};
-        if (compareWith) {
-          angular.forEach(compareWith, function (item) {
-            compareWithIndexed[item.timestamp] = item;
-          })
-        }
-
         // Build rows
         angular.forEach(values, function(item, timestamp) {
           var time = moment.unix(timestamp).toDate();
@@ -158,7 +158,7 @@ angular.module('negawattClientApp')
           // Add compareWith column, if exists.
           if (compareWith) {
             var n = compareWithIndexed[timestamp] ? compareWithIndexed[timestamp][compareLabelsField] : undefined;
-            col.push(n ? {v: n} : {})
+            col.push(n ? {v: n} : {});
             col.push(n ? {v: label + '\n' + $filter('number')(n, 0) + ' מעלות'} : {})
           }
           rows.push({ c: col, onSelect: timestamp });
@@ -190,15 +190,19 @@ angular.module('negawattClientApp')
 
         // Build rows
         angular.forEach(values, function(item, timestamp) {
+          var time = moment.unix(timestamp).toDate();
           var label = moment.unix(timestamp).format(frequency.axis_h_format);
-          var col = [{v: label}];
+          var col = [{v: time}];
           labelsUsed.forEach(function(type) {
-            col.push({v: item[type], f: $filter('number')(item[type], 0) + ' ' + unit});
+            var value = item[type];
+            col.push({v: value});
+            col.push(value ? {v: label + '\n' + $filter('number')(item[type], 0) + ' ' + unit} : {});
           });
           // Add compareWith column, if exists.
           if (compareWith) {
             var n = compareWithIndexed[timestamp] ? compareWithIndexed[timestamp][compareLabelsField] : undefined;
-            col.push(n ? {v: n, f: $filter('number')(n, 0)} : {})
+            col.push(n ? {v: n} : {});
+            col.push(n ? {v: label + '\n' + $filter('number')(n, 0) + ' מעלות'} : {})
           }
           rows.push({ 'c': col, onSelect: timestamp });
         });
@@ -276,10 +280,10 @@ angular.module('negawattClientApp')
         if (compareWith) {
           // @fixme: put proper label here, in stead of hard coded temperature.
           columns.push({
-            'id': 'temp',
-            'label': 'טמפרטורה',
-            'type': 'number',
-          },
+              'id': 'temp',
+              'label': 'טמפרטורה',
+              'type': 'number',
+            },
             {
               'id': 'temp',
               'type': 'string',
@@ -294,25 +298,36 @@ angular.module('negawattClientApp')
           {
             'id': 'month',
             'label': 'Month',
-            'type': 'string'
+            'type': 'date'
           }
         ];
 
         // Add meters/sites/categories columns
+        // For each data set add two columns - one for the data and one for the tooltip.
         labelsUsed.forEach(function(item) {
           columns.push({
-            id: item,
-            label: labels[item].label,
-            type: 'number'
-          })
+              id: item,
+              label: labels[item].label,
+              type: 'number'
+            },
+            {
+              'id': item,
+              'type': 'string',
+              p: {role: 'tooltip'}
+            })
         });
 
         if (compareWith) {
-          column.push({
-            'id': 'temp',
-            'label': 'טמפרטורה',
-            'type': 'number'
-          })
+          columns.push({
+              'id': 'temp',
+              'label': 'טמפרטורה',
+              'type': 'number'
+            },
+            {
+              'id': 'temp',
+              'type': 'string',
+              p: {role: 'tooltip'}
+            })
         }
         return columns;
       }
