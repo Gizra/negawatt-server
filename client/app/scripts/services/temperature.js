@@ -30,7 +30,8 @@ angular.module('negawattClientApp')
     this.get = function(hash) {
       if (angular.isUndefined(hash)) {
         // 'Negawatt.Temperature - Hash not defined on method get(hash)';
-        return undefined;
+        // Return a promise to empty data.
+        return $q.when({});
       }
 
       // Preparation of the promise and cache for Temperature request.
@@ -62,7 +63,7 @@ angular.module('negawattClientApp')
       // stay clean of page parameters since it also serves as key to the cache.
       var params = FilterFactory.getTemperature(hash) || {};
 
-      // If page-number is given, add it to the params.
+        // If page-number is given, add it to the params.
       // Don't modify 'filters' since it should reflect the general params,
       // without page number.
       if (pageNumber) {
