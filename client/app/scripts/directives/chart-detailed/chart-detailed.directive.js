@@ -118,7 +118,7 @@ angular.module('negawattClientApp')
   .directive('chartDetailed', function () {
     return {
       templateUrl: 'scripts/directives/chart-detailed/chart-detailed.directive.html',
-      controller: function ChartDetailedCtrl($scope, $window, $filter, ChartDetailedService, ChartOptions, ChartUsagePeriod, $stateParams) {
+      controller: function ChartDetailedCtrl($scope, $rootScope, $window, $filter, ChartDetailedService, ChartOptions, ChartUsagePeriod, $stateParams) {
         var chart = this;
 
         // Extend the service with the scope of the directive and
@@ -173,6 +173,9 @@ angular.module('negawattClientApp')
          * render the data in the chart.
          */
         function refreshChart() {
+          // Tell all charts to go to 'loading' state.
+          $rootScope.$broadcast('nwChartBeginLoading');
+
           // Prepare filters to get electricity.
           var filters = {
             accountId: $stateParams.accountId,
