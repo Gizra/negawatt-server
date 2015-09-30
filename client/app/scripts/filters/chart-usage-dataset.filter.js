@@ -23,11 +23,11 @@ angular.module('negawattClientApp')
      */
     return function (collection, chartType, compareWith, options, labels, labelsField, compareLabelsField, oneItemSelected) {
 
-      // chartType defaults to detailed.
-      chartType = chartType ? chartType : 'detailed';
+      // chartType defaults to stacked.
+      chartType = chartType ? chartType : 'stacked';
       // However, if there's only one item, revert to 'sum', that will display only one
       // meter/category, but split into TOUse rate-types.
-      if (chartType == 'detailed' && oneItemSelected) {
+      if ((chartType == 'detailed' || chartType == 'stacked') && oneItemSelected) {
         chartType = 'sum';
       }
 
@@ -38,16 +38,14 @@ angular.module('negawattClientApp')
         return ChartOptions.getOptions(chartFrequencyActive, chartType, !!compareWith);
       }
 
-      options = ChartOptions.getOptions(chartFrequencyActive.type, chartType, !!compareWith);
+      var data = getDataset(collection, chartFrequencyActive, chartType, labels, labelsField, compareWith, compareLabelsField);
+      options = ChartOptions.getOptions(chartFrequencyActive.type, chartType, data.numSeries, !!compareWith);
 
-      //if (compareWith) {
-      //  collection = collection.concat(compareWith);
-      //}
 
       // Recreate collection object.
       collection = {
         type: options.chart_type,
-        data: getDataset(collection, chartFrequencyActive, chartType, labels, labelsField, compareWith, compareLabelsField),
+        data: data,
         options: options
       };
       return collection;
@@ -75,7 +73,10 @@ angular.module('negawattClientApp')
         // Add rows.
         rows: getRows(collection, frequency, chartType, labelsUsed, labelsField, compareWith, compareLabelsField),
         // Add columns.
-        cols: getColumns(collection, frequency, chartType, labelsUsed, labels, compareWith)
+        cols: getColumns(collection, frequency, chartType, labelsUsed, labels, compareWith),
+        // Number of series (might happen that a serie contains no data in 'collection').
+        // For internal use, not used by google-charts.
+        numSeries: labelsUsed.length
       };
 
       return dataset;
@@ -148,7 +149,7 @@ angular.module('negawattClientApp')
         // Build rows
         angular.forEach(values, function(item, timestamp) {
           var time = moment.unix(timestamp).toDate();
-          var label = moment.unix(timestamp).format(frequency.axis_h_format);
+          var label = moment.unix(timestamp).format(frequency.tooltip_format);
           var col = [{v: time}];
           ['flat', 'peak', 'mid', 'low'].forEach(function(type) {
             var value = item[type];
@@ -164,7 +165,7 @@ angular.module('negawattClientApp')
           rows.push({ c: col, onSelect: timestamp });
         });
       }
-      else if (chartType == 'detailed') {
+      else if (chartType == 'detailed' || chartType == 'stacked') {
         // Prepare data for a multiple graphs.
         // -----------------------------------------------------------------------
 
@@ -191,7 +192,7 @@ angular.module('negawattClientApp')
         // Build rows
         angular.forEach(values, function(item, timestamp) {
           var time = moment.unix(timestamp).toDate();
-          var label = moment.unix(timestamp).format(frequency.axis_h_format);
+          var label = moment.unix(timestamp).format(frequency.tooltip_format);
           var col = [{v: time}];
           labelsUsed.forEach(function(type) {
             var value = item[type];
@@ -292,7 +293,7 @@ angular.module('negawattClientApp')
         }
         return columns;
       }
-      else if (chartType == 'detailed') {
+      else if (chartType == 'detailed' || chartType == 'stacked') {
         // First column is allways month
         var columns = [
           {
