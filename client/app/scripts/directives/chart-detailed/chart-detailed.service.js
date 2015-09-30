@@ -85,10 +85,13 @@ angular.module('negawattClientApp')
     function interpolateTemperature(data, filters) {
       // Interpolate only in day and week charts, when there's no meter selected or
       // only one meter selected.
-      if (filters.chartFreq == 4 && (!filters.sel || filters.sel.split(',').length < 2)) {
+      // @todo: filters doesn't contain 'sel', hence interpolation allways occure!
+      // @todo: interpolateTemperature is called too frequently.
+      if ((filters.chartFreq == 4 || filters.chartFreq == 5) && (!filters.sel || filters.sel.split(',').length < 2)) {
         // Hours frequency
         var prevTimestamp = undefined,
-          prevValue = undefined;
+          prevValue = undefined,
+          dt = (filters.chartFreq == 4) ? 3600 : 600;
         var interpolatedData = [];
         angular.forEach(data, function (item) {
           var newTimestamp = item.timestamp_rounded,
@@ -96,12 +99,12 @@ angular.module('negawattClientApp')
           // Only from the second data point and on.
           if (prevTimestamp) {
             // Calculate the number of data points to interpolate in an hour (3600 secs.) interval.
-            var numInterpolatedPoints = (newTimestamp - prevTimestamp) / 3600 - 1,
+            var numInterpolatedPoints = (newTimestamp - prevTimestamp) / dt - 1,
               dy = (newValue - prevValue) / (numInterpolatedPoints + 1);
             // Add the new points.
             for (var i = 0; i <numInterpolatedPoints; i++) {
               // Advance the time and value for the interpolation.
-              prevTimestamp += 3600;
+              prevTimestamp += dt;
               prevValue += dy;
               // Add new data point.
               interpolatedData.push({
