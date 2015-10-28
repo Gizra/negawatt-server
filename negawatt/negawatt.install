@@ -1,0 +1,102 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function negawatt_install() {
+  // Add text formats.
+  $filtered_html_format = array(
+    'format' => 'filtered_html',
+    'name' => 'Filtered HTML',
+    'weight' => 0,
+    'filters' => array(
+      // URL filter.
+      'filter_url' => array(
+        'weight' => 0,
+        'status' => 1,
+      ),
+      // HTML filter.
+      'filter_html' => array(
+        'weight' => 1,
+        'status' => 1,
+      ),
+      // Line break filter.
+      'filter_autop' => array(
+        'weight' => 2,
+        'status' => 1,
+      ),
+      // HTML corrector filter.
+      'filter_htmlcorrector' => array(
+        'weight' => 10,
+        'status' => 1,
+      ),
+    ),
+  );
+  $filtered_html_format = (object) $filtered_html_format;
+  filter_format_save($filtered_html_format);
+  $formats[] = filter_permission_name($filtered_html_format);
+
+  $full_html_format = array(
+    'format' => 'full_html',
+    'name' => 'Full HTML',
+    'weight' => 1,
+    'filters' => array(
+      // URL filter.
+      'filter_url' => array(
+        'weight' => 0,
+        'status' => 1,
+      ),
+      // Line break filter.
+      'filter_autop' => array(
+        'weight' => 1,
+        'status' => 1,
+      ),
+      // HTML corrector filter.
+      'filter_htmlcorrector' => array(
+        'weight' => 10,
+        'status' => 1,
+      ),
+    ),
+  );
+  $full_html_format = (object) $full_html_format;
+  filter_format_save($full_html_format);
+
+  $formats[] = filter_permission_name($full_html_format);
+
+
+  user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, array('access content', 'access comments', 'post comments', 'skip comment approval'));
+  user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, $formats);
+
+  // Set the theme.
+  theme_enable(array('bootstrap_subtheme'));
+  variable_set('theme_default','bootstrap_subtheme');
+  theme_disable(array('bartik'));
+
+  // Create a default vocabulary named "Meter Category", enabled for the 'node' content type.
+  $vocabulary = (object) array(
+    'name' => st('Meter Category'),
+    'description' => st('Dummy vocab, used to allow migration.'),
+    'machine_name' => 'meter_category',
+  );
+  taxonomy_vocabulary_save($vocabulary);
+
+  // Create user default profile image.
+  negawatt_users_install();
+}
+
+/**
+ * Implements hook_install().
+ */
+function negawatt_users_install() {
+  $uri = file_unmanaged_copy(DRUPAL_ROOT . '/' . drupal_get_path('module', 'negawatt_migrate') . '/images/default_profile_white.png', 'public://default_profile_white.png');
+  // Create the file manage entry.
+  $file = new stdClass;
+  $file->uid = 1;
+  $file->filename = 'default_profile_white.png';
+  $file->uri = $uri;
+  $file->status = 1;
+  $file->filemime = 'image/png';
+  file_save($file);
+
+  variable_set('default_user_picture_fid', $file->fid);
+}

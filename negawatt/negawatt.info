@@ -1,0 +1,62 @@
+; $Id: standard.info,v 1.2 2010/10/25 15:48:41 webchick Exp $
+name = Negawatt
+description = Negawatt PLM (Product Lifecycle Management)
+version = VERSION
+core = 7.x
+
+; Core
+dependencies[] = block
+dependencies[] = comment
+dependencies[] = contextual
+dependencies[] = image
+dependencies[] = list
+dependencies[] = menu
+dependencies[] = number
+dependencies[] = options
+dependencies[] = taxonomy
+dependencies[] = file
+
+; Contrib modules
+dependencies[] = admin_menu_toolbar
+dependencies[] = admin_views
+dependencies[] = addressfield
+dependencies[] = ctools
+dependencies[] = date
+dependencies[] = date_migrate
+dependencies[] = entity
+dependencies[] = entity_token
+dependencies[] = entityreference
+dependencies[] = entity_validator
+dependencies[] = features
+dependencies[] = flag
+dependencies[] = geolocation
+dependencies[] = geolocation_googlemaps
+dependencies[] = libraries
+dependencies[] = logs_http
+dependencies[] = message
+dependencies[] = migrate
+dependencies[] = migrate_extras
+dependencies[] = module_filter
+dependencies[] = og
+dependencies[] = og_access
+dependencies[] = og_ui
+dependencies[] = og_vocab
+dependencies[] = restful
+dependencies[] = restful_token_auth
+dependencies[] = strongarm
+dependencies[] = token
+dependencies[] = views
+dependencies[] = views_bulk_operations
+
+; Negawatt
+dependencies[] = negawatt_account
+dependencies[] = negawatt_electricity
+dependencies[] = negawatt_image
+dependencies[] = negawatt_message
+dependencies[] = negawatt_migrate
+dependencies[] = negawatt_normalizer
+dependencies[] = negawatt_restful
+dependencies[] = iec
+dependencies[] = modbus
+dependencies[] = negawatt_meter
+

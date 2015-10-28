@@ -1,0 +1,81 @@
+language: php
+sudo: false
+
+php:
+  - 5.4
+
+mysql:
+  database: drupal
+  username: root
+  encoding: utf8
+
+addons:
+  apt:
+    packages:
+    - php5-cgi
+    - php5-mysql
+
+before_install:
+  - composer self-update
+
+  # Install grunt.
+  - npm install -g grunt-cli
+  - npm install -g bower
+
+install:
+  # install drush
+  - export PATH="$HOME/.composer/vendor/bin:$PATH"
+  - composer global require drush/drush:6.*
+  - phpenv rehash
+
+before_script:
+  - bash scripts/ci/setup
+  - bash scripts/build
+  - mkdir -p www/sites/default/files/styles/thumbnail/public
+  - cd www
+  - drush si negawatt --db-url=mysql://root:@127.0.0.1/drupal --account-pass=admin --yes
+  - drush cc all --yes
+  - drush en simpletest -y
+  # Use drush migrate command to import dummy content, as user 1, so we don't have node access issues.
+  - drush en negawatt_migrate -y
+  - drush mi --all --user=1
+
+  - cd ..
+
+  # Create Drush alias.
+  - cd behat
+  - cp aliases.drushrc.php ~/.drush/
+  - cp behat.local.yml.travis behat.local.yml
+  - composer install --prefer-source
+
+script:
+  # Create display.
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - sleep 3 # give xvfb some time to start
+
+  # start a web server on port 8080, run in the background; wait for initialization
+  - drush @negawatt runserver 127.0.0.1:8080 &
+  - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; sleep 1; curl -I http://127.0.0.1:8080 ; do true; done
+
+  # Run client application.
+  - cd ../client
+  - npm install
+  - bower install
+  - cp config.travis.json config.json
+  - grunt serve > ~/grunt.log 2>&1 &
+
+  # Run selenium.
+  - wget http://selenium-release.storage.googleapis.com/2.45/selenium-server-standalone-2.45.0.jar
+  - java -jar selenium-server-standalone-2.45.0.jar -p 4444 > ~/selenium.log 2>&1 &
+  - sleep 5
+
+  # Run behat tests.
+  - cd ../behat
+  - ./bin/behat --tags=~@wip
+
+  # Print log ~/selenium.log
+  # - cat ~/selenium.log
+
+  # SimpleTest
+  - drush @negawatt test-run "Negawatt" --uri=http://127.0.0.1:8080

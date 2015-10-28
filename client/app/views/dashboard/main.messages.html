@@ -1,0 +1,26 @@
+<span><i class="icon-options"></i></span>
+<span class="title">התראות</span>
+
+<div id="messages">
+  <accordion>
+    <accordion-group ng-repeat="messagesGrouped in ::messages track by $id(messagesGrouped)" is-disabled="messagesGrouped.length === 1" is-open="status.open" class="message-wrapper">
+      <accordion-heading>
+        <div class="message-body">
+          <div class="message-icon-caret">
+            <span><i class="fa fa-lg" ng-class="{'fa-caret-down': status.open, 'fa-caret-left': !status.open}" ng-if="messagesGrouped.length !== 1"></i></span>
+
+          </div>
+          <div class="message-text accordion-heading">
+            <p>צריכה חריגה ב<a href="" ng-click="message.selectMeter($event, messagesGrouped[0].meter)" >{{messagesGrouped[0].text}}</a> בחודש  {{messagesGrouped[0].date}}</p>
+          </div>
+          <div class="message-badge">
+            <span class="badge" ng-if="messagesGrouped.length !== 1">{{messagesGrouped.length}}</span>
+          </div>
+        </div>
+      </accordion-heading>
+      <p ng-repeat="msg in ::messagesGrouped" ng-if="!$first" class="message-body">צריכה חריגה ב<a href="" ng-click="message.selectMeter($event, msg.meter)" >{{msg.text}}</a> בחודש  {{msg.date}}</p>
+    </accordion-group>
+  </accordion>
+</div>
+
+

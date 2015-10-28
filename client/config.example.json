@@ -1,0 +1,41 @@
+{
+  "development": {
+    "backend": "http://localhost/negawatt-server/www",
+    "cname": "  ",
+    "debugUiRouter": false,
+    "openweather": {
+      "endpoint": null,
+      "apikey": "5znrzehcfsa35jarjywbsy9dymvnmxzq"
+    },
+    "tileLayerOptions": {
+      "id": "your.id",
+      "accessToken": "public.access.token"
+    }
+  },
+  "production": {
+    "backend": "http://server.com/api",
+    "cname": "prod.front-end.url.here",
+    "debugUiRouter": false,
+    "openweather": {
+      "endpoint": null,
+      "apikey": "5znrzehcfsa35jarjywbsy9dymvnmxzq"
+    },
+    "tileLayerOptions": {
+      "id": "your.id",
+      "accessToken": "public.access.token"
+    }
+  },
+  "live": {
+    "backend": "http://server.com/api",
+    "cname": "live.front-end.url.here",
+    "debugUiRouter": false,
+    "openweather": {
+      "endpoint": null,
+      "apikey": "5znrzehcfsa35jarjywbsy9dymvnmxzq"
+    },
+    "tileLayerOptions": {
+      "id": "your.id",
+      "accessToken": "public.access.token"
+    }
+  }
+}

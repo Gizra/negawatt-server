@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the image feature.
+ */
+
+include_once 'negawatt_image.features.inc';

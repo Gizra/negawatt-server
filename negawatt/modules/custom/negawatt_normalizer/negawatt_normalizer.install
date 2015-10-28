@@ -1,0 +1,62 @@
+<?php
+
+/**
+ * @file
+ * Code for the Negawatt normalizer storage schema.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function negawatt_normalizer_schema() {
+  $schema = array();
+  $schema['negawatt_power_cap_analyzer_info'] = array(
+    'description' => 'Power-cap analyzer parameters.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'The primary identifier for the row.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'weekday' => array(
+        'description' => 'The weekday to apply the cap.',
+        'type' => 'int',
+        'unsigned' => FALSE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'hour_from' => array(
+        'description' => 'The hour to begin cap enforcement.',
+        'type' => 'int',
+        'unsigned' => FALSE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'hour_to' => array(
+        'description' => 'The hour to end cap enforcement.',
+        'type' => 'int',
+        'unsigned' => FALSE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'cap' => array(
+        'description' => 'Maximal allowed KW (avg_power) at the time range.',
+        'type' => 'float',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'meter_nid' => array(
+        'description' => 'The electric meter NID, or Modbus NID.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('id'),
+    'indexes' => array(
+      'meter_nid' => array('meter_nid'),
+    ),
+  );
+  return $schema;
+}
