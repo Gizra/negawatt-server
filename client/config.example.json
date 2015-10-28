@@ -7,7 +7,7 @@
       "endpoint": null,
       "apikey": "5znrzehcfsa35jarjywbsy9dymvnmxzq"
     },
-    "mapTilesOptions": {
+    "tileLayerOptions": {
       "id": "your.id",
       "accessToken": "public.access.token"
     }
@@ -20,7 +20,7 @@
       "endpoint": null,
       "apikey": "5znrzehcfsa35jarjywbsy9dymvnmxzq"
     },
-    "mapTilesOptions": {
+    "tileLayerOptions": {
       "id": "your.id",
       "accessToken": "public.access.token"
     }
@@ -33,7 +33,7 @@
       "endpoint": null,
       "apikey": "5znrzehcfsa35jarjywbsy9dymvnmxzq"
     },
-    "mapTilesOptions": {
+    "tileLayerOptions": {
       "id": "your.id",
       "accessToken": "public.access.token"
     }
