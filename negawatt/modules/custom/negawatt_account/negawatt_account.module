@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the Negawatt account feature.
- */
-
-include_once 'negawatt_account.features.inc';
