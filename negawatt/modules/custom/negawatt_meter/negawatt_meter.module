@@ -322,6 +322,7 @@ function negawatt_meter_field_attach_create_bundle($entity_type, $bundle) {
           'people' => 'people',
           'public-buildings' => 'public-buildings',
           'security' => 'security',
+          'other' => 'other',
         ),
         'allowed_values_function' => '',
       ),
