@@ -6,6 +6,10 @@
     "openweather": {
       "endpoint": null,
       "apikey": "5znrzehcfsa35jarjywbsy9dymvnmxzq"
+    },
+    "mapTilesOptions": {
+      "id": "your.id",
+      "accessToken": "public.access.token"
     }
   },
   "production": {
@@ -15,6 +19,10 @@
     "openweather": {
       "endpoint": null,
       "apikey": "5znrzehcfsa35jarjywbsy9dymvnmxzq"
+    },
+    "mapTilesOptions": {
+      "id": "your.id",
+      "accessToken": "public.access.token"
     }
   },
   "live": {
@@ -24,6 +32,10 @@
     "openweather": {
       "endpoint": null,
       "apikey": "5znrzehcfsa35jarjywbsy9dymvnmxzq"
+    },
+    "mapTilesOptions": {
+      "id": "your.id",
+      "accessToken": "public.access.token"
     }
   }
 }

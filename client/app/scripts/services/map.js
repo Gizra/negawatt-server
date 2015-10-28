@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Map', function ($rootScope, $log, leafletData, leafletHelpers) {
+  .service('Map', function ($rootScope, $log, leafletData, leafletHelpers, Config) {
     var self = this;
 
     // Initial center point.
@@ -34,7 +34,8 @@ angular.module('negawattClientApp')
      */
     this.getConfig = function() {
       return {
-        tileLayer: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        tileLayer: 'http://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}',
+        tileLayerOptions: Config.tileLayerOptions,
         zoomControlPosition: 'bottomleft',
         minZoom: 12,
         maxZoom:19,
