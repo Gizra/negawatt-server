@@ -1,0 +1,103 @@
+<?php
+
+/**
+ * @file
+ * Code for the Negawatt sensor storage schema.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function negawatt_sensor_schema() {
+  $schema = array();
+  $schema['negawatt_sensor'] = array(
+    'description' => 'The base table for sensor raw data.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'The primary identifier for the row.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'timestamp' => array(
+        'description' => 'timestamp of recording.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'frequency' => array(
+        'description' => 'The time-interval for the measurement: 1:year, 2:month, 3:day, 4:hour, 5:minute.',
+        'type' => 'int',
+        'unsigned' => FALSE,
+        'not null' => TRUE,
+      ),
+      'meter_nid' => array(
+        'description' => 'The meter NID.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'value' => array(
+        'description' => 'Sensor value.',
+        'type' => 'int',
+        'not null' => FALSE,
+        'default' => NULL,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+  $schema['negawatt_sensor_normalized'] = array(
+    'description' => 'The base table for sensor averages.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'The primary identifier for the row.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'frequency' => array(
+        'description' => 'The time-interval of this data: 1:year, 2:month, 3:day, 4:hour, 5:minute.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'timestamp' => array(
+        'description' => 'timestamp of beginning of period (at 12:00PM).',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'meter_nid' => array(
+        'description' => 'The meter NID.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'avg_value' => array(
+        'description' => 'Average value of sensor at period.',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => NULL,
+      ),
+      'max_value' => array(
+        'description' => 'Max value of sensor at period.',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => NULL,
+      ),
+      'min_value' => array(
+        'description' => 'Min value of sensor at period.',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => NULL,
+      ),
+    ),
+    'primary key' => array('id'),
+    'indexes' => array(
+      'meter_nid' => array('meter_nid'),
+    ),
+  );
+  return $schema;
+}
