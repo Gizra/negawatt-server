@@ -10,6 +10,7 @@ $plugin = array(
   'bundles' => array(
     'iec_meter' => 'iec_meters',
     'modbus_meter' => 'modbus_meters',
+    'sensor' => 'sensors',
   ),
   'authentication_types' => TRUE,
   // Add totals to output.

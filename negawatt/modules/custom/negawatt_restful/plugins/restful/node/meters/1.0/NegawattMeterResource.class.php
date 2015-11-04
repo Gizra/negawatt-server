@@ -198,7 +198,7 @@ class NegawattMeterResource extends \RestfulEntityBaseMultipleBundles {
 
     $query = parent::getEntityFieldQuery()
       ->entityCondition('entity_type', 'node')
-      ->entityCondition('bundle', array('iec_meter', 'modbus_meter'), 'IN');
+      ->entityCondition('bundle', array('iec_meter', 'modbus_meter', 'sensor'), 'IN');
 
     $request = $this->getRequest();
     $filter = !empty($request['filter']) ? $request['filter'] : array();
