@@ -114,7 +114,7 @@ angular.module('negawattClientApp')
       angular.forEach(obj, function(value, key) {
         this.push({
           c: [
-            { v: !Utils.isEmpty(labels) && labels[key].label || defaultLabel + key},
+            { v: !Utils.isEmpty(labels) && labels[key] && labels[key].label || defaultLabel + key},
             // "f" is for formatting the value in the tooltip.
             { v: +value, f: $filter('number')(value, 0) + ' קוט״ש'},
             { id: key},
