@@ -20,3 +20,4 @@ files[] = handlers/node/NegawattMeterSiteMigrate.php
 files[] = handlers/normalizer/NegawattPowerCapAnalyzerInfoMigrate.php
 files[] = handlers/taxonomy_term/NegawattMeterCategoryTermsMigrate.php
 files[] = handlers/taxonomy_term/NegawattSiteCategoryTermsMigrate.php
+files[] = handlers/taxonomy_term/NegawattSensorTypeTermsMigrate.php

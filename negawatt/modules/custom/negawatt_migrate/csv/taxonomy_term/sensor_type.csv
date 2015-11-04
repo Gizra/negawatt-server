@@ -1,0 +1,5 @@
+id,name,weight,description,field_units
+temperature,טמפרטורה,,,°C
+humidity,לחות,,,%RH
+luminosity,הארה,,,%
+occupancy,תפוסה,,,
