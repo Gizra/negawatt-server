@@ -1,6 +1,6 @@
 name = Negawatt Sensor
 core = 7.x
-package = Features
+package = Negawatt
 dependencies[] = addressfield
 dependencies[] = ctools
 dependencies[] = date
