@@ -6,13 +6,13 @@ projects[admin_menu][subdir] = "contrib"
 projects[admin_menu][version] = "3.0-rc5"
 
 projects[admin_views][subdir] = "contrib"
-projects[admin_views][version] = "1.4"
+projects[admin_views][version] = "1.5"
 
 projects[addressfield][subdir] = "contrib"
 projects[addressfield][version] = "1.0"
 
 projects[ctools][subdir] = "contrib"
-projects[ctools][version] = "1.7"
+projects[ctools][version] = "1.9"
 
 projects[date][subdir] = "contrib"
 projects[date][version] = "2.8"
