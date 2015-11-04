@@ -6,6 +6,7 @@ angular.module('negawattClientApp')
     var isUndefined = angular.isUndefined;
 
     this.getElectricity = getElectricity;
+    this.getTemperature = getTemperature;
     this.getCompareCollection = getCompareCollection;
 
     /**
@@ -54,10 +55,76 @@ angular.module('negawattClientApp')
      * @returns {Promise}
      */
     function getTemperature(filters) {
-      FilterFactory.setTemperature(filters);
-      var temperature = Temperature.get(FilterFactory.get('activeElectricityHash'));
+      if (filters) {
+        FilterFactory.setTemperature(filters);
+      }
+      var temperature = Temperature.get(FilterFactory.get('activeTemperatureHash'))
+        .then(function (data) {
+          return interpolateTemperature(data, filters);
+        });
 
       return isUndefined(temperature) ? $q.promise : temperature;
+    }
+
+    /**
+     * Interpoleate climate data if needed.
+     *
+     * Climate data might come in 3 hours intervals (IMS data). For day and weed charts, with only
+     * one data line (no meters selected, or one meter selected), broken line chart is used for
+     * TOUse colors, so interpolateNulls cannot be set to true. Hence, the missing data points
+     * must be interpolated
+     *
+     * @param data
+     *   The original data.
+     * @param filters
+     *   Filters of the query.
+     *
+     * @returns {array}
+     *   Data with interpolated data-points in the original 'holes'.
+     */
+    function interpolateTemperature(data, filters) {
+      // Interpolate only in day and week charts, when there's no meter selected or
+      // only one meter selected.
+      // @todo: filters doesn't contain 'sel', hence interpolation allways occure!
+      // @todo: interpolateTemperature is called too frequently.
+      if ((filters.chartFreq == 4 || filters.chartFreq == 5) && (!filters.sel || filters.sel.split(',').length < 2)) {
+        // Hours frequency
+        var prevTimestamp = undefined,
+          prevValue = undefined,
+          dt = (filters.chartFreq == 4) ? 3600 : 600;
+        var interpolatedData = [];
+        angular.forEach(data, function (item) {
+          var newTimestamp = item.timestamp_rounded,
+            newValue = item.avg_temp;
+          // Only from the second data point and on.
+          if (prevTimestamp) {
+            // Calculate the number of data points to interpolate in an hour (3600 secs.) interval.
+            var numInterpolatedPoints = (newTimestamp - prevTimestamp) / dt - 1,
+              dy = (newValue - prevValue) / (numInterpolatedPoints + 1);
+            // Add the new points.
+            for (var i = 0; i <numInterpolatedPoints; i++) {
+              // Advance the time and value for the interpolation.
+              prevTimestamp += dt;
+              prevValue += dy;
+              // Add new data point.
+              interpolatedData.push({
+                timestamp: prevTimestamp,
+                timestamp_rounded: prevTimestamp,
+                avg_temp: prevValue
+              });
+            }
+          }
+          // Add the original data point too.
+          interpolatedData.push(item);
+          // Save the time and value for next iteration.
+          prevTimestamp = +newTimestamp;
+          prevValue = +newValue;
+        });
+        // Return the interpolated data.
+        return interpolatedData;
+      }
+      // No interpolation required, return the original data.
+      return data;
     }
 
   });

@@ -113,6 +113,48 @@ angular.module('negawattClientApp')
       },
 
       /**
+       * Add or remove an object form the active-electricity-filter after clicking
+       * the checkbox in the categories/meters tree.
+       *
+       * @param object
+       *   The meter object.
+       * @param name
+       *   The name of the object.
+       *
+       * @return boolean
+       *   True if objects are selected, false if the last object is unselected.
+       */
+      addClimateSelected: function(meter) {
+        var metersSelected = true;
+
+        if (!meter.selected) {
+          // meter unselected, remove it from state-params.
+          var meters = $stateParams.climate.split(',');
+          // object.id is a number, objects is an array of strings. Convert object.id to string.
+          meters.splice(meters.indexOf('' + meter.id), 1);
+          $stateParams.climate = meters.join();
+
+          // Unset sel if no object is selected
+          if ($stateParams.climate == '') {
+            metersSelected = false;
+          }
+        }
+        else {
+          // Select the object.
+          var meters = $stateParams.climate ? $stateParams.climate.split(',') : [];
+          meters.push(meter.id);
+          $stateParams.climate = meters.join();
+        }
+
+        // Refresh $state with new params.
+        $state.refreshUrlWith($stateParams);
+
+        this.setTemperature($stateParams);
+
+        return metersSelected;
+      },
+
+      /**
        * Filter meters by categories checked on the category menu
        * (categories filters).
        *
@@ -317,22 +359,32 @@ angular.module('negawattClientApp')
        *  Parameters object regularly coming from the query string.
        */
       setTemperature: function (params) {
+        if (!params.climate) {
+          // No climate meter selected, clear active hast.
+          this.set('activeTemperatureHash', undefined);
+          this.filters['temperature'] = {};
+          return;
+        }
         // Prepare temperature filter in querystring format.
         var filter = getTemperatureFilter(params);
+        // Create and save hash.
+        var hash = Utils.objToHash(filter);
+        this.set('activeTemperatureHash', hash);
 
         // Clean Properties.
         filter = Utils.cleanProperties(filter);
 
         // Set property with the filters.
         this.filters['temperature'] = angular.isUndefined(this.filters['temperature']) ? {} : this.filters['temperature'];
-        this.filters['temperature'][this.get('activeElectricityHash')] = filter;
+        this.filters['temperature'][this.get('activeTemperatureHash')] = filter;
       }
   };
 
     /**
      * Return querystring of the parameter, representing the temperature filter.
      *
-     * @param params
+     * @param meter
+     *  The climate meter object.
      *
      * @returns {Object}
      */
@@ -341,7 +393,12 @@ angular.module('negawattClientApp')
 
       // Prepare filters for data request.
       filter = {
-        'filter[meter]': params.meter
+        // @fixme: assuming there can be only one climate meter.
+        'filter[meter]': params.climate,
+        'filter[frequency]': params.chartFreq,
+        'filter[timestamp][operator]': 'BETWEEN',
+        'filter[timestamp][value][0]': params.chartPreviousPeriod || '',
+        'filter[timestamp][value][1]': params.chartNextPeriod || ''
       };
 
       return filter;

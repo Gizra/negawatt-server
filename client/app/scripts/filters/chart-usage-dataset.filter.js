@@ -21,13 +21,13 @@ angular.module('negawattClientApp')
      * @returns {*}
      *  The dataset collection filtered.
      */
-    return function (collection, chartType, compareWith, options, labels, labelsField, oneItemSelected) {
+    return function (collection, chartType, compareWith, options, labels, labelsField, compareLabelsField, oneItemSelected) {
 
-      // chartType defaults to detailed.
-      chartType = chartType ? chartType : 'detailed';
-      // However, if there's only one label, revert to 'sum', that will display only one
+      // chartType defaults to stacked.
+      chartType = chartType ? chartType : 'stacked';
+      // However, if there's only one item, revert to 'sum', that will display only one
       // meter/category, but split into TOUse rate-types.
-      if (chartType == 'detailed' && oneItemSelected) {
+      if ((chartType == 'detailed' || chartType == 'stacked') && oneItemSelected) {
         chartType = 'sum';
       }
 
@@ -35,19 +35,17 @@ angular.module('negawattClientApp')
 
       // Check if asked to return chart options only.
       if (collection == 'options-only') {
-        return ChartOptions.getOptions(chartFrequencyActive, chartType);
+        return ChartOptions.getOptions(chartFrequencyActive, chartType, !!compareWith);
       }
 
-      options = ChartOptions.getOptions(chartFrequencyActive.type, chartType);
+      var data = getDataset(collection, chartFrequencyActive, chartType, labels, labelsField, compareWith, compareLabelsField);
+      options = ChartOptions.getOptions(chartFrequencyActive.type, chartType, data.numSeries, !!compareWith);
 
-      if (compareWith) {
-        collection = collection.concat(compareWith);
-      }
 
       // Recreate collection object.
       collection = {
         type: options.chart_type,
-        data: getDataset(collection, chartFrequencyActive, chartType, labels, labelsField),
+        data: data,
         options: options
       };
       return collection;
@@ -69,13 +67,16 @@ angular.module('negawattClientApp')
      *
      * @returns {{cols: *[], rows: Array}}
      */
-    function getDataset(collection, frequency, chartType, labels, labelsField) {
+    function getDataset(collection, frequency, chartType, labels, labelsField, compareWith, compareLabelsField) {
       var labelsUsed = [];
       var dataset = {
         // Add rows.
-        rows: getRows(collection, frequency, chartType, labelsUsed, labelsField),
+        rows: getRows(collection, frequency, chartType, labelsUsed, labelsField, compareWith, compareLabelsField),
         // Add columns.
-        cols: getColumns(collection, frequency, chartType, labelsUsed, labels)
+        cols: getColumns(collection, frequency, chartType, labelsUsed, labels, compareWith),
+        // Number of series (might happen that a serie contains no data in 'collection').
+        // For internal use, not used by google-charts.
+        numSeries: labelsUsed.length
       };
 
       return dataset;
@@ -94,12 +95,20 @@ angular.module('negawattClientApp')
      * @returns {Array}
      *  An array of the data ordering as the type requested.
      */
-    function getRows(collection, frequency, chartType, labelsUsed, labelsField) {
+    function getRows(collection, frequency, chartType, labelsUsed, labelsField, compareWith, compareLabelsField) {
       var values = {};
       var rows = [];
       var prevRateType;
       var isLineChart;
       var powerValueProperty = getPowerValueProperty(frequency);
+
+      // If 'compareCollection' is given, convert it to an indexed array.
+      var compareWithIndexed = {};
+      if (compareWith) {
+        angular.forEach(compareWith, function (item) {
+          compareWithIndexed[item.timestamp] = item;
+        })
+      }
 
       if (chartType == 'sum') {
         // Prepare data for a single graph, summing multiple meters to one column.
@@ -139,15 +148,24 @@ angular.module('negawattClientApp')
 
         // Build rows
         angular.forEach(values, function(item, timestamp) {
-          var label = moment.unix(timestamp).format(frequency.axis_h_format);
-          var col = [{v: label}];
+          var time = moment.unix(timestamp).toDate();
+          var label = moment.unix(timestamp).format(frequency.tooltip_format);
+          var col = [{v: time}];
           ['flat', 'peak', 'mid', 'low'].forEach(function(type) {
-            col.push({v: item[type], f: $filter('number')(item[type], 0) + ' ' + unit});
+            var value = item[type];
+            col.push({v: value});
+            col.push(value ? {v: label + '\n' + $filter('number')(item[type], 0) + ' ' + unit} : {});
           });
+          // Add compareWith column, if exists.
+          if (compareWith) {
+            var n = compareWithIndexed[timestamp] ? compareWithIndexed[timestamp][compareLabelsField] : undefined;
+            col.push(n ? {v: n} : {});
+            col.push(n ? {v: label + '\n' + $filter('number')(n, 0) + ' מעלות'} : {})
+          }
           rows.push({ c: col, onSelect: timestamp });
         });
       }
-      else if (chartType == 'detailed') {
+      else if (chartType == 'detailed' || chartType == 'stacked') {
         // Prepare data for a multiple graphs.
         // -----------------------------------------------------------------------
 
@@ -173,11 +191,20 @@ angular.module('negawattClientApp')
 
         // Build rows
         angular.forEach(values, function(item, timestamp) {
-          var label = moment.unix(timestamp).format(frequency.axis_h_format);
-          var col = [{v: label}];
+          var time = moment.unix(timestamp).toDate();
+          var label = moment.unix(timestamp).format(frequency.tooltip_format);
+          var col = [{v: time}];
           labelsUsed.forEach(function(type) {
-            col.push({v: item[type], f: $filter('number')(item[type], 0) + ' ' + unit});
+            var value = item[type];
+            col.push({v: value});
+            col.push(value ? {v: label + '\n' + $filter('number')(item[type], 0) + ' ' + unit} : {});
           });
+          // Add compareWith column, if exists.
+          if (compareWith) {
+            var n = compareWithIndexed[timestamp] ? compareWithIndexed[timestamp][compareLabelsField] : undefined;
+            col.push(n ? {v: n} : {});
+            col.push(n ? {v: label + '\n' + $filter('number')(n, 0) + ' מעלות'} : {})
+          }
           rows.push({ 'c': col, onSelect: timestamp });
         });
       }
@@ -202,13 +229,13 @@ angular.module('negawattClientApp')
      * @returns {Array}
      *  An array of the data ordering as the type requested.
      */
-    function getColumns(collection, frequency, chartType, labelsUsed, labels) {
+    function getColumns(collection, frequency, chartType, labelsUsed, labels, compareWith) {
       if (chartType == 'sum') {
-        return [
+        var columns = [
           {
             'id': 'month',
             'label': 'Month',
-            'type': 'string',
+            'type': 'date',
           },
           {
             'id': 'flat',
@@ -216,9 +243,19 @@ angular.module('negawattClientApp')
             'type': 'number',
           },
           {
+            'id': 'flat',
+            'type': 'string',
+            p: {role: 'tooltip'}
+          },
+          {
             'id': 'peak',
             'label': 'פסגה',
             'type': 'number',
+          },
+          {
+            'id': 'peak',
+            'type': 'string',
+            p: {role: 'tooltip'}
           },
           {
             'id': 'mid',
@@ -226,31 +263,73 @@ angular.module('negawattClientApp')
             'type': 'number',
           },
           {
+            'id': 'mid',
+            'type': 'string',
+            p: {role: 'tooltip'}
+          },
+          {
             'id': 'low',
             'label': 'שפל',
             'type': 'number',
+          },
+          {
+            'id': 'low',
+            'type': 'string',
+            p: {role: 'tooltip'}
           }
-        ];
+          ];
+        if (compareWith) {
+          // @fixme: put proper label here, in stead of hard coded temperature.
+          columns.push({
+              'id': 'temp',
+              'label': 'טמפרטורה',
+              'type': 'number',
+            },
+            {
+              'id': 'temp',
+              'type': 'string',
+              p: {role: 'tooltip'}
+            });
+        }
+        return columns;
       }
-      else if (chartType == 'detailed') {
+      else if (chartType == 'detailed' || chartType == 'stacked') {
         // First column is allways month
         var columns = [
           {
             'id': 'month',
             'label': 'Month',
-            'type': 'string'
+            'type': 'date'
           }
         ];
 
         // Add meters/sites/categories columns
+        // For each data set add two columns - one for the data and one for the tooltip.
         labelsUsed.forEach(function(item) {
           columns.push({
-            id: item,
-            label: labels[item].label,
-            type: 'number'
-          })
+              id: item,
+              label: labels[item].label,
+              type: 'number'
+            },
+            {
+              'id': item,
+              'type': 'string',
+              p: {role: 'tooltip'}
+            })
         });
 
+        if (compareWith) {
+          columns.push({
+              'id': 'temp',
+              'label': 'טמפרטורה',
+              'type': 'number'
+            },
+            {
+              'id': 'temp',
+              'type': 'string',
+              p: {role: 'tooltip'}
+            })
+        }
         return columns;
       }
     }

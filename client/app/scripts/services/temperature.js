@@ -30,7 +30,8 @@ angular.module('negawattClientApp')
     this.get = function(hash) {
       if (angular.isUndefined(hash)) {
         // 'Negawatt.Temperature - Hash not defined on method get(hash)';
-        return undefined;
+        // Return a promise to empty data.
+        return $q.when({});
       }
 
       // Preparation of the promise and cache for Temperature request.
@@ -62,7 +63,7 @@ angular.module('negawattClientApp')
       // stay clean of page parameters since it also serves as key to the cache.
       var params = FilterFactory.getTemperature(hash) || {};
 
-      // If page-number is given, add it to the params.
+        // If page-number is given, add it to the params.
       // Don't modify 'filters' since it should reflect the general params,
       // without page number.
       if (pageNumber) {
@@ -95,19 +96,19 @@ angular.module('negawattClientApp')
      *
      * @param temperature
      *   The data to cache.
-     * @param key
-     *   A key for the cached data - the hash code of the filters.
+     * @param hash
+     *   A hash for the cached data - the hash code of the filters.
      * @param skipResetCache
      *   If false, a timer will be set to clear the cache in 60 sec.
      */
-    function setCache(temperature, key, skipResetCache) {
+    function setCache(temperature, hash, skipResetCache) {
       // Cache messages data.
-      cache[key] = {
-        data: (cache[key] ? cache[key].data : []).concat(temperature.data)
+      cache[hash] = {
+        data: (cache[hash] ? cache[hash].data : []).concat(temperature.data)
       };
 
       // Broadcast an update event.
-      $rootScope.$broadcast(broadcastUpdateEventName, temperatureRecords());
+      $rootScope.$broadcast(broadcastUpdateEventName, temperatureRecords(hash));
 
       // If asked to skip cache timer reset, return now.
       // Will happen when reading multiple page data - when reading pages
@@ -119,8 +120,8 @@ angular.module('negawattClientApp')
 
       // Clear cache in 30 minutes.
       timeouts.push($timeout(function() {
-        if (angular.isDefined(cache[key])) {
-          cache[key] = undefined;
+        if (angular.isDefined(cache[hash])) {
+          cache[hash] = undefined;
         }
       }, 1800000));
     }

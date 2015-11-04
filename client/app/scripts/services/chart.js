@@ -105,7 +105,8 @@ angular.module('negawattClientApp')
           unit_num_seconds: 365 * 24 * 60 * 60,
           chart_default_time_frame: 10,
           axis_v_title: 'קוט"ש בשנה',
-          axis_h_format: 'YYYY',
+          axis_h_format: 'yyyy',
+          tooltip_format: 'YYYY',
           axis_h_title: 'שנה',
           get_period: function(timestamp) {
             // Return a period, from the beginning of 9 years ago, to the end of this year
@@ -121,7 +122,8 @@ angular.module('negawattClientApp')
           unit_num_seconds: 31 * 24 * 60 * 60,
           chart_default_time_frame: 24,
           axis_v_title: 'קוט"ש בחודש',
-          axis_h_format: 'MM/YYYY',
+          axis_h_format: 'MM/yyyy',
+          tooltip_format: 'MM/YYYY',
           axis_h_title: 'חודש',
           get_period: function(timestamp) {
             // Return a period, from the beginning of the previous year to year's end
@@ -137,7 +139,8 @@ angular.module('negawattClientApp')
           unit_num_seconds: 24 * 60 * 60,
           chart_default_time_frame: 31,
           axis_v_title: 'קוט"ש ביום',
-          axis_h_format: 'DD/MM',
+          axis_h_format: 'dd/MM\nEEE',
+          tooltip_format: 'DD/MM/YY',
           axis_h_title: 'תאריך',
           get_period: function(timestamp) {
             // Return a period, from the beginning of the month to its end.
@@ -154,7 +157,8 @@ angular.module('negawattClientApp')
           // One week.
           chart_default_time_frame: 168,
           axis_v_title: 'KW',
-          axis_h_format: 'HH:mm',
+          axis_h_format: 'dd/MM\nEEE',
+          tooltip_format: 'HH:mm dd/MM',
           axis_h_title: 'שעה',
           get_period: function(timestamp) {
             // Return a period, from the beginning of the week (Sunday) to its end.
@@ -173,7 +177,8 @@ angular.module('negawattClientApp')
           // 48 hours.
           chart_default_time_frame: 1440,
           axis_v_title: 'KW',
-          axis_h_format: 'HH:mm',
+          axis_h_format: 'HH:mm\ndd/MM',
+          tooltip_format: 'HH:mm DD/MM',
           axis_h_title: 'שעה',
           get_period: function(timestamp) {
             // Return a period, from the beginning of the day to its end.

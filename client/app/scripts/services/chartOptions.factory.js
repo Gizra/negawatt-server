@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .factory('ChartOptions', function ($window, Chart) {
+  .factory('ChartOptions', function ($stateParams, $window, Chart, moment) {
     var extend = angular.extend;
 
     var ChartOptions;
@@ -27,18 +27,27 @@ angular.module('negawattClientApp')
         height: '350',
         width: width * 7 / 12 - 150,
         titlePosition: 'none',
-        legend: { position: 'bottom' },
+        legend: {
+          maxLines: 3,
+          position: 'top'
+        },
         backgroundColor: 'none',
         vAxis: {
           title: chartFrequencyActive.axis_v_title,
-          gridlines: {
-            count: 3
-          }
+          format: 'short',
+          gridlines: {count: 5}
         },
         hAxis: {
           // No title in order to have enough space for the bars labels.
+          minValue: moment.unix($stateParams.chartPreviousPeriod).toDate(),
+          maxValue: moment.unix($stateParams.chartNextPeriod - 1).toDate(),
+          format: chartFrequencyActive.axis_h_format
         },
-        tooltip: {isHtml: true}
+        tooltip: {isHtml: true},
+        crosshair: {
+          trigger: 'both',
+          orientation: 'vertical'
+        }
       }
     }
 
@@ -60,9 +69,32 @@ angular.module('negawattClientApp')
      * @returns {*}
      *  Configuration object.
      */
-    function getLineCompareOptions() {
+    function getLineCompareOptions(numSeries) {
+      // If there's only one serie, TOUse will be displayed, using 4 series.
+      numSeries = (numSeries == 1) ? 4 : numSeries;
+      var series = {};
+      for (var i = 0; i < numSeries; i++) {
+        series[i] = {targetAxisIndex: 0};
+      }
+      // Add a last series for temperature (if exists).
+      series[numSeries] = {targetAxisIndex: 1};
+
+      var chartFrequencyActive = Chart.getActiveFrequency();
+
       return extend(getCommonOptions(), {
-        'chart_type': 'LineChart'
+        chart_type: 'LineChart',
+        'series': series,
+        'vAxes': {
+          0: {
+            title: chartFrequencyActive.axis_v_title,
+            format: 'short',
+          },
+          1: {
+            // @fixme: get title from somewhere.
+            title: 'טמפרטורה',
+            format: 'short',
+          }
+        },
       });
     }
 
@@ -118,37 +150,38 @@ angular.module('negawattClientApp')
      * @returns {*}
      *  Configuration object.
      */
-    function getColumnCompareOptions(chartType) {
+    function getColumnCompareOptions(chartType, numSeries) {
+      // If there's only one serie, TOUse will be displayed, using 4 series.
+      numSeries = (numSeries == 1) ? 4 : numSeries;
+      var series = {};
+      for (var i = 0; i < numSeries; i++) {
+        series[i] = {targetAxisIndex: 0};
+      }
+      // Add a last series for temperature (if exists).
+      series[numSeries] = {
+        targetAxisIndex: 1,
+          type: 'line'
+      };
+
+      var chartFrequencyActive = Chart.getActiveFrequency();
       return extend(getCommonOptions(), {
         'chart_type': 'ColumnChart',
         'isStacked': getStackOptions(chartType),
         'fill': 20,
         'displayExactValues': true,
-        'series': {
-          0: {targetAxisIndex: 0},
-          1: {
-            targetAxisIndex: 1,
-            type: 'line'
-          }
-        },
+        'series': series,
         'vAxes': {
           0: {
-            'title': 'Set a title vAxis (Ex. Electricity)',
-            'gridlines': {
-              'count': 6
-            }
+            title: chartFrequencyActive.axis_v_title,
+            format: 'short',
           },
           1: {
-            'title': 'Set a title vAxis (Ex. Temperature)',
-            'gridlines': {
-              'count': 6
-            },
+            // @fixme: get title from somewhere.
+            title: 'טמפרטורה',
+            format: 'short',
             'chart_type': 'LineChart'
           }
         },
-        'hAxis': {
-          'title': 'Set a title hAxis'
-        }
       });
     }
 
@@ -171,19 +204,22 @@ angular.module('negawattClientApp')
      *  The frequency number (Ex. year:1, month:2 .... minute:5).
      * @param chartType
      *  One of 'sum', 'detailed', 'stacked', 'percent'.
-     * @param withSeries
-     *  True if the chart will be organize in series.
+     * @param numSeries
+     *  The number of series that has data (it might happen that a serie will not contain any data, hence will not
+     *  appear in the data collection returned from the server).
+     * @param withCompare
+     *  True if the chart will have a comparison series (e.g. temperature).
      *
      * @returns {*}
      *  Chart options object.
      */
-    function getOptions(frequency, chartType, withSeries) {
+    function getOptions(frequency, chartType, numSeries, withCompare) {
       switch (getChartType(frequency)) {
         case 'columnChart':
-          return (withSeries) ? getColumnCompareOptions(chartType) : getColumnOptions(chartType);
+          return (withCompare) ? getColumnCompareOptions(chartType, numSeries) : getColumnOptions(chartType);
 
         case 'lineChart':
-          return (withSeries) ? getLineCompareOptions() : getLineOptions();
+          return (withCompare) ? getLineCompareOptions(numSeries) : getLineOptions();
       }
     }
 

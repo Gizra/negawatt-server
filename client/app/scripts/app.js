@@ -254,7 +254,7 @@ angular
         controller: 'DashboardCtrl'
       })
       .state('chart.withAccount', {
-        url: '/{accountId:int}?{chartFreq:int}&{sel}&{ids}&{chartType}&{chartNextPeriod:int}&{chartPreviousPeriod:int}',
+        url: '/{accountId:int}?{chartFreq:int}&{sel}&{ids}&{climate}&{chartType}&{chartNextPeriod:int}&{chartPreviousPeriod:int}',
         reloadOnSearch: false,
         params: {
           chartFreq: {
@@ -289,6 +289,8 @@ angular
             FilterFactory.setCategories(siteCategories);
             // Define electricity parameters
             FilterFactory.setElectricity($stateParams);
+            // Define climate parameters
+            FilterFactory.setTemperature($stateParams);
 
             return {
               loadElectricity: true,

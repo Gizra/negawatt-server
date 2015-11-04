@@ -118,9 +118,8 @@ angular.module('negawattClientApp')
   .directive('chartDetailed', function () {
     return {
       templateUrl: 'scripts/directives/chart-detailed/chart-detailed.directive.html',
-      controller: function ChartDetailedCtrl($scope, $window, $filter, ChartDetailedService, ChartOptions, ChartUsagePeriod, $stateParams) {
+      controller: function ChartDetailedCtrl($scope, $rootScope, $window, $filter, ChartDetailedService, ChartOptions, ChartUsagePeriod, $stateParams) {
         var chart = this;
-        var compareCollection;
 
         // Extend the service with the scope of the directive and
         // extend the controller of the directive with the service.
@@ -174,6 +173,9 @@ angular.module('negawattClientApp')
          * render the data in the chart.
          */
         function refreshChart() {
+          // Tell all charts to go to 'loading' state.
+          $rootScope.$broadcast('nwChartBeginLoading');
+
           // Prepare filters to get electricity.
           var filters = {
             accountId: $stateParams.accountId,
@@ -192,10 +194,6 @@ angular.module('negawattClientApp')
           };
           setChartOptions(config);
 
-          if (chart.compareWith && chart.meter) {
-            chart.compareCollection = ChartDetailedService.getCompareCollection(chart.compareWith, filters);
-          }
-
           // Update date-range text near the chart title.
           chart.dateRange = period.formatDateRange(period.getChartPeriod().previous * 1000, period.getChartPeriod().next * 1000);
 
@@ -205,6 +203,21 @@ angular.module('negawattClientApp')
           chart.referenceDate = period.getChartPeriod().referenceDate * 1000;
 
           chart.getElectricity(filters);
+
+          // Get compare collection, if one was selected.
+          if ($stateParams.climate) {
+            var climateFilters = {
+              climate: $stateParams.climate,
+              chartFreq: $stateParams.chartFreq,
+              chartPreviousPeriod: period.getChartPeriod().previous,
+              chartNextPeriod: period.getChartPeriod().next
+            };
+            // Get climate promise and wait for response.
+            ChartDetailedService.getCompareCollection('temperature', climateFilters)
+              .then(function(data) {
+                chart.compareCollection = data;
+              });
+          }
         }
 
         /**
@@ -295,6 +308,19 @@ angular.module('negawattClientApp')
 
           // Set chart properties and get electricity.
           refreshChart();
+        });
+
+        /**
+         * Electricity Service Event: When electricity changes, update charts with
+         * new consumption data.
+         *
+         * Actually, the handler receives the event after electricity is loaded with
+         * nodata=1 (to get min/max timestamps for new frequency), and refreshChart()
+         * asks for new electricity data (without the nodata=1 parameter).
+         */
+        $scope.$on('nwTemperatureChanged', function(event, climate) {
+            // Take climate data.
+            chart.compareCollection = climate;
         });
 
         /**

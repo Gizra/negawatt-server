@@ -4,7 +4,7 @@
         <ul class="tree">
             <li ng-repeat="meter in propertyMeters" class="meter property-meter tree-level-bottom">
                 <label>
-                    <input type="checkbox" ng-model="meter.compareWith" ng-change="meter.change()" ng-true-value="'temperature'" ng-false-value="null" />
+                    <input type="checkbox" ng-model="meter.selected" ng-change="selectTemperature(meter)" id="check-property-{{meter.id}}"/>
                     <span>{{meter.label}}</span>
                 </label>
             </li>

@@ -1,10 +1,10 @@
 <!-- Date selector -->
 <div ng-repeat="dateOp in ctrlChartDatePicker.dateOptions" class="inline" ng-if="dateOp.frequency == ctrlChartDatePicker.chartFreq">
   <p class="input-group">
-    <span class="input-group-btn"><button type="button" class="btn btn-default" title="חזרה"><span class="glyphicon glyphicon-chevron-right" ng-click="ctrlChartDatePicker.changePeriod('previous')"></span></button></span>
+    <span class="input-group-btn"><button type="button" class="btn btn-default" title="קדימה"><span class="glyphicon glyphicon-chevron-right" ng-click="ctrlChartDatePicker.changePeriod('next')"></span></button></span>
     <input type="text" size="9" class="form-control" datepicker-popup="{{dateOp.format}}" ng-model="ctrlChartDatePicker.referenceDate" title="תאריך" show-button-bar="false" is-open="dateOp.opened" min-date="ctrlChartDatePicker.minDate" max-date="ctrlChartDatePicker.maxDat" datepicker-options="dateOp" date-disabled="" ng-required="true"/>
     <span class="input-group-btn"><button type="button" class="btn btn-default" ng-click="ctrlChartDatePicker.open(dateOp)" title="בחר תאריך"><i class="glyphicon glyphicon-calendar"></i></button></span>
-    <span class="input-group-btn"><button type="button" class="btn btn-default" title="קדימה"><span class="glyphicon glyphicon-chevron-left" ng-click="ctrlChartDatePicker.changePeriod('next')"></span></button></span>
+    <span class="input-group-btn"><button type="button" class="btn btn-default" title="לאחור"><span class="glyphicon glyphicon-chevron-left" ng-click="ctrlChartDatePicker.changePeriod('previous')"></span></button></span>
 
     <span class="input-group-btn" ng-if="ctrlChartDatePicker.showCompareChartButton">
       <button type="button" class="btn btn-default" ng-model="ctrlChartDatePicker.showCompareChart" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0" title="השווה לתאריך אחר">

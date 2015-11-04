@@ -17,10 +17,8 @@ angular.module('negawattClientApp')
     $scope.siteCategoriesTree = siteCategories.tree;
     $scope.meterCategoriesTree = meterCategories.tree;
 
-    // If there's a selection in the URL, check the checkboxes in the selected rows.
-    if ($stateParams.ids) {
-      checkSelectedRows();
-    }
+    // Check the checkboxes in the selected rows.
+    checkSelectedRows();
 
     // Reload the categories when new sites/meters are added (new page arrives).
     metersMenuCtrl.reloadCategories = function(accountId) {
@@ -122,6 +120,20 @@ angular.module('negawattClientApp')
       ChartDetailedService.getElectricity();
     }
 
+    /**
+     * Handler for site selection.
+     *
+     * @param site
+     *  Site object.
+     */
+    $scope.selectTemperature = function (meter) {
+      // Add/remove site from selected list.
+      var selected = FilterFactory.addClimateSelected(meter);
+
+      // Reload electricity data to update charts.
+      ChartDetailedService.getTemperature(meter);
+    };
+
     // Reload the categories when new sites are added (new sites page arrived).
     $scope.$on('nwSitesChanged', function() {
       // Update categories tree with number of sites.
@@ -138,45 +150,56 @@ angular.module('negawattClientApp')
     // in the stateParams.
     function checkSelectedRows() {
       // Check boxes of items that are selected in state-params.
-      var selectedObjects = $stateParams.ids.split(',');
-      // Convert strings to integers.
-      selectedObjects = selectedObjects.map(function (value) {
-        return +value;
-      });
-      switch ($stateParams.sel) {
-        case 'meter':
-          // Check meters that are selected in state-params.
-          angular.forEach($scope.meters, function (meter) {
-            meter.selected = (selectedObjects.indexOf(+meter.id) != -1);
-          });
-          // Disable sites and categories.
-          $scope.disableSites = true;
-          $scope.disableCategories = true;
-          break;
-
-        case 'meter_site':
-          // Check sites that are selected in state-params.
-          // Sites are disguised as site-categories, with isSite field = true. But they will not appear in
-          // the categories list, only as children of categories.
-          angular.forEach(siteCategories.collection, function (category) {
-            angular.forEach(category.children, function (object) {
-              object.selected = (object.isSite && selectedObjects.indexOf(object.id) != -1);
+      if ($stateParams.ids) {
+        var selectedObjects = $stateParams.ids.split(',');
+        // Convert strings to integers.
+        selectedObjects = selectedObjects.map(function (value) {
+          return +value;
+        });
+        switch ($stateParams.sel) {
+          case 'meter':
+            // Check meters that are selected in state-params.
+            angular.forEach($scope.meters, function (meter) {
+              meter.selected = (selectedObjects.indexOf(+meter.id) != -1);
             });
-          });
-          // Disable meters and categories.
-          $scope.disableMeters = true;
-          $scope.disableCategories = true;
-          break;
+            // Disable sites and categories.
+            $scope.disableSites = true;
+            $scope.disableCategories = true;
+            break;
 
-        case 'site_category':
-          // Check site categories that are selected in state-params.
-          angular.forEach(siteCategories.collection, function (category) {
-            category.selected = (selectedObjects.indexOf(category.id) != -1);
-          });
-          // Disable sites and meters.
-          $scope.disableSites = true;
-          $scope.disableMeters = true;
-          break;
+          case 'meter_site':
+            // Check sites that are selected in state-params.
+            // Sites are disguised as site-categories, with isSite field = true. But they will not appear in
+            // the categories list, only as children of categories.
+            angular.forEach(siteCategories.collection, function (category) {
+              angular.forEach(category.children, function (object) {
+                object.selected = (object.isSite && selectedObjects.indexOf(object.id) != -1);
+              });
+            });
+            // Disable meters and categories.
+            $scope.disableMeters = true;
+            $scope.disableCategories = true;
+            break;
+
+          case 'site_category':
+            // Check site categories that are selected in state-params.
+            angular.forEach(siteCategories.collection, function (category) {
+              category.selected = (selectedObjects.indexOf(category.id) != -1);
+            });
+            // Disable sites and meters.
+            $scope.disableSites = true;
+            $scope.disableMeters = true;
+            break;
+        }
+      }
+
+      // Handle property meters.
+      if ($stateParams.climate) {
+        // Check climate meters that are selected in state-params.
+        var selectedMeters = $stateParams.climate.split(',');
+        angular.forEach(propertyMeters.listAll, function (meter) {
+          meter.selected = (selectedMeters.indexOf(meter.id) != -1);
+        });
       }
     }
     
