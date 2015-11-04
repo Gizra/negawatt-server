@@ -10,7 +10,7 @@
  */
 function negawatt_sensor_schema() {
   $schema = array();
-  $schema['negawatt_sensor'] = array(
+  $schema['negawatt_sensor_data'] = array(
     'description' => 'The base table for sensor raw data.',
     'fields' => array(
       'id' => array(
@@ -47,7 +47,7 @@ function negawatt_sensor_schema() {
     ),
     'primary key' => array('id'),
   );
-  $schema['negawatt_sensor_normalized'] = array(
+  $schema['negawatt_sensor_data_normalized'] = array(
     'description' => 'The base table for sensor averages.',
     'fields' => array(
       'id' => array(
