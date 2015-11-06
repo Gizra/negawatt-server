@@ -20,6 +20,7 @@ class NegawattSensorTypeTermsMigrate extends Migration {
     array('weight', 'weight'),
     array('description', 'description'),
     array('field_units', 'field_units'),
+    array('field_color', 'field_color'),
   );
 
   public function __construct() {
@@ -34,6 +35,7 @@ class NegawattSensorTypeTermsMigrate extends Migration {
       'weight',
       'description',
       'field_units',
+      'field_color',
     );
 
     $this->addSimpleMappings($field_names);

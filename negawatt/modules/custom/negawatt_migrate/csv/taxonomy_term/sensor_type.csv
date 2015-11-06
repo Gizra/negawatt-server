@@ -1,5 +1,5 @@
-id,name,weight,description,field_units
-temperature,טמפרטורה,,,°C
-humidity,לחות,,,%RH
-luminosity,הארה,,,%
-occupancy,תפוסה,,,
+id,name,weight,description,field_units,color
+temperature,טמפרטורה,,,°C,red
+humidity,לחות,,,%RH,lawnGreen
+luminosity,הארה,,,%,yellow
+occupancy,תפוסה,,,,purple
