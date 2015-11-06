@@ -2,10 +2,10 @@
 
 /**
  * @file
- * Contains \NegawattTaxonomyTermSiteCategory.
+ * Contains \NegawattTaxonomyTermSensorType.
  */
 
-class NegawattTaxonomyTermSiteCategory extends \RestfulEntityBaseTaxonomyTerm {
+class NegawattTaxonomyTermSensorType extends \RestfulEntityBaseTaxonomyTerm {
 
   /**
    * Save the account id from the request.
@@ -21,24 +21,12 @@ class NegawattTaxonomyTermSiteCategory extends \RestfulEntityBaseTaxonomyTerm {
   public function publicFieldsInfo() {
     $public_fields = parent::publicFieldsInfo();
 
-    $public_fields['children'] = array(
-      'callback' => array($this, 'getChildren',)
-    );
-
-    $public_fields['icon'] = array(
-      'property' => 'field_icon_categories',
+    $public_fields['units'] = array(
+      'property' => 'field_units',
     );
 
     $public_fields['color'] = array(
       'property' => 'field_color',
-    );
-
-    $public_fields['sites'] = array(
-      'callback' => array($this, 'categorySites'),
-    );
-
-    $public_fields['electricity_time_interval'] = array(
-      'callback' => array($this, 'electricityMinMax'),
     );
 
     return $public_fields;
@@ -130,7 +118,7 @@ class NegawattTaxonomyTermSiteCategory extends \RestfulEntityBaseTaxonomyTerm {
     $query->entityCondition('entity_type', 'node')
       ->entityCondition('bundle', 'meter_site')
       ->propertyCondition('status', NODE_PUBLISHED)
-      ->fieldCondition('field_site_category', 'target_id', $wrapper->getIdentifier())
+      ->fieldCondition('field_sensor_type', 'target_id', $wrapper->getIdentifier())
       ->fieldCondition(OG_AUDIENCE_FIELD, 'target_id', $this->account_id);
 
     $result = $query->execute();
