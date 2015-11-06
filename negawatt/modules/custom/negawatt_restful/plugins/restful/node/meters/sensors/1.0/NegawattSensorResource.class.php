@@ -12,6 +12,16 @@ class NegawattSensorResource extends \NegawattEntityMeterBase {
   public function publicFieldsInfo() {
     $public_fields = parent::publicFieldsInfo();
 
+    $public_fields['sensor_type'] = array(
+      'property' => 'field_sensor_type',
+      'resource' => array(
+        'sensor_type' => array(
+          'name' => 'sensor_types',
+          'full_view' => TRUE,
+        ),
+      ),
+    );
+
     return $public_fields;
   }
 
