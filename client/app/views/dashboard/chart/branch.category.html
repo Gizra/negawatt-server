@@ -10,6 +10,10 @@
   <li ng-repeat="meterId in category.meters" ng-include="'views/dashboard/chart/branch.meter.html'"> </li>
 </ol>
 
+<ol ui-tree-categorys ng-model="category.sensors" ng-if="category.sensors.length" class="sensors">
+  <li ng-repeat="sensorId in category.sensors" ng-include="'views/dashboard/chart/branch.sensor.html'"> </li>
+</ol>
+
 <ol ui-tree-categorys ng-model="category.children" ng-if="category.children.length" class="categories">
   <li ng-repeat="category in category.children" ng-if="category.numberOfSites || category.isSite" ui-tree-category ng-include="'views/dashboard/chart/branch.category.html'"> </li>
 </ol>

@@ -338,6 +338,7 @@ angular.module('negawattClientApp')
         id: site.id,
         label: site.label,
         meters: site.meters,
+        sensors: site.sensors,
         isSite: true});
       // @todo: Update number-of-sites counter in the category and its parents.
       // @todo: Note that on next time the tree is built, the child site will not be added again and the number-or-sites will not be incremented.
