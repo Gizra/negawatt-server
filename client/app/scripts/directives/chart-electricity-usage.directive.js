@@ -139,8 +139,15 @@ angular.module('negawattDirectives', [])
          *  The "active electricity" data collection.
          */
         function renderChart(activeElectricity) {
+          $stateParams, $scope;
           // Update data comming fron the server into the directive.
           ctrlChart.data = $filter('toChartDataset')(activeElectricity);
+
+          // FIXME: Patch to change chart axis for temperature meters.
+          if ($scope.$parent.title == 'meter10') {
+            ctrlChart.data.options.vAxis.title = $stateParams.chartFreq <3 ? 'מ"צ' : 'מ"צ';
+          }
+
           // Update state.
           setState();
         }
