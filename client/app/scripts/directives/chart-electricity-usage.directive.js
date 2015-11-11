@@ -139,13 +139,34 @@ angular.module('negawattDirectives', [])
          *  The "active electricity" data collection.
          */
         function renderChart(activeElectricity) {
-          $stateParams, $scope;
           // Update data comming fron the server into the directive.
           ctrlChart.data = $filter('toChartDataset')(activeElectricity);
 
           // FIXME: Patch to change chart axis for temperature meters.
-          if ($scope.$parent.title == 'meter10') {
-            ctrlChart.data.options.vAxis.title = $stateParams.chartFreq <3 ? 'מ"צ' : 'מ"צ';
+          if ($scope.$parent.title.indexOf('טמפרטורה') != -1) {
+            ctrlChart.data.options.vAxis.title = $stateParams.chartFreq > 3 ? 'טמפרטורה °C' : 'טמפרטורה ממוצעת °C';
+            // Convert 'קוט"ש' label to 'מ"צ'.
+            angular.forEach(ctrlChart.data.data.rows, function (row) {
+              angular.forEach(row.c, function (data) {
+                if (data.f) {
+                  data.f = data.f.replace('קוט״ש', '°C');
+                  data.f = data.f.replace('קו״ט', '°C');
+                }
+              })
+            })
+          }
+          // FIXME: Patch to change chart axis for humidity meters.
+          else if ($scope.$parent.title.indexOf('לחות') != -1) {
+            ctrlChart.data.options.vAxis.title = $stateParams.chartFreq > 3 ? 'לחות %' : 'לחות ממוצעת %';
+            // Convert 'קוט"ש' label to '%'.
+            angular.forEach(ctrlChart.data.data.rows, function (row) {
+              angular.forEach(row.c, function (data) {
+                if (data.f) {
+                  data.f = data.f.replace('קוט״ש', '%');
+                  data.f = data.f.replace('קו״ט', '%');
+                }
+              })
+            })
           }
 
           // Update state.
