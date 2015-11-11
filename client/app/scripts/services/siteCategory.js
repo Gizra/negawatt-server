@@ -311,6 +311,30 @@ angular.module('negawattClientApp')
     }
 
     /**
+     * For a site with only one sensor, add the sensor as category site.
+     *
+     * When building categories tree (below), sites are added to the category.sites array.
+     * However, for a site with only one sensor, put
+     * the sensor directly in the category's meters array.
+     *
+     * @param category
+     *    A category object.
+     * @param sensorId
+     *    The id of the sensor to add as site.
+     */
+    function addSensorAsCategorySite(category, sensorId) {
+      // Before adding the sensor, make sure it wasn't added already.
+      if (category.sensors && category.sensors.indexOf(sensorId) >= 0) {
+        return;
+      }
+      // Define sensors array if not existing yet.
+      if (!category.sensors) {
+        category.sensors = [];
+      }
+      category.sensors.push(sensorId);
+    }
+
+    /**
      * For a site with only one meter, add the meter as category site.
      *
      * When building categories tree (below), sites are added to the category.sites array.
@@ -377,14 +401,18 @@ angular.module('negawattClientApp')
           // (if there are several site pages).
           if (typeof(sitesIndexById[siteId]) !== 'undefined') {
             var site = sitesIndexById[siteId];
-            if (!site.meters || site.meters.length == 0) {
-              // Skip sites with no meters.
+            if ((!site.meters || site.meters.length == 0) && (!site.sensors || site.sensors.length == 0)) {
+              // Skip sites with no meters and no sensors.
               return;
             }
 
             // If there's only one meter for the site, add the meter and not the site.
-            if (site.meters.length == 1) {
+            if (site.meters.length == 1 && site.sensors.length == 0) {
               addMeterAsCategorySite(category, site.meters[0]);
+            }
+            // If there's only one sensor for the site, add the sensor and not the site.
+            else if (site.meters.length == 0 && site.sensors.length == 1) {
+              addSensorAsCategorySite(category, site.sensors[0]);
             }
             else {
               // More then one meter for the site. Add the site as a child site-category.
