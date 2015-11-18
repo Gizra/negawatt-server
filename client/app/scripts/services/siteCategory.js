@@ -343,11 +343,11 @@ angular.module('negawattClientApp')
      *
      * @param category
      *    A category object.
-     * @param meterId
-     *    The id of the meter to add as site.
+     * @param site
+     *    The site object.
      */
     function addCategorySite(category, site) {
-      // More then one meter for the site. Add the site as a child site-category.
+      // More then one meter or sensor for the site. Add the site as a child site-category.
       // Before adding the site, make sure it wasn't added already.
       // Use 'for' here so 'return' will continue the 'forEach' loop.
       for (var existingChildId in category.children) {
