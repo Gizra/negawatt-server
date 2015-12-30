@@ -96,17 +96,80 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
    */
   public function index()
   {
-    dpm('index');
+    // Get vocabulary.
+    $vocabulary = taxonomy_vocabulary_machine_name_load('site_category');
 
-    $list = array(
-      array(
-        'id' => 1,
+    // Get tree of site-categories.
+    $taxonomy_tree = taxonomy_get_tree($vocabulary->vid, 0, NULL, TRUE);
+
+    // Build an array of objects to hold required data.
+    $return = array();
+    foreach ($taxonomy_tree as $category) {
+      $category_wrapper = entity_metadata_wrapper('taxonomy_term', $category->tid);
+
+      $return['c' . $category->tid] = array(
+        'id' => 'c' . $category->tid,
         'type' => 'site_category',
-        'label' => 'school',
-      )
-    );
+        'name' => $category->name,
+        'description' => $category->description,
+        'color' => $category_wrapper->field_color->value(),
+        'icon' => $category_wrapper->field_icon_categories->value(),
+        'match_strings' => $category_wrapper->field_match_strings->value(),
+      );
 
-    return $list;
+      // Fix parent-child relashinship.
+      if (($parent = $category->parents[0]) != 0) {
+        $return[$category->tid]['parent'] = 'c' . $parent;
+        $return[$parent]['children'][$category->tid] = 'c' . $category->tid;
+      }
+    }
+
+    // Clear taxonomy-tree memory
+    unset($taxonomy_tree);
+
+    // Add all meters to the list.
+    $query = new EntityFieldQuery();
+    $result = $query
+      ->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', array('iec_meter', 'modbus_meter'))
+      ->fieldCondition(OG_AUDIENCE_FIELD, 'target_id', $this->request['account'])
+      ->execute();
+
+    foreach ($result['node'] as $node) {
+      $node_wrapper = entity_metadata_wrapper('node', $node->nid);
+
+      $location = $node_wrapper->field_location->value();
+
+      $return['m' . $node->nid] = array(
+        'id' => 'm' . $node->nid,
+        'type' => 'meter', //$node->type,
+        'name' => $node_wrapper->label(),
+        'meter_type' => $node->type,
+        'account' => $this->request['account'],
+        'meter_site' => $node_wrapper->field_meter_site->value()->vid,
+        'location' => array(
+          'lat' => $location['lat'],
+          'lng' => $location['lng'],
+          ),
+        'location_valid' => $node_wrapper->field_location_valid->value(),
+        'meter_category' => $node_wrapper->field_meter_category->value()->tid,
+        'category_valid' => $node_wrapper->field_category_valid->value(),
+        'place_description' => $node_wrapper->field_place_description->value(),
+        'place_address' => $node_wrapper->field_place_address->value(),
+        'place_locality' => $node_wrapper->field_place_locality->value(),
+        'max_frequency' => $node_wrapper->field_max_frequency->value(),
+        'has_electricity' => $node_wrapper->field_has_electricity->value(),
+        'image' => $node_wrapper->field_image->value(),
+      );
+
+      // Fix parent-child relashinship.
+//      if (($parent = $category->parents[0]) != 0) {
+//        $return[$category->tid]['parent'] = 'c' . $parent;
+//        $return[$parent]['children'][$category->tid] = 'c' . $category->tid;
+//      }
+    }
+
+    return $return;
   }
 
   /**
