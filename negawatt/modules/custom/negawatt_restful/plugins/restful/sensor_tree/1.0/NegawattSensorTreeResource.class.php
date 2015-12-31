@@ -34,57 +34,33 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
   }
 
   /**
-   * An access callback that returns TRUE if having filter for account. Otherwise FALSE.
+   * Override RestfulBase::controllersInfo()
    *
-   * @param string $op
-   *   The operation that access should be checked for. Can be "view" or "edit".
-   *   Defaults to "edit".
-   * @param string $public_field_name
-   *   The name of the public field.
-   * @param EntityMetadataWrapper $property_wrapper
-   *   The wrapped property.
-   * @param EntityMetadataWrapper $wrapper
-   *   The wrapped entity.
-   *
-   * @return string
-   *   "Allow" or "Deny" if user has access to the property.
-   */
-  public static function meterFieldAccess($op, $public_field_name, \EntityMetadataWrapper $property_wrapper, \EntityMetadataWrapper $wrapper) {
-    // Get query filter.
-    $request = $wrapper->request->value();
-    $filter = !empty($request['filter']) ? $request['filter'] : array();
-
-    return array_key_exists('account', $filter) ? \RestfulInterface::ACCESS_ALLOW : \RestfulInterface::ACCESS_DENY;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-//  public function getQueryForList() {
-//    $query = new EntityFieldQuery();
-//    return $query;
-//  }
-
-
-  /**
-   * Get a list of entities.
+   * Returns the default controllers for the entity.
+   * Allow only index and view calls.
    *
    * @return array
-   *   Array of entities, as passed to RestfulEntityBase::viewEntity().
-   *
-   * @throws RestfulBadRequestException
+   *   Nested array that provides information about what method to call for each
+   *   route pattern.
    */
-//  public function getList() {
-//    $list = array(
-//      array(
-//        'id' => 1,
-//        'type' => 'site_category',
-//        'label' => 'school',
-//      )
-//    );
-//
-//    return $list;
-//  }
+  public static function controllersInfo() {
+    // Provide sensible defaults for the HTTP methods. These methods (index,
+    // create, view, update and delete) are not implemented in this layer but
+    // they are guaranteed to exist because we are enforcing that all restful
+    // resources are an instance of \RestfulDataProviderInterface.
+    return array(
+      '' => array(
+        // GET returns a list of entities.
+        \RestfulInterface::GET => 'index',
+        \RestfulInterface::HEAD => 'index',
+      ),
+      // We don't know what the ID looks like, assume that everything is the ID.
+      '^.*$' => array(
+        \RestfulInterface::GET => 'view',
+        \RestfulInterface::HEAD => 'view',
+      ),
+    );
+  }
 
   /**
    * Get a list of entities.
@@ -96,6 +72,9 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
    */
   public function index()
   {
+    // TODO: Check that user permissions are honored.
+    // TODO: Implement caching. See 'Begiiner's Guide to Caching Data in Drupal 7'.
+
     $separator_last_id = 0;
 
     // Get vocabulary.
@@ -332,7 +311,6 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
    */
   public function viewMultiple(array $ids)
   {
-    dpm('viewMultiple');
   }
 
   /**
@@ -346,7 +324,7 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
    */
   public function view($id)
   {
-    dpm('view');
+    // TODO: Implement view?
   }
 
   /**
@@ -364,7 +342,6 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
    */
   public function update($id, $full_replace = FALSE)
   {
-    dpm('update');
   }
 
   /**
@@ -375,7 +352,6 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
    */
   public function create()
   {
-    dpm('create');
   }
 
   /**
