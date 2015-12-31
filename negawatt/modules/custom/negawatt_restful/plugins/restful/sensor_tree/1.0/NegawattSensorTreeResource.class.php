@@ -96,6 +96,8 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
    */
   public function index()
   {
+    $separator_last_id = 0;
+
     // Get vocabulary.
     $vocabulary = taxonomy_vocabulary_machine_name_load('site_category');
 
@@ -117,15 +119,54 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
         'match_strings' => $category_wrapper->field_match_strings->value(),
       );
 
-      // Fix parent-child relashinship.
+      // Fix parent-child relationships.
       if (($parent = $category->parents[0]) != 0) {
-        $return[$category->tid]['parent'] = 'c' . $parent;
-        $return[$parent]['children'][$category->tid] = 'c' . $category->tid;
+        $return['c' . $category->tid]['parent'] = 'c' . $parent;
+        $return['c' . $parent]['children']['c' . $category->tid] = 'c' . $category->tid;
       }
     }
 
     // Clear taxonomy-tree memory
     unset($taxonomy_tree);
+
+    // Add all sites to the list.
+    $query = new EntityFieldQuery();
+    $result = $query
+      ->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'meter_site')
+      ->fieldCondition(OG_AUDIENCE_FIELD, 'target_id', $this->request['account'])
+      ->execute();
+
+    foreach ($result['node'] as $node) {
+      $node_wrapper = entity_metadata_wrapper('node', $node->nid);
+
+      $location = $node_wrapper->field_location->value();
+      $site_category = $node_wrapper->field_site_category->value();
+
+      $return['s' . $node->nid] = array(
+        'id' => 's' . $node->nid,
+        'type' => 'site',
+        'name' => $node_wrapper->label(),
+        'account' => $this->request['account'],
+        'location' => empty($location) ? NULL : array(
+          'lat' => $location['lat'],
+          'lng' => $location['lng'],
+        ),
+        'location_valid' => $node_wrapper->field_location_valid->value(),
+        'site_category' => $site_category ? $site_category->tid : NULL,
+        'category_valid' => $node_wrapper->field_category_valid->value(),
+        'place_description' => $node_wrapper->field_place_description->value(),
+        'place_address' => $node_wrapper->field_place_address->value(),
+        'place_locality' => $node_wrapper->field_place_locality->value(),
+      );
+
+      // Fix parent-child relationships.
+      // FIXME: site category should always be available, remove if...
+      if ($site_category) {
+        $return['s' . $node->nid]['parent'] = 'c' . $site_category->tid;
+        $return['c' . $site_category->tid]['children']['s' . $node->nid] = 's' . $node->nid;
+      }
+    }
 
     // Add all meters to the list.
     $query = new EntityFieldQuery();
@@ -139,20 +180,22 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
       $node_wrapper = entity_metadata_wrapper('node', $node->nid);
 
       $location = $node_wrapper->field_location->value();
+      $meter_site = $node_wrapper->field_meter_site->value();
+      $meter_category = $node_wrapper->field_meter_category->value();
 
       $return['m' . $node->nid] = array(
         'id' => 'm' . $node->nid,
-        'type' => 'meter', //$node->type,
+        'type' => 'meter',
         'name' => $node_wrapper->label(),
         'meter_type' => $node->type,
         'account' => $this->request['account'],
-        'meter_site' => $node_wrapper->field_meter_site->value()->vid,
-        'location' => array(
+        'meter_site' => $meter_site->vid,
+        'location' => empty($location) ? NULL : array(
           'lat' => $location['lat'],
           'lng' => $location['lng'],
-          ),
+        ),
         'location_valid' => $node_wrapper->field_location_valid->value(),
-        'meter_category' => $node_wrapper->field_meter_category->value()->tid,
+        'meter_category' => $meter_category ? $meter_category->tid : NULL,
         'category_valid' => $node_wrapper->field_category_valid->value(),
         'place_description' => $node_wrapper->field_place_description->value(),
         'place_address' => $node_wrapper->field_place_address->value(),
@@ -162,11 +205,117 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
         'image' => $node_wrapper->field_image->value(),
       );
 
-      // Fix parent-child relashinship.
-//      if (($parent = $category->parents[0]) != 0) {
-//        $return[$category->tid]['parent'] = 'c' . $parent;
-//        $return[$parent]['children'][$category->tid] = 'c' . $category->tid;
-//      }
+      // Fix parent-child relationships.
+      $return['m' . $node->nid]['parent'] = 's' . $meter_site->vid;
+      $return['s' . $meter_site->vid]['children']['m' . $node->nid] = 'm' . $node->nid;
+    }
+
+    // Add sensors to the list.
+    $query = new EntityFieldQuery();
+    $result = $query
+      ->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'sensor')
+      ->fieldCondition(OG_AUDIENCE_FIELD, 'target_id', $this->request['account'])
+      ->execute();
+
+    foreach ($result['node'] as $node) {
+      $node_wrapper = entity_metadata_wrapper('node', $node->nid);
+
+      $location = $node_wrapper->field_location->value();
+      $sensor_site = $node_wrapper->field_meter_site->value();
+
+      $return['n' . $node->nid] = array(
+        'id' => 'n' . $node->nid,
+        'type' => 'sensor',
+        'name' => $node_wrapper->label(),
+        'sensor_type' => $node_wrapper->field_sensor_type->value()->tid,
+        'type_valid' => $node_wrapper->field_type_valid->value(),
+        'account' => $this->request['account'],
+        'sensor_site' => $sensor_site->vid,
+        'location' => empty($location) ? NULL : array(
+          'lat' => $location['lat'],
+          'lng' => $location['lng'],
+        ),
+        'location_valid' => $node_wrapper->field_location_valid->value(),
+        'place_description' => $node_wrapper->field_place_description->value(),
+        'place_address' => $node_wrapper->field_place_address->value(),
+        'place_locality' => $node_wrapper->field_place_locality->value(),
+        'max_frequency' => $node_wrapper->field_max_frequency->value(),
+        'has_data' => $node_wrapper->field_has_data->value(),
+        'image' => $node_wrapper->field_image->value(),
+      );
+
+      // Fix parent-child relationships.
+      // Check first if need to add separator element.
+      $sites_children = &$return['s' . $sensor_site->vid]['children'];
+      // Check that there are children for the sensor's site, and that the id
+      // of the last element begins with 'm' (that is, its a meter).
+      if (!empty($sites_children) && end($sites_children)['id'][0] == 'm') {
+        // Add separator element.
+        $return['p' . $separator_last_id] = array(
+          'id' => 'p' . $separator_last_id,
+          'type' => 'separator',
+        );
+        $sites_children['p' . $separator_last_id] = 'p' . $separator_last_id;
+        $separator_last_id++;
+      }
+      // Add relationships.
+      $return['n' . $node->nid]['parent'] = 's' . $sensor_site->vid;
+      $sites_children['n' . $node->nid] = 'n' . $node->nid;
+    }
+
+    // Replace all sites with only one meter by the meter itself.
+    foreach ($return as $item) {
+      if ($item['type'] == 'site' && sizeof($item['children']) == 1) {
+        // A site element with only one child. Make a shortcut between the
+        // parent category and child meter.
+        $category_id = $item['parent'];
+        $meter_id = reset($item['children']); // The first element of the array.
+        $category = &$return[$category_id];
+        $meter = &$return[$meter_id];
+
+        // Copy fields from site to meter if needed.
+        if (!$meter['place_description']) {
+          $meter['place_description'] = $item['place_description'];
+        }
+        if (!$meter['place_address']) {
+          $meter['place_description'] = $item['place_address'];
+        }
+        if (!$meter['place_locality']) {
+          $meter['place_description'] = $item['place_locality'];
+        }
+        if (!$meter['location']) {
+          $meter['location'] = $item['location'];
+          $meter['location_valid'] = $item['location_valid'];
+        }
+
+        // Shortcut the links.
+        unset($category['children'][$item['id']]);
+        $category['children'][$meter_id] = $meter_id;
+        $meter['parent'] = $category_id;
+
+        // Remove the site element.
+        unset($return[$item['id']]);
+      }
+    }
+
+    // Remove categories and sites with no children.
+    // Must loop from the end of the list backwards, so after removing child
+    // category of site, there will be a chance to remove also their parent
+    // category.
+    $keys = array_keys($return);
+    foreach (array_reverse($keys) as $key) {
+      $item = $return[$key];
+      if (in_array($item['type'], array('site_category', 'site')) && empty($item['children'])) {
+        // Check if has parent.
+        $parent = $item['parent'];
+        if ($parent) {
+          // Erase item's key from list of children of the parent item.
+          unset($return[$parent]['children'][$key]);
+        }
+        // Erase the item itself.
+        unset($return[$key]);
+      }
     }
 
     return $return;
