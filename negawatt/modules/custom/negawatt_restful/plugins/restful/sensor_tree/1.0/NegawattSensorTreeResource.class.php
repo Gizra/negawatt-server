@@ -121,6 +121,7 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
 
       $location = $node_wrapper->field_location->value();
       $site_category = $node_wrapper->field_site_category->value();
+      $image = $node_wrapper->field_image->value();
 
       $return['s' . $node->nid] = array(
         'id' => 's' . $node->nid,
@@ -137,6 +138,7 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
         'place_description' => $node_wrapper->field_place_description->value(),
         'place_address' => $node_wrapper->field_place_address->value(),
         'place_locality' => $node_wrapper->field_place_locality->value(),
+        'image' => empty($image) ? NULL : image_style_url('thumbnail_rotate', $image[0]['uri']),
       );
 
       // Fix parent-child relationships.
@@ -161,6 +163,7 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
       $location = $node_wrapper->field_location->value();
       $meter_site = $node_wrapper->field_meter_site->value();
       $meter_category = $node_wrapper->field_meter_category->value();
+      $image = $node_wrapper->field_image->value();
 
       $return['m' . $node->nid] = array(
         'id' => 'm' . $node->nid,
@@ -181,7 +184,7 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
         'place_locality' => $node_wrapper->field_place_locality->value(),
         'max_frequency' => $node_wrapper->field_max_frequency->value(),
         'has_electricity' => $node_wrapper->field_has_electricity->value(),
-        'image' => $node_wrapper->field_image->value(),
+        'image' => empty($image) ? NULL : image_style_url('thumbnail_rotate', $image[0]['uri']),
       );
 
       // Fix parent-child relationships.
@@ -202,6 +205,7 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
 
       $location = $node_wrapper->field_location->value();
       $sensor_site = $node_wrapper->field_meter_site->value();
+      $image = $node_wrapper->field_image->value();
 
       $return['n' . $node->nid] = array(
         'id' => 'n' . $node->nid,
@@ -221,7 +225,7 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
         'place_locality' => $node_wrapper->field_place_locality->value(),
         'max_frequency' => $node_wrapper->field_max_frequency->value(),
         'has_data' => $node_wrapper->field_has_data->value(),
-        'image' => $node_wrapper->field_image->value(),
+        'image' => empty($image) ? NULL : image_style_url('thumbnail_rotate', $image[0]['uri']),
       );
 
       // Fix parent-child relationships.
@@ -258,14 +262,17 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
           $meter['place_description'] = $item['place_description'];
         }
         if (!$meter['place_address']) {
-          $meter['place_description'] = $item['place_address'];
+          $meter['place_address'] = $item['place_address'];
         }
         if (!$meter['place_locality']) {
-          $meter['place_description'] = $item['place_locality'];
+          $meter['place_locality'] = $item['place_locality'];
         }
         if (!$meter['location']) {
           $meter['location'] = $item['location'];
           $meter['location_valid'] = $item['location_valid'];
+        }
+        if (!$meter['image']) {
+          $meter['image'] = $item['image'];
         }
 
         // Shortcut the links.
@@ -278,14 +285,14 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
       }
     }
 
-    // Remove categories and sites with no children.
+    // Remove categories with no children.
     // Must loop from the end of the list backwards, so after removing child
-    // category of site, there will be a chance to remove also their parent
+    // category, there will be a chance to remove also their parent
     // category.
     $keys = array_keys($return);
     foreach (array_reverse($keys) as $key) {
       $item = $return[$key];
-      if (in_array($item['type'], array('site_category', 'site')) && empty($item['children'])) {
+      if ($item['type'] == 'site_category' && empty($item['children'])) {
         // Check if has parent.
         $parent = $item['parent'];
         if ($parent) {
