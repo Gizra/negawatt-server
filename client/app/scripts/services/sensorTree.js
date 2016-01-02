@@ -53,7 +53,7 @@ angular.module('negawattClientApp')
     function getSensorsTreeFromServer(accountId) {
       var deferred = $q.defer();
       var url = Config.backend + '/api/sensor_tree';
-      var params = {account: accountId, XDEBUG_SESSION_START: 11770};
+      var params = {account: accountId};
       $http({
         method: 'GET',
         url: url,
@@ -133,7 +133,7 @@ angular.module('negawattClientApp')
       // Replace children category ID for the category it self.
       angular.forEach(collection, function(item, key) {
         if (item.parent) {
-          sensorTree[item.parent].children[key] = item;
+          collection[item.parent].children[key] = item;
         }
         else {
           sensorTree[key] = item;
