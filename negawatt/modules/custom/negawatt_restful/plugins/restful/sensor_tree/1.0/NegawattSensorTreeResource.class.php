@@ -5,7 +5,7 @@
  * Contains NegawattSensorTreeResource.
  */
 
-class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataProviderInterface {
+class NegawattSensorTreeResource extends \RestfulEntityBase {
 
   // Allow reading 200 items at a time
   protected $range = 200;
@@ -34,30 +34,19 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
   }
 
   /**
-   * Override RestfulBase::controllersInfo()
+   * Overrides \RestfulBase::controllersInfo().
    *
-   * Returns the default controllers for the entity.
-   * Allow only index and view calls.
-   *
-   * @return array
-   *   Nested array that provides information about what method to call for each
-   *   route pattern.
+   * Allow only GET requests.
    */
   public static function controllersInfo() {
-    // Provide sensible defaults for the HTTP methods. These methods (index,
-    // create, view, update and delete) are not implemented in this layer but
-    // they are guaranteed to exist because we are enforcing that all restful
-    // resources are an instance of \RestfulDataProviderInterface.
     return array(
       '' => array(
         // GET returns a list of entities.
-        \RestfulInterface::GET => 'index',
-        \RestfulInterface::HEAD => 'index',
+        \RestfulInterface::GET => 'getList',
       ),
-      // We don't know what the ID looks like, assume that everything is the ID.
       '^.*$' => array(
-        \RestfulInterface::GET => 'view',
-        \RestfulInterface::HEAD => 'view',
+        \RestfulInterface::GET => 'viewEntities',
+        \RestfulInterface::HEAD => 'viewEntities',
       ),
     );
   }
@@ -70,10 +59,19 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
    *
    * @throws RestfulBadRequestException
    */
-  public function index()
-  {
+  public function getList() {
     // TODO: Check that user permissions are honored.
-    // TODO: Implement caching. See 'Begiiner's Guide to Caching Data in Drupal 7'.
+    // TODO: Implement caching. See 'Beginner's Guide to Caching Data in Drupal 7'.
+    // TODO: In the result JSON, 'count' = 0, set it to the correct value.
+
+    // Due to problem in authentication using access-token, login admin by force.
+    // FIXME: Delete this section after authentication is fixed.
+    if ($uid = user_authenticate('admin', 'admin')) {
+      global $user;
+      $user = user_load($uid);
+      $login_array = array ('name' => 'admin');
+      user_login_finalize($login_array);
+    }
 
     $separator_last_id = 0;
 

@@ -7,6 +7,6 @@ $plugin = array(
   'bundle' => 'sensor_tree',
   'class' => 'NegawattSensorTreeResource',
   'name' => 'sensor_tree__1_0',
-  'entity_type' => 'sensor_tree',
+  'entity_type' => 'node',
   'authentication_types' => TRUE,
 );
