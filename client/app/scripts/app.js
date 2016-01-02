@@ -284,6 +284,9 @@ angular
           meterCategories: function(MeterCategory, account) {
             return MeterCategory.get(account.id);
           },
+          sensorTree: function(SensorTree, account) {
+            return SensorTree.get(account.id);
+          },
           filters: function(FilterFactory, siteCategories, $stateParams, meters, account) {
             // Define categories filters. Used for the UI Checknboxes.
             FilterFactory.setCategories(siteCategories);
@@ -322,7 +325,7 @@ angular
             controllerAs: 'detailedChartCtrl'
           }
         }
-      })
+      });
     // Define interceptors.
     $httpProvider.interceptors.push(function ($q, Auth, $location, localStorageService) {
       return {
