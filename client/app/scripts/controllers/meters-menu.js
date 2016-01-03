@@ -5,7 +5,7 @@
  * @name negawattClientApp.controller: MetersMenuCtrl
  */
 angular.module('negawattClientApp')
-  .controller('MetersMenuCtrl', function ($scope, $state, $stateParams, $filter, ChartDetailedService, SiteCategory, siteCategories, MeterCategory, meterCategories, Meter, meters, PropertyMeter, propertyMeters, Site, sites, FilterFactory) {
+  .controller('MetersMenuCtrl', function ($scope, $state, $stateParams, $filter, ChartDetailedService, SiteCategory, siteCategories, MeterCategory, meterCategories, Meter, meters, PropertyMeter, propertyMeters, Site, sites, SensorTree, sensorTree, FilterFactory) {
 
     var metersMenuCtrl = this;
 
@@ -16,6 +16,7 @@ angular.module('negawattClientApp')
     $scope.propertyMeters = propertyMeters.listAll;
     $scope.siteCategoriesTree = siteCategories.tree;
     $scope.meterCategoriesTree = meterCategories.tree;
+    $scope.sensorTree = sensorTree.tree;
 
     // Check the checkboxes in the selected rows.
     checkSelectedRows();

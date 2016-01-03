@@ -1,19 +1,20 @@
+{{item}}
 <div class="tree-level-middle">
   <label>
-    <input ng-change="selectCategory(category)" ng-model="category.selected" type="checkbox" ng-disabled="category.isSite ? disableSites : disableCategories" id="check-site-cat-{{category.id}}"/>
-    <img ng-show="category.icon" ng-src="images/categories/{{category.icon}}.png" />
-    <span>{{ category.label }}</span>
+    <input ng-change="selectCategory(item)" ng-model="item.selected" type="checkbox" XXng-disabled="category.isSite ? disableSites : disableCategories" id="check-site-cat-{{item.id}}"/>
+    <img ng-show="item.icon" ng-src="images/categories/{{item.icon}}.png" />
+    <span>{{ item.name }}</span>
   </label>
 </div>
 
-<ol ui-tree-categorys ng-model="category.meters" ng-if="category.meters.length" class="meters">
-  <li ng-repeat="meterId in category.meters" ng-include="'views/dashboard/chart/branch.meter.html'"> </li>
-</ol>
+<!--<ol ui-tree-categorys ng-model="category.meters" ng-if="category.meters.length" class="meters">-->
+  <!--<li ng-repeat="meterId in category.meters" ng-include="'views/dashboard/chart/branch.meter.html'"> </li>-->
+<!--</ol>-->
 
-<ol ui-tree-categorys ng-model="category.sensors" ng-if="category.sensors.length" class="sensors">
-  <li ng-repeat="sensorId in category.sensors" ng-include="'views/dashboard/chart/branch.sensor.html'"> </li>
-</ol>
+<!--<ol ui-tree-categorys ng-model="category.sensors" ng-if="category.sensors.length" class="sensors">-->
+  <!--<li ng-repeat="sensorId in category.sensors" ng-include="'views/dashboard/chart/branch.sensor.html'"> </li>-->
+<!--</ol>-->
 
-<ol ui-tree-categorys ng-model="category.children" ng-if="category.children.length" class="categories">
-  <li ng-repeat="category in category.children" ng-if="category.numberOfSites || category.isSite" ui-tree-category ng-include="'views/dashboard/chart/branch.category.html'"> </li>
+<ol ui-tree-categorys ng-model="item.children" ng-if="item.children.length" class="categories">
+  <li ng-repeat="child in category.children" XXng-if="child.numberOfSites || item.isSite" ui-tree-category ng-include="'views/dashboard/chart/branch.category.html'"> </li>
 </ol>
