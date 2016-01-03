@@ -5,7 +5,7 @@
  * Contains NegawattSensorTreeResource.
  */
 
-class NegawattSensorTreeResource extends \RestfulEntityBase {
+class NegawattSensorTreeResource extends \RestfulEntityBaseNode {
 
   // Allow reading 200 items at a time
   protected $range = 200;
@@ -96,7 +96,7 @@ class NegawattSensorTreeResource extends \RestfulEntityBase {
         'match_strings' => $category_wrapper->field_match_strings->value(),
       );
 
-      // Fix parent-child relationships.
+      // Set parent-child relationships.
       if (($parent = $category->parents[0]) != 0) {
         $return['c' . $category->tid]['parent'] = 'c' . $parent;
         $return['c' . $parent]['children']['c' . $category->tid] = 'c' . $category->tid;
@@ -121,6 +121,11 @@ class NegawattSensorTreeResource extends \RestfulEntityBase {
       $site_category = $node_wrapper->field_site_category->value();
       $image = $node_wrapper->field_image->value();
 
+      if (!$site_category) {
+        // something happened and there's no parent, skip site.
+        continue;
+      }
+
       $return['s' . $node->nid] = array(
         'id' => 's' . $node->nid,
         'type' => 'site',
@@ -139,12 +144,9 @@ class NegawattSensorTreeResource extends \RestfulEntityBase {
         'image' => empty($image) ? NULL : image_style_url('thumbnail_rotate', $image[0]['uri']),
       );
 
-      // Fix parent-child relationships.
-      // FIXME: site category should always be available, remove if...
-      if ($site_category) {
-        $return['s' . $node->nid]['parent'] = 'c' . $site_category->tid;
-        $return['c' . $site_category->tid]['children']['s' . $node->nid] = 's' . $node->nid;
-      }
+      // Set parent-child relationships.
+      $return['s' . $node->nid]['parent'] = 'c' . $site_category->tid;
+      $return['c' . $site_category->tid]['children']['s' . $node->nid] = 's' . $node->nid;
     }
 
     // Add all meters to the list.
@@ -162,6 +164,11 @@ class NegawattSensorTreeResource extends \RestfulEntityBase {
       $meter_site = $node_wrapper->field_meter_site->value();
       $meter_category = $node_wrapper->field_meter_category->value();
       $image = $node_wrapper->field_image->value();
+
+      if (!$meter_site) {
+        // something happened and there's no parent, skip meter.
+        continue;
+      }
 
       $return['m' . $node->nid] = array(
         'id' => 'm' . $node->nid,
@@ -185,7 +192,7 @@ class NegawattSensorTreeResource extends \RestfulEntityBase {
         'image' => empty($image) ? NULL : image_style_url('thumbnail_rotate', $image[0]['uri']),
       );
 
-      // Fix parent-child relationships.
+      // Set parent-child relationships.
       $return['m' . $node->nid]['parent'] = 's' . $meter_site->vid;
       $return['s' . $meter_site->vid]['children']['m' . $node->nid] = 'm' . $node->nid;
     }
@@ -204,6 +211,11 @@ class NegawattSensorTreeResource extends \RestfulEntityBase {
       $location = $node_wrapper->field_location->value();
       $sensor_site = $node_wrapper->field_meter_site->value();
       $image = $node_wrapper->field_image->value();
+
+      if (!$sensor_site) {
+        // something happened and there's no parent, skip sensor.
+        continue;
+      }
 
       $return['n' . $node->nid] = array(
         'id' => 'n' . $node->nid,
@@ -226,7 +238,7 @@ class NegawattSensorTreeResource extends \RestfulEntityBase {
         'image' => empty($image) ? NULL : image_style_url('thumbnail_rotate', $image[0]['uri']),
       );
 
-      // Fix parent-child relationships.
+      // Set parent-child relationships.
       // Check first if need to add separator element.
       $sites_children = &$return['s' . $sensor_site->vid]['children'];
       // Check that there are children for the sensor's site, and that the id
@@ -236,6 +248,7 @@ class NegawattSensorTreeResource extends \RestfulEntityBase {
         $return['p' . $separator_last_id] = array(
           'id' => 'p' . $separator_last_id,
           'type' => 'separator',
+          'parent' => 's' . $sensor_site->vid,
         );
         $sites_children['p' . $separator_last_id] = 'p' . $separator_last_id;
         $separator_last_id++;
