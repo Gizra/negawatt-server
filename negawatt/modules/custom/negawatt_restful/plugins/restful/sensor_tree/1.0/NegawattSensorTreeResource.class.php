@@ -5,10 +5,7 @@
  * Contains NegawattSensorTreeResource.
  */
 
-class NegawattSensorTreeResource extends \RestfulEntityBaseNode {
-
-  // Allow reading 200 items at a time
-  protected $range = 200;
+class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataProviderInterface {
 
   /**
    * Overrides \RestfulBase::publicFieldsInfo().
@@ -42,37 +39,29 @@ class NegawattSensorTreeResource extends \RestfulEntityBaseNode {
     return array(
       '' => array(
         // GET returns a list of entities.
-        \RestfulInterface::GET => 'getList',
+        \RestfulInterface::GET => 'index',
       ),
       '^.*$' => array(
-        \RestfulInterface::GET => 'viewEntities',
-        \RestfulInterface::HEAD => 'viewEntities',
+        \RestfulInterface::GET => 'view',
+        \RestfulInterface::HEAD => 'view',
       ),
     );
   }
 
   /**
-   * Get a list of entities.
+   * Overrides \RestfulBase::index().
    *
-   * @return array
-   *   Array of entities, as passed to RestfulEntityBase::viewEntity().
-   *
-   * @throws RestfulBadRequestException
+   * Return the tree of categories, sites, meters and sensors as an associative array.
    */
-  public function getList() {
+  public function index() {
     // TODO: Check that user permissions are honored.
     // TODO: Implement caching. See 'Beginner's Guide to Caching Data in Drupal 7'.
     // TODO: In the result JSON, 'count' = 0, set it to the correct value.
 
-    // Due to problem in authentication using access-token, login admin by force.
-    // FIXME: Delete this section after authentication is fixed.
-    if ($uid = user_authenticate('admin', 'admin')) {
-      global $user;
-      $user = user_load($uid);
-      $login_array = array ('name' => 'admin');
-      user_login_finalize($login_array);
-    }
+    // Set $user according to request authentication parameters.
+    $this->getAccount();
 
+    // Will be used if has to add separators between meters and sensors.
     $separator_last_id = 0;
 
     // Get vocabulary.
