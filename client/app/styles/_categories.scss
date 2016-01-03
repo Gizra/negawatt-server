@@ -92,6 +92,15 @@ ol, ul {
     label {
       font-weight: normal;
     }
+
+    .category-labels {
+      display: inline;
+    }
+
+    hr {
+      margin-top: 2px;
+      margin-bottom: 2px;
+    }
   }
 
   // Style of the input checkbox.
