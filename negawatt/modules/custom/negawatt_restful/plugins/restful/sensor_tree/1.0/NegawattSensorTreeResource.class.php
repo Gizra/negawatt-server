@@ -206,8 +206,8 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
         continue;
       }
 
-      $return['n' . $node->nid] = array(
-        'id' => 'n' . $node->nid,
+      $return['r' . $node->nid] = array(
+        'id' => 'r' . $node->nid,
         'type' => 'sensor',
         'name' => $node_wrapper->label(),
         'sensor_type' => $node_wrapper->field_sensor_type->value()->tid,
@@ -243,8 +243,8 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
         $separator_last_id++;
       }
       // Add relationships.
-      $return['n' . $node->nid]['parent'] = 's' . $sensor_site->vid;
-      $sites_children['n' . $node->nid] = 'n' . $node->nid;
+      $return['r' . $node->nid]['parent'] = 's' . $sensor_site->vid;
+      $sites_children['r' . $node->nid] = 'r' . $node->nid;
     }
 
     // Replace all sites with only one meter by the meter itself.
