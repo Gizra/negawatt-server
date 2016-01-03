@@ -1,18 +1,47 @@
-<div class="tree-level-middle">
-  <label>
-    <input ng-change="selectCategory(item)" ng-model="item.selected" type="checkbox" XXng-disabled="category.isSite ? disableSites : disableCategories" id="check-site-cat-{{item.id}}"/>
-    <img ng-show="item.icon" ng-src="images/categories/{{item.icon}}.png" />
-    <span>{{ item.name }}</span>
-  </label>
-</div>
-<!--<ol ui-tree-categorys ng-model="category.meters" ng-if="category.meters.length" class="meters">-->
-  <!--<li ng-repeat="meterId in category.meters" ng-include="'views/dashboard/chart/branch.meter.html'"> </li>-->
-<!--</ol>-->
+<div ng-switch="item.type">
+  <div ng-switch-when="site_category" class="tree-level-middle">
+    <label>
+      <input ng-change="selectCategory(item)" ng-model="item.selected" type="checkbox" XXng-disabled="category.isSite ? disableSites : disableCategories" id="check-site-cat-{{item.id}}"/>
+      <img ng-show="item.icon" ng-src="images/categories/{{item.icon}}.png" />
+      <span>{{ item.name }}</span>
+    </label>
+  </div>
 
-<!--<ol ui-tree-categorys ng-model="category.sensors" ng-if="category.sensors.length" class="sensors">-->
-  <!--<li ng-repeat="sensorId in category.sensors" ng-include="'views/dashboard/chart/branch.sensor.html'"> </li>-->
-<!--</ol>-->
-{{ Object.keys(item.children) }}
-<ol ui-tree-categorys ng-model="item.children" XXng-if="item.children.length" class="categories">
-  <li ng-repeat="item in item.children" XXng-if="child.numberOfSites || item.isSite" ui-tree-category ng-include="'views/dashboard/chart/branch.category.html'"> </li>
-</ol>
+  <div ng-switch-when="site" class="tree-level-middle">
+    <label>
+      <input ng-change="selectCategory(item)" ng-model="item.selected" type="checkbox" XXng-disabled="category.isSite ? disableSites : disableCategories" id="check-site-cat-{{item.id}}"/>
+      <img ng-show="item.icon" ng-src="images/categories/{{item.icon}}.png" />
+      <span>{{ item.name }}</span>
+    </label>
+  </div>
+
+  <div ng-switch-when="meter" class="tree-level-bottom">
+    <label>
+      <input ng-change="selectMeter(item.id, this)" ng-model="item.selected" type="checkbox" ng-disabled="disableMeters" id="check-meter-{{item.id}}"/>
+      <span>{{ item.name }}, {{ item.place_address }}</span>
+    </label>
+    <div class="category-labels">
+      <span ng-repeat="category in item.meter_categories" class="label" style="background: {{ category.color || 'gray'}}">{{ category.name }}</span>
+    </div>
+    <span class="site label label-default">{{ sites[item.site].name }}</span>
+  </div>
+
+  <div ng-switch-when="sensor" class="tree-level-bottom">
+    <label>
+      <input ng-change="selectsensor(item.id, this)" ng-model="item.selected" type="checkbox" ng-disabled="disablesensors" id="check-sensor-{{item.id}}"/>
+      <span>{{ item.name }}, {{ item.place_address }}</span>
+    </label>
+    <div class="category-labels">
+      <span class="label" style="background: {{ sensors[sensorId].sensor_type.color || 'gray'}}">{{ item.sensor_type }} {{ sensorTypes[item.sensor_type].label }}</span>
+    </div>
+    <span class="site label label-default">{{ sites[item.site].name }}</span>
+  </div>
+
+  <div ng-switch-when="separator" class="tree-level-bottom">
+    <hr>
+  </div>
+
+  <ol ui-tree-categorys ng-model="item.children" XXng-if="item.children.length" class="categories">
+    <li ng-repeat="item in item.children" XXng-if="child.numberOfSites || item.isSite" ui-tree-category ng-include="'views/dashboard/chart/branch.category.html'"> </li>
+  </ol>
+</div>
