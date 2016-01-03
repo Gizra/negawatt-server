@@ -14,23 +14,7 @@ class NegawattTestResource extends \RestfulBase implements \RestfulDataProviderI
    * Overrides \RestfulBase::publicFieldsInfo().
    */
   public function publicFieldsInfo() {
-    $public_fields['id'] = array(
-      'property' => 'id',
-    );
-
-    $public_fields['type'] = array(
-      'property' => 'type',
-    );
-
-    $public_fields['label'] = array(
-      'property' => 'label',
-    );
-
-    $public_fields['parent'] = array(
-      'property' => 'parent'
-    );
-
-    return $public_fields;
+    return array();
   }
 
   /**
@@ -56,23 +40,12 @@ class NegawattTestResource extends \RestfulBase implements \RestfulDataProviderI
    * @throws RestfulBadRequestException
    */
   public function index() {
-    // TODO: Check that user permissions are honored.
-    // TODO: Implement caching. See 'Beginner's Guide to Caching Data in Drupal 7'.
-    // TODO: In the result JSON, 'count' = 0, set it to the correct value.
-
-    // Due to problem in authentication using access-token, login admin by force.
-    // FIXME: Delete this section after authentication is fixed.
-//    if ($uid = user_authenticate('admin', 'admin')) {
-//      global $user;
-//      $user = user_load($uid);
-//      $login_array = array ('name' => 'admin');
-//      user_login_finalize($login_array);
-//    }
 
     global $user;
     return (array) $user;
   }
 
+  
   /**
    * View a collection of items.
    *
