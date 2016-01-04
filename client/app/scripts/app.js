@@ -287,6 +287,9 @@ angular
           sensorTree: function(SensorTree, account) {
             return SensorTree.get(account.id);
           },
+          sensorType: function(SensorType, account) {
+            return SensorType.get(account.id);
+          },
           filters: function(FilterFactory, siteCategories, $stateParams, meters, account) {
             // Define categories filters. Used for the UI Checknboxes.
             FilterFactory.setCategories(siteCategories);
