@@ -13,10 +13,14 @@
 
   <div ng-switch-when="site" class="tree-level-middle">
     <label>
-      <input ng-change="selectCategory(item)" ng-model="item.selected" type="checkbox" ng-disabled="disableSites" id="check-site-{{item.id}}"/>
+      <input ng-change="selectSite(item)" ng-model="item.selected" type="checkbox" ng-disabled="disableSites" id="check-site-{{item.id}}"/>
+      <span><i class="fa fa-lg" ng-class="{'fa-caret-down': item.open, 'fa-caret-left': !item.open}" ng-click="item.open = !item.open"></i></span>
       <img ng-show="item.icon" ng-src="images/categories/{{item.icon}}.png" />
       <span>{{ item.name }}</span>
     </label>
+    <ol ui-tree-categorys ng-model="item.children" class="categories" collapse="!item.open">
+      <li ng-repeat="item in item.children" ui-tree-category ng-include="'views/dashboard/chart/branch.category.html'"> </li>
+    </ol>
   </div>
 
   <div ng-switch-when="meter" class="tree-level-bottom">
