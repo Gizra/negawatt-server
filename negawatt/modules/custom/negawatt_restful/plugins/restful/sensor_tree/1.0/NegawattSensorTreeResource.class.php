@@ -76,7 +76,7 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
       $category_wrapper = entity_metadata_wrapper('taxonomy_term', $category->tid);
 
       $return['c' . $category->tid] = array(
-        'id' => 'c' . $category->tid,
+        'id' => $category->tid,
         'type' => 'site_category',
         'name' => $category->name,
         'description' => $category->description,
@@ -116,7 +116,7 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
       }
 
       $return['s' . $node->nid] = array(
-        'id' => 's' . $node->nid,
+        'id' => $node->nid,
         'type' => 'site',
         'name' => $node_wrapper->label(),
         'account' => $this->request['account'],
@@ -160,7 +160,7 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
       }
 
       $return['m' . $node->nid] = array(
-        'id' => 'm' . $node->nid,
+        'id' => $node->nid,
         'type' => 'meter',
         'name' => $node_wrapper->label(),
         'meter_type' => $node->type,
@@ -207,7 +207,7 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
       }
 
       $return['r' . $node->nid] = array(
-        'id' => 'r' . $node->nid,
+        'id' => $node->nid,
         'type' => 'sensor',
         'name' => $node_wrapper->label(),
         'sensor_type' => $node_wrapper->field_sensor_type->value()->tid,
@@ -235,7 +235,7 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
       if (!empty($sites_children) && end($sites_children)['id'][0] == 'm') {
         // Add separator element.
         $return['p' . $separator_last_id] = array(
-          'id' => 'p' . $separator_last_id,
+          'id' => $separator_last_id,
           'type' => 'separator',
           'parent' => 's' . $sensor_site->vid,
         );
