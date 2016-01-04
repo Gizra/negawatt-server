@@ -2,4 +2,4 @@ id,name,weight,description,field_units,color
 temperature,טמפרטורה,,,°C,red
 humidity,לחות,,,%RH,lawnGreen
 luminosity,הארה,,,%,yellow
-occupancy,תפוסה,,,,purple
+occupancy,תפוסה,,,%,purple
