@@ -21,7 +21,7 @@
       <span>{{ item.name }}, {{ item.place_address }}</span>
     </label>
     <div class="category-labels">
-      <span ng-repeat="category in item.meter_categories" class="label" style="background: {{ category.color || 'gray'}}">{{ category.name }}</span>
+      <span class="label" style="background: {{ meterCategories[item.meter_category].color || 'gray'}}">{{ meterCategories[item.meter_category].label }}</span>
     </div>
     <span class="site label label-default">{{ sites[item.site].name }}</span>
   </div>
@@ -32,7 +32,7 @@
       <span>{{ item.name }}, {{ item.place_address }}</span>
     </label>
     <div class="category-labels">
-      <span class="label" style="background: {{ sensors[sensorId].sensor_type.color || 'gray'}}">{{ item.sensor_type }} {{ sensorTypes[item.sensor_type].label }}</span>
+      <span class="label" style="background: {{ sensorType[item.sensor_type].color || 'gray'}}">{{ sensorType[item.sensor_type].label }}</span>
     </div>
     <span class="site label label-default">{{ sites[item.site].name }}</span>
   </div>
