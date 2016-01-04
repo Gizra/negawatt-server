@@ -25,7 +25,7 @@
 
   <div ng-switch-when="meter" class="tree-level-bottom">
     <label>
-      <input ng-change="selectMeter(item.id, this)" ng-model="item.selected" type="checkbox" ng-disabled="disableMeters" id="check-meter-{{item.id}}"/>
+      <input ng-change="selectMeter(item)" ng-model="item.selected" type="checkbox" ng-disabled="disableMeters" id="check-meter-{{item.id}}"/>
       <span>{{ item.name }}, {{ item.place_address }}</span>
     </label>
     <div class="category-labels">
@@ -36,7 +36,7 @@
 
   <div ng-switch-when="sensor" class="tree-level-bottom">
     <label>
-      <input ng-change="selectsensor(item.id, this)" ng-model="item.selected" type="checkbox" ng-disabled="disablesensors" id="check-sensor-{{item.id}}"/>
+      <input ng-change="selectSensor(item)" ng-model="item.selected" type="checkbox" ng-disabled="disablesensors" id="check-sensor-{{item.id}}"/>
       <span>{{ item.name }}, {{ item.place_address }}</span>
     </label>
     <div class="category-labels">

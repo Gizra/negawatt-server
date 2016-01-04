@@ -102,7 +102,7 @@ angular.module('negawattClientApp')
       // Get all the sites.
       getSensorsTree
         .then(function prepareSensorsTreeResolve(collection) {
-          // Add 'open' field to site-categories and sites.
+          // Add 'open' field to site-categories and sites, and 'selected' field to all items.
           angular.forEach(collection, function(item) {
             if (item.type == 'site_category' || item.type == 'site') {
               item.open = true;

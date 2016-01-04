@@ -55,7 +55,7 @@ angular.module('negawattClientApp')
         }
         else {
           // object selected.
-          // Set selected object to object.
+          // Set selected object to state-params.
           $stateParams.sel = name;
 
           // Select the object.
@@ -71,48 +71,6 @@ angular.module('negawattClientApp')
       },
 
       /**
-       * Add or remove a meter form the active-electricity-filter after clicking
-       * the checkbox in the categories/meters tree.
-       *
-       * @param meter
-       *   The meter object.
-       *
-       * @return boolean
-       *   True if objects are selected, false if the last object is unselected.
-       */
-      addMeterSelected: function(meter) {
-        return this.addObjectSelected(meter, 'meter');
-      },
-
-      /**
-       * Add or remove a category form the active-electricity-filter after clicking
-       * the checkbox in the categories/meters tree.
-       *
-       * @param category
-       *   The category object.
-       *
-       * @return boolean
-       *   True if objects are selected, false if the last object is unselected.
-       */
-      addSiteCategorySelected: function(category) {
-        return this.addObjectSelected(category, 'site_category');
-      },
-
-      /**
-       * Add or remove a site form the active-electricity-filter after clicking
-       * the checkbox in the categories/meters tree.
-       *
-       * @param site
-       *   The site object.
-       *
-       * @return boolean
-       *   True if objects are selected, false if the last object is unselected.
-       */
-      addSiteSelected: function(site) {
-        return this.addObjectSelected(site, 'meter_site');
-      },
-
-      /**
        * Add or remove an object form the active-electricity-filter after clicking
        * the checkbox in the categories/meters tree.
        *
@@ -124,7 +82,7 @@ angular.module('negawattClientApp')
        * @return boolean
        *   True if objects are selected, false if the last object is unselected.
        */
-      addClimateSelected: function(meter) {
+      addSensorSelected: function(meter) {
         var metersSelected = true;
 
         if (!meter.selected) {
