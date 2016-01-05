@@ -248,7 +248,7 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
     }
 
     // Replace all sites with only one meter by the meter itself.
-    foreach ($return as $item) {
+    foreach ($return as $key => $item) {
       if ($item['type'] == 'site' && sizeof($item['children']) == 1) {
         // A site element with only one child. Make a shortcut between the
         // parent category and child meter.
@@ -276,12 +276,12 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
         }
 
         // Shortcut the links.
-        unset($category['children'][$item['id']]);
+        unset($category['children'][$key]);
         $category['children'][$meter_id] = $meter_id;
         $meter['parent'] = $category_id;
 
         // Remove the site element.
-        unset($return[$item['id']]);
+        unset($return[$key]);
       }
     }
 
