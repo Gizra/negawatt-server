@@ -323,6 +323,10 @@ angular.module('negawattClientApp')
             chart.compareCollection = climate;
         });
 
+        $scope.$on('setChartTitleTo', function (event, newTitle) {
+          chart.title = newTitle;
+        });
+
         /**
          * Watch window width, and update chart parameters to resize the chart.
          */

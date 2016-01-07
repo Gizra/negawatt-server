@@ -10,7 +10,7 @@
  */
 
 angular.module('negawattClientApp')
-  .controller('DetailedChartCtrl', function DetailedChartCtrl($scope, $state, $stateParams, $filter, Electricity, Chart, ChartUsagePeriod, FilterFactory, meters, filters, ChartElectricityUsage, siteCategories, sites, profile) {
+  .controller('DetailedChartCtrl', function DetailedChartCtrl($scope, $state, $stateParams, $filter, Electricity, Chart, ChartUsagePeriod, FilterFactory, meters, SensorTree, sensorTree, filters, ChartElectricityUsage, siteCategories, sites, profile, ApplicationState) {
     var detailedChartCtrl = this;
 
     // Start with no compare chart.
@@ -33,26 +33,6 @@ angular.module('negawattClientApp')
     if (angular.isDefined($stateParams.markerId)) {
       // Share meter selected.
       $scope.meterSelected = meters.list[$stateParams.markerId];
-    }
-
-    // Set the current selection label.
-    if ($stateParams.markerId) {
-      // Set marker label.
-      this.title = meters.list[$stateParams.markerId] ? meters.list[$stateParams.markerId].label : null;
-    }
-    else if ($stateParams.categoryId) {
-      // When no marker is selected fetch category label.
-      this.title = siteCategories.list[$stateParams.categoryId] ? siteCategories.list[$stateParams.categoryId].label : null;
-    }
-    else {
-      // Otherwise display account label.
-      // Find the current selected account in the user's accounts.
-      angular.forEach(profile.account, function(account) {
-        if (account.id == $stateParams.accountId) {
-          this.title = account.label;
-          return;
-        }
-      }, detailedChartCtrl);
     }
 
     $scope.$on('sitePropertiesCtrlChange', function (event, siteProperties) {
