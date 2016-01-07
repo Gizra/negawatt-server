@@ -2,7 +2,7 @@
 
 angular.module('negawattClientApp')
   // TODO: remove dependency on Site, Meter
-  .service('SensorTree', function ($q, $http, $timeout, $state, $rootScope, $filter, Config, Utils, Site, Meter, FilterFactory) {
+  .service('SensorTree', function ($q, $http, $timeout, $state, $rootScope, $filter, Config) {
     var self = this;
 
     // A private cache key.
@@ -102,22 +102,27 @@ angular.module('negawattClientApp')
       // Get all the sites.
       getSensorsTree
         .then(function prepareSensorsTreeResolve(collection) {
-          // Add 'open' field to site-categories and sites, and 'selected' field to all items.
-          angular.forEach(collection, function(item) {
-            if (item.type == 'site_category' || item.type == 'site') {
-              item.open = true;
-            }
-          });
-          // Convert the array of sensorsTree to an object with properties list, collection and tree.
-          var sensorsTree = {};
+          // Prepare tree and collection on first time arrival. When called
+          // for the second time, the data already contains collection and
+          // tree objects. In that case skip the building of the tree.
+          if (!collection.collection) {
+            // Add 'open' field to site-categories and sites.
+            angular.forEach(collection, function (item) {
+              if (item.type == 'site_category' || item.type == 'site') {
+                item.open = true;
+              }
+            });
+            // Convert the array of sensorsTree to an object with properties list, collection and tree.
+            var sensorsTree = {};
 
-          // SensorsTree in an original collection array.
-          // SensorsTree indexed by id, used to easy select a sensorsTree.
-          sensorsTree.collection = collection;
-          // SensorsTree in tree model, used for angular-ui-tree directive.
-          sensorsTree.tree = convertSensorCollectionToTree(collection);
+            // SensorsTree in an original collection array.
+            // SensorsTree indexed by id, used to easy select a sensorsTree.
+            sensorsTree.collection = collection;
+            // SensorsTree in tree model, used for angular-ui-tree directive.
+            sensorsTree.tree = convertSensorCollectionToTree(collection);
 
-          setCache(sensorsTree);
+            setCache(sensorsTree);
+          }
           deferred.resolve(sensorsTreeData());
         });
 
