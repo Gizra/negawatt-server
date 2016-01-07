@@ -5,7 +5,7 @@
  * @name negawattClientApp.controller: MetersMenuCtrl
  */
 angular.module('negawattClientApp')
-  .controller('MetersMenuCtrl', function ($scope, $state, $stateParams, $filter, ChartDetailedService, SiteCategory, siteCategories, MeterCategory, meterCategories, Meter, meters, PropertyMeter, propertyMeters, Site, sites, SensorTree, sensorTree, SensorType, sensorType, FilterFactory) {
+  .controller('MetersMenuCtrl', function ($scope, $rootScope ,$state, $stateParams, $filter, ChartDetailedService, SiteCategory, siteCategories, MeterCategory, meterCategories, Meter, meters, PropertyMeter, propertyMeters, Site, sites, SensorTree, sensorTree, SensorType, sensorType, FilterFactory) {
 
     var metersMenuCtrl = this;
 
@@ -20,23 +20,8 @@ angular.module('negawattClientApp')
     // Check the checkboxes in the selected rows.
     checkSelectedRows();
 
-    // Reload the categories when new sites/meters are added (new page arrives).
-    metersMenuCtrl.reloadCategories = function(accountId) {
-      // Update categories tree with number of sites.
-      SiteCategory.get(accountId)
-        .then(function(siteCategories) {
-          // Update 'categories' object resolved by ui-router.
-          $state.setGlobal('siteCategories', siteCategories);
-          $scope.siteCategories = siteCategories;
-        });
-
-      MeterCategory.get(accountId)
-        .then(function(meterCategories) {
-          // Update 'categories' object resolved by ui-router.
-          $state.setGlobal('meterCategories', meterCategories);
-          $scope.meterCategories = meterCategories;
-        });
-    };
+    // After loading, set chart title.
+    $rootScope.$broadcast('selectionChanged');
 
     /**
      * Uncheck all checkboxes.
@@ -50,7 +35,7 @@ angular.module('negawattClientApp')
         item.checked = false;
       });
 
-      // Reset checbox disabeling
+      // Reset checkbox disabling
       $scope.disableSites = false;
       $scope.disableMeters = false;
       $scope.disableCategories = false;
