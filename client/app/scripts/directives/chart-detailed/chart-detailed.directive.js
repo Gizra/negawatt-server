@@ -208,7 +208,8 @@ angular.module('negawattClientApp')
           // Note that datepicker's referenceDate is in milliseconds.
           chart.referenceDate = period.getChartPeriod().referenceDate * 1000;
 
-          chart.getElectricity(filters);
+          // FIXME: Upon startup, refreshChart is being called 3 times!
+          ApplicationState.getElectricity(filters);
 
           // Get compare collection, if one was selected.
           if ($stateParams.climate) {

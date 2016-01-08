@@ -6,26 +6,8 @@ angular.module('negawattClientApp')
     var isUndefined = angular.isUndefined;
 
     // Expose some functions.
-    this.getElectricity = getElectricity;
     this.getTemperature = getTemperature;
     this.getCompareCollection = getCompareCollection;
-
-    /**
-     * Return a promise with electricity collection.
-     *
-     * @param filters (optional)
-     *   Filters of the query.
-     *
-     * @returns {Promise}
-     */
-    function getElectricity(filters) {
-      if (filters) {
-        FilterFactory.setElectricity(filters);
-      }
-      var electricity = Electricity.get(FilterFactory.get('activeElectricityHash'));
-
-      return isUndefined(electricity) ? $q.promise : electricity;
-    }
 
     /**
      * Return a promise of the collection to compare, according the compareWith parameter.
