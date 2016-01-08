@@ -2,7 +2,7 @@
 
 angular.module('negawattClientApp')
 
-  .factory('FilterFactory', function ($filter, $state, $stateParams, $rootScope, $injector, Utils, ApplicationState) {
+  .factory('FilterFactory', function ($filter, $state, $stateParams, $rootScope, $injector, Utils) {
     return {
       filters: {},
 
@@ -18,9 +18,6 @@ angular.module('negawattClientApp')
       updateSelection: function(sel, ids) {
         $stateParams.sel = sel;
         $stateParams.ids = ids;
-
-        ApplicationState.sel = sel;
-        ApplicationState.ids = ids;
 
         // Refresh $state with new params.
         $state.refreshUrlWith($stateParams);

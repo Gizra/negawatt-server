@@ -118,8 +118,14 @@ angular.module('negawattClientApp')
   .directive('chartDetailed', function () {
     return {
       templateUrl: 'scripts/directives/chart-detailed/chart-detailed.directive.html',
-      controller: function ChartDetailedCtrl($scope, $rootScope, $window, $filter, ChartDetailedService, ChartOptions, ChartUsagePeriod, $stateParams) {
+      controller: function ChartDetailedCtrl($scope, $rootScope, $window, $filter, ChartDetailedService, ChartOptions, ChartUsagePeriod, $stateParams, ApplicationState) {
         var chart = this;
+
+        // Expose some functions.
+        this.takeElectricity = takeElectricity;
+
+        // Register in ApplicationState.
+        ApplicationState.registerDetailedChart(this);
 
         // Extend the service with the scope of the directive and
         // extend the controller of the directive with the service.
@@ -287,6 +293,7 @@ angular.module('negawattClientApp')
          * nodata=1 (to get min/max timestamps for new frequency), and refreshChart()
          * asks for new electricity data (without the nodata=1 parameter).
          */
+        // FIXME: Delete this $on()
         $scope.$on('nwElectricityChanged', function(event, electricity) {
           if (!chart.checkTimeRange) {
             // Not checking time range, take electricity data.
@@ -309,6 +316,28 @@ angular.module('negawattClientApp')
           // Set chart properties and get electricity.
           refreshChart();
         });
+        function takeElectricity(electricity) {
+          if (!chart.checkTimeRange) {
+            // Not checking time range, take electricity data.
+            chart.electricity = electricity.data;
+            chart.summary = electricity.summary;
+            return;
+          }
+
+          // Got only summary with time range.
+          // Save it, fix the time-range for the chart, and request the real data.
+          chart.checkTimeRange = false;
+
+          // Set time range.
+          var params = {
+            min: electricity.summary.timestamp.min,
+            max: electricity.summary.timestamp.max
+          };
+          period.config(params);
+
+          // Set chart properties and get electricity.
+          refreshChart();
+        }
 
         /**
          * Electricity Service Event: When electricity changes, update charts with

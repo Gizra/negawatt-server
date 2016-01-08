@@ -5,6 +5,7 @@ angular.module('negawattClientApp')
     var self = this;
     var isUndefined = angular.isUndefined;
 
+    // Expose some functions.
     this.getElectricity = getElectricity;
     this.getTemperature = getTemperature;
     this.getCompareCollection = getCompareCollection;

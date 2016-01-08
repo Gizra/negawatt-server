@@ -5,7 +5,7 @@
  * @name negawattClientApp.controller: MetersMenuCtrl
  */
 angular.module('negawattClientApp')
-  .controller('MetersMenuCtrl', function ($scope, $rootScope ,$state, $stateParams, $filter, ChartDetailedService, SiteCategory, siteCategories, MeterCategory, meterCategories, Meter, meters, PropertyMeter, propertyMeters, Site, sites, SensorTree, sensorTree, SensorType, sensorType, FilterFactory) {
+  .controller('MetersMenuCtrl', function ($scope, $rootScope ,$state, $stateParams, $filter, ChartDetailedService, SiteCategory, siteCategories, MeterCategory, meterCategories, Meter, meters, PropertyMeter, propertyMeters, Site, sites, SensorTree, sensorTree, SensorType, sensorType, FilterFactory, ApplicationState) {
 
     var metersMenuCtrl = this;
 
@@ -35,16 +35,13 @@ angular.module('negawattClientApp')
         item.checked = false;
       });
 
+      // Update stateParam.
+      ApplicationState.updateSelection(undefined, undefined);
+
       // Reset checkbox disabling
       $scope.disableSites = false;
       $scope.disableMeters = false;
       $scope.disableCategories = false;
-
-      // Update stateParam.
-      FilterFactory.updateSelection(undefined, undefined);
-
-      // Reload electricity data to update charts.
-      ChartDetailedService.getElectricity();
     };
 
     /**
@@ -55,13 +52,11 @@ angular.module('negawattClientApp')
      */
     $scope.selectMeter = function(meter) {
       // Add/remove meter from selected list.
-      var selected = FilterFactory.addObjectSelected(meter, 'meter');
+      var selected = ApplicationState.addObjectSelected(meter, 'meter');
+
       // Disable sites and categories if one or more meters are selected.
       $scope.disableSites = selected;
       $scope.disableCategories = selected;
-
-      // Reload electricity data to update charts.
-      ChartDetailedService.getElectricity();
     };
 
     /**

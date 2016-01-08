@@ -13,8 +13,31 @@ angular.module('negawattClientApp')
 
     var getElectricity = {};
 
+    // Temp place to store filter parameters.
+    // FIXME DELME!
+    var saveParams = {};
+
     // Update event broadcast name.
     var broadcastUpdateEventName = 'nwElectricityChanged';
+
+
+    /**
+     * Get electricity data.
+     *
+     * Returns a promise for electricity data, from cache or the server.
+     * FIXME: Will replace get().
+     *
+     * @param params
+     *   Array of filter parameters in GET params format.
+     *
+     * @returns {*}
+     *   A promise to electricity data.
+     */
+    this.get2 = function(params) {
+      var hash = Utils.objToHash(params);
+      saveParams = params;
+      return this.get(hash);
+    };
 
     /**
      * Get electricity data.
@@ -88,7 +111,8 @@ angular.module('negawattClientApp')
       var url = Config.backend + '/api/electricity';
       // Create a copy of filters, since params might add page option. Filters must
       // stay clean of page parameters since it also serves as key to the cache.
-      var params = FilterFactory.getElectricity(hash) || {};
+      // FIXME: Will be eliminated - the params will arrive from the get() function.
+      var params = FilterFactory.getElectricity(hash) || saveParams;
 
       // If page-number is given, add it to the params.
       // Don't modify 'filters' since it should reflect the general params,
