@@ -26,10 +26,21 @@ angular.module('negawattClientApp')
     this.ids = $stateParams.ids;
 
     /**
-     * The detailed chart object, will receive notifications on any
+     * Sensor selection ids. A replication of $stateParams.sensor.
+     */
+    this.sensor = $stateParams.sensor;
+
+    /**
+     * The detailed chart directive, will receive notifications on any
      * change in data or options.
      */
     this.detailedChart = null;
+
+    /**
+     * The meters-menu controller, will receive notifications on any
+     * change in data or options.
+     */
+    this.metersMenu = null;
 
     /**
      * A function to register during the 'resolve' stage.
@@ -39,10 +50,17 @@ angular.module('negawattClientApp')
     };
 
     /**
-     * Register detailed-chart object for later communication.
+     * Register detailed-chart directive for later communication.
      */
     this.registerDetailedChart = function(chart) {
       this.detailedChart = chart;
+    };
+
+    /**
+     * Register meters-menu controller for later communication.
+     */
+    this.registerMetersMenu = function(menu) {
+      this.metersMenu = menu;
     };
 
     /**
@@ -52,7 +70,7 @@ angular.module('negawattClientApp')
      * @param object
      *   The meter object.
      * @param name
-     *   The name of the object.
+     *   The name of the object, e.g. 'meter', 'site', ...
      *
      * @return boolean
      *   True if objects are selected, false if the last object is unselected.
@@ -91,6 +109,44 @@ angular.module('negawattClientApp')
     };
 
     /**
+     * Add or remove an object form the active-electricity-filter after clicking
+     * the checkbox in the categories/meters tree.
+     *
+     * @param meter
+     *   The meter object.
+     *
+     * @return boolean
+     *   True if objects are selected, false if the last object is unselected.
+     */
+    this.addSensorSelected = function(meter) {
+      var metersSelected = true;
+
+      if (!meter.selected) {
+        // meter unselected, remove it from state-params.
+        var meters = $stateParams.sensor.split(',');
+        // object.id is a number, objects is an array of strings. Convert object.id to string.
+        meters.splice(meters.indexOf('' + meter.id), 1);
+        $stateParams.sensor = meters.join();
+
+        // Unset sel if no object is selected
+        if ($stateParams.sensor == '') {
+          metersSelected = false;
+        }
+      }
+      else {
+        // Select the object.
+        var meters = $stateParams.climate ? $stateParams.climate.split(',') : [];
+        meters.push(meter.id);
+        $stateParams.sensor = meters.join();
+      }
+
+      // Refresh $state with new params.
+      this.updateSensorSelection($stateParams.sensor);
+
+      return metersSelected;
+    };
+
+    /**
      * Update the current selected objects, both in application-state and
      * in $stateParams.
      *
@@ -99,8 +155,10 @@ angular.module('negawattClientApp')
      * @param ids
      *  The ids of selected object(s) as a comma separated list.
      *  To clear the selection, both sel and ids should be null.
+     * @param refreshCheckMarks boolean
+     *  True if has to re-mark the check marks in the sensors-menu.
      */
-    this.updateSelection = function(sel, ids) {
+    this.updateSelection = function(sel, ids, refreshCheckMarks) {
       $stateParams.sel = sel;
       $stateParams.ids = ids;
 
@@ -110,9 +168,37 @@ angular.module('negawattClientApp')
       // Refresh $state with new params.
       $state.refreshUrlWith($stateParams);
 
+      if (refreshCheckMarks) {
+        this.metersMenu.checkSelectedRows($stateParams);
+      }
+
       // Get a new set of electricity data, according to the new
       // selected objects.
       this.getElectricity($stateParams);
+
+      // FIXME: Consider replacing this with a direct call to selectionChanged()
+      $rootScope.$broadcast('selectionChanged');
+    };
+
+    /**
+     * Update the current selected sensors, both in application-state and
+     * in $stateParams.
+     *
+     * @param sensor
+     *  The ids of selected sensor(s) as a comma separated list.
+     *  To clear the selection, 'sensor' should be null.
+     */
+    this.updateSensorSelection = function(sensor) {
+      $stateParams.sensor = sensor;
+
+      this.sensor = sensor;
+
+      // Refresh $state with new params.
+      $state.refreshUrlWith($stateParams);
+
+      // Get a new set of sensor data, according to the new
+      // selected objects.
+      this.getSensorData($stateParams);
 
       // FIXME: Consider replacing this with a direct call to selectionChanged()
       $rootScope.$broadcast('selectionChanged');

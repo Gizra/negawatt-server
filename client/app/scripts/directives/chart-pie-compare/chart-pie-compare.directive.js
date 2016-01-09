@@ -5,7 +5,7 @@ angular.module('negawattClientApp')
     return {
       restrict: 'EA',
       templateUrl: 'scripts/directives/chart-pie-compare/chart-pie-compare.directive.html',
-      controller: function chartPieUsageCtrl(ChartUsagePeriod, Chart, $stateParams, $filter, $scope, $state, Utils) {
+      controller: function chartPieUsageCtrl(ChartUsagePeriod, Chart, $stateParams, $filter, $scope, $state, ApplicationState, Utils) {
         var ctrlPieChart = this;
 
         // Save the state of the directive (to handle views in the directive. "undefined|empty|loading|data").
@@ -17,16 +17,7 @@ angular.module('negawattClientApp')
           var row = selectedItem.row;
           var onSelect = chartData.data.rows[row].c[3].onSelect;
 
-          // Go to the referenced object.
-          $stateParams.sel = onSelect.sel;
-          $stateParams.ids = onSelect.ids;
-
-          // Refresh $state with new params.
-          $state.refreshUrlWith($stateParams);
-
-          // Reload electricity to update charts.
-          var chartDetailedCtrl = $scope.$parent.chart;
-          chartDetailedCtrl.getElectricity($stateParams);
+          ApplicationState.updateSelection(onSelect.sel, onSelect.ids, true /*refreshCheckMarks*/);
         };
 
         /**
