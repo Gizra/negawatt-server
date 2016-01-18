@@ -5,7 +5,7 @@
  * @name negawattClientApp.controller: MetersMenuCtrl
  */
 angular.module('negawattClientApp')
-  .controller('MetersMenuCtrl', function ($scope, $rootScope ,$stateParams, sensorTree, sensorType, ApplicationState) {
+  .controller('MetersMenuCtrl', function ($scope, $rootScope ,$stateParams, meterCategories, sensorTree, sensorType, ApplicationState) {
 
     var metersMenuCtrl = this;
 
@@ -15,6 +15,7 @@ angular.module('negawattClientApp')
     // Expose some data to the scope.
     $scope.sensorTree = sensorTree.tree;
     $scope.sensorCollection = sensorTree.collection;
+    $scope.meterCategories = meterCategories.collection;
     $scope.sensorType = sensorType;
 
     // Expose some functions.
