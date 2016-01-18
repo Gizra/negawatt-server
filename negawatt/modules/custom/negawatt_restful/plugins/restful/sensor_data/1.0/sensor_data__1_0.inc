@@ -13,4 +13,5 @@ $plugin = array(
     'table_name' => 'negawatt_sensor_data_normalized',
     'id_column' => 'id',
   ),
+  'formatter' => 'electricity_total',
 );

@@ -16,6 +16,16 @@ class NegawattEntityElectricityMeterBase extends \NegawattEntityMeterBase {
       'callback' => array($this, 'electricityMinMax'),
     );
 
+    $public_fields['site'] = array(
+      'property' => 'field_meter_site',
+      'resource' => array(
+        'meter_site' => array(
+          'name' => 'sites',
+          'full_view' => FALSE,
+        ),
+      ),
+    );
+
     $public_fields['meter_categories'] = array(
       'property' => 'nid',
       'process_callbacks' => array(

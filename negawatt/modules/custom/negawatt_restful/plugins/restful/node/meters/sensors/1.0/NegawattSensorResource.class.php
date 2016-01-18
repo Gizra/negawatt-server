@@ -22,6 +22,15 @@ class NegawattSensorResource extends \NegawattEntityMeterBase {
       ),
     );
 
+    $public_fields['site'] = array(
+      'property' => 'field_meter_site',
+      'resource' => array(
+        'meter_site' => array(
+          'name' => 'sites',
+          'full_view' => FALSE,
+        ),
+      ),
+    );
     return $public_fields;
   }
 

@@ -706,7 +706,7 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     return $query;
   }
 
-    /**
+  /**
    * Override RestfulBase::parseRequestForListFilter.
    *
    * Modify the filter for site-category to catch all the electricity
