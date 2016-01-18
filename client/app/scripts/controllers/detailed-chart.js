@@ -17,7 +17,7 @@ angular.module('negawattClientApp')
     detailedChartCtrl.hasExtraChart = false;
 
     detailedChartCtrl.account = $stateParams.accountId;
-    var compareCollection;
+    var sensorData;
     var options;
 
     $scope.siteCategories = siteCategories;
