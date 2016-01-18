@@ -21,7 +21,7 @@ angular.module('negawattClientApp')
      * @returns {*}
      *  The dataset collection filtered.
      */
-    return function (collection, chartType, compareWith, options, labels, labelsField, compareLabelsField, oneItemSelected) {
+    return function (collection, chartType, compareWith, options, labels, labelsField, labelsPrefixLetter, compareLabelsField, oneItemSelected) {
 
       // chartType defaults to stacked.
       chartType = chartType ? chartType : 'stacked';
@@ -38,7 +38,7 @@ angular.module('negawattClientApp')
         return ChartOptions.getOptions(chartFrequencyActive, chartType, !!compareWith);
       }
 
-      var data = getDataset(collection, chartFrequencyActive, chartType, labels, labelsField, compareWith, compareLabelsField);
+      var data = getDataset(collection, chartFrequencyActive, chartType, labels, labelsField, labelsPrefixLetter, compareWith, compareLabelsField);
       options = ChartOptions.getOptions(chartFrequencyActive.type, chartType, data.numSeries, !!compareWith);
 
 
@@ -62,18 +62,18 @@ angular.module('negawattClientApp')
      *  One of 'sum', 'detailed', 'stacked', 'percent'.
      * @param labels
      *  An indexed-array id => object.
-     * @param labelsField
-     *  The name of the label field in labels' objects.
+     * @param labelsPrefixLetter
+     *  A prefix letter to add before the item-id as index into 'labels' collection.
      *
      * @returns {{cols: *[], rows: Array}}
      */
-    function getDataset(collection, frequency, chartType, labels, labelsField, compareWith, compareLabelsField) {
+    function getDataset(collection, frequency, chartType, labels, labelsField, labelsPrefixLetter, compareWith, compareLabelsField) {
       var labelsUsed = [];
       var dataset = {
         // Add rows.
-        rows: getRows(collection, frequency, chartType, labelsUsed, labelsField, compareWith, compareLabelsField),
+        rows: getRows(collection, frequency, chartType, labelsUsed, labels, labelsField, labelsPrefixLetter, compareWith, compareLabelsField),
         // Add columns.
-        cols: getColumns(collection, frequency, chartType, labelsUsed, labels, compareWith),
+        cols: getColumns(collection, frequency, chartType, labelsUsed, labels, labelsPrefixLetter, compareWith),
         // Number of series (might happen that a serie contains no data in 'collection').
         // For internal use, not used by google-charts.
         numSeries: labelsUsed.length
@@ -95,14 +95,14 @@ angular.module('negawattClientApp')
      * @returns {Array}
      *  An array of the data ordering as the type requested.
      */
-    function getRows(collection, frequency, chartType, labelsUsed, labelsField, compareWith, compareLabelsField) {
+    function getRows(collection, frequency, chartType, labelsUsed, labels, labelsField, labelsPrefixLetter, compareWith, compareLabelsField) {
       var values = {};
       var rows = [];
       var prevRateType;
       var isLineChart;
       var powerValueProperty = getPowerValueProperty(frequency);
 
-      // If 'compareCollection' is given, convert it to an indexed array.
+      // If 'sensorData' is given, convert it to an indexed array.
       var compareWithIndexed = {};
       if (compareWith) {
         angular.forEach(compareWith, function (item) {
@@ -164,26 +164,30 @@ angular.module('negawattClientApp')
           }
           rows.push({ c: col, onSelect: timestamp });
         });
+
+        // For sum chart there's only one label.
+        labelsUsed.push(labels);
       }
       else if (chartType == 'detailed' || chartType == 'stacked') {
         // Prepare data for a multiple graphs.
         // -----------------------------------------------------------------------
 
         angular.forEach(collection, function(item) {
+          var itemLabel = labels[labelsPrefixLetter + item[labelsField]];
           if (!(item.timestamp_rounded in values)) {
             // Never encountered this timestamp, create an empty object
             values[item.timestamp_rounded] = {};
           }
-          if (labelsUsed.indexOf(+item[labelsField]) == -1) {
+          if (labelsUsed.indexOf(itemLabel) == -1) {
             // Never encountered this label. Save label in list.
-            labelsUsed.push(+item[labelsField]);
+            labelsUsed.push(itemLabel);
           }
-          if (!values[item.timestamp_rounded][item[labelsField]]) {
+          if (!values[item.timestamp_rounded][itemLabel]) {
             // Never encountered this item, zero it out.
-            values[item.timestamp_rounded][item[labelsField]] = 0;
+            values[item.timestamp_rounded][itemLabel] = 0;
           }
           // Will sum over rate-types.
-          values[item.timestamp_rounded][item[labelsField]] += +item[powerValueProperty];
+          values[item.timestamp_rounded][itemLabel] += +item[powerValueProperty];
         });
 
         // Display the unit according to selected frequency.
@@ -229,7 +233,7 @@ angular.module('negawattClientApp')
      * @returns {Array}
      *  An array of the data ordering as the type requested.
      */
-    function getColumns(collection, frequency, chartType, labelsUsed, labels, compareWith) {
+    function getColumns(collection, frequency, chartType, labelsUsed, labels, labelsPrefixLetter, compareWith) {
       if (chartType == 'sum') {
         var columns = [
           {
@@ -294,7 +298,7 @@ angular.module('negawattClientApp')
         return columns;
       }
       else if (chartType == 'detailed' || chartType == 'stacked') {
-        // First column is allways month
+        // First column is always month
         var columns = [
           {
             'id': 'month',
@@ -307,12 +311,12 @@ angular.module('negawattClientApp')
         // For each data set add two columns - one for the data and one for the tooltip.
         labelsUsed.forEach(function(item) {
           columns.push({
-              id: item,
-              label: labels[item].label,
+              id: item.id,
+              label: labels[labelsPrefixLetter + item.id].name,
               type: 'number'
             },
             {
-              'id': item,
+              'id': item.id,
               'type': 'string',
               p: {role: 'tooltip'}
             })

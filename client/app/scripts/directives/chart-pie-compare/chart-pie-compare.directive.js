@@ -10,6 +10,14 @@ angular.module('negawattClientApp')
 
         // Save the state of the directive (to handle views in the directive. "undefined|empty|loading|data").
         ctrlPieChart.state = 'loading';
+        ctrlPieChart.sensorTree = null;
+
+        ApplicationState.registerPieChart(this);
+
+        this.takeSensorTree = function (tree) {
+          ctrlPieChart.sensorTree = tree;
+        };
+
 
         // Select category form the pie chart.
         $scope.onSelect = function(selectedItem, chartData) {
@@ -34,8 +42,7 @@ angular.module('negawattClientApp')
          */
         $scope.$watchGroup(['ctrlPieChart.summary', 'ctrlPieChart.options'], function(chart) {
           if (angular.isUndefined(chart)
-            || Utils.isEmpty(chart[0])
-            || angular.isUndefined(chart[1])) {
+            || Utils.isEmpty(chart[0])) {
 
             return;
           }

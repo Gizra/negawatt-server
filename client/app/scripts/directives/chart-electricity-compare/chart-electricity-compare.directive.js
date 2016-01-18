@@ -5,7 +5,7 @@ angular.module('negawattClientApp')
     return {
       restrict: 'EA',
       templateUrl: 'scripts/directives/chart-electricity-compare/chart-electricity-compare.directive.html',
-      controller: function chartElectricityUsageCtrl(ChartElectricityUsage, ChartUsagePeriod, $stateParams, $filter, $scope, Utils) {
+      controller: function chartElectricityUsageCtrl(ChartElectricityUsage, ChartUsagePeriod, $stateParams, $filter, $scope, Utils, ApplicationState) {
         var ctrlChart = this;
 
         // Get chart frequencies. (Tabs the period of time)
@@ -17,9 +17,15 @@ angular.module('negawattClientApp')
         ctrlChart.changePeriod = changePeriod;
         ctrlChart.hasData = hasData;
         ctrlChart.changeFrequency = changeFrequency;
+        ctrlChart.sensorTree = null;
+
+        ApplicationState.registerMainChart(this);
+
+        this.takeSensorTree = function (tree) {
+          ctrlChart.sensorTree = tree;
+        };
 
         // Select category from the chart.
-        // @todo: make it work.
         $scope.onSelect = function(selectedItem, chartData) {
 
           var row = selectedItem.row;
@@ -49,7 +55,7 @@ angular.module('negawattClientApp')
         /**
          * Directive Event: When new electricity data is updated from the server.
          */
-        $scope.$watchGroup(['ctrlChart.electricity', 'ctrlChart.compareCollection', 'ctrlChart.options', 'ctrlChart.summary'], function(chart) {
+        $scope.$watchGroup(['ctrlChart.electricity', 'ctrlChart.sensorData', 'ctrlChart.options', 'ctrlChart.summary'], function(chart) {
           if (angular.isUndefined(chart)
             || Utils.isEmpty(chart[0])
             || angular.isUndefined(chart[2])) {
@@ -163,14 +169,14 @@ angular.module('negawattClientApp')
          *
          * @param activeElectricity
          *  The "active electricity" data collection.
-         * @param compareCollection
+         * @param sensorData
          *  Data collection to compare to.
          * @param options
          *  Chart options.
          * @param summary
          *  Electricity summary.
          */
-        function renderChart(activeElectricity, compareCollection, options, summary) {
+        function renderChart(activeElectricity, sensorData, options, summary) {
           // type is one of 'meters', 'sites', 'site_categories'.
           var labelsType = summary.type;
 
@@ -192,33 +198,33 @@ angular.module('negawattClientApp')
           }
 
           // Take sites, meters, and categories from chartDetailedCtrl's scope.
-          var detailedChartScope = $scope.$parent.$parent;
-          var detailedChartCtrl = detailedChartScope.detailedChartCtrl;
-          var labels = {}, labelsField;
+          var detailedChartScope = $scope.$parent;
+          var detailedChartCtrl = detailedChartScope.chart;
+          var labelsPrefixLetter, labelsField,
+            labels = ctrlChart.sensorTree.collection;
           switch (labelsType) {
             case 'accounts':
               // Create an object with the account name.
-              labels[detailedChartCtrl.account] = {label: detailedChartCtrl.title};
-              labelsField = 'meter_account';
+              labels = detailedChartCtrl.title;
               break;
             case 'site_categories':
-              labels = detailedChartScope.siteCategories.collection;
               labelsField = 'site_category';
+              labelsPrefixLetter = 'c';
               break;
             case 'sites':
-              labels = detailedChartScope.sites.listAll;
               labelsField = 'meter_site';
+              labelsPrefixLetter = 's';
               break;
             case 'meters':
-              labels = detailedChartScope.meters.listAll;
               labelsField = 'meter';
+              labelsPrefixLetter = 'm';
               break;
           }
 
-          var compareLabelsField = 'avg_temp';
+          var comparelabelsField = 'avg_value';
 
           // Convert the data coming from the server into google chart format.
-          ctrlChart.data = $filter('toChartDataset')(activeElectricity, $stateParams.chartType, compareCollection, options, labels, labelsField, compareLabelsField, oneItemSelected);
+          ctrlChart.data = $filter('toChartDataset')(activeElectricity, $stateParams.chartType, sensorData, options, labels, labelsField, labelsPrefixLetter, comparelabelsField, oneItemSelected);
 
           // Update state.
           setState();
@@ -229,7 +235,7 @@ angular.module('negawattClientApp')
       // Isolate scope.
       scope: {
         electricity: '=',
-        compareCollection: '=',
+        sensorData: '=',
         options: '=',
         summary: '='
       }

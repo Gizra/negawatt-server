@@ -17,8 +17,6 @@ angular.module('negawattClientApp')
         ctrlChartTabs.changeFrequency = function(frequency) {
           // Broadcast to all detailed-chart-directives to change frequency.
           $rootScope.$broadcast('nwFrequencyChanged', frequency);
-          // Also tell all charts to go to 'loading' state.
-          $rootScope.$broadcast('nwChartBeginLoading');
         };
       },
       controllerAs: 'ctrlChartTabs'
@@ -122,7 +120,11 @@ angular.module('negawattClientApp')
         var chart = this;
 
         // Expose some functions.
+        this.setup = setup;
         this.takeElectricity = takeElectricity;
+        this.takeSensorData = takeSensorData;
+        chart.filtersChanged = filtersChanged;
+        chart.changePeriod = changePeriod;
 
         // Register in ApplicationState.
         ApplicationState.registerDetailedChart(this);
@@ -131,54 +133,13 @@ angular.module('negawattClientApp')
         // extend the controller of the directive with the service.
         angular.extend(chart, ChartDetailedService);
 
-        // Default values of the properties.
-        chart.electricity = {};
-        chart.summary = {};
-        chart.pieOptions = {};
-        chart.frequency = $stateParams.chartFreq;
-        chart.account = $stateParams.accountId;
-
-        var period = ChartUsagePeriod;
-        period.config();
-
-        // To first get electricity with noData option.
-        chart.checkTimeRange = true;
-
-        // Expose functions.
-        chart.filtersChanged = filtersChanged;
-        chart.changePeriod = changePeriod;
-
-        // Inform to the directive about the filters change.
-        filtersChanged();
-
-        // Change filters gent select new frequency.
-        $scope.$watch('chart.frequency', function(frequency, previous) {
-          if (frequency === previous) {
-            return;
-          }
-
-          // To get electricity with noData option.
-          chart.checkTimeRange = true;
-
-          filtersChanged();
-        }, true);
-
-        // Update chart with compareWith information.
-        $scope.$watch('chart.siteProperties', function(siteProperties, previous) {
-          if (siteProperties === previous || angular.isUndefined(siteProperties)) {
-            return;
-          }
-          chart.compareWith = siteProperties.compareWith;
-          chart.meter = siteProperties.meter;
-
-          refreshChart();
-        }, true);
-
         /**
          * Get the new electricity collection according the filters and
          * render the data in the chart.
          */
         function refreshChart() {
+          // FIXME: Should delete all of this function?
+
           // Tell all charts to go to 'loading' state.
           $rootScope.$broadcast('nwChartBeginLoading');
 
@@ -198,6 +159,7 @@ angular.module('negawattClientApp')
             chartFreq: chart.frequency,
             compareWith: chart.compareWith
           };
+          // FIXME: DEL setChartOptions() when deleting this line.
           setChartOptions(config);
 
           // Update date-range text near the chart title.
@@ -212,19 +174,29 @@ angular.module('negawattClientApp')
           ApplicationState.getElectricity(filters);
 
           // Get compare collection, if one was selected.
-          if ($stateParams.climate) {
-            var climateFilters = {
-              climate: $stateParams.climate,
+          if ($stateParams.sensor) {
+            var sensorFilters = {
+              sensor: $stateParams.sensor,
               chartFreq: $stateParams.chartFreq,
               chartPreviousPeriod: period.getChartPeriod().previous,
               chartNextPeriod: period.getChartPeriod().next
             };
-            // Get climate promise and wait for response.
-            ChartDetailedService.getCompareCollection('temperature', climateFilters)
-              .then(function(data) {
-                chart.compareCollection = data;
-              });
+            ApplicationState.getSensorData(sensorFilters);
           }
+        }
+
+        /**
+         * Setup basic parameters for chart.
+         *
+         * @param dateRange string
+         *  Subtitle for the chart, indicating the date range.
+         * @param referenceDage integer
+         *  Reference date.
+         *  FIXME: Do we need it?
+         */
+        function setup(dateRange, referenceDate) {
+          chart.dateRange = dateRange;
+          chart.referenceDate = referenceDate;
         }
 
         /**
@@ -241,6 +213,7 @@ angular.module('negawattClientApp')
 
         /**
          * Set the chart options according a configuration.
+         * FIXME: Delete this function.
          */
         function setChartOptions(config) {
           chart.options = ChartOptions.getOptions(config.chartFreq, config.chartType, !!config.compareWith);
@@ -270,89 +243,33 @@ angular.module('negawattClientApp')
         });
 
         /**
-         * Handler for frequency change.
+         * Get new electricity date from application-state and update chart.
          *
-         * Set parameters, re-check time frame, and redraw the charts.
+         * @param electricity object
+         *  New electricity data, containing both data and summary.
+         * @param options object
+         *  New chart options.
          */
-        $scope.$watch('chart.referenceDate', function(newDate, oldDate) {
-          if (oldDate == newDate || newDate == period.getReferenceDate()) {
-            return;
-          }
-
-          // Datepicker's referenceDate is in milliseconds.
-          period.setReferenceDate(newDate / 1000);
-
-          // Update parameters and fetch electricity.
-          refreshChart();
-        });
-
-        /**
-         * Electricity Service Event: When electricity changes, update charts with
-         * new consumption data.
-         *
-         * Actually, the handler receives the event after electricity is loaded with
-         * nodata=1 (to get min/max timestamps for new frequency), and refreshChart()
-         * asks for new electricity data (without the nodata=1 parameter).
-         */
-        // FIXME: Delete this $on()
-        $scope.$on('nwElectricityChanged', function(event, electricity) {
-          if (!chart.checkTimeRange) {
-            // Not checking time range, take electricity data.
-            chart.electricity = electricity.data;
-            chart.summary = electricity.summary;
-            return;
-          }
-
-          // Got only summary with time range.
-          // Save it, fix the time-range for the chart, and request the real data.
-          chart.checkTimeRange = false;
-
-          // Set time range.
-          var params = {
-            min: electricity.summary.timestamp.min,
-            max: electricity.summary.timestamp.max
-          };
-          period.config(params);
-
-          // Set chart properties and get electricity.
-          refreshChart();
-        });
-        function takeElectricity(electricity) {
-          if (!chart.checkTimeRange) {
-            // Not checking time range, take electricity data.
-            chart.electricity = electricity.data;
-            chart.summary = electricity.summary;
-            return;
-          }
-
-          // Got only summary with time range.
-          // Save it, fix the time-range for the chart, and request the real data.
-          chart.checkTimeRange = false;
-
-          // Set time range.
-          var params = {
-            min: electricity.summary.timestamp.min,
-            max: electricity.summary.timestamp.max
-          };
-          period.config(params);
-
-          // Set chart properties and get electricity.
-          refreshChart();
+        function takeElectricity(electricity, options) {
+          chart.electricity = electricity.data;
+          chart.summary = electricity.summary;
+          chart.options = options;
         }
 
         /**
-         * Electricity Service Event: When electricity changes, update charts with
-         * new consumption data.
+         * Get new sensor date from application-state and update chart.
          *
-         * Actually, the handler receives the event after electricity is loaded with
-         * nodata=1 (to get min/max timestamps for new frequency), and refreshChart()
-         * asks for new electricity data (without the nodata=1 parameter).
+         * @param sensorData object
+         *  New sensor data, containing both data and summary.
          */
-        $scope.$on('nwTemperatureChanged', function(event, climate) {
-            // Take climate data.
-            chart.compareCollection = climate;
-        });
+        function takeSensorData(sensorData) {
+          chart.sensorData = sensorData.data;
+        }
 
+        /**
+         * Handler for setting chart title.
+         * FIXME: Make direct call.
+         */
         $scope.$on('setChartTitleTo', function (event, newTitle) {
           chart.title = newTitle;
         });
