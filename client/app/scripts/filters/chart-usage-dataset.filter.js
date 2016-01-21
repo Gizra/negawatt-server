@@ -182,12 +182,12 @@ angular.module('negawattClientApp')
             // Never encountered this label. Save label in list.
             labelsUsed.push(itemLabel);
           }
-          if (!values[item.timestamp_rounded][itemLabel]) {
+          if (!values[item.timestamp_rounded][itemLabel.id]) {
             // Never encountered this item, zero it out.
-            values[item.timestamp_rounded][itemLabel] = 0;
+            values[item.timestamp_rounded][itemLabel.id] = 0;
           }
           // Will sum over rate-types.
-          values[item.timestamp_rounded][itemLabel] += +item[powerValueProperty];
+          values[item.timestamp_rounded][itemLabel.id] += +item[powerValueProperty];
         });
 
         // Display the unit according to selected frequency.
@@ -199,9 +199,9 @@ angular.module('negawattClientApp')
           var label = moment.unix(timestamp).format(frequency.tooltip_format);
           var col = [{v: time}];
           labelsUsed.forEach(function(type) {
-            var value = item[type];
+            var value = item[type.id];
             col.push({v: value});
-            col.push(value ? {v: label + '\n' + $filter('number')(item[type], 0) + ' ' + unit} : {});
+            col.push(value ? {v: label + '\n' + $filter('number')(item[type.id], 0) + ' ' + unit} : {});
           });
           // Add compareWith column, if exists.
           if (compareWith) {

@@ -268,7 +268,7 @@ angular.module('negawattClientApp')
     this.updateSensorSelection = function(sensor) {
       $stateParams.sensor = sensor;
 
-      this.sensor = sensor;
+      this.filters.sensor = sensor;
 
       // Refresh $state with new params.
       $state.refreshUrlWith($stateParams);
@@ -277,16 +277,13 @@ angular.module('negawattClientApp')
       // selected objects.
       // FIXME: should be moved to 'updatePeriodLimitsAndGetElectricity()'
       this.getSensorData($stateParams);
-
-      // FIXME: Consider replacing this with a direct call to selectionChanged()
-      $rootScope.$broadcast('selectionChanged');
     };
 
     /**
      * Update the current selected objects, both in application-state and
      * in $stateParams.
      *
-     * @param newFrequency
+     * @param newFrequency integer
      *  The new frequency.
      */
     this.frequencyChanged = function(newFrequency) {
@@ -295,12 +292,29 @@ angular.module('negawattClientApp')
       this.filters.chartFreq = newFrequency;
       this.sensorFilters.chartFreq = newFrequency;
 
+      $stateParams.chartFreq = newFrequency;
+
+      // Refresh $state with new params.
+      $state.refreshUrlWith($stateParams);
+
       // Get time-frame limits for new frequency and then
       // get electricity from the server.
       this.updatePeriodLimitsAndGetElectricity();
     };
 
     /**
+     * Route frequency-change events to 'frequencyChanged'.
+     *
+     * @param event object
+     *  The event.
+     * @param frequency object
+     *  The new frequency object.
+     */
+    $rootScope.$on('nwFrequencyChanged', function(event, frequency) {
+      appState.frequencyChanged(frequency.type);
+    });
+
+      /**
      * Update the current selected objects, both in application-state and
      * in $stateParams.
      */
@@ -358,29 +372,33 @@ angular.module('negawattClientApp')
      * @param newPeriod
      *  The new period.
      */
-    this.periodChanged = function(newPeriod) {
-      this.period = newPeriod;
+    this.periodChanged = function(periodDirection) {
+      this.period.changePeriod(periodDirection);
 
       // Update filters with new limits.
-      this.filters.chartPreviousPeriod = period.getChartPeriod().previous;
-      this.filters.chartNextPeriod = period.getChartPeriod().next;
+      this.filters.chartPreviousPeriod = this.period.getChartPeriod().previous;
+      this.filters.chartNextPeriod = this.period.getChartPeriod().next;
 
-      this.sensorFilters.chartPreviousPeriod = period.getChartPeriod().previous;
-      this.sensorFilters.chartNextPeriod = period.getChartPeriod().next;
+      this.sensorFilters.chartPreviousPeriod = this.period.getChartPeriod().previous;
+      this.sensorFilters.chartNextPeriod = this.period.getChartPeriod().next;
+
+      // Update stateParams with new period.
+      $stateParams.chartNextPeriod = this.period.getChartPeriod().next;
+      $stateParams.chartPreviousPeriod = this.period.getChartPeriod().previous;
+      $state.refreshUrlWith($stateParams);
 
       // Update date-range text near the chart title.
-      var chartDateRange = period.formatDateRange(period.getChartPeriod().previous * 1000, period.getChartPeriod().next * 1000);
+      var chartDateRange = this.period.formatDateRange(this.period.getChartPeriod().previous * 1000, this.period.getChartPeriod().next * 1000);
 
       // ReferenceDate is used to communicate with the date selector,
       // update date-selector with current reference date.
       // Note that datepicker's referenceDate is in milliseconds.
-      var chartReferenceDate = period.getChartPeriod().referenceDate * 1000;
+      var chartReferenceDate = this.period.getChartPeriod().referenceDate * 1000;
 
       // Update the chart with new period.
-      this.pieChart.setup(chartOptions, chartDateRange, chartReferenceDate);
+      appState.detailedChart.setup(chartDateRange, chartReferenceDate);
 
       // Get the electricity.
-      this.filters.noData = true;
       appState.getElectricity(this.filters);
 
       // Get compare collection, if one was selected.
@@ -538,7 +556,7 @@ angular.module('negawattClientApp')
             break;
         }
 
-        SensorTree.get()
+        SensorTree.get($stateParams.accountId)
           .then(function(sensorTree) {
             selectedObjects = selectedObjects.map(function (id) {
               return sensorTree.collection[classLetter + id].name;
