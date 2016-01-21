@@ -17,17 +17,10 @@ angular.module('negawattClientApp')
     detailedChartCtrl.hasExtraChart = false;
 
     detailedChartCtrl.account = $stateParams.accountId;
-    var sensorData;
-    var options;
 
     $scope.siteCategories = siteCategories;
     $scope.sites = sites;
     $scope.meters = meters;
-
-    // Get the parameters chart frecuency.
-    if (angular.isDefined($stateParams.chartFreq)) {
-      Chart.setActiveFrequency($stateParams.chartFreq);
-    }
 
     // Get from parameters information of the selected marker.
     if (angular.isDefined($stateParams.markerId)) {

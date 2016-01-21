@@ -27,10 +27,6 @@ angular.module('negawattClientApp')
     // Register in application-state for later communication.
     ApplicationState.registerMetersMenu(this);
 
-    // After loading, set chart title.
-    // FIXME: Find a better way to set chart title.
-    $rootScope.$broadcast('selectionChanged');
-
     /**
      * Uncheck all checkboxes.
      */
@@ -110,6 +106,8 @@ angular.module('negawattClientApp')
 
     /**
      * Reload the categories when new meters are added (new meters page arrived).
+     *
+     * FIXME: Remove this, and all other references to 'nwMetersChanged'?
      */
     $scope.$on('nwMetersChanged', function() {
       // Update categories tree with number of sites.
@@ -127,7 +125,7 @@ angular.module('negawattClientApp')
     function checkSelectedRows(params) {
       // Start by clearing all previous check-marks (if were any...).
       angular.forEach($scope.sensorCollection, function (item) {
-        item.checked = false;
+        item.selected = false;
       });
 
       // Check boxes of items that are selected in state-params.
@@ -169,5 +167,4 @@ angular.module('negawattClientApp')
         }
       }
     }
-    
   });
