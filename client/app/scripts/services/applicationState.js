@@ -26,7 +26,6 @@ angular.module('negawattClientApp')
      * Filters includes sel and ids, a replication of $stateParams sel and ids.
      */
     this.filters = {};
-    this.sensorFilters = {};
 
     /**
      * The currently used time-frame.
@@ -115,10 +114,6 @@ angular.module('negawattClientApp')
         accountId: $stateParams.accountId,
         sel: $stateParams.sel,
         ids: $stateParams.ids
-      };
-
-      this.sensorFilters = {
-        sensor: $stateParams.sensor
       };
 
       // Define chart configuration.
@@ -212,7 +207,7 @@ angular.module('negawattClientApp')
       }
       else {
         // Select the object.
-        var meters = $stateParams.climate ? $stateParams.climate.split(',') : [];
+        var meters = $stateParams.sensor ? $stateParams.sensor.split(',') : [];
         meters.push(meter.id);
         $stateParams.sensor = meters.join();
       }
@@ -253,7 +248,7 @@ angular.module('negawattClientApp')
       this.updateChartTitle();
 
       // Get time-frame limits for new selected-objects and then
-      // get electricity from the server.
+      // get electricity and sensor data from the server.
       this.updatePeriodLimitsAndGetElectricity();
     };
 
@@ -273,10 +268,9 @@ angular.module('negawattClientApp')
       // Refresh $state with new params.
       $state.refreshUrlWith($stateParams);
 
-      // Get a new set of sensor data, according to the new
-      // selected objects.
-      // FIXME: should be moved to 'updatePeriodLimitsAndGetElectricity()'
-      this.getSensorData($stateParams);
+      // Get time-frame limits for new selected-objects and then
+      // get electricity and sensor data from the server.
+      this.updatePeriodLimitsAndGetElectricity();
     };
 
     /**
@@ -290,8 +284,6 @@ angular.module('negawattClientApp')
       this.period.changeFrequency(newFrequency);
 
       this.filters.chartFreq = newFrequency;
-      this.sensorFilters.chartFreq = newFrequency;
-
       $stateParams.chartFreq = newFrequency;
 
       // Refresh $state with new params.
@@ -322,12 +314,16 @@ angular.module('negawattClientApp')
       // Get electricity, for the first time with no data, only summary
       // with time-frame upper and lower limits.
       this.filters.noData = true;
-      this.getElectricity(this.filters)
-        .then(function(electricity) {
-          // Got the summary, set time-frame limits.
+      this.getElectricityAndSensors(this.filters)
+        .then(function(electricityAndData) {
+          var electricity = electricityAndData[0];
+          var sensorData = electricityAndData[1];
+
+          // Got the summary, set time-frame limits. Take the union of both
+          // electricity and sensor-date time-frames.
           var params = {
-            min: electricity.summary.timestamp.min,
-            max: electricity.summary.timestamp.max
+            min: Math.min(electricity.summary.timestamp.min, sensorData ? sensorData.summary.timestamp.min : Number.MAX_VALUE),
+            max: Math.max(electricity.summary.timestamp.max, sensorData ? sensorData.summary.timestamp.max : Number.MIN_VALUE)
           };
           appState.period.config(params);
 
@@ -340,9 +336,6 @@ angular.module('negawattClientApp')
           appState.filters.chartPreviousPeriod = appState.period.getChartPeriod().previous;
           appState.filters.chartNextPeriod = appState.period.getChartPeriod().next;
 
-          appState.sensorFilters.chartPreviousPeriod = appState.period.getChartPeriod().previous;
-          appState.sensorFilters.chartNextPeriod = appState.period.getChartPeriod().next;
-
           // Update date-range text near the chart title.
           var chartDateRange = appState.period.formatDateRange(appState.period.getChartPeriod().previous * 1000, appState.period.getChartPeriod().next * 1000);
 
@@ -354,14 +347,9 @@ angular.module('negawattClientApp')
           // Update the chart with new period.
           appState.detailedChart.setup(chartDateRange, chartReferenceDate);
 
-          // Now really get the electricity.
+          // Now really get the electricity and sensor data.
           appState.filters.noData = false;
-          appState.getElectricity(appState.filters);
-
-          // Get compare collection, if one was selected.
-          if ($stateParams.sensor) {
-            appState.getSensorData(appState.sensorFilters);
-          }
+          appState.getElectricityAndSensors(appState.filters);
         });
     };
 
@@ -369,8 +357,8 @@ angular.module('negawattClientApp')
      * Update the current selected objects, both in application-state and
      * in $stateParams.
      *
-     * @param newPeriod
-     *  The new period.
+     * @param periodDirection
+     *  The direction of the change (forward or backward).
      */
     this.periodChanged = function(periodDirection) {
       this.period.changePeriod(periodDirection);
@@ -378,9 +366,6 @@ angular.module('negawattClientApp')
       // Update filters with new limits.
       this.filters.chartPreviousPeriod = this.period.getChartPeriod().previous;
       this.filters.chartNextPeriod = this.period.getChartPeriod().next;
-
-      this.sensorFilters.chartPreviousPeriod = this.period.getChartPeriod().previous;
-      this.sensorFilters.chartNextPeriod = this.period.getChartPeriod().next;
 
       // Update stateParams with new period.
       $stateParams.chartNextPeriod = this.period.getChartPeriod().next;
@@ -398,13 +383,8 @@ angular.module('negawattClientApp')
       // Update the chart with new period.
       appState.detailedChart.setup(chartDateRange, chartReferenceDate);
 
-      // Get the electricity.
-      appState.getElectricity(this.filters);
-
-      // Get compare collection, if one was selected.
-      if ($stateParams.sensor) {
-        appState.getSensorData(this.sensorFilters);
-      }
+      // Get the electricity and sensor data.
+      appState.getElectricityAndSensors(this.filters);
     };
 
     /**
@@ -466,6 +446,25 @@ angular.module('negawattClientApp')
       else {
         // Preparing filters for sensor.
         filters['filter[sensor]'] = params.sensor;
+
+        var idsArray = params.sensor ? params.sensor.split(',') : [];
+        if (idsArray && idsArray.length > 1) {
+          // If multiple IDs are given, output in the format:
+          // filter[selector][operator] = IN
+          // filter[selector][value][0] = val-1
+          // filter[selector][value][1] = val-2
+          // ... etc.
+          filters['filter[sensor][operator]'] = 'IN';
+          var i = 0;
+          angular.forEach(idsArray, function (id) {
+            filters['filter[sensor][value][' + i++ + ']'] = id;
+          });
+        }
+        else {
+          // A single ID was given, Output in the format:
+          // filter[selector] = val
+          filters['filter[sensor]'] = params.sensor;
+        }
       }
 
       return filters;
@@ -480,22 +479,26 @@ angular.module('negawattClientApp')
      * @param params
      *  Parameter object regularly coming from the query string.
      */
-    this.getElectricity = function (params) {
+    this.getElectricityAndSensors = function (params) {
       var deferred = $q.defer();
 
       // Prepare electricity filter in querystring format.
-      var filters = this.prepareFilters(params, 'forElectricity');
+      var electricityFilters = this.prepareFilters(params, 'forElectricity');
+      var sensorFilters = this.prepareFilters(params);
 
       // Fetch the electricity data.
-      Electricity.get2(filters)
-        .then(function(electricity) {
+      $q.all([Electricity.get(electricityFilters), params.sensor ? SensorData.get(sensorFilters) : null])
+        .then(function(electricityAndData) {
+          var electricity = electricityAndData[0];
+          var sensorData = electricityAndData[1];
+
           // Pass the data to the detailed-chart for update
           // only if there was no 'noData' flag in params.
           if (!params.noData) {
-            var options = ChartOptions.getOptions(appState.config.chartFreq, appState.config.chartType, !!appState.config.compareWith);
-            appState.detailedChart.takeElectricity(electricity, options);
+            var options = ChartOptions.getOptions(appState.config.chartFreq, appState.config.chartType, !!params.sensor);
+            appState.detailedChart.takeElectricityAndSensorsData(electricity, sensorData, options);
           }
-          deferred.resolve(electricity);
+          deferred.resolve(electricityAndData);
         });
 
       // If there's a second chart (with different period)...
@@ -533,7 +536,7 @@ angular.module('negawattClientApp')
 
 
     /**
-     * Handle selection change.
+     * Figure out chart title, and broadcast update event.
      */
     this.updateChartTitle = function() {
       // Set the current selection label.

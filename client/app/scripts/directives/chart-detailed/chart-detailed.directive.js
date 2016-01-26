@@ -119,8 +119,7 @@ angular.module('negawattClientApp')
 
         // Expose some functions.
         this.setup = setup;
-        this.takeElectricity = takeElectricity;
-        this.takeSensorData = takeSensorData;
+        this.takeElectricityAndSensorsData = takeElectricityAndSensorsData;
 
         // Register in ApplicationState.
         ApplicationState.registerDetailedChart(this);
@@ -134,7 +133,7 @@ angular.module('negawattClientApp')
          *
          * @param dateRange string
          *  Subtitle for the chart, indicating the date range.
-         * @param referenceDage integer
+         * @param referenceDate integer
          *  Reference date.
          *  FIXME: Do we need it?
          */
@@ -144,27 +143,20 @@ angular.module('negawattClientApp')
         }
 
         /**
-         * Get new electricity date from application-state and update chart.
+         * Get new electricity and sensor date from application-state and update chart.
          *
          * @param electricity object
          *  New electricity data, containing both data and summary.
+         * @param sensorData object
+         *  New sensor data, containing both data and summary.
          * @param options object
          *  New chart options.
          */
-        function takeElectricity(electricity, options) {
+        function takeElectricityAndSensorsData(electricity, sensorData, options) {
           chart.electricity = electricity.data;
           chart.summary = electricity.summary;
+          chart.sensorData = sensorData ? sensorData.data : null;
           chart.options = options;
-        }
-
-        /**
-         * Get new sensor date from application-state and update chart.
-         *
-         * @param sensorData object
-         *  New sensor data, containing both data and summary.
-         */
-        function takeSensorData(sensorData) {
-          chart.sensorData = sensorData.data;
         }
 
         /**
