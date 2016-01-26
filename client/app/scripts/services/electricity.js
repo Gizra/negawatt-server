@@ -13,10 +13,6 @@ angular.module('negawattClientApp')
 
     var getElectricity = {};
 
-    // Temp place to store filter parameters.
-    // FIXME DELME!
-    var saveParams = {};
-
     // Update event broadcast name.
     var broadcastUpdateEventName = 'nwElectricityChanged';
 
@@ -25,7 +21,6 @@ angular.module('negawattClientApp')
      * Get electricity data.
      *
      * Returns a promise for electricity data, from cache or the server.
-     * FIXME: Will replace get().
      *
      * @param params
      *   Array of filter parameters in GET params format.
@@ -33,31 +28,11 @@ angular.module('negawattClientApp')
      * @returns {*}
      *   A promise to electricity data.
      */
-    this.get2 = function(params) {
+    this.get = function(params) {
       var hash = Utils.objToHash(params);
-      saveParams = params;
-      return this.get(hash);
-    };
-
-    /**
-     * Get electricity data.
-     *
-     * Returns a promise for electricity data, from cache or the server.
-     *
-     * @param hash
-     *   String that represent the filter parameters in GET params format.
-     *
-     * @returns {*}
-     *   A promise to electricity data.
-     */
-    this.get = function(hash) {
-      if (angular.isUndefined(hash)) {
-        // 'Negawatt.Electricity - Hash not defined on method get(hash)';
-        return undefined;
-      }
 
       // Preparation of the promise and cache for Electricity request.
-      getElectricity[hash] = $q.when(getElectricity[hash] || electricityData(hash) || getDataFromBackend(hash, 1, false));
+      getElectricity[hash] = $q.when(getElectricity[hash] || electricityData(hash) || getDataFromBackend(params, hash, 1, false));
 
       // Clear the promise cached, after resolve or reject the
       // promise. Permit access to the cache data, when
@@ -100,23 +75,22 @@ angular.module('negawattClientApp')
     /**
      * Return electricity data array from the server.
      *
+     * @param params
+     *  Request filters in the form of http-params.
      * @param hash
-     *
+     *  Hash number of the original params(params might have added 'page' option)
      * @param pageNumber
+     *  Used for paging - the page number to request.
      * @param skipResetCache
+     *
      * @returns {$q.promise}
      */
-    function getDataFromBackend(hash, pageNumber, skipResetCache) {
+    function getDataFromBackend(params, hash, pageNumber, skipResetCache) {
       var deferred = $q.defer();
       var url = Config.backend + '/api/electricity';
-      // Create a copy of filters, since params might add page option. Filters must
-      // stay clean of page parameters since it also serves as key to the cache.
-      // FIXME: Will be eliminated - the params will arrive from the get() function.
-      var params = FilterFactory.getElectricity(hash) || saveParams;
 
-      // If page-number is given, add it to the params.
-      // Don't modify 'filters' since it should reflect the general params,
-      // without page number.
+      // If page-number is given, add it to the params. Note that
+      // 'hash' includes all params, but the 'page' option.
       if (pageNumber) {
         params['page'] = pageNumber;
       }
@@ -135,7 +109,7 @@ angular.module('negawattClientApp')
 
         // If there are more pages, read them.
         if (hasNextPage && !noData) {
-          getDataFromBackend(hash, pageNumber + 1, true);
+          getDataFromBackend(params, hash, pageNumber + 1, true);
         }
       });
 
