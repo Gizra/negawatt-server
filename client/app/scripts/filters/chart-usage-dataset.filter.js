@@ -106,7 +106,7 @@ angular.module('negawattClientApp')
       var compareWithIndexed = {};
       if (compareWith) {
         angular.forEach(compareWith, function (item) {
-          compareWithIndexed[item.timestamp] = item;
+          compareWithIndexed[item.timestamp_rounded] = item;
         })
       }
 
