@@ -113,7 +113,8 @@ angular.module('negawattClientApp')
       this.filters = {
         accountId: $stateParams.accountId,
         sel: $stateParams.sel,
-        ids: $stateParams.ids
+        ids: $stateParams.ids,
+        sensor: $stateParams.sensor
       };
 
       // Define chart configuration.
@@ -121,6 +122,13 @@ angular.module('negawattClientApp')
         chartFreq: $stateParams.chartFreq,
         compareWith: $stateParams.sensor
       };
+
+      // If period is given in the URL, hard set period's reference-date
+      // to the beginning of the interval. It will be checked for validity
+      // after setting the frequency.
+      if ($stateParams.chartPreviousPeriod) {
+        this.period.getChartPeriod().referenceDate = $stateParams.chartPreviousPeriod;
+      }
 
       // Update chart title in detailed-chart
       this.updateChartTitle();
@@ -280,7 +288,7 @@ angular.module('negawattClientApp')
      * @param newFrequency integer
      *  The new frequency.
      */
-    this.frequencyChanged = function(newFrequency) {
+    this.frequencyChanged = function(newFrequency, newReferenceDate) {
       this.period.changeFrequency(newFrequency);
 
       this.filters.chartFreq = newFrequency;
@@ -288,6 +296,10 @@ angular.module('negawattClientApp')
 
       // Refresh $state with new params.
       $state.refreshUrlWith($stateParams);
+
+      if (newReferenceDate) {
+        this.period.setReferenceDate(newReferenceDate)
+      }
 
       // Get time-frame limits for new frequency and then
       // get electricity from the server.
@@ -319,11 +331,11 @@ angular.module('negawattClientApp')
           var electricity = electricityAndData[0];
           var sensorData = electricityAndData[1];
 
-          // Got the summary, set time-frame limits. Take the union of both
-          // electricity and sensor-date time-frames.
+          // Got the summary, set time-frame limits from electricity, if there's one,
+          // and from sensor-data if there's no electricity data.
           var params = {
-            min: Math.min(electricity.summary.timestamp.min, sensorData ? sensorData.summary.timestamp.min : Number.MAX_VALUE),
-            max: Math.max(electricity.summary.timestamp.max, sensorData ? sensorData.summary.timestamp.max : Number.MIN_VALUE)
+            min: electricity ? electricity.summary.timestamp.min : sensorData.summary.timestamp.min,
+            max: electricity ? electricity.summary.timestamp.max : sensorData.summary.timestamp.max
           };
           appState.period.config(params);
 
