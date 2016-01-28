@@ -128,7 +128,7 @@ angular.module('negawattClientApp')
         item.selected = false;
       });
 
-      // Check boxes of items that are selected in state-params.
+      // Check boxes of meters that are selected in state-params.
       if (params.ids) {
         var selectedObjects = params.ids.split(',');
         switch (params.sel) {
@@ -165,6 +165,17 @@ angular.module('negawattClientApp')
             $scope.disableCategories = false;
             break;
         }
+      }
+
+      // Check boxes of sensors that are selected in state-params.
+      if (params.sensor) {
+        var selectedObjects = params.sensor.split(',');
+        // Check sensors that are selected in state-params.
+        angular.forEach(selectedObjects, function (itemId) {
+          if ($scope.sensorCollection['r' + itemId]) {
+            $scope.sensorCollection['r' + itemId].selected = true;
+          }
+        });
       }
     }
   });
