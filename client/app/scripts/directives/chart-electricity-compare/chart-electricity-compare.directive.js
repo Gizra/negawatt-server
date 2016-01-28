@@ -30,17 +30,15 @@ angular.module('negawattClientApp')
 
           var row = selectedItem.row;
           var col = selectedItem.column;
-          var timestamp = chartData.data.rows[row].timestamp;
+          var timestamp = chartData.data.rows[row].onSelect;
 
-          // 'Drill down' to the referred timestamp, one frequency step higher.
-          // Reload electricity to update charts.
-          ChartUsagePeriod.setReferenceDate(timestamp);
+          // 'Drill down' to the referred timestamp, one frequency step higher
+          // and update charts.
           var frequency = $stateParams.chartFreq;
           // Increase frequency by one step.
           (frequency < 5) && frequency++;
-          ChartUsagePeriod.changeFrequency(frequency);
-          // Update electricty with new parameters.
-          ChartElectricityUsage.requestElectricity(ChartUsagePeriod.stateParams);
+          // Update charts with new data.
+          ApplicationState.frequencyChanged(frequency, timestamp);
         };
 
         /**
