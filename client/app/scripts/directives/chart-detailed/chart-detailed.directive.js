@@ -155,7 +155,7 @@ angular.module('negawattClientApp')
         function takeElectricityAndSensorsData(electricity, sensorData, options) {
           chart.electricity = electricity.data;
           chart.summary = electricity.summary;
-          chart.sensorData = sensorData ? sensorData.data : null;
+          chart.sensorData = sensorData ? sensorData.data : [];
           chart.options = options;
         }
 
