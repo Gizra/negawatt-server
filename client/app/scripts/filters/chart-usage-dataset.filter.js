@@ -117,34 +117,26 @@ angular.module('negawattClientApp')
         // Create a temp array like { time: {low: 1, mid:4, peak:5}, time: {..}, ..}.
         isLineChart = ChartOptions.getChartType(frequency.type) == 'lineChart';
 
+        var blankRow = {
+          flat: null,
+          peak: null,
+          mid: null,
+          low: null
+        };
         angular.forEach(collection, function(item) {
           if (!(item.timestamp_rounded in values)) {
             // Never encountered this timestamp, create an empty object
-            values[item.timestamp_rounded] = {};
+            values[item.timestamp_rounded] = angular.copy(blankRow);
           }
           // Save the average power. Sum the values.
-          if (!values[item.timestamp_rounded][item.rate_type]) {
-            values[item.timestamp_rounded][item.rate_type] = 0;
-          }
           values[item.timestamp_rounded][item.rate_type] += +item[powerValueProperty];
-
-          // Handle problem with line chart:
-          // If having TOUse data, the lines should be elongated one data point forward
-          // when changing rate-type in order to 'connect' the lines of the different
-          // charts.
-          if (isLineChart && prevRateType && prevRateType != item.rate_type) {
-            if (!values[item.timestamp_rounded][prevRateType]) {
-              values[item.timestamp_rounded][prevRateType] = 0;
-            }
-            // Will sum over different meters/sites/categories.
-            values[item.timestamp_rounded][prevRateType] += +item[powerValueProperty];
-          }
 
           prevRateType = item.rate_type;
         });
 
         // Display the unit according to selected frequency.
         var unit = ['hour', 'minute'].indexOf(frequency.frequency) != -1 ? 'קו״ט' : 'קוט״ש';
+        var colors = {flat: 'blue', peak: 'red', mid: 'orange', low: 'green'};
 
         // Build rows
         angular.forEach(values, function(item, timestamp) {
@@ -153,11 +145,26 @@ angular.module('negawattClientApp')
           var col = [{v: time}];
           ['flat', 'peak', 'mid', 'low'].forEach(function(type) {
             var value = item[type];
-            col.push({v: value});
-            col.push(value ? {v: label + '\n' + $filter('number')(item[type], 0) + ' ' + unit} : {});
+            if (isLineChart) {
+              // Line chart with varying colors. Push the value, then tooltip, then color
+              // information, and then 3 more empty charts.
+              if (value) {
+                col.push({v: value});
+                col.push(value ? {v: label + '\n' + $filter('number')(item[type], 0) + ' ' + unit} : {});
+                col.push({v: 'color:' + colors[type]});
+                col.push({v: null});
+                col.push({v: null});
+                col.push({v: null});
+              }
+            }
+            else {
+              // Stacked columns chart, just add the values for 4 charts.
+              col.push({v: value});
+              col.push(value ? {v: label + '\n' + $filter('number')(item[type], 0) + ' ' + unit} : {});
+            }
           });
           // Add compareWith column, if exists.
-          if (compareWith) {
+          if (compareWith.length) {
             var n = compareWithIndexed[timestamp] ? compareWithIndexed[timestamp][compareLabelsField] : undefined;
             col.push(n ? {v: n} : {});
             col.push(n ? {v: label + '\n' + $filter('number')(n, 0) + ' מעלות'} : {})
@@ -204,7 +211,7 @@ angular.module('negawattClientApp')
             col.push(value ? {v: label + '\n' + $filter('number')(item[type.id], 0) + ' ' + unit} : {});
           });
           // Add compareWith column, if exists.
-          if (compareWith) {
+          if (compareWith.length) {
             var n = compareWithIndexed[timestamp] ? compareWithIndexed[timestamp][compareLabelsField] : undefined;
             col.push(n ? {v: n} : {});
             col.push(n ? {v: label + '\n' + $filter('number')(n, 0) + ' מעלות'} : {})
@@ -235,55 +242,104 @@ angular.module('negawattClientApp')
      */
     function getColumns(collection, frequency, chartType, labelsUsed, labels, labelsPrefixLetter, compareWith) {
       if (chartType == 'sum') {
-        var columns = [
-          {
-            'id': 'month',
-            'label': 'Month',
-            'type': 'date',
-          },
-          {
-            'id': 'flat',
-            'label': 'אחיד',
-            'type': 'number',
-          },
-          {
-            'id': 'flat',
-            'type': 'string',
-            p: {role: 'tooltip'}
-          },
-          {
-            'id': 'peak',
-            'label': 'פסגה',
-            'type': 'number',
-          },
-          {
-            'id': 'peak',
-            'type': 'string',
-            p: {role: 'tooltip'}
-          },
-          {
-            'id': 'mid',
-            'label': 'גבע',
-            'type': 'number',
-          },
-          {
-            'id': 'mid',
-            'type': 'string',
-            p: {role: 'tooltip'}
-          },
-          {
-            'id': 'low',
-            'label': 'שפל',
-            'type': 'number',
-          },
-          {
-            'id': 'low',
-            'type': 'string',
-            p: {role: 'tooltip'}
-          }
+        var columns;
+        if (frequency.type < 4) {
+          // For year, month and week frequency, show stacked 4 charts for peak,
+          // mid, low and flat, each with its own tooltip.
+          columns = [
+            {
+              'id': 'month',
+              'label': 'Month',
+              'type': 'date',
+            },
+            {
+              'id': 'flat',
+              'label': 'אחיד',
+              'type': 'number',
+            },
+            {
+              'id': 'flat',
+              'type': 'string',
+              p: {role: 'tooltip'}
+            },
+            {
+              'id': 'peak',
+              'label': 'פסגה',
+              'type': 'number',
+            },
+            {
+              'id': 'peak',
+              'type': 'string',
+              p: {role: 'tooltip'}
+            },
+            {
+              'id': 'mid',
+              'label': 'גבע',
+              'type': 'number',
+            },
+            {
+              'id': 'mid',
+              'type': 'string',
+              p: {role: 'tooltip'}
+            },
+            {
+              'id': 'low',
+              'label': 'שפל',
+              'type': 'number',
+            },
+            {
+              'id': 'low',
+              'type': 'string',
+              p: {role: 'tooltip'}
+            }
           ];
-        if (compareWith) {
-          // @fixme: put proper label here, in stead of hard coded temperature.
+        }
+        else {
+          // For hour and minute frequencies, show 1 charts with different colors
+          // for peak, mid, low, and flat sections. The other charts are fake,
+          // only so that they appear in the legend.
+          columns = [
+            {
+              'id': 'month',
+              'label': 'Month',
+              'type': 'date',
+            },
+            {
+              'id': 'flat',
+              'label': 'אחיד',
+              'type': 'number',
+            },
+            {
+              'id': 'flat',
+              'type': 'string',
+              p: {role: 'tooltip'}
+            },
+            {
+              'id': 'flat',
+              'type': 'string',
+              p: {role: 'style'}
+            },
+            {
+              'id': 'peak',
+              'label': 'פסגה',
+              'type': 'number',
+            },
+            {
+              'id': 'mid',
+              'label': 'גבע',
+              'type': 'number',
+            },
+            {
+              'id': 'low',
+              'label': 'שפל',
+              'type': 'number',
+            },
+          ];
+        }
+        if (compareWith.length) {
+          // FIXME: Put proper label here, in stead of hard coded temperature.
+          // FIXME: Put as many charts as are sensors.
+          // FIXME: Do the same below for 'detailed' and 'stacked'.
           columns.push({
               'id': 'temp',
               'label': 'טמפרטורה',

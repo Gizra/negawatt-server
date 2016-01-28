@@ -59,7 +59,8 @@ angular.module('negawattClientApp')
      */
     function getLineOptions() {
       return extend(getCommonOptions(), {
-        'chart_type': 'LineChart'
+        'chart_type': 'LineChart',
+        interpolateNulls: true
       });
     }
 
@@ -83,6 +84,7 @@ angular.module('negawattClientApp')
 
       return extend(getCommonOptions(), {
         chart_type: 'LineChart',
+        interpolateNulls: true,
         'series': series,
         'vAxes': {
           0: {
