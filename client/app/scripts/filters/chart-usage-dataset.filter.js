@@ -21,7 +21,7 @@ angular.module('negawattClientApp')
      * @returns {*}
      *  The dataset collection filtered.
      */
-    return function (collection, chartType, compareWith, options, labels, labelsField, labelsPrefixLetter, compareLabelsField, oneItemSelected) {
+    return function (collection, chartType, compareWith, options, labels, labelsField, labelsPrefixLetter, compareLabelsField, sensorUnits, oneItemSelected) {
 
       // chartType defaults to stacked.
       chartType = chartType ? chartType : 'stacked';
@@ -32,15 +32,8 @@ angular.module('negawattClientApp')
       }
 
       var chartFrequencyActive = Chart.getActiveFrequency();
-
-      // Check if asked to return chart options only.
-      if (collection == 'options-only') {
-        return ChartOptions.getOptions(chartFrequencyActive, chartType, !!compareWith);
-      }
-
       var data = getDataset(collection, chartFrequencyActive, chartType, labels, labelsField, labelsPrefixLetter, compareWith, compareLabelsField);
-      options = ChartOptions.getOptions(chartFrequencyActive.type, chartType, data.numSeries, !!compareWith);
-
+      options = ChartOptions.getOptions(chartFrequencyActive.type, chartType, data.numSeries, !!compareWith, sensorUnits);
 
       // Recreate collection object.
       collection = {
@@ -135,7 +128,7 @@ angular.module('negawattClientApp')
         });
 
         // Display the unit according to selected frequency.
-        var unit = ['hour', 'minute'].indexOf(frequency.frequency) != -1 ? 'קו״ט' : 'קוט״ש';
+        var unit = frequency.tooltip_units;
         var colors = {flat: 'blue', peak: 'red', mid: 'orange', low: 'green'};
 
         // Build rows
@@ -198,7 +191,7 @@ angular.module('negawattClientApp')
         });
 
         // Display the unit according to selected frequency.
-        var unit = ['hour', 'minute'].indexOf(frequency.frequency) != -1 ? 'קו״ט' : 'קוט״ש';
+        var unit = frequency.tooltip_units;
 
         // Build rows
         angular.forEach(values, function(item, timestamp) {

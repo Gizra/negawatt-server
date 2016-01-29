@@ -8,8 +8,16 @@ angular.module('negawattClientApp')
 
     ChartOptions = {
       getChartType: getChartType,
-      getOptions: getOptions
+      getOptions: getOptions,
+      getChartWidth: getChartWidth
     };
+
+    function getChartWidth() {
+      var w = angular.element($window),
+        width = w.width();
+
+      return width * 7 / 12 - 150;
+    }
 
     /**
      * Get common configuration for draw Google Chart.
@@ -17,15 +25,11 @@ angular.module('negawattClientApp')
      * @returns {*}
      */
     function getCommonOptions() {
-      var w = angular.element($window),
-        width = w.width(),
-        height = w.height();
-
       var chartFrequencyActive = Chart.getActiveFrequency();
 
       return {
         height: '350',
-        width: width * 7 / 12 - 150,
+        width: getChartWidth(),
         titlePosition: 'none',
         legend: {
           maxLines: 3,
@@ -70,7 +74,7 @@ angular.module('negawattClientApp')
      * @returns {*}
      *  Configuration object.
      */
-    function getLineCompareOptions(numSeries) {
+    function getLineCompareOptions(numSeries, sensorUnits) {
       // If there's only one serie, TOUse will be displayed, using 4 series.
       numSeries = (numSeries == 1) ? 4 : numSeries;
       var series = {};
@@ -93,7 +97,7 @@ angular.module('negawattClientApp')
           },
           1: {
             // @fixme: get title from somewhere.
-            title: 'טמפרטורה',
+            title: sensorUnits,
             format: 'short',
           }
         },
@@ -152,14 +156,14 @@ angular.module('negawattClientApp')
      * @returns {*}
      *  Configuration object.
      */
-    function getColumnCompareOptions(chartType, numSeries) {
-      // If there's only one serie, TOUse will be displayed, using 4 series.
+    function getColumnCompareOptions(chartType, numSeries, sensorUnits) {
+      // If there's only one series, TOUse will be displayed, using 4 series.
       numSeries = (numSeries == 1) ? 4 : numSeries;
       var series = {};
       for (var i = 0; i < numSeries; i++) {
         series[i] = {targetAxisIndex: 0};
       }
-      // Add a last series for temperature (if exists).
+      // Add a last series for sensor (if exists).
       series[numSeries] = {
         targetAxisIndex: 1,
           type: 'line'
@@ -178,8 +182,7 @@ angular.module('negawattClientApp')
             format: 'short',
           },
           1: {
-            // @fixme: get title from somewhere.
-            title: 'טמפרטורה',
+            title: sensorUnits,
             format: 'short',
             'chart_type': 'LineChart'
           }
@@ -215,13 +218,13 @@ angular.module('negawattClientApp')
      * @returns {*}
      *  Chart options object.
      */
-    function getOptions(frequency, chartType, numSeries, withCompare) {
+    function getOptions(frequency, chartType, numSeries, withCompare, sensorUnits) {
       switch (getChartType(frequency)) {
         case 'columnChart':
-          return (withCompare) ? getColumnCompareOptions(chartType, numSeries) : getColumnOptions(chartType);
+          return withCompare ? getColumnCompareOptions(chartType, numSeries, sensorUnits) : getColumnOptions(chartType);
 
         case 'lineChart':
-          return (withCompare) ? getLineCompareOptions(numSeries) : getLineOptions();
+          return withCompare ? getLineCompareOptions(numSeries, sensorUnits) : getLineOptions();
       }
     }
 

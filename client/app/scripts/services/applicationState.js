@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('ApplicationState', function ApplicationState($q, $rootScope, $state, $stateParams, ChartOptions, ChartUsagePeriod, Electricity, Profile, SensorData, SensorTree) {
+  .service('ApplicationState', function ApplicationState($q, $rootScope, $state, $stateParams, ChartOptions, ChartUsagePeriod, Electricity, Profile, SensorData, SensorTree, SensorType) {
 
     var appState = this;
 
@@ -73,9 +73,11 @@ angular.module('negawattClientApp')
      */
     this.registerMainChart = function(chart) {
       this.mainChart = chart;
-      SensorTree.get()
-        .then(function(sensorTree) {
-          chart.takeSensorTree(sensorTree);
+      $q.all([SensorTree.get($stateParams.accountId), SensorType.get($stateParams.accountId)])
+        .then(function(treeAndType) {
+          var tree = treeAndType[0];
+          var type = treeAndType[1];
+          chart.takeSensorTreeAndType(tree, type);
         })
     };
 
@@ -481,7 +483,6 @@ angular.module('negawattClientApp')
 
       return filters;
     };
-
 
     /**
      * Get current electricity data.

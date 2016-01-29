@@ -18,14 +18,31 @@ angular.module('negawattClientApp')
         ctrlChart.hasData = hasData;
         ctrlChart.changeFrequency = changeFrequency;
         ctrlChart.sensorTree = null;
+        ctrlChart.sensorType = null;
 
         ApplicationState.registerMainChart(this);
 
-        this.takeSensorTree = function (tree) {
+        /**
+         * Get sensor-tree and sensor-types info from appState..
+         *
+         * @param: tree
+         *  Sensors' tree object.
+         * @param: type
+         *  Sensors' type information object.
+         */
+        this.takeSensorTreeAndType = function (tree, type) {
           ctrlChart.sensorTree = tree;
+          ctrlChart.sensorType = type;
         };
 
-        // Select category from the chart.
+        /**
+         * Handler for clicking a column of the chart.
+         *
+         * @param: selectedItem
+         *  Clicked column object.
+         * @param: chartData
+         *  Chart data object.
+         */
         $scope.onSelect = function(selectedItem, chartData) {
 
           var row = selectedItem.row;
@@ -69,7 +86,7 @@ angular.module('negawattClientApp')
           setState('loading');
         });
 
-        // Privete functions.
+        // Private functions.
 
         /**
          * Set User interface state.
@@ -219,10 +236,16 @@ angular.module('negawattClientApp')
               break;
           }
 
-          var comparelabelsField = 'avg_value';
+          var compareLabelsField = 'avg_value';
+
+          // Figure out sensor's units.
+          // Taken from the first sensor data.
+          // FIXME: How to handlle multiple sensors with different units?
+          var type = sensorData.length ? sensorData[0].sensor_type : null;
+          var sensorUnits = type ? ctrlChart.sensorType[type].units : null;
 
           // Convert the data coming from the server into google chart format.
-          ctrlChart.data = $filter('toChartDataset')(activeElectricity, $stateParams.chartType, sensorData, options, labels, labelsField, labelsPrefixLetter, comparelabelsField, oneItemSelected);
+          ctrlChart.data = $filter('toChartDataset')(activeElectricity, $stateParams.chartType, sensorData, options, labels, labelsField, labelsPrefixLetter, compareLabelsField, sensorUnits, oneItemSelected);
 
           // Update state.
           setState();

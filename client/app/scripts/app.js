@@ -291,6 +291,7 @@ angular
             return SensorType.get(account.id);
           },
           filters: function(FilterFactory, siteCategories, $stateParams, meters, account) {
+            // FIXME: cleanup required here.
             // Define categories filters. Used for the UI Checknboxes.
             FilterFactory.setCategories(siteCategories);
             // Define electricity parameters
