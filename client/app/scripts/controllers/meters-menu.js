@@ -7,8 +7,6 @@
 angular.module('negawattClientApp')
   .controller('MetersMenuCtrl', function ($scope, $rootScope ,$stateParams, meterCategories, sensorTree, sensorType, ApplicationState) {
 
-    var metersMenuCtrl = this;
-
     // Selected tab in the categories selector.
     $scope.tab = 'sites';
 
@@ -105,21 +103,11 @@ angular.module('negawattClientApp')
     };
 
     /**
-     * Reload the categories when new meters are added (new meters page arrived).
-     *
-     * FIXME: Remove this, and all other references to 'nwMetersChanged'?
-     */
-    $scope.$on('nwMetersChanged', function() {
-      // Update categories tree with number of sites.
-      metersMenuCtrl.reloadCategories($stateParams.accountId);
-    });
-
-    /**
      * Check the check-boxes of the rows of entities that are marked as selected
      * in the stateParams.
      *
      * @param params
-     *  Selection paramenter, like in $stateParams.
+     *  Selection parameter, like in $stateParams.
      *  DON'T use $stateParams here. Sometimes it's not up to date.
      */
     function checkSelectedRows(params) {
