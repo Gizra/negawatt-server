@@ -160,6 +160,26 @@ angular.module('negawattClientApp')
         }
 
         /**
+         * Handler for electricity lazy-load.
+         *
+         * Take the new data, the chart watches 'electricity' and
+         * will get updated with the new data.
+         */
+        $scope.$on("nwElectricityChanged", function(event, electricity) {
+          chart.electricity = electricity.data;
+        });
+
+        /**
+         * Handler for sensor-data lazy-load.
+         *
+         * Take the new data, the chart watches 'sensorData' and
+         * will get updated with the new data.
+         */
+        $scope.$on("nwSensorDataChanged", function(event, sensorData) {
+          chart.sensorData = sensorData.data;
+        });
+
+        /**
          * Handler for setting chart title.
          * FIXME: Make direct call.
          */
@@ -174,8 +194,13 @@ angular.module('negawattClientApp')
           function () { return $window.innerWidth; },
           function () {
             // Window was resized, recalc chart options.
-            if (chart.data != undefined) {
-              chart.data.options = $filter('toChartDataset')('options-only', $stateParams.chartType);
+            if (chart.electricity != undefined) {
+              var newOptions = angular.copy(chart.options);
+              newOptions.width = ChartOptions.getChartWidth();
+
+              // Update chart.options so the chart will be redrawn
+              // (chart-electricity-compare watches ctrlChart.options).
+              chart.options = newOptions;
             }
           },
           true
