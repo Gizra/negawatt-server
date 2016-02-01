@@ -103,7 +103,7 @@ angular.module('negawattClientApp')
         var noData = angular.isDefined(config.params.nodata);
         var hasNextPage = electricity.next != undefined;
 
-        setCache(electricity, hash, skipResetCache, noData);
+        setCache(electricity, hash, skipResetCache, noData, pageNumber);
 
         deferred.resolve(electricityData(hash));
 
@@ -127,15 +127,18 @@ angular.module('negawattClientApp')
      *   If false, a timer will be set to clear the cache in 60 sec.
      * @param noData
      *   True if parameter noData is 1, otherwise is false.
+     * @param pageNumber
+     *   Number of current data-page in multiple pages download.
      */
-    function setCache(electricity, hash, skipResetCache, noData) {
+    function setCache(electricity, hash, skipResetCache, noData, pageNumber) {
       // Cache messages data.
       cache[hash] = {
         data: (cache[hash] ? cache[hash].data : []).concat(electricity.data),
         limits: electricity.summary.timestamp,        
         timestamp: new Date(),
         noData: noData,
-        summary: electricity.summary
+        summary: electricity.summary,
+        pageNumber: pageNumber
       };
 
       // If asked to skip cache timer reset, return now.
