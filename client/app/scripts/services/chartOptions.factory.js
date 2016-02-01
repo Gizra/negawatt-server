@@ -96,7 +96,6 @@ angular.module('negawattClientApp')
             format: 'short',
           },
           1: {
-            // @fixme: get title from somewhere.
             title: sensorUnits,
             format: 'short',
           }

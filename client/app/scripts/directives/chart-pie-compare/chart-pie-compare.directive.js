@@ -8,6 +8,9 @@ angular.module('negawattClientApp')
       controller: function chartPieUsageCtrl(ChartUsagePeriod, Chart, $stateParams, $filter, $scope, $state, ApplicationState, Utils) {
         var ctrlPieChart = this;
 
+        // Expose functions.
+        ctrlPieChart.renderChart = renderChart;
+
         // Save the state of the directive (to handle views in the directive. "undefined|empty|loading|data").
         ctrlPieChart.state = 'loading';
         ctrlPieChart.sensorTree = null;
@@ -36,20 +39,6 @@ angular.module('negawattClientApp')
         ctrlPieChart.messages = {
           empty: ChartUsagePeriod.messages.empty
         };
-
-        /**
-         * Directive Event: When new electricity data is updated from the server.
-         */
-        $scope.$watchGroup(['ctrlPieChart.summary', 'ctrlPieChart.options'], function(chart) {
-          if (angular.isUndefined(chart)
-            || Utils.isEmpty(chart[0])) {
-
-            return;
-          }
-
-          renderChart(chart[0], chart[1]);
-
-        }, true);
 
         $scope.$on('nwChartBeginLoading', function() {
           setState('loading');
@@ -108,7 +97,7 @@ angular.module('negawattClientApp')
          * @param activeElectricity
          *  The "active electricity" data collection.
          */
-        function renderChart(summary, options) {
+        function renderChart(summary) {
           // Take sites, meters, and categories from chartDetailedCtrl's scope.
           var chartDetailedScope = $scope.$parent.$parent;
           var labels;

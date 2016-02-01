@@ -13,12 +13,18 @@ angular.module('negawattClientApp')
         // Save the state of the directive (to handle views in the directive. "undefined|empty|loading|data").
         ctrlChart.state = 'loading';
 
+        // Expose functions.
         ctrlChart.showNavigation = showNavigation;
         ctrlChart.changePeriod = changePeriod;
         ctrlChart.hasData = hasData;
+        ctrlChart.takeData = takeData;
         ctrlChart.changeFrequency = changeFrequency;
+
         ctrlChart.sensorTree = null;
         ctrlChart.sensorType = null;
+        ctrlChart.electricity = {};
+        ctrlChart.summary = {};
+        ctrlChart.sensorData = {};
 
         ApplicationState.registerMainChart(this);
 
@@ -66,21 +72,6 @@ angular.module('negawattClientApp')
         ctrlChart.messages = {
           empty: ChartUsagePeriod.messages.empty
         };
-
-        /**
-         * Directive Event: When new electricity data is updated from the server.
-         */
-        $scope.$watchGroup(['ctrlChart.electricity', 'ctrlChart.sensorData', 'ctrlChart.options', 'ctrlChart.summary'], function(chart) {
-          if (angular.isUndefined(chart)
-            || Utils.isEmpty(chart[0])
-            || angular.isUndefined(chart[2])) {
-
-            return;
-          }
-
-          renderChart(chart[0], chart[1], chart[2], chart[3]);
-
-        }, true);
 
         $scope.$on('nwChartBeginLoading', function() {
           setState('loading');
@@ -178,20 +169,29 @@ angular.module('negawattClientApp')
           ChartElectricityUsage.requestElectricity(ChartUsagePeriod.stateParams);
         }
 
+        function takeData(electricity, summary, sensorData) {
+          if (electricity) {
+            ctrlChart.electricity = electricity;
+            ctrlChart.summary = summary;
+          }
+          if (sensorData) {
+            ctrlChart.sensorData = sensorData;
+          }
+          renderChart(ctrlChart.electricity, ctrlChart.summary, ctrlChart.sensorData);
+        }
+
         /**
          * Render chart with the active electricity data according the
          * period and the chart selected.
          *
          * @param activeElectricity
          *  The "active electricity" data collection.
-         * @param sensorData
-         *  Data collection to compare to.
-         * @param options
-         *  Chart options.
          * @param summary
          *  Electricity summary.
+         * @param sensorData
+         *  Data collection to compare to.
          */
-        function renderChart(activeElectricity, sensorData, options, summary) {
+        function renderChart(activeElectricity, summary, sensorData) {
           // type is one of 'meters', 'sites', 'site_categories'.
           var labelsType = summary.type;
 
@@ -240,12 +240,13 @@ angular.module('negawattClientApp')
 
           // Figure out sensor's units.
           // Taken from the first sensor data.
-          // FIXME: How to handlle multiple sensors with different units?
+          // FIXME: How to handle multiple sensors with different units?
           var type = sensorData.length ? sensorData[0].sensor_type : null;
-          var sensorUnits = type ? ctrlChart.sensorType[type].units : null;
+          var sensorUnits = type ? ('[' + ctrlChart.sensorType[type].units + '] '
+                                    + ctrlChart.sensorType[type].label) : null;
 
           // Convert the data coming from the server into google chart format.
-          ctrlChart.data = $filter('toChartDataset')(activeElectricity, $stateParams.chartType, sensorData, options, labels, labelsField, labelsPrefixLetter, compareLabelsField, sensorUnits, oneItemSelected);
+          ctrlChart.data = $filter('toChartDataset')(activeElectricity, $stateParams.chartType, sensorData, labels, labelsField, labelsPrefixLetter, compareLabelsField, sensorUnits, oneItemSelected);
 
           // Update state.
           setState();

@@ -21,7 +21,7 @@ angular.module('negawattClientApp')
      * @returns {*}
      *  The dataset collection filtered.
      */
-    return function (collection, chartType, compareWith, options, labels, labelsField, labelsPrefixLetter, compareLabelsField, sensorUnits, oneItemSelected) {
+    return function (collection, chartType, compareWith, labels, labelsField, labelsPrefixLetter, compareLabelsField, sensorUnits, oneItemSelected) {
 
       // chartType defaults to stacked.
       chartType = chartType ? chartType : 'stacked';
@@ -33,7 +33,7 @@ angular.module('negawattClientApp')
 
       var chartFrequencyActive = Chart.getActiveFrequency();
       var data = getDataset(collection, chartFrequencyActive, chartType, labels, labelsField, labelsPrefixLetter, compareWith, compareLabelsField);
-      options = ChartOptions.getOptions(chartFrequencyActive.type, chartType, data.numSeries, !!compareWith, sensorUnits);
+      options = ChartOptions.getOptions(chartFrequencyActive.type, chartType, data.numSeries, !!compareWith.length, sensorUnits);
 
       // Recreate collection object.
       collection = {

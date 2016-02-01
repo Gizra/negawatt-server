@@ -505,11 +505,11 @@ angular.module('negawattClientApp')
           var electricity = electricityAndData[0];
           var sensorData = electricityAndData[1];
 
-          // Pass the data to the detailed-chart for update
-          // only if there was no 'noData' flag in params.
+          // Draw the main and pie charts,
+          // but only if there was no 'noData' flag in params.
           if (!params.noData) {
-            var options = ChartOptions.getOptions(appState.config.chartFreq, appState.config.chartType, !!params.sensor);
-            appState.detailedChart.takeElectricityAndSensorsData(electricity, sensorData, options);
+            appState.mainChart.takeData(electricity.data, electricity.summary, sensorData ? sensorData.data : []);
+            appState.pieChart.renderChart(electricity.summary);
           }
           deferred.resolve(electricityAndData);
         });
@@ -520,33 +520,6 @@ angular.module('negawattClientApp')
       //  Send it to the second chart.
       return deferred.promise;
     };
-
-
-    /**
-     * Get current sensors data.
-     *
-     * Fetch electricity data acccording to 'params' filtering.
-     *
-     * @param params
-     *  Parameter object regularly coming from the query string.
-     */
-    this.getSensorData = function (params) {
-      // Prepare data filter in querystring format.
-      var filters = this.prepareFilters(params, 'forSensor');
-
-      // Fetch the electricity data.
-      SensorData.get(filters)
-        .then(function(sensorData) {
-          // Pass the data to the detailed-chart for update.
-          appState.detailedChart.takeSensorData(sensorData);
-        });
-
-      // If there's a second chart (with different period)...
-      //  Change filters here to new period.
-      //  Fetch new data.
-      //  Send it to the second chart.
-    };
-
 
     /**
      * Figure out chart title, and broadcast update event.
@@ -596,5 +569,33 @@ angular.module('negawattClientApp')
           });
       }
     };
+
+    /**
+     * Handler for electricity lazy-load.
+     *
+     * Take the new data, the chart watches 'electricity' and
+     * will get updated with the new data.
+     */
+    $rootScope.$on("nwElectricityChanged", function(event, electricity) {
+      if (electricity.pageNumber > 1) {
+        // Pass the data only if on second page and on. The first page is
+        // always handled, so prevent double-rendering of the charts.
+        appState.mainChart.takeData(electricity.data, electricity.summary, null);
+      }
+    });
+
+    /**
+     * Handler for sensor-data lazy-load.
+     *
+     * Take the new data, the chart watches 'sensorData' and
+     * will get updated with the new data.
+     */
+    $rootScope.$on("nwSensorDataChanged", function(event, sensorData) {
+      if (sensorData.pageNumber > 1) {
+        // Pass the data only if on second page and on. The first page is
+        // always handled, so prevent double-rendering of the charts.
+        appState.mainChart.takeData(null, null, sensorData.data);
+      }
+    });
 
   });
