@@ -134,7 +134,7 @@ angular.module('negawattClientApp')
           case 'meter_site':
             // Check sites that are selected in state-params.
             angular.forEach($scope.sensorCollection, function (item) {
-              item.selected = (item.type == 'site' && selectedObjects.indexOf(item.id) != -1);
+              item.selected = (item.type == 'meter_site' && selectedObjects.indexOf(item.id) != -1);
             });
             // Disable meters and categories.
             $scope.disableMeters = true;

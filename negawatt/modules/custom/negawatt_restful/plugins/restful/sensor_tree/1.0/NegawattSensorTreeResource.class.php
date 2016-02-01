@@ -117,7 +117,7 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
 
       $return['s' . $node->nid] = array(
         'id' => $node->nid,
-        'type' => 'site',
+        'type' => 'meter_site',
         'name' => $node_wrapper->label(),
         'account' => $this->request['account'],
         'location' => empty($location) ? NULL : array(

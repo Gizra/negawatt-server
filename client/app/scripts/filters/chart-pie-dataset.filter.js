@@ -102,7 +102,7 @@ angular.module('negawattClientApp')
           break;
         case 'sites':
           defaultLabel = 'Site ';
-          selType = 'site';
+          selType = 'meter_site';
           break;
         case 'meters':
           defaultLabel = 'Meter ';

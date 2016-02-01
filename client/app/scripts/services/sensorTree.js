@@ -108,7 +108,7 @@ angular.module('negawattClientApp')
           if (!collection.collection) {
             // Add 'open' field to site-categories and sites.
             angular.forEach(collection, function (item) {
-              if (item.type == 'site_category' || item.type == 'site') {
+              if (item.type == 'site_category' || item.type == 'meter_site') {
                 item.open = true;
               }
             });
