@@ -119,7 +119,6 @@ angular.module('negawattClientApp')
 
         // Expose some functions.
         this.setup = setup;
-        this.takeElectricityAndSensorsData = takeElectricityAndSensorsData;
 
         // Register in ApplicationState.
         ApplicationState.registerDetailedChart(this);
@@ -141,43 +140,6 @@ angular.module('negawattClientApp')
           chart.dateRange = dateRange;
           chart.referenceDate = referenceDate;
         }
-
-        /**
-         * Get new electricity and sensor date from application-state and update chart.
-         *
-         * @param electricity object
-         *  New electricity data, containing both data and summary.
-         * @param sensorData object
-         *  New sensor data, containing both data and summary.
-         * @param options object
-         *  New chart options.
-         */
-        function takeElectricityAndSensorsData(electricity, sensorData, options) {
-          chart.electricity = electricity.data;
-          chart.summary = electricity.summary;
-          chart.sensorData = sensorData ? sensorData.data : [];
-          chart.options = options;
-        }
-
-        /**
-         * Handler for electricity lazy-load.
-         *
-         * Take the new data, the chart watches 'electricity' and
-         * will get updated with the new data.
-         */
-        $scope.$on("nwElectricityChanged", function(event, electricity) {
-          chart.electricity = electricity.data;
-        });
-
-        /**
-         * Handler for sensor-data lazy-load.
-         *
-         * Take the new data, the chart watches 'sensorData' and
-         * will get updated with the new data.
-         */
-        $scope.$on("nwSensorDataChanged", function(event, sensorData) {
-          chart.sensorData = sensorData.data;
-        });
 
         /**
          * Handler for setting chart title.
