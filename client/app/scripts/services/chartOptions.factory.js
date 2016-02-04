@@ -74,15 +74,17 @@ angular.module('negawattClientApp')
      * @returns {*}
      *  Configuration object.
      */
-    function getLineCompareOptions(numSeries, sensorUnits) {
+    function getLineCompareOptions(numSeries, numSensors, sensorUnits) {
       // If there's only one serie, TOUse will be displayed, using 4 series.
       numSeries = (numSeries == 1) ? 4 : numSeries;
-      var series = {};
-      for (var i = 0; i < numSeries; i++) {
-        series[i] = {targetAxisIndex: 0};
+      var series = {}, i, n = 0;
+      for (i = 0; i < numSeries; i++) {
+        series[n++] = {targetAxisIndex: 0};
       }
-      // Add a last series for temperature (if exists).
-      series[numSeries] = {targetAxisIndex: 1};
+      // Add series for sensors (if exists).
+      for (i = 0; i < numSensors; i++) {
+        series[n++] = {targetAxisIndex: 1}
+      }
 
       var chartFrequencyActive = Chart.getActiveFrequency();
 
@@ -93,13 +95,13 @@ angular.module('negawattClientApp')
         'vAxes': {
           0: {
             title: chartFrequencyActive.axis_v_title,
-            format: 'short',
+            format: 'short'
           },
           1: {
             title: sensorUnits,
-            format: 'short',
+            format: 'short'
           }
-        },
+        }
       });
     }
 
@@ -155,18 +157,20 @@ angular.module('negawattClientApp')
      * @returns {*}
      *  Configuration object.
      */
-    function getColumnCompareOptions(chartType, numSeries, sensorUnits) {
+    function getColumnCompareOptions(chartType, numSeries, numSensors, sensorUnits) {
       // If there's only one series, TOUse will be displayed, using 4 series.
       numSeries = (numSeries == 1) ? 4 : numSeries;
-      var series = {};
-      for (var i = 0; i < numSeries; i++) {
-        series[i] = {targetAxisIndex: 0};
+      var series = {}, i, n = 0;
+      for (i = 0; i < numSeries; i++) {
+        series[n++] = {targetAxisIndex: 0};
       }
-      // Add a last series for sensor (if exists).
-      series[numSeries] = {
-        targetAxisIndex: 1,
+      // Add series for sensors (if exists).
+      for (i = 0; i < numSensors; i++) {
+        series[n++] = {
+          targetAxisIndex: 1,
           type: 'line'
-      };
+        }
+      }
 
       var chartFrequencyActive = Chart.getActiveFrequency();
       return extend(getCommonOptions(), {
@@ -217,13 +221,13 @@ angular.module('negawattClientApp')
      * @returns {*}
      *  Chart options object.
      */
-    function getOptions(frequency, chartType, numSeries, withCompare, sensorUnits) {
+    function getOptions(frequency, chartType, numSeries, numSensors, sensorUnits) {
       switch (getChartType(frequency)) {
         case 'columnChart':
-          return withCompare ? getColumnCompareOptions(chartType, numSeries, sensorUnits) : getColumnOptions(chartType);
+          return numSensors ? getColumnCompareOptions(chartType, numSeries, numSensors, sensorUnits) : getColumnOptions(chartType);
 
         case 'lineChart':
-          return withCompare ? getLineCompareOptions(numSeries, sensorUnits) : getLineOptions();
+          return numSensors ? getLineCompareOptions(numSeries, numSensors, sensorUnits) : getLineOptions();
       }
     }
 

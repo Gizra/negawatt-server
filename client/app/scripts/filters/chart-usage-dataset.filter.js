@@ -1,27 +1,40 @@
 angular.module('negawattClientApp')
-  .filter('toChartDataset', function ($filter, Chart, ChartOptions, moment, $window) {
+  .filter('toChartDataset', function ($filter, Chart, ChartOptions, moment) {
 
     /**
      * From a collection object create a Google Chart data ser object
      * according the type.
      *
-     * @param collection
-     *  The collection to format.
-     * @param chartType
+     * @param electricityData {array}
+     *  The electricityData of electricity data to format.
+     * @param chartType {string}
      *  One of 'sum', 'detailed', 'stacked', 'percent'.
      *   sum: sum several meters to one column.
      *   detailed: display different meters side-be-side.
      *   stacked: stack meters to one column.
      *   percent: stack and stretch so all columns are the same height.
-     * @param compareWith
-     *  A collection with will be compare.
-     * @param options
-     *  The chart options.
+     * @param sensorsData {array}
+     *  An array of sensors' data.
+     * @param metersAndSensors {object}
+     *  An indexed-array of meters/sensors tree, containing all the information
+     *  about site-categories, sites, meters and sensors.
+     * @param labelsField {string}
+     *  The name of the field in 'electricityData' that holds the value to show.
+     * @param labelsPrefixLetter {string}
+     *  The prefix-letter to add to the meter id in order to find in in
+     *  'metersAndSensors' array.
+     * @param sensorsLabelsField {string}
+     *  The name of the field in 'sensorsData' that holds the value to show.
+     * @param sensorsDescriptors {object}
+     *  An array of objects containing information about sensor types, e.g.
+     *  what they measure, in what units, etc.
+     * @param oneItemSelected {boolean}
+     *  True if only one electricity meter selected.
      *
-     * @returns {*}
+     * @returns {object}
      *  The dataset collection filtered.
      */
-    return function (collection, chartType, compareWith, labels, labelsField, labelsPrefixLetter, compareLabelsField, sensorUnits, oneItemSelected) {
+    return function (electricityData, chartType, sensorsData, metersAndSensors, labelsField, labelsPrefixLetter, sensorsLabelsField, sensorsDescriptors, oneItemSelected) {
 
       // chartType defaults to stacked.
       chartType = chartType ? chartType : 'stacked';
@@ -31,11 +44,17 @@ angular.module('negawattClientApp')
         chartType = 'sum';
       }
 
-      var chartFrequencyActive = Chart.getActiveFrequency();
-      var data = getDataset(collection, chartFrequencyActive, chartType, labels, labelsField, labelsPrefixLetter, compareWith, compareLabelsField);
-      options = ChartOptions.getOptions(chartFrequencyActive.type, chartType, data.numSeries, !!compareWith.length, sensorUnits);
+      // Figure out sensor's units.
+      // Taken from the first sensor data.
+      // FIXME: How to handle multiple sensors with different units?
+      var type = sensorsData.length ? sensorsData[0].sensor_type : null;
+      var sensorUnits = type ? ('[' + sensorsDescriptors[type].units + '] ' + sensorsDescriptors[type].label) : null;
 
-      // Recreate collection object.
+      var chartFrequencyActive = Chart.getActiveFrequency();
+      var data = getDataset(electricityData, chartFrequencyActive, chartType, metersAndSensors, labelsField, labelsPrefixLetter, sensorsData, sensorsLabelsField, sensorsDescriptors);
+      options = ChartOptions.getOptions(chartFrequencyActive.type, chartType, data.numSeries, data.numSensors, sensorUnits);
+
+      // Create collection object for charts engine.
       collection = {
         type: options.chart_type,
         data: data,
@@ -45,31 +64,42 @@ angular.module('negawattClientApp')
     };
 
     /**
-     * Return the object with the dataset based on the collection object.
+     * Return the object with the dataset based on the electricityData object.
      *
-     * @param collection
-     *  The collection to format.
+     * @param electricityData
+     *  The electricityData to format.
      * @param frequency
      *  The active frequency.
      * @param chartType
      *  One of 'sum', 'detailed', 'stacked', 'percent'.
-     * @param labels
+     * @param metersAndSensors
      *  An indexed-array id => object.
+     * @param labelsField {string}
+     *  The name of the field in 'electricityData' that holds the value to show.
      * @param labelsPrefixLetter
-     *  A prefix letter to add before the item-id as index into 'labels' collection.
+     *  A prefix letter to add before the item-id as index into 'metersAndSensors' collection.
+     * @param sensorsData {array}
+     *  An array of sensors' data.
+     * @param sensorsLabelsField {string}
+     *  The name of the field in 'sensorsData' that holds the value to show.
+     * @param sensorsDescriptors {object}
+     *  An array of objects containing information about sensor types, e.g.
+     *  what they measure, in what units, etc.
      *
      * @returns {{cols: *[], rows: Array}}
      */
-    function getDataset(collection, frequency, chartType, labels, labelsField, labelsPrefixLetter, compareWith, compareLabelsField) {
-      var labelsUsed = [];
+    function getDataset(electricityData, frequency, chartType, metersAndSensors, labelsField, labelsPrefixLetter, sensorsData, sensorsLabelsField, sensorsDescriptors) {
+      var labelsUsed = [],
+        sensorsUsed = [];
       var dataset = {
         // Add rows.
-        rows: getRows(collection, frequency, chartType, labelsUsed, labels, labelsField, labelsPrefixLetter, compareWith, compareLabelsField),
+        rows: getRows(electricityData, frequency, chartType, labelsUsed, metersAndSensors, labelsField, labelsPrefixLetter, sensorsData, sensorsLabelsField, sensorsUsed, sensorsDescriptors),
         // Add columns.
-        cols: getColumns(collection, frequency, chartType, labelsUsed, labels, labelsPrefixLetter, compareWith),
-        // Number of series (might happen that a serie contains no data in 'collection').
+        cols: getColumns(frequency, chartType, labelsUsed, metersAndSensors, labelsPrefixLetter, sensorsUsed),
+        // Number of series (might happen that a series contains no data in 'electricityData').
         // For internal use, not used by google-charts.
-        numSeries: labelsUsed.length
+        numSeries: labelsUsed.length,
+        numSensors: sensorsUsed.length
       };
 
       return dataset;
@@ -78,28 +108,51 @@ angular.module('negawattClientApp')
     /**
      * Return the collection data in the type of the two chart type indicated.
      *
-     * @param collection
-     *  The collection to filter.
+     * @param electricityData
+     *  The electricityData to filter.
      * @param frequency
      *  The active frequency.
      * @param chartType
      *  One of 'sum', 'detailed', 'stacked', 'percent'.
+     * @param labelsUsed
+     *  RETURNED array of meters' labels used when rows were filled.
+     * @param metersAndSensors
+     *  An indexed-array id => object.
+     * @param labelsField {string}
+     *  The name of the field in 'electricityData' that holds the value to show.
+     * @param labelsPrefixLetter
+     *  A prefix letter to add before the item-id as index into 'metersAndSensors' collection.
+     * @param sensorsData {array}
+     *  An array of sensors' data.
+     * @param sensorsLabelsField {string}
+     *  The name of the field in 'sensorsData' that holds the value to show.
+     * @param sensorsUsed
+     *  RETURNED array of sensor-objects used when rows were filled.
+     * @param sensorsDescriptors {object}
+     *  An array of objects containing information about sensor types, e.g.
+     *  what they measure, in what units, etc.
      *
      * @returns {Array}
      *  An array of the data ordering as the type requested.
      */
-    function getRows(collection, frequency, chartType, labelsUsed, labels, labelsField, labelsPrefixLetter, compareWith, compareLabelsField) {
+    function getRows(electricityData, frequency, chartType, labelsUsed, metersAndSensors, labelsField, labelsPrefixLetter, sensorsData, sensorsLabelsField, sensorsUsed, sensorsDescriptors) {
       var values = {};
       var rows = [];
-      var prevRateType;
       var isLineChart;
       var powerValueProperty = getPowerValueProperty(frequency);
 
-      // If 'sensorData' is given, convert it to an indexed array.
-      var compareWithIndexed = {};
-      if (compareWith) {
-        angular.forEach(compareWith, function (item) {
-          compareWithIndexed[item.timestamp_rounded] = item;
+      // If 'sensorData' is given, convert it to an indexed array of
+      // the form sensorsDataIndexed[id][timestamp] = data-record.
+      var sensorsDataIndexed = {};
+      if (sensorsData.length) {
+        angular.forEach(sensorsData, function (item) {
+          // If this sensor id is not known yet, open a new row.
+          if (!sensorsDataIndexed[item.sensor]) {
+            sensorsDataIndexed[item.sensor] = {};
+            // Also add sensor-type record to the sensors-used array.
+            sensorsUsed.push(sensorsDescriptors[item.sensor_type]);
+          }
+          sensorsDataIndexed[item.sensor][item.timestamp_rounded] = item;
         })
       }
 
@@ -116,15 +169,13 @@ angular.module('negawattClientApp')
           mid: null,
           low: null
         };
-        angular.forEach(collection, function(item) {
+        angular.forEach(electricityData, function(item) {
           if (!(item.timestamp_rounded in values)) {
-            // Never encountered this timestamp, create an empty object
+            // Never encountered this timestamp, create an empty row object
             values[item.timestamp_rounded] = angular.copy(blankRow);
           }
           // Save the average power. Sum the values.
           values[item.timestamp_rounded][item.rate_type] += +item[powerValueProperty];
-
-          prevRateType = item.rate_type;
         });
 
         // Display the unit according to selected frequency.
@@ -156,24 +207,27 @@ angular.module('negawattClientApp')
               col.push(value ? {v: label + '\n' + $filter('number')(item[type], 0) + ' ' + unit} : {});
             }
           });
-          // Add compareWith column, if exists.
-          if (compareWith.length) {
-            var n = compareWithIndexed[timestamp] ? compareWithIndexed[timestamp][compareLabelsField] : undefined;
-            col.push(n ? {v: n} : {});
-            col.push(n ? {v: label + '\n' + $filter('number')(n, 0) + ' מעלות'} : {})
+          // Add sensorsData column, if exists.
+          if (sensorsData.length) {
+            angular.forEach(sensorsDataIndexed, function(item) {
+              var n = item[timestamp] ? item[timestamp][sensorsLabelsField] : undefined,
+                units = n ? sensorsDescriptors[item[timestamp].sensor_type].units : '';
+              col.push(n ? {v: n} : {});
+              col.push(n ? {v: label + '\n' + $filter('number')(n, 0) + ' ' + units} : {})
+            })
           }
           rows.push({ c: col, onSelect: timestamp });
         });
 
         // For sum chart there's only one label.
-        labelsUsed.push(labels);
+        labelsUsed.push(metersAndSensors);
       }
       else if (chartType == 'detailed' || chartType == 'stacked') {
         // Prepare data for a multiple graphs.
         // -----------------------------------------------------------------------
 
-        angular.forEach(collection, function(item) {
-          var itemLabel = labels[labelsPrefixLetter + item[labelsField]];
+        angular.forEach(electricityData, function(item) {
+          var itemLabel = metersAndSensors[labelsPrefixLetter + item[labelsField]];
           if (!(item.timestamp_rounded in values)) {
             // Never encountered this timestamp, create an empty object
             values[item.timestamp_rounded] = {};
@@ -203,11 +257,14 @@ angular.module('negawattClientApp')
             col.push({v: value});
             col.push(value ? {v: label + '\n' + $filter('number')(item[type.id], 0) + ' ' + unit} : {});
           });
-          // Add compareWith column, if exists.
-          if (compareWith.length) {
-            var n = compareWithIndexed[timestamp] ? compareWithIndexed[timestamp][compareLabelsField] : undefined;
-            col.push(n ? {v: n} : {});
-            col.push(n ? {v: label + '\n' + $filter('number')(n, 0) + ' מעלות'} : {})
+          // Add sensorsData column, if exists.
+          if (sensorsData.length) {
+            angular.forEach(sensorsDataIndexed, function(item) {
+              var n = item[timestamp] ? item[timestamp][sensorsLabelsField] : undefined,
+                units = n ? sensorsDescriptors[item[timestamp].sensor_type].units : '';
+              col.push(n ? {v: n} : {});
+              col.push(n ? {v: label + '\n' + $filter('number')(n, 0) + ' ' + units} : {})
+            })
           }
           rows.push({ 'c': col, onSelect: timestamp });
         });
@@ -219,21 +276,23 @@ angular.module('negawattClientApp')
     /**
      * Return the collection data in the type of the two chart type indicated.
      *
-     * @param collection
-     *  The collection to filter.
      * @param frequency
      *  The active frequency.
      * @param chartType
      *  One of 'sum', 'detailed', 'stacked', 'percent'.
      * @param labelsUsed
-     *  An array of object ids that are used in the chart.
-     * @param labels
+     *  An array of object ids that were used when rows were filled.
+     * @param metersAndSensors
      *  An indexed-array of id => object.
+     * @param labelsPrefixLetter
+     *  A prefix letter to add before the item-id as index into 'metersAndSensors' collection.
+     * @param sensorsUsed
+     *  Array of sensor-objects used when rows were filled.
      *
      * @returns {Array}
      *  An array of the data ordering as the type requested.
      */
-    function getColumns(collection, frequency, chartType, labelsUsed, labels, labelsPrefixLetter, compareWith) {
+    function getColumns(frequency, chartType, labelsUsed, metersAndSensors, labelsPrefixLetter, sensorsUsed) {
       if (chartType == 'sum') {
         var columns;
         if (frequency.type < 4) {
@@ -329,26 +388,10 @@ angular.module('negawattClientApp')
             },
           ];
         }
-        if (compareWith.length) {
-          // FIXME: Put proper label here, in stead of hard coded temperature.
-          // FIXME: Put as many charts as are sensors.
-          // FIXME: Do the same below for 'detailed' and 'stacked'.
-          columns.push({
-              'id': 'temp',
-              'label': 'טמפרטורה',
-              'type': 'number',
-            },
-            {
-              'id': 'temp',
-              'type': 'string',
-              p: {role: 'tooltip'}
-            });
-        }
-        return columns;
       }
       else if (chartType == 'detailed' || chartType == 'stacked') {
         // First column is always month
-        var columns = [
+        columns = [
           {
             'id': 'month',
             'label': 'Month',
@@ -361,7 +404,7 @@ angular.module('negawattClientApp')
         labelsUsed.forEach(function(item) {
           columns.push({
               id: item.id,
-              label: labels[labelsPrefixLetter + item.id].name,
+              label: metersAndSensors[labelsPrefixLetter + item.id].name,
               type: 'number'
             },
             {
@@ -370,21 +413,22 @@ angular.module('negawattClientApp')
               p: {role: 'tooltip'}
             })
         });
-
-        if (compareWith) {
-          columns.push({
-              'id': 'temp',
-              'label': 'טמפרטורה',
-              'type': 'number'
-            },
-            {
-              'id': 'temp',
-              'type': 'string',
-              p: {role: 'tooltip'}
-            })
-        }
-        return columns;
       }
+
+      // Add sensors, as listed in sensorsUsed array.
+      angular.forEach(sensorsUsed, function(sensorType) {
+        columns.push({
+            'id': sensorType.id,
+            'label': sensorType.label,
+            'type': 'number'
+          },
+          {
+            'id': sensorType.id,
+            'type': 'string',
+            p: {role: 'tooltip'}
+          });
+      });
+      return columns;
     }
 
     /**

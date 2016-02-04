@@ -249,7 +249,7 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
 
     // Replace all sites with only one meter by the meter itself.
     foreach ($return as $key => $item) {
-      if ($item['type'] == 'site' && sizeof($item['children']) == 1) {
+      if ($item['type'] == 'meter_site' && sizeof($item['children']) == 1) {
         // A site element with only one child. Make a shortcut between the
         // parent category and child meter.
         $category_id = $item['parent'];

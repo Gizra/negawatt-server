@@ -238,15 +238,8 @@ angular.module('negawattClientApp')
 
           var compareLabelsField = 'avg_value';
 
-          // Figure out sensor's units.
-          // Taken from the first sensor data.
-          // FIXME: How to handle multiple sensors with different units?
-          var type = sensorData.length ? sensorData[0].sensor_type : null;
-          var sensorUnits = type ? ('[' + ctrlChart.sensorType[type].units + '] '
-                                    + ctrlChart.sensorType[type].label) : null;
-
           // Convert the data coming from the server into google chart format.
-          ctrlChart.data = $filter('toChartDataset')(activeElectricity, $stateParams.chartType, sensorData, labels, labelsField, labelsPrefixLetter, compareLabelsField, sensorUnits, oneItemSelected);
+          ctrlChart.data = $filter('toChartDataset')(activeElectricity, $stateParams.chartType, sensorData, labels, labelsField, labelsPrefixLetter, compareLabelsField, ctrlChart.sensorType, oneItemSelected);
 
           // Update state.
           setState();
