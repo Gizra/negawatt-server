@@ -114,18 +114,15 @@ angular.module('negawattClientApp')
   .directive('chartDetailed', function () {
     return {
       templateUrl: 'scripts/directives/chart-detailed/chart-detailed.directive.html',
-      controller: function ChartDetailedCtrl($scope, $rootScope, $window, $filter, ChartDetailedService, ChartOptions, ChartUsagePeriod, $stateParams, ApplicationState) {
+      controller: function ChartDetailedCtrl($scope, $window, ChartOptions, ApplicationState) {
         var chart = this;
 
         // Expose some functions.
         this.setup = setup;
+        this.setChartTitle = setChartTitle;
 
         // Register in ApplicationState.
         ApplicationState.registerDetailedChart(this);
-
-        // Extend the service with the scope of the directive and
-        // extend the controller of the directive with the service.
-        angular.extend(chart, ChartDetailedService);
 
         /**
          * Setup basic parameters for chart.
@@ -134,7 +131,6 @@ angular.module('negawattClientApp')
          *  Subtitle for the chart, indicating the date range.
          * @param referenceDate integer
          *  Reference date.
-         *  FIXME: Do we need it?
          */
         function setup(dateRange, referenceDate) {
           chart.dateRange = dateRange;
@@ -142,12 +138,11 @@ angular.module('negawattClientApp')
         }
 
         /**
-         * Handler for setting chart title.
-         * FIXME: Make direct call.
+         * Set chart title.
          */
-        $scope.$on('setChartTitleTo', function (event, newTitle) {
+        function setChartTitle(newTitle) {
           chart.title = newTitle;
-        });
+        }
 
         /**
          * Watch window width, and update chart parameters to resize the chart.

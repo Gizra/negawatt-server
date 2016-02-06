@@ -555,7 +555,7 @@ angular.module('negawattClientApp')
               return sensorTree.collection[classLetter + id].name;
             });
             title = selectedObjects.join(', ');
-            $rootScope.$broadcast('setChartTitleTo', title);
+            appState.detailedChart.setChartTitle(title);
           });
       }
       else {
@@ -569,7 +569,7 @@ angular.module('negawattClientApp')
                 return;
               }
             });
-            $rootScope.$broadcast('setChartTitleTo', title);
+            appState.detailedChart.setChartTitle(title);
           });
       }
     };
