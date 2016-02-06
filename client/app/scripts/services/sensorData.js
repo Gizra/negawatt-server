@@ -2,11 +2,8 @@
 
 angular.module('negawattClientApp')
   .service('SensorData', function SensorData($q, $http, $timeout, $rootScope, Config, Utils, FilterFactory) {
-    var self = this;
-
     // A private cache key.
     var cache = {};
-    this.__cache = cache;
 
     // Array of $timeout promises to clear the cache.
     var timeouts = [];
@@ -47,24 +44,6 @@ angular.module('negawattClientApp')
 
       return getSensorData[hash];
     };
-
-    ///**
-    // * Broadcast event to refresh the sensorData object in the $scope.
-    // *
-    // * NOTE: For a correct functionality of the refresh sensorData data, the
-    // * filters have to be defined with a period between the period limits.
-    // *
-    // * @param hash
-    // *  Hash string for the data to be updated.
-    // */
-    //this.refresh = function(hash) {
-    //  // Initial sensorData data force load new sensorData data, the broadcast
-    //  // will occurs after that the cache is set.
-    //  angular.isUndefined(cache[hash]) && self.get(hash);
-    //
-    //  // Broadcast an update event.
-    //  angular.isDefined(cache[hash]) && $rootScope.$broadcast(broadcastUpdateEventName, sensorDataData(hash));
-    //};
 
     /**
      * Return sensorData data array from the server.

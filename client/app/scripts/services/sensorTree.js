@@ -3,8 +3,6 @@
 angular.module('negawattClientApp')
   // TODO: remove dependency on Site, Meter
   .service('SensorTree', function ($q, $http, $timeout, $state, $rootScope, $filter, Config) {
-    var self = this;
-
     // A private cache key.
     var cache = {};
 
@@ -37,13 +35,6 @@ angular.module('negawattClientApp')
 
       return getSensorsTree;
     };
-
-    /**
-     * Reset the sensors-tree filters.
-     */
-    //this.reset = function() {
-    //  FilterFactory.setSensorsTree(sensorsTreeData());
-    //};
 
     /**
      * Return site-sensorsTree array from the server.

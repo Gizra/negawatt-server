@@ -6,7 +6,6 @@ angular.module('negawattClientApp')
 
     // A private cache key.
     var cache = {};
-    this.__cache = cache;
 
     // Array of $timeout promises to clear the cache.
     var timeouts = [];
@@ -60,16 +59,6 @@ angular.module('negawattClientApp')
 
       // Broadcast an update event.
       angular.isDefined(cache[hash]) && $rootScope.$broadcast(broadcastUpdateEventName, electricityData(hash));
-    };
-
-    /**
-     * Force the lazyload of the electricity data.
-     *
-     * @param hash
-     */
-    this.forceResolve = function(hash) {
-      // Initial electricity data force.
-      angular.isUndefined(cache[hash]) && self.get(hash);
     };
 
     /**
