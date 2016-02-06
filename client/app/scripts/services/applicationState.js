@@ -86,6 +86,10 @@ angular.module('negawattClientApp')
      */
     this.registerPieChart = function(chart) {
       this.pieChart = chart;
+      SensorTree.get($stateParams.accountId)
+        .then(function (tree) {
+          chart.takeSensorTree(tree);
+        })
     };
 
     /**

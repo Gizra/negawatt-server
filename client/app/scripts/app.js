@@ -266,21 +266,6 @@ angular
           account: function($stateParams, Profile, profile) {
             return Profile.selectAccount($stateParams.accountId, profile);
           },
-          meters: function(Meter, account) {
-            // Get first records.
-            return Meter.get(account.id);
-          },
-          propertyMeters: function(PropertyMeter, account) {
-            // Get first records.
-            return PropertyMeter.get(account.id);
-          },
-          sites: function(Site, account) {
-            // Get first records.
-            return Site.get(account.id);
-          },
-          siteCategories: function(SiteCategory, account) {
-            return SiteCategory.get(account.id);
-          },
           meterCategories: function(MeterCategory, account) {
             return MeterCategory.get(account.id);
           },
@@ -289,20 +274,6 @@ angular
           },
           sensorType: function(SensorType, account) {
             return SensorType.get(account.id);
-          },
-          filters: function(FilterFactory, siteCategories, $stateParams, meters, account) {
-            // FIXME: cleanup required here.
-            // Define categories filters. Used for the UI Checknboxes.
-            FilterFactory.setCategories(siteCategories);
-            // Define electricity parameters
-            FilterFactory.setElectricity($stateParams);
-            // Define climate parameters
-            FilterFactory.setTemperature($stateParams);
-
-            return {
-              loadElectricity: true,
-              activeElectricityHash: FilterFactory.get('activeElectricityHash')
-            };
           },
           messages: function(Message, account) {
             return Message.get(account);

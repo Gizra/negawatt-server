@@ -110,11 +110,13 @@ angular.module('negawattClientApp')
           break;
       }
 
+      var prefixLetter = Utils.prefixLetter(type);
+
       // Fill result rows.
       angular.forEach(obj, function(value, key) {
         this.push({
           c: [
-            { v: !Utils.isEmpty(labels) && labels[key] && labels[key].label || defaultLabel + key},
+            { v: labels[prefixLetter + key] && labels[prefixLetter + key].name || defaultLabel + key},
             // "f" is for formatting the value in the tooltip.
             { v: +value, f: $filter('number')(value, 0) + ' קוט״ש'},
             { id: key},

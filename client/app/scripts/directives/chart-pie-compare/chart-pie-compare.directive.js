@@ -5,7 +5,7 @@ angular.module('negawattClientApp')
     return {
       restrict: 'EA',
       templateUrl: 'scripts/directives/chart-pie-compare/chart-pie-compare.directive.html',
-      controller: function chartPieUsageCtrl(ChartUsagePeriod, Chart, $stateParams, $filter, $scope, $state, ApplicationState, Utils) {
+      controller: function chartPieUsageCtrl(ChartUsagePeriod, Chart, $filter, $scope, ApplicationState) {
         var ctrlPieChart = this;
 
         // Expose functions.
@@ -15,12 +15,14 @@ angular.module('negawattClientApp')
         ctrlPieChart.state = 'loading';
         ctrlPieChart.sensorTree = null;
 
+        // Register with appState. It will reply with a call to
+        // takeSensorTree().
         ApplicationState.registerPieChart(this);
 
+        // Receive sensor-tree from appState.
         this.takeSensorTree = function (tree) {
           ctrlPieChart.sensorTree = tree;
         };
-
 
         // Select category form the pie chart.
         $scope.onSelect = function(selectedItem, chartData) {
@@ -70,17 +72,6 @@ angular.module('negawattClientApp')
         }
 
         /**
-         * Return true if the directive has a valid state, otherwise is false.
-         *
-         * Avoid change on directive definition, in a invalid state.
-         *
-         * @returns {*}
-         */
-        function isInitialized() {
-          return !angular.isUndefined(ctrlPieChart.state);
-        }
-
-        /**
          * Return true if ctrlPieChart.data have valid electricity data, otherwise
          * false.
          *
@@ -94,27 +85,12 @@ angular.module('negawattClientApp')
          * Render chart with the active electricity data according the
          * period and the chart selected.
          *
-         * @param activeElectricity
-         *  The "active electricity" data collection.
+         * @param summary {object}
+         *  Electricity summary collection.
          */
         function renderChart(summary) {
-          // Take sites, meters, and categories from chartDetailedCtrl's scope.
-          var chartDetailedScope = $scope.$parent.$parent;
-          var labels;
-          switch (summary.type) {
-            case 'site_categories':
-              labels = chartDetailedScope.siteCategories.collection;
-              break;
-            case 'sites':
-              labels = chartDetailedScope.sites.listAll;
-              break;
-            case 'meters':
-              labels = chartDetailedScope.meters.listAll;
-              break;
-          }
-
           // Convert the data coming from the server into google chart format.
-          ctrlPieChart.data = $filter('toPieChartDataset')(summary, labels);
+          ctrlPieChart.data = $filter('toPieChartDataset')(summary, ctrlPieChart.sensorTree.collection);
 
           // Update state.
           setState();

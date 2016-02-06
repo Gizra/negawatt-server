@@ -5,7 +5,7 @@
  * @name negawattClientApp.controller: MetersMenuCtrl
  */
 angular.module('negawattClientApp')
-  .controller('MetersMenuCtrl', function ($scope, $rootScope ,$stateParams, meterCategories, sensorTree, sensorType, ApplicationState) {
+  .controller('MetersMenuCtrl', function ($scope, $stateParams, meterCategories, sensorTree, sensorType, ApplicationState) {
 
     // Selected tab in the categories selector.
     $scope.tab = 'sites';
