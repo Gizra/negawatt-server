@@ -325,18 +325,6 @@ angular.module('negawattClientApp')
     };
 
     /**
-     * Route frequency-change events to 'frequencyChanged'.
-     *
-     * @param event object
-     *  The event.
-     * @param frequency object
-     *  The new frequency object.
-     */
-    $rootScope.$on('nwFrequencyChanged', function(event, frequency) {
-      appState.frequencyChanged(frequency.type);
-    });
-
-      /**
      * Update the current selected objects, both in application-state and
      * in $stateParams.
      */

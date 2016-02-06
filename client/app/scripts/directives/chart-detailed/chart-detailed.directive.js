@@ -4,7 +4,7 @@ angular.module('negawattClientApp')
   .directive('chartDetailedTabs', function() {
     return {
       templateUrl: 'scripts/directives/chart-detailed/chart-detailed-tabs.directive.html',
-      controller: function ChartDetailedCtrlTabs($scope, $rootScope, Chart, $filter, ChartUsagePeriod) {
+      controller: function ChartDetailedCtrlTabs($scope, $rootScope, Chart, $filter, ApplicationState, ChartUsagePeriod) {
 
         var ctrlChartTabs = this;
 
@@ -13,8 +13,8 @@ angular.module('negawattClientApp')
 
         // Handler for click in frequency tab.
         ctrlChartTabs.changeFrequency = function(frequency) {
-          // Broadcast to all detailed-chart-directives to change frequency.
-          $rootScope.$broadcast('nwFrequencyChanged', frequency);
+          // Pass event to appState.
+          ApplicationState.frequencyChanged(frequency.type);
         };
       },
       controllerAs: 'ctrlChartTabs'
