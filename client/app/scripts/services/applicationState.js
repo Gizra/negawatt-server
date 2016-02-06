@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('ApplicationState', function ApplicationState($q, $rootScope, $state, $stateParams, ChartOptions, ChartUsagePeriod, Electricity, Profile, SensorData, SensorTree, SensorType) {
+  .service('ApplicationState', function ApplicationState($q, $rootScope, $state, $stateParams, ChartOptions, ChartUsagePeriod, Electricity, Profile, SensorData, SensorTree, SensorType, Utils) {
 
     var appState = this;
 
@@ -534,20 +534,7 @@ angular.module('negawattClientApp')
       if ($stateParams.sel) {
         // Set marker label.
         var selectedObjects = $stateParams.ids.split(',');
-        var classLetter = '';
-        switch ($stateParams.sel) {
-          case 'meter':
-            classLetter = 'm';
-            break;
-
-          case 'meter_site':
-            classLetter = 's';
-            break;
-
-          case 'site_category':
-            classLetter = 'c';
-            break;
-        }
+        var classLetter = Utils.prefixLetter($stateParams.sel);
 
         SensorTree.get($stateParams.accountId)
           .then(function(sensorTree) {

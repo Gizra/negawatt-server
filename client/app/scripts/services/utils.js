@@ -154,10 +154,13 @@ angular.module('negawattClientApp')
     this.prefixLetter = function(type) {
       switch (type) {
         case 'site_categories':
+        case 'site_category':
           return 'c';
         case 'sites':
+        case 'meter_site':
           return 's';
         case 'meters':
+        case 'meter':
           return 'm';
       }
     }
