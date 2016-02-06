@@ -114,7 +114,7 @@ angular.module('negawattClientApp')
   .directive('chartDetailed', function () {
     return {
       templateUrl: 'scripts/directives/chart-detailed/chart-detailed.directive.html',
-      controller: function ChartDetailedCtrl($scope, $window, ChartOptions, ApplicationState) {
+      controller: function ChartDetailedCtrl($scope, ApplicationState) {
         var chart = this;
 
         // Expose some functions.
@@ -143,26 +143,6 @@ angular.module('negawattClientApp')
         function setChartTitle(newTitle) {
           chart.title = newTitle;
         }
-
-        /**
-         * Watch window width, and update chart parameters to resize the chart.
-         */
-        $scope.$watch(
-          function () { return $window.innerWidth; },
-          function () {
-            // Window was resized, recalc chart options.
-            if (chart.electricity != undefined) {
-              var newOptions = angular.copy(chart.options);
-              newOptions.width = ChartOptions.getChartWidth();
-
-              // Update chart.options so the chart will be redrawn
-              // (chart-electricity-compare watches ctrlChart.options).
-              chart.options = newOptions;
-            }
-          },
-          true
-        );
-
       },
       controllerAs: 'chart',
       bindToController: true,

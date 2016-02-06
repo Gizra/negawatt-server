@@ -5,7 +5,7 @@ angular.module('negawattClientApp')
     return {
       restrict: 'EA',
       templateUrl: 'scripts/directives/chart-electricity-compare/chart-electricity-compare.directive.html',
-      controller: function chartElectricityUsageCtrl(ChartElectricityUsage, ChartUsagePeriod, $stateParams, $filter, $scope, Utils, ApplicationState) {
+      controller: function chartElectricityUsageCtrl(ChartElectricityUsage, ChartUsagePeriod, $stateParams, $filter, $scope, $window, ChartOptions, Utils, ApplicationState) {
         var ctrlChart = this;
 
         // Get chart frequencies. (Tabs the period of time)
@@ -244,6 +244,26 @@ angular.module('negawattClientApp')
           // Update state.
           setState();
         }
+
+        /**
+         * Watch window width, and update chart parameters to resize the chart.
+         */
+        $scope.$watch(
+          function () { return $window.innerWidth; },
+          function () {
+            // Window was resized, recalc chart options.
+            if (ctrlChart.data && ctrlChart.data.options) {
+              var newOptions = angular.copy(ctrlChart.data.options);
+              newOptions.width = ChartOptions.getChartWidth();
+
+              // Update chart.options so the chart will be redrawn
+              // (chart-electricity-compare watches ctrlChart.options).
+              ctrlChart.data.options = newOptions;
+            }
+          },
+          true
+        );
+
       },
       controllerAs: 'ctrlChart',
       bindToController: true,
