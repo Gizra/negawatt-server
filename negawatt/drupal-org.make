@@ -95,7 +95,7 @@ projects[purl][subdir] = "contrib"
 projects[purl][version] = "1.x-dev"
 
 projects[restful][subdir] = "contrib"
-projects[restful][version] = 2.x
+projects[restful][version] = 1.x
 
 projects[search_api][subdir] = "contrib"
 projects[search_api][version] = "1.12"
