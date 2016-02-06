@@ -105,6 +105,18 @@ angular.module('negawattClientApp')
     }, 500);
 
     /**
+     * Handle URL/State change.
+     *
+     * When changing URL manually, or login after logout, has to call
+     * init() again to reset app-state.
+     */
+    $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+      if (fromParams.accountId != toParams.accountId) {
+        appState.init();
+      }
+    });
+
+    /**
      * Initialize application state.
      */
     this.init = function() {
