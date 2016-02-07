@@ -419,6 +419,29 @@ angular.module('negawattClientApp')
      *   The filters as HTTP call parameters.
      */
     this.prepareFilters = function (params, whatFor) {
+      // Helper function.
+      function addMultipleFilter(filter, ids) {
+        var filters = [];
+        if (ids && ids.length > 1) {
+          // If multiple IDs are given, output in the format:
+          // filter[selector][operator] = IN
+          // filter[selector][value][0] = val-1
+          // filter[selector][value][1] = val-2
+          // ... etc.
+          filters['filter[' + filter + '][operator]'] = 'IN';
+          var i = 0;
+          angular.forEach(ids, function (id) {
+            filters['filter[' + filter + '][value][' + i++ + ']'] = id;
+          });
+        }
+        else {
+          // A single ID was given, Output in the format:
+          // filter[selector] = val
+          filters['filter[' + filter + ']'] = ids[0];
+        }
+        return filters;
+      }
+
       // Prepare electricity filter in querystring format.
       var filters = {
         'filter[meter_account]': params.accountId,
@@ -442,47 +465,13 @@ angular.module('negawattClientApp')
         // Add filters for selected entities.
         var idsArray = params.ids ? params.ids.split(',') : [];
         if (params.sel) {
-          if (idsArray && idsArray.length > 1) {
-            // If multiple IDs are given, output in the format:
-            // filter[selector][operator] = IN
-            // filter[selector][value][0] = val-1
-            // filter[selector][value][1] = val-2
-            // ... etc.
-            filters['filter[' + params.sel + '][operator]'] = 'IN';
-            var i = 0;
-            angular.forEach(idsArray, function (id) {
-              filters['filter[' + params.sel + '][value][' + i++ + ']'] = id;
-            });
-          }
-          else {
-            // A single ID was given, Output in the format:
-            // filter[selector] = val
-            filters['filter[' + params.sel + ']'] = params.ids;
-          }
+          angular.extend(filters, addMultipleFilter(params.sel, idsArray));
         }
       }
       else {
         // Preparing filters for sensor.
-        filters['filter[sensor]'] = params.sensor;
-
         var idsArray = params.sensor ? params.sensor.split(',') : [];
-        if (idsArray && idsArray.length > 1) {
-          // If multiple IDs are given, output in the format:
-          // filter[selector][operator] = IN
-          // filter[selector][value][0] = val-1
-          // filter[selector][value][1] = val-2
-          // ... etc.
-          filters['filter[sensor][operator]'] = 'IN';
-          var i = 0;
-          angular.forEach(idsArray, function (id) {
-            filters['filter[sensor][value][' + i++ + ']'] = id;
-          });
-        }
-        else {
-          // A single ID was given, Output in the format:
-          // filter[selector] = val
-          filters['filter[sensor]'] = params.sensor;
-        }
+        angular.extend(filters, addMultipleFilter('sensor', idsArray));
       }
 
       return filters;
