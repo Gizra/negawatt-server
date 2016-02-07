@@ -21,7 +21,7 @@ angular.module('negawattClientApp')
         ctrlChart.changeFrequency = changeFrequency;
 
         ctrlChart.sensorTree = null;
-        ctrlChart.sensorType = null;
+        ctrlChart.sensorsDescriptors = null;
         ctrlChart.electricity = {};
         ctrlChart.summary = {};
         ctrlChart.sensorData = {};
@@ -38,7 +38,7 @@ angular.module('negawattClientApp')
          */
         this.takeSensorTreeAndType = function (tree, type) {
           ctrlChart.sensorTree = tree;
-          ctrlChart.sensorType = type;
+          ctrlChart.sensorsDescriptors = type;
         };
 
         /**
@@ -239,7 +239,7 @@ angular.module('negawattClientApp')
           var compareLabelsField = 'avg_value';
 
           // Convert the data coming from the server into google chart format.
-          ctrlChart.data = $filter('toChartDataset')(activeElectricity, $stateParams.chartType, sensorData, labels, labelsField, labelsPrefixLetter, compareLabelsField, ctrlChart.sensorType, oneItemSelected);
+          ctrlChart.data = $filter('toChartDataset')(activeElectricity, $stateParams.chartType, sensorData, labels, labelsField, labelsPrefixLetter, compareLabelsField, ctrlChart.sensorsDescriptors, oneItemSelected);
 
           // Update state.
           setState();

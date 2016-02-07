@@ -14,7 +14,7 @@ angular.module('negawattClientApp')
     $scope.sensorTree = sensorTree.tree;
     $scope.sensorCollection = sensorTree.collection;
     $scope.meterCategories = meterCategories.collection;
-    $scope.sensorType = sensorType;
+    $scope.sensorsDescriptors = sensorType;
 
     // Expose some functions.
     this.checkSelectedRows = checkSelectedRows;

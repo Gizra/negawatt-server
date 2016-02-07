@@ -40,7 +40,7 @@
       <span>{{ item.name }}, {{ item.place_address }}</span>
     </label>
     <div class="category-labels">
-      <span class="label" style="background: {{ sensorType[item.sensor_type].color || 'gray'}}">{{ sensorType[item.sensor_type].label }}</span>
+      <span class="label" style="background: {{ sensorsDescriptors[item.sensor_type].color || 'gray'}}">{{ sensorsDescriptors[item.sensor_type].label }}</span>
     </div>
     <span class="site label label-default">{{ sites[item.site].name }}</span>
   </div>
