@@ -114,8 +114,27 @@ angular.module('negawattClientApp')
      * When changing URL manually, or login after logout, has to call
      * init() again to reset app-state.
      */
-    $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-      if (fromParams.accountId != toParams.accountId) {
+    $rootScope.$on('$locationChangeSuccess', function(event, newUrl, oldUrl, newState, oldState) {
+      // This handler will be called for EVERY URL change. In order to identify
+      // 'legitimate' URL change (a one that originated from the application)
+      // from 'illegitimate' one (a one that follows manual URL change), compare
+      // the appState filters to the URL parameters.
+
+      // Parse URL to it's parameters.
+      if ($stateParams.accountId != appState.filters.accountId) {
+        // Account change, init appState anew.
+        appState.init();
+      }
+      else if ($stateParams.sel != appState.filters.sel || $stateParams.ids != appState.filters.ids || $stateParams.sensor != appState.filters.sensor) {
+        // Meter/sensor selection was changed, re-read data.
+        appState.init();
+      }
+      else if ($stateParams.chartFreq != appState.filters.chartFreq) {
+        // Frequency changed.
+        appState.init();
+      }
+      else if ($stateParams.chartNextPeriod != appState.filters.chartNextPeriod || $stateParams.chartPreviousPeriod != appState.filters.chartPreviousPeriod) {
+        // Period changed.
         appState.init();
       }
     });
@@ -337,6 +356,10 @@ angular.module('negawattClientApp')
           var electricity = electricityAndData[0];
           var sensorData = electricityAndData[1];
 
+          // Set filters so next time we'll really get the
+          // electricity and sensor data.
+          appState.filters.noData = false;
+
           // Got the summary, set time-frame limits from electricity, if there's one,
           // and from sensor-data if there's no electricity data.
           var params = {
@@ -345,29 +368,9 @@ angular.module('negawattClientApp')
           };
           appState.period.config(params);
 
-          // Update stateParams with new limits.
-          $stateParams.chartNextPeriod = appState.period.getChartPeriod().next;
-          $stateParams.chartPreviousPeriod = appState.period.getChartPeriod().previous;
-          $state.refreshUrlWith($stateParams);
-
-          // Update filters with new limits.
-          appState.filters.chartPreviousPeriod = appState.period.getChartPeriod().previous;
-          appState.filters.chartNextPeriod = appState.period.getChartPeriod().next;
-
-          // Update date-range text near the chart title.
-          var chartDateRange = appState.period.formatDateRange(appState.period.getChartPeriod().previous * 1000, appState.period.getChartPeriod().next * 1000);
-
-          // ReferenceDate is used to communicate with the date selector,
-          // update date-selector with current reference date.
-          // Note that datepicker's referenceDate is in milliseconds.
-          var chartReferenceDate = appState.period.getChartPeriod().referenceDate * 1000;
-
-          // Update the chart with new period.
-          appState.detailedChart.setup(chartDateRange, chartReferenceDate);
-
-          // Now really get the electricity and sensor data.
-          appState.filters.noData = false;
-          appState.getElectricityAndSensors(appState.filters);
+          // Update period and stateParams with new limits,
+          // then get electricity and sensor data.
+          periodChangedCleanupAndGetElectricity();
         });
     };
 
@@ -381,29 +384,56 @@ angular.module('negawattClientApp')
     this.periodChanged = function(periodDirection) {
       this.period.changePeriod(periodDirection);
 
+      periodChangedCleanupAndGetElectricity();
+    };
+
+    /**
+     * Update the current selected objects, both in application-state and
+     * in $stateParams.
+     *
+     * @param previous
+     *  Timestamp of previous timeframe - for new period.
+     * @param next
+     *  Timestamp of next timeframe - for new period.
+     */
+    this.periodChangedPrevNext = function(previous, next) {
+      this.period.getChartPeriod().setPeriod({newDate: next});
+
+      periodChangedCleanupAndGetElectricity();
+    };
+
+    /**
+     * Some housekeeping after changing period, then
+     * get electricity and sensor data.
+     */
+    function periodChangedCleanupAndGetElectricity() {
+      var chartPeriod = appState.period.getChartPeriod(),
+        previous = chartPeriod.previous,
+        next = chartPeriod.next;
+
       // Update filters with new limits.
-      this.filters.chartPreviousPeriod = this.period.getChartPeriod().previous;
-      this.filters.chartNextPeriod = this.period.getChartPeriod().next;
+      appState.filters.chartPreviousPeriod = previous;
+      appState.filters.chartNextPeriod = next;
 
       // Update stateParams with new period.
-      $stateParams.chartNextPeriod = this.period.getChartPeriod().next;
-      $stateParams.chartPreviousPeriod = this.period.getChartPeriod().previous;
+      $stateParams.chartNextPeriod = next;
+      $stateParams.chartPreviousPeriod = previous;
       $state.refreshUrlWith($stateParams);
 
       // Update date-range text near the chart title.
-      var chartDateRange = this.period.formatDateRange(this.period.getChartPeriod().previous * 1000, this.period.getChartPeriod().next * 1000);
+      var chartDateRange = appState.period.formatDateRange(previous * 1000, next * 1000);
 
       // ReferenceDate is used to communicate with the date selector,
       // update date-selector with current reference date.
       // Note that datepicker's referenceDate is in milliseconds.
-      var chartReferenceDate = this.period.getChartPeriod().referenceDate * 1000;
+      var chartReferenceDate = chartPeriod.referenceDate * 1000;
 
       // Update the chart with new period.
       appState.detailedChart.setup(chartDateRange, chartReferenceDate);
 
       // Get the electricity and sensor data.
-      appState.getElectricityAndSensors(this.filters);
-    };
+      appState.getElectricityAndSensors(appState.filters);
+    }
 
     /**
      * Prepare filters for API call.
