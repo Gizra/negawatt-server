@@ -62,6 +62,13 @@ class NegawattSitesResource extends \NegawattEntityBaseNode {
       ),
     );
 
+    $public_fields['sensors'] = array(
+      'property' => 'nid',
+      'process_callbacks' => array(
+        array($this, 'siteSensors'),
+      ),
+    );
+
     return $public_fields;
   }
 
@@ -94,13 +101,43 @@ class NegawattSitesResource extends \NegawattEntityBaseNode {
    * @return array
    *   List of meter ids.
    */
-  protected function siteMeters($value) {
+  protected function siteMeters($value)
+  {
+    return $this->siteLinkedEntities($value, array('iec_meter', 'modbus_meter'));
+  }
+
+  /**
+   * Process callback, that returns list of sensors linked to the site.
+   *
+   * @param id $value
+   *   The site ID.
+   *
+   * @return array
+   *   List of sensor ids.
+   */
+  protected function siteSensors($value)
+  {
+    return $this->siteLinkedEntities($value, array('sensor'));
+  }
+
+  /**
+   * Helper funciton that returns list of node entities linked to the site.
+   *
+   * @param int $site_id
+   *   The site ID.
+   * @param array $node_types
+   *   An array of node types (bundles).
+   *
+   * @return array
+   *   List of node ids.
+   */
+  protected function siteLinkedEntities($site_id, $node_types) {
     // Query for meters belonging to the site.
     $query = new EntityFieldQuery();
 
     $query->entityCondition('entity_type', 'node')
-      ->entityCondition('bundle', array('iec_meter', 'modbus_meter'), 'IN')
-      ->fieldCondition('field_meter_site', 'target_id', $value);
+      ->entityCondition('bundle', $node_types, 'IN')
+      ->fieldCondition('field_meter_site', 'target_id', $site_id);
 
     $result = $query->execute();
 

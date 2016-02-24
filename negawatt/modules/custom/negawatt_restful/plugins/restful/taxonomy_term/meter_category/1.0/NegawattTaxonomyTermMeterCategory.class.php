@@ -29,6 +29,10 @@ class NegawattTaxonomyTermMeterCategory extends \RestfulEntityBaseTaxonomyTerm {
       'property' => 'field_icon_categories',
     );
 
+    $public_fields['color'] = array(
+      'property' => 'field_color',
+    );
+
     $public_fields['electricity_time_interval'] = array(
       'callback' => array($this, 'electricityMinMax'),
     );

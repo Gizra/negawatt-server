@@ -6,7 +6,6 @@ angular.module('negawattClientApp')
 
     // A private cache key.
     var cache = {};
-    this.__cache = cache;
 
     // Array of $timeout promises to clear the cache.
     var timeouts = [];
@@ -16,25 +15,23 @@ angular.module('negawattClientApp')
     // Update event broadcast name.
     var broadcastUpdateEventName = 'nwElectricityChanged';
 
+
     /**
      * Get electricity data.
      *
      * Returns a promise for electricity data, from cache or the server.
      *
-     * @param hash
-     *   String that represent the filter parameters in GET params format.
+     * @param params
+     *   Array of filter parameters in GET params format.
      *
      * @returns {*}
      *   A promise to electricity data.
      */
-    this.get = function(hash) {
-      if (angular.isUndefined(hash)) {
-        // 'Negawatt.Electricity - Hash not defined on method get(hash)';
-        return undefined;
-      }
+    this.get = function(params) {
+      var hash = Utils.objToHash(params);
 
       // Preparation of the promise and cache for Electricity request.
-      getElectricity[hash] = $q.when(getElectricity[hash] || electricityData(hash) || getDataFromBackend(hash, 1, false));
+      getElectricity[hash] = $q.when(getElectricity[hash] || electricityData(hash) || getDataFromBackend(params, hash, 1, false));
 
       // Clear the promise cached, after resolve or reject the
       // promise. Permit access to the cache data, when
@@ -65,34 +62,24 @@ angular.module('negawattClientApp')
     };
 
     /**
-     * Force the lazyload of the electricity data.
-     *
-     * @param hash
-     */
-    this.forceResolve = function(hash) {
-      // Initial electricity data force.
-      angular.isUndefined(cache[hash]) && self.get(hash);
-    };
-
-    /**
      * Return electricity data array from the server.
      *
+     * @param params
+     *  Request filters in the form of http-params.
      * @param hash
-     *
+     *  Hash number of the original params(params might have added 'page' option)
      * @param pageNumber
+     *  Used for paging - the page number to request.
      * @param skipResetCache
+     *
      * @returns {$q.promise}
      */
-    function getDataFromBackend(hash, pageNumber, skipResetCache) {
+    function getDataFromBackend(params, hash, pageNumber, skipResetCache) {
       var deferred = $q.defer();
       var url = Config.backend + '/api/electricity';
-      // Create a copy of filters, since params might add page option. Filters must
-      // stay clean of page parameters since it also serves as key to the cache.
-      var params = FilterFactory.getElectricity(hash) || {};
 
-      // If page-number is given, add it to the params.
-      // Don't modify 'filters' since it should reflect the general params,
-      // without page number.
+      // If page-number is given, add it to the params. Note that
+      // 'hash' includes all params, but the 'page' option.
       if (pageNumber) {
         params['page'] = pageNumber;
       }
@@ -105,13 +92,13 @@ angular.module('negawattClientApp')
         var noData = angular.isDefined(config.params.nodata);
         var hasNextPage = electricity.next != undefined;
 
-        setCache(electricity, hash, skipResetCache, noData);
+        setCache(electricity, hash, skipResetCache, noData, pageNumber);
 
         deferred.resolve(electricityData(hash));
 
         // If there are more pages, read them.
         if (hasNextPage && !noData) {
-          getDataFromBackend(hash, pageNumber + 1, true);
+          getDataFromBackend(params, hash, pageNumber + 1, true);
         }
       });
 
@@ -129,15 +116,18 @@ angular.module('negawattClientApp')
      *   If false, a timer will be set to clear the cache in 60 sec.
      * @param noData
      *   True if parameter noData is 1, otherwise is false.
+     * @param pageNumber
+     *   Number of current data-page in multiple pages download.
      */
-    function setCache(electricity, hash, skipResetCache, noData) {
+    function setCache(electricity, hash, skipResetCache, noData, pageNumber) {
       // Cache messages data.
       cache[hash] = {
         data: (cache[hash] ? cache[hash].data : []).concat(electricity.data),
         limits: electricity.summary.timestamp,        
         timestamp: new Date(),
         noData: noData,
-        summary: electricity.summary
+        summary: electricity.summary,
+        pageNumber: pageNumber
       };
 
       // If asked to skip cache timer reset, return now.

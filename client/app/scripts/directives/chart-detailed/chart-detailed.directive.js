@@ -4,21 +4,17 @@ angular.module('negawattClientApp')
   .directive('chartDetailedTabs', function() {
     return {
       templateUrl: 'scripts/directives/chart-detailed/chart-detailed-tabs.directive.html',
-      controller: function ChartDetailedCtrlTabs($scope, $rootScope, Chart, $filter, ChartUsagePeriod) {
+      controller: function ChartDetailedCtrlTabs($scope, $rootScope, Chart, $filter, ApplicationState, ChartUsagePeriod) {
 
         var ctrlChartTabs = this;
-
-        ChartUsagePeriod.config();
 
         // Get chart frequencies (in order to draw frequency tabs)
         ctrlChartTabs.frequencies = ChartUsagePeriod.getFrequencies();
 
         // Handler for click in frequency tab.
         ctrlChartTabs.changeFrequency = function(frequency) {
-          // Broadcast to all detailed-chart-directives to change frequency.
-          $rootScope.$broadcast('nwFrequencyChanged', frequency);
-          // Also tell all charts to go to 'loading' state.
-          $rootScope.$broadcast('nwChartBeginLoading');
+          // Pass event to appState.
+          ApplicationState.frequencyChanged(frequency.type);
         };
       },
       controllerAs: 'ctrlChartTabs'
@@ -33,7 +29,7 @@ angular.module('negawattClientApp')
         showCompareChartButton: '='
       },
       templateUrl: 'scripts/directives/chart-detailed/chart-detailed-date-selector.directive.html',
-      controller: function ChartDetailedDatePickerCtrl($scope, $stateParams, $timeout) {
+      controller: function ChartDetailedDatePickerCtrl($scope, $stateParams, $timeout, ApplicationState) {
 
         var ctrlChartDatePicker = this;
 
@@ -99,7 +95,7 @@ angular.module('negawattClientApp')
          */
         ctrlChartDatePicker.changePeriod = function (periodDirection) {
           // Pass the event to the parent ChartDetailedCtrl.
-          $scope.$parent.chart.changePeriod(periodDirection);
+          ApplicationState.periodChanged(periodDirection);
         };
 
         /**
@@ -118,225 +114,35 @@ angular.module('negawattClientApp')
   .directive('chartDetailed', function () {
     return {
       templateUrl: 'scripts/directives/chart-detailed/chart-detailed.directive.html',
-      controller: function ChartDetailedCtrl($scope, $rootScope, $window, $filter, ChartDetailedService, ChartOptions, ChartUsagePeriod, $stateParams) {
+      controller: function ChartDetailedCtrl($scope, ApplicationState) {
         var chart = this;
 
-        // Extend the service with the scope of the directive and
-        // extend the controller of the directive with the service.
-        angular.extend(chart, ChartDetailedService);
+        // Expose some functions.
+        this.setup = setup;
+        this.setChartTitle = setChartTitle;
 
-        // Default values of the properties.
-        chart.electricity = {};
-        chart.summary = {};
-        chart.pieOptions = {};
-        chart.frequency = $stateParams.chartFreq;
-        chart.account = $stateParams.accountId;
-
-        var period = ChartUsagePeriod;
-        period.config();
-
-        // To first get electricity with noData option.
-        chart.checkTimeRange = true;
-
-        // Expose functions.
-        chart.filtersChanged = filtersChanged;
-        chart.changePeriod = changePeriod;
-
-        // Inform to the directive about the filters change.
-        filtersChanged();
-
-        // Change filters gent select new frequency.
-        $scope.$watch('chart.frequency', function(frequency, previous) {
-          if (frequency === previous) {
-            return;
-          }
-
-          // To get electricity with noData option.
-          chart.checkTimeRange = true;
-
-          filtersChanged();
-        }, true);
-
-        // Update chart with compareWith information.
-        $scope.$watch('chart.siteProperties', function(siteProperties, previous) {
-          if (siteProperties === previous || angular.isUndefined(siteProperties)) {
-            return;
-          }
-          chart.compareWith = siteProperties.compareWith;
-          chart.meter = siteProperties.meter;
-
-          refreshChart();
-        }, true);
+        // Register in ApplicationState.
+        ApplicationState.registerDetailedChart(this);
 
         /**
-         * Get the new electricity collection according the filters and
-         * render the data in the chart.
+         * Setup basic parameters for chart.
+         *
+         * @param dateRange string
+         *  Subtitle for the chart, indicating the date range.
+         * @param referenceDate integer
+         *  Reference date.
          */
-        function refreshChart() {
-          // Tell all charts to go to 'loading' state.
-          $rootScope.$broadcast('nwChartBeginLoading');
-
-          // Prepare filters to get electricity.
-          var filters = {
-            accountId: $stateParams.accountId,
-            chartFreq: $stateParams.chartFreq,
-            chartPreviousPeriod: period.getChartPeriod().previous,
-            chartNextPeriod: period.getChartPeriod().next,
-            sel: $stateParams.sel,
-            ids: $stateParams.ids,
-            noData: chart.checkTimeRange
-          };
-
-          // Define chart configuration.
-          var config = {
-            chartFreq: chart.frequency,
-            compareWith: chart.compareWith
-          };
-          setChartOptions(config);
-
-          // Update date-range text near the chart title.
-          chart.dateRange = period.formatDateRange(period.getChartPeriod().previous * 1000, period.getChartPeriod().next * 1000);
-
-          // ReferenceDate is used to communicate with the date selector,
-          // update date-selector with current reference date.
-          // Note that datepicker's referenceDate is in milliseconds.
-          chart.referenceDate = period.getChartPeriod().referenceDate * 1000;
-
-          chart.getElectricity(filters);
-
-          // Get compare collection, if one was selected.
-          if ($stateParams.climate) {
-            var climateFilters = {
-              climate: $stateParams.climate,
-              chartFreq: $stateParams.chartFreq,
-              chartPreviousPeriod: period.getChartPeriod().previous,
-              chartNextPeriod: period.getChartPeriod().next
-            };
-            // Get climate promise and wait for response.
-            ChartDetailedService.getCompareCollection('temperature', climateFilters)
-              .then(function(data) {
-                chart.compareCollection = data;
-              });
-          }
+        function setup(dateRange, referenceDate) {
+          chart.dateRange = dateRange;
+          chart.referenceDate = referenceDate;
         }
 
         /**
-         * Change the actual period to next or previous. Watch on chart.referenceDate
-         * will cause reading new electricity and update to the chart.
-         *
-         * @param periodDirection
-         *  String indicate the direction of the new period next or previous.
+         * Set chart title.
          */
-        function changePeriod(periodDirection) {
-          period.changePeriod(periodDirection);
-          refreshChart();
+        function setChartTitle(newTitle) {
+          chart.title = newTitle;
         }
-
-        /**
-         * Set the chart options according a configuration.
-         */
-        function setChartOptions(config) {
-          chart.options = ChartOptions.getOptions(config.chartFreq, config.chartType, !!config.compareWith);
-        }
-
-        /**
-         * On the change of the filters render the chart with the new data.
-         */
-        function filtersChanged() {
-          refreshChart();
-        }
-
-        /**
-         * Handler for frequency change.
-         *
-         * Set parameters, re-check time frame, and redraw the charts.
-         */
-        $scope.$on('nwFrequencyChanged', function(event, frequency) {
-          // Next electricity fetch will first bring time-range (noData mode).
-          chart.checkTimeRange = true;
-          chart.frequency = frequency.type;
-
-          period.changeFrequency(frequency.type);
-
-          // Update parameters and fetch electricity.
-          refreshChart();
-        });
-
-        /**
-         * Handler for frequency change.
-         *
-         * Set parameters, re-check time frame, and redraw the charts.
-         */
-        $scope.$watch('chart.referenceDate', function(newDate, oldDate) {
-          if (oldDate == newDate || newDate == period.getReferenceDate()) {
-            return;
-          }
-
-          // Datepicker's referenceDate is in milliseconds.
-          period.setReferenceDate(newDate / 1000);
-
-          // Update parameters and fetch electricity.
-          refreshChart();
-        });
-
-        /**
-         * Electricity Service Event: When electricity changes, update charts with
-         * new consumption data.
-         *
-         * Actually, the handler receives the event after electricity is loaded with
-         * nodata=1 (to get min/max timestamps for new frequency), and refreshChart()
-         * asks for new electricity data (without the nodata=1 parameter).
-         */
-        $scope.$on('nwElectricityChanged', function(event, electricity) {
-          if (!chart.checkTimeRange) {
-            // Not checking time range, take electricity data.
-            chart.electricity = electricity.data;
-            chart.summary = electricity.summary;
-            return;
-          }
-
-          // Got only summary with time range.
-          // Save it, fix the time-range for the chart, and request the real data.
-          chart.checkTimeRange = false;
-
-          // Set time range.
-          var params = {
-            min: electricity.summary.timestamp.min,
-            max: electricity.summary.timestamp.max
-          };
-          period.config(params);
-
-          // Set chart properties and get electricity.
-          refreshChart();
-        });
-
-        /**
-         * Electricity Service Event: When electricity changes, update charts with
-         * new consumption data.
-         *
-         * Actually, the handler receives the event after electricity is loaded with
-         * nodata=1 (to get min/max timestamps for new frequency), and refreshChart()
-         * asks for new electricity data (without the nodata=1 parameter).
-         */
-        $scope.$on('nwTemperatureChanged', function(event, climate) {
-            // Take climate data.
-            chart.compareCollection = climate;
-        });
-
-        /**
-         * Watch window width, and update chart parameters to resize the chart.
-         */
-        $scope.$watch(
-          function () { return $window.innerWidth; },
-          function () {
-            // Window was resized, recalc chart options.
-            if (chart.data != undefined) {
-              chart.data.options = $filter('toChartDataset')('options-only', $stateParams.chartType);
-            }
-          },
-          true
-        );
-
       },
       controllerAs: 'chart',
       bindToController: true,

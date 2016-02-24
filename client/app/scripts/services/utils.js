@@ -139,5 +139,29 @@ angular.module('negawattClientApp')
      */
     this.isEmpty = function(obj) {
       return angular.isUndefined(obj) || obj === null || angular.isObject(obj) && !Object.keys(obj).length;
+    };
+
+
+    /**
+     * Return the prefix letter in sensorTree array.
+     *
+     * @param type {string}
+     *  The type of the sensor/meter.
+     *
+     * @returns {string}
+     *  Return the prefix letter.
+     */
+    this.prefixLetter = function(type) {
+      switch (type) {
+        case 'site_categories':
+        case 'site_category':
+          return 'c';
+        case 'sites':
+        case 'meter_site':
+          return 's';
+        case 'meters':
+        case 'meter':
+          return 'm';
+      }
     }
   });

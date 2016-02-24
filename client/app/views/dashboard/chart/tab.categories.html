@@ -1,4 +1,4 @@
-<ol ng-model="meterCategoriesTree" ui-tree-nodes ui-tree data-drag-enabled="false" class="tree by-category"
+<ol ng-model="sensorTree" ui-tree-nodes ui-tree data-drag-enabled="false" class="tree by-category"
     max-depth="5" empty-placeholder-enabled="false" nodrop-enabled="true" clone-enabled="false" drag-delay="0">
-    <li ng-repeat="category in meterCategoriesTree" ng-show="category.numberOfSites || category.meters.length" data-collapsed="false" ui-tree-node ng-include="'views/dashboard/chart/branch.category.html'"></li>
+    <li data-collapsed="false" ui-tree-node ng-include="'views/dashboard/chart/branch.category.html'"></li>
 </ol>

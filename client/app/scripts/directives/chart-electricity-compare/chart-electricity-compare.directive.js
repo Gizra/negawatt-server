@@ -5,7 +5,7 @@ angular.module('negawattClientApp')
     return {
       restrict: 'EA',
       templateUrl: 'scripts/directives/chart-electricity-compare/chart-electricity-compare.directive.html',
-      controller: function chartElectricityUsageCtrl(ChartElectricityUsage, ChartUsagePeriod, $stateParams, $filter, $scope, Utils) {
+      controller: function chartElectricityUsageCtrl(ChartElectricityUsage, ChartUsagePeriod, $stateParams, $filter, $scope, $window, ChartOptions, Utils, ApplicationState) {
         var ctrlChart = this;
 
         // Get chart frequencies. (Tabs the period of time)
@@ -13,28 +13,55 @@ angular.module('negawattClientApp')
         // Save the state of the directive (to handle views in the directive. "undefined|empty|loading|data").
         ctrlChart.state = 'loading';
 
+        // Expose functions.
         ctrlChart.showNavigation = showNavigation;
         ctrlChart.changePeriod = changePeriod;
         ctrlChart.hasData = hasData;
+        ctrlChart.takeData = takeData;
         ctrlChart.changeFrequency = changeFrequency;
 
-        // Select category from the chart.
-        // @todo: make it work.
+        ctrlChart.sensorTree = null;
+        ctrlChart.sensorsDescriptors = null;
+        ctrlChart.electricity = {};
+        ctrlChart.summary = {};
+        ctrlChart.sensorData = {};
+
+        ApplicationState.registerMainChart(this);
+
+        /**
+         * Get sensor-tree and sensor-types info from appState..
+         *
+         * @param: tree
+         *  Sensors' tree object.
+         * @param: type
+         *  Sensors' type information object.
+         */
+        this.takeSensorTreeAndType = function (tree, type) {
+          ctrlChart.sensorTree = tree;
+          ctrlChart.sensorsDescriptors = type;
+        };
+
+        /**
+         * Handler for clicking a column of the chart.
+         *
+         * @param: selectedItem
+         *  Clicked column object.
+         * @param: chartData
+         *  Chart data object.
+         */
         $scope.onSelect = function(selectedItem, chartData) {
 
           var row = selectedItem.row;
           var col = selectedItem.column;
-          var timestamp = chartData.data.rows[row].timestamp;
+          var timestamp = chartData.data.rows[row].onSelect;
 
-          // 'Drill down' to the referred timestamp, one frequency step higher.
-          // Reload electricity to update charts.
-          ChartUsagePeriod.setReferenceDate(timestamp);
+          // 'Drill down' to the referred timestamp, one frequency step higher
+          // and update charts.
           var frequency = $stateParams.chartFreq;
           // Increase frequency by one step.
           (frequency < 5) && frequency++;
-          ChartUsagePeriod.changeFrequency(frequency);
-          // Update electricty with new parameters.
-          ChartElectricityUsage.requestElectricity(ChartUsagePeriod.stateParams);
+          // Update charts with new data.
+          ApplicationState.frequencyChanged(frequency, timestamp);
         };
 
         /**
@@ -46,26 +73,11 @@ angular.module('negawattClientApp')
           empty: ChartUsagePeriod.messages.empty
         };
 
-        /**
-         * Directive Event: When new electricity data is updated from the server.
-         */
-        $scope.$watchGroup(['ctrlChart.electricity', 'ctrlChart.compareCollection', 'ctrlChart.options', 'ctrlChart.summary'], function(chart) {
-          if (angular.isUndefined(chart)
-            || Utils.isEmpty(chart[0])
-            || angular.isUndefined(chart[2])) {
-
-            return;
-          }
-
-          renderChart(chart[0], chart[1], chart[2], chart[3]);
-
-        }, true);
-
         $scope.$on('nwChartBeginLoading', function() {
           setState('loading');
         });
 
-        // Privete functions.
+        // Private functions.
 
         /**
          * Set User interface state.
@@ -157,20 +169,29 @@ angular.module('negawattClientApp')
           ChartElectricityUsage.requestElectricity(ChartUsagePeriod.stateParams);
         }
 
+        function takeData(electricity, summary, sensorData) {
+          if (electricity) {
+            ctrlChart.electricity = electricity;
+            ctrlChart.summary = summary;
+          }
+          if (sensorData) {
+            ctrlChart.sensorData = sensorData;
+          }
+          renderChart(ctrlChart.electricity, ctrlChart.summary, ctrlChart.sensorData);
+        }
+
         /**
          * Render chart with the active electricity data according the
          * period and the chart selected.
          *
          * @param activeElectricity
          *  The "active electricity" data collection.
-         * @param compareCollection
-         *  Data collection to compare to.
-         * @param options
-         *  Chart options.
          * @param summary
          *  Electricity summary.
+         * @param sensorData
+         *  Data collection to compare to.
          */
-        function renderChart(activeElectricity, compareCollection, options, summary) {
+        function renderChart(activeElectricity, summary, sensorData) {
           // type is one of 'meters', 'sites', 'site_categories'.
           var labelsType = summary.type;
 
@@ -192,44 +213,64 @@ angular.module('negawattClientApp')
           }
 
           // Take sites, meters, and categories from chartDetailedCtrl's scope.
-          var detailedChartScope = $scope.$parent.$parent;
-          var detailedChartCtrl = detailedChartScope.detailedChartCtrl;
-          var labels = {}, labelsField;
+          var detailedChartScope = $scope.$parent;
+          var detailedChartCtrl = detailedChartScope.chart;
+          var labelsPrefixLetter, labelsField,
+            labels = ctrlChart.sensorTree.collection;
           switch (labelsType) {
             case 'accounts':
               // Create an object with the account name.
-              labels[detailedChartCtrl.account] = {label: detailedChartCtrl.title};
-              labelsField = 'meter_account';
+              labels = detailedChartCtrl.title;
               break;
             case 'site_categories':
-              labels = detailedChartScope.siteCategories.collection;
               labelsField = 'site_category';
+              labelsPrefixLetter = 'c';
               break;
             case 'sites':
-              labels = detailedChartScope.sites.listAll;
               labelsField = 'meter_site';
+              labelsPrefixLetter = 's';
               break;
             case 'meters':
-              labels = detailedChartScope.meters.listAll;
               labelsField = 'meter';
+              labelsPrefixLetter = 'm';
               break;
           }
 
-          var compareLabelsField = 'avg_temp';
+          var compareLabelsField = 'avg_value';
 
           // Convert the data coming from the server into google chart format.
-          ctrlChart.data = $filter('toChartDataset')(activeElectricity, $stateParams.chartType, compareCollection, options, labels, labelsField, compareLabelsField, oneItemSelected);
+          ctrlChart.data = $filter('toChartDataset')(activeElectricity, $stateParams.chartType, sensorData, labels, labelsField, labelsPrefixLetter, compareLabelsField, ctrlChart.sensorsDescriptors, oneItemSelected);
 
           // Update state.
           setState();
         }
+
+        /**
+         * Watch window width, and update chart parameters to resize the chart.
+         */
+        $scope.$watch(
+          function () { return $window.innerWidth; },
+          function () {
+            // Window was resized, recalc chart options.
+            if (ctrlChart.data && ctrlChart.data.options) {
+              var newOptions = angular.copy(ctrlChart.data.options);
+              newOptions.width = ChartOptions.getChartWidth();
+
+              // Update chart.options so the chart will be redrawn
+              // (chart-electricity-compare watches ctrlChart.options).
+              ctrlChart.data.options = newOptions;
+            }
+          },
+          true
+        );
+
       },
       controllerAs: 'ctrlChart',
       bindToController: true,
       // Isolate scope.
       scope: {
         electricity: '=',
-        compareCollection: '=',
+        sensorData: '=',
         options: '=',
         summary: '='
       }

@@ -41,7 +41,6 @@ angular.module('negawattClientApp')
      * @param siteProperties
      */
     function redrawChart(siteProperties) {
-
       $rootScope.$broadcast('sitePropertiesCtrlChange', siteProperties);
     }
   });

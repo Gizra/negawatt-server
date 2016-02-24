@@ -161,6 +161,14 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
+   * @Then I should see detailed-chart title :title
+   */
+  public function iShouldSeeDetailedChartTitle($title) {
+    $csspath = 'chart-detailed > div > h4';
+    $this->waitForTextNgElement($csspath, $title);
+  }
+
+  /**
    * @Then I should have :frequency as chart usage label
    */
   public function iShouldHaveAsChartUsageLabel($frequency) {

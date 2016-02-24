@@ -9,5 +9,4 @@ $plugin = array(
   'description' => t('Export the "Site Category" taxonomy term.'),
   'class' => 'NegawattTaxonomyTermSiteCategory',
   'authentication_types' => TRUE,
-  'authentication_optional' => TRUE,
 );

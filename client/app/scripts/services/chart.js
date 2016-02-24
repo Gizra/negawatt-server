@@ -20,10 +20,10 @@ angular.module('negawattClientApp')
       /**
        * Return a collection of frequencies or a specific frequency.
        *
-       * @param type {Number}
-       *  The type of the frecuency.
+       * @param type {Number|null}
+       *  The type of the frequency.
        * @returns {*}
-       *  The frecuency object or collection .
+       *  The frequency object or collection .
        */
       getFrequencies: function(type) {
         return isDefined(type) ? get('frequencies')[type] : get('frequencies');
@@ -107,6 +107,7 @@ angular.module('negawattClientApp')
           axis_v_title: 'קוט"ש בשנה',
           axis_h_format: 'yyyy',
           tooltip_format: 'YYYY',
+          tooltip_units: 'קוט"ש',
           axis_h_title: 'שנה',
           get_period: function(timestamp) {
             // Return a period, from the beginning of 9 years ago, to the end of this year
@@ -124,6 +125,7 @@ angular.module('negawattClientApp')
           axis_v_title: 'קוט"ש בחודש',
           axis_h_format: 'MM/yyyy',
           tooltip_format: 'MM/YYYY',
+          tooltip_units: 'קוט"ש',
           axis_h_title: 'חודש',
           get_period: function(timestamp) {
             // Return a period, from the beginning of the previous year to year's end
@@ -140,7 +142,8 @@ angular.module('negawattClientApp')
           chart_default_time_frame: 31,
           axis_v_title: 'קוט"ש ביום',
           axis_h_format: 'dd/MM\nEEE',
-          tooltip_format: 'DD/MM/YY',
+          tooltip_format: 'יום dd\' DD/MM/YY',
+          tooltip_units: 'קוט"ש',
           axis_h_title: 'תאריך',
           get_period: function(timestamp) {
             // Return a period, from the beginning of the month to its end.
@@ -158,7 +161,8 @@ angular.module('negawattClientApp')
           chart_default_time_frame: 168,
           axis_v_title: 'KW',
           axis_h_format: 'dd/MM\nEEE',
-          tooltip_format: 'HH:mm dd/MM',
+          tooltip_format: 'יום dd\' DD/MM, HH:mm',
+          tooltip_units: 'קו״ט',
           axis_h_title: 'שעה',
           get_period: function(timestamp) {
             // Return a period, from the beginning of the week (Sunday) to its end.
@@ -178,7 +182,8 @@ angular.module('negawattClientApp')
           chart_default_time_frame: 1440,
           axis_v_title: 'KW',
           axis_h_format: 'HH:mm\ndd/MM',
-          tooltip_format: 'HH:mm DD/MM',
+          tooltip_format: 'יום dd\' DD/MM, HH:mm',
+          tooltip_units: 'קו״ט',
           axis_h_title: 'שעה',
           get_period: function(timestamp) {
             // Return a period, from the beginning of the day to its end.

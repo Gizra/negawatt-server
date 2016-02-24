@@ -311,6 +311,30 @@ angular.module('negawattClientApp')
     }
 
     /**
+     * For a site with only one sensor, add the sensor as category site.
+     *
+     * When building categories tree (below), sites are added to the category.sites array.
+     * However, for a site with only one sensor, put
+     * the sensor directly in the category's meters array.
+     *
+     * @param category
+     *    A category object.
+     * @param sensorId
+     *    The id of the sensor to add as site.
+     */
+    function addSensorAsCategorySite(category, sensorId) {
+      // Before adding the sensor, make sure it wasn't added already.
+      if (category.sensors && category.sensors.indexOf(sensorId) >= 0) {
+        return;
+      }
+      // Define sensors array if not existing yet.
+      if (!category.sensors) {
+        category.sensors = [];
+      }
+      category.sensors.push(sensorId);
+    }
+
+    /**
      * For a site with only one meter, add the meter as category site.
      *
      * When building categories tree (below), sites are added to the category.sites array.
@@ -319,11 +343,11 @@ angular.module('negawattClientApp')
      *
      * @param category
      *    A category object.
-     * @param meterId
-     *    The id of the meter to add as site.
+     * @param site
+     *    The site object.
      */
     function addCategorySite(category, site) {
-      // More then one meter for the site. Add the site as a child site-category.
+      // More then one meter or sensor for the site. Add the site as a child site-category.
       // Before adding the site, make sure it wasn't added already.
       // Use 'for' here so 'return' will continue the 'forEach' loop.
       for (var existingChildId in category.children) {
@@ -338,6 +362,7 @@ angular.module('negawattClientApp')
         id: site.id,
         label: site.label,
         meters: site.meters,
+        sensors: site.sensors,
         isSite: true});
       // @todo: Update number-of-sites counter in the category and its parents.
       // @todo: Note that on next time the tree is built, the child site will not be added again and the number-or-sites will not be incremented.
@@ -376,14 +401,18 @@ angular.module('negawattClientApp')
           // (if there are several site pages).
           if (typeof(sitesIndexById[siteId]) !== 'undefined') {
             var site = sitesIndexById[siteId];
-            if (!site.meters || site.meters.length == 0) {
-              // Skip sites with no meters.
+            if ((!site.meters || site.meters.length == 0) && (!site.sensors || site.sensors.length == 0)) {
+              // Skip sites with no meters and no sensors.
               return;
             }
 
             // If there's only one meter for the site, add the meter and not the site.
-            if (site.meters.length == 1) {
+            if (site.meters.length == 1 && site.sensors.length == 0) {
               addMeterAsCategorySite(category, site.meters[0]);
+            }
+            // If there's only one sensor for the site, add the sensor and not the site.
+            else if (site.meters.length == 0 && site.sensors.length == 1) {
+              addSensorAsCategorySite(category, site.sensors[0]);
             }
             else {
               // More then one meter for the site. Add the site as a child site-category.

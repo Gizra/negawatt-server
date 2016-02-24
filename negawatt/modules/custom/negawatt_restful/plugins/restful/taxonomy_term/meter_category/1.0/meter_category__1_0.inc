@@ -9,5 +9,4 @@ $plugin = array(
   'description' => t('Export the "Meter Category" taxonomy term.'),
   'class' => 'NegawattTaxonomyTermMeterCategory',
   'authentication_types' => TRUE,
-  'authentication_optional' => TRUE,
 );

@@ -254,7 +254,7 @@ angular
         controller: 'DashboardCtrl'
       })
       .state('chart.withAccount', {
-        url: '/{accountId:int}?{chartFreq:int}&{sel}&{ids}&{climate}&{chartType}&{chartNextPeriod:int}&{chartPreviousPeriod:int}',
+        url: '/{accountId:int}?{chartFreq:int}&{sel}&{ids}&{sensor}&{chartType}&{chartNextPeriod:int}&{chartPreviousPeriod:int}',
         reloadOnSearch: false,
         params: {
           chartFreq: {
@@ -266,36 +266,14 @@ angular
           account: function($stateParams, Profile, profile) {
             return Profile.selectAccount($stateParams.accountId, profile);
           },
-          meters: function(Meter, account) {
-            // Get first records.
-            return Meter.get(account.id);
-          },
-          propertyMeters: function(PropertyMeter, account) {
-            // Get first records.
-            return PropertyMeter.get(account.id);
-          },
-          sites: function(Site, account) {
-            // Get first records.
-            return Site.get(account.id);
-          },
-          siteCategories: function(SiteCategory, account) {
-            return SiteCategory.get(account.id);
-          },
           meterCategories: function(MeterCategory, account) {
             return MeterCategory.get(account.id);
           },
-          filters: function(FilterFactory, siteCategories, $stateParams, meters, account) {
-            // Define categories filters. Used for the UI Checknboxes.
-            FilterFactory.setCategories(siteCategories);
-            // Define electricity parameters
-            FilterFactory.setElectricity($stateParams);
-            // Define climate parameters
-            FilterFactory.setTemperature($stateParams);
-
-            return {
-              loadElectricity: true,
-              activeElectricityHash: FilterFactory.get('activeElectricityHash')
-            };
+          sensorTree: function(SensorTree, account) {
+            return SensorTree.get(account.id);
+          },
+          sensorType: function(SensorType, account) {
+            return SensorType.get(account.id);
           },
           messages: function(Message, account) {
             return Message.get(account);
@@ -322,7 +300,7 @@ angular
             controllerAs: 'detailedChartCtrl'
           }
         }
-      })
+      });
     // Define interceptors.
     $httpProvider.interceptors.push(function ($q, Auth, $location, localStorageService) {
       return {
