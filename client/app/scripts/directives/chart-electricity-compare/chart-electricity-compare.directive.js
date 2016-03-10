@@ -5,7 +5,7 @@ angular.module('negawattClientApp')
     return {
       restrict: 'EA',
       templateUrl: 'scripts/directives/chart-electricity-compare/chart-electricity-compare.directive.html',
-      controller: function chartElectricityUsageCtrl(ChartElectricityUsage, ChartUsagePeriod, $stateParams, $filter, $scope, $window, ChartOptions, Utils, ApplicationState) {
+      controller: function chartElectricityUsageCtrl(ChartUsagePeriod, $stateParams, $filter, $scope, $window, ChartOptions, Utils, ApplicationState) {
         var ctrlChart = this;
 
         // Get chart frequencies. (Tabs the period of time)
@@ -31,6 +31,8 @@ angular.module('negawattClientApp')
         /**
          * Get sensor-tree and sensor-types info from appState..
          *
+         * A callback function that is called from ApplicationState.registerMainChart()
+         *
          * @param: tree
          *  Sensors' tree object.
          * @param: type
@@ -40,6 +42,30 @@ angular.module('negawattClientApp')
           ctrlChart.sensorTree = tree;
           ctrlChart.sensorsDescriptors = type;
         };
+
+        /**
+         * Take new electricity and sensor data.
+         *
+         * Called from ApplicationState.getElectricityAndSensors() after new electricity
+         * and/or sensor data arrives.
+         *
+         * @param electricity
+         *  New electricity data.
+         * @param summary
+         *  New electricity summary.
+         * @param sensorData
+         *  New sensor data.
+         */
+        function takeData(electricity, summary, sensorData) {
+          if (electricity) {
+            ctrlChart.electricity = electricity;
+            ctrlChart.summary = summary;
+          }
+          if (sensorData) {
+            ctrlChart.sensorData = sensorData;
+          }
+          renderChart(ctrlChart.electricity, ctrlChart.summary, ctrlChart.sensorData);
+        }
 
         /**
          * Handler for clicking a column of the chart.
@@ -167,17 +193,6 @@ angular.module('negawattClientApp')
 
           ChartUsagePeriod.changeFrequency(type);
           ChartElectricityUsage.requestElectricity(ChartUsagePeriod.stateParams);
-        }
-
-        function takeData(electricity, summary, sensorData) {
-          if (electricity) {
-            ctrlChart.electricity = electricity;
-            ctrlChart.summary = summary;
-          }
-          if (sensorData) {
-            ctrlChart.sensorData = sensorData;
-          }
-          renderChart(ctrlChart.electricity, ctrlChart.summary, ctrlChart.sensorData);
         }
 
         /**
