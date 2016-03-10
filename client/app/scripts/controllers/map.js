@@ -1,41 +1,85 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .controller('MapCtrl', function ($scope, $state, $stateParams, $location, $filter, Map, leafletData, $timeout, account, meters, FilterFactory) {
-    var vm = this;  
+  .controller('MapCtrl', function ($scope, $state, $stateParams, $location, $filter, Map, leafletData, $timeout, account, sensorTree) {
+    var mapCtrl = this;  
     var isMeterSelected = false;
 
     // Config map.
-    vm.defaults = Map.getConfig();
-    vm.center = Map.getCenter(account);
-    // The first time always loadd all the meters.
-    vm.meters = ($state.is('dashboard.withAccount')) ? meters.listAll : getMetersWithOptions(meters.list);
+    mapCtrl.defaults = Map.getConfig();
+    mapCtrl.center = Map.getCenter(account);
+    // Build sites/meters list from sensorTree.
+    var sites = [];
+    angular.forEach(sensorTree.collection, function(item) {
+      // If it's a site or a meter, add it to sites array.
+      if (item.type == 'site' || item.type == 'meter') {
+        if (item.location) {
+          // Set lat/lng.
+          item.lat = Number(item.location.lat);
+          item.lng = Number(item.location.lng);
+
+          // Set icon.
+          var parentCategory = sensorTree.collection[item.parent];
+          var categoryIcon = parentCategory && parentCategory.icon ? parentCategory.icon : 'marker';
+          item.icon = {
+            iconUrl: '../images/markers/' + categoryIcon + '-blue.png',
+            shadowUrl: '../images/shadow.png',
+            iconSize: [32, 32], // size of the icon
+            shadowSize: [20, 20],
+            iconAnchor: [16, 29], // point of the icon which will correspond to marker's location
+            shadowAnchor: [10, 12],  // the same for the shadow
+            popupAnchor: [0, -25], // where the pop-up window will appear
+            //unselect: {
+            //  iconUrl: '../images/markers/' + categoryIcon + '-blue.png',
+            //  shadowUrl: '../images/shadow.png',
+            //  iconSize: [32, 32], // size of the icon
+            //  shadowSize: [20, 20],
+            //  iconAnchor: [16, 29], // point of the icon which will correspond to marker's location
+            //  shadowAnchor: [10, 12],  // the same for the shadow
+            //  popupAnchor: [0, -25], // where the pop-up window will appear
+            //},
+            //select: {
+            //  iconUrl: '../images/markers/' + categoryIcon + '-red.png',
+            //  shadowUrl: '../images/shadow.png',
+            //  iconSize: [32, 32], // size of the icon
+            //  shadowSize: [20, 20],
+            //  iconAnchor: [16, 29], // point of the icon which will correspond to marker's location
+            //  shadowAnchor: [10, 12],  // the same for the shadow
+            //  popupAnchor: [0, -25], // where the pop-up window will appear
+            //}
+          };
+          sites.push(item);
+        }
+      }
+    });
+    mapCtrl.sites = sites;
+    //mapCtrl.sites = ($state.is('dashboard.withAccount')) ? meters.listAll : getMetersWithOptions(meters.list);
 
     // Select marker if is the case.
-    if ($stateParams.markerId) {
-      isMeterSelected = !!setSelectedMarker($stateParams.markerId);
+    if ($stateParams.sel && $stateParams.sel == 'site') {
+      isMeterSelected = !!setSelectedMarker($stateParams.ids);
     }
 
     /**
     * Set the selected Meter.
     *
-    * @param id int
+    * @param ids int
     *   The Marker ID.
     */
-    function setSelectedMarker(id) {
+    function setSelectedMarker(ids) {
+      // FIXME: handle multiple ids.
       var lastSelectedMarkerId = Map.getMarkerSelected();
       // Unselect the previous marker.
-      if (angular.isDefined(lastSelectedMarkerId) && angular.isDefined(vm.meters[lastSelectedMarkerId])) {
-        vm.meters[Map.getMarkerSelected()].unselect()
+      if (angular.isDefined(lastSelectedMarkerId) && angular.isDefined(mapCtrl.sites[lastSelectedMarkerId])) {
+        mapCtrl.sites[Map.getMarkerSelected()].unselect()
       }
 
       // Select the marker.
-      if (angular.isDefined(vm.meters[id])) {
-        vm.meters[id].select();
-        Map.setMarkerSelected(id);
+      if (angular.isDefined(mapCtrl.sites[ids])) {
+        mapCtrl.sites[ids].select();
+        Map.setMarkerSelected(ids);
         isMeterSelected = true;
       }
-
     }
 
     // Hover above marker in the Map -  open tooltip.
@@ -76,43 +120,24 @@ angular.module('negawattClientApp')
     $scope.$on("leafletDirectiveMap.load", function(events, map) {
       leafletData.getMap().then(function(map){
         map.setActiveArea('map-activearea')
-          .setView([vm.center.lat, vm.center.lng], vm.center.zoom, {reset: true});
+          .setView([mapCtrl.center.lat, mapCtrl.center.lng], mapCtrl.center.zoom, {reset: true});
       });
     });
 
     // Reload the current $state when meters added more.
     $scope.$on('nwMetersChanged', function(event, meters) {
-      vm.meters = getMetersWithOptions(meters.list);
-      if (FilterFactory.get('meter') && vm.meters[FilterFactory.get('meter')] && !isMeterSelected) {
-        setSelectedMarker(FilterFactory.get('meter'));
-      }
+      //mapCtrl.sites = getMetersWithOptions(meters.list);
+      //if (FilterFactory.get('meter') && mapCtrl.sites[FilterFactory.get('meter')] && !isMeterSelected) {
+      //  setSelectedMarker(FilterFactory.get('meter'));
+      //}
     });
 
     // Select marker in the Map.
     $scope.$on('leafletDirectiveMarker.click', function(event, args) {
-      $state.forceGo('dashboard.withAccount.markers', {markerId: args.modelName, categoryId: FilterFactory.get('category')} );
+//      $state.forceGo('dashboard.withAccount.markers', {markerId: args.modelName, categoryId: FilterFactory.get('category')} );
+      $stateParams.sel = 'site';
+      $stateParams.ids = args.modelName;
     });
-
-    /**
-    * Set the selected Meter.
-    *
-    * @param id int
-    *   The Marker ID.
-    */
-    function setSelectedMarker(id) {
-      var lastSelectedMarkerId = Map.getMarkerSelected();
-      // Unselect the previous marker.
-      if (angular.isDefined(lastSelectedMarkerId) && angular.isDefined(vm.meters[lastSelectedMarkerId])) {
-        vm.meters[Map.getMarkerSelected()].unselect()
-      }
-
-      // Select the marker.
-      if (angular.isDefined(vm.meters[id])) {
-        vm.meters[id].select();
-        Map.setMarkerSelected(id);
-        isMeterSelected = true;
-      }
-    }
 
     /**
      * Apply style to the markers according the active filters.
@@ -123,7 +148,7 @@ angular.module('negawattClientApp')
      * @returns {*}
      */
     function getMetersWithOptions(meters) {
-      return (FilterFactory.isDefine('category')) ? $filter('setMetersOptionsByActiveCategory')(angular.copy(meters), {transparent: true}, 'noActiveCategory') : meters;
+//      return (FilterFactory.isDefine('category')) ? $filter('setMetersOptionsByActiveCategory')(angular.copy(meters), {transparent: true}, 'noActiveCategory') : meters;
     }
 
   });
