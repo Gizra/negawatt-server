@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Map', function ($rootScope, $log, leafletData, leafletHelpers) {
+  .service('Map', function ($rootScope, $log, leafletData, leafletHelpers, Config) {
     var self = this;
 
     // Initial center point.
