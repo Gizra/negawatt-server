@@ -121,6 +121,38 @@ angular.module('negawattClientApp')
     };
 
     /**
+     * Calculate the next and previous periods in unix format time.
+     *
+     * @param periodDirection
+     *  String to indicate if is next or previous.
+     *
+     * @returns {{next: null, previous: null}|*}
+     */
+    function getNewPeriod(periodDirection) {
+      // Define new period.
+      var newPeriod = {};
+
+      // Calculate the new period od period.
+      if (periodDirection === 'next' && period.next !== null) {
+        newPeriod = {
+          next: (moment.unix(period.next).isAfter(moment.unix(period.max)) || moment.unix(period.next).isSame(moment.unix(period.max))) ? null : period.add(period.next).unix(),
+          previous: period.add(period.previous).unix()
+        };
+      }
+      // This calculate the previous period.
+      if (periodDirection === 'previous' && period.previous !== null){
+        newPeriod = {
+          next: period.subtract(period.next).unix(),
+          previous: (moment.unix(period.previous).isBefore(moment.unix(period.min)) || moment.unix(period.previous).isSame(moment.unix(period.min))) ? null : period.subtract(period.previous).unix()
+        };
+      }
+
+      // Extend the Period factory methods.
+      newPeriod = extend(copy(period), newPeriod);
+      return newPeriod;
+    }
+
+    /**
      * Clear the actual period and the theirs limits.
      */
     function reset() {
