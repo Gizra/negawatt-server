@@ -20,13 +20,13 @@
   <div ng-switch-when="data">
 
     <!-- Chart subcomponent -->
-    <div google-chart chart="ctrlChart.data" id="chart-usage" class="usageChart"></div>
+    <div google-chart chart="ctrlChart.data" id="chart-usage" class="usageChart" on-select="onSelect(selectedItem, ctrlChart.data)"></div>
     <!-- Period selction subcomponent -->
     <div class="chart-navigation">
-      <button type="button" id="chart-usage-btn-arrow-left" class="btn btn-transparent btn-arrow btn-arrow-left" ng-show="ctrlChart.showNavigation('previous')" ng-click="ctrlChart.changePeriod('previous')" >
+      <button type="button" id="chart-usage-btn-arrow-left" class="btn btn-transparent btn-arrow btn-arrow-left" ng-disabled="!ctrlChart.showNavigation('previous')" ng-click="ctrlChart.changePeriod('previous')" >
         <span class="glyphicon glyphicon-chevron-left"></span>
       </button>
-      <button type="button" id="chart-usage-btn-arrow-right" class="btn btn-transparent btn-arrow btn-arrow-right" ng-show="ctrlChart.showNavigation('next')" ng-click="ctrlChart.changePeriod('next')">
+      <button type="button" id="chart-usage-btn-arrow-right" class="btn btn-transparent btn-arrow btn-arrow-right" ng-disabled="!ctrlChart.showNavigation('next')" ng-click="ctrlChart.changePeriod('next')">
         <span class="glyphicon glyphicon-chevron-right"></span>
       </button>
     </div>
