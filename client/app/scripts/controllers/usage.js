@@ -8,85 +8,18 @@
  * Controller of the negawattClientApp
  */
 angular.module('negawattClientApp')
-  .controller('UsageCtrl', function UsageCtrl($scope, $state, $stateParams, $filter, Electricity, Chart, ChartUsagePeriod, FilterFactory, meters, filters, ChartElectricityUsage, siteCategories, profile) {
+  .controller('UsageCtrl', function UsageCtrl($scope, ApplicationState) {
     var usageCtrl = this;
-    var getChartPeriod = ChartUsagePeriod.getChartPeriod;
 
-    // Populate the electricity data into the UI.
-    usageCtrl.electricity;
+    // Register this with appState.
+    ApplicationState.registerDetailedChart(this);
 
-    // Get the parameters chart frecuency.
-    if (angular.isDefined($stateParams.chartFreq)) {
-      Chart.setActiveFrequency($stateParams.chartFreq);
-    }
+    this.setup = function(chartDateRange, chartReferenceDate) {
+      $scope.dateRange = chartDateRange;
+    };
 
-    // Get from parameters information of the selected marker.
-    if (angular.isDefined($stateParams.markerId)) {
-      // Share meter selected.
-      $scope.meterSelected = meters.list[$stateParams.markerId];
-    }
-
-    // Set the current selection label.
-    if ($stateParams.markerId) {
-      // Set marker label.
-      $scope.title = meters.list[$stateParams.markerId] ? meters.list[$stateParams.markerId].label : null;
-    }
-    else if ($stateParams.categoryId) {
-      // When no marker is selected fetch category label.
-      $scope.title = siteCategories.list[$stateParams.categoryId] ? siteCategories.list[$stateParams.categoryId].label : null;
-    }
-    else {
-      // Otherwise display account label.
-      // Find the current selected account in the user's accounts.
-      angular.forEach(profile.account, function(account) {
-        if (account.id == $stateParams.accountId) {
-          $scope.title = account.label;
-        }
-      });
-    }
-
-    //  Force load of the electricity data.
-    if (filters.loadElectricity) {
-      // Realize the first load electricity data after ui-roter resolutions.
-      Electricity.refresh(filters.activeElectricityHash);
-    }
-
-    /**
-     * Electricity Service Event: When electricity collection change update
-     * the active electricity (electricity data from a specific period) to
-     * usage chart directive.
-     */
-    $scope.$on("nwElectricityChanged", function(event, electricity) {
-      var noData;
-
-      if (angular.isUndefined(electricity)) {
-        return;
-      }
-
-      // Save if the period id missing on electricity request, otherwhise false.
-      noData = $filter('activeElectricityFilters')(electricity, 'noData');
-
-      if (!getChartPeriod().isConfigured()) {
-        // Configure the period for the chart frequency selected, and request
-        // specific electricity data.
-        ChartUsagePeriod.config($filter('activeElectricityFilters')(electricity, 'limits'));
-      }
-
-      if (noData && getChartPeriod().isConfigured()) {
-        ChartElectricityUsage.requestElectricity(ChartUsagePeriod.stateParams);
-        return;
-      }
-
-      // Update electricity property with active electricity (if the response has data).
-      usageCtrl.electricity = $filter('activeElectricityFilters')(electricity);
-
-      if (usageCtrl.electricity && usageCtrl.electricity.length) {
-        // Update the title's date range, according to the first and last
-        // selected electricity records.
-        var firstEntry = usageCtrl.electricity[0];
-        var lastEntry = usageCtrl.electricity[usageCtrl.electricity.length - 1];
-        $scope.dateRange = ChartUsagePeriod.formatDateRange(firstEntry.timestamp * 1000, lastEntry.timestamp * 1000);
-      }
-    });
+    this.setChartTitle = function(title) {
+      $scope.title = title;
+    };
 
   });
