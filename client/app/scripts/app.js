@@ -84,7 +84,7 @@ angular
         controller: 'DashboardCtrl'
       })
       .state('dashboard.withAccount', {
-        url: '/{accountId:int}?{chartFreq:int}&{chartNextPeriod:int}&{chartPreviousPeriod:int}',
+        url: '/{accountId:int}?{chartFreq:int}&{sel}&{ids}&{sensor}&{chartType}&{chartNextPeriod:int}&{chartPreviousPeriod:int}',
         reloadOnSearch: false,
         params: {
           chartFreq: {
@@ -96,23 +96,14 @@ angular
           account: function($stateParams, Profile, profile) {
             return Profile.selectAccount($stateParams.accountId, profile);
           },
-          meters: function(Meter, account) {
-            // Get first records.
-            return Meter.get(account.id);
+          meterCategories: function(MeterCategory, account) {
+            return MeterCategory.get(account.id);
           },
-          siteCategories: function(SiteCategory, account) {
-            return SiteCategory.get(account.id);
+          sensorTree: function(SensorTree, account) {
+            return SensorTree.get(account.id);
           },
-          filters: function(FilterFactory, siteCategories, $stateParams, meters, account) {
-            // Define categories filters. Used for the UI Checknboxes.
-            FilterFactory.setCategories(siteCategories);
-            // Define electricity parameters
-            FilterFactory.setElectricity($stateParams);
-
-            return {
-              loadElectricity: true,
-              activeElectricityHash: FilterFactory.get('activeElectricityHash')
-            };
+          sensorType: function(SensorType, account) {
+            return SensorType.get(account.id);
           },
           messages: function(Message, account) {
             return Message.get(account);
@@ -128,9 +119,10 @@ angular
             controller: 'MapCtrl',
             controllerAs: 'map'
           },
-          'categories@dashboard': {
-            templateUrl: 'views/dashboard/map/main.categories.html',
-            controller: 'CategoryCtrl'
+          'meters-menu@dashboard': {
+            templateUrl: 'views/dashboard/map/main.meters-menu.html',
+            controller: 'MetersMenuCtrl',
+            controllerAs: 'metersMenuCtrl'
           },
           'messages@dashboard': {
             templateUrl: 'views/dashboard/map/main.messages.html',
@@ -138,102 +130,7 @@ angular
             controllerAs: 'message'
           },
           'details@dashboard': {
-            templateUrl: 'views/dashboard/map/main.details.html',
-            controller: 'DetailsCtrl',
-            controllerAs: 'chart'
-          },
-          'usage@dashboard': {
-            templateUrl: 'views/dashboard/map/main.usage.html',
-            controller: 'UsageCtrl',
-            controllerAs: 'chart'
-          }
-        }
-      })
-      .state('dashboard.withAccount.categories', {
-        url: '/category/{categoryId:int}',
-        reloadOnSearch: false,
-        resolve: {
-          meters: function(Meter, $stateParams, account, FilterFactory) {
-            // Set Meter filter.
-            FilterFactory.set('category', +$stateParams.categoryId);
-
-            return Meter.get(account.id, $stateParams.categoryId);
-          },
-          siteCategories: function(SiteCategory, account) {
-            return SiteCategory.get(account.id);
-          },
-          filters: function(siteCategories, $stateParams, FilterFactory) {
-            return {
-              loadElectricity: true,
-              activeElectricityHash: FilterFactory.get('activeElectricityHash')
-            };
-          }
-        },
-        views: {
-          // Replace `meters` data previous resolved, with the cached data
-          // filtered by the selected category.
-          'map@dashboard': {
-            templateUrl: 'views/dashboard/map/main.map.html',
-            controller: 'MapCtrl',
-            controllerAs: 'map'
-          },
-          // Update usage-chart to show category summary.
-          'usage@dashboard': {
-            templateUrl: 'views/dashboard/map/main.usage.html',
-            controller: 'UsageCtrl',
-            controllerAs: 'chart'
-          },
-          'categories@dashboard': {
-            templateUrl: 'views/dashboard/map/main.categories.html',
-            controller: 'CategoryCtrl'
-          },
-          // Update details (pie) chart for categories.
-          'details@dashboard': {
-            templateUrl: 'views/dashboard/map/main.details.html',
-            controller: 'DetailsCtrl',
-            controllerAs: 'chart'
-          }
-        }
-      })
-      .state('dashboard.withAccount.markers', {
-        url: '/marker/:markerId?categoryId',
-        reloadOnSearch: false,
-        resolve: {
-          meters: function(Meter, $stateParams, account, FilterFactory) {
-            FilterFactory.set('category', +$stateParams.categoryId || undefined);
-            FilterFactory.set('meter', +$stateParams.markerId);
-            // Necessary to resolve again to apply the filter, of category id.
-            return Meter.get(account.id, $stateParams.categoryId);
-          },
-          siteCategories: function(SiteCategory, account) {
-            return SiteCategory.get(account.id);
-          },
-          filters: function(meters, $stateParams, FilterFactory) {
-            FilterFactory.setElectricity($stateParams);
-
-            return {
-              loadElectricity: true,
-              activeElectricityHash: FilterFactory.get('activeElectricityHash')
-            };
-          }
-        },
-        views: {
-          // Replace `meters` data previous resolved, with the cached data
-          // if is the case filtered by the selected category.
-          'map@dashboard': {
-            templateUrl: 'views/dashboard/map/main.map.html',
-            controller: 'MapCtrl',
-            controllerAs: 'map'
-          },
-          'categories@dashboard': {
-            templateUrl: 'views/dashboard/map/main.categories.html',
-            controller: 'CategoryCtrl'
-          },
-          // Update the meter detailed data.
-          'details@dashboard': {
-            templateUrl: 'views/dashboard/map/main.details.html',
-            controller: 'DetailsCtrl',
-            controllerAs: 'chart'
+            templateUrl: 'views/dashboard/map/main.details.html'
           },
           'usage@dashboard': {
             templateUrl: 'views/dashboard/map/main.usage.html',
