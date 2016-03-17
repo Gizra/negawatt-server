@@ -105,23 +105,23 @@ angular.module('negawattClientApp')
     };
 
     /**
-     * Save the selected marker.
+     * Save the selected markers.
      *
-     * @param marker
-     *  The marker ID.
+     * @param markers array
+     *  The marker IDs.
      */
-    this.setMarkerSelected = function(marker) {
-      cache.markerSelected = marker;
+    this.setMarkersSelected = function(markers) {
+      cache.markersSelected = markers;
     };
 
     /**
-     * Return the selected marker.
+     * Return the selected markers.
      *
-     * @returns int
-     *  The marker ID.
+     * @returns array
+     *  The marker IDs.
      */
-    this.getMarkerSelected = function() {
-      return cache.markerSelected;
+    this.getMarkersSelected = function() {
+      return cache.markersSelected;
     };
 
     /**
@@ -166,9 +166,6 @@ angular.module('negawattClientApp')
           northEast: bounds._northEast,
           southWest: bounds._southWest
         };
-
       })
     }
-
-
   });
