@@ -17,6 +17,14 @@ function negawatt_taxonomy_taxonomy_default_vocabularies() {
       'module' => 'taxonomy',
       'weight' => 0,
     ),
+    'normalization_factor' => array(
+      'name' => 'Normalization factor',
+      'machine_name' => 'normalization_factor',
+      'description' => '',
+      'hierarchy' => 0,
+      'module' => 'taxonomy',
+      'weight' => 0,
+    ),
     'sensor_type' => array(
       'name' => 'Sensor Type',
       'machine_name' => 'sensor_type',
