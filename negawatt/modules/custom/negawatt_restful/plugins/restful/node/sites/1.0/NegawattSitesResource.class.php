@@ -128,7 +128,7 @@ class NegawattSitesResource extends \NegawattEntityBaseNode {
   }
 
   /**
-   * Process callback, that returns list of sensors linked to the site.
+   * Process callback, that returns list of normalization-factors of the site.
    *
    * @param $value
    *   An array of normalization-factor objects.
