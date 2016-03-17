@@ -8,6 +8,12 @@
     </a>
   </div>
   <span class="menu-separator"></span>
+  <ul class="nav nav-pills">
+    <li class="active"><a href ng-click="goMap()">Map</a></li>
+    <li><a href ng-click="goChart()">Chart</a></li>
+    <li><a href="#">Table</a></li>
+  </ul>
+  <span class="menu-separator"></span>
   <div ng-controller="AccessCtrl" class="menu-account">
     <img class="menu-account-photo" ng-src="{{ user.picture }}" alt=""/><span>שלום ,{{ user.label }}</span>
     <img class="menu-account-logout" src="../../images/icon-arrow.png" alt=""/>

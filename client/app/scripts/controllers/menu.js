@@ -23,4 +23,18 @@ angular.module('negawattClientApp')
       $state.go('dashboard.withAccount');
     };
 
+    $scope.goChart = function() {
+      //$state.go('chart.withAccount');
+      var loc = window.location.href;
+      loc = loc.replace('dashboard', 'chart');
+      window.location.href = loc;
+    };
+
+    $scope.goMap = function() {
+      //$state.go('dashboard.withAccount');
+      var loc = window.location.href;
+      loc = loc.replace('chart', 'dashboard');
+      window.location.href = loc;
+    };
+
   });

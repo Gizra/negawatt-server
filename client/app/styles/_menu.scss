@@ -14,3 +14,15 @@ img.menu-account-photo {
   border-radius: 50%;
 }
 
+#dashboard-controls {
+  .nav-pills {
+    li {
+      height: 40px;
+    }
+
+    a {
+      font-size: 16px;
+      line-height: 24px;
+    }
+  }
+}
