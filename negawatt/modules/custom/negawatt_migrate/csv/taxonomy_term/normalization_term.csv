@@ -1,0 +1,8 @@
+id,name,weight,description,field_units
+area,Area,,,sq.m
+classes,Classes,,,class
+poles,Poles,,,pole
+rooms,Rooms,,,room
+students,Students,,,student
+workers,Workers,,,worker
+
