@@ -56,6 +56,11 @@ angular.module('negawattClientApp')
     this.pieChart = null;
 
     /**
+     * The markers map.
+     */
+    this.markersMap = null;
+
+    /**
      * The meters-menu controller, will receive notifications on any
      * change in data or options.
      */
@@ -97,6 +102,13 @@ angular.module('negawattClientApp')
      */
     this.registerMetersMenu = function(menu) {
       this.metersMenu = menu;
+    };
+
+    /**
+     * Register markers-map controller for later communication.
+     */
+    this.registerMap = function(map) {
+      this.markersMap = map;
     };
 
     // Wait for charts to register before calling init()
@@ -291,6 +303,11 @@ angular.module('negawattClientApp')
 
       // Update chart title in detailed-chart
       this.updateChartTitle();
+
+      // Update map (if exists),
+      if ((sel == 'site' || sel == 'meter') && this.markersMap) {
+        this.markersMap.setSelectedMarkers(ids);
+      }
 
       // Get time-frame limits for new selected-objects and then
       // get electricity and sensor data from the server.
