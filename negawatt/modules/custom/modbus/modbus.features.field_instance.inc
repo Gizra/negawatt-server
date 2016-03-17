@@ -716,6 +716,49 @@ function modbus_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-modbus_meter-field_normalization_factors'
+  $field_instances['node-modbus_meter-field_normalization_factors'] = array(
+    'bundle' => 'modbus_meter',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'field_collection',
+        'settings' => array(
+          'add' => 'Add',
+          'delete' => 'Delete',
+          'description' => TRUE,
+          'edit' => 'Edit',
+          'view_mode' => 'full',
+        ),
+        'type' => 'field_collection_view',
+        'weight' => 20,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_normalization_factors',
+    'label' => 'Normalization factors',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'field_collection',
+      'settings' => array(),
+      'type' => 'field_collection_embed',
+      'weight' => 22,
+    ),
+  );
+
   // Exported field_instance: 'node-modbus_meter-field_place_address'
   $field_instances['node-modbus_meter-field_place_address'] = array(
     'bundle' => 'modbus_meter',
@@ -910,6 +953,7 @@ function modbus_field_default_field_instances() {
   t('Meter processed');
   t('Meter site');
   t('Meter type');
+  t('Normalization factors');
   t('Place Address');
   t('Place Description');
   t('Place Locality');
