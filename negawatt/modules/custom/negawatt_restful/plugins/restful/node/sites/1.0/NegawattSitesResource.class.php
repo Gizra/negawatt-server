@@ -69,6 +69,13 @@ class NegawattSitesResource extends \NegawattEntityBaseNode {
       ),
     );
 
+    $public_fields['normalization_factors'] = array(
+      'property' => 'field_normalization_factors',
+      'process_callbacks' => array(
+        array($this, 'normalizationFactors'),
+      ),
+    );
+
     return $public_fields;
   }
 
@@ -95,7 +102,7 @@ class NegawattSitesResource extends \NegawattEntityBaseNode {
   /**
    * Process callback, that returns list of meters linked to the site.
    *
-   * @param id $value
+   * @param $value
    *   The site ID.
    *
    * @return array
@@ -109,7 +116,7 @@ class NegawattSitesResource extends \NegawattEntityBaseNode {
   /**
    * Process callback, that returns list of sensors linked to the site.
    *
-   * @param id $value
+   * @param $value
    *   The site ID.
    *
    * @return array
@@ -121,7 +128,31 @@ class NegawattSitesResource extends \NegawattEntityBaseNode {
   }
 
   /**
-   * Helper funciton that returns list of node entities linked to the site.
+   * Process callback, that returns list of sensors linked to the site.
+   *
+   * @param $value
+   *   An array of normalization-factor objects.
+   *
+   * @return array
+   *   List normalization factors.
+   */
+  protected function normalizationFactors($value)
+  {
+    $return = array();
+    foreach ($value as $normalization_factor) {
+      $wrapper = entity_metadata_wrapper('field_collection_item', $normalization_factor);
+      $factor_wrapper = entity_metadata_wrapper('taxonomy_term', $wrapper->field_factor->value());
+      $return[] = array(
+        'factor' => $factor_wrapper->label(),
+        'units' => $factor_wrapper->field_units->value(),
+        'value' => $wrapper->field_value->value(),
+      );
+    }
+    return $return;
+  }
+
+  /**
+   * Helper function that returns list of node entities linked to the site.
    *
    * @param int $site_id
    *   The site ID.
