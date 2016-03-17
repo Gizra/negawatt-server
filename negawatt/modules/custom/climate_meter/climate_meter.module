@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the Climate meter feature.
- */
-
-include_once 'climate_meter.features.inc';
