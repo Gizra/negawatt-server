@@ -309,6 +309,9 @@ angular.module('negawattClientApp')
         this.markersMap.setSelectedMarkers(ids);
       }
 
+      // Update the set of normalization-factors
+      this.updateNormalizationFactors(sel, ids);
+
       // Get time-frame limits for new selected-objects and then
       // get electricity and sensor data from the server.
       this.updatePeriodLimitsAndGetElectricity();
@@ -595,6 +598,25 @@ angular.module('negawattClientApp')
             appState.detailedChart.setChartTitle(title);
           });
       }
+    };
+
+    /**
+     * Update the set of normalization-factors for detailed-chart.
+     *
+     */
+    this.updateNormalizationFactors = function(sel, ids) {
+      var factors = [];
+
+      SensorTree.get($stateParams.accountId)
+        .then(function(sensorTree) {
+          if (sel == 'meter') {
+            var ids_array = ids.split(',');
+            var classLetter = Utils.prefixLetter(sel);
+            var sensor = sensorTree.collection[classLetter + ids_array[0]];
+            factors = sensor.normalization_factors;
+          }
+          appState.detailedChart.takeNormalizationFactors(factors);
+        })
     };
 
     /**

@@ -117,9 +117,12 @@ angular.module('negawattClientApp')
       controller: function ChartDetailedCtrl($scope, ApplicationState) {
         var chart = this;
 
+        this.normalizationFactors = [];
+
         // Expose some functions.
         this.setup = setup;
         this.setChartTitle = setChartTitle;
+        this.takeNormalizationFactors = takeNormalizationFactors;
 
         // Register in ApplicationState.
         ApplicationState.registerDetailedChart(this);
@@ -142,6 +145,13 @@ angular.module('negawattClientApp')
          */
         function setChartTitle(newTitle) {
           chart.title = newTitle;
+        }
+
+        /**
+         * Get a new set of normalization-factors from appState.
+         */
+        function takeNormalizationFactors(factors) {
+          chart.normalizationFactors = factors;
         }
       },
       controllerAs: 'chart',
