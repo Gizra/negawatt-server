@@ -609,11 +609,25 @@ angular.module('negawattClientApp')
 
       SensorTree.get($stateParams.accountId)
         .then(function(sensorTree) {
-          if (sel == 'meter') {
+          if (sel == 'meter' || sel == 'site') {
             var ids_array = ids.split(',');
             var classLetter = Utils.prefixLetter(sel);
-            var sensor = sensorTree.collection[classLetter + ids_array[0]];
-            factors = sensor.normalization_factors;
+            // Find common denominator of all normalization-factors.
+            // Count how many times each factor appears. The ones that appear
+            // as many times as the meters themselves, will remain.
+            var factorsCount = {};
+            angular.forEach(ids_array, function (id) {
+              var sensor = sensorTree.collection[classLetter + id];
+              angular.forEach(sensor.normalization_factors, function (factor) {
+                factorsCount[factor.factor] = factorsCount[factor.factor] ? (factorsCount[factor.factor] + 1) : 1;
+              })
+            });
+            // Gather all the common factors.
+            angular.forEach(factorsCount, function(count, factor) {
+              if (count == ids_array.length) {
+                factors.push(factor);
+              }
+            })
           }
           appState.detailedChart.takeNormalizationFactors(factors);
         })
