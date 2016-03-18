@@ -131,6 +131,7 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
         'place_address' => $node_wrapper->field_place_address->value(),
         'place_locality' => $node_wrapper->field_place_locality->value(),
         'image' => empty($image) ? NULL : image_style_url('thumbnail_rotate', $image[0]['uri']),
+        'normalization_factors' => normalizationFactorsList($node_wrapper),
       );
 
       // Set parent-child relationships.
@@ -179,6 +180,7 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
         'max_frequency' => $node_wrapper->field_max_frequency->value(),
         'has_electricity' => $node_wrapper->field_has_electricity->value(),
         'image' => empty($image) ? NULL : image_style_url('thumbnail_rotate', $image[0]['uri']),
+        'normalization_factors' => normalizationFactorsList($node_wrapper),
       );
 
       // Set parent-child relationships.
@@ -274,6 +276,9 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
         if (!$meter['image']) {
           $meter['image'] = $item['image'];
         }
+        if (count($meter['normalization_factors']) == 0) {
+          $meter['normalization_factors'] = $item['normalization_factors'];
+        }
 
         // Shortcut the links.
         unset($category['children'][$key]);
@@ -305,6 +310,30 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
     }
 
     return $return;
+  }
+
+  /**
+   * Build a simple list of normalization-factors.
+   *
+   * @param $node_wrapper
+   *   Wrapper to parent node.
+   *
+   * @return array
+   *   The list of normalization factors.
+   */
+  function normalizationFactorsList($node_wrapper) {
+    // Figure out normalization factors.
+    $normalization_factors = array();
+    foreach ($node_wrapper->field_normalization_factors->value() as $normalization_factor) {
+      $wrapper = entity_metadata_wrapper('field_collection_item', $normalization_factor);
+      $factor_wrapper = entity_metadata_wrapper('taxonomy_term', $wrapper->field_factor->value());
+      $normalization_factors[] = array(
+        'factor' => $factor_wrapper->label(),
+        'units' => $factor_wrapper->field_units->value(),
+        'value' => $wrapper->field_value->value(),
+      );
+    }
+    return $normalization_factors;
   }
 
   /**
