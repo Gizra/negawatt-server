@@ -131,7 +131,7 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
         'place_address' => $node_wrapper->field_place_address->value(),
         'place_locality' => $node_wrapper->field_place_locality->value(),
         'image' => empty($image) ? NULL : image_style_url('thumbnail_rotate', $image[0]['uri']),
-        'normalization_factors' => normalizationFactorsList($node_wrapper),
+        'normalization_factors' => $this->normalizationFactorsList($node_wrapper),
       );
 
       // Set parent-child relationships.
@@ -180,7 +180,7 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
         'max_frequency' => $node_wrapper->field_max_frequency->value(),
         'has_electricity' => $node_wrapper->field_has_electricity->value(),
         'image' => empty($image) ? NULL : image_style_url('thumbnail_rotate', $image[0]['uri']),
-        'normalization_factors' => normalizationFactorsList($node_wrapper),
+        'normalization_factors' => $this->normalizationFactorsList($node_wrapper),
       );
 
       // Set parent-child relationships.
@@ -321,7 +321,7 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
    * @return array
    *   The list of normalization factors.
    */
-  function normalizationFactorsList($node_wrapper) {
+  private function normalizationFactorsList($node_wrapper) {
     // Figure out normalization factors.
     $normalization_factors = array();
     foreach ($node_wrapper->field_normalization_factors->value() as $normalization_factor) {
