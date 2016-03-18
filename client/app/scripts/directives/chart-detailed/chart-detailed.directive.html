@@ -21,8 +21,8 @@
   <div class="usage-normalization col-sm-8" ng-show="chart.normalizationFactors.length > 0">
     Normalize by:
     <span ng-repeat="item in chart.normalizationFactors">
-      <input ng-change="selectNormalization(item)" ng-model="item.selected" type="checkbox" id="check-normalization-{{item}}" class="ng-pristine ng-valid ng-touched">
-      {{ item }}
+      <input ng-change="chart.selectNormalization(item)" ng-model="item.selected" type="checkbox" id="check-normalization-{{item.title}}" class="ng-pristine ng-valid ng-touched">
+      {{ item.title }}
     </span>
   </div>
 

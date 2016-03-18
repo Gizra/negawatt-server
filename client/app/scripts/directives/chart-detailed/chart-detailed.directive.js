@@ -123,6 +123,7 @@ angular.module('negawattClientApp')
         this.setup = setup;
         this.setChartTitle = setChartTitle;
         this.takeNormalizationFactors = takeNormalizationFactors;
+        this.selectNormalization = selectNormalization;
 
         // Register in ApplicationState.
         ApplicationState.registerDetailedChart(this);
@@ -152,6 +153,13 @@ angular.module('negawattClientApp')
          */
         function takeNormalizationFactors(factors) {
           chart.normalizationFactors = factors;
+        }
+
+        /**
+         * A handler for selecting a normalization factor.
+         */
+        function selectNormalization(normalizationFactor) {
+          ApplicationState.selectNormalization(normalizationFactor);
         }
       },
       controllerAs: 'chart',

@@ -182,6 +182,9 @@ angular.module('negawattClientApp')
       // Update chart title in detailed-chart
       this.updateChartTitle();
 
+      // Update the set of normalization-factors
+      this.updateNormalizationFactors($stateParams.sel, $stateParams.ids);
+
       // Simulate a frequency change, that will handle loading the electricity
       // first with no data to adjust the max and min time-frame, and the load
       // the electricity data itself.
@@ -603,6 +606,9 @@ angular.module('negawattClientApp')
     /**
      * Update the set of normalization-factors for detailed-chart.
      *
+     * Only when showing meters or sites. Look for the common factors of
+     * all meters/sites selected, then send the list of factors to the
+     * detailed-chart for display.
      */
     this.updateNormalizationFactors = function(sel, ids) {
       var factors = [];
@@ -625,12 +631,22 @@ angular.module('negawattClientApp')
             // Gather all the common factors.
             angular.forEach(factorsCount, function(count, factor) {
               if (count == ids_array.length) {
-                factors.push(factor);
+                factors.push({title: factor});
               }
             })
           }
           appState.detailedChart.takeNormalizationFactors(factors);
         })
+    };
+
+    /**
+     * Update the set of normalization-factors for detailed-chart.
+     *
+     * Only when showing meters or sites. Look for the common factors of
+     * all meters/sites selected, then send the list of factors to the
+     * detailed-chart for display.
+     */
+    this.selectNormalization = function(factor) {
     };
 
     /**
