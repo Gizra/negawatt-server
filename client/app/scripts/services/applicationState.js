@@ -163,7 +163,8 @@ angular.module('negawattClientApp')
         accountId: $stateParams.accountId,
         sel: $stateParams.sel,
         ids: $stateParams.ids,
-        sensor: $stateParams.sensor
+        sensor: $stateParams.sensor,
+        norm: $stateParams.norm
       };
 
       // Define chart configuration.
@@ -183,7 +184,7 @@ angular.module('negawattClientApp')
       this.updateChartTitle();
 
       // Update the set of normalization-factors
-      this.updateNormalizationFactors($stateParams.sel, $stateParams.ids);
+      this.updateNormalizationFactors($stateParams.sel, $stateParams.ids, $stateParams.norm);
 
       // Simulate a frequency change, that will handle loading the electricity
       // first with no data to adjust the max and min time-frame, and the load
@@ -208,6 +209,7 @@ angular.module('negawattClientApp')
     this.addObjectSelected = function(object, name) {
       var ids = $stateParams.ids,
         sel = $stateParams.sel,
+        norm = $stateParams.norm,
         objectsSelected = true;
 
       if (!object.selected) {
@@ -235,7 +237,7 @@ angular.module('negawattClientApp')
       }
 
       // Refresh $state with new params.
-      this.updateSelection(sel, ids);
+      this.updateSelection(sel, ids, norm);
 
       return objectsSelected;
     };
@@ -287,15 +289,22 @@ angular.module('negawattClientApp')
      * @param ids
      *  The ids of selected object(s) as a comma separated list.
      *  To clear the selection, both sel and ids should be null.
+     * @param norm
+     *  The selected normalization factors.
      * @param refreshCheckMarks boolean
      *  True if has to re-mark the check marks in the sensors-menu.
      */
-    this.updateSelection = function(sel, ids, refreshCheckMarks) {
+    this.updateSelection = function(sel, ids, norm, refreshCheckMarks) {
       $stateParams.sel = sel;
       $stateParams.ids = ids;
 
       this.filters.sel = sel;
       this.filters.ids = ids;
+
+      if (norm != undefined) {
+        $stateParams.norm = norm;
+        this.filters.norm = norm;
+      }
 
       // Refresh $state with new params.
       $state.refreshUrlWith($stateParams);
@@ -312,8 +321,8 @@ angular.module('negawattClientApp')
         this.markersMap.setSelectedMarkers(ids);
       }
 
-      // Update the set of normalization-factors
-      this.updateNormalizationFactors(sel, ids);
+      // Update the set of normalization-factors in detailed-chart.
+      this.updateNormalizationFactors(sel, ids, norm);
 
       // Get time-frame limits for new selected-objects and then
       // get electricity and sensor data from the server.
@@ -520,6 +529,10 @@ angular.module('negawattClientApp')
         if (params.sel) {
           angular.extend(filters, addMultipleFilter(params.sel, idsArray));
         }
+        // Check normalization-factors.
+        if (params.norm) {
+          filters['normalization_factors'] = params.norm;
+        }
       }
       else {
         // Preparing filters for sensor.
@@ -609,9 +622,17 @@ angular.module('negawattClientApp')
      * Only when showing meters or sites. Look for the common factors of
      * all meters/sites selected, then send the list of factors to the
      * detailed-chart for display.
+     *
+     * @param sel
+     *  Type of selection (as in $stateParams), e.g. 'meter', 'site', etc.
+     * @param ids
+     *  Comma separated list of selected meter/site ids (as in $stateParams).
+     * @param norm
+     *  Comma separated list of selected normalization factors (as in $stateParams).
      */
-    this.updateNormalizationFactors = function(sel, ids) {
-      var factors = [];
+    this.updateNormalizationFactors = function(sel, ids, norm) {
+      var factors = [],
+        factors_selected = norm.split(',');
 
       SensorTree.get($stateParams.accountId)
         .then(function(sensorTree) {
@@ -631,7 +652,12 @@ angular.module('negawattClientApp')
             // Gather all the common factors.
             angular.forEach(factorsCount, function(count, factor) {
               if (count == ids_array.length) {
-                factors.push({title: factor});
+                factors.push({
+                  title: factor,
+                  // Set selection flag for checkboxes of detailed-chart.
+                  // True if the factor appears in 'sel' parameter.
+                  selected: factors_selected.indexOf(factor) != -1
+                });
               }
             })
           }
@@ -647,6 +673,27 @@ angular.module('negawattClientApp')
      * detailed-chart for display.
      */
     this.selectNormalization = function(factor) {
+      var ids = $stateParams.ids,
+        sel = $stateParams.sel,
+        norm = $stateParams.norm,
+        objectsSelected = true;
+
+      if (!factor.selected) {
+        // factor unselected, remove it from state-params.
+        var normalization_factors = norm.split(',');
+        // object.id is a number, normalization_factors is an array of strings. Convert object.id to string.
+        normalization_factors.splice(normalization_factors.indexOf(factor.title), 1);
+        norm = normalization_factors.join();
+      }
+      else {
+        // factor selected.
+        var normalization_factors = norm ? norm.split(',') : [];
+        normalization_factors.push(factor.title);
+        norm = normalization_factors.join();
+      }
+
+      // Refresh $state with new params.
+      this.updateSelection(sel, ids, norm);
     };
 
     /**

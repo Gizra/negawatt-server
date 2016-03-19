@@ -30,7 +30,7 @@ angular.module('negawattClientApp')
           var row = selectedItem.row;
           var onSelect = chartData.data.rows[row].c[3].onSelect;
 
-          ApplicationState.updateSelection(onSelect.sel, onSelect.ids, true /*refreshCheckMarks*/);
+          ApplicationState.updateSelection(onSelect.sel, onSelect.ids, $stateParams.norm, true /*refreshCheckMarks*/);
         };
 
         /**
