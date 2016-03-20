@@ -10,9 +10,6 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
   // Allow reading 200 meters at a time
   protected $range = 200;
 
-  // Placeholder for normalization factors.
-  protected $normalization_factors = null;
-
   /**
    * Overrides \RestfulBase::publicFieldsInfo().
    */
@@ -650,7 +647,7 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     }
 
     // Initialize normalization-factors array.
-    $this->normalization_factors = array();
+    $normalization_factors_metadata = array();
 
     // Figure out meters.
     $meters = null;
@@ -687,8 +684,10 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
         }
       }
       // Put calculated factor in array.
-      $this->normalization_factors[$meter] = $value;
+      $normalization_factors_metadata[$meter] = $value;
     }
+    // Pass info to the formatter
+    $this->valueMetadata['electricity']['normalization_factors'] = $normalization_factors_metadata;
   }
 
   /**
@@ -812,20 +811,5 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
     }
 
     return $filters;
-  }
-
-  /**
-   * Override RestfulDataProviderDbQuery::mapDbRowToPublicFields to divide
-   * electricity values by normalization-factors, if needed.
-   */
-  public function mapDbRowToPublicFields($row) {
-    if ($this->normalization_factors) {
-      // If normalization factors are given, divide kwh and avg_power
-      // by the proper factor.
-      $factor = $this->normalization_factors[$row->meter_nid];
-      $row->sum_kwh /= $factor;
-      $row->avg_power /= $factor;
-    }
-    return parent::mapDbRowToPublicFields($row);
   }
 }

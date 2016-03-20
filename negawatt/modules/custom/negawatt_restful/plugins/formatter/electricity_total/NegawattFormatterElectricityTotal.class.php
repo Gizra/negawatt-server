@@ -31,6 +31,20 @@ class NegawattFormatterElectricityTotal extends \RestfulFormatterJson {
       $this->contentType = 'application/problem+json; charset=utf-8';
       return $data;
     }
+
+    // If we have normalization-factors data, we have to divide the
+    // result data by the factors.
+    if ($this->handler->getValueMetadata('electricity', 'normalization_factors')) {
+      // Normalization factors are given, divide kwh and avg_power
+      // by the proper factor.
+      $normalization_factors = $this->handler->getValueMetadata('electricity', 'normalization_factors');
+      foreach ($data as &$item) {
+        $factor = $normalization_factors[$item['meter']];
+        $item['kwh'] /= $factor;
+        $item['avg_power'] /= $factor;
+      }
+    }
+
     // Let parent formatter prepare the output.
     $output = parent::prepare($data);
 
