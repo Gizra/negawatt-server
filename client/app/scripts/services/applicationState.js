@@ -632,7 +632,7 @@ angular.module('negawattClientApp')
      */
     this.updateNormalizationFactors = function(sel, ids, norm) {
       var factors = [],
-        factors_selected = norm.split(',');
+        factors_selected = norm ? norm.split(',') : [];
 
       SensorTree.get($stateParams.accountId)
         .then(function(sensorTree) {
