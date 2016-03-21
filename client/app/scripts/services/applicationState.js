@@ -112,13 +112,14 @@ angular.module('negawattClientApp')
     };
 
     // Wait for charts to register before calling init()
-    var intervalId = setInterval(function() {
-      // Wait of all the chart objects to register.
-      if (appState.detailedChart && appState.mainChart && appState.pieChart) {
-        clearInterval(intervalId);
+    $q.all([
+        Utils.waitForVariable(appState, 'detailedChart'),
+        Utils.waitForVariable(appState, 'mainChart'),
+        Utils.waitForVariable(appState, 'pieChart')
+      ])
+      .then(function() {
         appState.init();
-      }
-    }, 500);
+      });
 
     /**
      * Handle URL/State change.
@@ -634,8 +635,10 @@ angular.module('negawattClientApp')
       var factors = [],
         factors_selected = norm ? norm.split(',') : [];
 
-      SensorTree.get($stateParams.accountId)
-        .then(function(sensorTree) {
+      // Get sensor tree, but also wait until detailed-chart registers.
+      $q.all([SensorTree.get($stateParams.accountId), Utils.waitForVariable(appState, 'detailedChart')])
+        .then(function(result) {
+          var sensorTree = result[0];
           if (sel == 'meter' || sel == 'site') {
             var ids_array = ids.split(',');
             var classLetter = Utils.prefixLetter(sel);
