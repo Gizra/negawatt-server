@@ -22,4 +22,7 @@ angular.module('negawattClientApp')
       $scope.title = title;
     };
 
+    this.takeNormalizationFactors = function(factors) {
+      // Do nothing. Used in 'chart' state.
+    }
   });
