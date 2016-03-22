@@ -20,20 +20,20 @@ angular.module('negawattClientApp')
 
       // Refresh home and meter's map.
       Meter.refresh();
-      $state.go('dashboard.withAccount');
+      $state.go('map.withAccount');
     };
 
     $scope.goChart = function() {
       //$state.go('chart.withAccount');
       var loc = window.location.href;
-      loc = loc.replace('dashboard', 'chart');
+      loc = loc.replace('map', 'chart');
       window.location.href = loc;
     };
 
     $scope.goMap = function() {
-      //$state.go('dashboard.withAccount');
+      //$state.go('map.withAccount');
       var loc = window.location.href;
-      loc = loc.replace('chart', 'dashboard');
+      loc = loc.replace('chart', 'map');
       window.location.href = loc;
     };
 
