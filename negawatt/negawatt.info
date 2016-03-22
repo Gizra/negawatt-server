@@ -28,6 +28,7 @@ dependencies[] = entity_token
 dependencies[] = entityreference
 dependencies[] = entity_validator
 dependencies[] = features
+dependencies[] = field_collection
 dependencies[] = flag
 dependencies[] = geolocation
 dependencies[] = geolocation_googlemaps

@@ -605,20 +605,22 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
       // Prepare the total section of the summary, for 'meters' result type.
       $total = $this->prepareTotalForMeters($result);
     }
-    else if ($result_type == 'sites') {
-      // Prepare the total section of the summary, for 'meters' result type.
-      $total = $this->prepareTotalForSites(null, $filter['meter_site']['value'], $filter['meter_account']);
-    }
     else {
-      // Prepare the total section of the summary, for 'categories' result type.
-      $total = $this->prepareTotalForCategories($result, $child_cat_mapping);
+      if ($result_type == 'sites') {
+        // Prepare the total section of the summary, for 'meters' result type.
+        $total = $this->prepareTotalForSites(NULL, $filter['meter_site']['value'], $filter['meter_account']);
+      }
+      else {
+        // Prepare the total section of the summary, for 'categories' result type.
+        $total = $this->prepareTotalForCategories($result, $child_cat_mapping);
 
-      if (count($total) == 1) {
-        // Only one category was found. Show summary for its sites.
-        $result_type = 'sites';
-        $cat_ids = array_keys($total);
-        $cat_id = $cat_ids[0];
-        $total = $this->prepareTotalForSites($cat_id, null, $filter['meter_account']);
+        if (count($total) == 1) {
+          // Only one category was found. Show summary for its sites.
+          $result_type = 'sites';
+          $cat_ids = array_keys($total);
+          $cat_id = $cat_ids[0];
+          $total = $this->prepareTotalForSites($cat_id, NULL, $filter['meter_account']);
+        }
       }
     }
 
@@ -630,6 +632,62 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
 
     // Pass info to the formatter
     $this->valueMetadata['electricity']['summary'] = $summary;
+  }
+
+  /**
+   * Prepare normalization-factors, if given in request.
+   *
+   * Prepare a list of normalization-factors for the different meters,
+   * if 'normalization_factors' parameter is given in the request.
+   */
+  protected function prepareNormalizationFactors() {
+    $request = $this->getRequest();
+    if (!$request['normalization_factors']) {
+      return;
+    }
+
+    // Initialize normalization-factors array.
+    $normalization_factors_metadata = array();
+
+    // Figure out meters.
+    $meters = null;
+    if ($this->request['filter']['meter'] && gettype($this->request['filter']['meter']) == 'string') {
+      $meters = array($this->request['filter']['meter']);
+    }
+    else if ($this->request['filter']['meter']['operator'] && $this->request['filter']['meter']['operator'] == 'IN') {
+      $meters = $this->request['filter']['meter']['value'];
+    }
+    // Verify that meters filter was given.
+    if (!$meters) {
+      throw new \RestfulBadRequestException('If normalization_factors is given, must filter by meter.');
+    }
+
+    $factors = explode(',', $request['normalization_factors']);
+
+    // Loop for all meters give in filter.
+    foreach ($meters as $meter) {
+      $value = 1.0;
+      // Loop for all normalization-factors given in request.
+      foreach ($factors as $factor) {
+        // Look for normalization-factors in given meter.
+        $node = entity_metadata_wrapper('node', $meter);
+        $normalization_factors = $node->field_normalization_factors->value();
+        // Loop for all normalization-factors of given meter.
+        foreach ($normalization_factors as $normalization_factor) {
+          $wrapper = entity_metadata_wrapper('field_collection_item', $normalization_factor);
+          $factor_wrapper = entity_metadata_wrapper('taxonomy_term', $wrapper->field_factor->value());
+          // Test that factor name in meter node is equal factor name in request.
+          if ($factor_wrapper->label() == $factor) {
+            // Calculate factor value.
+            $value *= $wrapper->field_value->value();
+          }
+        }
+      }
+      // Put calculated factor in array.
+      $normalization_factors_metadata[$meter] = $value;
+    }
+    // Pass info to the formatter
+    $this->valueMetadata['electricity']['normalization_factors'] = $normalization_factors_metadata;
   }
 
   /**
@@ -651,6 +709,9 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
 
     // Prepare summary data for the formatter.
     $this->prepareSummary();
+
+    // Prepare normalization factors.
+    $this->prepareNormalizationFactors();
 
     $query = parent::getQuery();
 

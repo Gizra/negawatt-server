@@ -44,6 +44,9 @@ projects[entity_validator][download][url] = "https://github.com/Gizra/entity_val
 projects[features][subdir] = "contrib"
 projects[features][version] = "2.3"
 
+projects[field_collection][subdir] = "contrib"
+projects[field_collection][version] = "1.x"
+
 projects[flag][subdir] = "contrib"
 projects[flag][version] = "2.2"
 

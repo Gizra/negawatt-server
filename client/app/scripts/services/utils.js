@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('negawattClientApp')
-  .service('Utils', function (md5) {
+  .service('Utils', function (md5, $q) {
     var Utils = this;
     /**
      * Base64 encode / decode
@@ -163,5 +163,28 @@ angular.module('negawattClientApp')
         case 'meter':
           return 'm';
       }
+    }
+
+    /**
+     * Return a promise that is fulfiled only when variable is != null.
+     *
+     * @param object {object}
+     *  The parent object to wait for.
+     * @param field {string}
+     *  The object field to wait for.
+     *
+     * @returns {promise}
+     *  A promise to wait until variable is set.
+     */
+    this.waitForVariable = function(object, field) {
+      var deferred = $q.defer();
+      var intervalId = setInterval(function () {
+        // Wait for the variable to get a value.
+        if (object[field]) {
+          clearInterval(intervalId);
+          deferred.resolve(object[field]);
+        }
+      }, 100);
+      return deferred.promise;
     }
   });

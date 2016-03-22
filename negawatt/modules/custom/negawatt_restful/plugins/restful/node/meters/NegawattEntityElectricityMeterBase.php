@@ -33,6 +33,13 @@ class NegawattEntityElectricityMeterBase extends \NegawattEntityMeterBase {
       ),
     );
 
+    $public_fields['normalization_factors'] = array(
+      'property' => 'field_normalization_factors',
+      'process_callbacks' => array(
+        array($this, 'normalizationFactors'),
+      ),
+    );
+
     return $public_fields;
   }
 
@@ -95,6 +102,30 @@ class NegawattEntityElectricityMeterBase extends \NegawattEntityMeterBase {
     }
 
     return $category_ids;
+  }
+
+  /**
+   * Process callback, that returns list of normalization-factors of the meter.
+   *
+   * @param $value
+   *   An array of normalization-factor objects.
+   *
+   * @return array
+   *   List normalization factors.
+   */
+  protected function normalizationFactors($value)
+  {
+    $return = array();
+    foreach ($value as $normalization_factor) {
+      $wrapper = entity_metadata_wrapper('field_collection_item', $normalization_factor);
+      $factor_wrapper = entity_metadata_wrapper('taxonomy_term', $wrapper->field_factor->value());
+      $return[] = array(
+        'factor' => $factor_wrapper->label(),
+        'units' => $factor_wrapper->field_units->value(),
+        'value' => $wrapper->field_value->value(),
+      );
+    }
+    return $return;
   }
 
   /**

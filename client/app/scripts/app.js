@@ -84,7 +84,7 @@ angular
         controller: 'DashboardCtrl'
       })
       .state('dashboard.withAccount', {
-        url: '/{accountId:int}?{chartFreq:int}&{sel}&{ids}&{sensor}&{chartType}&{chartNextPeriod:int}&{chartPreviousPeriod:int}',
+        url: '/{accountId:int}?{chartFreq:int}&{sel}&{ids}&{sensor}&{norm}&{chartType}&{chartNextPeriod:int}&{chartPreviousPeriod:int}',
         reloadOnSearch: false,
         params: {
           chartFreq: {
@@ -151,7 +151,7 @@ angular
         controller: 'DashboardCtrl'
       })
       .state('chart.withAccount', {
-        url: '/{accountId:int}?{chartFreq:int}&{sel}&{ids}&{sensor}&{chartType}&{chartNextPeriod:int}&{chartPreviousPeriod:int}',
+        url: '/{accountId:int}?{chartFreq:int}&{sel}&{ids}&{sensor}&{norm}&{chartType}&{chartNextPeriod:int}&{chartPreviousPeriod:int}',
         reloadOnSearch: false,
         params: {
           chartFreq: {
