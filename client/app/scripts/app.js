@@ -72,9 +72,9 @@ angular
           $state.go('login');
         }
       })
-      .state('dashboard', {
+      .state('map', {
         abstract: true,
-        url: '/dashboard',
+        url: '/map',
         templateUrl: 'views/dashboard/map/main.html',
         resolve: {
           profile: function(Profile) {
@@ -83,7 +83,7 @@ angular
         },
         controller: 'DashboardCtrl'
       })
-      .state('dashboard.withAccount', {
+      .state('map.withAccount', {
         url: '/{accountId:int}?{chartFreq:int}&{sel}&{ids}&{sensor}&{norm}&{chartType}&{chartNextPeriod:int}&{chartPreviousPeriod:int}',
         reloadOnSearch: false,
         params: {
@@ -110,7 +110,7 @@ angular
           }
         },
         views: {
-          'menu@dashboard': {
+          'menu@map': {
             templateUrl: 'views/dashboard/map/main.menu.html',
             controller: 'MenuCtrl'
           },
@@ -119,20 +119,20 @@ angular
             controller: 'MapCtrl',
             controllerAs: 'map'
           },
-          'meters-menu@dashboard': {
+          'meters-menu@map': {
             templateUrl: 'views/dashboard/map/main.meters-menu.html',
             controller: 'MetersMenuCtrl',
             controllerAs: 'metersMenuCtrl'
           },
-          'messages@dashboard': {
+          'messages@map': {
             templateUrl: 'views/dashboard/map/main.messages.html',
             controller: 'MessageCtrl',
             controllerAs: 'message'
           },
-          'details@dashboard': {
+          'details@map': {
             templateUrl: 'views/dashboard/map/main.details.html'
           },
-          'usage@dashboard': {
+          'usage@map': {
             templateUrl: 'views/dashboard/map/main.usage.html',
             controller: 'UsageCtrl',
             controllerAs: 'chart'
