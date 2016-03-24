@@ -1,8 +1,8 @@
 id,name,weight,description,field_units
-area,Area,,,sq.m
-classes,Classes,,,class
-poles,Poles,,,pole
-rooms,Rooms,,,room
-students,Students,,,student
-workers,Workers,,,worker
+area,שטח,,,מ"ר
+classes,כיתות,,,כיתה
+poles,עמודים,,,עמוד
+rooms,חדרים,,,חדר
+students,תלמידים,,,תלמיד
+workers,עובדים,,,עובד
 

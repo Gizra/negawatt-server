@@ -340,6 +340,16 @@ function negawatt_meter_views_default_views() {
   $handler->display->display_options['fields']['field_has_electricity']['id'] = 'field_has_electricity';
   $handler->display->display_options['fields']['field_has_electricity']['table'] = 'field_data_field_has_electricity';
   $handler->display->display_options['fields']['field_has_electricity']['field'] = 'field_has_electricity';
+  /* Field: Content: Normalization factors */
+  $handler->display->display_options['fields']['field_normalization_factors']['id'] = 'field_normalization_factors';
+  $handler->display->display_options['fields']['field_normalization_factors']['table'] = 'field_data_field_normalization_factors';
+  $handler->display->display_options['fields']['field_normalization_factors']['field'] = 'field_normalization_factors';
+  $handler->display->display_options['fields']['field_normalization_factors']['label'] = 'Norm. factors';
+  $handler->display->display_options['fields']['field_normalization_factors']['type'] = 'field_collection_fields';
+  $handler->display->display_options['fields']['field_normalization_factors']['settings'] = array(
+    'view_mode' => 'full',
+  );
+  $handler->display->display_options['fields']['field_normalization_factors']['delta_offset'] = '0';
   /* Field: Content: Delete link */
   $handler->display->display_options['fields']['delete_node']['id'] = 'delete_node';
   $handler->display->display_options['fields']['delete_node']['table'] = 'views_entity_node';
