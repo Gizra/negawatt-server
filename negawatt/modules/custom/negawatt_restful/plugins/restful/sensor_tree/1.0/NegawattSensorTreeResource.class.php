@@ -234,7 +234,7 @@ class NegawattSensorTreeResource extends \RestfulBase implements \RestfulDataPro
       $sites_children = &$return['s' . $sensor_site->vid]['children'];
       // Check that there are children for the sensor's site, and that the id
       // of the last element begins with 'm' (that is, its a meter).
-      if (!empty($sites_children) && end($sites_children)['id'][0] == 'm') {
+      if (!empty($sites_children) && ($last = end($sites_children)) && $last['id'][0] == 'm') {
         // Add separator element.
         $return['p' . $separator_last_id] = array(
           'id' => $separator_last_id,
