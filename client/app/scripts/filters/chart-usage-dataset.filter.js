@@ -52,15 +52,14 @@ angular.module('negawattClientApp')
 
       var chartFrequencyActive = Chart.getActiveFrequency();
       var data = getDataset(electricityData, chartFrequencyActive, chartType, metersAndSensors, labelsField, labelsPrefixLetter, sensorsData, sensorsLabelsField, sensorsDescriptors);
-      options = ChartOptions.getOptions(chartFrequencyActive.type, chartType, data.numSeries, data.numSensors, sensorUnits);
+      var options = ChartOptions.getOptions(chartFrequencyActive.type, chartType, data.numSeries, data.numSensors, sensorUnits);
 
       // Create collection object for charts engine.
-      collection = {
+      return {
         type: options.chart_type,
         data: data,
         options: options
       };
-      return collection;
     };
 
     /**
