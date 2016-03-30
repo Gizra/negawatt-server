@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('negawattClientApp')
 
   .filter('filterMeterByCategories', function (Utils, FilterFactory, $filter) {

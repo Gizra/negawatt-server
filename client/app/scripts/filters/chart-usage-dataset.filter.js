@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('negawattClientApp')
   .filter('toChartDataset', function ($filter, Chart, ChartOptions, moment) {
 
