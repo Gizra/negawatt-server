@@ -533,7 +533,7 @@ module.exports = function (grunt) {
       'usemin',
       'htmlmin',
       'replace' + dest
-    ]
+    ];
 
     return grunt.task.run(tasks);
   });

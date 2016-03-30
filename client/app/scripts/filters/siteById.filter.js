@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('negawattClientApp')
   .filter('siteById', function (Utils, FilterFactory, $filter) {
     /**
