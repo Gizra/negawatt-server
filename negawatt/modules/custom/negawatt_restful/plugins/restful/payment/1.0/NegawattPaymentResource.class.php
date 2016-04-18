@@ -352,7 +352,7 @@ class NegawattPaymentResource extends \RestfulDataProviderDbQuery implements \Re
    */
   protected function queryForSummary($query) {
     // Add expressions for payment total.
-    $query->addExpression('SUM(negawatt_payment_normalized.sum_payment)', 'sum');
+    $query->addExpression('SUM(negawatt_payment_normalized.sum_amount)', 'sum');
 
     return $query->execute();
   }

@@ -13,5 +13,4 @@ $plugin = array(
     'table_name' => 'negawatt_payment_normalized',
     'id_column' => 'id',
   ),
-  'formatter' => 'payment_total',
 );
