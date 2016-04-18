@@ -1,0 +1,105 @@
+<?php
+
+/**
+ * @file
+ * Code for the Negawatt payment storage schema.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function negawatt_payment_schema() {
+  $schema = array();
+  $schema['negawatt_payment'] = array(
+    'description' => 'The base table for payment consumption raw data.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'The primary identifier for the row.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'timestamp' => array(
+        'description' => 'timestamp of beginning of period.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'payment_type' => array(
+        'description' => 'Rate type, low/mid/peak/flat or a fine, service, etc.',
+        'type' => 'varchar',
+        'length' => 8,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'frequency' => array(
+        'description' => 'The time-interval for the measurement: 1:year, 2:month, 3:day, 4:hour, 5:minute.',
+        'type' => 'int',
+        'unsigned' => FALSE,
+        'not null' => TRUE,
+      ),
+      'meter_nid' => array(
+        'description' => 'The electric meter NID.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'amount' => array(
+        'description' => 'Amount to pay.',
+        'type' => 'float',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+  $schema['negawatt_payment_normalized'] = array(
+    'description' => 'The base table for payment consumption averages.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'The primary identifier for the row.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'frequency' => array(
+        'description' => 'The time-interval of this data: 1:year, 2:month, 3:day, 4:hour, 5:minute.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'timestamp' => array(
+        'description' => 'timestamp of beginning of period (at 12:00PM).',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'payment_type' => array(
+        'description' => 'Rate type, low/mid/peak/flat or a fine, service, etc.',
+        'type' => 'varchar',
+        'length' => 8,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'meter_nid' => array(
+        'description' => 'The electric meter NID.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'sum_amount' => array(
+        'description' => 'Total payments at period.',
+        'type' => 'float',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('id'),
+    'indexes' => array(
+      'meter_nid' => array('meter_nid'),
+    ),
+  );
+  return $schema;
+}

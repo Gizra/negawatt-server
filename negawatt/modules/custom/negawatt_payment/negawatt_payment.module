@@ -1,0 +1,54 @@
+<?php
+/**
+ * @file
+ * Code for the Negawatt payment storage feature.
+ */
+
+include_once 'negawatt_payment.features.inc';
+
+/**
+ * Implements hook_entity_info().
+ */
+function negawatt_payment_entity_info() {
+  $return = array(
+    'payment' => array(
+      'label' => t('Payment data', array(), array('context' => 'payment entity')),
+      'locking mode' => 'pessimistic',
+      'base table' => 'negawatt_payment_normalized',
+      'fieldable' => TRUE,
+      'entity keys' => array(
+        'id' => 'id',
+      ),
+      'entity class' => 'Payment',
+      'controller class' => 'EntityAPIController',
+      'metadata controller class' => 'PaymentMetadataController',
+      'views controller class' => 'EntityDefaultViewsController',
+      'entity cache' => module_exists('entitycache'),
+    ),
+
+    'payment_raw' => array(
+      'label' => t('Payment raw data', array(), array('context' => 'payment raw entity')),
+      'base table' => 'negawatt_payment',
+      'fieldable' => TRUE,
+      'entity keys' => array(
+        'id' => 'id',
+      ),
+      'entity class' => 'PaymentRaw',
+      'controller class' => 'EntityAPIController',
+      'metadata controller class' => 'PaymentRawMetadataController',
+      'views controller class' => 'EntityDefaultViewsController',
+      'entity cache' => module_exists('entitycache'),
+    ),
+  );
+
+  return $return;
+}
+
+/**
+ * Returns payment controller.
+ *
+ * @return PaymentEntityController
+ */
+function negawatt_payment_get_controller() {
+  return entity_get_controller('payment');
+}

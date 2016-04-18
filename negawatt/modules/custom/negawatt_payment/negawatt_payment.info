@@ -1,0 +1,17 @@
+name = Negawatt payment storage
+description = Store data from payment connectors
+core = 7.x
+package = Negawatt
+dependencies[] = ctools
+dependencies[] = entity
+dependencies[] = views
+features[ctools][] = strongarm:strongarm:1
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = payment_overview
+features[views_view][] = payment_raw_overview
+files[] = includes/PaymentMetadataController.php
+files[] = includes/PaymentRawMetadataController.php
+files[] = includes/Payment.php
+files[] = includes/PaymentRaw.php
+files[] = tests/NegawattWebTestCase.test

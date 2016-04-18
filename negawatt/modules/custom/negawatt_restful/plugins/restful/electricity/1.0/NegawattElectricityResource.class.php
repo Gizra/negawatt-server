@@ -642,7 +642,7 @@ class NegawattElectricityResource extends \RestfulDataProviderDbQuery implements
    */
   protected function prepareNormalizationFactors() {
     $request = $this->getRequest();
-    if (!$request['normalization_factors']) {
+    if (empty($request['normalization_factors'])) {
       return;
     }
 
