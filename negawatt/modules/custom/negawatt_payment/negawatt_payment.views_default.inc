@@ -99,7 +99,7 @@ function negawatt_payment_views_default_views() {
   $handler->display->display_options['fields']['timestamp']['id'] = 'timestamp';
   $handler->display->display_options['fields']['timestamp']['table'] = 'negawatt_payment_normalized';
   $handler->display->display_options['fields']['timestamp']['field'] = 'timestamp';
-  /* Field: Payment data: payment_type */
+  /* Field: Payment data: Payment_type */
   $handler->display->display_options['fields']['payment_type']['id'] = 'payment_type';
   $handler->display->display_options['fields']['payment_type']['table'] = 'negawatt_payment_normalized';
   $handler->display->display_options['fields']['payment_type']['field'] = 'payment_type';
@@ -132,7 +132,7 @@ function negawatt_payment_views_default_views() {
     3 => 0,
     4 => 0,
   );
-  /* Filter criterion: Payment data: payment_type */
+  /* Filter criterion: Payment data: Payment_type */
   $handler->display->display_options['filters']['payment_type']['id'] = 'payment_type';
   $handler->display->display_options['filters']['payment_type']['table'] = 'negawatt_payment_normalized';
   $handler->display->display_options['filters']['payment_type']['field'] = 'payment_type';
@@ -337,15 +337,11 @@ function negawatt_payment_views_default_views() {
   $handler->display->display_options['fields']['id_1']['field'] = 'id';
   $handler->display->display_options['fields']['id_1']['label'] = 'ID';
   $handler->display->display_options['fields']['id_1']['separator'] = '';
-  /* Field: Payment raw data: Meter_type */
-  $handler->display->display_options['fields']['meter_type']['id'] = 'meter_type';
-  $handler->display->display_options['fields']['meter_type']['table'] = 'negawatt_payment';
-  $handler->display->display_options['fields']['meter_type']['field'] = 'meter_type';
   /* Field: Payment raw data: Timestamp */
   $handler->display->display_options['fields']['timestamp']['id'] = 'timestamp';
   $handler->display->display_options['fields']['timestamp']['table'] = 'negawatt_payment';
   $handler->display->display_options['fields']['timestamp']['field'] = 'timestamp';
-  /* Field: Payment raw data: payment_type */
+  /* Field: Payment raw data: Payment_type */
   $handler->display->display_options['fields']['payment_type']['id'] = 'payment_type';
   $handler->display->display_options['fields']['payment_type']['table'] = 'negawatt_payment';
   $handler->display->display_options['fields']['payment_type']['field'] = 'payment_type';
@@ -362,53 +358,16 @@ function negawatt_payment_views_default_views() {
   $handler->display->display_options['fields']['meter_nid']['alter']['make_link'] = TRUE;
   $handler->display->display_options['fields']['meter_nid']['alter']['path'] = 'node/[meter_nid]';
   $handler->display->display_options['fields']['meter_nid']['separator'] = '';
-  /* Field: Payment raw data: amount */
+  /* Field: Payment raw data: Amount */
   $handler->display->display_options['fields']['amount']['id'] = 'amount';
   $handler->display->display_options['fields']['amount']['table'] = 'negawatt_payment';
   $handler->display->display_options['fields']['amount']['field'] = 'amount';
   $handler->display->display_options['fields']['amount']['label'] = 'amount';
-  /* Field: Payment raw data: Power_factor */
-  $handler->display->display_options['fields']['power_factor']['id'] = 'power_factor';
-  $handler->display->display_options['fields']['power_factor']['table'] = 'negawatt_payment';
-  $handler->display->display_options['fields']['power_factor']['field'] = 'power_factor';
-  $handler->display->display_options['fields']['power_factor']['precision'] = '0';
-  /* Field: Payment raw data: amount_l1 */
-  $handler->display->display_options['fields']['amount_l1']['id'] = 'amount_l1';
-  $handler->display->display_options['fields']['amount_l1']['table'] = 'negawatt_payment';
-  $handler->display->display_options['fields']['amount_l1']['field'] = 'amount_l1';
-  $handler->display->display_options['fields']['amount_l1']['label'] = 'amount_l1';
-  /* Field: Payment raw data: amount_l2 */
-  $handler->display->display_options['fields']['amount_l2']['id'] = 'amount_l2';
-  $handler->display->display_options['fields']['amount_l2']['table'] = 'negawatt_payment';
-  $handler->display->display_options['fields']['amount_l2']['field'] = 'amount_l2';
-  $handler->display->display_options['fields']['amount_l2']['label'] = 'amount_l2';
-  /* Field: Payment raw data: amount_l3 */
-  $handler->display->display_options['fields']['amount_l3']['id'] = 'amount_l3';
-  $handler->display->display_options['fields']['amount_l3']['table'] = 'negawatt_payment';
-  $handler->display->display_options['fields']['amount_l3']['field'] = 'amount_l3';
-  $handler->display->display_options['fields']['amount_l3']['label'] = 'amount_l3';
-  /* Field: Payment raw data: Power_factor_l1 */
-  $handler->display->display_options['fields']['power_factor_l1']['id'] = 'power_factor_l1';
-  $handler->display->display_options['fields']['power_factor_l1']['table'] = 'negawatt_payment';
-  $handler->display->display_options['fields']['power_factor_l1']['field'] = 'power_factor_l1';
-  $handler->display->display_options['fields']['power_factor_l1']['label'] = 'PF l1';
-  $handler->display->display_options['fields']['power_factor_l1']['precision'] = '0';
-  /* Field: Payment raw data: Power_factor_l2 */
-  $handler->display->display_options['fields']['power_factor_l2']['id'] = 'power_factor_l2';
-  $handler->display->display_options['fields']['power_factor_l2']['table'] = 'negawatt_payment';
-  $handler->display->display_options['fields']['power_factor_l2']['field'] = 'power_factor_l2';
-  $handler->display->display_options['fields']['power_factor_l2']['label'] = 'PF l2';
-  $handler->display->display_options['fields']['power_factor_l2']['precision'] = '0';
-  /* Field: Payment raw data: Power_factor_l3 */
-  $handler->display->display_options['fields']['power_factor_l3']['id'] = 'power_factor_l3';
-  $handler->display->display_options['fields']['power_factor_l3']['table'] = 'negawatt_payment';
-  $handler->display->display_options['fields']['power_factor_l3']['field'] = 'power_factor_l3';
-  $handler->display->display_options['fields']['power_factor_l3']['label'] = 'PF l3';
-  $handler->display->display_options['fields']['power_factor_l3']['precision'] = '0';
   /* Filter criterion: Payment raw data: Meter_nid */
   $handler->display->display_options['filters']['meter_nid']['id'] = 'meter_nid';
   $handler->display->display_options['filters']['meter_nid']['table'] = 'negawatt_payment';
   $handler->display->display_options['filters']['meter_nid']['field'] = 'meter_nid';
+  $handler->display->display_options['filters']['meter_nid']['group'] = 1;
   $handler->display->display_options['filters']['meter_nid']['exposed'] = TRUE;
   $handler->display->display_options['filters']['meter_nid']['expose']['operator_id'] = 'meter_nid_op';
   $handler->display->display_options['filters']['meter_nid']['expose']['label'] = 'Meter_nid';
@@ -421,10 +380,11 @@ function negawatt_payment_views_default_views() {
     3 => 0,
     4 => 0,
   );
-  /* Filter criterion: Payment raw data: payment_type */
+  /* Filter criterion: Payment raw data: Payment_type */
   $handler->display->display_options['filters']['payment_type']['id'] = 'payment_type';
   $handler->display->display_options['filters']['payment_type']['table'] = 'negawatt_payment';
   $handler->display->display_options['filters']['payment_type']['field'] = 'payment_type';
+  $handler->display->display_options['filters']['payment_type']['group'] = 1;
   $handler->display->display_options['filters']['payment_type']['exposed'] = TRUE;
   $handler->display->display_options['filters']['payment_type']['expose']['operator_id'] = 'payment_type_op';
   $handler->display->display_options['filters']['payment_type']['expose']['label'] = 'payment_type';
@@ -441,6 +401,7 @@ function negawatt_payment_views_default_views() {
   $handler->display->display_options['filters']['timestamp']['id'] = 'timestamp';
   $handler->display->display_options['filters']['timestamp']['table'] = 'negawatt_payment';
   $handler->display->display_options['filters']['timestamp']['field'] = 'timestamp';
+  $handler->display->display_options['filters']['timestamp']['group'] = 1;
   $handler->display->display_options['filters']['timestamp']['exposed'] = TRUE;
   $handler->display->display_options['filters']['timestamp']['expose']['operator_id'] = 'timestamp_op';
   $handler->display->display_options['filters']['timestamp']['expose']['label'] = 'Timestamp';
@@ -453,28 +414,12 @@ function negawatt_payment_views_default_views() {
     3 => 0,
     4 => 0,
   );
-  /* Filter criterion: Payment raw data: Meter_type */
-  $handler->display->display_options['filters']['meter_type']['id'] = 'meter_type';
-  $handler->display->display_options['filters']['meter_type']['table'] = 'negawatt_payment';
-  $handler->display->display_options['filters']['meter_type']['field'] = 'meter_type';
-  $handler->display->display_options['filters']['meter_type']['exposed'] = TRUE;
-  $handler->display->display_options['filters']['meter_type']['expose']['operator_id'] = 'meter_type_op';
-  $handler->display->display_options['filters']['meter_type']['expose']['label'] = 'meter_type';
-  $handler->display->display_options['filters']['meter_type']['expose']['operator'] = 'meter_type_op';
-  $handler->display->display_options['filters']['meter_type']['expose']['identifier'] = 'meter_type';
-  $handler->display->display_options['filters']['meter_type']['expose']['remember'] = TRUE;
-  $handler->display->display_options['filters']['meter_type']['expose']['remember_roles'] = array(
-    2 => '2',
-    1 => 0,
-    3 => 0,
-    4 => 0,
-  );
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['path'] = 'admin/content/payment-raw-overview';
   $handler->display->display_options['menu']['type'] = 'tab';
-  $handler->display->display_options['menu']['title'] = 'Elect. Raw';
+  $handler->display->display_options['menu']['title'] = 'Payment Raw';
   $handler->display->display_options['menu']['weight'] = '0';
   $handler->display->display_options['menu']['name'] = 'devel';
   $handler->display->display_options['menu']['context'] = 0;
