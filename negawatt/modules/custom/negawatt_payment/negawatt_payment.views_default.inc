@@ -216,30 +216,15 @@ function negawatt_payment_views_default_views() {
   $handler->display->display_options['style_plugin'] = 'table';
   $handler->display->display_options['style_options']['columns'] = array(
     'id_1' => 'id_1',
-    'meter_type' => 'meter_type',
     'timestamp' => 'timestamp',
     'payment_type' => 'payment_type',
     'frequency' => 'frequency',
     'meter_nid' => 'meter_nid',
     'amount' => 'amount',
-    'power_factor' => 'power_factor',
-    'amount_l1' => 'amount_l1',
-    'amount_l2' => 'amount_l2',
-    'amount_l3' => 'amount_l3',
-    'power_factor_l1' => 'power_factor_l1',
-    'power_factor_l2' => 'power_factor_l2',
-    'power_factor_l3' => 'power_factor_l3',
   );
   $handler->display->display_options['style_options']['default'] = 'frequency';
   $handler->display->display_options['style_options']['info'] = array(
     'id_1' => array(
-      'sortable' => 1,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'meter_type' => array(
       'sortable' => 1,
       'default_sort_order' => 'asc',
       'align' => '',
@@ -275,55 +260,6 @@ function negawatt_payment_views_default_views() {
       'empty_column' => 0,
     ),
     'amount' => array(
-      'sortable' => 0,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'power_factor' => array(
-      'sortable' => 0,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'amount_l1' => array(
-      'sortable' => 0,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'amount_l2' => array(
-      'sortable' => 0,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'amount_l3' => array(
-      'sortable' => 0,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'power_factor_l1' => array(
-      'sortable' => 0,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'power_factor_l2' => array(
-      'sortable' => 0,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'power_factor_l3' => array(
       'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',

@@ -18,7 +18,6 @@ class PaymentRawMetadataController extends EntityDefaultMetadataController {
     ) + $properties['timestamp'];
 
     $field_names = array(
-      'meter_type',
       'payment_type',
       'frequency',
       'meter_nid',
