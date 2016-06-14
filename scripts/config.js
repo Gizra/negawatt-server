@@ -1,5 +1,5 @@
 angular.module('config', [])
 
-.constant('Config', {backend:'http://server.com/api',cname:'prod.front-end.url.here',debugUiRouter:false,openweather:{endpoint:null,apikey:'5znrzehcfsa35jarjywbsy9dymvnmxzq'}})
+.constant('Config', {backend:'http://live-negawatt.pantheonsite.io',cname:'negawatt.gizra.com',debugUiRouter:false,openweather:{endpoint:null,apikey:'5znrzehcfsa35jarjywbsy9dymvnmxzq'}})
 
 ;
