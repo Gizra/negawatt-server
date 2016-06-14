@@ -1,0 +1,34 @@
+<!-- Frequency time tabs -->
+<tabset class="box-chart-usage" vertical="true">
+  <tab ng-repeat="frequency in ::ctrlChart.frequencies" heading="{{frequency.label}}" active="frequency.active" disabled="frequency.disabled" select="ctrlChart.changeFrequency(frequency.type)"></tab>
+</tabset>
+
+<!-- Content -->
+<div ng-switch="ctrlChart.state" class="chart-container">
+
+  <!-- Spniner - With no data and is loading-->
+  <div ng-switch-when="loading" class="row chart-empty">
+    <div class="title col-md-12 col-centered text-center chart-message"><i class="fa fa-circle-o-notch fa-spin fa-2x nw-icon-loading nw-icon"></i></div>
+  </div>
+
+  <!-- Message to the User no Chart - No data -->
+  <div ng-switch-when="empty" class="row chart-empty">
+    <div class="title col-md-6 col-centered text-center chart-message">{{ctrlChart.messages.empty}}</div>
+  </div>
+
+  <!-- Chart with electricity data -->
+  <div ng-switch-when="data">
+
+    <!-- Chart subcomponent -->
+    <div google-chart chart="ctrlChart.data" id="chart-usage" class="usageChart"></div>
+    <!-- Period selction subcomponent -->
+    <div class="chart-navigation">
+      <button type="button" id="chart-usage-btn-arrow-left" class="btn btn-transparent btn-arrow btn-arrow-left" ng-show="ctrlChart.showNavigation('previous')" ng-click="ctrlChart.changePeriod('previous')" >
+        <span class="glyphicon glyphicon-chevron-left"></span>
+      </button>
+      <button type="button" id="chart-usage-btn-arrow-right" class="btn btn-transparent btn-arrow btn-arrow-right" ng-show="ctrlChart.showNavigation('next')" ng-click="ctrlChart.changePeriod('next')">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+      </button>
+    </div>
+  </div>
+</div>
